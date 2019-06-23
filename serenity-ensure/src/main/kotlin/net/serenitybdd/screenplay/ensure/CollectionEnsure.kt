@@ -251,6 +251,26 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
     fun atLeast(n: Int, expectation: NamedExpectation<A>) = atLeast(n, expectation.description, expectation.predicate)
 
     /**
+     * Verifies that at least _n_ elements in a collection that match a given predicate
+     * @param predicateDescription A short description of the predicate, to appear in error messages
+     * @param predicate A predicate operating on the elements of the collection
+     */
+    fun exactly(n: Int, predicateDescription: String, predicate: (A) -> Boolean): PerformablePredicate<KnowableValue<Collection<A>>> {
+        val number: GrammaticalNumber = if (n == 1) SINGULAR else PLURAL
+        val elements = if (n == 1) "element" else "elements"
+        return PerformablePredicate(value,
+                containsExactlyElementsThatMatch(n, "exactly $n $elements",
+                        number,
+                        IS_ARE,
+                        predicateDescription,
+                        predicate),
+                isNegated(),
+                targetDescription)
+    }
+
+    fun exactly(n: Int, expectation: NamedExpectation<A>) = exactly(n, expectation.description, expectation.predicate)
+
+    /**
      * Verifies that no more than _n_ elements in a collection that match a given predicate
      * @param predicateDescription A short description of the predicate, to appear in error messages
      * @param predicate A predicate operating on the elements of the collection
@@ -594,4 +614,21 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
             predicateNumber
     )
 
+    private fun containsExactlyElementsThatMatch(n: Int,
+                                                overallDescription: String,
+                                                predicateNumber: GrammaticalNumber,
+                                                qualifier: ElementQualifier,
+                                                predicateDescription: String,
+                                                predicate: (A) -> Boolean) = expectThatActualContainsElementsThat(
+            overallDescription,
+            fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
+                if (actual == null) return false
+                val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
+                return actualValue.filter(predicate).size == n
+            },
+            predicateDescription,
+            qualifier,
+            predicateNumber
+    )
 }

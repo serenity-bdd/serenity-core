@@ -1,22 +1,30 @@
 package net.serenitybdd.screenplay.ensure;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.ensure.web.ElementsLocated;
+import net.serenitybdd.screenplay.ensure.web.NamedExpectation;
 import net.serenitybdd.screenplay.ensure.web.TheMatchingElement;
+import net.serenitybdd.screenplay.questions.NamedPredicate;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith(SerenityRunner.class)
@@ -25,9 +33,10 @@ import java.util.List;
  */
 public class WhenUsingFluentAssertionsInJava {
 
+    Actor aster = Actor.named("Aster");
+
     @Test
-    public void weCanMakeAssertionsAboutNumbers() {
-        Actor aster = Actor.named("Aster");
+    public void weCanMakeAssertionsAboutIntegers() {
 
         int age = 20;
 
@@ -36,6 +45,27 @@ public class WhenUsingFluentAssertionsInJava {
         );
     }
 
+    @Test
+    public void weCanMakeAssertionsAboutFloats() {
+        Actor aster = Actor.named("Aster");
+
+        float creditScore = 9.8F;
+
+        aster.attemptsTo(
+                Ensure.that(creditScore).isCloseTo(9.81F, 0.01F)
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutApproximateDoubles() {
+        Actor aster = Actor.named("Aster");
+
+        double score = 9.8;
+
+        aster.attemptsTo(
+                Ensure.that(score).isCloseTo(9.81, 0.01)
+        );
+    }
 
     @Test
     public void weCanMakeAssertionsAboutCollections() {
@@ -76,11 +106,12 @@ public class WhenUsingFluentAssertionsInJava {
     public void weCanMakeAssertionsUsingLambdas() {
         Actor aster = Actor.named("Aster");
 
-        String name = "yellow";
+        String actualColor = "green";
 
         aster.attemptsTo(
-                Ensure.that(name).matches("is yellow", color -> color.equals("yellow")),
-                Ensure.that(name).not().matches("is red", color -> color.equals("red"))
+                Ensure.that(actualColor).matches("is an RGB color",
+                                          color -> color.equals("red") || color.equals("blue") || color.equals("green")),
+                Ensure.that(actualColor).not().matches("is red", color -> color.equals("red"))
         );
     }
 
@@ -187,6 +218,49 @@ public class WhenUsingFluentAssertionsInJava {
         );
     }
 
+//    private NamedPredicate<String> IS_A_PRIMARY_COLOR
+//            = GivenWhenThen.returnsAValueThat("is a primary color",
+//                                              color -> (color == "red") || (color == "green") || (color == "blue"));
+
+    private static final  NamedExpectation<String> IS_A_PRIMARY_COLOR
+            = new NamedExpectation<>("is a primary color",
+                                   color -> (color.equals("red")) || (color.equals("green")) || (color.equals("blue")));
+
+    @Test
+    public void weCanCheckThatAnyElementMatchesAConditionWithANamedPredicate() {
+        Actor aster = Actor.named("Aster");
+        List<String> colors = ImmutableList.of("blue", "cyan", "pink");
+
+        aster.attemptsTo(
+                Ensure.that(colors).anyMatch(IS_A_PRIMARY_COLOR)
+        );
+    }
+
+    @Test
+    public void weCanCheckThatAnyElementMatchesACondition() {
+        Actor aster = Actor.named("Aster");
+        List<String> colors = ImmutableList.of("blue", "cyan", "pink");
+
+        aster.attemptsTo(
+                Ensure.that(colors).anyMatch("is a primary color", it ->  isAPrimaryColor(it))
+        );
+    }
+
+    @Test
+    public void weCanCheckThatNoElementMatchesACondition() {
+        Actor aster = Actor.named("Aster");
+        List<String> colors = ImmutableList.of("orange", "cyan", "pink");
+
+        aster.attemptsTo(
+                Ensure.that(colors).noneMatch("is a primary color", it ->  isAPrimaryColor(it))
+        );
+    }
+
+    private boolean isAPrimaryColor(String color) {
+        return  (color == "red") || (color == "green") || (color == "blue");
+    }
+
+
 
     @Test
     public void weCanMakeAssertionsAboutQuestionsAboutTextValues() {
@@ -241,6 +315,33 @@ public class WhenUsingFluentAssertionsInJava {
                 Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue()
         );
     }
+
+    @Test
+    public void weCanMakeAssertionsAboutTimes() {
+        Actor aster = Actor.named("Aster");
+
+        LocalTime tenInTheMorning = LocalTime.of(10,0);
+        LocalTime twoInTheAfternoon = LocalTime.of(14,0);
+
+        aster.attemptsTo(
+                Ensure.that(tenInTheMorning).isBefore(twoInTheAfternoon),
+                Ensure.that(twoInTheAfternoon).isAfter(tenInTheMorning)
+        );
+    }
+
+
+    @Test
+    public void weCanMakeAssertionsAboutDates() {
+        Actor aster = Actor.named("Aster");
+
+        LocalDate firstOfJanuary = LocalDate.of(2000,1,1);
+        LocalDate secondOfJanuary = LocalDate.of(2000,1,2);
+
+        aster.attemptsTo(
+                Ensure.that(firstOfJanuary).isBefore(secondOfJanuary)
+        );
+    }
+
 
     @Test
     public void weCanMakeAssertionsAboutQuestionsAboutDate() {

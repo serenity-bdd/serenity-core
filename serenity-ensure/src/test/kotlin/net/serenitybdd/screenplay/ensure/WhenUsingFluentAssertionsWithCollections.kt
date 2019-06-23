@@ -315,6 +315,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `the same elements from a list`() {
                 shouldPassWhenChecking(that(colors).containsExactlyElementsFrom(expectedColorsInTheSameOrder))
+                shouldFailWhenChecking(that(colors).containsExactlyElementsFrom(expectedColorsInADifferentOrder))
             }
         }
 
@@ -630,6 +631,30 @@ class WhenUsingFluentAssertionsWithCollections {
                 shouldPassWhenChecking(that(emptyList).noMoreThan(2,"red", isRed))
             }
         }
+
+        @Nested
+        inner class AListWhereAGivenNumberOfElementsMatch {
+
+            val isRed = {it : String -> it == "red"}
+            val isBlue = {it : String -> it == "blue"}
+            val emptyList = emptyList<String>()
+
+            @Test
+            fun `when there are exactly N matching elements`() {
+                shouldPassWhenChecking(that(listOf("red","red","cyan","blue")).exactly(2,"red", isRed))
+            }
+
+            @Test
+            fun `when there are not exactly N matching elements`() {
+                shouldFailWhenChecking(that(listOf("red","red","blue")).exactly(2,"blue", isBlue))
+            }
+
+            @Test
+            fun `when the list is empty`() {
+                shouldFailWhenChecking(that(emptyList).exactly(2,"red", isRed))
+            }
+        }
+
 
     }
 }

@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.ensure.web;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.ensure.Ensure;
@@ -13,9 +12,10 @@ import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import net.serenitybdd.screenplay.ensure.Ensure;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static net.serenitybdd.screenplay.ensure.web.TheMatchingElement.containsText;
 
@@ -41,8 +41,51 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         aster.attemptsTo(
                 Open.browserOn(demoPage),
                 Ensure.that(ElementLocated.by("#firstName")).isDisplayed(),
-                Ensure.that(ElementLocated.by("#heading")).text().isEqualTo("Heading"),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
+        );
+    }
+
+    @Test
+    public void weCanConvertWebElementValuesToOtherTypes() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        LocalDate expectedDate = LocalDate.of(2019,6,20);
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementLocated.by("#firstName")).value().startsWith("Joe"),
+                Ensure.that(ElementLocated.by("#itemCount")).value().asAnInteger().isGreaterThanOrEqualTo(2),
+                Ensure.that(ElementLocated.by("#totalCost")).value().asADouble().isCloseTo(99.99d,0.01d),
+                Ensure.that(ElementLocated.by("#totalCost")).value().asAFloat().not().isCloseTo(98.99f,0.01f),
+                Ensure.that(ElementLocated.by("#totalCost")).value().asABigDecimal().isEqualTo(new BigDecimal("99.99")),
+                Ensure.that(ElementLocated.by("#flag")).value().asABoolean().isTrue()
+        );
+    }
+
+    @Test
+    public void weCanConvertWebElementValuesToDateValues() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        LocalDate expectedDate = LocalDate.of(2019,6,20);
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementLocated.by("#currentDate")).value().asADate().isEqualTo(expectedDate),
+                Ensure.that(ElementLocated.by("#ddmmyyyyDate")).value().asADate("dd-MM-yyyy").isEqualTo(expectedDate)
+        );
+    }
+
+    @Test
+    public void weCanConvertWebElementValuesToTimeValues() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        LocalTime expectedTime = LocalTime.of(11,42);
+        LocalTime laterTime = LocalTime.of(11,43);
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementLocated.by("#currentTime")).value().asATime().isEqualTo(expectedTime),
+                Ensure.that(ElementLocated.by("#altFormattedTime")).value().asATime("HH:mm:ss.SSS").isBefore(laterTime)
         );
     }
 }

@@ -140,10 +140,13 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
 
     fun asAString() = StringEnsure(KnowableStringValue(value, expectedDescription), expectedDescription)
     fun asAnInteger() = ComparableEnsure(KnowableIntValue(value, expectedDescription), null, expectedDescription)
-    fun asADouble() = ComparableEnsure(KnowableDoubleValue(value, expectedDescription), null, expectedDescription)
-    fun asAFloat() = ComparableEnsure(KnowableFloatValue(value, expectedDescription), null, expectedDescription)
+    fun asADouble() = DoubleEnsure.fromKnowable(KnowableDoubleValue(value, expectedDescription))
+    fun asAFloat() = FloatEnsure.fromKnowable(KnowableFloatValue(value, expectedDescription))
     fun asABigDecimal() = ComparableEnsure(KnowableBigDecimalValue(value, expectedDescription), null, expectedDescription)
-    fun asADate() = DateEnsure(KnowableLocalDateValue(value, expectedDescription), naturalOrder<LocalDate>())
+    fun asADate() = DateEnsure(KnowableLocalDateValue(value, expectedDescription), naturalOrder())
+    fun asADate(format: String) = DateEnsure(KnowableLocalDateValue(value, expectedDescription, format), naturalOrder())
+    fun asATime() = TimeEnsure(KnowableLocalTimeValue(value, expectedDescription), naturalOrder())
+    fun asATime(format: String) = TimeEnsure(KnowableLocalTimeValue(value, expectedDescription, format), naturalOrder())
     fun asABoolean() = BooleanEnsure(KnowableBooleanValue(value, expectedDescription))
 
     private val IS_EQUAL_TO = expectThatActualIs("equal to",

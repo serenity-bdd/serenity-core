@@ -108,11 +108,12 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
 
         Target CITY = Target.the("City field")
-                            .locatedBy("#city");
+                            .locatedBy("#city")
+                            .waitingForNoMoreThan(Duration.ofSeconds(0));
 
         aster.attemptsTo(
                 Open.browserOn(demoPage),
-                Ensure.that(CITY.waitingForNoMoreThan(Duration.ofSeconds(10)))
+                Ensure.that(CITY.waitingForNoMoreThan(Duration.ofSeconds(4)))
                       .value()
                       .isEqualTo("Marseille")
         );

@@ -385,7 +385,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `when the element is on the page`() {
                     val aSlowDisplayingField: Target = ElementLocated.by(By.id("city"))
-                            .waitingForNoMoreThan(Duration.ofSeconds(2))
+                            .waitingForNoMoreThan(Duration.ofSeconds(0))
 
                     shouldPassWhenChecking(that(aSlowDisplayingField).isDisplayed(), wendy)
                 }

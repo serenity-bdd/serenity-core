@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -41,7 +43,18 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         aster.attemptsTo(
                 Open.browserOn(demoPage),
                 Ensure.that(ElementLocated.by("#firstName")).isDisplayed(),
+                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutCollectionsOfMatchingValues() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementLocated.by("#colors option")).values().contains("red","blue","green")
         );
     }
 
@@ -88,4 +101,21 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
                 Ensure.that(ElementLocated.by("#altFormattedTime")).value().asATime("HH:mm:ss.SSS").isBefore(laterTime)
         );
     }
+
+
+    @Test
+    public void weCanSpecifyADelayForAParticularElement() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        Target CITY = Target.the("City field")
+                            .locatedBy("#city");
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(CITY.waitingForNoMoreThan(Duration.ofSeconds(10)))
+                      .value()
+                      .isEqualTo("Marseille")
+        );
+    }
+
 }

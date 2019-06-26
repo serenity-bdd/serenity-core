@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,35 +87,25 @@ public class CucumberParser {
             return Optional.empty();
         }
     }
-    
 
     private List<CucumberFeature> loadCucumberFeatures(MultiLoader multiLoader, List<String> listOfFiles) {
-        try { //try to load cucumber-core 4.2.6
+        try {
             Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
             Method load = featureLoaderClass.getMethod("load", List.class);
             Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
-            List<URI> uriList = listOfFiles.stream().map(filePath->new File(filePath).toURI()).collect(Collectors.toList());
-            return  (List<CucumberFeature>)load.invoke(featureLoader,uriList);
-        } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber426Exception) {
-            LOGGER.debug("Found no Cucumber 4.2.6 class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 4.2.0 ");
-            try { //try to load cucumber-core 4.2.0
-                Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
-                Method load = featureLoaderClass.getMethod("load", List.class);
-                Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
-                return (List<CucumberFeature>) load.invoke(featureLoader, listOfFiles);
-            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber420Exception) {
-                LOGGER.debug("Found no Cucumber 4.2.0 class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
-                try {
-                    Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
-                    Method load = featureLoaderClass.getMethod("load", ResourceLoader.class, List.class);
-                    return (List<CucumberFeature>) load.invoke(null, multiLoader, listOfFiles);
-                } catch (InvocationTargetException gherkinParserException) {
-                    throw new SerenityManagedException(gherkinParserException.getTargetException());
-                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException cucumber2Exception) {
-                    LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
-                    LOGGER.error("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath");
-                    throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath", cucumber2Exception);
-                }
+            return (List<CucumberFeature>) load.invoke(featureLoader, listOfFiles);
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber4Exception) {
+            LOGGER.debug("Found no Cucumber 4.x.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
+            try {
+                Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
+                Method load = featureLoaderClass.getMethod("load", ResourceLoader.class, List.class);
+                return (List<CucumberFeature>) load.invoke(null, multiLoader, listOfFiles);
+            } catch (InvocationTargetException gherkinParserException) {
+                throw new SerenityManagedException(gherkinParserException.getTargetException());
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException  cucumber2Exception) {
+                LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
+                LOGGER.error("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath");
+                throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath", cucumber2Exception);
             }
         }
     }

@@ -58,19 +58,4 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
                 + " is not a supported browser. Supported driver values are: "
                 + SupportedWebDriver.listOfSupportedDrivers());
     }
-
-    @Override
-    public WebDriverConfiguration copy() {
-        return withEnvironmentVariables(getEnvironmentVariables());
-    }
-
-
-    @Override
-    public WebDriverConfiguration withEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        WebDriverConfiguration copy = new WebDriverConfiguration(environmentVariables.copy());
-        copy.outputDirectory = null; // Reset to be reloaded from the System properties
-        copy.defaultBaseUrl = defaultBaseUrl;
-        return copy;
-    }
-
 }

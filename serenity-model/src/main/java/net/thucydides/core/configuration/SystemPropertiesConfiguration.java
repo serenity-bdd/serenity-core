@@ -61,7 +61,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     protected String defaultBaseUrl;
 
-    private final EnvironmentVariables environmentVariables;
+    protected EnvironmentVariables environmentVariables;
 
     private final FilePathParser filePathParser;
 
@@ -71,24 +71,16 @@ public class SystemPropertiesConfiguration implements Configuration {
         filePathParser = new FilePathParser(environmentVariables);
     }
 
-    public Configuration copy() {
-        return withEnvironmentVariables(environmentVariables);
-    }
-
-
-    public Configuration withEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        SystemPropertiesConfiguration copy = new SystemPropertiesConfiguration(environmentVariables.copy());
-        copy.outputDirectory = null; // Reset to be reloaded from the System properties
-        copy.defaultBaseUrl = defaultBaseUrl;
-        return copy;
+    @Override
+    public SystemPropertiesConfiguration withEnvironmentVariables(final EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        return this;
     }
 
     @Override
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
     }
-
-
 
     /**
      * Where should the reports go?

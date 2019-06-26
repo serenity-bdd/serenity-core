@@ -55,8 +55,6 @@ public interface Configuration<T extends Configuration> {
 
     void setIfUndefined(String property, String value);
 
-    T copy();
-
     T withEnvironmentVariables(EnvironmentVariables environmentVariables);
 
     EnvironmentVariables getEnvironmentVariables();

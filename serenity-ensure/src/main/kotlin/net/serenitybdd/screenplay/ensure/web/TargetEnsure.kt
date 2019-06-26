@@ -25,12 +25,12 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun isDisplayed() = PerformablePredicate(value, IS_DISPLAYED, isNegated(), targetDescription)
 
     /**
-     * Verifies that the element is currently displayed
+     * Verifies that the element is currently disabled
      */
     fun isDisabled() = PerformablePredicate(value, IS_DISABLED, isNegated(), targetDescription)
 
     /**
-     * Verifies that the element is not currently displayed
+     * Verifies that the element is currently enabled
      */
     fun isEnabled() = PerformablePredicate(value, IS_ENABLED, isNegated(), targetDescription)
 
@@ -48,6 +48,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
      * Verifies the text content of the specified element
      */
     fun textContent(): StringEnsure = StringEnsure(textValueOf(value), "$targetDescription with text content")
+
+    /**
+     * Verifies the text content of the specified element
+     */
+    fun textContentValues(): CollectionEnsure<String> = CollectionEnsure(textContentsOf(value), "$targetDescription with text contents")
 
     /**
      * Verifies the value attribute of an element
@@ -103,10 +108,22 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
                 return target.resolveFor(actor).text
             }
 
+    private fun textContentOf(target: Target): KnowableValue<String> =
+            fun(actor: Actor?): String {
+                if (actor == null) return ""
+                return target.resolveFor(actor).textContent
+            }
+
     private fun textValuesOf(target: Target): KnowableValue<List<String>?> =
             fun(actor: Actor?): List<String> {
                 if (actor == null) return emptyList()
                 return target.resolveAllFor(actor).map { it.text }
+            }
+
+    private fun textContentsOf(target: Target): KnowableValue<List<String>?> =
+            fun(actor: Actor?): List<String> {
+                if (actor == null) return emptyList()
+                return target.resolveAllFor(actor).map { it.textContent }
             }
 
     private fun valueOf(target: Target): KnowableValue<String> =

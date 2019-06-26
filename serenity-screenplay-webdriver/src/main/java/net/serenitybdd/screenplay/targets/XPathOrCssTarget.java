@@ -13,7 +13,7 @@ public class XPathOrCssTarget extends Target {
     private final String cssOrXPathSelector;
 
     public XPathOrCssTarget(String targetElementName, String cssOrXPathSelector, Optional<IFrame> iFrame, Optional<Duration> timeout) {
-        super(targetElementName, iFrame);
+        super(targetElementName, iFrame, timeout);
         this.cssOrXPathSelector = cssOrXPathSelector;
     }
 

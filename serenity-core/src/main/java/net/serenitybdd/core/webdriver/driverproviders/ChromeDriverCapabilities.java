@@ -29,6 +29,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         this.driverOptions = driverOptions;
     }
 
+    @Override
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 
@@ -48,6 +49,12 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private ChromeOptions configuredOptions() {
         ChromeOptions options = new ChromeOptions();
+
+	/*
+	 * This is the only way to set the Chrome _browser_ binary.
+	 */
+	if (WEBDRIVER_CHROME_BINARY.isDefinedIn(environmentVariables))
+	    options.setBinary(WEBDRIVER_CHROME_BINARY.from(environmentVariables));
 
         addEnvironmentSwitchesTo(options);
         addRuntimeOptionsTo(options);

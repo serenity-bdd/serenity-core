@@ -332,24 +332,24 @@
                 <#macro write_step(step, step_number)>
                 <@step_details step=step step_number=step_number level=level/>
                 <#if step.isAGroup()>
-                <#if level == 1>
                 <tr>
                 <td colspan="5">
                 <table id="stepSection${step_number}" style="display:none; width:100%">
 
-                </#if>
                 <#assign level = level + 1>
+                <#assign substep_number = 1>
                 <#list step.children as nestedStep>
-                    <@write_step step=nestedStep step_number=""/>
+                    <#if step.isAGroup() >
+                        <#assign substep_number = substep_number + 1>
+                        <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
+                    </#if>
                 </#list>
                 <#assign level = level-1>
-                <#assign screenshotCount = screenshotCount +1>
+                <#assign screenshotCount = screenshotCount + step.screenshotCount>
 
-                <#if level == 1>
                 </table>
                 </td>
                 <tr>
-                    </#if>
                     </#if>
                     </#macro>
 
@@ -417,7 +417,7 @@
                         <#assign step_class_root = "top-level">
                     </#if>
                     <#assign step_indent = level*20>
-                    <#if level == 1 && step.isAGroup()>
+                    <#if step.isAGroup()>
                         <#assign showAccordion = true/>
                     <#else>
                         <#assign showAccordion = false/>
@@ -430,7 +430,7 @@
                                style="display:block">
                                 <#--${step_outcome_icon}-->
                                 <i class="fa fa-plus-square-o imgstepSection${step_number} ${step_outcome_style}"
-                                   style="margin-left: 20px; float:left;  padding-right:5px"></i>
+                                   style="margin-left: ${step_indent}px; float:left;  padding-right:5px"></i>
                                 <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
                                 <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
                             </a>

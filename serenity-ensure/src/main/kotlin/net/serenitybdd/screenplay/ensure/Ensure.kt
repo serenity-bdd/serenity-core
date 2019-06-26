@@ -11,10 +11,14 @@ import net.serenitybdd.screenplay.ensure.web.TargetEnsure
 import net.serenitybdd.screenplay.targets.Target
 import org.openqa.selenium.By
 import java.time.LocalDate
+import java.time.LocalTime
 
 fun that(value: String?) = StringEnsure(value)
 fun that(value: LocalDate?) = DateEnsure(value)
+fun that(value: LocalTime?) = TimeEnsure(value)
 fun that(value: Boolean?) = BooleanEnsure(value)
+fun that(value: Float?) = FloatEnsure(value)
+fun that(value: Double?) = DoubleEnsure(value)
 fun <A> that(value: Comparable<A>) = ComparableEnsure(value)
 fun <A> that(value: Collection<A>?) = CollectionEnsure(value)
 
@@ -28,7 +32,7 @@ fun <A> thatTheAnswersTo(description: String, question: Question<Collection<A>>)
 
 fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.getSubject(), question)
 
-fun that(value: PageObject) = PageObjectEnsure(value)
+fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)
 

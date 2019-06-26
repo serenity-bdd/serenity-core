@@ -37,6 +37,11 @@ public class ConsoleStepListener extends BaseStepListener {
         buffer.append("TEST DONE").append("\n");
     }
 
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest) {
+        pop();
+        buffer.append("TEST DONE").append("\n");
+    }
+
     public void stepStarted(ExecutedStepDescription description) {
         writeIndent(buffer);
         buffer.append(description.getName()).append("\n");

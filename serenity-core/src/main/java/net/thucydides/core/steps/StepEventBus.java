@@ -295,16 +295,20 @@ public class StepEventBus {
         return resultTally;
     }
 
-    public void testFinished() {
+    public void testFinished(boolean inDataDrivenTest) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         outcome = checkForEmptyScenarioIn(outcome);
 
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.testFinished(outcome);
+            stepListener.testFinished(outcome, inDataDrivenTest);
         }
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         clear();
+    }
+
+    public void testFinished() {
+        testFinished(false);
     }
 
     private TestOutcome checkForEmptyScenarioIn(TestOutcome outcome) {

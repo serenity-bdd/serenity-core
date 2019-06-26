@@ -43,6 +43,10 @@ public interface StepListener {
      */
     void testFinished(final TestOutcome result);
 
+    default void testFinished(final TestOutcome result, boolean isInDataDrivenTest) {
+        testFinished(result);
+    }
+
     /**
      * The last test run is about to be restarted
      */

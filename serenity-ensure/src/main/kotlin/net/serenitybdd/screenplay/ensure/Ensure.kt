@@ -22,6 +22,9 @@ fun that(value: Double?) = DoubleEnsure(value)
 fun <A> that(value: Comparable<A>) = ComparableEnsure(value)
 fun <A> that(value: Collection<A>?) = CollectionEnsure(value)
 
+fun <A : Boolean?> thatTheAnswerTo(description: String, question: Question<Boolean?>) =
+        BooleanEnsure(KnowableBooleanAnswer(question, description))
+
 fun <A : Comparable<A>> thatTheAnswerTo(description: String, question: Question<A>) =
         ComparableEnsure(KnowableComparableAnswer(question, description), null, description)
 

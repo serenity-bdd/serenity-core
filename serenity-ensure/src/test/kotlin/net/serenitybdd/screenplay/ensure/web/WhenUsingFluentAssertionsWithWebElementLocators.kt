@@ -396,7 +396,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                             .waitingForNoMoreThan(Duration.ofSeconds(1))
 
                     assertTimeout(ofSeconds(3)) {
-                        shouldFailWhenChecking(that(aMissingField).isDisplayed(), wendy)
+                        shouldFailWhenChecking(that(aMissingField).silently().isDisplayed(), wendy)
                     }
                 }
 

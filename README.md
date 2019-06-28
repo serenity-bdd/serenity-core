@@ -69,6 +69,7 @@ Serenity works with both Cucumber 2 and Cucumber 4
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
 |---------------|-----------------------|-------------------|---------------------|
+| 2.0.54        | 2.0.54                | 1.9.39            | 2.4.0               |
 | 2.0.52        | 2.0.52                | 1.9.39            | 2.4.0               |
 | 2.0.48        | 2.0.48                | 1.9.37            | 2.4.0               |
 
@@ -78,9 +79,9 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
-| 2.0.52        | 1.0.14             | 4.2.0               |
-| 2.0.48        | 1.0.12             | 4.2.0               |
-
+| 2.0.52        | 2.0.54                | 1.0.14             | 4.2.0               | 
+| 2.0.48        | 2.0.48                | 1.0.12             | 4.2.0               |
+ 
 Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenity-bdd/serenity-cucumber4-starter).
 
 ### Serenity with JBehave

@@ -34,7 +34,7 @@ public class TagFilter {
             filteredTags = onlyKeepAllowedTypes(filteredTags, displayedTags);
         }
 
-        List<String> excludedTags = excludedTagTypes();
+        List<String> excludedTags = new ArrayList<>(excludedTagTypes());
         excludedTags.addAll(ALWAYS_HIDDEN_TAGS);
 
         return removeUnwantedTags(filteredTags, excludedTags);

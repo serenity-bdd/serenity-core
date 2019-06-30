@@ -370,7 +370,7 @@ public class TestOutcome {
 
     public TestOutcome asManualTest() {
         this.manual = true;
-        addTag(TestTag.withName("Manual").andType("External Tests"));
+        addTag(TestTag.withName("manual").andType("tag"));
         return this;
     }
 

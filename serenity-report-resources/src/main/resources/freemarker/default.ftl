@@ -154,7 +154,7 @@
                                             <br/>
                                             <a target="_blank" href="${testOutcome.manualTestEvidence}">
                                                 <span class="badge badge-pill badge-primary">
-                                                    <i class="fas fa-external-link-alt"></i> Test Evidence for previous test
+                                                    <i class="fas fa-external-link-alt"></i> Test Evidence
                                                 </span>
                                             </a>
                                         </#if>

@@ -136,8 +136,24 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentTestOutcome().overrideAnnotatedResult(result);
     }
 
+    public void recordManualTestResult(TestResult result,
+                                       Optional<String> lastTestedVersion,
+                                       Boolean isUpToDate,
+                                       Optional<String> testEvidence) {
+        getCurrentTestOutcome().overrideAnnotatedResult(result);
+        lastTestedVersion.ifPresent(
+                version -> {
+                    getCurrentTestOutcome().setLastTested(version);
+                    getCurrentTestOutcome().setManualTestingUpToDate(isUpToDate);
+                    testEvidence.ifPresent( evidence -> getCurrentTestOutcome().setManualTestEvidence(evidence));
+                }
+        );
+    }
+
     public void exceptionExpected(Class<? extends Throwable> expected) {
-        if (isNotAnException(expected.getName())) { return; }
+        if (isNotAnException(expected.getName())) {
+            return;
+        }
 
 
         if ((getCurrentTestOutcome().getTestFailureCause() != null)
@@ -185,13 +201,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages,TestFailureCause testfailureCause) {
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages, TestFailureCause testfailureCause) {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().recordStep(
                     TestStep.forStepCalled("UNSTABLE TEST:\n" + failureHistoryFor(failureMessages))
                             .withResult(TestResult.IGNORED));
 
-            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)). andType("unstable test"));
+            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
             latestTestOutcome().get().setFlakyTestFailureCause(testfailureCause);
         }
     }
@@ -445,6 +461,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
     }
+
     private void setAnnotatedResult(String testMethod) {
         if (TestAnnotations.forClass(testSuite).isIgnored(testMethod)) {
             getCurrentTestOutcome().setAnnotatedResult(IGNORED);
@@ -457,6 +474,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testFinished(final TestOutcome outcome) {
         testFinished(outcome, false);
     }
+
     /**
      * A test has finished.
      *
@@ -464,7 +482,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testFinished(final TestOutcome outcome, boolean inDataDrivenTest) {
 
-        if (getTestOutcomes().isEmpty()) { return; }
+        if (getTestOutcomes().isEmpty()) {
+            return;
+        }
 
         recordTestDuration();
         getCurrentTestOutcome().addIssues(storywideIssues);
@@ -549,7 +569,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     static class Question {
-        public void ask(){}
+        public void ask() {
+        }
     }
 
     private Method tokenQuestionMethod() {
@@ -563,7 +584,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void skippedStepStarted(final ExecutedStepDescription description) {
         recordStep(description);
     }
-
 
 
     Stack<Method> currentStepMethodStack = new Stack<>();
@@ -614,9 +634,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private java.util.Optional<TestStep> currentStep() {
-        if (currentStepStack.isEmpty()) { return java.util.Optional.empty(); }
+        if (currentStepStack.isEmpty()) {
+            return java.util.Optional.empty();
+        }
         return (java.util.Optional.of(currentStepStack.peek()));
     }
+
     private TestStep getCurrentStep() {
         return currentStepStack.peek();
     }
@@ -669,10 +692,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void markCurrentStepAs(final TestResult result) {
         getCurrentTestOutcome().currentStep().ifPresent(
-            step -> {
-                step.setResult(result);
-                updateExampleTableIfNecessary(result);
-            }
+                step -> {
+                    step.setResult(result);
+                    updateExampleTableIfNecessary(result);
+                }
         );
     }
 
@@ -882,13 +905,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         return SerenityWebdriverManager.inThisTestThread().getCurrentDrivers().stream().map(
-                        driver -> new ScreenshotAndHtmlSource(
-                                screenshotFrom(driver),
-                                sourceFrom(result, driver))
-                ).collect(Collectors.toList());
+                driver -> new ScreenshotAndHtmlSource(
+                        screenshotFrom(driver),
+                        sourceFrom(result, driver))
+        ).collect(Collectors.toList());
     }
 
-    private File screenshotFrom( WebDriver driver) {
+    private File screenshotFrom(WebDriver driver) {
         Path screenshotPath = getPhotographer().takesAScreenshot()
                 .with(driver)
                 .andWithBlurring(AnnotatedBluring.blurLevel())
@@ -901,7 +924,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private File sourceFrom(TestResult result, WebDriver driver) {
         return soundEngineer.ifRequiredForResult(result)
                 .recordPageSourceUsing(driver)
-                .intoDirectory(pathOf(outputDirectory)).orElse(null) ;
+                .intoDirectory(pathOf(outputDirectory)).orElse(null);
     }
 
     private java.util.Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
@@ -974,24 +997,32 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testFailed(TestOutcome testOutcome, final Throwable cause) {
-        if (!testOutcomeRecorded()) { return; }
+        if (!testOutcomeRecorded()) {
+            return;
+        }
 
         getCurrentTestOutcome().determineTestFailureCause(cause);
     }
 
     public void testIgnored() {
-        if (!testOutcomeRecorded()) { return; }
+        if (!testOutcomeRecorded()) {
+            return;
+        }
         getCurrentTestOutcome().setAnnotatedResult(IGNORED);
     }
 
     public void testSkipped() {
-        if (!testOutcomeRecorded()) { return; }
+        if (!testOutcomeRecorded()) {
+            return;
+        }
 
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
     }
 
     public void testPending() {
-        if (!testOutcomeRecorded()) { return; }
+        if (!testOutcomeRecorded()) {
+            return;
+        }
 
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
         updateExampleTableIfNecessary(PENDING);
@@ -1003,7 +1034,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     @Override
     public void testIsManual() {
-        if (!testOutcomeRecorded()) { return; }
+        if (!testOutcomeRecorded()) {
+            return;
+        }
 
         getCurrentTestOutcome().asManualTest();
         getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
@@ -1081,7 +1114,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean newStepForEachExample() {
-        if (!latestTestOutcome().isPresent()) { return false; }
+        if (!latestTestOutcome().isPresent()) {
+            return false;
+        }
         return (getCurrentTestOutcome().getTestSource() != null) && (!getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit"));
     }
 

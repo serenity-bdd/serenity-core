@@ -11,7 +11,6 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
@@ -40,15 +39,12 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -170,6 +166,21 @@ public class TestOutcome {
      * The driver used to run this test if it is a web test.
      */
     private String driver;
+
+    /**
+     * The last tested version for manual tests, defined by the @last-tested tag in Cucumber scenarios
+     */
+    private String lastTested;
+
+    /**
+     * True if a manual test has been marked as up-to-date. Only relevant if lastTested is defined.
+     */
+    private boolean isManualTestingUpToDate;
+
+    /**
+     * A relative or absolute link to test evidence related to the last manual test
+     */
+    private String manualTestEvidence;
 
     /**
      * Keeps track of step groups.
@@ -454,6 +465,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -480,6 +494,9 @@ public class TestOutcome {
                           final Optional<String> qualifier,
                           final String driver,
                           final boolean manualTest,
+                          final boolean isManualTestingUpToDate,
+                          final String lastTested,
+                          final String testEvidence,
                           final String projectKey,
                           final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
@@ -509,6 +526,9 @@ public class TestOutcome {
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.driver = driver;
         this.manual = manualTest;
+        this.manualTestEvidence = testEvidence;
+        this.isManualTestingUpToDate = isManualTestingUpToDate;
+        this.lastTested = lastTested;
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
     }
@@ -560,6 +580,9 @@ public class TestOutcome {
                     Optional.ofNullable(qualifier),
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables);
         } else {
@@ -590,6 +613,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -617,6 +643,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -645,6 +674,9 @@ public class TestOutcome {
                     this.qualifier,
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables);
         } else {
@@ -828,6 +860,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -916,6 +951,14 @@ public class TestOutcome {
         actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
                 crewMember -> crewMember.withDescription(description)
         );
+    }
+
+    public void setManualTestEvidence(String manualTestEvidence) {
+        this.manualTestEvidence = manualTestEvidence;
+    }
+
+    public String getManualTestEvidence() {
+        return manualTestEvidence;
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1998,6 +2041,22 @@ public class TestOutcome {
         return manual;
     }
 
+    public String getLastTested() {
+        return lastTested;
+    }
+
+    public void setLastTested(String lastTested) {
+        this.lastTested = lastTested;
+    }
+
+    public boolean isManualTestingUpToDate() {
+        return isManualTestingUpToDate;
+    }
+
+    public void setManualTestingUpToDate(Boolean upToDate) {
+        this.isManualTestingUpToDate  = upToDate;
+    }
+
     public Set<? extends Flag> getFlags() {
         if (flags == null) {
             flags = flagProvider.getFlagsFor(this);
@@ -2543,6 +2602,9 @@ public class TestOutcome {
                 qualifier,
                 driver,
                 manual,
+                isManualTestingUpToDate,
+                lastTested,
+                manualTestEvidence,
                 projectKey,
                 environmentVariables);
     }

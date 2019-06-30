@@ -15,7 +15,6 @@ import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -147,7 +146,7 @@ public class FreemarkerContext {
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
         TagFilter tagFilter = new TagFilter(environmentVariables);
         Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
-        filteredTags = tagFilter.removeRequirementsTagsFrom(filteredTags);
+        filteredTags = tagFilter.removeHiddenTagsFrom(filteredTags);
         context.put("filteredTags", filteredTags);
     }
 

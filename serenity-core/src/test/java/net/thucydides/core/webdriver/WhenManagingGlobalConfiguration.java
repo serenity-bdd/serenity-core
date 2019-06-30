@@ -29,16 +29,6 @@ public class WhenManagingGlobalConfiguration {
     }
 
     @Test
-    public void a_configuration_can_be_safely_copied() {
-        environmentVariables.setProperty("thucydides.step.delay", "1000");
-        Configuration copy = configuration.copy();
-        ((SystemPropertiesConfiguration) copy).getEnvironmentVariables().setProperty("thucydides.step.delay", "2000");
-        assertThat(copy.getStepDelay(), is(not(configuration.getStepDelay())));
-        assertThat(configuration.getStepDelay(), is(1000));
-    }
-
-
-    @Test
     public void the_browser_restart_value_can_be_defined_in_a_system_property() {
         environmentVariables.setProperty("thucydides.restart.browser.frequency", "5");
 

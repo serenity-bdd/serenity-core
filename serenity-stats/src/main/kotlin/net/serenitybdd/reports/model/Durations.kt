@@ -18,10 +18,18 @@ fun totalDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
 )
 
 fun maxDurationOf(outcome: TestOutcome) =
-        if (outcome.isDataDriven) { outcome.testSteps.map { step -> step.duration }.max()!! } else outcome.duration
+        if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
+            outcome.testSteps.map { step -> step.duration }.max()!!
+        } else {
+            outcome.duration
+        }
 
 fun minDurationOf(outcome: TestOutcome) =
-        if (outcome.isDataDriven) { outcome.testSteps.map { step -> step.duration }.min()!! } else outcome.duration
+        if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
+            outcome.testSteps.map { step -> step.duration }.min()!!
+        } else {
+            outcome.duration
+        }
 
 fun clockDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
         if (outcomes.isEmpty())

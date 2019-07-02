@@ -195,7 +195,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
 
     override fun hasValue(): StringEnsure = this
     override fun not(): StringEnsure = negate() as StringEnsure
-    override fun silently(): StringEnsure = silently() as StringEnsure
+    override fun silently(): StringEnsure = super.silently() as StringEnsure
     override fun usingComparator(comparator: Comparator<String>): StringEnsure {
         return StringEnsure(value, comparator)
     }

@@ -23,7 +23,7 @@ class TimeEnsure(override val value: KnowableValue<LocalTime?>, comparator: Comp
     fun isAfter(expected: LocalTime) = PerformableExpectation(value, AFTER, expected, isNegated())
 
     override fun not(): TimeEnsure = negate() as TimeEnsure
-    override fun silently(): TimeEnsure = silently() as TimeEnsure
+    override fun silently(): TimeEnsure = super.silently() as TimeEnsure
 
     override fun usingComparator(comparator: Comparator<LocalTime>): TimeEnsure {
         return TimeEnsure(value, comparator)

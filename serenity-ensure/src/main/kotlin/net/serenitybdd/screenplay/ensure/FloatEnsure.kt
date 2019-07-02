@@ -16,7 +16,7 @@ class FloatEnsure(override val value: KnowableValue<Float?>, comparator: Compara
      */
     fun isCloseTo(expected: Float, margin: Float) = PerformableExpectation(value, within(margin), expected, isNegated())
     override fun not(): FloatEnsure = negate() as FloatEnsure
-    override fun silently(): FloatEnsure = silently() as FloatEnsure
+    override fun silently(): FloatEnsure = super.silently() as FloatEnsure
 
     private fun within(margin: Float) = expectThatActualIs("close to (within a margin of " + margin + ")",
             fun(actor: Actor?, actual: KnowableValue<Float?>?, expected: Float): Boolean {

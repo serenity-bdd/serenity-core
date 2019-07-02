@@ -29,7 +29,7 @@ open class PerformableExpectation<A, E>(private val actual: A?,
             Expectation<A?, E>(
                     "placeholder",
                     "placeholder",
-                    fun(actor: Actor?, actual: A?, expected: E): Boolean = true
+                    fun(_: Actor?, _: A?, _: E): Boolean = true
             ),
             null) {
     }
@@ -60,7 +60,7 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
     protected constructor() : this(null,
             DoubleValueExpectation<A?, E>(
                     "placeholder",
-                    fun(actor: Actor?, actual: A?, startRange: E, endRange: E): Boolean = true
+                    fun(_: Actor?, _: A?, _: E, endRange: E): Boolean = true
             ),
             null,
             null,
@@ -92,7 +92,7 @@ open class PerformablePredicate<A>(private val actual: A?,
     protected constructor() : this(null,
             PredicateExpectation<A?>(
                     "placeholder","placeholder",
-                    fun(actor: Actor?, actual: A?): Boolean = true
+                    fun(_: Actor?, _: A?): Boolean = true
             ),
             false,
             "placeholder") {

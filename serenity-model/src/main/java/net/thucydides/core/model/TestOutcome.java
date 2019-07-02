@@ -46,6 +46,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -94,7 +95,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private final List<TestStep> testSteps = new ArrayList<>();
+    private List<TestStep> testSteps = new ArrayList<>();
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -261,7 +262,7 @@ public class TestOutcome {
         groupStack = new Stack<>();
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
-        this.actors = new ArrayList<>();
+        this.actors = new CopyOnWriteArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -1177,7 +1178,7 @@ public class TestOutcome {
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
-        return new ArrayList<>(testSteps);
+        return testSteps;
     }
 
     public boolean hasScreenshots() {
@@ -1263,7 +1264,7 @@ public class TestOutcome {
                 leafTestSteps.add(step);
             }
         }
-        return new ArrayList<>(leafTestSteps);
+        return leafTestSteps;
     }
 
     /**
@@ -1330,13 +1331,26 @@ public class TestOutcome {
     }
 
     private void addStep(TestStep step) {
-        testSteps.add(step);
-        renumberTestSteps();
+//        testSteps.add(step);
+//        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.add(step);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
     }
 
     private void addSteps(List<TestStep> steps) {
-        testSteps.addAll(steps);
-        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.addAll(steps);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+    }
+
+    private void renumberTestSteps(List<TestStep> testSteps) {
+        int count = 1;
+        for (TestStep step : testSteps) {
+            count = step.renumberFrom(count);
+        }
     }
 
     private void renumberTestSteps() {
@@ -1628,7 +1642,7 @@ public class TestOutcome {
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
-        return new ArrayList<>(allIssues);
+        return allIssues;
     }
 
     private List<String> versions() {
@@ -1649,7 +1663,7 @@ public class TestOutcome {
             allVersions.addAll(additionalVersions);
         }
         addVersionsDefinedInTagsTo(allVersions);
-        return new ArrayList<>(allVersions);
+        return allVersions;
     }
 
     private void addVersionsDefinedInTagsTo(List<String> allVersions) {
@@ -2517,12 +2531,18 @@ public class TestOutcome {
     }
 
     private void removeSteps(List<TestStep> stepsToReplace) {
-        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
-        for (TestStep testStep : currentTestSteps) {
-            if (stepsToReplace.contains(testStep)) {
-                testSteps.remove(testStep);
-            }
-        }
+//        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
+//        for (TestStep testStep : currentTestSteps) {
+//            if (stepsToReplace.contains(testStep)) {
+//                testSteps.remove(testStep);
+//            }
+//        }
+//
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.removeAll(stepsToReplace);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+
     }
 
     public FailureDetails getFailureDetails() {
@@ -2538,7 +2558,7 @@ public class TestOutcome {
     }
 
     public List<CastMember> getActors() {
-        return new ArrayList<>(actors);
+        return actors;
     }
 
     public boolean hasEvidence() {

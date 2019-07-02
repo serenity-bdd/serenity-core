@@ -24,7 +24,7 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
 
     override fun isSilent() = silent
 
-    open fun silently(): TargetEnsure {
+    fun silently(): TargetEnsure {
         silent = true
         return this
     }

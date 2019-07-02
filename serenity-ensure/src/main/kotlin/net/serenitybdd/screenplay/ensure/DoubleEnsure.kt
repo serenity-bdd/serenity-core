@@ -16,7 +16,7 @@ class DoubleEnsure(override val value: KnowableValue<Double?>, comparator: Compa
      */
     fun isCloseTo(expected: Double, margin: Double) = PerformableExpectation(value, within(margin), expected, isNegated())
     override fun not(): DoubleEnsure = negate() as DoubleEnsure
-    override fun silently(): DoubleEnsure = silently() as DoubleEnsure
+    override fun silently(): DoubleEnsure = super.silently() as DoubleEnsure
 
     fun within(margin: Double) = expectThatActualIs("close to(within a margin of " + margin + ")",
             fun(actor: Actor?, actual: KnowableValue<Double?>?, expected: Double): Boolean {

@@ -317,7 +317,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
 
     override fun isSilent() = silent
 
-    open fun silently(): CollectionEnsure<A> {
+    fun silently(): CollectionEnsure<A> {
         silent = true
         return this
     }

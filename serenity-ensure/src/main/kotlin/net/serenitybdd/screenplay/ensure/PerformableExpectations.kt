@@ -60,7 +60,7 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
     protected constructor() : this(null,
             DoubleValueExpectation<A?, E>(
                     "placeholder",
-                    fun(_: Actor?, _: A?, _: E, endRange: E): Boolean = true
+                    fun(_: Actor?, _: A?, _: E, _: E): Boolean = true
             ),
             null,
             null,

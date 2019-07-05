@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.model
 
+import com.sun.jdi.event.StepEvent
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.SystemEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat

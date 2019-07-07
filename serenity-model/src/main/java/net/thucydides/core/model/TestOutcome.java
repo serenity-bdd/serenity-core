@@ -2588,13 +2588,17 @@ public class TestOutcome {
             return this;
         }
 
+        if (testSteps.size() != dataTable.getSize()) {
+            return this;
+        }
+
         DataTable filteredDataTable = dataTable.containingOnlyRowsWithTagsFrom(filterTags);
-        List<TestStep> filteredSteps = dataTable.filterStepsWithTagsFrom(testSteps, tags);
+        List<TestStep> filteredSteps = testSteps;// dataTable.filterStepsWithTagsFrom(testSteps, tags);
 
         Collection<TestTag> originalDataTableTags = dataTable.getTags();
         Collection<TestTag> filteredDataTableTags = filteredDataTable.getTags();
 
-        Collection<TestTag> redundantTags = new HashSet(originalDataTableTags);
+        Collection<TestTag> redundantTags = new HashSet<>(originalDataTableTags);
         redundantTags.removeAll(filteredDataTableTags);
 
         Set<TestTag> outcomeTagsWithoutRedundentTags = new HashSet<>(tags);

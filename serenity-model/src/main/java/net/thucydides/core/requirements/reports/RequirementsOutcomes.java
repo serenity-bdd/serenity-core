@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -521,7 +522,7 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {
-        if (isEmpty(ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
+        if ("none".equalsIgnoreCase(SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
             return this;
         }
         return new RequirementsOutcomes(

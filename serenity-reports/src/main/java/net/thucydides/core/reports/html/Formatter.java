@@ -257,6 +257,8 @@ public class Formatter  {
                         if (dataRow < testOutcome.getTestSteps().size()) {
                             matcher.appendReplacement(newText,
                                                       resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult()));
+                        } else {
+                            matcher.appendReplacement(newText,"");
                         }
                     });
         }

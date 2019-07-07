@@ -1100,7 +1100,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private String exampleTitle(int exampleNumber, Map<String, String> data) {
-        return String.format("Example #%s: %s", exampleNumber, data);
+        return String.format("Example: %s", data);
     }
 
     public void exampleFinished() {

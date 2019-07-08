@@ -11,7 +11,6 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
@@ -40,16 +39,14 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -98,7 +95,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private final List<TestStep> testSteps = new ArrayList<>();
+    private List<TestStep> testSteps = new ArrayList<>();
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -170,6 +167,21 @@ public class TestOutcome {
      * The driver used to run this test if it is a web test.
      */
     private String driver;
+
+    /**
+     * The last tested version for manual tests, defined by the @last-tested tag in Cucumber scenarios
+     */
+    private String lastTested;
+
+    /**
+     * True if a manual test has been marked as up-to-date. Only relevant if lastTested is defined.
+     */
+    private boolean isManualTestingUpToDate;
+
+    /**
+     * A relative or absolute link to test evidence related to the last manual test
+     */
+    private String manualTestEvidence;
 
     /**
      * Keeps track of step groups.
@@ -250,7 +262,7 @@ public class TestOutcome {
         groupStack = new Stack<>();
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
-        this.actors = new ArrayList<>();
+        this.actors = new CopyOnWriteArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -359,7 +371,7 @@ public class TestOutcome {
 
     public TestOutcome asManualTest() {
         this.manual = true;
-        addTag(TestTag.withName("Manual").andType("External Tests"));
+        addTag(TestTag.withName("manual").andType("tag"));
         return this;
     }
 
@@ -454,6 +466,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -480,6 +495,9 @@ public class TestOutcome {
                           final Optional<String> qualifier,
                           final String driver,
                           final boolean manualTest,
+                          final boolean isManualTestingUpToDate,
+                          final String lastTested,
+                          final String testEvidence,
                           final String projectKey,
                           final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
@@ -509,6 +527,9 @@ public class TestOutcome {
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.driver = driver;
         this.manual = manualTest;
+        this.manualTestEvidence = testEvidence;
+        this.isManualTestingUpToDate = isManualTestingUpToDate;
+        this.lastTested = lastTested;
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
     }
@@ -560,6 +581,9 @@ public class TestOutcome {
                     Optional.ofNullable(qualifier),
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables);
         } else {
@@ -590,6 +614,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -617,6 +644,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -645,6 +675,9 @@ public class TestOutcome {
                     this.qualifier,
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables);
         } else {
@@ -828,6 +861,9 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables);
     }
@@ -916,6 +952,14 @@ public class TestOutcome {
         actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
                 crewMember -> crewMember.withDescription(description)
         );
+    }
+
+    public void setManualTestEvidence(String manualTestEvidence) {
+        this.manualTestEvidence = manualTestEvidence;
+    }
+
+    public String getManualTestEvidence() {
+        return manualTestEvidence;
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1134,7 +1178,7 @@ public class TestOutcome {
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
-        return new ArrayList<>(testSteps);
+        return testSteps;
     }
 
     public boolean hasScreenshots() {
@@ -1220,7 +1264,7 @@ public class TestOutcome {
                 leafTestSteps.add(step);
             }
         }
-        return new ArrayList<>(leafTestSteps);
+        return leafTestSteps;
     }
 
     /**
@@ -1287,13 +1331,26 @@ public class TestOutcome {
     }
 
     private void addStep(TestStep step) {
-        testSteps.add(step);
-        renumberTestSteps();
+//        testSteps.add(step);
+//        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.add(step);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
     }
 
     private void addSteps(List<TestStep> steps) {
-        testSteps.addAll(steps);
-        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.addAll(steps);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+    }
+
+    private void renumberTestSteps(List<TestStep> testSteps) {
+        int count = 1;
+        for (TestStep step : testSteps) {
+            count = step.renumberFrom(count);
+        }
     }
 
     private void renumberTestSteps() {
@@ -1585,7 +1642,7 @@ public class TestOutcome {
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
-        return new ArrayList<>(allIssues);
+        return allIssues;
     }
 
     private List<String> versions() {
@@ -1606,7 +1663,7 @@ public class TestOutcome {
             allVersions.addAll(additionalVersions);
         }
         addVersionsDefinedInTagsTo(allVersions);
-        return new ArrayList<>(allVersions);
+        return allVersions;
     }
 
     private void addVersionsDefinedInTagsTo(List<String> allVersions) {
@@ -1996,6 +2053,22 @@ public class TestOutcome {
 
     public boolean isManual() {
         return manual;
+    }
+
+    public String getLastTested() {
+        return lastTested;
+    }
+
+    public void setLastTested(String lastTested) {
+        this.lastTested = lastTested;
+    }
+
+    public boolean isManualTestingUpToDate() {
+        return isManualTestingUpToDate;
+    }
+
+    public void setManualTestingUpToDate(Boolean upToDate) {
+        this.isManualTestingUpToDate  = upToDate;
     }
 
     public Set<? extends Flag> getFlags() {
@@ -2458,12 +2531,18 @@ public class TestOutcome {
     }
 
     private void removeSteps(List<TestStep> stepsToReplace) {
-        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
-        for (TestStep testStep : currentTestSteps) {
-            if (stepsToReplace.contains(testStep)) {
-                testSteps.remove(testStep);
-            }
-        }
+//        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
+//        for (TestStep testStep : currentTestSteps) {
+//            if (stepsToReplace.contains(testStep)) {
+//                testSteps.remove(testStep);
+//            }
+//        }
+//
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.removeAll(stepsToReplace);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+
     }
 
     public FailureDetails getFailureDetails() {
@@ -2479,7 +2558,7 @@ public class TestOutcome {
     }
 
     public List<CastMember> getActors() {
-        return new ArrayList<>(actors);
+        return actors;
     }
 
     public boolean hasEvidence() {
@@ -2509,13 +2588,17 @@ public class TestOutcome {
             return this;
         }
 
+        if (testSteps.size() != dataTable.getSize()) {
+            return this;
+        }
+
         DataTable filteredDataTable = dataTable.containingOnlyRowsWithTagsFrom(filterTags);
-        List<TestStep> filteredSteps = dataTable.filterStepsWithTagsFrom(testSteps, tags);
+        List<TestStep> filteredSteps = testSteps;// dataTable.filterStepsWithTagsFrom(testSteps, tags);
 
         Collection<TestTag> originalDataTableTags = dataTable.getTags();
         Collection<TestTag> filteredDataTableTags = filteredDataTable.getTags();
 
-        Collection<TestTag> redundantTags = new HashSet(originalDataTableTags);
+        Collection<TestTag> redundantTags = new HashSet<>(originalDataTableTags);
         redundantTags.removeAll(filteredDataTableTags);
 
         Set<TestTag> outcomeTagsWithoutRedundentTags = new HashSet<>(tags);
@@ -2543,6 +2626,9 @@ public class TestOutcome {
                 qualifier,
                 driver,
                 manual,
+                isManualTestingUpToDate,
+                lastTested,
+                manualTestEvidence,
                 projectKey,
                 environmentVariables);
     }

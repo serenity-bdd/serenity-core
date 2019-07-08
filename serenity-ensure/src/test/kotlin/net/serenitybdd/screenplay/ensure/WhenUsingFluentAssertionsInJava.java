@@ -303,7 +303,7 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the boolean", booleanEquivalentOf("true")).asABoolean().isTrue()
+                Ensure.thatTheAnswerTo("the boolean", booleanEquivalentOf("true")).isTrue()
         );
     }
 

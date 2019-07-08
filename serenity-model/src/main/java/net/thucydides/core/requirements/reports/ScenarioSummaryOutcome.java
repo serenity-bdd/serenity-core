@@ -2,9 +2,11 @@ package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String name;
@@ -20,6 +22,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String parentName;
     private final String parentReport;
     private final Boolean manual;
+    private final Set<TestTag> tags;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -32,7 +35,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   int exampleCount,
                                   Boolean isManual,
                                   String parentName,
-                                  String parentReport) {
+                                  String parentReport,
+                                  Set<TestTag> tags) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -46,6 +50,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.parentName = parentName;
         this.parentReport = parentReport;
         this.manual = isManual;
+        this.tags = tags;
     }
 
     public String toString() {
@@ -142,5 +147,10 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
     public String getParentReport() {
         return parentReport;
+    }
+
+    @Override
+    public Set<TestTag> getTags() {
+        return tags;
     }
 }

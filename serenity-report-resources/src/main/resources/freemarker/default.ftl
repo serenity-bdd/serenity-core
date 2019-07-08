@@ -143,8 +143,43 @@
                                 </span>
                             </span>
                             <#if (testOutcome.manual)>
-                                <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
+
+                                <#if (testOutcome.lastTested?? && testOutcome.manualTestingUpToDate)>
+<#--                                Last tested and up to date-->
+                                    <div class="manual-test-result">
+                                        <span class="badge badge-pill badge-info">
+                                            <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
+                                        </span>
+                                        <#if (testOutcome.manualTestEvidence??)>
+                                            <br/>
+                                            <a target="_blank" href="${testOutcome.manualTestEvidence}">
+                                                <span class="badge badge-pill badge-primary">
+                                                    <i class="fas fa-external-link-alt"></i> Test Evidence
+                                                </span>
+                                            </a>
+                                        </#if>
+                                    </div>
+
+                                <#elseif (testOutcome.lastTested??)>
+<#--                                Last tested out of date-->
+                                    <div class="manual-test-result">
+                                        <span class="badge badge-pill badge-info">
+                                            <i class="fas fa-user-clock"></i> Awaiting new manual test. Last tested version: ${testOutcome.lastTested}</span>
+                                        <#if (testOutcome.manualTestEvidence??)>
+                                            <br/>
+                                            <a target="_blank" href="${testOutcome.manualTestEvidence}">
+                                                <span class="badge badge-pill badge-primary">
+                                                    <i class="fas fa-external-link-alt"></i> Test Evidence for previous test
+                                                </span>
+                                            </a>
+                                        </#if>
+                                    </div>
+                                <#else>
+<#--                                No last tested version specified -->
+                                    <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
+                                </#if>
                             </#if>
+
                             <#list testOutcome.flags as flag>
                                 <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}"
                                    title="${flag.message}"></i>
@@ -333,22 +368,22 @@
                 <@step_details step=step step_number=step_number level=level/>
                 <#if step.isAGroup()>
                 <tr>
-                <td colspan="5">
-                <table id="stepSection${step_number}" style="display:none; width:100%">
+                    <td colspan="5">
+                        <table id="stepSection${step_number}" style="display:none; width:100%">
 
-                <#assign level = level + 1>
-                <#assign substep_number = 1>
-                <#list step.children as nestedStep>
-                    <#if step.isAGroup() >
-                        <#assign substep_number = substep_number + 1>
-                        <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
-                    </#if>
-                </#list>
-                <#assign level = level-1>
-                <#assign screenshotCount = screenshotCount + step.screenshotCount>
+                            <#assign level = level + 1>
+                            <#assign substep_number = 1>
+                            <#list step.children as nestedStep>
+                                <#if step.isAGroup() >
+                                    <#assign substep_number = substep_number + 1>
+                                    <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
+                                </#if>
+                            </#list>
+                            <#assign level = level-1>
+                            <#assign screenshotCount = screenshotCount + step.screenshotCount>
 
-                </table>
-                </td>
+                        </table>
+                    </td>
                 <tr>
                     </#if>
                     </#macro>

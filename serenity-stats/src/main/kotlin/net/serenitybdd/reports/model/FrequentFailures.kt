@@ -5,6 +5,7 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.reports.html.ResultIconFormatter
 import net.thucydides.core.util.NameConverter.humanize
+import org.apache.commons.lang3.StringUtils
 
 class FrequentFailures {
     companion object {
@@ -19,6 +20,7 @@ class FrequentFailuresBuilder(val testOutcomes: TestOutcomes) {
             testOutcomes.unsuccessfulTests.outcomes
                     .map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome).results }
                     .flatMap { it.toList() }
+                    .filter { StringUtils.isNotEmpty(it.testFailureErrorType) }
                     .groupBy { it.testFailureErrorType }
                     .map { (error, outcomes) -> FrequentFailure(error, outcomes.size, testResultOf(outcomes)) }
                     .sortedByDescending { it.count }

@@ -13,9 +13,9 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
+import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -73,6 +73,8 @@ public class FreemarkerContext {
                                                boolean useFiltering) {
         Map<String, Object> context = new HashMap<>();
         TagFilter tagFilter = new TagFilter(environmentVariables);
+        OutcomeTagFilter outcomeFilter = new OutcomeTagFilter(environmentVariables);
+
         context.put("testOutcomes", testOutcomes);
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());
         if (useFiltering) {
@@ -105,13 +107,14 @@ public class FreemarkerContext {
 
         context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
 
-        List<ScenarioOutcome> scenarios = ScenarioOutcomes.from(testOutcomes);
+        List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes));
 
         context.put("scenarios", scenarios);
+        context.put("filteredScenarios", scenarios);
         context.put("testCases", executedScenariosIn(scenarios));
         context.put("automatedTestCases", automated(executedScenariosIn(scenarios)));
         context.put("manualTestCases", manual(executedScenariosIn(scenarios)));
-        context.put("evidence", EvidenceData.from(testOutcomes));
+        context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(testOutcomes.getOutcomes())));
 
         context.put("frequentFailures", FrequentFailures.from(testOutcomes).withMaxOf(5));
         context.put("unstableFeatures", UnstableFeatures.from(testOutcomes)
@@ -147,7 +150,7 @@ public class FreemarkerContext {
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
         TagFilter tagFilter = new TagFilter(environmentVariables);
         Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
-        filteredTags = tagFilter.removeRequirementsTagsFrom(filteredTags);
+        filteredTags = tagFilter.removeHiddenTagsFrom(filteredTags);
         context.put("filteredTags", filteredTags);
     }
 

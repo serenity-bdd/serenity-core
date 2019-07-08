@@ -794,6 +794,12 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_TEST_ROOT,
 
+    /**
+     * Property used to define the current target version for manual tests defined in Cucumber scenarios
+     * with the @manual and @@last-version-tested annotations.
+     */
+    CURRENT_TARGET_VERSION,
+
     @Deprecated
     THUCYDIDES_REQUIREMENTS_DIR,
 
@@ -1406,6 +1412,10 @@ public enum ThucydidesSystemProperty {
     @Override
     public String toString() {
         return propertyName;
+    }
+
+    public Optional<String> optionalFrom(EnvironmentVariables environmentVariables) {
+        return Optional.ofNullable(from(environmentVariables, null));
     }
 
     public String from(EnvironmentVariables environmentVariables) {

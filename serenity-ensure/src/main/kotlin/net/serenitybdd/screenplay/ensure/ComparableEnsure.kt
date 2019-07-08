@@ -98,7 +98,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
 
     open fun hasValue(): ComparableEnsure<A> = this
     override fun not(): ComparableEnsure<A> = negate() as ComparableEnsure<A>
-    override fun silently(): ComparableEnsure<A> = silently() as ComparableEnsure<A>
+    override fun silently(): ComparableEnsure<A> = super.silently() as ComparableEnsure<A>
 
     open fun usingComparator(comparator: Comparator<A>): ComparableEnsure<A> {
         return ComparableEnsure(value, comparator)
@@ -184,7 +184,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                         return if (comparator != null)
                             comparator.compare(resolvedValue as A, startRange as A) > 0 && comparator.compare(resolvedValue as A, endRange as A) < 0
                         else
-                            (resolvedValue!! > startRange as A && resolvedValue!! < endRange as A)
+                            (resolvedValue!! > startRange as A && resolvedValue < endRange as A)
                     })
 
 }

@@ -39,7 +39,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
         LOGGER.info("GENERATING EMAIL REPORT")
 
         // Fetch the test outcomes
-        val testOutcomes = testOutcomesIn(sourceDirectory)
+        val testOutcomes = testOutcomesIn(sourceDirectory).filteredByEnvironmentTags()
 
         // Prepare the parameters
         val outputDirectory = SerenityEmailReport.outputDirectory().configuredIn(environmentVariables)

@@ -1,12 +1,13 @@
 package net.serenitybdd.screenplay.ensure.web
 
 import net.serenitybdd.core.pages.WebElementFacade
+import net.serenitybdd.markers.CanBeSilent
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.ensure.*
 import net.serenitybdd.screenplay.targets.Target
 import org.openqa.selenium.By
 
-class TargetEnsure(val value: Target, val targetDescription: String = value.toString()) {
+class TargetEnsure(val value: Target, val targetDescription: String = value.toString()) : CanBeSilent {
 
     constructor(byLocator: By) : this(Target.the(byLocator.toString()).located(byLocator))
 
@@ -18,6 +19,15 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     }
 
     private fun isNegated() = negated
+
+    var silent = false
+
+    override fun isSilent() = silent
+
+    fun silently(): TargetEnsure {
+        silent = true
+        return this
+    }
 
     /**
      * Verifies that the element is currently displayed

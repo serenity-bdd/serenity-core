@@ -1,14 +1,12 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
-import gherkin.ast.Feature;
-import gherkin.ast.ScenarioDefinition;
-import gherkin.ast.ScenarioOutline;
-import gherkin.ast.Tag;
+import gherkin.ast.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestResultList;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
@@ -19,10 +17,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FeatureFileScenarioOutcomes {
@@ -91,6 +86,9 @@ public class FeatureFileScenarioOutcomes {
                 : 0;
 
         Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTags());
+
+        Set<TestTag> scenarioTags = scenarioTagsDefinedIn(scenarioDefinition);
+
         return new ScenarioSummaryOutcome(scenarioTitle,
                 scenarioDefinition.getKeyword(),
                 result,
@@ -102,7 +100,37 @@ public class FeatureFileScenarioOutcomes {
                 exampleCount,
                 isManual,
                 feature.getName(),
-                featureReport);
+                featureReport,
+                scenarioTags);
+    }
+
+    private Set<TestTag> scenarioTagsDefinedIn(ScenarioDefinition scenarioDefinition) {
+        if (scenarioDefinition instanceof ScenarioOutline) {
+            return scenarioOutlineTagsIn((ScenarioOutline) scenarioDefinition);
+        } else if (scenarioDefinition instanceof Scenario) {
+            return scenarioTagsIn((Scenario) scenarioDefinition);
+        }
+        return new HashSet<>();
+    }
+
+    private Set<TestTag> scenarioOutlineTagsIn(ScenarioOutline scenarioOutline) {
+        Set<TestTag> testTags = scenarioOutline.getTags().stream()
+                .map(tag -> TestTag.withValue(tag.getName()))
+                .collect(Collectors.toSet());
+
+        Set<TestTag> exampleTags = scenarioOutline.getExamples().stream()
+                .flatMap(examples -> examples.getTags().stream())
+                .map(tag -> TestTag.withValue(tag.getName()))
+                .collect(Collectors.toSet());
+
+        testTags.addAll(exampleTags);
+        return testTags;
+    }
+
+    private Set<TestTag> scenarioTagsIn(Scenario scenario) {
+        return scenario.getTags().stream()
+                .map(tag -> TestTag.withValue(tag.getName()))
+                .collect(Collectors.toSet());
     }
 
     private Boolean hasManualTag(List<Tag> tags) {

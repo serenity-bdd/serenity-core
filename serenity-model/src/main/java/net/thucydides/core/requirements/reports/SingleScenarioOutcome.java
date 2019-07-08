@@ -2,12 +2,14 @@ package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.EMPTY_LIST;
 
@@ -27,6 +29,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final Boolean manual;
     private final String parentName;
     private final String parentReport;
+    private final Set<TestTag> tags;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -41,7 +44,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  List<String> examples,
                                  int exampleCount,
                                  String parentName,
-                                 String parentReport) {
+                                 String parentReport,
+                                 Set<TestTag> tags) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -57,6 +61,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
+        this.tags = tags;
     }
 
     public String toString() {
@@ -158,5 +163,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
 
     public String getParentReport() {
         return parentReport;
+    }
+
+    @Override
+    public Set<TestTag> getTags() {
+        return tags;
     }
 }

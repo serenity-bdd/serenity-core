@@ -2,6 +2,7 @@ package net.serenitybdd.core.annotations.findby.integration
 
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.pages.integration.StaticSitePageWithFacades
+import net.thucydides.core.steps.StepEventBus
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Shared
@@ -18,6 +19,7 @@ class WhenUsingSmartFindBy extends Specification {
     def setupSpec() {
         page.open()
         page.waitFor(1).second()
+
     }
 
 	def "should be able to find an element using jquery"(){

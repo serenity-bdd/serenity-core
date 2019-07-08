@@ -194,7 +194,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {
-        String takeScreenshotsLevel = THUCYDIDES_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
+        String takeScreenshotsLevel = SERENITY_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
         if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {

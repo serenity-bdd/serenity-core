@@ -3,10 +3,8 @@ package net.thucydides.core.requirements.reports;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.DescriptionSplitter;
-import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
@@ -78,7 +76,8 @@ public class ScenarioOutcomes {
                 exampleTables,
                 testOutcome.getDataTableRowCount(),
                 userStoryName,
-                userStoryReportName);
+                userStoryReportName,
+                testOutcome.getTags());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

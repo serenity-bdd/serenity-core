@@ -13,6 +13,7 @@ import net.thucydides.core.model.formatters.TestCoverageFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.RequirementsTree;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
@@ -137,6 +138,16 @@ public class TestOutcomes {
     public TestOutcomes withResultFilter(TestResult testResult) {
         return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, testResult);
     }
+
+    public TestOutcomes filteredByEnvironmentTags() {
+
+        OutcomeTagFilter outcomeFilter = new OutcomeTagFilter(environmentVariables);
+        List<? extends TestOutcome> filteredOutcomes = outcomeFilter.outcomesFilteredByTagIn(getOutcomes());
+
+        return TestOutcomes.of(filteredOutcomes).withLabel(label);
+//        return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label);
+    }
+
 
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;

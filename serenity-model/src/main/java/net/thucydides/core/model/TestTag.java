@@ -73,6 +73,7 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     public static TestTag withValue(String value) {
+        value = stripLeadingAtSymbol(value);
         if (value.contains(":")) {
             return getTestTag(value, value.indexOf(":"));
         } else if (value.contains("=")) {
@@ -80,6 +81,10 @@ public class TestTag implements Comparable<TestTag> {
         } else {
             return TestTag.withName(value.trim()).andType("tag");
         }
+    }
+
+    private static String stripLeadingAtSymbol(String value) {
+        return value.startsWith("@") ? value.substring(1) : value;
     }
 
     public TestTag withDisplayName(String displayName) {

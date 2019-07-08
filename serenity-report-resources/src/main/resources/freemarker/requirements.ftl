@@ -325,7 +325,6 @@
 
                                             <h3>Scenario details</h3>
                                             <#list scenarios as scenario>
-
                                                 <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
 
                                                 <div class="scenario-docs card" id="${scenario.id}">

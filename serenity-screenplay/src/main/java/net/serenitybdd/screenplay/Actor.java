@@ -12,6 +12,7 @@ import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import org.openqa.selenium.Keys;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -341,6 +342,10 @@ public class Actor implements PerformsTasks, SkipNested {
     @SuppressWarnings("unchecked")
     public <T> T recall(String key) {
         return (T) notepad.get(key);
+    }
+
+    public Map<String, Object> recallAll() {
+        return new HashMap<>(notepad);
     }
 
     public <T> T sawAsThe(String key) {

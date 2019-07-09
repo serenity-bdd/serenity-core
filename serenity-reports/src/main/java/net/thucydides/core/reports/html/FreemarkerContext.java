@@ -13,6 +13,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
+import net.thucydides.core.requirements.RequirementsFilter;
 import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
@@ -90,8 +91,6 @@ public class FreemarkerContext {
 
         context.put("reportOptions", new ReportOptions(environmentVariables));
         context.put("timestamp", timestampFrom(new DateTime()));
-        context.put("requirementTypes", requirements.getRequirementTypes());
-        context.put("leafRequirementType", last(requirements.getRequirementTypes()));
         addFormattersToContext(context);
 
         context.put("totalTestDuration", formattedDuration(Duration.ofMillis(testOutcomes.getDuration())));
@@ -116,6 +115,12 @@ public class FreemarkerContext {
         context.put("manualTestCases", manual(executedScenariosIn(scenarios)));
         context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(testOutcomes.getOutcomes())));
 
+        context.put("requirementTypes", requirements.getRequirementTypes());
+        context.put("leafRequirementType", last(requirements.getRequirementTypes()));
+
+        List<String> requirementTypesWithScenarios = RequirementsFilter.onlyRequirementsUsedIn(scenarios).from(requirements.getRequirementTypes());
+        context.put("requirementTypesWithScenarios", requirementTypesWithScenarios);
+
         context.put("frequentFailures", FrequentFailures.from(testOutcomes).withMaxOf(5));
         context.put("unstableFeatures", UnstableFeatures.from(testOutcomes)
                 .withRequirementsFrom(requirementsService)
@@ -133,7 +138,6 @@ public class FreemarkerContext {
 
 
         context.put("coverage", TagCoverage.from(testOutcomes)
-//                .showingTags(requirements.getTagsOfType(tagTypes))
                 .showingTags(coveredTags)
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());

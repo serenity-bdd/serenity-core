@@ -18,7 +18,7 @@
             <#if selected=="progress"><a href="#"><#else><a href="progress-report.html"></#if>Progress</a>
         </li>
     </#if>
-    <#foreach requirementType in requirementTypes>
+    <#foreach requirementType in requirementTypesWithScenarios>
         <#assign requirmentReport = absoluteReportName.forRequirementType(requirementType) >
         <#assign typeTitle = inflection.of(requirementType).inPluralForm().asATitle() >
         <li <#if selected=="${requirementType}">class="active"</#if>>

@@ -36,13 +36,14 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
         this.reportName = reportNameProvider.forRequirementType(requirementType);
     }
 
-    static Set<ReportingTask> requirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
+    static Set<ReportingTask> requirementTypeReports(final List<String> requirementTypes,
+                                                     final RequirementsOutcomes requirementsOutcomes,
                                                      final FreemarkerContext freemarker,
                                                      final EnvironmentVariables environmentVariables,
                                                      final File outputDirectory,
                                                      final ReportNameProvider reportNameProvider) {
 
-        return requirementsOutcomes.getTypes().stream()
+        return requirementTypes.stream()
                 .map(
                         type -> new RequirementsTypeReportingTask(freemarker,
                                 environmentVariables,

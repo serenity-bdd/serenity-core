@@ -181,7 +181,7 @@ public class TestOutcome {
     /**
      * A relative or absolute link to test evidence related to the last manual test
      */
-    private String manualTestEvidence;
+    private List<String> manualTestEvidence;
 
     /**
      * Keeps track of step groups.
@@ -497,7 +497,7 @@ public class TestOutcome {
                           final boolean manualTest,
                           final boolean isManualTestingUpToDate,
                           final String lastTested,
-                          final String testEvidence,
+                          final List<String> testEvidence,
                           final String projectKey,
                           final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
@@ -954,12 +954,18 @@ public class TestOutcome {
         );
     }
 
-    public void setManualTestEvidence(String manualTestEvidence) {
+    public void setManualTestEvidence(List<String> manualTestEvidence) {
         this.manualTestEvidence = manualTestEvidence;
     }
 
-    public String getManualTestEvidence() {
+    public List<String> getManualTestEvidence() {
         return manualTestEvidence;
+    }
+
+    public List<ManualTestEvidence> getRenderedManualTestEvidence() {
+        return manualTestEvidence.stream()
+                .map(evidence -> ManualTestEvidence.from(evidence))
+                .collect(Collectors.toList());
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {

@@ -150,13 +150,15 @@
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
                                         </span>
-                                        <#if (testOutcome.manualTestEvidence??)>
+                                        <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
-                                            <a target="_blank" href="${testOutcome.manualTestEvidence}">
+                                            <#list testOutcome.renderedManualTestEvidence as manualEvidence>
+                                            <a target="_blank" href="${manualEvidence.link}">
                                                 <span class="badge badge-pill badge-primary">
-                                                    <i class="fas fa-external-link-alt"></i> Test Evidence
+                                                    <i class="fas fa-external-link-alt"></i> ${manualEvidence.label}
                                                 </span>
                                             </a>
+                                            </#list>
                                         </#if>
                                     </div>
 

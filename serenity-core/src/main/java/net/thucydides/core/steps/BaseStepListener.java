@@ -26,6 +26,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.webdriver.*;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -145,9 +146,18 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 version -> {
                     getCurrentTestOutcome().setLastTested(version);
                     getCurrentTestOutcome().setManualTestingUpToDate(isUpToDate);
-                    testEvidence.ifPresent( evidence -> getCurrentTestOutcome().setManualTestEvidence(evidence));
+                    testEvidence.ifPresent( evidence -> getCurrentTestOutcome().setManualTestEvidence(testEvidenceLinksFrom(testEvidence)));
                 }
         );
+    }
+
+    @NotNull
+    private List<String> testEvidenceLinksFrom(Optional<String> testEvidence) {
+        List<String> testEvidenceLinks = new ArrayList<>();
+        if (testEvidence.isPresent()) {
+            testEvidenceLinks = Arrays.stream(testEvidence.get().split(",")).map(String::trim).collect(Collectors.toList());
+        }
+        return testEvidenceLinks;
     }
 
     public void exceptionExpected(Class<? extends Throwable> expected) {

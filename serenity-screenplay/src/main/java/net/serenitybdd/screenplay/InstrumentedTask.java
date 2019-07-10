@@ -69,8 +69,7 @@ public class InstrumentedTask {
                                                 + ". If you are not instrumenting a Task class explicitly you need to give the class a default constructor."
                                                 + "A task class cannot be instrumented if it is final (so if you are writing in Kotlin, make sure the task class is 'open'.");
         }
-        Cloner cloner = new Cloner();
-        cloner.copyPropertiesOfInheritedClass(task, instrumentedTask);
+        CopyNonNullProperties.from(task).to(instrumentedTask);
         return instrumentedTask;
     }
 

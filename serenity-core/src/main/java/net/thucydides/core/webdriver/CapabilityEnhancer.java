@@ -42,7 +42,9 @@ public class CapabilityEnhancer {
                                                          .latestTestOutcome();
 
             TestOutcome outcome = (currentTestOutcome == null) ? null : currentTestOutcome.orElse(null);
-            AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(driver, outcome).to(capabilities);
+            AddCustomDriverCapabilities.from(environmentVariables)
+                                       .withTestDetails(driver, outcome)
+                                       .to(capabilities);
         }
 
         return capabilities;

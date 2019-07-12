@@ -12,6 +12,7 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,29 @@ public class ChromeDriverProvider implements DriverProvider {
         DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 
-        return ProvideNewDriver.withConfiguration(environmentVariables,
+        ChromeOptions chromeOptions = new ChromeOptions();
+        enhancedCapabilities.asMap().forEach(
+                chromeOptions::setCapability
+        );
+
+        //
+        // Check for extended classes to add extra ChromeOptions configuration
+        //
+        final ChromeOptions enhancedChromeOptions = ConfigureChromeOptions.from(environmentVariables).to(chromeOptions);
+
+        WebDriver newDriver = ProvideNewDriver.withConfiguration(environmentVariables,
                 enhancedCapabilities,
                 driverServicePool,
                 DriverServicePool::newDriver,
-                (pool, capabilities) -> new ChromeDriver(capabilities)
+                (pool, capabilities) -> new ChromeDriver(enhancedChromeOptions)
         );
+
+        //
+        // Perform any custom configuration to the new driver
+        //
+        EnhanceDriver.from(environmentVariables).to(newDriver);
+
+        return newDriver;
     }
 
     private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {

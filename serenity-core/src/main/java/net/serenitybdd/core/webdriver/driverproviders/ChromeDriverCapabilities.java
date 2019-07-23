@@ -37,7 +37,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
         capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-        String chromeSwitches = environmentVariables.getProperty(ThucydidesSystemProperty.CHROME_SWITCHES);
+        String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
         capabilities.setCapability("chrome.switches", chromeSwitches);
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);
@@ -67,7 +67,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addEnvironmentSwitchesTo(ChromeOptions options) {
 
-        String chromeSwitches = environmentVariables.getProperty(ThucydidesSystemProperty.CHROME_SWITCHES);
+        String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
 
         if (StringUtils.isNotEmpty(chromeSwitches)) {
             List<String> arguments = new OptionsSplitter().split(chromeSwitches);

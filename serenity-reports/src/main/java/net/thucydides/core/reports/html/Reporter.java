@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.time.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.*;
 import net.thucydides.core.guice.*;
 import net.thucydides.core.reports.*;
@@ -10,6 +11,8 @@ import org.slf4j.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
+
+import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
 
 class Reporter {
 
@@ -83,7 +86,8 @@ class Reporter {
     }
 
     private boolean showThreaddumpOnReportTimeout() {
-        return environmentVariables.getPropertyAsBoolean("report.timeout.threaddumps", false);
+        return REPORT_TIMEOUT_THREADDUMPS.booleanFrom(environmentVariables, false);
+//        return environmentVariables.getPropertyAsBoolean("report.timeout.threaddumps", false);
     }
 
     private String reportFailureMessage(String reason, ReportExecutorFuture executedTask, Exception e) {

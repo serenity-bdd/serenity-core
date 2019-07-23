@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.guice.Injectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,8 @@ public class VersionProvider {
     }
 
     private String buildNumberVariable() {
-        return environmentVariables.getProperty("build.number.variable","BUILD_NUMBER");
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("build.number.variable")
+                .orElse("BUILD_NUMBER");
     }
 }

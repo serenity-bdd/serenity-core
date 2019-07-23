@@ -1,5 +1,6 @@
 package net.thucydides.core;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -117,6 +118,8 @@ public enum ThucydidesSystemProperty {
      */
     REPORT_SUBTITLE,
 
+    REPORT_TIMEOUT_THREADDUMPS,
+
     /**
      * Link to the generated Serenity report to embed in the emailable summary report.
      */
@@ -149,6 +152,8 @@ public enum ThucydidesSystemProperty {
      * Encoding for reports output
      */
     SERENITY_REPORT_ENCODING,
+
+    REMOTE_PLATFORM,
 
     @Deprecated
     THUCYDIDES_OUTPUT_DIRECTORY("thucydides.outputDirectory"),
@@ -214,6 +219,8 @@ public enum ThucydidesSystemProperty {
      * If set to true, WebElementFacade events and other step actions will be logged to the console.
      */
     SERENITY_VERBOSE_STEPS,
+
+    VERBOSE_REPORTING,
 
     /**
      * Words that will be recognised as pronouns by Serenity Screenplay in Cucumber and used to refer to the
@@ -329,6 +336,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * How long should the driver wait for elements not immediately visible, in seconds.
+     * @deprecated Use WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT instead.
      */
     SERENITY_TIMEOUT,
 
@@ -1254,6 +1262,8 @@ public enum ThucydidesSystemProperty {
      */
     CONTEXT,
 
+    APPIUM_HUB,
+
     /**
      * By default, new @Steps libraries are made as new instances, unless declared `shared`, in which case they are
      * cached by type. Use this property to make Serenity use the older strategy, which was to default to 'shared' and
@@ -1289,6 +1299,7 @@ public enum ThucydidesSystemProperty {
      */
     APPIUM_DEVICE_NAME("appium.deviceName"),
 
+    APPIUM_PLATFORMNAME("appium.platformName"),
     /**
      * (Experimental) Specifies a list of devices to be used for parallel testing.
      * Will only be used if manage.appium.servers is set to true
@@ -1342,6 +1353,8 @@ public enum ThucydidesSystemProperty {
     MAX_FREQUENT_FAILURES,
 
     CUCUMBER_PRETTY_FORMAT_TABLES,
+
+    IO_BLOCKING_COEFFICIENT,
 
     /**
      * How many days before a manually configured test result expires and goes back to pending.
@@ -1449,8 +1462,8 @@ public enum ThucydidesSystemProperty {
     }
 
     public String from(EnvironmentVariables environmentVariables, String defaultValue) {
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return newPropertyValue.get();
@@ -1469,8 +1482,8 @@ public enum ThucydidesSystemProperty {
     }
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Integer.parseInt(newPropertyValue.get().trim());
@@ -1487,8 +1500,8 @@ public enum ThucydidesSystemProperty {
     public Boolean booleanFrom(EnvironmentVariables environmentVariables, Boolean defaultValue) {
         if (environmentVariables == null) { return defaultValue; }
 
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Boolean.valueOf(newPropertyValue.get().trim());
@@ -1496,6 +1509,10 @@ public enum ThucydidesSystemProperty {
             Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
             return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get().trim()) : defaultValue;
         }
+    }
+
+    private Optional<String> optionalPropertyValueDefinedIn(EnvironmentVariables environmentVariables) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(withSerenityPrefix(getPropertyName()));
     }
 
     public boolean isDefinedIn(EnvironmentVariables environmentVariables) {

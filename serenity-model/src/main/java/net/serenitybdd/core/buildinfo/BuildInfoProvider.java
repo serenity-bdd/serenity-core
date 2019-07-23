@@ -4,6 +4,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
 //import io.vavr.collection.List;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -86,7 +87,9 @@ public class BuildInfoProvider {
                                                         .collect(Collectors.toList());
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
-            String expression = environmentVariables.getProperty(key);
+            String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(simplifiedKey)
+                    .orElse(null);
 
             String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;
 

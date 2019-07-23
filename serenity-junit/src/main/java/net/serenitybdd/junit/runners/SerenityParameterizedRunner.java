@@ -88,8 +88,13 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private String getThreadParameter(Concurrent concurrent) {
-        String systemPropertyThreadValue =
-                configuration.getEnvironmentVariables().getProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName());
+//        String systemPropertyThreadValue =
+//                configuration.getEnvironmentVariables().getProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName());
+//
+        String systemPropertyThreadValue = EnvironmentSpecificConfiguration.from(configuration.getEnvironmentVariables())
+                .getOptionalProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName())
+                .orElse(null);
+
         String annotatedThreadValue = concurrent.threads();
         return (StringUtils.isNotEmpty(systemPropertyThreadValue) ? systemPropertyThreadValue : annotatedThreadValue);
 

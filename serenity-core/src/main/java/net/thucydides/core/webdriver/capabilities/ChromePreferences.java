@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.HashMap;
@@ -31,7 +32,11 @@ public class ChromePreferences {
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
-            String propertyValue = environmentVariables.getProperty(propertyKey);
+//            String propertyValue = environmentVariables.getProperty(propertyKey);
+            String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(propertyKey)
+                    .orElse(null);
+
             if (isNotEmpty(propertyValue)) {
                 preferences.put(preparedPropertyKey, asObject(propertyValue));
             }

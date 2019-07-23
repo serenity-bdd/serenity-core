@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.configuration
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.util.EnvironmentVariables
 
@@ -7,7 +8,9 @@ class StringListReportProperty(val property: String, val defaultValues: List<Str
     constructor(property: ThucydidesSystemProperty, defaultValues: List<String> = listOf()) : this(property.toString(), defaultValues)
 
     override fun configuredIn(environmentVariables: EnvironmentVariables) : List<String> {
-        return environmentVariables.getProperty(property, defaultValues.joinToString(","))
+        val propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property).orElse(defaultValues.joinToString(","))
+
+        return propertyValue
                 .split(",")
                 .map { value -> value.trim() }
                 .filter { value -> value.isNotEmpty() }

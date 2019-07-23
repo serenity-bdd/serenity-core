@@ -6,11 +6,13 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.REMOTE_DRIVER;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
@@ -103,19 +105,20 @@ public class DriverCapabilities {
         capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
 
 
-        if (environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS) != null) {
-            capabilities.setCapability("platform", Platform.valueOf(environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS)));
+        if (WEBDRIVER_REMOTE_OS.from(environmentVariables) != null) {
+            capabilities.setCapability("platform", Platform.valueOf(WEBDRIVER_REMOTE_OS.from(environmentVariables)));
         }
 
-        if (environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION) != null) {
-            capabilities.setCapability("version", environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION));
+        if (WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables) != null) {
+            capabilities.setCapability("version", WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables));
         }
 
         return capabilities;
     }
 
     private boolean shouldUseARemoteDriver() {
-        return ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
+//        return WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
+        return StringUtils.isNotEmpty(WEBDRIVER_REMOTE_URL.from(environmentVariables));
     }
 
 }

@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ class ReportExecutor implements Callable<Void> {
     }
 
     private Boolean verboseReporting() {
-        return environmentVariables.getPropertyAsBoolean("verbose.reporting", false);
+        return ThucydidesSystemProperty.VERBOSE_REPORTING.booleanFrom(environmentVariables, false);
+//        return environmentVariables.getPropertyAsBoolean("verbose.reporting", false);
     }
 }

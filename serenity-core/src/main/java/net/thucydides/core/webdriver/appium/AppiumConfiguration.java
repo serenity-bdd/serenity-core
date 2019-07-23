@@ -1,6 +1,8 @@
 package net.thucydides.core.webdriver.appium;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.*;
@@ -77,7 +79,7 @@ public class AppiumConfiguration {
      * Return the Appium platform defined in the system properties, or NONE if no platform is defined.
      */
     public MobilePlatform definedTargetPlatform() {
-        String targetPlatform = environmentVariables.getProperty("appium.platformName","NONE");
+        String targetPlatform = ThucydidesSystemProperty.APPIUM_PLATFORMNAME.from(environmentVariables,"NONE");
         try {
             return MobilePlatform.valueOf(targetPlatform.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -86,7 +88,7 @@ public class AppiumConfiguration {
     }
 
     public MobilePlatform definedContext() {
-        String targetPlatform = environmentVariables.getProperty("context","NONE");
+        String targetPlatform = ThucydidesSystemProperty.CONTEXT.from(environmentVariables, "NONE");
         try {
             return MobilePlatform.valueOf(targetPlatform.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -96,7 +98,7 @@ public class AppiumConfiguration {
     }
 
     public URL getUrl() {
-        String url = environmentVariables.getProperty("appium.hub", DEFAULT_URL);
+        String url = ThucydidesSystemProperty.APPIUM_HUB.from(environmentVariables, DEFAULT_URL);
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
@@ -132,7 +134,12 @@ public class AppiumConfiguration {
                         .collect(Collectors.toList());
 
         for (String key : appiumKeys) {
-            String value = isAppProperty(key) ? appPathFrom(environmentVariables.getProperty(key)) : environmentVariables.getProperty(key);
+
+            String specifiedAppPath = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(key)
+                    .orElse("");
+
+            String value = isAppProperty(key) ? appPathFrom(specifiedAppPath) : specifiedAppPath;
             String simplifiedKey = key.replace("appium.", "");
             appiumProperties.setProperty(simplifiedKey, value.trim());
         }

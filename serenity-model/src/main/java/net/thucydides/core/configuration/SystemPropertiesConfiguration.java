@@ -18,7 +18,6 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Centralized configuration of the test runner. You can configure the output
  * directory, the browser to use, and the reports to generate. Most
  * configuration elements can be set using system properties.
- *
  */
 public class SystemPropertiesConfiguration implements Configuration {
 
@@ -114,7 +113,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * If some property that can change output directory@Override was changed this method should be called
      */
-    public void reloadOutputDirectory(){
+    public void reloadOutputDirectory() {
         setOutputDirectory(loadOutputDirectoryFromSystemProperties());
     }
 
@@ -131,14 +130,23 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     @Override
-    public int getElementTimeout() {
-        int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
+    public int getElementTimeoutInSeconds() {
+        Optional<Integer> serenityDefinedTimeoutInSeconds = integerValueOf(SERENITY_TIMEOUT.from(environmentVariables));
+        Optional<Integer> implicitTimeoutInMilliseconds = integerValueOf(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables));
 
-        String serenityDefinedTimeoutInSeconds = SERENITY_TIMEOUT.from(environmentVariables);
-        if ((serenityDefinedTimeoutInSeconds != null) && (!serenityDefinedTimeoutInSeconds.isEmpty())) {
-            elementTimeout = Integer.parseInt(serenityDefinedTimeoutInSeconds);
+        if (serenityDefinedTimeoutInSeconds.isPresent()) {
+            return implicitTimeoutInMilliseconds.get();
+        } else
+            return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(DEFAULT_ELEMENT_TIMEOUT_SECONDS);
+
+    }
+
+    private Optional<Integer> integerValueOf(String value) {
+        if ((value != null) && (!value.isEmpty())) {
+            return Optional.of(Integer.parseInt(value));
+        } else {
+            return Optional.empty();
         }
-        return elementTimeout;
 
     }
 
@@ -162,7 +170,6 @@ public class SystemPropertiesConfiguration implements Configuration {
      * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
-     *
      */
     public File getOutputDirectory() {
         if (outputDirectory == null) {
@@ -185,12 +192,14 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
+       return  Boolean.parseBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.from(environmentVariables,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
+        return Boolean.parseBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.from(environmentVariables,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {

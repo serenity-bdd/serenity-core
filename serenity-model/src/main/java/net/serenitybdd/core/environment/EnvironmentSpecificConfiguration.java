@@ -2,6 +2,7 @@ package net.serenitybdd.core.environment;
 
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,17 +63,26 @@ public class EnvironmentSpecificConfiguration {
         this.environmentStrategy = environmentStrategyDefinedIn(environmentVariables);
     }
 
-    public String getProperty(String propertyName) {
+    public String getProperty(final String propertyName) {
+
+        return getOptionalProperty(propertyName)
+                .orElseThrow(
+                () -> new UndefinedEnvironmentVariableException("Environment '"
+                                + propertyName
+                                + "' property undefined for environment '"
+                                + getDefinedEnvironment(environmentVariables) + "'")
+        );
+    }
+
+
+    public Optional<String> getOptionalProperty(String propertyName) {
 
         String propertyValue = getPropertyValue(propertyName);
 
         if (propertyValue == null) {
-            throw new UndefinedEnvironmentVariableException("Environment '"
-                    + propertyName
-                    + "' property undefined for environment '"
-                    + getDefinedEnvironment(environmentVariables) + "'");
+            return Optional.empty();
         }
-        return substituteProperties(propertyValue);
+        return Optional.ofNullable(substituteProperties(propertyValue));
     }
 
     private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");

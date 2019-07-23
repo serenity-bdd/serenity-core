@@ -22,7 +22,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
-        Map<String, String> propertyValues = new HashMap();
+        Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {
             propertyValues.put(property, systemProperties.getProperty(property));
         }

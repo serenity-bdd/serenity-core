@@ -46,6 +46,8 @@ public class FirefoxDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
         DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
+        AddLoggingPreferences.from(environmentVariables).to(capabilities);
 
         WebDriver driver = newMarionetteDriver(capabilities,environmentVariables);
 

@@ -55,6 +55,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
+        AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
 
         driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(desiredCapabilities));
 

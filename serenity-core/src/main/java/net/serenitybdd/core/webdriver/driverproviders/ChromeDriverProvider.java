@@ -47,7 +47,7 @@ public class ChromeDriverProvider implements DriverProvider {
         DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 
-        ChromeOptions chromeOptions = new ChromeOptions();
+        ChromeOptions chromeOptions = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).configuredOptions();
         enhancedCapabilities.asMap().forEach(
                 chromeOptions::setCapability
         );
@@ -73,8 +73,12 @@ public class ChromeDriverProvider implements DriverProvider {
     }
 
     private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
-        DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
+        DesiredCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
+    }
+
+    private ChromeDriverCapabilities chromeDriverCapabilitiesDefinedIn(EnvironmentVariables environmentVariables, String options) {
+        return new ChromeDriverCapabilities(environmentVariables, options);
     }
 }

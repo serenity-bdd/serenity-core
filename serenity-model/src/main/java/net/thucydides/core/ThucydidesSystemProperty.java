@@ -580,6 +580,25 @@ public enum ThucydidesSystemProperty {
      * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+    SERENITY_PROXY_FTP,
+    SERENITY_PROXY_NOPROXY,
+    SERENITY_PROXY_AUTOCONFIG,
+    SERENITY_PROXY_AUTODETECT,
+    SERENITY_PROXY_SOCKS_PROXY,
+    SERENITY_PROXY_SOCKS_USERNAME,
+    SERENITY_PROXY_SOCKS_PASSWORD,
+    SERENITY_PROXY_SOCKS_VERSION,
+
+
+    /**
+     * Possible values are:none, eager or normal
+     */
+    SERENITY_DRIVER_PAGE_LOAD_STRATEGY,
+    /**
+     *  Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
+     */
+    SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR,
+
 
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.

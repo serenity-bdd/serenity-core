@@ -41,6 +41,7 @@ public class RemoteDriverProvider implements DriverProvider {
         driverBuilders.put(RemoteDriverType.BROWSERSTACK, new BrowserStackDriverBuilder(environmentVariables, remoteDriverCapabilities));
         driverBuilders.put(RemoteDriverType.DEFAULT, new DefaultRemoteDriver(environmentVariables, remoteDriverCapabilities));
 
+
         return driverBuilders;
     }
 

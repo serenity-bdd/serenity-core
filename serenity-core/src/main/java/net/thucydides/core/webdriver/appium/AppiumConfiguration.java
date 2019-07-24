@@ -2,6 +2,8 @@ package net.thucydides.core.webdriver.appium;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
+import net.serenitybdd.core.webdriver.driverproviders.AddLoggingPreferences;
+import net.serenitybdd.core.webdriver.driverproviders.SetProxyConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
@@ -112,6 +114,10 @@ public class AppiumConfiguration {
 
     public DesiredCapabilities getCapabilities(String options) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
+        AddLoggingPreferences.from(environmentVariables).to(capabilities);
+
         Properties appiumProperties = getProperties(options);
         for (Object key : appiumProperties.keySet()) {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));

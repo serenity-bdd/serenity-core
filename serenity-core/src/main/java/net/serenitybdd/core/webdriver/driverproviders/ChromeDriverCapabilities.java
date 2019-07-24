@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Optional;
+import com.google.gson.JsonObject;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -8,6 +9,9 @@ import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -20,7 +24,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
-    private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation","--test-type");
+    private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation", "--test-type");
     private final EnvironmentVariables environmentVariables;
     private final String driverOptions;
 
@@ -41,28 +45,52 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         capabilities.setCapability("chrome.switches", chromeSwitches);
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);
-
+        AddLoggingPreferences.from(environmentVariables).to(capabilities);
         SetProxyConfiguration.from(environmentVariables).in(capabilities);
 
         return capabilities;
     }
 
-    private ChromeOptions configuredOptions() {
+    public ChromeOptions configuredOptions() {
         ChromeOptions options = new ChromeOptions();
 
-	/*
-	 * This is the only way to set the Chrome _browser_ binary.
-	 */
-	if (WEBDRIVER_CHROME_BINARY.isDefinedIn(environmentVariables))
-	    options.setBinary(WEBDRIVER_CHROME_BINARY.from(environmentVariables));
-
+        /*
+         * This is the only way to set the Chrome _browser_ binary.
+         */
+        if (WEBDRIVER_CHROME_BINARY.isDefinedIn(environmentVariables)) {
+            options.setBinary(WEBDRIVER_CHROME_BINARY.from(environmentVariables));
+        }
         addEnvironmentSwitchesTo(options);
         addRuntimeOptionsTo(options);
         addPreferencesTo(options);
         addExperimentalOptionsTo(options);
         updateChromeBinaryIfSpecified(options);
+        addProxyConfigurationTo(options);
+        addPageLoadStrategyTo(options);
+        addUnhandledPromptBehaviour(options);
 
         return options;
+    }
+
+    private void addUnhandledPromptBehaviour(ChromeOptions options) {
+        String unexpectedAlertBehavior = SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR.from(environmentVariables);
+
+        if (unexpectedAlertBehavior != null) {
+            options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.fromString(unexpectedAlertBehavior));
+        }
+    }
+
+    private void addPageLoadStrategyTo(ChromeOptions options) {
+        String pageLoadStrategy = SERENITY_DRIVER_PAGE_LOAD_STRATEGY.from(environmentVariables);
+        if (pageLoadStrategy != null) {
+            options.setPageLoadStrategy(PageLoadStrategy.fromString(pageLoadStrategy));
+        }
+    }
+
+    private void addProxyConfigurationTo(ChromeOptions options) {
+        ConfiguredProxy.definedIn(environmentVariables).ifPresent(
+                options::setProxy
+        );
     }
 
     private void addEnvironmentSwitchesTo(ChromeOptions options) {
@@ -82,7 +110,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addRuntimeOptionsTo(ChromeOptions options) {
 
 
-        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables,true)) {
+        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, true)) {
             options.addArguments(AUTOMATION_OPTIONS);
         }
 
@@ -90,7 +118,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
             List<String> arguments = new OptionsSplitter().split(driverOptions);
             options.addArguments(arguments);
         }
-
 
 
         options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false));

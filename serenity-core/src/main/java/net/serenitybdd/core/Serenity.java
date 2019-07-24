@@ -1,6 +1,7 @@
 package net.serenitybdd.core;
 
 import net.serenitybdd.core.collect.*;
+import net.serenitybdd.core.configurers.WebDriverConfigurer;
 import net.serenitybdd.core.di.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
@@ -314,5 +315,9 @@ public class Serenity {
             Serenity.throwExceptionsImmediately();
             return this;
         }
+    }
+
+    public static WebDriverConfigurer webdriver() {
+        return new WebDriverConfigurer();
     }
 }

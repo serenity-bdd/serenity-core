@@ -18,6 +18,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
+
 /**
  * An event bus for Step-related notifications.
  * Use this to integrate Thucydides listeners with testing tools.
@@ -36,8 +38,6 @@ public class StepEventBus {
 
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
-
-
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
@@ -92,11 +92,12 @@ public class StepEventBus {
     private Optional<Boolean> isDryRun = Optional.empty();
 
     private final EnvironmentVariables environmentVariables;
+    private final CleanupMethodLocator cleanupMethodLocator;
 
     @Inject
     public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-
+        this.cleanupMethodLocator = new CleanupMethodLocator();
 //        Darkroom.isOpenForBusiness();
     }
 
@@ -480,8 +481,23 @@ public class StepEventBus {
         registeredListeners.clear();
     }
 
+    private boolean driverReenabled = false;
+
+    public void reenableWebDriver() {
+        driverReenabled = true;
+    }
+
+    private boolean inFixureMethod() {
+        boolean activateWebDriverInFixtureMethods = SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS.booleanFrom(environmentVariables, true);
+
+        return (activateWebDriverInFixtureMethods && cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod());
+    }
+
     public boolean webdriverCallsAreSuspended() {
 
+        if (driverReenabled || inFixureMethod()) {
+            return false;
+        }
         if (softAssertsActive()) {
             return !webdriverSuspensions.isEmpty();
         }

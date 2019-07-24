@@ -1396,6 +1396,11 @@ public enum ThucydidesSystemProperty {
     ENVIRONMENT,
 
     /**
+     * Enable WebDriver calls in @After methods, even after a step has failed (true by default).
+     */
+    SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS,
+
+    /**
      * The title to appear in the tag type table in the email reports
      */
     REPORT_TAGTYPE_TITLE

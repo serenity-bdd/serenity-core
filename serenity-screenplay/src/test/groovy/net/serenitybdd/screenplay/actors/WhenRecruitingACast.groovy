@@ -70,4 +70,14 @@ class WhenRecruitingACast extends Specification {
             1 * performHamlet.tearDown()
     }
 
+    def "cast members can be used before knowing their names"() {
+        given:
+            OnStage.setTheStage(Cast.ofStandardActors())
+            Actor theNextActor = OnStage.aNewActor()
+        when:
+            Actor kenneth = OnStage.theActorCalled("Kenneth");
+        then:
+            theNextActor == kenneth;
+    }
+
 }

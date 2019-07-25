@@ -67,9 +67,16 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         updateChromeBinaryIfSpecified(options);
         addProxyConfigurationTo(options);
         addPageLoadStrategyTo(options);
+        addExtensionsTo(options);
         addUnhandledPromptBehaviour(options);
 
         return options;
+    }
+
+    private void addExtensionsTo(ChromeOptions options) {
+        CHROME_EXTENSION.optionalFrom(environmentVariables).ifPresent(
+                extensionFile  -> options.addExtensions(new File(extensionFile))
+        );
     }
 
     private void addUnhandledPromptBehaviour(ChromeOptions options) {

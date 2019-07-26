@@ -29,12 +29,16 @@ public class OnStage {
         if (pronouns().contains(requiredActor)) {
             return stage().theActorInTheSpotlight().usingPronoun(requiredActor);
         }
-        if (theActorInTheSpotlight().getName().equals(A_NEW_ACTOR)) {
+        if (anActorIsOnStage() && theActorInTheSpotlight().getName().equals(A_NEW_ACTOR)) {
             theActorInTheSpotlight().assignName(requiredActor);
             return theActorInTheSpotlight();
         }
         
         return stage().shineSpotlightOn(requiredActor);
+    }
+
+    private static boolean anActorIsOnStage() {
+        return stage().anActorIsOnStage();
     }
 
     public static Actor aNewActor() {

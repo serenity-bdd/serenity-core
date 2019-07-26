@@ -22,22 +22,23 @@ fun that(value: Double?) = DoubleEnsure(value)
 fun <A> that(value: Comparable<A>) = ComparableEnsure(value)
 fun <A> that(value: Collection<A>?) = CollectionEnsure(value)
 
-fun <A : Boolean?> thatTheAnswerTo(description: String, question: Question<Boolean?>) =
-        BooleanEnsure(KnowableBooleanAnswer(question, description))
+fun <A : Boolean?> thatTheAnswerTo(description: String, question: Question<Boolean?>) = BooleanEnsure(KnowableBooleanAnswer(question, description))
 
-fun <A : String?> thatTheAnswerTo(description: String, question: Question<String?>) =
-        StringEnsure(KnowableStringAnswer(question, description))
+fun <A : Boolean?> thatTheAnswerTo(question: Question<Boolean?>) = BooleanEnsure(KnowableBooleanAnswer(question, question.subject))
 
+fun <A : String?> thatTheAnswerTo(description: String, question: Question<String?>) = StringEnsure(KnowableStringAnswer(question, description))
+
+fun <A : String?> thatTheAnswerTo(question: Question<String?>) = StringEnsure(KnowableStringAnswer(question, question.subject))
 
 fun <A : Comparable<A>> thatTheAnswerTo(description: String, question: Question<A>) =
         ComparableEnsure(KnowableComparableAnswer(question, description), null, description)
 
-fun <A : Comparable<A>> thatTheAnswerTo(question: Question<A>) = thatTheAnswerTo(question.getSubject(), question)
+fun <A : Comparable<A>> thatTheAnswerTo(question: Question<A>) = thatTheAnswerTo(question.subject, question)
 
 fun <A> thatTheAnswersTo(description: String, question: Question<Collection<A>>) =
         CollectionEnsure(KnowableCollectionAnswer(question, description), description)
 
-fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.getSubject(), question)
+fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.subject, question)
 
 fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)

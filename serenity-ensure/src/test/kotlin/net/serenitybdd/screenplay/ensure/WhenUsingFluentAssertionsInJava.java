@@ -312,7 +312,8 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue()
+                Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue(),
+                Ensure.thatTheAnswerTo(stringBooleanEquivalentOf("true")).asABoolean().isTrue()
         );
     }
 
@@ -321,7 +322,8 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the string value", stringValueOf("red, blue, yellow")).doesNotContain("green")
+                Ensure.thatTheAnswerTo("the string value", stringValueOf("red, blue, yellow")).doesNotContain("green"),
+                Ensure.thatTheAnswerTo(stringValueOf("red, blue, yellow")).doesNotContain("green")
         );
     }
 

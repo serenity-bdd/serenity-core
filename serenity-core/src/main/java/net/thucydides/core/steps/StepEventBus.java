@@ -797,4 +797,10 @@ public class StepEventBus {
             );
         }
     }
+
+    public void initialiseSession() {
+        if (clearSessionForEachTest()) {
+            Serenity.clearCurrentSession();
+        }
+    }
 }

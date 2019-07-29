@@ -8,6 +8,7 @@ import net.serenitybdd.core.injectors.*;
 import net.serenitybdd.core.reports.ReportDataSaver;
 import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.*;
 import net.thucydides.core.pages.*;

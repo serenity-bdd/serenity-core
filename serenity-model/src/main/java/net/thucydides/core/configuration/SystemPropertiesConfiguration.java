@@ -241,13 +241,11 @@ public class SystemPropertiesConfiguration implements Configuration {
      */
     public String getBaseUrl() {
         if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
-            return Optional.ofNullable(EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getProperty(WEBDRIVER_BASE_URL.getPropertyName()))
+            return EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
                     .orElse(defaultBaseUrl);
         } else {
             return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
         }
     }
-
-
 }

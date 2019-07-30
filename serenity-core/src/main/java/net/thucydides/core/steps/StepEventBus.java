@@ -252,7 +252,6 @@ public class StepEventBus {
 
     public void clear() {
         stepStack.clear();
-        StepFactory.getFactory().reset();
         clearStepFailures();
         currentTestIsNotSuspended();
         noAssumptionsViolated();
@@ -260,6 +259,7 @@ public class StepEventBus {
 
         if (clearSessionForEachTest()) {
             Serenity.clearCurrentSession();
+            StepFactory.getFactory().reset();
         }
 
         resultTally = null;

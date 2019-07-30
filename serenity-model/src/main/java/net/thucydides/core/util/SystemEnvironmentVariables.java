@@ -160,7 +160,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public void setProperties(Map<String, String> properties) {
 
         propertySetLock.lock();
-        properties.putAll(properties);
+        this.properties.putAll(properties);
         propertySetLock.unlock();
     }
 

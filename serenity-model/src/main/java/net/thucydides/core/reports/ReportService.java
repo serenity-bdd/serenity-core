@@ -129,6 +129,8 @@ public class ReportService {
         for (final AcceptanceTestFullReporter reporter : getSubscribedFullReporters()) {
             generateFullReportFor(allTestOutcomes, reporter);
         }
+        generateJUnitTestResults(allTestOutcomes);
+
     }
 
     /**
@@ -176,7 +178,6 @@ public class ReportService {
                     LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
                 }));
             }
-            generateJUnitTestResults(testOutcomes);
             waitForReportGenerationToFinish(tasks);
         } finally {
             LOGGER.debug("Shutting down executor service");

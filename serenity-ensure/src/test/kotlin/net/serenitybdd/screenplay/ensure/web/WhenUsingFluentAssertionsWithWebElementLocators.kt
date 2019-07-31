@@ -144,6 +144,34 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
             }
 
             @Nested
+            inner class IsNotDisplayed {
+
+                @Test
+                fun `when the element is on the page`() {
+                    shouldFailWhenChecking(that(ElementLocated.by(By.id("firstName"))).isNotDisplayed(), wendy)
+                }
+
+                @Test
+                fun `when the element is not on the page`() {
+                    shouldPassWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isNotDisplayed(), wendy)
+                }
+
+                @Test
+                fun `when the element is not displayed on the page`() {
+                    shouldPassWhenChecking(that(ElementLocated.by(By.id("#hidden-field"))).isNotDisplayed(), wendy)
+                }
+
+                @Test
+                fun `when the element is displayed but should not be`() {
+                    shouldFailWithMessage("""|Expecting web element located by #firstName that is not displayed
+                                             |But got: web element is displayed"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#firstName")).isNotDisplayed(), wendy)
+                }
+
+
+            }
+            @Nested
             inner class IsDisabled {
 
                 @Test

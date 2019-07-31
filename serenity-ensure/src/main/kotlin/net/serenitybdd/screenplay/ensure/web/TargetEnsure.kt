@@ -35,6 +35,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun isDisplayed() = PerformablePredicate(value, IS_DISPLAYED, isNegated(), targetDescription)
 
     /**
+     * Verifies that the element is currently displayed
+     */
+    fun isNotDisplayed() = PerformablePredicate(value, IS_NOT_DISPLAYED, isNegated(), targetDescription)
+
+    /**
      * Verifies that the element is currently disabled
      */
     fun isDisabled() = PerformablePredicate(value, IS_DISABLED, isNegated(), targetDescription)
@@ -207,6 +212,16 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
                 }
         )
 
+        private val IS_NOT_DISPLAYED = expectThatActualIs("not displayed",
+                fun(actor: Actor?, element: Target?): Boolean {
+                    if ((actor == null) || (element == null)) return false
+                    val resolvedElements = element.resolveAllFor(actor);
+                    val actualValue = resolvedElements.size == 0 || !resolvedElements[0].isCurrentlyVisible
+                    BlackBox.logAssertionValues(isNotDisplayed(actualValue), "an element that is not displayed")
+                    return actualValue
+                }
+        )
+
         private val IS_DISABLED = expectThatActualIs("disabled",
                 fun(actor: Actor?, element: Target?): Boolean {
                     if ((actor == null) || (element == null)) return false
@@ -229,6 +244,7 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
         private fun isDisabledOrNot(actualValue: Boolean) = if (actualValue) "web element is disabled" else "web element is not disabled"
         private fun isEnabledOrNot(actualValue: Boolean) = if (actualValue) "web element is enabled" else "web element is not enabled"
         private fun isDisplayedOrNot(actualValue: Boolean) = if (actualValue) "web element is displayed" else "web element is not displayed"
+        private fun isNotDisplayed(actualValue: Boolean) = if (actualValue) "web element is not displayed" else "web element is displayed"
     }
 
 }

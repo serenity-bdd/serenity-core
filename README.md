@@ -83,7 +83,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
-| 2.0.64        | 2.0.64                | 1.0.18             | 4.2.0               | 
+| 2.0.64        | 2.0.64                | 1.0.19             | 4.2.0               | 
 | 2.0.56        | 2.0.56                | 1.0.15             | 4.2.0               | 
 | 2.0.54        | 2.0.54                | 1.0.14             | 4.2.0               | 
 | 2.0.52        | 2.0.52                | 1.0.14             | 4.2.0               | 

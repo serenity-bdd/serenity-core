@@ -29,6 +29,9 @@ public class EnvironmentSpecificConfiguration {
         if (candidateValue == null) {
             candidateValue = propertyForDefaultEnvironment(property);
         }
+        if (candidateValue == null) {
+            candidateValue = contextlessProperty.apply(property);
+        }
         return substituteProperties(candidateValue);
     };
 

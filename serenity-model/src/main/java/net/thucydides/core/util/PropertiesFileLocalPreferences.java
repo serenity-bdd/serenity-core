@@ -9,6 +9,7 @@ import org.slf4j.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -100,7 +101,9 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private Properties typesafeConfigPreferences() {
-        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+        File configFile = new File("src/test/resources/" + TYPESAFE_CONFIG_FILE);
+        Set<Map.Entry<String, ConfigValue>> preferences = (configFile.exists()) ?
+                ConfigFactory.parseFile(configFile).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
         return getPropertiesFromConfig(preferences);
     }
 
@@ -177,13 +180,26 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return new File(legacyPropertiesFileName());
     }
 
+    private final String PROPERTIES = ThucydidesSystemProperty.PROPERTIES.getPropertyName();
+
     private String defaultPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "serenity.properties");
+
+        return optionalEnvironmentVariable(System.getProperty(PROPERTIES))
+                .orElse(
+                        optionalEnvironmentVariable(System.getenv(PROPERTIES))
+                                .orElse("serenity.properties")
+                );
     }
 
     private String legacyPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "thucydides.properties");
-    }
+        return optionalEnvironmentVariable(System.getProperty(PROPERTIES))
+                .orElse(
+                        optionalEnvironmentVariable(System.getenv(PROPERTIES))
+                                .orElse("thucydides.properties")
+                );    }
 
+    private Optional<String> optionalEnvironmentVariable(String value) {
+        return Optional.ofNullable(value);
+    }
 
 }

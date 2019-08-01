@@ -57,7 +57,7 @@ The tables below list the latest stable versions of Serenity BDD and other relat
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version |
 |---------------|-----------------------|-------------------|----------------------|
-| 2.0.64        | 2.0.64                | 3.141.59          | 3.3.0                |
+| 2.0.65        | 2.0.65                | 3.141.59          | 3.3.0                |
 | 2.0.56        | 2.0.56                | 3.141.59          | 3.3.0                |
 | 2.0.52        | 2.0.52                | 3.141.59          | 3.3.0                |
 | 2.0.48        | 2.0.48                | 3.141.59          | 3.3.0                |

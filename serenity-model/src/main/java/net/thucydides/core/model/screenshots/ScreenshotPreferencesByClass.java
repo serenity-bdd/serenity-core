@@ -25,7 +25,7 @@ public class ScreenshotPreferencesByClass {
 
                 String preference = EnvironmentSpecificConfiguration.from(environmentVariables)
                         .getOptionalProperty(key)
-                        .orElse(null);
+                        .orElse("FOR_EACH_ACTION");
 
                 screenshotPreference.put(singularClassNameFrom(key).toLowerCase(),
                                          screenshotPreferenceValueFrom(preference));

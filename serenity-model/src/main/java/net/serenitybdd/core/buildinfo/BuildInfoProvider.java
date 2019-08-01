@@ -88,7 +88,7 @@ public class BuildInfoProvider {
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty(simplifiedKey)
+                    .getOptionalProperty(key)
                     .orElse(null);
 
             String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;

@@ -40,7 +40,7 @@ public class AddCustomCapabilities {
             //String propertyValue = environmentVariables.getProperty(propertyKey);
 
             String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty(preparedPropertyKey)
+                    .getOptionalProperty(propertyKey)
                     .orElse(null);
 
             if (isNotEmpty(propertyValue)) {

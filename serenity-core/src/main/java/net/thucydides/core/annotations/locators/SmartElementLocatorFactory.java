@@ -12,8 +12,8 @@ public final class SmartElementLocatorFactory implements ElementLocatorFactory {
     private MobilePlatform platform;
 
     public SmartElementLocatorFactory(SearchContext searchContext, MobilePlatform platform) {
-    	this.searchContext = searchContext;
-    	this.platform = platform;
+        this.searchContext = searchContext;
+        this.platform = platform;
     }
 
     public ElementLocator createLocator(Field field) {

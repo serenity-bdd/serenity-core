@@ -41,15 +41,6 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final MobilePlatform platform;
     private final EnvironmentVariables environmentVariables;
 
-
-    /**
-     * @deprecated The timeOutInSeconds parameter is no longer used - implicit timeouts should now be used
-     */
-    public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
-        this(Clock.systemDefaultZone(), searchContext, field, platform);
-
-    }
-
     /**
      * Main constructor.
      *

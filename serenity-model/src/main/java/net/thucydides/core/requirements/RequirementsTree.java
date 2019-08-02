@@ -33,18 +33,18 @@ public class RequirementsTree {
         return rootRequirements.stream().flatMap(Requirement::stream);
     }
 
-//    public List<Requirement> asFlattenedList() {
-//        List<Requirement> requirements = new ArrayList<>();
-//        rootRequirements.forEach(
-//                requirement -> {
-//                    requirements.add(requirement);
-//                    for(Requirement child : requirement.getChildren()) {
-//                        requirements.addAll(RequirementsTree.forRequirement(child).asFlattenedList());
-//                    }
-//                }
-//        );
-//        return requirements;
-//    }
+    public List<Requirement> asFlattenedList() {
+        List<Requirement> requirements = new ArrayList<>();
+        rootRequirements.forEach(
+                requirement -> {
+                    requirements.add(requirement);
+                    for(Requirement child : requirement.getChildren()) {
+                        requirements.addAll(RequirementsTree.forRequirement(child).asFlattenedList());
+                    }
+                }
+        );
+        return requirements;
+    }
 
     public String toString() {
         return net.thucydides.core.requirements.model.RequirementTree.withRequirements(rootRequirements).toString();

@@ -145,7 +145,7 @@
                             <#if (testOutcome.manual)>
 
                                 <#if (testOutcome.lastTested?? && testOutcome.manualTestingUpToDate)>
-<#--                                Last tested and up to date-->
+                                <#--                                Last tested and up to date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
@@ -153,17 +153,17 @@
                                         <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
                                             <#list testOutcome.renderedManualTestEvidence as manualEvidence>
-                                            <a target="_blank" href="${manualEvidence.link}">
+                                                <a target="_blank" href="${manualEvidence.link}">
                                                 <span class="badge badge-pill badge-primary">
                                                     <i class="fas fa-external-link-alt"></i> ${manualEvidence.label}
                                                 </span>
-                                            </a>
+                                                </a>
                                             </#list>
                                         </#if>
                                     </div>
 
                                 <#elseif (testOutcome.lastTested??)>
-<#--                                Last tested out of date-->
+                                <#--                                Last tested out of date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-clock"></i> Awaiting new manual test. Last tested version: ${testOutcome.lastTested}</span>
@@ -177,7 +177,7 @@
                                         </#if>
                                     </div>
                                 <#else>
-<#--                                No last tested version specified -->
+                                <#--                                No last tested version specified -->
                                     <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                                 </#if>
                             </#if>
@@ -369,6 +369,7 @@
                 <#macro write_step(step, step_number)>
                 <@step_details step=step step_number=step_number level=level/>
                 <#if step.isAGroup()>
+                <#if level == 1>
                 <tr>
                     <td colspan="5">
                         <table id="stepSection${step_number}" style="display:none; width:100%">
@@ -376,17 +377,20 @@
                             <#assign level = level + 1>
                             <#assign substep_number = 1>
                             <#list step.children as nestedStep>
-                                <#if step.isAGroup() >
-                                    <#assign substep_number = substep_number + 1>
-                                    <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
-                                </#if>
+                                <@write_step step=nestedStep step_number=""/>
+<#--                                <#if step.isAGroup() >-->
+<#--                                    <#assign substep_number = substep_number + 1>-->
+<#--                                    <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>-->
+<#--                                </#if>-->
                             </#list>
                             <#assign level = level-1>
                             <#assign screenshotCount = screenshotCount + step.screenshotCount>
-
+                            <#if level == 1>
                         </table>
                     </td>
                 <tr>
+                    </#if>
+                    </#if>
                     </#if>
                     </#macro>
 
@@ -454,7 +458,7 @@
                         <#assign step_class_root = "top-level">
                     </#if>
                     <#assign step_indent = level*20>
-                    <#if step.isAGroup()>
+                    <#if level == 1 && step.isAGroup()>
                         <#assign showAccordion = true/>
                     <#else>
                         <#assign showAccordion = false/>
@@ -472,7 +476,7 @@
                                 <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
                             </a>
                         <#else>
-                            <span style="margin-left: ${step_indent}px; margin-right: 5px;"
+                            <span style="margin-left: 20px; margin-right: 5px;"
                                   class="${step_class_root}-icon">${step_outcome_icon}</span>
                         <#--<img style="margin-left: ${step_indent}px; margin-right: 5px;"-->
                         <#--src="images/${step_outcome_icon}" class="${step_class_root}-icon"/>-->

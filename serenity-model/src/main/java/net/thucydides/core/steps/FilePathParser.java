@@ -36,9 +36,8 @@ public class FilePathParser {
     }
 
     private String valueDefinedIn(EnvironmentVariables environmentVariables, String propertyName) {
-        if (environmentVariables.getValue(propertyName) != null) { return environmentVariables.getValue(propertyName); }
-
-        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(propertyName).orElse(null);
+        return (environmentVariables.getValue(propertyName) != null)
+                ? environmentVariables.getValue(propertyName) : environmentVariables.getProperty(propertyName);
     }
 
     private String operatingSystemLocalized(String testDataSource) {

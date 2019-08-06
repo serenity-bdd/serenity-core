@@ -133,9 +133,11 @@ public class AppiumConfiguration {
     private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
 
         Properties appiumProperties = new Properties();
-        List<String> appiumKeys =
+List<String> appiumKeys =
                 environmentVariables.getKeys()
                         .stream()
+                        .map(key->key.replaceFirst("environment.*.appium","appium"))
+                        .distinct()
                         .filter(key -> key.startsWith("appium."))
                         .collect(Collectors.toList());
 

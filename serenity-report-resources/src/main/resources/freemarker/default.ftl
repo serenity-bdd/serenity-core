@@ -374,11 +374,9 @@
                         <table id="stepSection${step_number}" style="display:none; width:100%">
 
                             <#assign level = level + 1>
-                            <#assign substep_number = 1>
                             <#list step.children as nestedStep>
                                 <#if step.isAGroup() >
-                                    <#assign substep_number = substep_number + 1>
-                                    <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
+                                    <@write_step step=nestedStep step_number=step_number + "-" + nestedStep_index/>
                                 </#if>
                             </#list>
                             <#assign level = level-1>

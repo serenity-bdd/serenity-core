@@ -1091,6 +1091,12 @@ public enum ThucydidesSystemProperty {
     DASHBOARD_EXCLUDED_TAG_LIST,
 
     /**
+     * If set, this will define the list of tag types which will be not formatted with title case in HTML report.
+     * This option allows to preserve underscores or camel case in tag name.
+     */
+    REPORT_RAW_TAG_LIST,
+
+    /**
      * Format the JSON test outcomes nicely.
      * "true" or "false", turned off by default.
      */

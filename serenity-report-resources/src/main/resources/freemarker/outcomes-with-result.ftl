@@ -513,7 +513,7 @@
                                                                     <a href="${tagResult.report}">
                                                                         <span class="badge"
                                                                               style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
-                                                                                class="fa fa-tag"></i> ${inflection.of(tagResult.tag.name).asATitle()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
+                                                                                class="fa fa-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
                                                                     </a>
                                                                 </#list>
                                                                 </div>

@@ -121,7 +121,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getStepDelay() {
         int stepDelay = 0;
 
-        String stepDelayValue = SERENITY_STEP_DELAY.from(environmentVariables);
+        String stepDelayValue = propertyNamed(SERENITY_STEP_DELAY);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             stepDelay = Integer.parseInt(stepDelayValue);
         }
@@ -131,8 +131,8 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     @Override
     public int getElementTimeoutInSeconds() {
-        Optional<Integer> serenityDefinedTimeoutInSeconds = integerValueOf(SERENITY_TIMEOUT.from(environmentVariables));
-        Optional<Integer> implicitTimeoutInMilliseconds = integerValueOf(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables));
+        Optional<Integer> serenityDefinedTimeoutInSeconds = integerPropertyNamed(SERENITY_TIMEOUT);
+        Optional<Integer> implicitTimeoutInMilliseconds = integerPropertyNamed(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT);
 
         if (serenityDefinedTimeoutInSeconds.isPresent()) {
             return implicitTimeoutInMilliseconds.get();
@@ -187,23 +187,23 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public double getEstimatedAverageStepCount() {
-        return THUCYDIDES_ESTIMATED_AVERAGE_STEP_COUNT.integerFrom(environmentVariables, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return integerPropertyNamed(SERENITY_ESTIMATED_AVERAGE_STEP_COUNT, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
-       return  Boolean.parseBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.from(environmentVariables,"false"));
+       return  Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS,"false"));
 //        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
-        return Boolean.parseBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.from(environmentVariables,"false"));
+        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS,"false"));
 //        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {
-        String takeScreenshotsLevel = SERENITY_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
+        String takeScreenshotsLevel = propertyNamed(SERENITY_TAKE_SCREENSHOTS);
         if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {
@@ -240,12 +240,30 @@ public class SystemPropertiesConfiguration implements Configuration {
      * It is also the base URL used to build relative paths.
      */
     public String getBaseUrl() {
-        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
-            return EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
-                    .orElse(defaultBaseUrl);
-        } else {
-            return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
-        }
+//        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
+//            return EnvironmentSpecificConfiguration.from(environmentVariables)
+//                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
+//                    .orElse(defaultBaseUrl);
+//        } else {
+            return propertyNamed(WEBDRIVER_BASE_URL, defaultBaseUrl);
+//        }
+    }
+
+    private String propertyNamed(ThucydidesSystemProperty property, String defaultValue) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName()).orElse(defaultValue);
+    }
+
+    private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
+        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName());
+        return value.map(Integer::parseInt);
+    }
+
+    private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
+        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName())
+                .orElse(Integer.toString(defaultValue)));
+    }
+
+    private String propertyNamed(ThucydidesSystemProperty propertyName) {
+        return propertyNamed(propertyName,null);
     }
 }

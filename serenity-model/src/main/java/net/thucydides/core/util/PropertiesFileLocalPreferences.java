@@ -77,7 +77,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return new Properties();
     }
 
-    private InputStream propertiesInputStream(){
+    private InputStream propertiesInputStream() {
         InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
         if (input == null) {
             input = Thread.currentThread().getContextClassLoader().getResourceAsStream(legacyPropertiesFileName());
@@ -101,10 +101,14 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private Properties typesafeConfigPreferences() {
-        File configFile = new File("src/test/resources/" + TYPESAFE_CONFIG_FILE);
-        Set<Map.Entry<String, ConfigValue>> preferences = (configFile.exists()) ?
-                ConfigFactory.parseFile(configFile).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
-        return getPropertiesFromConfig(preferences);
+        File configFile = new File(defaultPropertiesConfFileName());
+        if (configFile.exists()) {
+            Set<Map.Entry<String, ConfigValue>> preferences = (configFile.exists()) ?
+                    ConfigFactory.parseFile(configFile).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+            return getPropertiesFromConfig(preferences);
+        } else {
+            return new Properties();
+        }
     }
 
     private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {
@@ -125,7 +129,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private Properties preferencesIn(File preferencesFile) throws IOException {
         Properties preferenceProperties = new Properties();
         if (preferencesFile.exists()) {
-            try(InputStream preferences = new FileInputStream(preferencesFile)) {
+            try (InputStream preferences = new FileInputStream(preferencesFile)) {
                 LOGGER.debug("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
                 preferenceProperties.load(preferences);
             }
@@ -182,6 +186,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private final String PROPERTIES = ThucydidesSystemProperty.PROPERTIES.getPropertyName();
 
+    private String defaultPropertiesConfFileName() {
+        return optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf");
+    }
+
     private String defaultPropertiesFileName() {
 
         return optionalEnvironmentVariable(System.getProperty(PROPERTIES))
@@ -196,7 +204,8 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                 .orElse(
                         optionalEnvironmentVariable(System.getenv(PROPERTIES))
                                 .orElse("thucydides.properties")
-                );    }
+                );
+    }
 
     private Optional<String> optionalEnvironmentVariable(String value) {
         return Optional.ofNullable(value);

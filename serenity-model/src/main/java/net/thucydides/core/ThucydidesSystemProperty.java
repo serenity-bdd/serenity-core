@@ -1446,6 +1446,14 @@ public enum ThucydidesSystemProperty {
         return propertyName;
     }
 
+    public String getLegacyPropertyName() {
+        if (propertyName.startsWith("serenity.")) {
+            return "thucydides." + propertyName.substring(9);
+        } else {
+            return propertyName;
+        }
+    }
+
     @Override
     public String toString() {
         return propertyName;

@@ -78,9 +78,13 @@ public class EnvironmentSpecificConfiguration {
     }
 
 
-    public Optional<String> getOptionalProperty(String propertyName) {
+    public Optional<String> getOptionalProperty(String... propertyNames) {
 
-        String propertyValue = getPropertyValue(propertyName);
+        String propertyValue =  null;
+        for(String propertyName : propertyNames) {
+            propertyValue = getPropertyValue(propertyName);
+            if (propertyValue !=  null) { break; }
+        }
 
         if (propertyValue == null) {
             return Optional.empty();

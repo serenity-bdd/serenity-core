@@ -250,16 +250,22 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     private String propertyNamed(ThucydidesSystemProperty property, String defaultValue) {
-        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName()).orElse(defaultValue);
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                                               .getOptionalProperty(property.getPropertyName(), property.getLegacyPropertyName())
+                                               .orElse(defaultValue);
     }
 
     private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
-        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName());
+        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                                 .getOptionalProperty(property.getPropertyName(),
+                                                                                      property.getLegacyPropertyName());
         return value.map(Integer::parseInt);
     }
 
     private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
-        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property.getPropertyName())
+        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(property.getPropertyName(),
+                                     property.getLegacyPropertyName())
                 .orElse(Integer.toString(defaultValue)));
     }
 

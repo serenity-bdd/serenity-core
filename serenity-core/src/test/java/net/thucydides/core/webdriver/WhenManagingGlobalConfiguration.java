@@ -23,7 +23,7 @@ public class WhenManagingGlobalConfiguration {
 
     @Test
     public void the_step_delay_value_can_be_defined_in_a_system_property() {
-        environmentVariables.setProperty("thucydides.step.delay", "1000");
+        environmentVariables.setProperty("serenity.step.delay", "1000");
 
         assertThat(configuration.getStepDelay(), is(1000));
     }

@@ -139,7 +139,7 @@ public class EnvironmentSpecificConfiguration {
         }
 
         if (specifiedEnvironmentNotConfiguredIn(environmentVariables)) {
-            return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
+            return EnvironmentStrategy.USE_DEFAULT_PROPERTIES;
         }
 
         if (defaultEnvironmentsAreConfigured && !environmentIsSpecified) {

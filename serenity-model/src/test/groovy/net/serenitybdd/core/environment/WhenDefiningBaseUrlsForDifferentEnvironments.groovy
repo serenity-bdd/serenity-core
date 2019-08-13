@@ -177,7 +177,7 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
 
     }
 
-    def """If no configured environment can be found, an exception is thrown
+    def """If no configured environment can be found, the default should be used if defined
              environments {
                 default {
                     webdriver.base.url = http://default.myapp.myorg.com
@@ -193,9 +193,32 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
                 "environment"                            : "prod",
         ])
         when:
-        EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("webdriver.base.url")
+        def baseUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("webdriver.base.url")
         then:
-        thrown(UnknownEnvironmentException)
+        baseUrl == "http://default.foo.com"
+
+    }
+
+
+    def """If no configured environment can be found, the normal value should be used if no default is defined
+             environments {
+                default {
+                    webdriver.base.url = http://default.myapp.myorg.com
+                }
+                dev {
+                    webdriver.base.url = http://dev.myapp.myorg.com
+                }
+        """() {
+
+        given:
+        environmentVariables.setProperties([
+                "webdriver.base.url": "http://default.foo.com",
+                "environment"       : "prod",
+        ])
+        when:
+        def baseUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("webdriver.base.url")
+        then:
+        baseUrl == "http://default.foo.com"
 
     }
 

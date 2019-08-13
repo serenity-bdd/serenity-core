@@ -134,9 +134,11 @@ public class EnvironmentSpecificConfiguration {
         boolean environmentIsSpecified = environmentVariables.getProperty("environment") != null;
         boolean defaultEnvironmentsAreConfigured = !environmentVariables.getPropertiesWithPrefix("environments.default.").isEmpty();
 
-        ensureSpecifiedEnvironmentConfigurationExistsFor(environmentVariables);
-
         if (!environmentsAreConfigured) {
+            return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
+        }
+
+        if (specifiedEnvironmentNotConfiguredIn(environmentVariables)) {
             return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
         }
 
@@ -144,13 +146,6 @@ public class EnvironmentSpecificConfiguration {
             return EnvironmentStrategy.USE_DEFAULT_PROPERTIES;
         }
 
-        if (environmentsAreConfigured && !environmentIsSpecified) {
-            return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
-        }
-
-        if (!environmentIsSpecified && defaultEnvironmentsAreConfigured) {
-            return EnvironmentStrategy.USE_DEFAULT_CONFIGURATION;
-        }
         if (!environmentIsSpecified) {
             return EnvironmentStrategy.ENVIRONMENT_CONFIGURED_BUT_NOT_NAMED;
         }
@@ -158,11 +153,8 @@ public class EnvironmentSpecificConfiguration {
         return EnvironmentStrategy.ENVIRONMENT_CONFIGURED_AND_NAMED;
     }
 
-    private static void ensureSpecifiedEnvironmentConfigurationExistsFor(EnvironmentVariables environmentVariables) {
+    private static boolean specifiedEnvironmentNotConfiguredIn(EnvironmentVariables environmentVariables) {
         String environment = getDefinedEnvironment(environmentVariables);
-        if ((environment != null) && (environmentVariables.getPropertiesWithPrefix("environments." + environment + ".")).isEmpty()) {
-            throw new UnknownEnvironmentException("No environment configuration found for environment '" + environment + "'");
-        }
-
+        return ((environment != null) && (environmentVariables.getPropertiesWithPrefix("environments." + environment + ".")).isEmpty());
     }
 }

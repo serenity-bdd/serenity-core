@@ -86,25 +86,21 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private Properties typesafeConfigPreferencesInCustomDefinedConfigFile() {
-        String providedConfigPath = defaultPropertiesFileName();
-        if (!providedConfigPath.endsWith(".conf")) {
+
+        Optional<File> providedConfigFile = defaultPropertiesConfFile();
+        if (!providedConfigFile.isPresent()) {
             return new Properties();
         }
 
-        File providedConfigFile = new File(providedConfigPath);
-        if (!providedConfigFile.exists()) {
-            return new Properties();
-        }
-
-        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile).entrySet();
+        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile.get()).entrySet();
         return getPropertiesFromConfig(preferences);
     }
 
     private Properties typesafeConfigPreferences() {
-        File configFile = new File(defaultPropertiesConfFileName());
-        if (configFile.exists()) {
-            Set<Map.Entry<String, ConfigValue>> preferences = (configFile.exists()) ?
-                    ConfigFactory.parseFile(configFile).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+        Optional<File> configFile = defaultPropertiesConfFile();
+        if (configFile.isPresent()) {
+            Set<Map.Entry<String, ConfigValue>> preferences = (configFile.get().exists()) ?
+                    ConfigFactory.parseFile(configFile.get()).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
             return getPropertiesFromConfig(preferences);
         } else {
             return new Properties();
@@ -186,8 +182,16 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private final String PROPERTIES = ThucydidesSystemProperty.PROPERTIES.getPropertyName();
 
-    private String defaultPropertiesConfFileName() {
-        return optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf");
+    private Optional<File> defaultPropertiesConfFile() {
+        List<String> possibleConfigFileNames = Arrays.asList(
+                optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf"),
+                        "src/test/resources/serenity.conf",
+                        "src/main/resources/serenity.conf");
+
+        return possibleConfigFileNames.stream()
+                .map(File::new)
+                .filter(File::exists)
+                .findFirst();
     }
 
     private String defaultPropertiesFileName() {

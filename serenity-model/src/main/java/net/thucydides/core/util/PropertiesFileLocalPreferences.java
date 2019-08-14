@@ -97,14 +97,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private Properties typesafeConfigPreferences() {
-        Optional<File> configFile = defaultPropertiesConfFile();
-        if (configFile.isPresent()) {
-            Set<Map.Entry<String, ConfigValue>> preferences = (configFile.get().exists()) ?
-                    ConfigFactory.parseFile(configFile.get()).entrySet() : ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
-            return getPropertiesFromConfig(preferences);
-        } else {
-            return new Properties();
-        }
+        return defaultPropertiesConfFile()
+                .filter(File::exists)
+                .map(configFile -> getPropertiesFromConfig(ConfigFactory.parseFile(configFile).entrySet()))
+                .orElse(getPropertiesFromConfig(ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet()));
     }
 
     private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {
@@ -185,8 +181,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private Optional<File> defaultPropertiesConfFile() {
         List<String> possibleConfigFileNames = Arrays.asList(
                 optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf"),
-                        "src/test/resources/serenity.conf",
-                        "src/main/resources/serenity.conf");
+                "src/main/resources/serenity.conf");
 
         return possibleConfigFileNames.stream()
                 .map(File::new)

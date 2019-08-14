@@ -20,6 +20,7 @@ import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import net.thucydides.core.util.TagInflector;
 import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
 
@@ -126,6 +127,7 @@ public class FreemarkerContext {
                 .splitToList(REPORT_TAGTYPES.from(environmentVariables, "feature"));
 
         context.put("inflection", Inflector.getInstance());
+        context.put("tagInflector", new TagInflector(environmentVariables));
 
         Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
                 .filter(tag -> testOutcomes.containsTagMatching(tag))
@@ -180,6 +182,7 @@ public class FreemarkerContext {
         context.put("reportFormatter", reportFormatter);
         context.put("formatted", new NumericalFormatter());
         context.put("inflection", Inflector.getInstance());
+        context.put("tagInflector", new TagInflector(environmentVariables));
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
         context.put("reportOptions", new ReportOptions(environmentVariables));

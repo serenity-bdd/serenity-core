@@ -114,7 +114,7 @@
                         <td valign="top">
                             <#list filteredTags as tag>
                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
-                                <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
+                                <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
                                 <p class="tag">
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">

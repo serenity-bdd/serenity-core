@@ -14,8 +14,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<serenity.version>2.0.67</serenity.version>
+		<serenity.version>2.0.69</serenity.version>
 		<webdriver.driver>appium</webdriver.driver>
+		<serenity.maven.version>2.0.69</serenity.maven.version>
+		<serenity.cucumber.version>1.0.21</serenity.cucumber.version>
+		<cucumber.version>4.2.0</cucumber.version>
+		<serenity.test.root></serenity.test.root>
 	</properties>
 
 	<repositories>
@@ -38,15 +42,29 @@
 			<url>http://jcenter.bintray.com</url>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<dependencies>
-
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>net.serenity-bdd</groupId>
 			<artifactId>serenity-core</artifactId>
 			<version>${serenity.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.cucumber</groupId>
+					<artifactId>cucumber-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>net.serenity-bdd</groupId>
 			<artifactId>serenity-junit</artifactId>
 			<version>${serenity.version}</version>
@@ -79,6 +97,12 @@
 			<artifactId>assertj-core</artifactId>
 			<scope>test</scope>
 			<version>3.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.serenity-bdd</groupId>
+			<artifactId>serenity-cucumber4</artifactId>
+			<version>${serenity.cucumber.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -127,7 +151,7 @@
 			<plugin>
 				<groupId>net.serenity-bdd.maven.plugins</groupId>
 				<artifactId>serenity-maven-plugin</artifactId>
-				<version>${serenity.version}</version>
+				<version>${serenity.maven.version}</version>
 				<executions>
 					<execution>
 						<id>serenity-reports</id>
@@ -140,5 +164,34 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>cucumber</id>
+			<properties>
+				<serenity.test.root>com.serenity.cucumber</serenity.test.root>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M3</version>
+						<configuration>
+							<includes>
+								<include>**/cucumber/RecordNotes.java</include>
+							</includes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
  

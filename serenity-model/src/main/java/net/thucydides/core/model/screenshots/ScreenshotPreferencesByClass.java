@@ -1,5 +1,6 @@
 package net.thucydides.core.model.screenshots;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
@@ -17,14 +18,19 @@ public class ScreenshotPreferencesByClass {
     }
 
     private Map<String, TakeScreenshots> classNameToScreenshotPreferencesDefinedIn(EnvironmentVariables environmentVariables) {
-        Map<String, TakeScreenshots> screenshotPreference = new HashMap();
+        Map<String, TakeScreenshots> screenshotPreference = new HashMap<>();
 
         for (String key : environmentVariables.getKeys()) {
             if (key.startsWith(SERENITY_TAKE_SCREENSHOTS_FOR)) {
+
+                String preference = EnvironmentSpecificConfiguration.from(environmentVariables)
+                        .getOptionalProperty(key)
+                        .orElse("FOR_EACH_ACTION");
+
                 screenshotPreference.put(singularClassNameFrom(key).toLowerCase(),
-                                         screenshotPreferenceValueFrom(environmentVariables.getProperty(key)));
+                                         screenshotPreferenceValueFrom(preference));
                 screenshotPreference.put(pluralClassNameFrom(key).toLowerCase(),
-                                         screenshotPreferenceValueFrom(environmentVariables.getProperty(key)));
+                                         screenshotPreferenceValueFrom(preference));
             }
         }
         return screenshotPreference;

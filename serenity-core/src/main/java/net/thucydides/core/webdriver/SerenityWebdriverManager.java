@@ -95,6 +95,11 @@ public class SerenityWebdriverManager implements WebdriverManager {
     }
 
     @Override
+    public void overrideProperties(Map<String, String> propertyValues) {
+        configuration.getEnvironmentVariables().setProperties(propertyValues);
+    }
+
+    @Override
     public WebdriverManager withProperty(String property, String value) {
         EnvironmentVariables updatedEnvironmentVariables = configuration.getEnvironmentVariables().copy();
         updatedEnvironmentVariables.setProperty(property, value);

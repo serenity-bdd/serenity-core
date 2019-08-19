@@ -2,6 +2,7 @@ package net.serenitybdd.core.environment;
 
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,9 @@ public class EnvironmentSpecificConfiguration {
         String candidateValue = propertyForAllEnvironments(property);
         if (candidateValue == null) {
             candidateValue = propertyForDefaultEnvironment(property);
+        }
+        if (candidateValue == null) {
+            candidateValue = contextlessProperty.apply(property);
         }
         return substituteProperties(candidateValue);
     };
@@ -62,17 +66,30 @@ public class EnvironmentSpecificConfiguration {
         this.environmentStrategy = environmentStrategyDefinedIn(environmentVariables);
     }
 
-    public String getProperty(String propertyName) {
+    public String getProperty(final String propertyName) {
 
-        String propertyValue = getPropertyValue(propertyName);
+        return getOptionalProperty(propertyName)
+                .orElseThrow(
+                () -> new UndefinedEnvironmentVariableException("Environment '"
+                                + propertyName
+                                + "' property undefined for environment '"
+                                + getDefinedEnvironment(environmentVariables) + "'")
+        );
+    }
+
+
+    public Optional<String> getOptionalProperty(String... propertyNames) {
+
+        String propertyValue =  null;
+        for(String propertyName : propertyNames) {
+            propertyValue = getPropertyValue(propertyName);
+            if (propertyValue !=  null) { break; }
+        }
 
         if (propertyValue == null) {
-            throw new UndefinedEnvironmentVariableException("Environment '"
-                    + propertyName
-                    + "' property undefined for environment '"
-                    + getDefinedEnvironment(environmentVariables) + "'");
+            return Optional.empty();
         }
-        return substituteProperties(propertyValue);
+        return Optional.ofNullable(substituteProperties(propertyValue));
     }
 
     private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
@@ -117,23 +134,18 @@ public class EnvironmentSpecificConfiguration {
         boolean environmentIsSpecified = environmentVariables.getProperty("environment") != null;
         boolean defaultEnvironmentsAreConfigured = !environmentVariables.getPropertiesWithPrefix("environments.default.").isEmpty();
 
-        ensureSpecifiedEnvironmentConfigurationExistsFor(environmentVariables);
-
         if (!environmentsAreConfigured) {
             return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
+        }
+
+        if (specifiedEnvironmentNotConfiguredIn(environmentVariables)) {
+            return EnvironmentStrategy.USE_DEFAULT_PROPERTIES;
         }
 
         if (defaultEnvironmentsAreConfigured && !environmentIsSpecified) {
             return EnvironmentStrategy.USE_DEFAULT_PROPERTIES;
         }
 
-        if (environmentsAreConfigured && !environmentIsSpecified) {
-            return EnvironmentStrategy.USE_NORMAL_PROPERTIES;
-        }
-
-        if (!environmentIsSpecified && defaultEnvironmentsAreConfigured) {
-            return EnvironmentStrategy.USE_DEFAULT_CONFIGURATION;
-        }
         if (!environmentIsSpecified) {
             return EnvironmentStrategy.ENVIRONMENT_CONFIGURED_BUT_NOT_NAMED;
         }
@@ -141,11 +153,8 @@ public class EnvironmentSpecificConfiguration {
         return EnvironmentStrategy.ENVIRONMENT_CONFIGURED_AND_NAMED;
     }
 
-    private static void ensureSpecifiedEnvironmentConfigurationExistsFor(EnvironmentVariables environmentVariables) {
+    private static boolean specifiedEnvironmentNotConfiguredIn(EnvironmentVariables environmentVariables) {
         String environment = getDefinedEnvironment(environmentVariables);
-        if ((environment != null) && (environmentVariables.getPropertiesWithPrefix("environments." + environment + ".")).isEmpty()) {
-            throw new UnknownEnvironmentException("No environment configuration found for environment '" + environment + "'");
-        }
-
+        return ((environment != null) && (environmentVariables.getPropertiesWithPrefix("environments." + environment + ".")).isEmpty());
     }
 }

@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.adaptors;
 
 import net.serenitybdd.core.collect.NewMap;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.adaptors.lettuce.LettuceXUnitAdaptor;
 import net.thucydides.core.reports.adaptors.specflow.SpecflowAdaptor;
@@ -31,10 +32,20 @@ public class AdaptorService {
         if (BUILT_IN_ADAPTORS.containsKey(name)) {
             return BUILT_IN_ADAPTORS.get(name);
         }
-        String customAdaptor = environmentVariables.getProperty("serenity.adaptors." + name);
-        if (customAdaptor == null) {
-            customAdaptor = environmentVariables.getProperty("thucydides.adaptors." + name);
-        }
+//        String customAdaptor = environmentVariables.getProperty("serenity.adaptors." + name);
+
+        String customAdaptor = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("serenity.adaptors." + name)
+                .orElse(
+                        EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                        .getOptionalProperty("thucydides.adaptors." + name)
+                                                        .orElse(null)
+                );
+
+
+//        if (customAdaptor == null) {
+//            customAdaptor = environmentVariables.getProperty("thucydides.adaptors." + name);
+//        }
         if (StringUtils.isNotEmpty(customAdaptor)) {
             return newAdaptor(customAdaptor);
         }

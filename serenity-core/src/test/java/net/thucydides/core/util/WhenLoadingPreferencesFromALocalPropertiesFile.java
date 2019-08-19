@@ -84,38 +84,45 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
     public void should_load_preferences_from_a_designated_properties_file_if_specified() throws Exception {
         writeToPropertiesFileCalled("myprops.properties", "webdriver.driver = safari");
 
-        environmentVariables.setProperty("properties", "myprops.properties");
+        System.setProperty("properties", "myprops.properties");
 
         localPreferences.setHomeDirectory(homeDirectory);
 
         localPreferences.loadPreferences();
 
         assertThat(environmentVariables.getProperty("webdriver.driver"), is("safari"));
+
+        System.clearProperty("properties");
     }
 
     @Test
     public void should_load_preferences_from_a_designated_properties_filepath_if_specified() throws Exception {
         String fullPath = writeToPropertiesFileCalled("myprops.properties", "webdriver.driver = safari");
 
-        environmentVariables.setProperty("properties", fullPath);
+        System.setProperty("properties", fullPath);
 
         localPreferences.setHomeDirectory(homeDirectory);
 
         localPreferences.loadPreferences();
 
         assertThat(environmentVariables.getProperty("webdriver.driver"), is("safari"));
+
+        System.clearProperty("properties");
     }
 
     @Test
     public void should_ignore_preferences_if_specified_file_does_not_exist() throws Exception {
 
-        environmentVariables.setProperty("properties", "noexistant.properties");
+        System.setProperty("properties", "noexistant.properties");
 
         localPreferences.setHomeDirectory(homeDirectory);
 
         localPreferences.loadPreferences();
 
         assertThat(environmentVariables.getProperty("webdriver.driver"), is(nullValue()));
+
+        System.clearProperty("properties");
+
     }
 
     @Test

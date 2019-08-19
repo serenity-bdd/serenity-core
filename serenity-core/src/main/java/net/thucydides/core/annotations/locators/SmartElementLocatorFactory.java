@@ -9,17 +9,15 @@ import java.lang.reflect.Field;
 
 public final class SmartElementLocatorFactory implements ElementLocatorFactory {
     private final SearchContext searchContext;
-    private int timeoutInSeconds;
     private MobilePlatform platform;
 
-    public SmartElementLocatorFactory(SearchContext searchContext, MobilePlatform platform, int timeoutInSeconds) {
-    	this.searchContext = searchContext;
-    	this.timeoutInSeconds = timeoutInSeconds;
-    	this.platform = platform;
+    public SmartElementLocatorFactory(SearchContext searchContext, MobilePlatform platform) {
+        this.searchContext = searchContext;
+        this.platform = platform;
     }
 
     public ElementLocator createLocator(Field field) {
         // FIXME: Need to pass through the appium platform either here, or in both ElementLocator instances
-        return new SmartAjaxElementLocator(searchContext, field, platform, timeoutInSeconds);
+        return new SmartAjaxElementLocator(searchContext, field, platform);
     }
 }

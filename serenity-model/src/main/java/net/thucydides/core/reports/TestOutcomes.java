@@ -385,19 +385,18 @@ public class TestOutcomes {
 
     public TestOutcomes forRequirement(Requirement requirement) {
 
-        Set<TestOutcome> testOutcomesForThisRequirement
-                = requirement.stream().flatMap(this::outcomesMatching).collect(Collectors.toSet());
-//
-//        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
-//            testOutcomesForThisRequirement.addAll(
-//                    withTag(childRequirement.asTag()).getOutcomes()
-//            );
-//            if (childRequirement.getCardNumber() != null) {
-//                testOutcomesForThisRequirement.addAll(
-//                        withCardNumber(childRequirement.getCardNumber()).getOutcomes()
-//                );
-//            }
-//        }
+        Set<TestOutcome> testOutcomesForThisRequirement = new HashSet<>();
+
+        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
+            testOutcomesForThisRequirement.addAll(
+                    withTag(childRequirement.asTag()).getOutcomes()
+            );
+            if (childRequirement.getCardNumber() != null) {
+                testOutcomesForThisRequirement.addAll(
+                        withCardNumber(childRequirement.getCardNumber()).getOutcomes()
+                );
+            }
+        }
 
         return TestOutcomes.of(testOutcomesForThisRequirement)
                 .withLabel(requirement.getDisplayName())

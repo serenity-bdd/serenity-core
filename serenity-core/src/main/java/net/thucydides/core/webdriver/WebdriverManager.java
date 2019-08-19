@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Manage WebDriver instances.
@@ -62,4 +63,6 @@ public interface WebdriverManager {
     void reset();
 
     WebdriverManager withOptions(String driverOptions);
+
+    void overrideProperties(Map<String, String> propertyValues);
 }

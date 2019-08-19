@@ -101,6 +101,11 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
+    public boolean isDisabled() {
+        return false;
+    }
+
+    @Override
     public void shouldNotBeEnabled() { }
 
     @Override

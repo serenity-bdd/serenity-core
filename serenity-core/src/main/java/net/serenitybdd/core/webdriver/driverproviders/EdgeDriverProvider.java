@@ -43,6 +43,9 @@ public class EdgeDriverProvider implements DriverProvider {
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge(), SupportedWebDriver.EDGE);
         driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
 
+        SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
+        AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
+
         return ProvideNewDriver.withConfiguration(environmentVariables,
                 desiredCapabilities,
                 driverServicePool,

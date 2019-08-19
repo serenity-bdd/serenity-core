@@ -312,7 +312,18 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue()
+                Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue(),
+                Ensure.thatTheAnswerTo(stringBooleanEquivalentOf("true")).asABoolean().isTrue()
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutStrings() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("the string value", stringValueOf("red, blue, yellow")).doesNotContain("green"),
+                Ensure.thatTheAnswerTo(stringValueOf("red, blue, yellow")).doesNotContain("green")
         );
     }
 
@@ -373,6 +384,12 @@ public class WhenUsingFluentAssertionsInJava {
     public Question<Boolean> booleanEquivalentOf(String todoItem) {
         return Question.about("a boolean value").answeredBy(
                 actor -> Boolean.valueOf(todoItem)
+        );
+    }
+
+    public Question<String> stringValueOf(String todoItem) {
+        return Question.about("a string value").answeredBy(
+                actor -> todoItem
         );
     }
 

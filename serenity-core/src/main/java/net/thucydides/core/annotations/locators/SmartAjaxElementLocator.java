@@ -23,6 +23,8 @@ import org.openqa.selenium.support.ui.SlowLoadableComponent;
 import java.lang.reflect.Field;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -30,8 +32,8 @@ import java.util.function.BiFunction;
 import static net.thucydides.core.annotations.locators.SearchContextType.*;
 
 public class SmartAjaxElementLocator extends SmartElementLocator implements WithConfigurableTimeout {
-    public static final Duration ZERO_SECONDS =  Duration.ofSeconds(0);
-    protected Optional<Integer> annotatedTimeoutInSeconds;
+    private static final Duration ZERO_SECONDS =  Duration.ofSeconds(0);
+    private Optional<Integer> annotatedTimeoutInSeconds;
     private final Clock clock;
 
     private final Field field;
@@ -39,20 +41,12 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final MobilePlatform platform;
     private final EnvironmentVariables environmentVariables;
 
-
     /**
      * Main constructor.
      *
      * @param searchContext    The SearchContext to use when locating elements
      * @param field            The field representing this element
-     * @param timeOutInSeconds How long to wait for the element to appear. Measured in seconds.
-     * @deprecated The timeOutInSeconds parameter is no longer used - implicit timeouts should now be used
      */
-    public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
-        this(Clock.systemDefaultZone(), searchContext, field, platform);
-
-    }
-
     public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform) {
         this(Clock.systemDefaultZone(), searchContext, field, platform);
 
@@ -66,7 +60,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     private final static SearchContextProvider WEB_ELEMENT_FACADE_WITH_OPTIONAL_TIMEOUT = (context, timeout) -> {
         if (timeout.isPresent()) {
-            return ((WebElementFacade) context).withTimeoutOf(timeout.get(), TimeUnit.SECONDS);
+            return ((WebElementFacade) context).withTimeoutOf(timeout.get(), ChronoUnit.SECONDS);
         } else {
             return context;
         }
@@ -75,7 +69,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final static SearchContextProvider WEBELEMENT_SEARCH_CONTEXT = (context, timeout) -> context;
 
 
-    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap();
+    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap<>();
 
     static {
         SEARCH_CONTEXTS.put(WebDriverFacadeContext,     UNMODIFIED_SEARCH_CONTEXT);
@@ -84,7 +78,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         SEARCH_CONTEXTS.put(WebElementContext,          WEBELEMENT_SEARCH_CONTEXT);
     }
 
-    public SmartAjaxElementLocator(Clock clock, SearchContext searchContext, Field field, MobilePlatform platform) {
+    SmartAjaxElementLocator(Clock clock, SearchContext searchContext, Field field, MobilePlatform platform) {
         super(searchContext, field, platform);
         this.annotatedTimeoutInSeconds = timeoutFrom(field);
         this.clock = clock;

@@ -22,7 +22,9 @@ public class OpenPageWithName implements Interaction {
 
     @Step("{0} opens the #pageName")
     public <T extends Actor> void performAs(T theUser) {
-        String pageUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(pageName);
+        String pageUrl = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(pageName)
+                .orElse(environmentVariables.getProperty(pageName));
         if (pageUrl == null) {
             throw new UnknownPageException("No page defined with the name '" + pageUrl + "'");
         }

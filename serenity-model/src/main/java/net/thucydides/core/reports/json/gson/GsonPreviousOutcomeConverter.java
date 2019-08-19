@@ -56,6 +56,6 @@ public class GsonPreviousOutcomeConverter {
     }
 
     private boolean usePrettyPrinting() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.JSON_PRETTY_PRINTING, false);
+        return Boolean.parseBoolean(ThucydidesSystemProperty.JSON_PRETTY_PRINTING.from(environmentVariables,"false"));
     }
 }

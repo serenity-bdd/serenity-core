@@ -22,7 +22,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
-        Map<String, String> propertyValues = new HashMap();
+        Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {
             propertyValues.put(property, systemProperties.getProperty(property));
         }
@@ -160,7 +160,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public void setProperties(Map<String, String> properties) {
 
         propertySetLock.lock();
-        properties.putAll(properties);
+        this.properties.putAll(properties);
         propertySetLock.unlock();
     }
 

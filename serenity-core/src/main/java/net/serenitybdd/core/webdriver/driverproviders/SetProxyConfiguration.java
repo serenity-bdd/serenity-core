@@ -21,25 +21,8 @@ public class SetProxyConfiguration {
     }
 
     public void in(DesiredCapabilities capabilities) {
-        String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
-        String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
-        String sslProxy = ThucydidesSystemProperty.SERENITY_PROXY_SSL.from(environmentVariables, proxyUrl);
-        String sslProxyPort = ThucydidesSystemProperty.SERENITY_PROXY_SSL_PORT.from(environmentVariables);
-
-        Proxy proxy = new Proxy();
-
-        if ((proxyUrl  != null) && (!proxyUrl.isEmpty())) {
-            JsonObject json = new JsonObject();
-            if (StringUtils.isNotEmpty(proxyUrl)) {
-                proxy.setHttpProxy(proxyUrl + ":"+ proxyPort);
-            }
-            if (StringUtils.isNotEmpty(sslProxy)) {
-                proxy.setSslProxy(sslProxy + ":"+ sslProxyPort);
-            }
-            if (StringUtils.isNotEmpty(sslProxyPort)) {
-                json.addProperty("sslProxyPort", sslProxyPort);
-            }
-            capabilities.setCapability(CapabilityType.PROXY, proxy);
-        }
+        ConfiguredProxy.definedIn(environmentVariables).ifPresent(
+                proxy -> capabilities.setCapability(CapabilityType.PROXY, proxy)
+        );
     }
 }

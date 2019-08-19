@@ -10,7 +10,7 @@ public interface Configuration<T extends Configuration> {
 
     int getStepDelay();
 
-    int getElementTimeout();
+    int getElementTimeoutInSeconds();
 
     /**
      * Use shouldUseAUniqueBrowser() instead

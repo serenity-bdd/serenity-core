@@ -57,6 +57,9 @@ public class PhantomJSDriverProvider implements DriverProvider {
 
     private DesiredCapabilities requestedPhantomJSCapabilities(EnvironmentVariables environmentVariables) {
         DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
+        AddLoggingPreferences.from(environmentVariables).to(capabilities);
+
         PhantomJSCapabilityEnhancer phantomEnhancer = new PhantomJSCapabilityEnhancer(environmentVariables);
         phantomEnhancer.enhanceCapabilities(capabilities);
 

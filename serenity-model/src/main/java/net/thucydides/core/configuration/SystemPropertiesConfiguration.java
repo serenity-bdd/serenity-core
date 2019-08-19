@@ -18,7 +18,6 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Centralized configuration of the test runner. You can configure the output
  * directory, the browser to use, and the reports to generate. Most
  * configuration elements can be set using system properties.
- *
  */
 public class SystemPropertiesConfiguration implements Configuration {
 
@@ -114,7 +113,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * If some property that can change output directory@Override was changed this method should be called
      */
-    public void reloadOutputDirectory(){
+    public void reloadOutputDirectory() {
         setOutputDirectory(loadOutputDirectoryFromSystemProperties());
     }
 
@@ -122,7 +121,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getStepDelay() {
         int stepDelay = 0;
 
-        String stepDelayValue = SERENITY_STEP_DELAY.from(environmentVariables);
+        String stepDelayValue = propertyNamed(SERENITY_STEP_DELAY);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             stepDelay = Integer.parseInt(stepDelayValue);
         }
@@ -131,14 +130,23 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     @Override
-    public int getElementTimeout() {
-        int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
+    public int getElementTimeoutInSeconds() {
+        Optional<Integer> serenityDefinedTimeoutInSeconds = integerPropertyNamed(SERENITY_TIMEOUT);
+        Optional<Integer> implicitTimeoutInMilliseconds = integerPropertyNamed(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT);
 
-        String serenityDefinedTimeoutInSeconds = SERENITY_TIMEOUT.from(environmentVariables);
-        if ((serenityDefinedTimeoutInSeconds != null) && (!serenityDefinedTimeoutInSeconds.isEmpty())) {
-            elementTimeout = Integer.parseInt(serenityDefinedTimeoutInSeconds);
+        if (serenityDefinedTimeoutInSeconds.isPresent()) {
+            return implicitTimeoutInMilliseconds.get();
+        } else
+            return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(DEFAULT_ELEMENT_TIMEOUT_SECONDS);
+
+    }
+
+    private Optional<Integer> integerValueOf(String value) {
+        if ((value != null) && (!value.isEmpty())) {
+            return Optional.of(Integer.parseInt(value));
+        } else {
+            return Optional.empty();
         }
-        return elementTimeout;
 
     }
 
@@ -162,7 +170,6 @@ public class SystemPropertiesConfiguration implements Configuration {
      * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
-     *
      */
     public File getOutputDirectory() {
         if (outputDirectory == null) {
@@ -180,21 +187,23 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public double getEstimatedAverageStepCount() {
-        return THUCYDIDES_ESTIMATED_AVERAGE_STEP_COUNT.integerFrom(environmentVariables, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return integerPropertyNamed(SERENITY_ESTIMATED_AVERAGE_STEP_COUNT, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
+       return  Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
+        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {
-        String takeScreenshotsLevel = SERENITY_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
+        String takeScreenshotsLevel = propertyNamed(SERENITY_TAKE_SCREENSHOTS);
         if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {
@@ -231,14 +240,36 @@ public class SystemPropertiesConfiguration implements Configuration {
      * It is also the base URL used to build relative paths.
      */
     public String getBaseUrl() {
-        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
-            return Optional.ofNullable(EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getProperty(WEBDRIVER_BASE_URL.getPropertyName()))
-                    .orElse(defaultBaseUrl);
-        } else {
-            return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
-        }
+//        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
+//            return EnvironmentSpecificConfiguration.from(environmentVariables)
+//                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
+//                    .orElse(defaultBaseUrl);
+//        } else {
+            return propertyNamed(WEBDRIVER_BASE_URL, defaultBaseUrl);
+//        }
     }
 
+    private String propertyNamed(ThucydidesSystemProperty property, String defaultValue) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                                               .getOptionalProperty(property.getPropertyName(), property.getLegacyPropertyName())
+                                               .orElse(defaultValue);
+    }
 
+    private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
+        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                                 .getOptionalProperty(property.getPropertyName(),
+                                                                                      property.getLegacyPropertyName());
+        return value.map(Integer::parseInt);
+    }
+
+    private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
+        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(property.getPropertyName(),
+                                     property.getLegacyPropertyName())
+                .orElse(Integer.toString(defaultValue)));
+    }
+
+    private String propertyNamed(ThucydidesSystemProperty propertyName) {
+        return propertyNamed(propertyName,null);
+    }
 }

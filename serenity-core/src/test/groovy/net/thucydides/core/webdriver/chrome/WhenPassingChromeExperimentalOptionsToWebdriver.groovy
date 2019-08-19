@@ -20,12 +20,12 @@ class WhenPassingChromeExperimentalOptionsToWebdriver extends Specification {
         def exp_opt = optionText.replaceAll("chrome_experimental_options.", "")
         options.getCapability("goog:chromeOptions")[exp_opt] == optionValue
         where:
-        optionText                                           | optionValue                   | shouldContain
-        "chrome_experimental_options.useAutomationExtension" | false                         | true
-        "chrome_experimental_options.test1"                  | "String"                      | true
-        "chrome_experimental_options.test2"                  | "Other String that is bigger" | true
-        "chrome_experimental_options.test3"                  | true                          | true
-        "chrome_experimental_options.test4.test1"            | 4                             | true
+        optionText                                           | optionValue
+        "chrome_experimental_options.useAutomationExtension" | false
+        "chrome_experimental_options.test1"                  | "String"
+        "chrome_experimental_options.test2"                  | "Other String that is bigger"
+        "chrome_experimental_options.test3"                  | true
+        "chrome_experimental_options.test4.test1"            | 4
     }
 
     @Unroll

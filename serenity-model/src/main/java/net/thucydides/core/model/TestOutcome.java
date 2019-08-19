@@ -1798,6 +1798,14 @@ public class TestOutcome {
         return tags;
     }
 
+    public Set<TestTag> getAllTags() {
+        Set<TestTag> allTags = new HashSet<>(getTags());
+        getFeatureTag().ifPresent(
+                featureTag -> allTags.add(featureTag)
+        );
+        return allTags;
+    }
+
     public void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
         if (userStory != null && userStory.getFeature() != null) {
             augmentedTags.add(TestTag.withName(userStory.getFeature().getName()).andType("feature"));
@@ -2021,15 +2029,15 @@ public class TestOutcome {
     }
 
     public boolean hasTag(TestTag tag) {
-        return getTags().contains(tag);
+        return getAllTags().contains(tag);
     }
 
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
-        return TestTags.of(getTags()).containsTagMatching(specificTag);
+        return TestTags.of(getAllTags()).containsTagMatching(specificTag);
     }
 
     public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
-        return getTags().stream().anyMatch(
+        return getAllTags().stream().anyMatch(
                 tag -> tag.isAsOrMoreSpecificThan(generalTag)
         );// TestTags.of(getTags()).containsTagMatching(specificTag);
     }

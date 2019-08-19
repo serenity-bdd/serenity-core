@@ -19,7 +19,7 @@ public class TestConfiguration {
     }
 
     public boolean shouldClearMetadata() {
-        return (!ThucydidesSystemProperty.THUCYDIDES_MAINTAIN_SESSION.booleanFrom(configuration.getEnvironmentVariables()));
+        return (!ThucydidesSystemProperty.SERENITY_MAINTAIN_SESSION.booleanFrom(configuration.getEnvironmentVariables()));
     }
 
     public static TestConfigurationBuilder forClass(Class<?> testClass) {
@@ -36,7 +36,7 @@ public class TestConfiguration {
     }
 
     public boolean shouldResetStepLibraries() {
-        return !TestCaseAnnotations.shouldUsePersistantStepLibraries(testClass);
+        return !shouldClearMetadata() && !TestCaseAnnotations.shouldUsePersistantStepLibraries(testClass);
     }
 
     public static class TestConfigurationBuilder {

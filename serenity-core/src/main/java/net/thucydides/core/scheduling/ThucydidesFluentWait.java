@@ -4,7 +4,6 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.TemporalUnitConverter;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -55,7 +54,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
         RuntimeException lastException = null;
         String waitForConditionMessage = isTrue.toString();
         while (true) {
-            if (aPreviousStepHasFailed()) {
+            if (webdriverCallsAreSuspended()) {
                 return (V) Boolean.TRUE;
             }
             try {
@@ -92,8 +91,8 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
         }
     }
 
-    private boolean aPreviousStepHasFailed() {
-        return StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed();
+    private boolean webdriverCallsAreSuspended() {
+        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
     }
 
     public abstract void doWait() throws InterruptedException;

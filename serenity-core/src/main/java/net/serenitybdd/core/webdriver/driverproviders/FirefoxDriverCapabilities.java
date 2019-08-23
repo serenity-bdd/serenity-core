@@ -10,15 +10,20 @@ import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
@@ -60,8 +65,19 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
         addProxyConfigurationTo(capabilities);
 
+        addUnhandledPromptBehaviourTo(capabilities);
 
         return capabilities;
+    }
+
+
+    private void addUnhandledPromptBehaviourTo(DesiredCapabilities capabilities) {
+        String unexpectedAlertBehavior = SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR.from(environmentVariables);
+
+        if (unexpectedAlertBehavior != null) {
+            capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
+                                       UnexpectedAlertBehaviour.fromString(unexpectedAlertBehavior));
+        }
     }
 
     private void updateBinaryIfSpecified() {

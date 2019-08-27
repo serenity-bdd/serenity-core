@@ -143,7 +143,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
 
-        Map<String, Object> chromeExperimentalOptions = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
+        Map<String, Object> chromeExperimentalOptions = ChromePreferences.startingWith("chrome_experimental_options.")
+                                                                         .from(environmentVariables);
 
         chromeExperimentalOptions.keySet().forEach(
                 key -> options.setExperimentalOption(key, chromeExperimentalOptions.get(key))

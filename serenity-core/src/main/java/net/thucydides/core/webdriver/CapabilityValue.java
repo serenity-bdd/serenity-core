@@ -20,11 +20,18 @@ public class CapabilityValue {
         if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
             return Boolean.parseBoolean(value);
         }
-        if (isAList(value)) {
-            return asList(value);
+        if (isAList(stripQuotesFrom(value))) {
+            return asList(stripQuotesFrom(value));
         }
-        if (isAMap(value)) {
-            return asMap(value);
+        if (isAMap(stripQuotesFrom(value))) {
+            return asMap(stripQuotesFrom(value));
+        }
+        return value;
+    }
+
+    private static String stripQuotesFrom(String value) {
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            return value.substring(1, value.length() - 1);
         }
         return value;
     }

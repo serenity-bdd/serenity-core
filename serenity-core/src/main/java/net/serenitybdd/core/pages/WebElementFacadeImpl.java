@@ -21,6 +21,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
+import org.openqa.selenium.remote.server.handler.ClearElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
@@ -1254,7 +1255,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         if (!isMobileDriver()) {
-            getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+            ClearContents.ofElement(getElement());
         }
         getElement().clear();
     }

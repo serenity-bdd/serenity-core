@@ -90,7 +90,7 @@ class SerenityPlugin implements Plugin<Project> {
 
             log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory}")
 
-            inputs.files reportDirectory
+            inputs.files(project.fileTree(reportDirectory))
 
             doLast {
                 updateProperties(project)

@@ -631,16 +631,6 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public WebElement findElementByIosUIAutomation(String using) {
-        return this;
-    }
-
-    @Override
-    public List<WebElement> findElementsByIosUIAutomation(String using) {
-        return new ArrayList<>();
-    }
-
-    @Override
     public void setImplicitTimeout(Duration implicitTimeout) {
 
     }

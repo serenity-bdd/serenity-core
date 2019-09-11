@@ -93,9 +93,9 @@ public class SmartFieldDecorator implements FieldDecorator {
                             FindBys.class,
                             FindAll.class,
                             AndroidFindBy.class,
-                            AndroidFindBys.class,
-                            iOSFindBy.class,
-                            iOSFindBys.class);
+                            AndroidFindBys.class);
+//                            iOSFindBy.class,
+//                            iOSFindBys.class);
 
 
     private boolean annotatedByLegalFindByAnnotation(Field field) {

@@ -1,7 +1,10 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Splitter;
-import io.appium.java_client.*;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.FindsByAccessibilityId;
+import io.appium.java_client.FindsByAndroidUIAutomator;
+import io.appium.java_client.MobileElement;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
@@ -17,23 +20,23 @@ import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.remote.server.handler.ClearElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Sleeper;
+import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
-import java.time.temporal.ChronoUnit;
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.time.Duration;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
@@ -382,24 +385,24 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(using);
     }
-
-    @Override
-    public WebElement findElementByIosUIAutomation(String using) {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
-        return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(using);
-    }
-
-    @Override
-    public List<WebElement> findElementsByIosUIAutomation(String using) {
-        if (driverIsDisabled()) {
-            return new ArrayList<>();
-        }
-
-        return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(using);
-    }
+//
+//    @Override
+//    public WebElement findElementByIosUIAutomation(String using) {
+//        if (driverIsDisabled()) {
+//            return this;
+//        }
+//
+//        return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(using);
+//    }
+//
+//    @Override
+//    public List<WebElement> findElementsByIosUIAutomation(String using) {
+//        if (driverIsDisabled()) {
+//            return new ArrayList<>();
+//        }
+//
+//        return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(using);
+//    }
 
     @Override
     public long getImplicitTimeoutInMilliseconds() {

@@ -112,4 +112,8 @@ public class TagFilter {
                         tag -> !hiddenTypes.contains(tag.getType())
                 ).collect(Collectors.toSet());
     }
+
+    public Set<String> rawTagTypes() {
+        return new HashSet<>(asLowercaseList(ThucydidesSystemProperty.REPORT_RAW_TAG_LIST.from(environmentVariables)));
+    }
 }

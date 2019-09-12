@@ -119,7 +119,9 @@ public class PageUrls {
     private static String namedUrlFrom(String annotatedBaseUrl) {
         String pageName = annotatedBaseUrl.substring(NAMED_URL_PREFIX.length());
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        return EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(pageName);
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(pageName)
+                .orElse(environmentVariables.getProperty(pageName));
     }
 
 

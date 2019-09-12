@@ -30,4 +30,8 @@ public class CurrentOS {
     }
     return detectedOS;
   }
+
+  public static boolean isWindows() {
+    return getType() == OSType.windows;
+  }
 }

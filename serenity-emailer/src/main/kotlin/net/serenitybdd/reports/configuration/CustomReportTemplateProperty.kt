@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.configuration
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.util.EnvironmentVariables
 
 class CustomReportTemplateProperty : ReportProperty<String?> {
@@ -9,6 +10,8 @@ class CustomReportTemplateProperty : ReportProperty<String?> {
     }
 
     override fun configuredIn(environmentVariables: EnvironmentVariables) : String? {
-        return environmentVariables.getProperty(CUSTOM_TEMPLATE_PROPERTY)
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                .getOptionalProperty(CUSTOM_TEMPLATE_PROPERTY)
+                                                .orElse(null)
     }
 }

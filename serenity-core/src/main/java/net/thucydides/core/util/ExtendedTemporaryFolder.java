@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import net.serenitybdd.core.webdriver.servicepools.CurrentOS;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
@@ -8,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
 
 public class ExtendedTemporaryFolder extends ExternalResource {
 	
@@ -119,12 +118,8 @@ public class ExtendedTemporaryFolder extends ExternalResource {
         file.delete();
     }
 
-	protected static synchronized boolean isWindows() {
-		return System.getProperty("os.name").startsWith("Windows");
-	}
-
 	public File newFolder() throws IOException {
-		if (isWindows()) {
+		if (CurrentOS.isWindows()) {
 			synchronized (this) {
 				try {
 					return createTemporaryFolderIn(getRoot());
@@ -139,7 +134,7 @@ public class ExtendedTemporaryFolder extends ExternalResource {
 	}
 	
 	public File newFile(String fileName) throws IOException {
-		if (isWindows()) {
+		if (CurrentOS.isWindows()) {
 			synchronized (this) {
 				File file= new File(getRoot(), fileName);
                 file.setWritable(true);

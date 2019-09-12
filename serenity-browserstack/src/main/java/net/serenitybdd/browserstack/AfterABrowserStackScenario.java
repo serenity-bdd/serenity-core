@@ -1,5 +1,6 @@
 package net.serenitybdd.browserstack;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -35,8 +36,16 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         try {
             String sessionId = RemoteDriver.of(driver).getSessionId().toString();
-            String browserStackUsername = environmentVariables.getProperty("browserstack.user");
-            String browserStackKey = environmentVariables.getProperty("browserstack.key");
+//            String browserStackUsername = environmentVariables.getProperty("browserstack.user");
+            String browserStackUsername = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty("browserstack.user")
+                    .orElse(null);
+
+//            String browserStackKey = environmentVariables.getProperty("browserstack.key");
+            String browserStackKey = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty("browserstack.key")
+                    .orElse(null);
+            
             URI uri = new URI("https://" + browserStackUsername
                               + ":" + browserStackKey + "@api.browserstack.com/automate/sessions/"
                               + sessionId + ".json");

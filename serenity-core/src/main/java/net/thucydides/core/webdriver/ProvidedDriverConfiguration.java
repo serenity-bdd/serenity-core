@@ -1,9 +1,13 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.Optional;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 /**
@@ -28,7 +32,12 @@ public class ProvidedDriverConfiguration {
         String providedDriverType = getDriverName();
         Preconditions.checkNotNull(providedDriverType, "No provider type was specified in 'webdriver.provided.type'");
 
-        String providedImplementation = environmentVariables.getProperty("webdriver.provided." + providedDriverType);
+//        String providedImplementation = environmentVariables.getProperty("webdriver.provided." + providedDriverType);
+
+        String providedImplementation = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("webdriver.provided." + providedDriverType)
+                .orElse(null);
+
         Preconditions.checkNotNull(providedImplementation,
                 "No provider implementation was specified in 'webdriver.provided.'" + providedDriverType);
 
@@ -40,6 +49,7 @@ public class ProvidedDriverConfiguration {
     }
 
     public String getDriverName() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE);
+        return WEBDRIVER_PROVIDED_TYPE.from(environmentVariables);
+        //environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE);
     }
 }

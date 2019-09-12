@@ -73,7 +73,12 @@ public class RequirementsReports {
 
         RequirementsReports reporter = new RequirementsReports(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementsFactory, requirementsService, relativeLink, testOutcomes);
 
-        reportingTasks.addAll(requirementTypeReports(requirementsOutcomes, freemarker, environmentVariables, outputDirectory, reportNameProvider));
+        reportingTasks.addAll(requirementTypeReports(requirementsService.getRequirementTypes(),
+                                                     requirementsOutcomes,
+                                                     freemarker,
+                                                     environmentVariables,
+                                                     outputDirectory,
+                                                     reportNameProvider));
 
         reportingTasks.add(new RequirementsOverviewReportingTask(freemarker,
                 environmentVariables,

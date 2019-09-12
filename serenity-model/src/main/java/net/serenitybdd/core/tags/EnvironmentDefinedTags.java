@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
+
 public class EnvironmentDefinedTags {
 
     public static List<TestTag> definedIn(EnvironmentVariables environmentVariables) {
-        String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
+        String tagListValue = TAGS.from(environmentVariables);
         if (StringUtils.isNotEmpty(tagListValue)) {
             List<String> tagList = Splitter.on(",").trimResults().splitToList(tagListValue);
             return tagList.stream()

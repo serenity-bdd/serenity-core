@@ -114,7 +114,7 @@
                         <td valign="top">
                             <#list filteredTags as tag>
                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
-                                <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
+                                <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
                                 <p class="tag">
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">
@@ -150,13 +150,15 @@
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
                                         </span>
-                                        <#if (testOutcome.manualTestEvidence??)>
+                                        <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
-                                            <a target="_blank" href="${testOutcome.manualTestEvidence}">
+                                            <#list testOutcome.renderedManualTestEvidence as manualEvidence>
+                                            <a target="_blank" href="${manualEvidence.link}">
                                                 <span class="badge badge-pill badge-primary">
-                                                    <i class="fas fa-external-link-alt"></i> Test Evidence
+                                                    <i class="fas fa-external-link-alt"></i> ${manualEvidence.label}
                                                 </span>
                                             </a>
+                                            </#list>
                                         </#if>
                                     </div>
 
@@ -372,11 +374,9 @@
                         <table id="stepSection${step_number}" style="display:none; width:100%">
 
                             <#assign level = level + 1>
-                            <#assign substep_number = 1>
                             <#list step.children as nestedStep>
                                 <#if step.isAGroup() >
-                                    <#assign substep_number = substep_number + 1>
-                                    <@write_step step=nestedStep step_number=step_number + "-" + substep_number/>
+                                    <@write_step step=nestedStep step_number=step_number + "-" + nestedStep_index/>
                                 </#if>
                             </#list>
                             <#assign level = level-1>

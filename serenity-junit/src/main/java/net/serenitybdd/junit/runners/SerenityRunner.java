@@ -4,6 +4,7 @@ import com.google.inject.*;
 import net.serenitybdd.core.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.batches.*;
 import net.thucydides.core.guice.*;
@@ -429,7 +430,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             processTestMethodAnnotationsFor(method);
         }
 
-        initializeTestSession();
+        StepEventBus.getEventBus().initialiseSession();
+
         prepareBrowserForTest();
         additionalBrowserCleanup();
 

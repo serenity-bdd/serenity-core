@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Optional;
 import java.util.Properties;
 
+import static net.thucydides.core.ThucydidesSystemProperty.REMOTE_PLATFORM;
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -57,6 +59,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
     private void addBuildNumberTo(MutableCapabilities capabilities) {
+
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
@@ -73,7 +76,8 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     private void configureTargetPlatform(DesiredCapabilities capabilities) {
         SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
 
-        String remotePlatform = environmentVariables.getProperty("remote.platform");
+        String remotePlatform = REMOTE_PLATFORM.from(environmentVariables);
+
         if (isNotEmpty(remotePlatform)) {
             capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }

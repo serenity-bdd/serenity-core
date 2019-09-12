@@ -57,7 +57,7 @@
             <div class="table">
 
             <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
-                <#assign workingRequirementsTitle = inflection.of(requirements.type).inPluralForm().asATitle() >
+                <#assign workingRequirementsTitle = inflection.of(requirementType).inPluralForm().asATitle() >
 
                 <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="requirements-table"/>
 

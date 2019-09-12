@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -36,7 +37,12 @@ public class AddCustomCapabilities {
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
-            String propertyValue = environmentVariables.getProperty(propertyKey);
+            //String propertyValue = environmentVariables.getProperty(propertyKey);
+
+            String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(propertyKey)
+                    .orElse(null);
+
             if (isNotEmpty(propertyValue)) {
                 capabilities.setCapability(preparedPropertyKey, asObject(propertyValue));
                 if (withPrefix) {

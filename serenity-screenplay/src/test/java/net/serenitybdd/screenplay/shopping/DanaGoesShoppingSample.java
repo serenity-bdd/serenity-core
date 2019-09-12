@@ -6,6 +6,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.ThisTakesTooLong;
+import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
@@ -285,6 +286,18 @@ public class DanaGoesShoppingSample {
             nextPersonToBeServed().by(slowCheckout), is("Dana")
         )).waitingForNoLongerThan(10).seconds()
             .orComplainWith(ThisTakesTooLong.class));
+    }
+
+    @Test
+    public void shouldPatientlyWaitThenPurchaseItems() {
+        Checkout slowCheckout = slowCheckout();
+
+        givenThat(dana).attemptsTo(
+            joinTheCheckoutQueue().of(slowCheckout),
+            Wait.until(nextPersonToBeServed().by(slowCheckout), is("Dana"))
+                .forNoLongerThan(10).seconds(),
+            purchase().anApple().thatCosts(10).dollars()
+        );
     }
 
     @Test(expected = ThisTakesTooLong.class)

@@ -1,5 +1,6 @@
 package net.serenitybdd.browserstack;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
@@ -26,7 +27,10 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
             return capabilities;
         }
 
-        String remotePlatform = environmentVariables.getProperty("remote.platform");
+//        String remotePlatform = environmentVariables.getProperty("remote.platform");
+        String remotePlatform = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                                .getOptionalProperty("remote.platform")
+                                                                .orElse(null);
         if (isNotEmpty(remotePlatform)) {
             capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }

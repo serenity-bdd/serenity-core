@@ -169,7 +169,7 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("bySCLocator")          | net.serenitybdd.core.annotations.findby.By.ByScLocator
         AnnotatedPageSample.class.getField("byNgModelName")        | By.ByCssSelector
         AnnotatedPageSample.class.getField("byAccessibilityId")    | MobileBy.ByAccessibilityId
-        AnnotatedPageSample.class.getField("byIOSUIAutomation")    | MobileBy.ByIosUIAutomation
+//        AnnotatedPageSample.class.getField("byIOSUIAutomation")    | MobileBy.ByIosUIAutomation
         AnnotatedPageSample.class.getField("byAndroidUIAutomator") | MobileBy.ByAndroidUIAutomator
     }
 
@@ -196,7 +196,7 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byJQueryLong")             | net.serenitybdd.core.annotations.findby.By.ByjQuerySelector
         AnnotatedPageSample.class.getField("bySCLocatorLong")          | net.serenitybdd.core.annotations.findby.By.ByScLocator
         AnnotatedPageSample.class.getField("byAccessibilityIdLong")    | MobileBy.ByAccessibilityId
-        AnnotatedPageSample.class.getField("byIOSUIAutomationLong")    | MobileBy.ByIosUIAutomation
+//        AnnotatedPageSample.class.getField("byIOSUIAutomationLong")    | MobileBy.ByIosUIAutomation
         AnnotatedPageSample.class.getField("byAndroidUIAutomatorLong") | MobileBy.ByAndroidUIAutomator
     }
 

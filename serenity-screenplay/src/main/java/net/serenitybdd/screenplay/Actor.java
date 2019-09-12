@@ -26,7 +26,7 @@ import static net.serenitybdd.screenplay.SilentTasks.isSilent;
  */
 public class Actor implements PerformsTasks, SkipNested {
 
-    private final String name;
+    private String name;
 
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
     private EventBusInterface eventBusInterface = new EventBusInterface();
@@ -393,5 +393,9 @@ public class Actor implements PerformsTasks, SkipNested {
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignDescriptionToActor(getName(), description)
         );
+    }
+
+    public void assignName(String name) {
+        this.name = name;
     }
 }

@@ -13,7 +13,7 @@ class WhenUsingFluentAssertionsWithDates {
 
 
     @Nested
-    inner class WeCanCheckFor {
+    inner class WeCanCheckThat {
 
         val firstDayOfTheYear = LocalDate.of(2019,1,1)
         val tuesday = LocalDate.of(2019,1,1)
@@ -21,30 +21,30 @@ class WhenUsingFluentAssertionsWithDates {
         val thursday = LocalDate.of(2019,1,3)
 
         @Nested
-        inner class DateComparisons {
+        inner class ADate {
 
             @Test
-            fun `equality`() {
+            fun `is equivalent to another date`() {
                 shouldPassWhenChecking(that(firstDayOfTheYear).isEqualTo(tuesday))
             }
 
             @Test
-            fun `non-equality`() {
+            fun `is different to another date`() {
                 shouldPassWhenChecking(that(firstDayOfTheYear).not().isEqualTo(wednesday))
             }
 
             @Test
-            fun `before`() {
+            fun `is before another date`() {
                 shouldPassWhenChecking(that(tuesday).isBefore(wednesday))
             }
 
             @Test
-            fun `after`() {
+            fun `is after another date`() {
                 shouldPassWhenChecking(that(thursday).isAfter(wednesday))
             }
 
             @Test
-            fun `using a custom comparator`() {
+            fun `matches using a custom comparator`() {
 
                 val byMonth = Comparator.comparingInt<LocalDate> { it.monthValue }
 
@@ -54,7 +54,7 @@ class WhenUsingFluentAssertionsWithDates {
 
 
             @Test
-            fun `Custom comparators work with the normal comparison methods, not the specific date ones`() {
+            fun `using custom comparators with the normal comparison methods, not the specific date ones`() {
 
                 val byMonthNumber = Comparator.comparingInt<LocalDate> { it.month.value }
 
@@ -77,12 +77,12 @@ class WhenUsingFluentAssertionsWithDates {
         @Nested
         inner class TheDayOfTheWeek {
             @Test
-            fun `when it is the expected day`() {
+            fun `is the expected day`() {
                 shouldPassWhenChecking(that(thursday).isDayOfWeek(DayOfWeek.THURSDAY))
             }
 
             @Test
-            fun `when it is not the expected day`() {
+            fun `is not the expected day`() {
                 shouldFailWithMessage("""|Expecting a value that is on a: <THURSDAY>
                                          |But got.......................: <2019-01-02>"""
                         .trimMargin())
@@ -93,12 +93,12 @@ class WhenUsingFluentAssertionsWithDates {
         @Nested
         inner class TheDayOfTheMonth {
             @Test
-            fun `when it is the expected day`() {
+            fun `is the expected day`() {
                 shouldPassWhenChecking(that(thursday).isDayOfMonth(3))
             }
 
             @Test
-            fun `when it is not the expected day`() {
+            fun `is not the expected day`() {
                 shouldFailWithMessage("""|Expecting a value that is on day of month: <2>
                                          |But got..................................: <2019-01-03>"""
                         .trimMargin())
@@ -109,12 +109,12 @@ class WhenUsingFluentAssertionsWithDates {
         @Nested
         inner class TheMonth {
             @Test
-            fun `when it is the expected month`() {
+            fun `is the expected month`() {
                 shouldPassWhenChecking(that(thursday).isInTheMonthOf(Month.JANUARY))
             }
 
             @Test
-            fun `when it is not the expected day`() {
+            fun `is not the expected month`() {
                 shouldFailWithMessage("""|Expecting a value that is in month: <MARCH>
                                          |But got...........................: <2019-01-03>"""
                         .trimMargin())
@@ -126,12 +126,12 @@ class WhenUsingFluentAssertionsWithDates {
         @Nested
         inner class TheYear {
             @Test
-            fun `when it is the expected year`() {
+            fun `is the expected year`() {
                 shouldPassWhenChecking(that(thursday).isTheYear(2019))
             }
 
             @Test
-            fun `when it is not the expected year`() {
+            fun `is not the expected year`() {
                 shouldFailWithMessage("""|Expecting a value that is in the year: <2000>
                                          |But got..............................: <2019-01-03>"""
                         .trimMargin())

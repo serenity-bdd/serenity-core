@@ -106,6 +106,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
+    public boolean isDisabled() {
+        return false;
+    }
+
+    @Override
     public void shouldNotBeEnabled() {
 
     }

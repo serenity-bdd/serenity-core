@@ -217,8 +217,9 @@ public class WebDriverFactory {
 
     private void setImplicitTimeoutsIfSpecified(WebDriver driver) {
         if (ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.isDefinedIn(environmentVariables)) {
-            int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                    .getPropertyName(),0);
+            int timeout = WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables,0);
+//            int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
+//                    .getPropertyName(),0);
 
             driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.MILLISECONDS);
         }

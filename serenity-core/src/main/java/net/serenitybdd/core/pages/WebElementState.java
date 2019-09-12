@@ -101,6 +101,8 @@ public interface WebElementState {
 
     boolean isEnabled();
 
+    boolean isDisabled();
+
     void shouldNotBeEnabled();
 
     String getSelectedVisibleTextValue();

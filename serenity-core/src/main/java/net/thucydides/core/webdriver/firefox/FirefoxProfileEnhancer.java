@@ -25,7 +25,8 @@ public class FirefoxProfileEnhancer {
     }
 
     public void configureJavaSupport(FirefoxProfile profile) {
-        boolean enableJava = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SECURITY_ENABLE_JAVA, false);
+//        boolean enableJava = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SECURITY_ENABLE_JAVA, false);
+        boolean enableJava = ThucydidesSystemProperty.SECURITY_ENABLE_JAVA.booleanFrom(environmentVariables, false);
         profile.setPreference("security.enable_java", enableJava);
     }
 
@@ -60,8 +61,8 @@ public class FirefoxProfileEnhancer {
     }
 
     public void addPreferences(FirefoxProfile profile) {
-        String preferences = environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
-        String driverOptions = environmentVariables.getProperty(ThucydidesSystemProperty.DRIVER_OPTIONS);
+        String preferences = ThucydidesSystemProperty.FIREFOX_PREFERENCES.from(environmentVariables);
+        String driverOptions = ThucydidesSystemProperty.DRIVER_OPTIONS.from(environmentVariables);
 
         applyPreferences(profile, preferences);
         applyPreferences(profile, driverOptions);

@@ -31,43 +31,34 @@ public class RestSpecificationFactory {
 
     private static final Logger log = LoggerFactory.getLogger(RestSpecificationFactory.class);
 
-    private static Constructor<?> requestSpecificationDecoratedConstructor;
-
-    private static Constructor<?> responseSpecificationDecoratedConstructor;
-
     private static RequestSpecificationDecoratedFactory requestSpecificationDecoratedFactory;
 
     private static ResponseSpecificationDecoratedFactory responseSpecificationDecoratedFactory;
 
     static {
-        final Class<?>  requestSpecificationDecoratedClass = new ByteBuddy()
+
+        ByteBuddy byteBuddy = new ByteBuddy();
+
+        Class<?>  requestSpecificationDecoratedClass = byteBuddy
                 .subclass(RequestSpecificationDecorated.class)
                 .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
                 .intercept(MethodDelegation.toField("core"))
                 .make()
                 .load(SerenityRest.class.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
-        final Class<?> responseSpecificationDecoratedClass = new ByteBuddy()
+        Class<?> responseSpecificationDecoratedClass = byteBuddy
                 .subclass(ResponseSpecificationDecorated.class)
                 .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
                 .intercept(MethodDelegation.toField("core"))
                 .make()
                 .load(SerenityRest.class.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
-        try {
-            requestSpecificationDecoratedConstructor = requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class);
-        } catch (NoSuchMethodException e) {
-            log.error("Cannot found constructor for RequestSpecificationDecorated ",e);
-        }
 
         try {
-            responseSpecificationDecoratedConstructor = responseSpecificationDecoratedClass.getConstructor(ResponseSpecificationImpl.class);
-        } catch (NoSuchMethodException e) {
-            log.error("Cannot found constructor for ResponseSpecificationDecorated ",e);
-        }
+            Constructor<?> requestSpecificationDecoratedConstructor = requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class);
+            Constructor<?> responseSpecificationDecoratedConstructor = responseSpecificationDecoratedClass.getConstructor(ResponseSpecificationImpl.class);
 
-        try {
-            requestSpecificationDecoratedFactory = new ByteBuddy()
+            requestSpecificationDecoratedFactory = byteBuddy
                     .subclass(RequestSpecificationDecoratedFactory.class)
                     .method(isDeclaredBy(RequestSpecificationDecoratedFactory.class))
                     .intercept(MethodCall
@@ -76,12 +67,8 @@ public class RestSpecificationFactory {
                     .make()
                     .load(requestSpecificationDecoratedClass.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                     .getLoaded().newInstance();
-        } catch (InstantiationException | IllegalAccessException  e) {
-            log.error("Cannot create requestSpecificationDecoratedFactory ",e);
-        }
 
-        try {
-            responseSpecificationDecoratedFactory = new ByteBuddy()
+            responseSpecificationDecoratedFactory = byteBuddy
                     .subclass(ResponseSpecificationDecoratedFactory.class)
                     .method(isDeclaredBy(ResponseSpecificationDecoratedFactory.class))
                     .intercept(MethodCall
@@ -90,8 +77,11 @@ public class RestSpecificationFactory {
                     .make()
                     .load(responseSpecificationDecoratedClass.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                     .getLoaded().newInstance();
+
         } catch (InstantiationException | IllegalAccessException  e) {
             log.error("Cannot create responseSpecificationDecoratedFactory ",e);
+        } catch (NoSuchMethodException e) {
+            log.error("Constructor not found",e);
         }
 
     }
@@ -111,6 +101,7 @@ public class RestSpecificationFactory {
     }
 
     public static ResponseSpecificationDecorated getInstrumentedResponseSpecification(ResponseSpecificationImpl delegate) {
-        return responseSpecificationDecoratedFactory.create(delegate);
+        ResponseSpecificationDecorated responseSpecificationDecorated = responseSpecificationDecoratedFactory.create(delegate);
+        return responseSpecificationDecorated;
     }
 }

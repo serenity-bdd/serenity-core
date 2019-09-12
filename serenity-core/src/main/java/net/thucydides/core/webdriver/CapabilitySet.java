@@ -26,7 +26,7 @@ class CapabilitySet {
     }
 
     public Map<String,Object> getCapabilities() {
-        Map<String,Object> capabilitiesMap = new HashMap();
+        Map<String,Object> capabilitiesMap = new HashMap<>();
 
         String specifiedCapabilities = SERENITY_DRIVER_CAPABILITIES.from(environmentVariables);
         if (StringUtils.isNotEmpty(specifiedCapabilities)) {
@@ -37,39 +37,14 @@ class CapabilitySet {
     }
 
     private  Map<String,Object> addCapabilityMapValues(Iterable<String> capabilityValues) {
-        Map<String,Object> capabilitiesMap = new HashMap();
+        Map<String,Object> capabilitiesMap = new HashMap<>();
         for(String capability : capabilityValues) {
             CapabilityToken token = new CapabilityToken(capability);
             if (token.isDefined()) {
-                capabilitiesMap.put(token.getName(), asObject(token.getValue()));
+                capabilitiesMap.put(token.getName(), CapabilityValue.asObject(token.getValue()));
             }
         }
         return capabilitiesMap;
-    }
-
-    private Object asObject(String value) {
-        if (StringUtils.isNumeric(value))  {
-            return Integer.parseInt(value);
-        }
-        if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
-            return Boolean.parseBoolean(value);
-        }
-        if (isAList(value)) {
-            return asList(value);
-        }
-        return value;
-    }
-
-    private List<Object> asList(String value) {
-        String listContents = StringUtils.removeEnd(StringUtils.removeStart(value, "["), "]");
-        List<String> items = Splitter.on(",").trimResults().splitToList(listContents);
-        return items.stream()
-                .map(this::asObject)
-                .collect(Collectors.toList());
-    }
-
-    private boolean isAList(String value) {
-        return value.startsWith("[") && value.endsWith("]");
     }
 
     private static class CapabilityToken {

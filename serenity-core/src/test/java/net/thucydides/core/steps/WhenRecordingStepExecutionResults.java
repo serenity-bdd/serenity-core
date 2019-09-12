@@ -1232,7 +1232,7 @@ public class WhenRecordingStepExecutionResults {
 
         FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY.getPropertyName(), "100");
+        environmentVariables.setProperty(ThucydidesSystemProperty.SERENITY_STEP_DELAY.getPropertyName(), "100");
 
         long startTime = System.currentTimeMillis();
         steps.step_one();

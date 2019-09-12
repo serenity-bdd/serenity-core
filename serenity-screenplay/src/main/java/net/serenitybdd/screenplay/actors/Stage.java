@@ -33,4 +33,8 @@ public class Stage {
     public void drawTheCurtain() {
         cast.dismissAll();
     }
+
+    public boolean anActorIsOnStage() {
+        return actorInTheSpotlight != null;
+    }
 }

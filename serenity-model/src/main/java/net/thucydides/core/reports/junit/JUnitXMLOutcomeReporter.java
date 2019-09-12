@@ -34,23 +34,17 @@ public class JUnitXMLOutcomeReporter {
 
     public void generateReportsFor(TestOutcomes testOutcomes) {
 
-        LOGGER.debug("GENERATING JUNIT REPORTS");
+        groupByTestCase(testOutcomes).forEach((testCase, testCaseOutcomes) -> {
 
-        groupByTestCase(testOutcomes).entrySet().stream().parallel().forEach(
-                entry -> {
-                    String testCase = entry.getKey();
-                    List<TestOutcome> testCaseOutcomes = entry.getValue();
-
-                    String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
-                    File report = new File(getOutputDirectory(), reportFilename);
-                    try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))) {
-                        junitXMLConverter.write(testCase, testCaseOutcomes.asJava(), outputStream);
-                        outputStream.flush();
-                    } catch (ParserConfigurationException | TransformerException | IOException e) {
-                        LOGGER.warn("Failed to generate JUnit XML report", e);
-                    }
-                }
-        );
+            String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
+            File report = new File(getOutputDirectory(), reportFilename);
+            try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))) {
+                junitXMLConverter.write(testCase, testCaseOutcomes.asJava(), outputStream);
+                outputStream.flush();
+            } catch (ParserConfigurationException | TransformerException | IOException e) {
+                LOGGER.warn("Failed to generate JUnit XML report", e);
+            }
+        });
     }
 
     private String reportFilenameFor(TestOutcome testOutcome) {

@@ -2,7 +2,6 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import net.bytebuddy.ByteBuddy;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
@@ -47,17 +46,14 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
     private final EnvironmentVariables environmentVariables;
-    private final List<String> cleanupMethodsAnnotations = new ArrayList<>();
 
     private List<StepInterceptionListener> listeners = new ArrayList<>();
 
+    CleanupMethodLocator cleanupMethodLocator;
     StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
-        Iterable<CleanupMethodAnnotationProvider> cleanupMethodAnnotationProviders = ServiceLoader.load(CleanupMethodAnnotationProvider.class);
-        for (CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
-            cleanupMethodsAnnotations.addAll(cleanupMethodAnnotationProvider.getCleanupMethodAnnotations());
-        }
+        this.cleanupMethodLocator = new CleanupMethodLocator();
 
         listeners.add(new DynamicExampleStepInterceptionListener());
     }
@@ -188,21 +184,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private boolean stepIsCalledFromCleanupMethod() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (StackTraceElement stackTraceElement : stackTrace) {
-            try {
-                Method m = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
-                if (m.getAnnotations() != null && m.getAnnotations().length > 0) {
-                    for (Annotation a : m.getAnnotations()) {
-                        if (cleanupMethodsAnnotations.contains(a.toString())) {
-                            return true;
-                        }
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return false;
+        return cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod();
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {

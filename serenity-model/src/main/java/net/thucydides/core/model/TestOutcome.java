@@ -181,7 +181,7 @@ public class TestOutcome {
     /**
      * A relative or absolute link to test evidence related to the last manual test
      */
-    private String manualTestEvidence;
+    private List<String> manualTestEvidence;
 
     /**
      * Keeps track of step groups.
@@ -497,7 +497,7 @@ public class TestOutcome {
                           final boolean manualTest,
                           final boolean isManualTestingUpToDate,
                           final String lastTested,
-                          final String testEvidence,
+                          final List<String> testEvidence,
                           final String projectKey,
                           final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
@@ -954,12 +954,18 @@ public class TestOutcome {
         );
     }
 
-    public void setManualTestEvidence(String manualTestEvidence) {
+    public void setManualTestEvidence(List<String> manualTestEvidence) {
         this.manualTestEvidence = manualTestEvidence;
     }
 
-    public String getManualTestEvidence() {
+    public List<String> getManualTestEvidence() {
         return manualTestEvidence;
+    }
+
+    public List<ManualTestEvidence> getRenderedManualTestEvidence() {
+        return manualTestEvidence.stream()
+                .map(evidence -> ManualTestEvidence.from(evidence))
+                .collect(Collectors.toList());
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1792,6 +1798,14 @@ public class TestOutcome {
         return tags;
     }
 
+    public Set<TestTag> getAllTags() {
+        Set<TestTag> allTags = new HashSet<>(getTags());
+        getFeatureTag().ifPresent(
+                featureTag -> allTags.add(featureTag)
+        );
+        return allTags;
+    }
+
     public void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
         if (userStory != null && userStory.getFeature() != null) {
             augmentedTags.add(TestTag.withName(userStory.getFeature().getName()).andType("feature"));
@@ -2015,15 +2029,15 @@ public class TestOutcome {
     }
 
     public boolean hasTag(TestTag tag) {
-        return getTags().contains(tag);
+        return getAllTags().contains(tag);
     }
 
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
-        return TestTags.of(getTags()).containsTagMatching(specificTag);
+        return TestTags.of(getAllTags()).containsTagMatching(specificTag);
     }
 
     public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
-        return getTags().stream().anyMatch(
+        return getAllTags().stream().anyMatch(
                 tag -> tag.isAsOrMoreSpecificThan(generalTag)
         );// TestTags.of(getTags()).containsTagMatching(specificTag);
     }

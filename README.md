@@ -55,12 +55,13 @@ The tables below list the latest stable versions of Serenity BDD and other relat
 
 ### Serenity with JUnit
 
-| serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version |
-|---------------|-----------------------|-------------------|----------------------|
-| 2.0.69        | 2.0.69                | 3.141.59          | 3.3.0                |
-| 2.0.56        | 2.0.56                | 3.141.59          | 3.3.0                |
-| 2.0.52        | 2.0.52                | 3.141.59          | 3.3.0                |
-| 2.0.48        | 2.0.48                | 3.141.59          | 3.3.0                |
+| serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
+|---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.0.71        | 2.0.71                | 3.141.59          | 3.3.0                | 7.2.0                 |
+| 2.0.69        | 2.0.69                | 3.141.59          | 3.3.0                | 7.0.0                 |
+| 2.0.56        | 2.0.56                | 3.141.59          | 3.3.0                | 7.0.0                 |
+| 2.0.52        | 2.0.52                | 3.141.59          | 3.3.0                | 7.0.0                 |
+| 2.0.48        | 2.0.48                | 3.141.59          | 3.3.0                | 7.0.0                 |
 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 

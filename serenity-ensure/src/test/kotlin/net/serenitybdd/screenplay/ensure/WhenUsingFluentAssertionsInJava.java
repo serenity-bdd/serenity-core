@@ -299,11 +299,20 @@ public class WhenUsingFluentAssertionsInJava {
     }
 
     @Test
-    public void weCanMakeAssertionsAboutQuestionsAboutBooleans() {
+    public void weCanMakeAssertionsAboutQuestionsAboutBooleansWithDescriptions() {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
                 Ensure.thatTheAnswerTo("the boolean", booleanEquivalentOf("true")).isTrue()
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutBooleans() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo(booleanEquivalentOf("true")).isTrue()
         );
     }
 
@@ -382,7 +391,7 @@ public class WhenUsingFluentAssertionsInJava {
     }
 
     public Question<Boolean> booleanEquivalentOf(String todoItem) {
-        return Question.about("a boolean value").answeredBy(
+        return Question.about("a boolean field").answeredBy(
                 actor -> Boolean.valueOf(todoItem)
         );
     }
@@ -394,7 +403,7 @@ public class WhenUsingFluentAssertionsInJava {
     }
 
     public Question<String> stringBooleanEquivalentOf(String todoItem) {
-        return Question.about("a boolean value").answeredBy(
+        return Question.about("a boolean field").answeredBy(
                 actor -> todoItem
         );
     }

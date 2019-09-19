@@ -6,8 +6,17 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
 
     constructor(value: Boolean?) : this(KnownValue(value, value.toString()))
 
-    fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(),"a value")
-    fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated(),"a value")
+    fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(), descriptionOf(value))
+    fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated(), descriptionOf(value))
+
+    fun descriptionOf(value: KnowableValue<Boolean?>): String {
+        if (value is KnowableBooleanValue<*>) {
+            if (value.value is HasSubject) {
+                return value.value.subject()
+            }
+        }
+        return value.toString()
+    }
 
     override fun not(): BooleanEnsure = negate() as BooleanEnsure
 
@@ -16,7 +25,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
                 if (actual == null || actor == null) return false;
 
                 val resolvedValue = actual(actor)
-                BlackBox.logAssertion(resolvedValue,"true")
+                BlackBox.logAssertion(resolvedValue, "true")
                 return resolvedValue ?: false
             })
 
@@ -25,7 +34,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
                 if (actual == null || actor == null) return true;
 
                 val resolvedValue = actual(actor)
-                BlackBox.logAssertion(resolvedValue,"false")
+                BlackBox.logAssertion(resolvedValue, "false")
                 return if (resolvedValue == null) true else !resolvedValue
             })
 }

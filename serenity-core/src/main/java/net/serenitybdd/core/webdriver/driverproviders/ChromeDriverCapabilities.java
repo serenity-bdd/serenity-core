@@ -117,7 +117,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addRuntimeOptionsTo(ChromeOptions options) {
 
 
-        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, true)) {
+        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, false)) {
             options.addArguments(AUTOMATION_OPTIONS);
         }
 

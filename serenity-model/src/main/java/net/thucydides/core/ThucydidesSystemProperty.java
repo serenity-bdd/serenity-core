@@ -53,6 +53,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Sets a number of common chrome options useful for automated testing.
      * In particular, this includes: --enable-automation --test-type
+     * Set to false by default
      */
     USE_CHROME_AUTOMATION_OPTIONS,
 

@@ -890,19 +890,19 @@ public class TestOutcome {
     }
 
     public boolean hasTagWithName(String tagName) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getName().equalsIgnoreCase(tagName));
     }
 
     public boolean hasTagWithType(String tagType) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getType().equalsIgnoreCase(tagType));
     }
 
     public boolean hasTagWithTypes(List<String> tagTypes) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tagTypes.contains(tag.getType()));
     }

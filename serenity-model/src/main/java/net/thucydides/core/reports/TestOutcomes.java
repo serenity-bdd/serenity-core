@@ -299,7 +299,7 @@ public class TestOutcomes {
      */
     public List<TestTag> getTags() {
         return outcomes.stream()
-                .flatMap(outcome -> outcome.getTags().stream())
+                .flatMap(outcome -> outcome.getAllTags().stream())
                 .distinct()
                 .collect(Collectors.toList());
     }
@@ -504,7 +504,7 @@ public class TestOutcomes {
 
     public TestOutcomes withRequirementsTags() {
         for (TestOutcome outcome : outcomes) {
-            List<TestTag> outcomeTags = new ArrayList<>(outcome.getTags());
+            List<TestTag> outcomeTags = new ArrayList<>(outcome.getAllTags());
             List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
             for(Requirement requirement : parentRequirements) {
                 outcomeTags.add(requirement.asTag());
@@ -534,12 +534,12 @@ public class TestOutcomes {
         }
 
         Stream<TestTag> from(TestOutcome outcome) {
-            return outcome.getTags().stream()
+            return outcome.getAllTags().stream()
                     .filter(tag -> tag.normalisedType().equals(tagType));
         }
 
         List<TestTag> in(TestOutcome testOutcome) {
-            return testOutcome.getTags().stream()
+            return testOutcome.getAllTags().stream()
                     .filter(tag -> tag.normalisedType().equals(tagType))
                     .collect(Collectors.toList());
         }

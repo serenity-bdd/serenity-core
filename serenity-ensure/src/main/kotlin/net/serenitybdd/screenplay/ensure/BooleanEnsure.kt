@@ -15,7 +15,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
                 return value.value.subject()
             }
         }
-        return value.toString()
+        return "a value"
     }
 
     override fun not(): BooleanEnsure = negate() as BooleanEnsure

@@ -135,9 +135,11 @@ public class SystemPropertiesConfiguration implements Configuration {
         Optional<Integer> implicitTimeoutInMilliseconds = integerPropertyNamed(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT);
 
         if (serenityDefinedTimeoutInSeconds.isPresent()) {
-            return implicitTimeoutInMilliseconds.get();
-        } else
+            return serenityDefinedTimeoutInSeconds.get();
+        } else {
             return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(DEFAULT_ELEMENT_TIMEOUT_SECONDS);
+        }
+
 
     }
 

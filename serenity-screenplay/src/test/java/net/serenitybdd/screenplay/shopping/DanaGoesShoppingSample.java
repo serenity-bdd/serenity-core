@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.PeopleAreTerriblyIncorrect;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;

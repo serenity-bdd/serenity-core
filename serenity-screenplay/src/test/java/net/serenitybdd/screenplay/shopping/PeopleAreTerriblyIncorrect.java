@@ -1,4 +1,4 @@
-package net.serenitybdd;
+package net.serenitybdd.screenplay.shopping;
 
 import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
 

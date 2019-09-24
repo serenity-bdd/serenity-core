@@ -1,5 +1,9 @@
 package net.thucydides.core.webdriver.appium;
 
+import io.appium.java_client.remote.AndroidMobileCapabilityType;
+import io.appium.java_client.remote.IOSMobileCapabilityType;
+import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.remote.YouiEngineCapabilityType;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.driverproviders.AddLoggingPreferences;
@@ -10,8 +14,8 @@ import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +34,8 @@ public class AppiumConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppiumConfiguration.class);
     private static final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
+    private static final Predicate<String> ACCEPTED_W3C_PATTERNS = new AcceptedW3CCapabilityKeys();
+    private static final List<String> APPIUM_SUPPORTED_CAPABILITIES = AppiumConfiguration.collectAppiumCapabilities();
     private final EnvironmentVariables environmentVariables;
 
     private AppiumConfiguration(EnvironmentVariables environmentVariables) {
@@ -65,8 +73,8 @@ public class AppiumConfiguration {
      */
     public MobilePlatform getTargetPlatform() {
         Optional contextPlatform = Stream.of(definedContext())
-                                         .filter(platform -> platform.isDefined)
-                                         .findFirst();
+                .filter(platform -> platform.isDefined)
+                .findFirst();
         if (contextPlatform.isPresent()) {
             return (MobilePlatform) contextPlatform.get();
         }
@@ -119,11 +127,31 @@ public class AppiumConfiguration {
         AddLoggingPreferences.from(environmentVariables).to(capabilities);
 
         Properties appiumProperties = getProperties(options);
+
         for (Object key : appiumProperties.keySet()) {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));
-            capabilities.asMap();
         }
-        return capabilities;
+
+        List<String> additionalAppiumCapabilities = getAdditionalAppiumCapabilities();
+
+        DesiredCapabilities processedCapabilities = new DesiredCapabilities();
+
+        for (String capabilityName : capabilities.getCapabilityNames()) {
+            if (ACCEPTED_W3C_PATTERNS.test(capabilityName) || APPIUM_SUPPORTED_CAPABILITIES.contains(capabilityName)) {
+                processedCapabilities.setCapability(capabilityName, capabilities.getCapability(capabilityName));
+            }
+            else if (additionalAppiumCapabilities.contains(capabilityName)) {
+                LOGGER.info("appium: prefix added to capability {}", capabilityName);
+                processedCapabilities.setCapability("appium:" + capabilityName, capabilities.getCapability(capabilityName));
+            }
+            else {
+                LOGGER.warn("{} capability is not discovered in the list of supported by w3c or Appium. " +
+                                "If it is required then it should be listed in {@link ThucydidesSystemProperty#APPIUM_ADDITIONAL_CAPABILITIES}",
+                        capabilityName);
+            }
+        }
+
+        return processedCapabilities;
     }
 
     public Properties getProperties(String options) {
@@ -133,7 +161,7 @@ public class AppiumConfiguration {
     private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
 
         Properties appiumProperties = new Properties();
-List<String> appiumKeys =
+        List<String> appiumKeys =
                 environmentVariables.getKeys()
                         .stream()
                         .map(key->key.replaceFirst("environment.*.appium","appium"))
@@ -176,5 +204,42 @@ List<String> appiumKeys =
 
     public boolean isDefined() {
         return getTargetPlatform() != MobilePlatform.NONE;
+    }
+
+    private static List<String> collectAppiumCapabilities() {
+        Class[] capabilityClasses = {
+                MobileCapabilityType.class,
+                AndroidMobileCapabilityType.class,
+                IOSMobileCapabilityType.class,
+                YouiEngineCapabilityType.class
+        };
+
+        List<String> mobileCapabilities = new ArrayList<>();
+
+        for (Class capsClass : capabilityClasses) {
+            Stream.of(capsClass.getDeclaredFields())
+                    .map(f -> {
+                        f.setAccessible(true);
+                        try {
+                            return f.get(capsClass).toString();
+                        } catch (IllegalAccessException e) {
+                            throw new IllegalArgumentException(e);
+                        }
+                    })
+                    .forEach(mobileCapabilities::add);
+        }
+
+        return mobileCapabilities.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getAdditionalAppiumCapabilities() {
+        String capabilities = ThucydidesSystemProperty.APPIUM_ADDITIONAL_CAPABILITIES.from(environmentVariables, "");
+        return Stream.of(capabilities.split(","))
+                .map(String::trim)
+                .filter(v -> !v.isEmpty())
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

@@ -31,7 +31,7 @@ public enum ThucydidesSystemProperty {
     /**
      * If using a provided driver, what type is it.
      * The implementation class needs to be defined in the webdriver.provided.{type} system property.
-    */
+     */
     WEBDRIVER_PROVIDED_TYPE,
 
     /**
@@ -1336,6 +1336,12 @@ public enum ThucydidesSystemProperty {
      * Should Serenity Manage your appium servers for you
      */
     MANAGE_APPIUM_SERVERS,
+
+    /**
+     * List of capabilities that should be provided in addition to supported by w3c or Appium
+     * 'appium:' prefix will be added to each of provided name
+     */
+    APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.caps"),
 
     /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.

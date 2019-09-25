@@ -165,4 +165,25 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")
     }
 
+    def "should filter Appium properties that are not supported"() {
+        given:
+        environmentVariables.setProperty("appium.unknown", "value")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        !appiumConfiguration.capabilities.getCapabilityNames().contains("unknown")
+    }
+
+    def "should add 'appium:' prefix if capability listed in 'appium.additional.caps"() {
+        given:
+        environmentVariables.setProperty("appium.unknown", "value")
+        environmentVariables.setProperty("appium.additional.caps", "unknown, ")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.capabilities.getCapability("appium:unknown") == "value"
+    }
+
 }

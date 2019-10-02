@@ -19,7 +19,7 @@ public interface Task extends Performable {
         return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(title, performableOperation);
     }
 
-    static <T extends Performable> AnonymousPerformableFunction where(String title, Runnable performableOperation) {
-        return Instrumented.instanceOf(AnonymousPerformableFunction.class).withProperties(title, performableOperation);
+    static <T extends Performable> AnonymousPerformableRunnable where(String title, Runnable performableOperation) {
+        return Instrumented.instanceOf(AnonymousPerformableRunnable.class).withProperties(title, performableOperation);
     }
 }

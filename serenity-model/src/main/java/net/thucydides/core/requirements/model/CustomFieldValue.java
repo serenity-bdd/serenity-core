@@ -42,6 +42,10 @@ public class CustomFieldValue {
         return (renderedText != null) ? withLineBreaks(renderedText) : withLineBreaks(text);
     }
 
+    public String getRenderedTextWithoutTables() {
+        String fullText = (renderedText != null) ? withLineBreaks(renderedText) : withLineBreaks(text);
+        return  fullText.replaceAll("\\{example-result.*\\}","");
+    }
 
     private String withLineBreaks(String text) {
         return asList(text.split(("\\r?\\n"))).stream()

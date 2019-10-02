@@ -42,7 +42,7 @@ public class JSONRequirementsTree {
 
         TestResult result = matchingOutcome(requirement, requirementsOutcomes);
 
-        String label = new ResultIconFormatter().forResult(result);
+        String label = new ResultIconFormatter().forResult(result, "#");
 
         String childCount = (children.isEmpty()) ? countScenariosIn(requirement, requirementsOutcomes) : countChildRequirementsIn(requirement);
 

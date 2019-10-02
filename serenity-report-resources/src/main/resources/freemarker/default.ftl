@@ -85,7 +85,7 @@
                                     </h3>
 
                                     <div class="discreet-requirement-narrative-title">
-                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
+                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedTextWithoutTables)}
                                     </div>
                                 </div>
                             <#elseif (featureOrStory?? && featureOrStory.isPresent())>

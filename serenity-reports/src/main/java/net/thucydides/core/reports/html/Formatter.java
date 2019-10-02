@@ -204,6 +204,7 @@ public class Formatter  {
 
         ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
 
+
         StringBuffer newText = new StringBuffer();
         Matcher matcher = RESULT_TOKEN.matcher(text);
         while (matcher.find()) {
@@ -216,7 +217,10 @@ public class Formatter  {
             ).findFirst();
 
 
-            matchingOutcome.ifPresent(testOutcome -> matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getResult())));
+            matchingOutcome.ifPresent(
+                    testOutcome -> matcher.appendReplacement(newText,
+                                                             resultIconFormatter.forResult(testOutcome.getResult(), testOutcome.getHtmlReport()))
+            );
         }
         matcher.appendTail(newText);
 
@@ -256,7 +260,7 @@ public class Formatter  {
 
                         if (dataRow < testOutcome.getTestSteps().size()) {
                             matcher.appendReplacement(newText,
-                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult()));
+                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult(), testOutcome.getHtmlReport()));
                         } else {
                             matcher.appendReplacement(newText,"");
                         }

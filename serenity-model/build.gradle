@@ -38,7 +38,7 @@ dependencies {
 
     compile("org.awaitility:awaitility:${awaitilityVersion}") {
         exclude group: 'cglib', module: 'cglib-nodep'
-        exclude group: 'org.objenesis', module: 'objenesis'
+//        exclude group: 'org.objenesis', module: 'objenesis'
     }
     testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
         exclude group: 'com.google.guava', module:'guava'

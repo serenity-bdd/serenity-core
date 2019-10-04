@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import com.rits.cloning.Cloner;
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;

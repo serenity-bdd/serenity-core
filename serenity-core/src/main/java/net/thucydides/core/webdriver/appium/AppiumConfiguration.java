@@ -132,6 +132,10 @@ public class AppiumConfiguration {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));
         }
 
+        if (!ThucydidesSystemProperty.APPIUM_PROCESS_DESIRED_CAPABILITIES.booleanFrom(environmentVariables, Boolean.FALSE)) {
+            return capabilities;
+        }
+
         List<String> additionalAppiumCapabilities = getAdditionalAppiumCapabilities();
 
         DesiredCapabilities processedCapabilities = new DesiredCapabilities();

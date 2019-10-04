@@ -165,8 +165,9 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")
     }
 
-    def "should filter Appium properties that are not supported"() {
+    def "should filter Appium properties that are not supported if 'appium.process.desired.capabilities' is enabled"() {
         given:
+        environmentVariables.setProperty("appium.process.desired.capabilities", "true")
         environmentVariables.setProperty("appium.unknown", "value")
         environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
         when:
@@ -175,15 +176,29 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         !appiumConfiguration.capabilities.getCapabilityNames().contains("unknown")
     }
 
-    def "should add 'appium:' prefix if capability listed in 'appium.additional.caps"() {
+    def "should not filter Appium properties that are not supported if 'appium.process.desired.capabilities' is disabled"() {
         given:
+        environmentVariables.setProperty("appium.build", "value")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.capabilities.getCapabilityNames().contains("build")
+    }
+
+    def "should add 'appium:' prefix if capability listed in 'appium.additional.capabilities and 'appium.process.desired.capabilities' enabled"() {
+        given:
+        environmentVariables.setProperty("appium.process.desired.capabilities", "true")
         environmentVariables.setProperty("appium.unknown", "value")
-        environmentVariables.setProperty("appium.additional.caps", "unknown, ")
+        environmentVariables.setProperty("appium.additional.capabilities", "unknown, ")
         environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
         appiumConfiguration.capabilities.getCapability("appium:unknown") == "value"
     }
+
+
+
 
 }

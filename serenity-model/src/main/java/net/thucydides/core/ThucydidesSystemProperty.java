@@ -1338,10 +1338,21 @@ public enum ThucydidesSystemProperty {
     MANAGE_APPIUM_SERVERS,
 
     /**
-     * List of capabilities that should be provided in addition to supported by w3c or Appium
-     * 'appium:' prefix will be added to each of provided name
+     * List of capabilities that should be provided in addition to supported by w3c or Appium.
+     * Properties, that match w3c pattern or listed in Appium's interfaces, will be included as is and
+     * 'appium:' prefix will be added to each name provided in this property
      */
-    APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.caps"),
+    APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.capabilities"),
+
+
+    /**
+     * Set to true to enable processing of desired capabilities, created from the provided 'appium:' properties.
+     * If processing is enabled, only capabilities supported by w3c, Appium or mentioned in
+     * {@link ThucydidesSystemProperty#APPIUM_ADDITIONAL_CAPABILITIES} will be included into desired capabilities.
+     * If processing is disabled, all of the properties that have 'appium:' prefix will be included into desired capabilities.
+     * Disabled by default
+     */
+    APPIUM_PROCESS_DESIRED_CAPABILITIES("appium.process.desired.capabilities"),
 
     /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.

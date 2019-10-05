@@ -8,7 +8,7 @@ import java.time.LocalDate
 fun pluralFormOf(targetName: String) = targetName.replace("web element ", "web elements ")
 
 open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
-                              val expectedDescription: String = "a value") : CanBeSilent {
+                              val expectedDescription: String = descriptionOf { value }) : CanBeSilent {
 
     constructor(value: A) : this(KnownValue(value, value.toString()))
 

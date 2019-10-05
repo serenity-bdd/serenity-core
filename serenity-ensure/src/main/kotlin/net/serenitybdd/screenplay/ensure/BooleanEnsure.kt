@@ -8,15 +8,61 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
 
     fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(), descriptionOf(value))
     fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated(), descriptionOf(value))
+//
+//    fun <T> descriptionOf(value: KnowableValue<T?>): String {
+//        when(value) {
+//            is KnowableBooleanValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableStringValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableBigDecimalValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableDoubleValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableFloatValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableIntValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableLocalDateValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//            is KnowableLocalTimeValue<*> -> {
+//                if (value.value is HasSubject) {
+//                    return value.value.subject()
+//                }
+//            }
+//        }
+//        return "a value"
+//    }
 
-    fun descriptionOf(value: KnowableValue<Boolean?>): String {
-        if (value is KnowableBooleanValue<*>) {
-            if (value.value is HasSubject) {
-                return value.value.subject()
-            }
-        }
-        return "a value"
-    }
+//    fun descriptionOf(value: KnowableValue<Boolean?>): String {
+//        if (value is KnowableBooleanValue<*>) {
+//            if (value.value is HasSubject) {
+//                return value.value.subject()
+//            }
+//        }
+//        return "a value"
+//    }
 
     override fun not(): BooleanEnsure = negate() as BooleanEnsure
 

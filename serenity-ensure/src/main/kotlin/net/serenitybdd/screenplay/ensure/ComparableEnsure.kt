@@ -10,7 +10,7 @@ import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualNotNull
  */
 open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                                val comparator: Comparator<A>? = null,
-                               expectedDescription: String = "a value"
+                               expectedDescription: String = descriptionOf { value }
                                ) : CommonEnsure<Comparable<A>, A>(value, expectedDescription) {
 
 

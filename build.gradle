@@ -22,6 +22,7 @@ plugins {
     id 'project-report'
     id "org.sonarqube" version "2.6"
     id 'org.jetbrains.dokka' version '0.9.17'
+    id 'java-library'
 }
 
 apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
@@ -47,6 +48,7 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
+    apply plugin:  'java-library'
     apply plugin: 'com.github.ben-manes.versions'
 
     dependencyUpdates.resolutionStrategy = {

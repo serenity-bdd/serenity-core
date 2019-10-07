@@ -29,11 +29,15 @@ public class CleanupMethodLocator {
 
     private boolean isAnnotatedWithAFixtureMethod(StackTraceElement stackTraceElement) {
         try {
-            Method method = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
-            return (stream(method.getAnnotations()).anyMatch(
-                    annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
-                            || cleanupMethodsAnnotations.contains(annotation.toString()))
-            ));
+            try {
+                Method method = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+                return (stream(method.getAnnotations()).anyMatch(
+                        annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
+                                || cleanupMethodsAnnotations.contains(annotation.toString()))
+                ));
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
         } catch (Exception ignored) {
             return false;
         }

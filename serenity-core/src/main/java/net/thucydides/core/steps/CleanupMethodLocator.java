@@ -29,19 +29,37 @@ public class CleanupMethodLocator {
 
     private boolean isAnnotatedWithAFixtureMethod(StackTraceElement stackTraceElement) {
         try {
-            try {
-                Method method = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+                Method method = forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
                 return (stream(method.getAnnotations()).anyMatch(
                         annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
                                 || cleanupMethodsAnnotations.contains(annotation.toString()))
                 ));
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        } catch (Exception ignored) {
+        } catch (ClassNotFoundException | NoSuchMethodException ignored) {
             return false;
         }
     }
+
+    private static Class<?> forName(String className) throws ClassNotFoundException {
+        return forName(className, null);
+    }
+
+    private static Class<?> forName(String className, ClassLoader classLoader) throws ClassNotFoundException {
+        if (classLoader == null) try {
+            // Check the thread's class loader
+            classLoader = Thread.currentThread().getContextClassLoader();
+            if (classLoader != null) {
+                return Class.forName(className, false, classLoader);
+            }
+        } catch (ClassNotFoundException e) {
+            // not found, use the class' loader
+            classLoader = null;
+        }
+        if (classLoader != null) {
+            return Class.forName(className, false, classLoader);
+        }
+        return Class.forName(className);
+    }
+
     private boolean isAnAfterAnnotation(String annotationName) {
         return annotationName.startsWith("After");
     }

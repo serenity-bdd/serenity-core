@@ -29,7 +29,7 @@ public class CleanupMethodLocator {
 
     private List<String> DEFAULT_CLEANUP_PACKAGES_TO_SKIP = Arrays.asList(
             "java.lang",
-            "net.serenitybdd",
+            "net.serenitybdd.core",
             "net.thucydides",
             "org.junit",
             "org.openqa.selenium");

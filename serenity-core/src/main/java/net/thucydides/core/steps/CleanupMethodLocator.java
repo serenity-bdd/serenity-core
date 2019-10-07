@@ -27,16 +27,30 @@ public class CleanupMethodLocator {
         return stream(stackTrace).anyMatch(this::isAnnotatedWithAFixtureMethod);
     }
 
+    private List<String> DEFAULT_CLEANUP_PACKAGES_TO_SKIP = Arrays.asList(
+            "java.lang",
+            "net.serenitybdd",
+            "net.thucydides",
+            "org.junit",
+            "org.openqa.selenium");
+
     private boolean isAnnotatedWithAFixtureMethod(StackTraceElement stackTraceElement) {
         try {
-                Method method = forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
-                return (stream(method.getAnnotations()).anyMatch(
-                        annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
-                                || cleanupMethodsAnnotations.contains(annotation.toString()))
-                ));
+            if (inPackageToSkip(stackTraceElement.getClassName())) {
+                return false;
+            }
+            Method method = forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+            return (stream(method.getAnnotations()).anyMatch(
+                    annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
+                            || cleanupMethodsAnnotations.contains(annotation.toString()))
+            ));
         } catch (ClassNotFoundException | NoSuchMethodException ignored) {
             return false;
         }
+    }
+
+    private boolean inPackageToSkip(String className) {
+        return DEFAULT_CLEANUP_PACKAGES_TO_SKIP.stream().anyMatch(className::startsWith);
     }
 
     private static Class<?> forName(String className) throws ClassNotFoundException {

@@ -215,7 +215,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().recordStep(
                     TestStep.forStepCalled("UNSTABLE TEST:\n" + failureHistoryFor(failureMessages))
-                            .withResult(TestResult.IGNORED));
+                            .withResult(UNDEFINED));
+//                            .withResult(TestResult.IGNORED));
 
             latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
             latestTestOutcome().get().setFlakyTestFailureCause(testfailureCause);

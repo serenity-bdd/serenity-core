@@ -36,8 +36,6 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
      */
     override fun generateReportFrom(sourceDirectory: Path): File {
 
-        LOGGER.info("GENERATING EMAIL REPORT")
-
         // Fetch the test outcomes
         val testOutcomes = testOutcomesIn(sourceDirectory).filteredByEnvironmentTags()
 
@@ -46,6 +44,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
         val fields = templateFields(environmentVariables, testOutcomes)
 
         // Write the report
+        LOGGER.info("GENERATING EMAIL REPORT in $outputDirectory")
         return writeHtmlReportTo(outputDirectory, fields)
     }
 

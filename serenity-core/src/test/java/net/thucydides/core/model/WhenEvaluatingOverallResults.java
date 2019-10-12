@@ -33,7 +33,7 @@ public class WhenEvaluatingOverallResults {
                 { Arrays.asList(SUCCESS, SUCCESS),          SUCCESS },
                 { Arrays.asList(SUCCESS, SUCCESS, SUCCESS), SUCCESS },
                 { Arrays.asList(SUCCESS, PENDING),          PENDING },
-                { Arrays.asList(SUCCESS, IGNORED),          SUCCESS },
+                { Arrays.asList(SUCCESS, IGNORED),          IGNORED }, // IGNORED can be the result of a failed assumption
                 { Arrays.asList(SUCCESS, SKIPPED),          SUCCESS },
                 { Arrays.asList(FAILURE),                   FAILURE },
                 { Arrays.asList(FAILURE, FAILURE),          FAILURE },

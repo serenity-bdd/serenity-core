@@ -33,7 +33,7 @@ public class TestResultList {
             return PENDING;
         }
 
-        if (containsOnly(testResults, IGNORED)) {
+        if (testResults.contains(IGNORED)) {
             return IGNORED;
         }
 

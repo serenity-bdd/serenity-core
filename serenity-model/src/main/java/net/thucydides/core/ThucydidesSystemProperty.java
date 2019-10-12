@@ -1443,6 +1443,10 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS,
 
+    IE_OPTIONS_ENABLE_NATIVE_EVENTS("ieOptions.EnableNativeEvents"),
+    IE_OPTIONS_IGNORE_ZOOM_LEVEL("ieOptions.IgnoreZoomLevel"),
+    IE_OPTIONS_REQUIRE_WINDOW_FOCUS("ieOptions.RequireWindowFocus"),
+
     /**
      * The title to appear in the tag type table in the email reports
      */

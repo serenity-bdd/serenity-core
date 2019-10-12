@@ -467,15 +467,23 @@ public class TestOutcomes {
             return (expectedResults.contains(outcome.getResult())) ? 1 : 0;
         }
 
+        if (outcome.isManual()) {
+            return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
+        }
+
         if (dataTableRowResultsAreUndefinedIn(outcome.getDataTable())
-                && outcome.getTestSteps().size() == outcome.getDataTable().getSize()) {
-            return (int) outcome.getTestSteps().stream()
-                    .filter(step -> expectedResults.contains(step.getResult()))
-                    .count();
+            && outcome.getTestSteps().size() == outcome.getDataTable().getSize()) {
+            return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
         }
 
         return (int) outcome.getDataTable().getRows().stream()
                 .filter(row -> expectedResults.contains(row.getResult()))
+                .count();
+    }
+
+    private long stepsWithResultIn(List<TestStep> steps, List<TestResult> expectedResults) {
+        return steps.stream()
+                .filter(step -> expectedResults.contains(step.getResult()))
                 .count();
     }
 

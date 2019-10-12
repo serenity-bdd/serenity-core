@@ -122,6 +122,12 @@ public class TestStep implements Cloneable {
         this.precondition = precondition;
     }
 
+    public TestStep withResult(TestResult annotatedResult) {
+        TestStep annotatedStep = this.clone();
+        annotatedStep.result = annotatedResult;
+        return annotatedStep;
+    }
+
     public static class TestStepBuilder {
         private final String description;
 

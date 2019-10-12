@@ -1184,6 +1184,15 @@ public class TestOutcome {
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
+        return annotatedStepsFrom(testSteps);
+    }
+
+    private List<TestStep> annotatedStepsFrom(List<TestStep> testSteps) {
+        if (isManual()) { // && annotatedResult != null) {
+            return testSteps.stream().map(
+                    step -> step.withResult(getResult())
+            ).collect(Collectors.toList());
+        }
         return testSteps;
     }
 
@@ -1289,6 +1298,10 @@ public class TestOutcome {
         }
 
         if ((TestResult.IGNORED == annotatedResult) || (TestResult.SKIPPED == annotatedResult) || TestResult.PENDING == annotatedResult) {
+            return annotatedResult;
+        }
+
+        if (isManual() && (annotatedResult != null)) {
             return annotatedResult;
         }
 

@@ -294,7 +294,7 @@ class WhenRunningTestScenarios extends Specification {
     @Unroll
     def "annotated tests should have expected results"() {
         given:
-        def runner = new ThucydidesRunner(testclass, webDriverFactory)
+        def runner = new SerenityRunner(testclass, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;

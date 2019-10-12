@@ -759,14 +759,14 @@ public class WhenRecordingNewTestOutcomes {
     }
 
     @Test
-    public void if_one_test_is_ignored_among_others_it_will_not_affect_the_outcome_for_successful_tests() {
+    public void if_one_step_is_ignored_then_the_test_is_ignored() {
 
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 2"));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 3"));
         testOutcome.recordStep(forAnIgnoredTestStepCalled("Step 4"));
 
-        assertThat(testOutcome.getResult(), is(SUCCESS));
+        assertThat(testOutcome.getResult(), is(IGNORED));
     }
 
     @Test

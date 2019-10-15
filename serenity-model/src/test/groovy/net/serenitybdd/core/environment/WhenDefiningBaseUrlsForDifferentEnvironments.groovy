@@ -222,6 +222,24 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
 
     }
 
+    def """If environments are configured but no environment is set, normal properties will be used
+             environments {
+                dev {
+                    webdriver.base.url = http://dev.myapp.myorg.com
+                }
+        """() {
+
+        given:
+        environmentVariables.setProperties([
+                "environments.dev.webdriver.base.url"  : "http://dev.myapp.myorg.com",
+                "webdriver.base.url"                   : "a.normal.property"
+        ])
+        when:
+        def baseUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("webdriver.base.url")
+        then:
+        baseUrl == "a.normal.property"
+    }
+
     def "If no configured environment can be found but a property is present in the normal properties, this will be used"() {
 
         given:

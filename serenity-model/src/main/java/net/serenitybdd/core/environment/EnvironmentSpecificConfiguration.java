@@ -113,6 +113,7 @@ public class EnvironmentSpecificConfiguration {
 
         switch (environmentStrategy) {
             case USE_NORMAL_PROPERTIES:
+            case ENVIRONMENT_CONFIGURED_BUT_NOT_NAMED:
                 return contextlessProperty.apply(propertyName);
 
             case USE_DEFAULT_PROPERTIES:

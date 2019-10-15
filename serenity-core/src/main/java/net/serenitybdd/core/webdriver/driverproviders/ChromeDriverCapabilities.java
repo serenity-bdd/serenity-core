@@ -147,7 +147,15 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
                                                                          .from(environmentVariables);
 
         chromeExperimentalOptions.keySet().forEach(
-                key -> options.setExperimentalOption(key, chromeExperimentalOptions.get(key))
+                key -> {
+                    Object value = chromeExperimentalOptions.get(key);
+                    if( value instanceof String) {
+                        List<String> arguments = new OptionsSplitter().split((String)value);
+                        options.setExperimentalOption(key, arguments);
+                    }else {
+                        options.setExperimentalOption(key, value);
+                    }
+                }
         );
     }
 

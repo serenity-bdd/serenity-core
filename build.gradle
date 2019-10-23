@@ -240,10 +240,6 @@ subprojects {
             exclude group: "org.sonatype.sisu.inject", module: "cglib"
         }
 
-        compile("cglib:cglib:${cglibVersion}") {
-            exclude group: "org.ow2.asm", module: "asm"
-            exclude group: "org.apache.ant", module: "ant"
-        }
         compile("org.ow2.asm:asm:${asmVersion}")
 
         compile "commons-codec:commons-codec:${commonsCodecVersion}"

@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import net.bytebuddy.implementation.bind.annotation.*;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
@@ -11,14 +12,11 @@ import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsSilent;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
-import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
@@ -27,8 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
@@ -40,7 +42,7 @@ import static net.thucydides.core.steps.ErrorConvertor.forError;
  *
  * @author johnsmart
  */
-public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
+public class StepInterceptor implements MethodErrorReporter {
 
     private final Class<?> testStepClass;
     private Throwable error = null;
@@ -58,17 +60,20 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         listeners.add(new DynamicExampleStepInterceptionListener());
     }
 
-    public Object intercept(final Object obj, final Method method,
-                            final Object[] args, final MethodProxy proxy) throws Throwable {
-
+    @RuntimeType
+    public Object intercept(
+            @Origin Method method,
+            @This Object target,
+            @AllArguments Object[] args,
+            @SuperMethod Method zuper
+    ) throws Throwable {
         Object result;
-        if (baseClassMethod(method, obj)) {
-            result = runBaseObjectMethod(obj, method, args, proxy);
+        if (baseClassMethod(method, target)) {
+            result = runBaseObjectMethod(target, method, args, zuper);
         } else {
-            result = testStepResult(obj, method, args, proxy);
+            result = testStepResult(target, method, args, zuper);
         }
         return result;
-
     }
 
     private final List<String> OBJECT_METHODS
@@ -151,28 +156,28 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object testStepResult(final Object obj, final Method method,
-                                  final Object[] args, final MethodProxy proxy) throws Throwable {
+                                  final Object[] args, final Method zuperMethod) throws Throwable {
 
         if (!isATestStep(method)) {
-            return runNormalMethod(obj, method, args, proxy);
+            return runNormalMethod(obj, method, args, zuperMethod);
         }
 
-        listeners.forEach( listener -> listener.start(obj, method, args, proxy));
+        listeners.forEach( listener -> listener.start(obj, method, args, zuperMethod));
 
-        Object result = runOrSkipMethod(obj, method, args, proxy);
+        Object result = runOrSkipMethod(obj, method, args, zuperMethod);
 
-        listeners.forEach( listener -> listener.end(obj, method, args, proxy));
+        listeners.forEach( listener -> listener.end(obj, method, args, zuperMethod));
 
         return result;
     }
 
-    private Object runOrSkipMethod(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    private Object runOrSkipMethod(Object obj, Method method, Object[] args, Method zuperMethod) throws Throwable {
         Object result;
         if (shouldSkip(method) && !stepIsCalledFromCleanupMethod()) {
-            result = skipStepMethod(obj, method, args, proxy);
+            result = skipStepMethod(obj, method, args, zuperMethod);
         } else {
             notifyStepStarted(obj, method, args);
-            result = runTestStep(obj, method, args, proxy);
+            result = runTestStep(obj, method, args, zuperMethod);
         }
         return result;
     }
@@ -187,14 +192,14 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         return cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod();
     }
 
-    private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
+    private Object skipStepMethod(final Object obj, Method method, final Object[] args, final Method zuperMethod) throws Exception {
         if ((aPreviousStepHasFailed() || testAssumptionViolated()) && (!shouldExecuteNestedStepsAfterFailures())) {
             notifySkippedStepStarted(obj, method, args);
             notifySkippedStepFinishedFor(method, args);
             return appropriateReturnObject(obj, method);
         } else {
             notifySkippedStepStarted(obj, method, args);
-            return skipTestStep(obj, method, args, proxy);
+            return skipTestStep(obj, method, args, zuperMethod);
         }
     }
 
@@ -202,26 +207,26 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         return ThucydidesSystemProperty.DEEP_STEP_EXECUTION_AFTER_FAILURES.booleanFrom(environmentVariables, false);
     }
 
-    private Object skipTestStep(Object obj, Method method, Object[] args, MethodProxy proxy) throws Exception {
-        Object skippedReturnObject = runSkippedMethod(obj, method, args, proxy);
+    private Object skipTestStep(Object obj, Method method, Object[] args, Method zuperMethod) throws Exception {
+        Object skippedReturnObject = runSkippedMethod(obj, method, args, zuperMethod);
         notifyStepSkippedFor(method, args);
         LOGGER.debug("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         return appropriateReturnObject(skippedReturnObject, obj, method);
     }
 
-    private Object runSkippedMethod(Object obj, Method method, Object[] args, MethodProxy proxy) {
+    private Object runSkippedMethod(Object obj, Method method, Object[] args, Method zuperMethod) {
         LOGGER.trace("Running test step " + StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
-        Object result = runIfNestedMethodsShouldBeRun(obj, method, args, proxy);
+        Object result = runIfNestedMethodsShouldBeRun(obj, method, args, zuperMethod);
         StepEventBus.getEventBus().reenableWebdriverCalls();
         return result;
     }
 
-    private Object runIfNestedMethodsShouldBeRun(Object obj, Method method, Object[] args, MethodProxy proxy) {
+    private Object runIfNestedMethodsShouldBeRun(Object obj, Method method, Object[] args, Method zuperMethod) {
         Object result = null;
         try {
             if (shouldRunNestedMethodsIn(method)) {
-                result = invokeMethod(obj, args, proxy);
+                result = invokeMethod(obj, args, zuperMethod);
             }
         } catch (Throwable anyException) {
             LOGGER.trace("Ignoring exception thrown during a skipped test", anyException);
@@ -358,18 +363,18 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         return StepEventBus.getEventBus().softAssertsActive();
     }
 
-    private Object runBaseObjectMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
+    private Object runBaseObjectMethod(final Object obj, final Method method, final Object[] args, final Method zuperMethod)
             throws Throwable {
-        return invokeMethod(obj, args, proxy);
+        return invokeMethod(obj, args, zuperMethod);
     }
 
-    private Object runNormalMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
+    private Object runNormalMethod(final Object obj, final Method method, final Object[] args, final Method zuperMethod)
             throws Throwable {
 
         Object result = DefaultValue.defaultReturnValueFor(method, obj);
 
         return withNonStepMethodRunner(method, obj.getClass())
-                .invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
+                .invokeMethodAndNotifyFailures(obj, method, args, zuperMethod, result);
     }
 
     private MethodRunner withNonStepMethodRunner(final Method methodOrStep, final Class callingClass) {
@@ -411,13 +416,13 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object runTestStep(final Object obj, final Method method,
-                               final Object[] args, final MethodProxy proxy) throws Throwable {
+                               final Object[] args, final Method zuperMethod) throws Throwable {
 
         String callingClass = testContext();
         LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         Object result = null;
         try {
-            result = executeTestStepMethod(obj, method, args, proxy, result);
+            result = executeTestStepMethod(obj, method, args, zuperMethod, result);
             LOGGER.debug("STEP DONE: {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
@@ -440,9 +445,9 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
     }
 
-    private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
+    private Object executeTestStepMethod(Object obj, Method method, Object[] args, Method zuperMethod, Object result) throws Throwable {
         try {
-            result = invokeMethod(obj, args, proxy);
+            result = invokeMethod(obj, args, zuperMethod);
             notifyStepFinishedFor(method, args);
         } catch (PendingStepException pendingStep) {
             notifyStepPending(pendingStep.getMessage());
@@ -456,8 +461,12 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         return result;
     }
 
-    private Object invokeMethod(final Object obj, final Object[] args, final MethodProxy proxy) throws Throwable {
-        return proxy.invokeSuper(obj, args);
+    private Object invokeMethod(final Object obj, final Object[] args, final Method zuperMethod) throws Throwable {
+        try {
+            return zuperMethod.invoke(obj, args);
+        } catch (InvocationTargetException invocationTargetException) {
+            throw invocationTargetException.getCause();
+        }
     }
 
     private boolean isPending(final Method method) {

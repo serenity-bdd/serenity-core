@@ -38,6 +38,7 @@ public class DataDrivenStepInterceptor {
         if (isFinalizer(method)) {
             return this;
         }
+        method.setAccessible(true);
         return method.invoke(steps, args);
         /*try {
             return zuperMethod.invoke(steps, args);

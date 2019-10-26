@@ -232,7 +232,7 @@ subprojects {
         compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
         compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
         compile "com.google.guava:guava:${guavaVersion}"
-        
+
         compile("com.google.inject:guice:${guiceVersion}") {
             exclude group: "org.ow2.asm", module: "asm"
             exclude group: "asm", module: "asm"
@@ -249,7 +249,7 @@ subprojects {
         compile "io.cucumber:cucumber-core:${cucumberVersion}"
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
-        compile "junit:junit:${junitVersion}"
+        testCompile "junit:junit:${junitVersion}"
 
         compile "io.vavr:vavr:${vavrVersion}"
 
@@ -453,7 +453,7 @@ Changelog of Git Changelog Gradle plugin.
 **{{{messageTitle}}}**
 
 {{#messageBodyItems}}
- * {{.}} 
+ * {{.}}
 {{/messageBodyItems}}
 
 [{{hash}}](https://github.com/tomasbjerre/git-changelog-gradle-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*

@@ -44,6 +44,6 @@ public class ContextIcon {
                 ? String.format(
                         "<i class='fa fa-%s' aria-hidden='true'></i>",
                         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.get(contextName))
-                : contextName;
+                : contextName.toUpperCase();
     }
 }

@@ -34,7 +34,7 @@ public class WhenGeneratingContextIcons {
     public void should_use_the_name_provided_if_it_did_not_match_any_recognised_names() {
         String icon = ContextIcon.forOutcome(outcomeWithContextSetTo("foo,bar"));
 
-        assertThat(icon, is("<span class='context-icon'>foo bar</span>"));
+        assertThat(icon, is("<span class='context-icon'>FOO BAR</span>"));
     }
 
     private TestOutcome outcomeWithContextSetTo(String value) {

@@ -18,8 +18,9 @@ import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.JUnitAdapter;
+
 import org.apache.commons.lang3.StringUtils;
-import org.junit.internal.AssumptionViolatedException;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class StepInterceptor implements MethodErrorReporter {
         Class callingClass = obj.getClass();
         boolean isACoreLanguageMethod = (OBJECT_METHODS.contains(method.getName()));
         boolean methodDoesNotComeFromThisClassOrARelatedParentClass = !declaredInSameDomain(method, callingClass);
-        boolean isSilentMethod = isSilent(callingClass, method,  obj);
+        boolean isSilentMethod = isSilent(callingClass, method, obj);
         return (isACoreLanguageMethod || methodDoesNotComeFromThisClassOrARelatedParentClass || isSilentMethod);
     }
 
@@ -116,7 +117,6 @@ public class StepInterceptor implements MethodErrorReporter {
                 .stream()
                 .anyMatch(element -> element.getMethodName().equals("performSilently"));
     }
-
 
     private boolean declaredInSameDomain(Method method, final Class callingClass) {
         return domainPackageOf(getRoot(method)).equals(domainPackageOf(callingClass));
@@ -156,17 +156,17 @@ public class StepInterceptor implements MethodErrorReporter {
     }
 
     private Object testStepResult(final Object obj, final Method method,
-                                  final Object[] args, final Method zuperMethod) throws Throwable {
+            final Object[] args, final Method zuperMethod) throws Throwable {
 
         if (!isATestStep(method)) {
             return runNormalMethod(obj, method, args, zuperMethod);
         }
 
-        listeners.forEach( listener -> listener.start(obj, method, args, zuperMethod));
+        listeners.forEach(listener -> listener.start(obj, method, args, zuperMethod));
 
         Object result = runOrSkipMethod(obj, method, args, zuperMethod);
 
-        listeners.forEach( listener -> listener.end(obj, method, args, zuperMethod));
+        listeners.forEach(listener -> listener.end(obj, method, args, zuperMethod));
 
         return result;
     }
@@ -235,7 +235,7 @@ public class StepInterceptor implements MethodErrorReporter {
     }
 
     private boolean shouldRunNestedMethodsIn(Method method) {
-        return !(TestAnnotations.shouldSkipNested(method)  || shouldSkipNestedIn(method.getDeclaringClass()));
+        return !(TestAnnotations.shouldSkipNested(method) || shouldSkipNestedIn(method.getDeclaringClass()));
     }
 
     private boolean shouldSkipNestedIn(Class testStepClass) {
@@ -302,7 +302,7 @@ public class StepInterceptor implements MethodErrorReporter {
     private Object mockedReturnObjectFor(Method method) {
         try {
             return Mockito.mock(method.getReturnType());
-        } catch(RuntimeException tooHardToMockLetsJustCallItQuits) {
+        } catch (RuntimeException tooHardToMockLetsJustCallItQuits) {
             return null;
         }
     }
@@ -313,22 +313,22 @@ public class StepInterceptor implements MethodErrorReporter {
 
     private Object primativeDefaultValueFor(Method method) {
         switch (returnTypeOf(method)) {
-            case VOID:
-                return null;
-            case STRING:
-                return "";
-            case LONG:
-                return 0L;
-            case INTEGER:
-                return 0;
-            case FLOAT:
-                return 0.0F;
-            case DOUBLE:
-                return 0.0D;
-            case BOOLEAN:
-                return Boolean.FALSE;
-            default:
-                return null;
+        case VOID:
+            return null;
+        case STRING:
+            return "";
+        case LONG:
+            return 0L;
+        case INTEGER:
+            return 0;
+        case FLOAT:
+            return 0.0F;
+        case DOUBLE:
+            return 0.0D;
+        case BOOLEAN:
+            return Boolean.FALSE;
+        default:
+            return null;
         }
     }
 
@@ -392,7 +392,6 @@ public class StepInterceptor implements MethodErrorReporter {
         notifyOfStepFailure(obj, method, args, assertionError);
     }
 
-
     private boolean isAnnotatedWithAValidStepAnnotation(final Method method) {
         Annotation[] annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -416,7 +415,7 @@ public class StepInterceptor implements MethodErrorReporter {
     }
 
     private Object runTestStep(final Object obj, final Method method,
-                               final Object[] args, final Method zuperMethod) throws Throwable {
+            final Object[] args, final Method zuperMethod) throws Throwable {
 
         String callingClass = testContext();
         LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).orElse(method.getName()));
@@ -428,12 +427,14 @@ public class StepInterceptor implements MethodErrorReporter {
             error = failedAssertion;
             logStepFailure(obj, method, args, failedAssertion);
             result = appropriateReturnObject(obj, method);
-        } catch (AssumptionViolatedException assumptionFailed) {
-            result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
-            error = SerenityManagedException.detachedCopyOf(testErrorException);
-            logStepFailure(obj, method, args, forError(error).convertToAssertion());
-            result = appropriateReturnObject(obj, method);
+            if (JUnitAdapter.isAssumptionViolatedException(testErrorException)) {
+                result = appropriateReturnObject(obj, method);
+            } else {
+                error = SerenityManagedException.detachedCopyOf(testErrorException);
+                logStepFailure(obj, method, args, forError(error).convertToAssertion());
+                result = appropriateReturnObject(obj, method);
+            }
         }
         return result;
     }
@@ -453,8 +454,12 @@ public class StepInterceptor implements MethodErrorReporter {
             notifyStepPending(pendingStep.getMessage());
         } catch (IgnoredStepException ignoredStep) {
             notifyStepIgnored(ignoredStep.getMessage());
-        } catch (AssumptionViolatedException assumptionViolated) {
-            notifyAssumptionViolated(assumptionViolated.getMessage());
+        } catch (Throwable throwable) {
+            if (JUnitAdapter.isAssumptionViolatedException(throwable)) {
+                notifyAssumptionViolated(throwable.getMessage());
+            } else {
+                throw throwable;
+            }
         }
 
         Preconditions.checkArgument(true);
@@ -507,9 +512,9 @@ public class StepInterceptor implements MethodErrorReporter {
     }
 
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
-                                     final Throwable cause) throws Throwable {
+            final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                .withDisplayedFields(fieldValuesIn(object));
+                        .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);
@@ -524,15 +529,15 @@ public class StepInterceptor implements MethodErrorReporter {
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                .withDisplayedFields(fieldValuesIn(object));
+                        .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().stepStarted(description);
     }
 
     private Map<String, Object> fieldValuesIn(Object object) {
-        Map<String, Object> coreFieldValues =  Fields.of(object).asMap();
+        Map<String, Object> coreFieldValues = Fields.of(object).asMap();
 
         if (object instanceof HasCustomFieldValues) {
-            coreFieldValues.putAll( ((HasCustomFieldValues) object).getCustomFieldValues());
+            coreFieldValues.putAll(((HasCustomFieldValues) object).getCustomFieldValues());
         }
 
         return coreFieldValues;
@@ -541,7 +546,7 @@ public class StepInterceptor implements MethodErrorReporter {
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
 
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                .withDisplayedFields(fieldValuesIn(object));
+                        .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 

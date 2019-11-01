@@ -4,7 +4,7 @@ import net.serenitybdd.core.tags.EnvironmentDefinedTags;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.junit.runner.RunWith;
+import net.thucydides.core.util.JUnitAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,20 +19,26 @@ public class TagScanner {
     }
 
     public boolean shouldRunForTags(List<String> tags) {
-        if (providedTags.isEmpty()) { return true; }
+        if (providedTags.isEmpty()) {
+            return true;
+        }
 
         return tagsMatchAPositiveTag(tags, providedTags) && !tagsMatchANegativeTag(tags, providedTags);
     }
 
     public boolean shouldRunClass(Class<?> testClass) {
-        if (providedTags.isEmpty()) { return true; }
+        if (providedTags.isEmpty()) {
+            return true;
+        }
 
         return testClassMatchesAPositiveTag(testClass, providedTags)
-               && testClassDoesNotMatchANegativeTag(testClass, providedTags);
+                && testClassDoesNotMatchANegativeTag(testClass, providedTags);
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
-        if (!isATaggable(testClass) || (providedTags.isEmpty()) )  { return true; }
+        if (!isATaggable(testClass) || (providedTags.isEmpty())) {
+            return true;
+        }
 
         return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
                 && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
@@ -42,8 +48,7 @@ public class TagScanner {
     // If the default tag scanner is applied to these test runners, it will interfere
     // with the real filtering.
     private boolean isATaggable(Class<?> testClass) {
-        RunWith runWith = testClass.getAnnotation(RunWith.class);
-        return (runWith != null && Taggable.class.isAssignableFrom(runWith.value()));
+        return JUnitAdapter.isATaggableClass(testClass);
     }
 
     private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {
@@ -101,7 +106,6 @@ public class TagScanner {
         return negativeTags;
     }
 
-
     private boolean testMethodMatchesAPositiveTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
         return containsAPositiveMatch(expectedTags, tags);
@@ -113,11 +117,12 @@ public class TagScanner {
     }
 
     private boolean containsANegativeMatch(List<TestTag> expectedTags, List<TestTag> tags) {
-        if (negative(expectedTags).isEmpty()) {return false;}
+        if (negative(expectedTags).isEmpty()) {
+            return false;
+        }
 
         return tagsMatch(negative(expectedTags), tags);
     }
-
 
     private boolean tagsMatch(List<TestTag> expectedTags, List<TestTag> tags) {
         for (TestTag expectedTag : expectedTags) {

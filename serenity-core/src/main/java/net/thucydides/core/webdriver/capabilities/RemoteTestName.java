@@ -1,9 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import net.thucydides.core.util.JUnitAdapter;
 import net.thucydides.core.util.NameConverter;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -26,12 +24,11 @@ class RemoteTestName {
     }
 
     private static boolean isATestMethod(Method callingMethod) {
-        return callingMethod.getAnnotation(Test.class) != null;
+        return JUnitAdapter.isTestMethod(callingMethod);
     }
 
     private static boolean isASetupMethod(Method callingMethod) {
-        return (callingMethod.getAnnotation(Before.class) != null)
-                || (callingMethod.getAnnotation(BeforeClass.class) != null);
+        return JUnitAdapter.isTestSetupMethod(callingMethod);
     }
 
 }

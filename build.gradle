@@ -216,7 +216,7 @@ subprojects {
         options.addStringOption('debug')
         options.addStringOption('Xdoclint:none')
         options.encoding = 'UTF-8'
-        classpath = configurations.compile
+        classpath = configurations.compileClasspath
     }
 
     dokka {
@@ -232,7 +232,7 @@ subprojects {
         compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
         compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
         compile "com.google.guava:guava:${guavaVersion}"
-        
+
         compile("com.google.inject:guice:${guiceVersion}") {
             exclude group: "org.ow2.asm", module: "asm"
             exclude group: "asm", module: "asm"
@@ -240,10 +240,6 @@ subprojects {
             exclude group: "org.sonatype.sisu.inject", module: "cglib"
         }
 
-        compile("cglib:cglib:${cglibVersion}") {
-            exclude group: "org.ow2.asm", module: "asm"
-            exclude group: "org.apache.ant", module: "ant"
-        }
         compile("org.ow2.asm:asm:${asmVersion}")
 
         compile "commons-codec:commons-codec:${commonsCodecVersion}"
@@ -253,7 +249,7 @@ subprojects {
         compile "io.cucumber:cucumber-core:${cucumberVersion}"
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
-        compile "junit:junit:${junitVersion}"
+        testCompile "junit:junit:${junitVersion}"
 
         compile "io.vavr:vavr:${vavrVersion}"
 
@@ -276,7 +272,9 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
 
-        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
+        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
+            exclude group: "org.junit.jupiter"
+        }
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "junit"
             exclude group: "org.codehaus.groovy"
@@ -457,7 +455,7 @@ Changelog of Git Changelog Gradle plugin.
 **{{{messageTitle}}}**
 
 {{#messageBodyItems}}
- * {{.}} 
+ * {{.}}
 {{/messageBodyItems}}
 
 [{{hash}}](https://github.com/tomasbjerre/git-changelog-gradle-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*

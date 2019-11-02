@@ -73,6 +73,6 @@ public class InstrumentedTask {
     }
 
     public static boolean isInstrumented(Performable task) {
-        return task.getClass().getSimpleName().contains("EnhancerByCGLIB");
+        return task.getClass().getSimpleName().contains("ByteBuddy");
     }
 }

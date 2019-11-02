@@ -11,9 +11,9 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.JUnitAdapter;
 import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * @see ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT
  */
 public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
+
     private static final String DOT_REGEX = "\\.";
     private final static List<String> SUPPORTED_SUFFIXES = NewList.of("story", "feature");
 
@@ -53,7 +54,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private File getRequirementsDirectory() {
-        return new File(configuration.getOutputDirectory(),"requirements");
+        return new File(configuration.getOutputDirectory(), "requirements");
     }
 
     @Override
@@ -112,7 +113,6 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return requirementMap;
     }
 
-
     private void addChildrenTo(SortedMap<String, Requirement> requirementsByPath) {
         Set<String> paths = requirementsByPath.keySet();
         for (String path : paths) {
@@ -127,8 +127,8 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private void addRequirementTo(Map<String, Requirement> requirementsByPath,
-                                  Class candidateClass,
-                                  int maxDepth) {
+            Class candidateClass,
+            int maxDepth) {
 
         String fullRequirementName = getFullRequirementPath(candidateClass);
 
@@ -177,12 +177,11 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return maxDepth;
     }
 
-
     private Requirement newParentRequirement(String requirementPath,
-                                             Requirement parentRequirement,
-                                             String packageName,
-                                             int level,
-                                             String defaultRequirementType) {
+            Requirement parentRequirement,
+            String packageName,
+            int level,
+            String defaultRequirementType) {
         String requirementTitle = packageName;
         String requirementType = defaultRequirementType;
         String narrativeText = "";
@@ -205,18 +204,17 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement newRequirement(Class candidateClass,
-                                       String currentPath,
-                                       Requirement parentRequirement,
-                                       String packageName,
-                                       int level,
-                                       String defaultRequirementType) {
+            String currentPath,
+            Requirement parentRequirement,
+            String packageName,
+            int level,
+            String defaultRequirementType) {
         String requirementTitle = packageName;
         String requirementType = defaultRequirementType;
         String narrativeText = "";
         String cardNumber = "";
 
         java.util.Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
-
 
         Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative);
         if (parentRequirement != null) {
@@ -294,7 +292,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         Set<Class<?>> classesWithNarratives = new HashSet(loadClasses().annotatedWith(Narrative.class)
                 .fromPackage(rootPackage));
 
-        Set<Class<?>> testCases = new HashSet(loadClasses().annotatedWith(RunWith.class)
+        Set<Class<?>> testCases = new HashSet(loadClasses().thatMatch(JUnitAdapter::isTestClass)
                 .fromPackage(rootPackage));
 
         Set<Class<?>> requirementClasses = new HashSet();
@@ -318,6 +316,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private static class RequirementChildLocator {
+
         Requirement parent;
 
         public RequirementChildLocator(Requirement parent) {
@@ -334,7 +333,6 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
             return children;
         }
     }
-
 
     private Collection<Requirement> getAllRequirements() {
         return getRequirementsByPath().values();
@@ -361,13 +359,12 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return path;
     }
 
-
     private RequirementPathMatcher fullPathOf(Requirement requirement) {
         return new RequirementPathMatcher(requirement);
     }
 
-
     private class RequirementPathMatcher {
+
         String requirementPath;
 
         public RequirementPathMatcher(Requirement requirement) {

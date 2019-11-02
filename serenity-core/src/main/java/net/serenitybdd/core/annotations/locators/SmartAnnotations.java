@@ -112,6 +112,18 @@ public class SmartAnnotations extends Annotations {
             org.openqa.selenium.By getBy(Annotation annotation) {
                 return By.sclocator(getValue(annotation, this));
             }
+        },
+        BYIOSCLASSCHAIN("iOSClassChain") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return MobileBy.iOSClassChain(getValue(annotation, this));
+            }
+        },
+        BYIOSNSPREDICATE("iOSNsPredicate") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return MobileBy.iOSNsPredicateString(getValue(annotation, this));
+            }
         };
 
         private final String valueName;

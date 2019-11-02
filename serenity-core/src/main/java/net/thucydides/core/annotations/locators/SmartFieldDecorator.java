@@ -90,10 +90,10 @@ public class SmartFieldDecorator implements FieldDecorator {
             = Arrays.asList(FindBy.class,
                             net.thucydides.core.annotations.findby.FindBy.class,
                             org.openqa.selenium.support.FindBy.class,
-                            FindBys.class,
-                            FindAll.class,
-                            AndroidFindBy.class,
-                            AndroidFindBys.class);
+                            FindBys.class, FindAll.class, AndroidFindBy.class,
+                            AndroidFindBys.class, AndroidFindAll.class,
+                            iOSXCUITFindBy.class, iOSXCUITFindBys.class,
+                            iOSXCUITFindAll.class);
 //                            iOSFindBy.class,
 //                            iOSFindBys.class);
 

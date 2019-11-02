@@ -7,6 +7,15 @@ test {
     maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
 }
 
+configurations {
+    compile {
+        exclude group: 'org.junit.jupiter'
+    }
+    testCompile {
+        exclude group: 'org.junit.jupiter'
+    }
+}
+
 dependencies {
     compile project(':serenity-model')
     compile project(':serenity-core')

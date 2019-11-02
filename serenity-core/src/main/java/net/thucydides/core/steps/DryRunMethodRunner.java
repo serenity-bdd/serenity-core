@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.serenitybdd.core.collect.NewList;
-import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -9,11 +9,12 @@ import java.util.List;
 class DryRunMethodRunner extends BaseMethodRunner implements MethodRunner {
 
         private final List<String> slowDomains = NewList.of("webdriver", "rest");
-        @Override
-        public Object invokeMethodAndNotifyFailures(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
+
+        @RuntimeType
+        public Object invokeMethodAndNotifyFailures(Object obj, Method method, Object[] args, Method zuperMethod, Object result) throws Throwable {
             try {
                 if (!isSlow(method)) {
-                    result = invokeMethod(obj, args, proxy);
+                    result = invokeMethod(obj, args, zuperMethod);
                 }
             } catch (Throwable ignorableException) {
                 return DefaultValue.defaultReturnValueFor(method, obj);

@@ -111,7 +111,7 @@ public class Inflector {
         return wordStr;
     }
 
-    String pluralize(Object word,
+    public String pluralize(Object word,
                      int count) {
         if (word == null) return null;
         if (count == 1 || count == -1) {

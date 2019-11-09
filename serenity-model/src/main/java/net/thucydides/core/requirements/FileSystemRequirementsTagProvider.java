@@ -60,7 +60,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final int level;
     private final List<String> requirementTypes;
 
-    private final static String DEFAULT_FEATURE_DIRECTORY = "src/test.features";
+    private final static String DEFAULT_FEATURE_DIRECTORY = "src/test/resources/features";
 
     private final RequirementsConfiguration requirementsConfiguration;
 

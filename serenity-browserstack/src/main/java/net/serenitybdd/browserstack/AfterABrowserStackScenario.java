@@ -27,12 +27,10 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         try {
             String sessionId = RemoteDriver.of(driver).getSessionId().toString();
-//            String browserStackUsername = environmentVariables.getProperty("browserstack.user");
             String browserStackUsername = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty("browserstack.user")
                     .orElse(null);
 
-//            String browserStackKey = environmentVariables.getProperty("browserstack.key");
             String browserStackKey = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty("browserstack.key")
                     .orElse(null);

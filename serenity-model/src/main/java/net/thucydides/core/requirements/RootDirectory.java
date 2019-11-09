@@ -258,7 +258,6 @@ public class RootDirectory {
             return RESOURCE_DIRECTORY_CACHE.get(root);
         }
 
-        Stopwatch stopwatch = Stopwatch.started();
         List<File> results;
         if (ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
             results = new ArrayList<>();
@@ -269,7 +268,6 @@ public class RootDirectory {
                     .collect(Collectors.toList());
         }
         RESOURCE_DIRECTORY_CACHE.put(root,results);
-        LOGGER.debug("Resource directories found in {} in {} ms: {}", root, stopwatch.stop(), results);
 
         return results;
     }

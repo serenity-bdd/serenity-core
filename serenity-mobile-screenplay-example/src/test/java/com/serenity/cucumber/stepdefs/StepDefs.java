@@ -26,12 +26,7 @@ public class StepDefs {
     public void set_the_stage() {
         OnStage.setTheStage(new OnlineCast());
     }
-
-    @Given("^that \"(.*)\" has an empty note list$")
-    public void that_Jacob_has_an_empty_note_list(String actor) {
-    	givenThat(theActorCalled(actor)).can(BrowseTheWeb.with(mobileDevice));
-    }
-    
+	
     @When("^he notes \"(.*)\" to his list$")
     public void he_notes_to_his_list(String item) throws Throwable {
         theActorInTheSpotlight().attemptsTo(Click.on(ADD_BUTTON));

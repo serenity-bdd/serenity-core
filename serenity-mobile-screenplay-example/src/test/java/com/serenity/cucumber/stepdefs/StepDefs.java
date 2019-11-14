@@ -27,9 +27,9 @@ public class StepDefs {
         OnStage.setTheStage(new OnlineCast());
     }
 	
-    @When("^he notes \"(.*)\" to his list$")
-    public void he_notes_to_his_list(String item) throws Throwable {
-        theActorCalled("Jacob").attemptsTo(Click.on(ADD_BUTTON));
+    @When("^\"(.*)\" notes \"(.*)\" to his list$")
+    public void he_notes_to_his_list(String actorName, String item) throws Throwable {
+        theActorCalled(actorName).attemptsTo(Click.on(ADD_BUTTON));
         
     }
 }

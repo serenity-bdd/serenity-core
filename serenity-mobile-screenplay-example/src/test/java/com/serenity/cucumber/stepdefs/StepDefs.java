@@ -29,7 +29,7 @@ public class StepDefs {
 	
     @When("^he notes \"(.*)\" to his list$")
     public void he_notes_to_his_list(String item) throws Throwable {
-        theActorInTheSpotlight().attemptsTo(Click.on(ADD_BUTTON));
+        theActorCalled("Jacob").attemptsTo(Click.on(ADD_BUTTON));
         
     }
 }

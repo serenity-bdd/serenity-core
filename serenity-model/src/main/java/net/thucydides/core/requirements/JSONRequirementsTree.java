@@ -21,8 +21,10 @@ public class JSONRequirementsTree {
     private final List<Node> nodes;
 
     public JSONRequirementsTree(List<Requirement> requirements, RequirementsOutcomes requirementsOutcomes) {
-        nodes = requirements.stream().map(requirement -> toNode(requirement, requirementsOutcomes))
-                            .collect(Collectors.toList());
+        nodes = requirements.stream()
+                .map(requirement -> toNode(requirement, requirementsOutcomes))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public static JSONRequirementsTree forRequirements(List<Requirement> requirements,
@@ -34,11 +36,13 @@ public class JSONRequirementsTree {
         return new JSONRequirementsTree(requirements, null);
     }
 
-    private Node toNode(Requirement requirement,RequirementsOutcomes requirementsOutcomes) {
-        List<Node> children = requirement.getChildren().stream()
-                                         .map(child -> toNode(child, requirementsOutcomes))
-                                         .distinct()
-                                         .collect(Collectors.toList());
+    private Node toNode(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        List<Node> children = requirement.getChildren()
+                .stream()
+                .map(child -> toNode(child, requirementsOutcomes))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
         TestResult result = matchingOutcome(requirement, requirementsOutcomes);
 
@@ -74,7 +78,7 @@ public class JSONRequirementsTree {
     private int scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
         int scenarioCount = 0;
         if ((requirementsOutcomes != null) && (requirementsOutcomes.requirementOutcomeFor(requirement) != null)
-            && ((requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes() != null))) {
+                && ((requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes() != null))) {
             scenarioCount = requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes().getOutcomes().size();
         }
         return scenarioCount;
@@ -83,7 +87,9 @@ public class JSONRequirementsTree {
     private TestResult matchingOutcome(Requirement requirement,
                                        RequirementsOutcomes requirementsOutcomes) {
 
-        if (requirementsOutcomes == null) { return TestResult.UNDEFINED; }
+        if (requirementsOutcomes == null) {
+            return TestResult.UNDEFINED;
+        }
 
         Optional<RequirementOutcome> matchingOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
 
@@ -103,14 +109,14 @@ public class JSONRequirementsTree {
 
     private Optional<RequirementOutcome> testOutcomeForRequirement(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
         return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
-                                                            .filter(outcome -> outcome.getRequirement().equals(requirement))
-                                                            .findFirst();
+                .filter(outcome -> outcome.getRequirement().equals(requirement))
+                .findFirst();
     }
 
     private boolean unimplementedFeaturesExistFor(RequirementOutcome matchingOutcome, RequirementsOutcomes requirementsOutcomes) {
         return matchingOutcome.getFlattenedRequirements(matchingOutcome.getRequirement())
-                       .stream()
-                       .anyMatch( requirement -> noTestsExistFor(requirement, requirementsOutcomes));
+                .stream()
+                .anyMatch(requirement -> noTestsExistFor(requirement, requirementsOutcomes));
     }
 
     private boolean noTestsExistFor(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {

@@ -86,6 +86,7 @@ public class RequirementsOutcomes {
 
         return distinctRequirements.parallelStream()
                 .map(this::requirementOutcomeFor)
+                .sorted()
                 .collect(Collectors.toList());
     }
 

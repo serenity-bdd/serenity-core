@@ -56,11 +56,13 @@ dependencies {
     }
     compile 'es.nitaur.markdown:txtmark:0.16'
 
+    compileOnly "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+
     testCompile project(':serenity-test-utils')
     testCompile project(':serenity-sample-alternative-resources')
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude group: "junit"
         exclude group: "org.codehaus.groovy"
-
     }
+    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
 }

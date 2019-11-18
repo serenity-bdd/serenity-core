@@ -10,16 +10,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+// TODO junit4/junit5:
+// This seems to be a test utility that is both provided as part of the library and used in serenity (internal) tests.
+// Would be better placed in serenity-junit. And as long as the serenity internal tests are also using junit4 the tests
+// should then depend on serenity-junit as well.
+// Current decision: leave it here, but using it will require to add junit4 as dependency again.
 public class ExtendedTemporaryFolder extends ExternalResource {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ExtendedTemporaryFolder.class);
 
-	private final File parentFolder;
+    private static final Logger logger = LoggerFactory.getLogger(ExtendedTemporaryFolder.class);
+
+    private final File parentFolder;
     private File folder;
 
     public ExtendedTemporaryFolder() {
-    	this(null);
-	}
+        this(null);
+    }
 
     public ExtendedTemporaryFolder(File parentFolder) {
         this.parentFolder = parentFolder;
@@ -52,15 +57,15 @@ public class ExtendedTemporaryFolder extends ExternalResource {
     }
 
     /**
-     * @param  folder name of the new temporary directory
+     * @param folder name of the new temporary directory
      * @return a new fresh folder with the given name under the temporary folder.
      */
     public File newFolder(String folder) throws IOException {
-        return newFolder(new String[]{folder});
+        return newFolder(new String[] { folder });
     }
 
     /**
-     * @param  folderNames a sequence of folder names used to create a temporary directory
+     * @param folderNames a sequence of folder names used to create a temporary directory
      * @return a new fresh folder with the given name(s) under the temporary folder.
      */
     public File newFolder(String... folderNames) throws IOException {
@@ -118,34 +123,34 @@ public class ExtendedTemporaryFolder extends ExternalResource {
         file.delete();
     }
 
-	public File newFolder() throws IOException {
-		if (CurrentOS.isWindows()) {
-			synchronized (this) {
-				try {
-					return createTemporaryFolderIn(getRoot());
-				} catch (IOException e) {
-					logger.debug("Error when invoke newFolder(): {}", e);
-					throw e;
-				}
-			}
-		} else {
-			return createTemporaryFolderIn(getRoot());
-		}
-	}
-	
-	public File newFile(String fileName) throws IOException {
-		if (CurrentOS.isWindows()) {
-			synchronized (this) {
-				File file= new File(getRoot(), fileName);
+    public File newFolder() throws IOException {
+        if (CurrentOS.isWindows()) {
+            synchronized (this) {
+                try {
+                    return createTemporaryFolderIn(getRoot());
+                } catch (IOException e) {
+                    logger.debug("Error when invoke newFolder(): {}", e);
+                    throw e;
+                }
+            }
+        } else {
+            return createTemporaryFolderIn(getRoot());
+        }
+    }
+
+    public File newFile(String fileName) throws IOException {
+        if (CurrentOS.isWindows()) {
+            synchronized (this) {
+                File file = new File(getRoot(), fileName);
                 file.setWritable(true);
                 file.setReadable(true);
                 file.createNewFile();
-				return file;
-			}
-		} else {
+                return file;
+            }
+        } else {
             File file = new File(getRoot(), fileName);
             file.createNewFile();
             return file;
-		}
-	}
+        }
+    }
 }

@@ -81,6 +81,10 @@ public class RootDirectory {
 
     }
 
+    public Set<String> requirementsDirectoryNames() {
+        return new HashSet<>(requirementsDirectoryNames);
+    }
+
     public static RootDirectory definedIn(EnvironmentVariables environmentVariables) {
         return new RootDirectory(environmentVariables,".");
     }
@@ -322,4 +326,18 @@ public class RootDirectory {
     }
 
 
+    public Path getRelativePathOf(String path) {
+            if (path == null) {
+                return Paths.get("");
+            }
+            for (String requirementsDirectory : requirementsDirectoryNames) {
+                if (path.startsWith("classpath:" + requirementsDirectory + "/")) {
+                    return Paths.get(path.substring(requirementsDirectory.length() + 11));
+                }
+            }
+            if (path.startsWith("classpath:")) {
+                return Paths.get(path.substring(11));
+            }
+            return Paths.get(path);
+    }
 }

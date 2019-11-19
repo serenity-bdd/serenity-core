@@ -403,7 +403,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .filter(requirement -> requirementHasPathMatching(requirement, testOutcomeRequirementsPath)).findFirst();
 
         Optional<Requirement> requirementWithAMatchingName = AllRequirements.asStreamFrom(getRequirements())
-                .filter(requirement -> requirementHasNameMatching(requirement, testOutcome.getPath())).findFirst();
+                .filter(requirement -> requirementHasNameMatching(requirement, testOutcomeRequirementsPath)).findFirst();
 
 
         if (requirementWithMatchingPath.isPresent()) {
@@ -427,10 +427,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return requirement.getPath() != null  && expectedPath.equals(Paths.get(requirement.getPath()));
     }
 
-    private boolean requirementHasNameMatching(Requirement requirement, String requirementName) {
-        return requirement.getFeatureFileName() != null
-                && requirementName != null
-                && Paths.get(requirementName).equals(Paths.get(requirement.getFeatureFileName()));
+    private boolean requirementHasNameMatching(Requirement requirement,Path expectedPath) {
+        return requirement.getFeatureFileName() != null  && expectedPath.equals(Paths.get(requirement.getFeatureFileName()));
     }
 
 

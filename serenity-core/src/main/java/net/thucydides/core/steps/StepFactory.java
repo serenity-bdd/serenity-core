@@ -3,6 +3,7 @@ package net.thucydides.core.steps;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
@@ -204,6 +205,7 @@ public class StepFactory {
                                          Object interceptor,
                                          Object... parameters) {
         Class proxyClass = new ByteBuddy()
+                .with(TypeValidation.DISABLED)
                 .subclass(scenarioStepsClass)
                 .method(not(isDeclaredBy(Object.class)))
                 .intercept(MethodDelegation.to(interceptor))

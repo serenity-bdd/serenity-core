@@ -337,6 +337,12 @@ public class RootDirectory {
             }
             if (path.startsWith("classpath:")) {
                 return Paths.get(path.substring(11));
+            } else if (path.startsWith("file:///")) {
+                return Paths.get(path.substring(8));
+            } else if (path.startsWith("file://")) {
+                return Paths.get(path.substring(7));
+            } else if (path.startsWith("file:/")) {
+                return Paths.get(path.substring(6));
             }
             return Paths.get(path);
     }

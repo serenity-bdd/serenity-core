@@ -397,7 +397,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private java.util.Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
 
-        Path testOutcomeRequirementsPath =  RootDirectory.definedIn(environmentVariables).getRelativePathOf(testOutcome.getPath());//.asRelativePathOn(requirementsDirectoryPaths);
+        Path testOutcomeRequirementsPath =  RootDirectory.definedIn(environmentVariables).getRelativePathOf(testOutcome.getPath());
 
         Optional<Requirement> requirementWithMatchingPath = AllRequirements.asStreamFrom(getRequirements())
                 .filter(requirement -> requirementHasPathMatching(requirement, testOutcomeRequirementsPath)).findFirst();

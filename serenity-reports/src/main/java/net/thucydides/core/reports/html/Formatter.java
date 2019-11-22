@@ -469,6 +469,23 @@ public class Formatter  {
         return Inflector.inflection().humanize(text);
     }
 
+    public String humanReadableTitle(String text) {
+        if (isAClassOrMethodName(text)) {
+            return Inflector.inflection().of(text).inHumanReadableForm().startingWithACapital().toString();
+        } else {
+            return text;
+        }
+    }
+
+    private boolean isAClassOrMethodName(String text) {
+        if (StringUtils.containsWhitespace(text)) { return false; }
+        if (StringUtils.isEmpty(text)) { return false; }
+        if (StringUtils.isAllUpperCase(text)) {
+            return false;
+        }
+        return true;
+    }
+
     public String formatWithFields(String textToFormat) {
         String textWithEscapedFields  = textToFormat.replaceAll("<", "&lt;")
                                                     .replaceAll(">", "&gt;");

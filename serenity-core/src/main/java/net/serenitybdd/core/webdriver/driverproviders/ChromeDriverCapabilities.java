@@ -25,6 +25,12 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation", "--test-type");
+    private static final List<String> LIST_BASED_EXPERIMENTAL_OPTIONS = Arrays.asList(
+            "chrome_experimental_options.args",
+            "chrome_experimental_options.extensions",
+            "chrome_experimental_options.excludeSwitches",
+            "chrome_experimental_options.windowTypes"
+    );
     private final EnvironmentVariables environmentVariables;
     private final String driverOptions;
 
@@ -149,7 +155,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         chromeExperimentalOptions.keySet().forEach(
                 key -> {
                     Object value = chromeExperimentalOptions.get(key);
-                    if( value instanceof String) {
+                    if( LIST_BASED_EXPERIMENTAL_OPTIONS.contains(key) ) {
                         List<String> arguments = new OptionsSplitter().split((String)value);
                         options.setExperimentalOption(key, arguments);
                     }else {

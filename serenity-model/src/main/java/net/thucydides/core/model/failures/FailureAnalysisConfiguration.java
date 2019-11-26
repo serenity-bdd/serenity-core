@@ -90,15 +90,15 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> skippedTypes() {
-        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
-        pendingTypes.addAll(skippedTypesDefinedIn(environmentVariables));
+        List<Class<?>> skippedTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
+        skippedTypes.addAll(skippedTypesDefinedIn(environmentVariables));
 
-        pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(failureTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(errorTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
-        return pendingTypes;
+        return skippedTypes;
     }
 
     public List<Class<?>> errorTypes() {

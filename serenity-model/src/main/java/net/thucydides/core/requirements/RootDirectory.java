@@ -356,6 +356,8 @@ public class RootDirectory {
                 int startOfRelativePath = absolutePath.lastIndexOf(requirementsDirectoryInPath) + requirementsDirectoryInPath.length();
                 return Optional.of(Paths.get(absolutePath.substring(startOfRelativePath)));
             }
+        } else if (absolutePath.startsWith("file:")) {
+            return Optional.of(Paths.get(absolutePath.substring(5)));
         }
         return Optional.empty();
     }

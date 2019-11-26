@@ -38,7 +38,7 @@ public class FailureAnalysisConfiguration {
 
     private final List<Class<?>> DEFAULT_SKIPPED_TYPES = new ArrayList<>();
     {
-        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(SkipStepException.class));
+        DEFAULT_SKIPPED_TYPES.addAll(Arrays.asList(SkipStepException.class));
     }
 
     private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();

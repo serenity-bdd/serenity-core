@@ -83,7 +83,7 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
 
     public static class ATestWithAFailingStepAndAReactivatedDriver {
 
-        @Managed(driver = "chrome", options = "--headless")
+        @Managed(driver = "htmlunit")
         WebDriver driver;
 
         @Steps
@@ -100,7 +100,7 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
 
     public static class ATestWithAFailingStepWhereWeReactivateTheDriver {
 
-        @Managed(driver = "chrome", options = "--headless")
+        @Managed(driver = "htmlunit")
         WebDriver driver;
 
         @Steps
@@ -120,7 +120,7 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
 
     public static class ATestWithAFailingStepWhereWeReactivateTheDriverAndUsingAStepMethod {
 
-        @Managed(driver = "chrome", options = "--headless")
+        @Managed(driver = "htmlunit", options = "--headless")
         WebDriver driver;
 
         @Steps

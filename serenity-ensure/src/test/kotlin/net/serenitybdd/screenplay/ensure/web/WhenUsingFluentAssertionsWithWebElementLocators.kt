@@ -19,6 +19,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
@@ -39,9 +40,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        val browserOptions = ChromeOptions()
-        browserOptions.setHeadless(true)
-        driver = ChromeDriver(browserOptions)
+        driver = HtmlUnitDriver()
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)
@@ -101,7 +100,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `has a given page HTML content`() {
-                shouldPassWhenChecking(thatTheCurrentPage().pageSource().contains("<title>Test Page</title>"), wendy)
+                shouldPassWhenChecking(thatTheCurrentPage().pageSource().contains("Test Page"), wendy)
             }
 
             @Test

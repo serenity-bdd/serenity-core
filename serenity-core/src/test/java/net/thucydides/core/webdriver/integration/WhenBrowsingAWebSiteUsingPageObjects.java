@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.integration;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -93,7 +94,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @Before
     public void openLocalStaticSite() {
-        driver = new HtmlUnitDriver();
+        driver = new HtmlUnitDriver(BrowserVersion.CHROME, true);
         openStaticTestSite();
         indexPage = new IndexPage(driver, 1);
         indexPage.setWaitForTimeout(100);

@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.integration;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestResult;
@@ -22,6 +23,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,9 +55,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         File sourceDirectory = directoryInClasspathCalled("/test-outcomes/containing-nostep-errors");
         reporter.generateReportsForTestResultsFrom(sourceDirectory);
 
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver(chromeOptions);
+        driver = new HtmlUnitDriver(BrowserVersion.CHROME, true);
     }
 
     @AfterClass

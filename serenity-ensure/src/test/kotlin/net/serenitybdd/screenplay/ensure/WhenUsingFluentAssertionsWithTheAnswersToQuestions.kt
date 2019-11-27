@@ -5,33 +5,32 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.time.LocalTime
-import java.util.regex.Pattern
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
 
     internal fun colorRed(): Question<String> {
-        return Question.about("the colour").answeredBy { actor -> "BLUE" }
+        return Question.about("the colour").answeredBy { "BLUE" }
     }
 
     internal fun age(): Question<Int> {
-        return Question.about("the age").answeredBy { actor -> 30 }
+        return Question.about("the age").answeredBy { 30 }
     }
 
     internal fun flag(): Question<Boolean> {
-        return Question.about("the flag").answeredBy { actor -> false }
+        return Question.about("the flag").answeredBy { false }
     }
 
     internal fun float(): Question<Float> {
-        return Question.about("the float").answeredBy { actor -> 1.3f }
+        return Question.about("the float").answeredBy { 1.3f }
     }
 
     internal fun double(): Question<Double> {
-        return Question.about("the double").answeredBy { actor -> 1.3 }
+        return Question.about("the double").answeredBy { 1.3 }
     }
 
     internal fun time(): Question<LocalTime> {
-        return Question.about("the time").answeredBy { actor -> LocalTime.of(12,0) }
+        return Question.about("the time").answeredBy { LocalTime.of(12,0) }
     }
 
     @Nested

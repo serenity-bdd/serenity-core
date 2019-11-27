@@ -131,7 +131,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldFailWhenChecking(that(nullValue).isIn("red", "green", "blue"))
             }
         }
@@ -153,7 +153,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldPassWhenChecking(that(nullValue).isNotIn("red", "green", "blue"))
             }
         }
@@ -175,7 +175,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldFailWhenChecking(that(nullValue).isIn(listOf("red", "green", "blue")))
             }
         }
@@ -198,7 +198,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldPassWhenChecking(that(nullValue).isNotIn(setOf("red", "green", "blue")))
             }
         }

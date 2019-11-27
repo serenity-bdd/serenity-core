@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.ensure
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.util.regex.Pattern
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithBooleans {

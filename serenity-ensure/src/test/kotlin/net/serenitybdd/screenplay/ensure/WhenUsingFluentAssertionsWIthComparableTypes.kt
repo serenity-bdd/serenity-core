@@ -9,7 +9,7 @@ import java.util.Comparator
 class WhenUsingFluentAssertionsWIthComparableTypes {
 
     internal enum class Color {
-        RED, GREEN, BLUE
+        RED, BLUE
     }
 
     @Nested

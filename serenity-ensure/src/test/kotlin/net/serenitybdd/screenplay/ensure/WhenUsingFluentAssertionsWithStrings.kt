@@ -116,7 +116,7 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the value is null`() {
-                val nullValue : String? = null;
+                val nullValue : String? = null
                 shouldPassWhenChecking(that(nullValue).doesNotContain("blue"))
             }
 

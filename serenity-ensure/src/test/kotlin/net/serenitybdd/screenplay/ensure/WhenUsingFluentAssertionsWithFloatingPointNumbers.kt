@@ -3,10 +3,6 @@ package net.serenitybdd.screenplay.ensure
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.Month
-import java.util.Comparator
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithFloatingPointNumbers {
@@ -22,7 +18,7 @@ class WhenUsingFluentAssertionsWithFloatingPointNumbers {
         inner class FloatingPointComparisons {
 
             @Test
-            fun `equality`() {
+            fun equality() {
                 shouldPassWhenChecking(that(floatingPointTen).isEqualTo(10.0f))
             }
 
@@ -47,7 +43,7 @@ class WhenUsingFluentAssertionsWithFloatingPointNumbers {
         inner class DoublePointComparisons {
 
             @Test
-            fun `equality`() {
+            fun equality() {
                 shouldPassWhenChecking(that(doubleTen).isEqualTo(10.0))
             }
 

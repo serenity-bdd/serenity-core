@@ -26,10 +26,10 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation", "--test-type");
     private static final List<String> LIST_BASED_EXPERIMENTAL_OPTIONS = Arrays.asList(
-            "chrome_experimental_options.args",
-            "chrome_experimental_options.extensions",
-            "chrome_experimental_options.excludeSwitches",
-            "chrome_experimental_options.windowTypes"
+            "args",
+            "extensions",
+            "excludeSwitches",
+            "windowTypes"
     );
     private final EnvironmentVariables environmentVariables;
     private final String driverOptions;

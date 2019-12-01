@@ -48,6 +48,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     public static void generateReports() throws IOException {
         IssueTracking issueTracking = mock(IssueTracking.class);
         environmentVariables.setProperty("output.formats", "xml");
+        environmentVariables.setProperty("report.customfields.env", "testenv");
         HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking, environmentVariables);
         outputDirectory = newTemporaryDirectory();
         reporter.setOutputDirectory(outputDirectory);
@@ -122,6 +123,16 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         File report = new File(outputDirectory, expectedSuccessReport);
         driver.get(urlFor(report));
         assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
+    }
+
+    @Test
+    public void should_display_custom_field_on_the_home_page() {
+        File report = new File(outputDirectory, "index.html");
+        driver.get(urlFor(report));
+        assertThat(driver.findElement(By.cssSelector(".custom-title")).isDisplayed(), is(true));
+        assertThat(driver.findElement(By.cssSelector(".custom-title")).getText(), equalTo("Env"));
+        assertThat(driver.findElement(By.cssSelector(".custom-value")).isDisplayed(), is(true));
+        assertThat(driver.findElement(By.cssSelector(".custom-value")).getText(), equalTo("testenv"));
     }
 
     private String urlFor(File report) {

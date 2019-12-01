@@ -146,6 +146,10 @@ public class FreemarkerContext {
 
         context.put("tagResults", TagResults.from(testOutcomes).groupedByType());
 
+        CustomReportFields customReportFields = new CustomReportFields(environmentVariables);
+        context.put("customFields", customReportFields.getFieldNames());
+        context.put("customFieldValues", customReportFields.getValues());
+
         return context;
     }
 

@@ -139,6 +139,26 @@
 
     <div class="clr"></div>
     <!--/* starts second table*/-->
+    <#if (customFields?has_content) && (customFields?size > 0) >
+        <div>
+            <table class="table environment">
+                <tr>
+                    <#list customFields as customField>
+                        <th class="custom-title">
+                            ${customField}
+                        </th>
+                    </#list>
+                </tr>
+                <tr>
+                    <#list customFieldValues as customFieldValue>
+                        <td class="custom-value">
+                            ${customFieldValue}
+                        </td>
+                    </#list>
+                </tr>
+            </table>
+        </div>
+    </#if>
     <#include "menu.ftl">
     <@main_menu selected="home" />
     <div class="clr"></div>
@@ -770,11 +790,12 @@
                                                 </div>
                                             </div>
                                         </#if>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
-
                     </tr>
                 </table>
-
             </div>
         </div>
     </div>

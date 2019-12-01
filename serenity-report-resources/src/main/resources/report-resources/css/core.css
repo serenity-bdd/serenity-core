@@ -2301,3 +2301,20 @@ span.evidence {
     display:block;
     margin-left: 4em;
 }
+
+.environment {
+    background-color: #fff;
+    font-size: 16px;
+    table-layout: fixed;
+}
+
+.environment th {
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.environment td {
+    color: #69727f;
+    text-align: center;
+}

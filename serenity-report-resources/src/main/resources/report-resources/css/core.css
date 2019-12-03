@@ -63,8 +63,7 @@ body {
 {
 
     min-width:1024px;
-    max-width:1024px;
-    margin:0 auto;
+    margin:0 1em;
     width: auto !important; /*IE6 hack*/
     width:1024px;
 
@@ -119,8 +118,7 @@ footer {
 #topbanner
 {
     min-width:1024px;
-    max-width:1024px;
-    margin:0 auto;
+    margin:0 1em;
     width: auto !important; /*IE6 hack*/
     width:1024px; /*IE6 hack*/
     /*border: 1px solid #FF0000;*/
@@ -975,6 +973,7 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 .overview {
     border: 0px;
     padding-top: 10px;
+    width: 100%;
     min-height: 650px;
     min-width: 1000px;
 }
@@ -1102,7 +1101,6 @@ td.step-icon {
 
 #results-dashboard
 {
-    width:1025px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;

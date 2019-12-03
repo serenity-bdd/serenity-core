@@ -84,7 +84,7 @@
                 <span style="display:none">${status_rank}</span>
             </td>
 
-            <td width="165px" style="padding:0px;">
+            <td width="165px">
                 <@test_coverage requirementOutcome=requirementOutcome barWidth=125 />
             </td>
 

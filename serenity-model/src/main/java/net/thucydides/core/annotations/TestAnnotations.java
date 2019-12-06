@@ -3,9 +3,9 @@ package net.thucydides.core.annotations;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.tags.TagConverters;
+import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ public class TestAnnotations {
     }
 
     public static boolean isIgnored(final Method method) {
-        return method != null && hasAnnotationCalled(method, "Ignore");
+        return JUnitAdapter.isIgnored(method);
     }
 
     public static boolean shouldSkipNested(Method method) {
@@ -62,14 +62,6 @@ public class TestAnnotations {
             return ((stepAnnotation != null) && (stepAnnotation.exampleRow()));
         }
         return false;
-    }
-
-    private static boolean hasAnnotationCalled(Method method, String annotationName) {
-        Annotation[] annotations = method.getAnnotations();
-
-        return Arrays.stream(annotations).anyMatch(
-              annotation -> annotation.annotationType().getSimpleName().equals(annotationName)
-        );
     }
 
     public boolean isIgnored(final String methodName) {

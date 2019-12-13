@@ -23,7 +23,8 @@ public class ExampleTableInMarkdown {
 
     public String renderedFormOf(Examples exampleTable, int exampleRow, ScenarioDisplayOption displayOption) {
 
-        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName(), exampleRow);
+//        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName(), exampleRow);
+        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName());
 
         StringBuilder renderedExampleTable = new StringBuilder();
 
@@ -35,10 +36,14 @@ public class ExampleTableInMarkdown {
             String exampleTitle = "### " + tableName;
             renderedExampleTable.append(exampleTitle);
         }
-        renderedExampleTable.append(System.lineSeparator());
-        renderedExampleTable.append(RenderedExampleTable.descriptionFor(exampleTable));
-        renderedExampleTable.append(RenderedExampleTable.renderedTable(exampleTable, exampleRowCounter));
-        renderedExampleTable.append(System.lineSeparator()).append("[<i class=\"fa fa-info-circle\"></i> More details](#" + scenarioId + ")").append(System.lineSeparator());
+        renderedExampleTable.append(System.lineSeparator())
+                .append(RenderedExampleTable.descriptionFor(exampleTable))
+                .append(RenderedExampleTable.renderedTable(exampleTable, exampleRowCounter))
+                .append(System.lineSeparator())
+                .append("[<i class=\"fa fa-info-circle\"></i> More details](#")
+                .append(scenarioId)
+                .append(")")
+                .append(System.lineSeparator());
 
         return renderedExampleTable.toString();
     }

@@ -5,19 +5,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataTableRow {
-    private List<? extends Object> values;  // A list of strings or integers
+    private final List<?> values;  // A list of strings or integers
+    private final int lineNumber;
     private TestResult result;
 
-    public DataTableRow(List<? extends Object> values) {
-        this(values, TestResult.UNDEFINED);
+    public DataTableRow(List<?> values) {
+        this(values, 0, TestResult.UNDEFINED);
     }
 
-    public DataTableRow(List<? extends Object> values, TestResult result) {
+    public DataTableRow(List<?> values,  int lineNumber) {
+        this(values, lineNumber, TestResult.UNDEFINED);
+    }
+
+    public DataTableRow(List<?> values, int lineNumber, TestResult result) {
         this.values = new ArrayList<>(values);
         this.result = result;
+        this.lineNumber = lineNumber;
     }
 
-    public List<? extends Object> getValues() {
+    public List<?> getValues() {
         return new ArrayList<>(values);
     }
 
@@ -28,6 +34,7 @@ public class DataTableRow {
         ).collect(Collectors.toList());
     }
 
+    public int getLineNumber() { return lineNumber; }
     public TestResult getResult() {
         return result;
     }

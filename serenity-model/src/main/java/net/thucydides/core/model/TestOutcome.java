@@ -2616,7 +2616,6 @@ public class TestOutcome {
         if (!TestTags.of(dataTable.getTags()).containsTagMatchingOneOf(filterTags)) {
             return this;
         }
-
         if (testSteps.size() != dataTable.getSize()) {
             return this;
         }

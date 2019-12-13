@@ -188,7 +188,7 @@ public class Formatter  {
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
         String textWithResults = RenderMarkdown.preprocessMarkdownTables(
-                                                textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes));
+                textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes));
         return wrapTablesInDivs(renderDescription(textWithResults),"example-table example-table-in-summary");
     }
 
@@ -197,29 +197,36 @@ public class Formatter  {
         return wrapTablesInDivs(renderDescription(textWithResults),"example-table-in-scenario");
     }
 
-    private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\[(.*)\\]\\}'?");
+    private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
+    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)]}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 
-        ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
-
-
-        StringBuffer newText = new StringBuffer();
         Matcher matcher = RESULT_TOKEN.matcher(text);
+        if (!matcher.matches()) {
+            return text;
+        } else {
+            return embedResults(matcher, requirementsOutcomes);
+        }
+    }
+
+    private String embedResults(Matcher matcher, RequirementsOutcomes requirementsOutcomes) {
+
+        ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
+        StringBuffer newText = new StringBuffer();
         while (matcher.find()) {
             String feature= matcher.group(1);
             String scenario= matcher.group(2);
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
-                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario)
-                                                                && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+                    outcome -> outcome.getName().equalsIgnoreCase(scenario)
+                            && outcome.getUserStory().getName().equalsIgnoreCase(feature)
             ).findFirst();
 
 
             matchingOutcome.ifPresent(
                     testOutcome -> matcher.appendReplacement(newText,
-                                                             resultIconFormatter.forResult(testOutcome.getResult(), testOutcome.getHtmlReport()))
+                            resultIconFormatter.forResult(testOutcome.getResult(), testOutcome.getHtmlReport()))
             );
         }
         matcher.appendTail(newText);
@@ -241,8 +248,7 @@ public class Formatter  {
         while (matcher.find()) {
             String feature= matcher.group(1);
             String scenario= matcher.group(2);
-            int exampleTable = Integer.parseInt(matcher.group(3));
-            int exampleRow = Integer.parseInt(matcher.group(4));
+            int exampleLineNumber = Integer.parseInt(matcher.group(3));
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
@@ -250,19 +256,13 @@ public class Formatter  {
 
             matchingOutcome.ifPresent(
                     testOutcome -> {
-
-                        int dataRow = exampleRow;
-                        if (exampleTable > 0) {
-                            dataRow = testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getStartRow()
-                                      + testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getRowCount()
-                                      + exampleRow;
-                        }
-
-                        if (dataRow < testOutcome.getTestSteps().size()) {
+                        Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
+                        if (matchingRow.isPresent()) {
                             matcher.appendReplacement(newText,
-                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult(), testOutcome.getHtmlReport()));
+                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
+                                                      testOutcome.getHtmlReport()));
                         } else {
-                            matcher.appendReplacement(newText,"");
+                            matcher.appendReplacement(newText,"&nbsp;");
                         }
                     });
         }

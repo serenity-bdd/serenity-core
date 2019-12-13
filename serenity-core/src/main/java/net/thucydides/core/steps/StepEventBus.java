@@ -241,6 +241,10 @@ public class StepEventBus {
         storyUnderTest = story;
     }
 
+    public void updateExampleLineNumber(int lineNumber) {
+        getBaseStepListener().updateExampleLineNumber(lineNumber);
+    }
+
     public void testSuiteStarted(final Story story) {
         LOGGER.debug("Test suite started for story {}", story);
         updateStoryUnderTest(story);

@@ -366,7 +366,6 @@
                                                             <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                         </#list>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </#list>

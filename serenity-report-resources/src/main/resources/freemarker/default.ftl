@@ -84,9 +84,9 @@
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
-                                    <div class="discreet-requirement-narrative-title">
-                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedTextWithoutTables)}
-                                    </div>
+<#--                                    <div class="discreet-requirement-narrative-title">-->
+<#--                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedTextWithoutTables)}-->
+<#--                                    </div>-->
                                 </div>
                             <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                                 <div>
@@ -97,9 +97,9 @@
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
 
-                                    <div class="discreet-requirement-narrative-title">
-                                        ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
-                                    </div>
+<#--                                    <div class="discreet-requirement-narrative-title">-->
+<#--                                        ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}-->
+<#--                                    </div>-->
                                 </div>
                             </#if>
 

@@ -527,6 +527,15 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
                 }
         );
+
+        List<Integer> ages = Arrays.asList(20,40,50,15,80);
+
+        int totalAges = 0;
+        for(int age : ages) {
+            totalAges = totalAges + age;
+        }
+        double average = totalAges / ages.size();
+
         switch(theMethod.getManualResult()) {
             case SUCCESS:
                 StepEventBus.getEventBus().testFinished();

@@ -1,25 +1,15 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 public class ExampleRowResultIcon implements RowResultIcon {
-    private int exampleTableNumber = 0;
-    private int exampleRow = 0;
     private final String fullScenarioName;
 
-    public ExampleRowResultIcon(String featureName, String scenarioName, int exampleTableNumber) {
-//        this.fullScenarioName = featureName + "∫" + scenarioName;
+    public ExampleRowResultIcon(String featureName, String scenarioName) {
         this.fullScenarioName = featureName + "!" + scenarioName;
-        this.exampleTableNumber = exampleTableNumber;
     }
 
-    public String resultToken() {
-//        return "{example-result:" + fullScenarioName + "≤" + exampleTableNumber + "≥≤" + exampleRow++ + "≥}";
-        return "{example-result:" + fullScenarioName + "[" + exampleTableNumber + "][" + exampleRow++ + "]}";
-    }
-
-    public ExampleRowResultIcon nextExampleTable() {
-        exampleTableNumber++;
-        exampleRow = 0;
-        return this;
+    private static String RESULT_TOKEN_TEMPLATE = "{example-result:%s[%d]}";
+    public String resultToken(int lineNumber) {
+        return String.format(RESULT_TOKEN_TEMPLATE, fullScenarioName, lineNumber);
     }
 
     public SummaryRowResultIcon summaryIcon() {

@@ -51,8 +51,10 @@ public class ScenarioOutcomes {
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
 
+        String featureName = testOutcome.getUserStory().getName();
+        String scenarioName = testOutcome.getName();
         List<String> exampleTables = (testOutcome.isDataDriven()) ?
-                Collections.singletonList(testOutcome.getDataTable().toMarkdown()) : Collections.EMPTY_LIST;
+                Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName)) : Collections.EMPTY_LIST;
 
         String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;

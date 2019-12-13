@@ -111,6 +111,9 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
         'ASCII code'                   | 'ASCII'    | 0     | 5
         'big ASCII code'               | 'ASCII'    | 4     | 9
         'big AsciI'                    | 'AsciI'    | 4     | 9
+        'big X1'                       | 'X1'       | 4     | 6
+        'big FORM16'                   | 'FORM16'   | 4     | 10
+        'big 1FORM16'                  | '1FORM16'  | 4     | 11
     }
 
     def "should find multiple acronyms in a text"() {

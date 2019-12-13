@@ -131,10 +131,14 @@ public class DataTable {
     }
 
     public void updateLineNumbers(Map<Integer, Integer> lineNumbersOfEachRow) {
+        lineNumbersForEachRow().putAll(withLineNumbersIncrementedBy(lineNumbersOfEachRow.size() - 1,lineNumbersOfEachRow));
+    }
+
+    private Map<Integer, Integer> lineNumbersForEachRow() {
         if (lineNumbersForEachRow == null) {
             lineNumbersForEachRow = new HashMap<>();
         }
-        lineNumbersForEachRow.putAll(withLineNumbersIncrementedBy(lineNumbersOfEachRow.size() - 1,lineNumbersOfEachRow));
+        return lineNumbersForEachRow;
     }
 
     private Map<? extends Integer, ? extends Integer> withLineNumbersIncrementedBy(int startRow, Map<Integer, Integer> lineNumbersOfEachRow) {
@@ -273,7 +277,7 @@ public class DataTable {
         int rowCount = dataSetDescriptor.getRowCount();
         int endRow = (rowCount > 0) ? startRow + rowCount - 1 : getRows().size() - 1;
         for (int row = startRow; row <= endRow; row++) {
-            int lineNumber = lineNumbersForEachRow.getOrDefault(row, 0);
+            int lineNumber = lineNumbersForEachRow().getOrDefault(row, 0);
             renderedTable.append("| ");
             getRows().get(row).getValues().forEach(value -> renderedTable.append(value).append(" |"));
             renderedTable.append(" ")
@@ -367,7 +371,7 @@ public class DataTable {
 
 
     public int getLineNumberForRow(int row) {
-        return lineNumbersForEachRow.getOrDefault(row, 0);
+        return lineNumbersForEachRow().getOrDefault(row, 0);
     }
 
     private Collection<TestTag> getExampleTags() {

@@ -852,6 +852,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_FEATURES_DIRECTORY,
 
     /**
+     * If set to true, the full description of the parent story or feature is displayed at the top of an individual test report.
+     * Set to false by default/
+     */
+    SERENITY_SHOW_STORY_DETAILS_IN_TESTS,
+
+    /**
      * Same as serenity.features.directory but for src/test/stories
      */
     SERENITY_STORIES_DIRECTORY,

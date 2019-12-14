@@ -5,6 +5,7 @@ import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -190,6 +192,7 @@ public class FreemarkerContext {
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
         context.put("reportOptions", new ReportOptions(environmentVariables));
+        context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 
 

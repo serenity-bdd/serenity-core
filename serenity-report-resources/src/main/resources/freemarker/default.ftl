@@ -96,7 +96,7 @@
                                         <i class="fa fa-2x fa-comments-o"></i>
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
-                                    <#if showDetailedStoryDescription>
+                                    <#if showDetailedStoryDescription!false>
                                         <div class="discreet-requirement-narrative-title">
                                             ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
                                         </div>

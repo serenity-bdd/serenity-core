@@ -51,12 +51,13 @@ Check out Serenity BDD in more detail here:
   
 ## What is the latest stable version I should use?
 
-The tables below list the latest stable versions of Serenity BDD and other related libraries.
+The tables below list the latest stable and tested versions of Serenity BDD and other related libraries. 
 
 ### Serenity with JUnit
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.0.90        | 2.0.90                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.84        | 2.0.84                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.71        | 2.0.71                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.69        | 2.0.69                | 3.141.59          | 3.3.0                | 7.0.0                 |
@@ -73,6 +74,7 @@ Serenity works with both Cucumber 2 and Cucumber 4
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
 |---------------|-----------------------|-------------------|---------------------|
+| 2.0.90        | 2.0.90                | 1.9.49            | 2.4.0               |
 | 2.0.84        | 2.0.84                | 1.9.48            | 2.4.0               |
 | 2.0.69        | 2.0.69                | 1.9.45            | 2.4.0               |
 | 2.0.56        | 2.0.56                | 1.9.40            | 2.4.0               |
@@ -86,6 +88,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               | 
 | 2.0.84        | 2.0.84                | 1.0.22             | 4.2.0               | 
 | 2.0.69        | 2.0.69                | 1.0.18             | 4.2.0               | 
 | 2.0.56        | 2.0.56                | 1.0.15             | 4.2.0               | 

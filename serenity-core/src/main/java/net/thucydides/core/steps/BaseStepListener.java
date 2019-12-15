@@ -432,13 +432,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param testMethod the name of the test method in the test suite class.
      */
     public void testStarted(final String testMethod) {
-        LOGGER.warn("testStarted: " + testMethod);
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
         recordNewTestOutcome(testMethod, newTestOutcome);
     }
 
     public void testStarted(final String testMethod, final String id) {
-        LOGGER.warn("testStarted: " + testMethod + "/" + id);
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
         recordNewTestOutcome(testMethod, newTestOutcome);
     }
@@ -499,8 +497,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testFinished(final TestOutcome outcome, boolean inDataDrivenTest) {
 
-        LOGGER.warn("testFinished: " + outcome);
-        LOGGER.warn("TestOutcomes: " + getTestOutcomes());
         if (getTestOutcomes().isEmpty()) {
             return;
         }
@@ -533,7 +529,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         }
 
-        LOGGER.warn("Final testOutcomes: " + getTestOutcomes());
         currentStepStack.clear();
     }
 
@@ -573,7 +568,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param description the description of the test that is about to be run
      */
     public void stepStarted(final ExecutedStepDescription description) {
-        LOGGER.warn("stepStarted: " + description);
         pushStepMethodIn(description);
         recordStep(description);
         if (currentTestIsABrowserTest() && browserIsOpen()) {
@@ -687,8 +681,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished() {
-        LOGGER.warn("stepFinished: current outcome:" + getCurrentTestOutcome());
-//        updateSessionIdIfKnown();
         takeEndOfStepScreenshotFor(SUCCESS);
         currentStepDone(SUCCESS);
         pauseIfRequired();

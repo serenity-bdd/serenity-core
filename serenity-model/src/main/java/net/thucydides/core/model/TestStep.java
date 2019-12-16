@@ -51,7 +51,7 @@ public class TestStep implements Cloneable {
     private List<ReportData> reportData;
     private boolean precondition;
     private int level;
-    private int lineNumber;
+    private Integer lineNumber;
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
     public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
@@ -133,7 +133,7 @@ public class TestStep implements Cloneable {
     }
 
     public boolean correspondsToLine(int lineNumber) {
-        return lineNumber == this.lineNumber;
+        return (this.lineNumber != null) && (this.lineNumber == lineNumber);
     }
 
     public static class TestStepBuilder {

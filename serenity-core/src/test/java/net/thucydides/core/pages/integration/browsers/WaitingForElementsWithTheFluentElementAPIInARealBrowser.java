@@ -21,16 +21,6 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
     }
 
     @Test
-    public void should_optionally_type_enter_after_entering_text() {
-
-        assertThat(page.firstName.getAttribute("value"), is("<enter first name>"));
-
-        page.element(page.firstName).typeAndEnter("joe");
-
-        assertThat(page.firstName.getAttribute("value"), is("joe"));
-    }
-
-    @Test
     public void should_be_able_to_build_composite_wait_until_enabled_clauses() throws InterruptedException {
         page.waitForCondition().until(page.firstAndLastNameAreEnabled());
     }

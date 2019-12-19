@@ -1,5 +1,6 @@
 package net.serenitybdd.browserstack;
 
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -41,5 +42,4 @@ public class WhenAddingBrowserStackCapabilities {
 
         assertThat(capabilities.getCapability("browser")).isEqualTo("edge");
     }
-
 }

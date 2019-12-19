@@ -39,7 +39,10 @@
                 "language": {
                     searchPlaceholder: "Filter",
                     search: ""
-                }
+                },
+                columnDefs: [
+                    { type: 'time-elapsed-dhms', targets: 4 }
+                ]
             });
 
             // Results table

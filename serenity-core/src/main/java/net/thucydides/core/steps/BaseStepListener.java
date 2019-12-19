@@ -12,6 +12,7 @@ import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -341,7 +342,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return proxyFactory;
     }
 
-    protected TestOutcome getCurrentTestOutcome() {
+    public TestOutcome getCurrentTestOutcome() {
         return latestTestOutcome().orElse(unavailableTestOutcome());
     }
 
@@ -519,6 +520,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     outcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
+            OverrideDriverCapabilities.clear();
 
             if (inDataDrivenTest) {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);

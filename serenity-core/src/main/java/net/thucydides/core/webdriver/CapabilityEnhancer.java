@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -45,6 +46,11 @@ public class CapabilityEnhancer {
             AddCustomDriverCapabilities.from(environmentVariables)
                                        .withTestDetails(driver, outcome)
                                        .to(capabilities);
+
+            OverrideDriverCapabilities.getProperties().forEach(
+                    (key, value) -> capabilities.setCapability(key, value)
+            );
+            // TODO: Add programmatically-defined driver capabilities
         }
 
         return capabilities;

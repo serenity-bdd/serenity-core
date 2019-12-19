@@ -1,8 +1,11 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Preconditions;
+
 import java.util.HashMap;
+
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -63,10 +66,10 @@ public class DriverCapabilities {
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
         Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap();
 
-        selectors.put(CHROME,new ChromeDriverCapabilities(environmentVariables, options));
-        selectors.put(FIREFOX,new FirefoxDriverCapabilities(environmentVariables));
-        selectors.put(APPIUM,new AppiumDriverCapabilities(environmentVariables, options));
-        selectors.put(PROVIDED,new ProvidedDriverCapabilities(environmentVariables));
+        selectors.put(CHROME, new ChromeDriverCapabilities(environmentVariables, options));
+        selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));
+        selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
+        selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
         selectors.put(SAFARI, DesiredCapabilities::safari);
         selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
         selectors.put(OPERA, DesiredCapabilities::operaBlink);
@@ -89,17 +92,21 @@ public class DriverCapabilities {
     }
 
     private boolean isUndefined(String browser) {
-       return (browser == null || browser.startsWith(":"));
+        return (browser == null || browser.startsWith(":"));
     }
 
     private DesiredCapabilities remoteCapabilities(String options) {
+
+        DesiredCapabilities capabilities;
+
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
-        if (isUndefined(remoteBrowser)) {
-            remoteBrowser = "firefox";
+        if (!isUndefined(remoteBrowser)) {
+            capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);;
+        } else {
+            capabilities = new DesiredCapabilities();
         }
 
-        DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
-        capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
+        capabilities.setCapability("idle-timeout", EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
         Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);
         capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
@@ -113,11 +120,15 @@ public class DriverCapabilities {
             capabilities.setCapability("version", WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables));
         }
 
+        AddCustomDriverCapabilities.from(environmentVariables)
+                .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
+                .to(capabilities);
+
         return capabilities;
     }
 
+
     private boolean shouldUseARemoteDriver() {
-//        return WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
         return StringUtils.isNotEmpty(WEBDRIVER_REMOTE_URL.from(environmentVariables));
     }
 

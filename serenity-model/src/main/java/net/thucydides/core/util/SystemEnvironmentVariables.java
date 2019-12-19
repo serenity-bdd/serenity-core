@@ -175,6 +175,13 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         propertySetLock.unlock();
     }
 
+    @Override
+    public Map<String, String> asMap() {
+        Map<String, String> environmentValues = new HashMap<>(properties);
+        environmentValues.putAll(systemValues);
+        return environmentValues;
+    }
+
     public EnvironmentVariables copy() {
         return new SystemEnvironmentVariables(getProperties(), systemValues);
     }

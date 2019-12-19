@@ -154,7 +154,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedDuration() {
-        return (duration != 0L) ? DurationFormatUtils.formatDuration(duration,"mm:ss") : " ";
+        return (duration != 0L) ? CompoundDuration.of(duration) : " ";
     }
 
     public String getParentName() {

@@ -10,7 +10,7 @@ import java.util.stream.*;
 public class MockEnvironmentVariables implements EnvironmentVariables {
 
     private Properties properties = new Properties();
-    private Map<String, String> values = new HashMap();
+    private Map<String, String> values = new HashMap<>();
 
     public MockEnvironmentVariables() {
         this.properties.setProperty("user.home", System.getProperty("user.home"));
@@ -158,6 +158,19 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     @Override
     public String injectSystemPropertiesInto(String value) {
         return value;
+    }
+
+    @Override
+    public Map<String, String> asMap() {
+        Map<String, String> environmentValues = new HashMap<>();
+
+        values.keySet().forEach(
+                key -> environmentValues.put(key, values.get(key))
+        );
+        properties.stringPropertyNames().forEach(
+                key -> environmentValues.put(key, properties.getProperty(key))
+        );
+        return environmentValues;
     }
 
     public void setValue(String name, String value) {

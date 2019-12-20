@@ -4,6 +4,9 @@ import com.google.common.reflect.ClassPath;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.thucydides.core.util.JUnitAdapter;
 
@@ -39,11 +42,13 @@ public class ClassInfoAnnotations {
     }
 
     public boolean containsTests() {
-        for (Method method : classInfo.load().getMethods()) {
-            if (JUnitAdapter.isTestMethod(method)) {
-                return true;
-            }
-        }
-        return false;
+        return allMethods().stream().anyMatch(JUnitAdapter::isTestMethod);
+    }
+
+    private Set<Method> allMethods() {
+        Set<Method> allMethods = new HashSet<>();
+        allMethods.addAll(Arrays.asList(classInfo.load().getMethods()));
+        allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
+        return allMethods;
     }
 }

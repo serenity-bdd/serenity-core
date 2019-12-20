@@ -41,8 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -244,6 +242,8 @@ public class TestOutcome {
      * The actors used in a Screenplay test
      */
     private List<CastMember> actors;
+
+    private ExternalLink externalLink;
 
     /**
      * Fields used for serialization
@@ -472,7 +472,8 @@ public class TestOutcome {
                 this.lastTested,
                 this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -501,7 +502,8 @@ public class TestOutcome {
                           final String lastTested,
                           final List<String> testEvidence,
                           final String projectKey,
-                          final EnvironmentVariables environmentVariables) {
+                          final EnvironmentVariables environmentVariables,
+                          final ExternalLink externalLink) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -534,6 +536,7 @@ public class TestOutcome {
         this.lastTested = lastTested;
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
+        this.externalLink = this.externalLink;
     }
 
     private List<String> removeDuplicates(List<String> issues) {
@@ -587,7 +590,8 @@ public class TestOutcome {
                     this.lastTested,
                     this.manualTestEvidence,
                     this.projectKey,
-                    this.environmentVariables);
+                    this.environmentVariables,
+                    this.externalLink);
         } else {
             return this;
         }
@@ -620,7 +624,8 @@ public class TestOutcome {
                 this.lastTested,
                 this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -650,7 +655,8 @@ public class TestOutcome {
                 this.lastTested,
                 this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public TestOutcome withMethodName(String methodName) {
@@ -681,7 +687,8 @@ public class TestOutcome {
                     this.lastTested,
                     this.manualTestEvidence,
                     this.projectKey,
-                    this.environmentVariables);
+                    this.environmentVariables,
+                    this.externalLink);
         } else {
             return this;
         }
@@ -867,7 +874,8 @@ public class TestOutcome {
                 this.lastTested,
                 this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public void updateTopLevelStepResultsTo(TestResult result) {
@@ -966,8 +974,18 @@ public class TestOutcome {
 
     public List<ManualTestEvidence> getRenderedManualTestEvidence() {
         return manualTestEvidence.stream()
-                .map(evidence -> ManualTestEvidence.from(evidence))
+                .map(ManualTestEvidence::from)
                 .collect(Collectors.toList());
+    }
+
+    public void setLink(ExternalLink externalLink) {
+        if (isDataDriven()) {
+            getLatestTopLevelTestStep().ifPresent(
+                    latestStep -> latestStep.setExternalLink(externalLink)
+            );
+        } else {
+            this.externalLink = externalLink;
+        }
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1187,6 +1205,13 @@ public class TestOutcome {
      */
     public List<TestStep> getTestSteps() {
         return annotatedStepsFrom(testSteps);
+    }
+
+    public Optional<TestStep> getLatestTopLevelTestStep() {
+        int latestStep = testSteps.size() - 1;
+        return (latestStep >= 0) ?
+                Optional.of(annotatedStepsFrom(testSteps).get(latestStep))
+                : Optional.empty();
     }
 
     private List<TestStep> annotatedStepsFrom(List<TestStep> testSteps) {
@@ -1450,7 +1475,9 @@ public class TestOutcome {
      * @return The current step is the last step in the step list, or the last step in the children of the current step group.
      */
     public Optional<TestStep> currentStep() {
-        if (testSteps.isEmpty()) { return Optional.empty(); }
+        if (testSteps.isEmpty()) {
+            return Optional.empty();
+        }
 
         if (!inGroup()) {
             return Optional.ofNullable(lastStepIn(testSteps));
@@ -1473,7 +1500,9 @@ public class TestOutcome {
     }
 
     private TestStep lastStepIn(final List<TestStep> testSteps) {
-        if (testSteps.isEmpty()) { return null; }
+        if (testSteps.isEmpty()) {
+            return null;
+        }
         return testSteps.get(testSteps.size() - 1);
     }
 
@@ -2097,7 +2126,7 @@ public class TestOutcome {
     }
 
     public void setManualTestingUpToDate(Boolean upToDate) {
-        this.isManualTestingUpToDate  = upToDate;
+        this.isManualTestingUpToDate = upToDate;
     }
 
     public Set<? extends Flag> getFlags() {
@@ -2252,8 +2281,10 @@ public class TestOutcome {
     }
 
     public ZonedDateTime getEndTime() {
-        if (startTime == null) { return null; }
-        return startTime.plusNanos( duration * 1000);
+        if (startTime == null) {
+            return null;
+        }
+        return startTime.plusNanos(duration * 1000);
     }
 
     /**
@@ -2658,6 +2689,11 @@ public class TestOutcome {
                 lastTested,
                 manualTestEvidence,
                 projectKey,
-                environmentVariables);
+                environmentVariables,
+                externalLink);
+    }
+
+    public ExternalLink getExternalLink() {
+        return externalLink;
     }
 }

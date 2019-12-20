@@ -2,6 +2,8 @@ package net.thucydides.core.requirements.reports;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -9,9 +11,9 @@ public class CompoundDuration {
 
     private static final String MILLISECONDS_FORMAT = "SSS'ms'";
     private static final String SECONDS_FORMAT = "s's' SSS'ms'";
-    private static final String MINUTES_FORMAT = "m'm' s's' SSS'ms'";
-    private static final String HOURS_FORMAT = "H'h' m'm' s's' SSS'ms'";
-    private static final String DAYS_FORMAT = "d'd' H'h' m'm' s's' SSS'ms'";
+    private static final String MINUTES_FORMAT = "m'm' s's'";
+    private static final String HOURS_FORMAT = "H'h' m'm' s's'";
+    private static final String DAYS_FORMAT = "d'd' H'h' m'm' s's'";
 
     private static final Map<Long, String> FORMATS_PER_DURATION_THRESHOLD = new TreeMap<>();
     static {
@@ -29,7 +31,18 @@ public class CompoundDuration {
                 .findFirst()
                 .orElse(DAYS_FORMAT);
 
-        return trimZeroValuesFrom(DurationFormatUtils.formatDuration(durationInMilliseconds,format));
+        long roundedDuration = roundMillisecondsUpForLongerDurations(durationInMilliseconds);
+        return trimZeroValuesFrom(DurationFormatUtils.formatDuration(roundedDuration,format));
+    }
+
+    private static long roundMillisecondsUpForLongerDurations(long durationInMilliseconds) {
+        if (durationInMilliseconds < 60000) {
+            return durationInMilliseconds;
+        }
+        return BigDecimal.valueOf(durationInMilliseconds)
+                                                 .divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP)
+                                                 .multiply(BigDecimal.valueOf(1000))
+                                                 .longValue();
     }
 
     private static String trimZeroValuesFrom(String formatDuration) {

@@ -713,6 +713,9 @@ public enum ThucydidesSystemProperty {
      */
     BROWSERSTACK_URL,
 
+    BROWSERSTACK_USER,
+    BROWSERSTACK_KEY,
+
     BROWSERSTACK_OS,
 
     BROWSERSTACK_OS_VERSION("browserstack.os_version"),

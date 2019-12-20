@@ -550,6 +550,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private boolean currentTestIsABrowserTest() {
         return SerenityJUnitTestCase.inClass(testSuite).isAWebTest()
                 || (testSuite == null && ThucydidesWebDriverSupport.isDriverInstantiated());
+//                || (!ThucydidesWebDriverSupport.getDriversUsed().isEmpty());
     }
 
     public void testRetried() {
@@ -1126,6 +1127,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().moveToNextRow();
         }
+        if (currentTestIsABrowserTest()) {
+            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+        //    updateSessionIdIfKnown();
+
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    getCurrentTestOutcome(),
+                    SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
+        }
+
         closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
     }
 

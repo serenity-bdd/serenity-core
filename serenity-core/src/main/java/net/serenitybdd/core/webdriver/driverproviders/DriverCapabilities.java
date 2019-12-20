@@ -22,7 +22,7 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class DriverCapabilities {
 
-    public static final DriverCapabilitiesProvider DEFAULT_CAPABILITIES = DesiredCapabilities::firefox;
+    public static final DriverCapabilitiesProvider DEFAULT_CAPABILITIES = DesiredCapabilities::new;
     private final EnvironmentVariables environmentVariables;
     private final CapabilityEnhancer enhancer;
 

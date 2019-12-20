@@ -36,7 +36,6 @@ public class SerenityListeners {
     }
 
     private void registerListeners(StepEventBus stepEventBus) {
-        System.out.println("REGISTER BASE STEP LISTENER " + baseStepListener);
         stepEventBus.registerListener(baseStepListener);
         for (StepListener listener : stepListeners) {
             if (listener != null) {

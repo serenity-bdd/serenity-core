@@ -52,6 +52,7 @@ public class TestStep implements Cloneable {
     private boolean precondition;
     private int level;
     private Integer lineNumber;
+    private ExternalLink externalLink;
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
     public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
@@ -134,6 +135,14 @@ public class TestStep implements Cloneable {
 
     public boolean correspondsToLine(int lineNumber) {
         return (this.lineNumber != null) && (this.lineNumber == lineNumber);
+    }
+
+    public ExternalLink getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(ExternalLink externalLink) {
+        this.externalLink = externalLink;
     }
 
     public static class TestStepBuilder {

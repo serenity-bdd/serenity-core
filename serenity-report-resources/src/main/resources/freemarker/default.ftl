@@ -84,9 +84,9 @@
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
-<#--                                    <div class="discreet-requirement-narrative-title">-->
-<#--                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedTextWithoutTables)}-->
-<#--                                    </div>-->
+                                    <#--                                    <div class="discreet-requirement-narrative-title">-->
+                                    <#--                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedTextWithoutTables)}-->
+                                    <#--                                    </div>-->
                                 </div>
                             <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                                 <div>
@@ -96,7 +96,7 @@
                                         <i class="fa fa-2x fa-comments-o"></i>
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
-                                    <#if showDetailedStoryDescription!false>
+                                    <#if showDetailedStoryDescription>
                                         <div class="discreet-requirement-narrative-title">
                                             ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
                                         </div>
@@ -146,7 +146,7 @@
                             <#if (testOutcome.manual)>
 
                                 <#if (testOutcome.lastTested?? && testOutcome.manualTestingUpToDate)>
-<#--                                Last tested and up to date-->
+                                <#--                                Last tested and up to date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
@@ -154,17 +154,17 @@
                                         <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
                                             <#list testOutcome.renderedManualTestEvidence as manualEvidence>
-                                            <a target="_blank" href="${manualEvidence.link}">
+                                                <a target="_blank" href="${manualEvidence.link}">
                                                 <span class="badge badge-pill badge-primary">
                                                     <i class="fas fa-external-link-alt"></i> ${manualEvidence.label}
                                                 </span>
-                                            </a>
+                                                </a>
                                             </#list>
                                         </#if>
                                     </div>
 
                                 <#elseif (testOutcome.lastTested??)>
-<#--                                Last tested out of date-->
+                                <#--                                Last tested out of date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
                                             <i class="fas fa-user-clock"></i> Awaiting new manual test. Last tested version: ${testOutcome.lastTested}</span>
@@ -180,7 +180,7 @@
                                         </#if>
                                     </div>
                                 <#else>
-<#--                                No last tested version specified -->
+                                <#--                                No last tested version specified -->
                                     <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                                 </#if>
                             </#if>
@@ -196,9 +196,17 @@
                                 </div>
                             </#if>
                         </td>
-                        <#if (testOutcome.videoLink)??>
+<#--                        <#if (testOutcome.videoLink)??>-->
+<#--                            <td valign="top">-->
+<#--                                <a href="${relativeLink!}${testOutcome.videoLink}" class="tag">-->
+<#--                                    <i class="fa fa-video-camera fa-2x"></i>-->
+<#--                                </a>-->
+<#--                            </td>-->
+<#--                        </#if>-->
+                        <#if (testOutcome.externalLink)??>
                             <td valign="top">
-                                <a href="${relativeLink!}${testOutcome.videoLink}" class="tag">
+                                <a href="${testOutcome.externalLink.url}" class="tag"
+                                   title="${testOutcome.externalLink.type}">
                                     <i class="fa fa-video-camera fa-2x"></i>
                                 </a>
                             </td>
@@ -491,6 +499,12 @@
                             <#else>
                                 ${formatter.formatWithFields(step.description)}
                             </#if>
+                            <#if (step.externalLink)??>
+                                <a href="${step.externalLink.url}" class="tag" title="${step.externalLink.type}">
+                                    <i class="fa fa-video-camera fa-1x"></i>
+                                </a>
+                            </#if>
+
                             </span>
                                 <#if showAccordion>
                             </a>
@@ -592,8 +606,10 @@
                                 <span class="top-level-step">An error occurred outside of step execution</span>
                             </#if>
                         </td>
-                        <td width="100"><span
-                                    class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>
+                        <td width="100">
+                            <span class="top-level-step">
+                                ${formatter.htmlCompatibleStepDescription(testOutcome.result)}
+                            </span>
                         </td>
                         <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
                     </tr>

@@ -511,6 +511,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
             testAndTopLevelStepsShouldBeIgnored();
         }
 
+        OverrideDriverCapabilities.clear();
+
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
@@ -519,8 +521,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     getEventBus().getEnvironmentVariables(),
                     outcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
-
-            OverrideDriverCapabilities.clear();
 
             if (inDataDrivenTest) {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
@@ -1127,6 +1127,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().moveToNextRow();
         }
+        OverrideDriverCapabilities.clear();
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
         //    updateSessionIdIfKnown();

@@ -3,6 +3,8 @@ package net.serenitybdd.core.environment;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,6 +12,19 @@ import java.util.regex.Pattern;
 public class EnvironmentSpecificConfiguration {
     private EnvironmentVariables environmentVariables;
     private EnvironmentStrategy environmentStrategy;
+
+    public Properties getPropertiesWithPrefix(String prefix) {
+        Set<String> propertyNames = environmentVariables.getPropertiesWithPrefix(prefix).stringPropertyNames();
+        Properties propertiesWithPrefix = new Properties();
+        propertyNames.forEach(
+                propertyName -> {
+                    getOptionalProperty(propertyName).ifPresent(
+                            propertyValue -> propertiesWithPrefix.setProperty(propertyName, propertyValue)
+                    );
+                }
+        );
+        return propertiesWithPrefix;
+    }
 
     enum EnvironmentStrategy {
         USE_NORMAL_PROPERTIES,

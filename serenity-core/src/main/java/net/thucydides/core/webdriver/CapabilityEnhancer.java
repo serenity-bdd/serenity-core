@@ -41,16 +41,11 @@ public class CapabilityEnhancer {
             Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
                                                          .getBaseStepListener()
                                                          .latestTestOutcome();
-
-            TestOutcome outcome = (currentTestOutcome == null) ? null : currentTestOutcome.orElse(null);
-            AddCustomDriverCapabilities.from(environmentVariables)
-                                       .withTestDetails(driver, outcome)
-                                       .to(capabilities);
-
-            OverrideDriverCapabilities.getProperties().forEach(
-                    (key, value) -> capabilities.setCapability(key, value)
+            currentTestOutcome.ifPresent(
+                    outcome -> AddCustomDriverCapabilities.from(environmentVariables)
+                            .withTestDetails(driver, outcome)
+                            .to(capabilities)
             );
-            // TODO: Add programmatically-defined driver capabilities
         }
 
         return capabilities;

@@ -13,6 +13,10 @@ class WhenGettingNamedWebdriverInstances extends Specification {
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
     SystemPropertiesConfiguration configuration = new WebDriverConfiguration(environmentVariables);
 
+    def setup() {
+        SerenityWebdriverManager.inThisTestThread().closeAllDrivers()
+    }
+
     def "should be able to request explicitly several named driver instances"() {
         given:
             def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)

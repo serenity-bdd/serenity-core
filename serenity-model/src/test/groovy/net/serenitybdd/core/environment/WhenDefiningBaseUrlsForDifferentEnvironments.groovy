@@ -265,4 +265,37 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
         !number.isPresent()
     }
 
+
+    def "Can list all the properties for a specified environment"() {
+
+        given:
+        environmentVariables.setProperties([
+                "environment" : "dev",
+                "favorite.color": "RED",
+                "environments.dev.favorite.number" : "7",
+                "environments.prod.favorite.number" : "3"
+        ])
+        when:
+        def config = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix("favorite.")
+        then:
+        config.stringPropertyNames().containsAll("favorite.number","favorite.color")
+        and:
+        EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("favorite.color") == "RED"
+        EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("favorite.number") == "7"
+    }
+
+
+    def "Environement-specific properties override general ones"() {
+
+        when:
+        environmentVariables.setProperties([
+                "environment" : "dev",
+                "favorite.color": "RED",
+                "favorite.number":"0",
+                "environments.dev.favorite.number" : "7",
+                "environments.prod.favorite.number" : "3"
+        ])
+        then:
+        EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("favorite.number") == "7"
+    }
 }

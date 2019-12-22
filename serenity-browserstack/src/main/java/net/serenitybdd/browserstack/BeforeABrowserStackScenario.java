@@ -20,7 +20,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
 
     private static final String BROWSERSTACK = "browserstack.";
     private static final Map<String, String> LEGACY_TO_W3C = new HashMap<>();
-    private static final List<String> UNOVERRIDABLE_FIELDS = Arrays.asList("browserstack.user", "browserstack.key","browserstack.server");
+    private static final List<String> UNOVERRIDABLE_FIELDS  = Arrays.asList("user", "key","server");
 
     static {
         LEGACY_TO_W3C.put("os_version", "osVersion");
@@ -63,7 +63,8 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
                                                     .getPropertiesWithPrefix(BROWSERSTACK);
 
         Properties browserStackPropertiesWithOverrides = caterForOverridesIn(browserStackProperties);
-        OverrideDriverCapabilities.in(browserStackPropertiesWithOverrides);
+        OverrideDriverCapabilities.getProperties()
+                .forEach((key, value) -> browserStackPropertiesWithOverrides.setProperty(key, value.toString()));
 
         setNonW3CCapabilities(capabilities, browserStackPropertiesWithOverrides);
 
@@ -92,14 +93,15 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         browserStackProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)
-                .filter(this::shouldNotOveride)
                 .forEach(
                         key -> capabilities.setCapability(w3cKey(key), browserStackProperties.getProperty(key))
                 );
     }
 
     private boolean shouldNotOveride(String propertyName) {
-        return (!OverrideDriverCapabilities.shouldOverrideDefaults() || UNOVERRIDABLE_FIELDS.contains(propertyName));
+        return (!OverrideDriverCapabilities.shouldOverrideDefaults()
+                || UNOVERRIDABLE_FIELDS.contains(propertyName)
+                || UNOVERRIDABLE_FIELDS.contains(unprefixed(propertyName)));
     }
 
     private Map<String, Object> w3CPropertyMapFrom(Properties properties) {
@@ -109,7 +111,6 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         properties.stringPropertyNames()
                 .stream()
                 .filter(this::isW3CProperty)
-                .filter(this::shouldNotOveride)
                 .forEach(
                         key -> {
                             String unprefixedKey = unprefixed(key);
@@ -130,11 +131,12 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
     }
 
     private boolean isNonW3CProperty(String key) {
-        return !isW3CProperty(key);
+        return (NON_BSTACK_PROPERTIES.contains(w3cKey(unprefixed(key)))
+                || NON_BSTACK_PROPERTIES.contains(w3cKey(key)));
     }
 
     private boolean isW3CProperty(String key) {
-        return !NON_BSTACK_PROPERTIES.contains(w3cKey(unprefixed(key)));
+        return !isNonW3CProperty(key);
     }
 
     private String w3cKey(String key) {

@@ -46,7 +46,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Format text for HTML reports.
  * In particular, this integrates JIRA links into the generated reports.
  */
-public class Formatter  {
+public class Formatter {
 
 
     private static final String ELIPSE = "&hellip;";
@@ -80,7 +80,7 @@ public class Formatter  {
         this.environmentVariables = environmentVariables;
         this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
 
-        String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables,"UTF-8");
+        String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables, "UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
 
 
@@ -99,7 +99,7 @@ public class Formatter  {
     }
 
     public Formatter() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public String renderAsciidoc(String text) {
@@ -107,7 +107,9 @@ public class Formatter  {
     }
 
     public String renderMarkdown(String text) {
-        if (text == null) { return ""; }
+        if (text == null) {
+            return "";
+        }
 
         Node document = parser.parse(text);
         String html = renderer.render(document);
@@ -139,12 +141,13 @@ public class Formatter  {
     public String escapedXML(String text) {
         return BASIC_XML.translate(text);
     }
+
     public String renderText(String text) {
         if (isEmpty(text)) {
             return "";
         }
 
-        return concatLines(BASIC_XML.translate(text),"<br>")
+        return concatLines(BASIC_XML.translate(text), "<br>")
                 .replaceAll(TAB, FOUR_SPACES);
     }
 
@@ -152,7 +155,7 @@ public class Formatter  {
         if (text == null) {
             return "";
         }
-        return concatLines(BASIC_XML.translate(stringFormOf(text)),"<br>")
+        return concatLines(BASIC_XML.translate(stringFormOf(text)), "<br>")
                 .replaceAll("\\t", "");
     }
 
@@ -162,7 +165,9 @@ public class Formatter  {
     }
 
     public String renderDescription(final String text) {
-        if (text == null) { return ""; }
+        if (text == null) {
+            return "";
+        }
 
         String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT, TEXT);
 
@@ -170,7 +175,7 @@ public class Formatter  {
             return text;
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text.trim());
-        } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative)) ) {
+        } else if (format.equalsIgnoreCase(MARKDOWN) || (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative))) {
             return renderMarkdown(text.trim());
         } else {
             return addLineBreaks(text);
@@ -178,7 +183,7 @@ public class Formatter  {
     }
 
     private static String withEscapedParameterFields(String text) {
-        return text.replace("<","{").replace(">","}");
+        return text.replace("<", "{").replace(">", "}");
     }
 
     private String convertTablesToMarkdown(String text) {
@@ -189,16 +194,16 @@ public class Formatter  {
 
         String textWithResults = RenderMarkdown.preprocessMarkdownTables(
                 textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes));
-        return wrapTablesInDivs(renderDescription(textWithResults),"example-table example-table-in-summary");
+        return wrapTablesInDivs(renderDescription(textWithResults), "example-table example-table-in-summary");
     }
 
     public String renderTableDescription(final String text, RequirementsOutcomes requirementsOutcomes) {
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
-        return wrapTablesInDivs(renderDescription(textWithResults),"example-table-in-scenario");
+        return wrapTablesInDivs(renderDescription(textWithResults), "example-table-in-scenario");
     }
 
     private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)]}'?");
+    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)\\[(\\d*)]}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 
@@ -215,8 +220,8 @@ public class Formatter  {
         ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
         StringBuffer newText = new StringBuffer();
         while (matcher.find()) {
-            String feature= matcher.group(1);
-            String scenario= matcher.group(2);
+            String feature = matcher.group(1);
+            String scenario = matcher.group(2);
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
                     outcome -> outcome.getName().equalsIgnoreCase(scenario)
@@ -235,8 +240,8 @@ public class Formatter  {
     }
 
     private String wrapTablesInDivs(String markdownText, String cssClass) {
-        return markdownText.replace("<table>","<div class='" + cssClass + "'><table>")
-                           .replace("</table>", "</table></div>");
+        return markdownText.replace("<table>", "<div class='" + cssClass + "'><table>")
+                .replace("</table>", "</table></div>");
     }
 
     private String textWithEmbeddedExampleResults(String text, RequirementsOutcomes requirementsOutcomes) {
@@ -246,28 +251,38 @@ public class Formatter  {
         StringBuffer newText = new StringBuffer();
         Matcher matcher = EXAMPLE_RESULT_TOKEN.matcher(text);
         while (matcher.find()) {
-            String feature= matcher.group(1);
-            String scenario= matcher.group(2);
-            int exampleLineNumber = Integer.parseInt(matcher.group(3));
+            String feature = matcher.group(1);
+//            String scenario= matcher.group(2);
+            int exampleLineNumber = Integer.parseInt(matcher.group(2));
 
-            Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
-                    outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
-            ).findFirst();
+//            Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
+//                    outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+//            ).findFirst();
 
-            matchingOutcome.ifPresent(
+            requirementsOutcomes.getTestOutcomes().getOutcomes().stream()
+                    .filter(
+                            outcome -> outcome.getUserStory().getName().equalsIgnoreCase(feature) && containsMatchingExampleRow(outcome, exampleLineNumber)
+                    ).findFirst()
+                    .ifPresent(
+//            matchingOutcome.ifPresent(
                     testOutcome -> {
                         Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
                         if (matchingRow.isPresent()) {
                             matcher.appendReplacement(newText,
-                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
-                                                      testOutcome.getHtmlReport()));
+                                    resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
+                                            testOutcome.getHtmlReport()));
                         } else {
-                            matcher.appendReplacement(newText,"&nbsp;");
+                            matcher.appendReplacement(newText, "&nbsp;");
                         }
                     });
         }
         matcher.appendTail(newText);
         return newText.toString();
+    }
+
+    private boolean containsMatchingExampleRow(TestOutcome outcome, int exampleLineNumber) {
+        return outcome.isDataDriven()
+                && outcome.getTestSteps().stream().anyMatch(testStep -> testStep.correspondsToLine(exampleLineNumber));
     }
 
     private boolean isRenderedHtml(String text) {
@@ -294,7 +309,7 @@ public class Formatter  {
 
     private String withTablesReplaced(String text) {
         List<String> unformattedTables = getEmbeddedTablesIn(text);
-        for(String unformattedTable : unformattedTables) {
+        for (String unformattedTable : unformattedTables) {
             ExampleTable table = new ExampleTable(unformattedTable);
 
             text = text.replace(unformattedTable, table.inHtmlFormat());
@@ -316,7 +331,7 @@ public class Formatter  {
     }
 
     private boolean containsEmbeddedTable(String text) {
-        return ((positionOfFirstPipeIn(text) >= 0)  && (positionOfLastPipeIn(text) >= 0));
+        return ((positionOfFirstPipeIn(text) >= 0) && (positionOfLastPipeIn(text) >= 0));
     }
 
     private int positionOfLastPipeIn(String text) {
@@ -335,9 +350,9 @@ public class Formatter  {
             String newLine = newLineUsedIn(text);
             String line;
             while ((line = reader.readLine()) != null) {
-                if (!inTable && line.contains("|")){ // start of a table
+                if (!inTable && line.contains("|")) { // start of a table
                     inTable = true;
-                } else if (inTable && !line.contains("|") && !(isBlank(line))){ // end of a table
+                } else if (inTable && !line.contains("|") && !(isBlank(line))) { // end of a table
                     embeddedTables.add(tableText.toString().trim());
                     tableText = new StringBuffer();
                     inTable = false;
@@ -398,6 +413,8 @@ public class Formatter  {
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         String firstLine = fieldValue.toString().split("\\n")[0];
 
+        String htmlCompatibleFirstLine = BASIC_XML.translate(stringFormOf(firstLine));
+
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.story)) ?
                 (htmlCompatible(renderMarkdown(firstLine))) : htmlCompatible(firstLine);
     }
@@ -423,7 +440,9 @@ public class Formatter  {
     }
 
     public String htmlAttributeCompatible(Object fieldValue, boolean renderNewLines) {
-        if (fieldValue == null) { return ""; }
+        if (fieldValue == null) {
+            return "";
+        }
 
         return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
                 .replaceAll("<", "(")
@@ -444,18 +463,18 @@ public class Formatter  {
     }
 
     private static String concatLines(String message) {
-        return concatLines(message," ");
+        return concatLines(message, " ");
     }
 
     private static String concatLines(String message, String newLine) {
         message = StringUtils.replace(message, UTF_8_NEW_LINE, newLine);
         List<String> lines = Splitter.onPattern(NEW_LINE_ON_ANY_OS).splitToList(message);
-        return StringUtils.join(lines,newLine);
+        return StringUtils.join(lines, newLine);
     }
 
     private static String stringFormOf(Object fieldValue) {
         if (Iterable.class.isAssignableFrom(fieldValue.getClass())) {
-            return "[" + StringUtils.join((Iterable)fieldValue, ", ") +"]";
+            return "[" + StringUtils.join((Iterable) fieldValue, ", ") + "]";
         } else {
             return fieldValue.toString();
         }
@@ -478,8 +497,12 @@ public class Formatter  {
     }
 
     private boolean isAClassOrMethodName(String text) {
-        if (StringUtils.containsWhitespace(text)) { return false; }
-        if (StringUtils.isEmpty(text)) { return false; }
+        if (StringUtils.containsWhitespace(text)) {
+            return false;
+        }
+        if (StringUtils.isEmpty(text)) {
+            return false;
+        }
         if (StringUtils.isAllUpperCase(text)) {
             return false;
         }
@@ -487,8 +510,8 @@ public class Formatter  {
     }
 
     public String formatWithFields(String textToFormat) {
-        String textWithEscapedFields  = textToFormat.replaceAll("<", "&lt;")
-                                                    .replaceAll(">", "&gt;");
+        String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;");
 
         String renderedText = addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
         if (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.step)) {
@@ -499,7 +522,7 @@ public class Formatter  {
     }
 
     private String removeMacros(String textToFormat) {
-        return textToFormat.replaceAll("\\{trim=false\\}\\s*\\r?\\n","");
+        return textToFormat.replaceAll("\\{trim=false\\}\\s*\\r?\\n", "");
     }
 
 }

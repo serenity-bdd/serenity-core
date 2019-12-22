@@ -92,14 +92,14 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             return new Properties();
         }
 
-        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile.get()).entrySet();
+        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile.get()).resolve().entrySet();
         return getPropertiesFromConfig(preferences);
     }
 
     private Properties typesafeConfigPreferences() {
         return defaultPropertiesConfFile()
                 .filter(File::exists)
-                .map(configFile -> getPropertiesFromConfig(ConfigFactory.parseFile(configFile).entrySet()))
+                .map(configFile -> getPropertiesFromConfig(ConfigFactory.parseFile(configFile).resolve().entrySet()))
                 .orElse(getPropertiesFromConfig(ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet()));
     }
 

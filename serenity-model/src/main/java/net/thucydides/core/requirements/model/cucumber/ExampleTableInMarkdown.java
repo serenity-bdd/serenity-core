@@ -24,7 +24,8 @@ public class ExampleTableInMarkdown {
     public String renderedFormOf(Examples exampleTable, int exampleRow, ScenarioDisplayOption displayOption) {
 
 //        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName(), exampleRow);
-        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName());
+//        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName());
+        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName());
 
         StringBuilder renderedExampleTable = new StringBuilder();
 

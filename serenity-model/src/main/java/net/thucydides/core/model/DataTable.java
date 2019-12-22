@@ -271,7 +271,7 @@ public class DataTable {
                            DataSetDescriptor dataSetDescriptor,
                            String featureName,
                            String scenarioName) {
-        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(featureName, scenarioName);
+        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(featureName);
 
         int startRow = dataSetDescriptor.getStartRow();
         int rowCount = dataSetDescriptor.getRowCount();

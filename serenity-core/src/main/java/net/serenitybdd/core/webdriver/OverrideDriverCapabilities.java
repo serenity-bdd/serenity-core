@@ -25,6 +25,21 @@ public class OverrideDriverCapabilities {
     private static ThreadLocal<Map<String,Object>> OVERRIDDEN_DRIVER_CAPABILITIES = ThreadLocal.withInitial(HashMap::new);
     private static ThreadLocal<Boolean> OVERRIDE_DEFAULTS = ThreadLocal.withInitial(() -> FALSE);
 
+    private String prefix;
+
+    public OverrideDriverCapabilities(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public interface OverrideSetter {
+        CapabilityBuilderChain setTo(Object value);
+    }
+
+    public interface CapabilityBuilderChain {
+        OverrideSetter andProperty(String propertyName);
+        CapabilityBuilderChain andOverrideDefaults();
+    }
+
     public static OverrideSetter withProperty(String propertyName) {
         return new OverrideDriverCapabilitiesBuilder(propertyName);
     }
@@ -38,23 +53,8 @@ public class OverrideDriverCapabilities {
         return new HashMap<>(OVERRIDDEN_DRIVER_CAPABILITIES.get());
     }
 
-    public static void in(Properties properties) {
-        OverrideDriverCapabilities.getProperties().forEach(
-                (key, value) -> properties.setProperty(key,value.toString())
-        );
-    }
-
     public static boolean shouldOverrideDefaults() {
         return OVERRIDE_DEFAULTS.get();
-    }
-
-    public interface OverrideSetter {
-        CapabilityBuilderChain setTo(Object value);
-    }
-
-    public interface CapabilityBuilderChain {
-        OverrideSetter andProperty(String propertyName);
-        CapabilityBuilderChain andOverrideDefaults();
     }
 
     public static class OverrideDriverCapabilitiesBuilder implements OverrideSetter, CapabilityBuilderChain {

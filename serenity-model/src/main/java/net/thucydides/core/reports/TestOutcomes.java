@@ -534,6 +534,37 @@ public class TestOutcomes {
         ).collect(Collectors.toList());
     }
 
+    public long getFastestTestDuration() {
+        return outcomes.stream()
+                .filter(outcome -> outcome.getDuration() > 0)
+                .mapToLong(this::minDurationOf)
+                .min()
+                .orElse(0);
+    }
+
+    public long getSlowestTestDuration() {
+        return outcomes.stream()
+                .filter(outcome -> outcome.getDuration() > 0)
+                .mapToLong(this::maxDurationOf)
+                .max()
+                .orElse(0);
+    }
+
+    private Long maxDurationOf(TestOutcome outcome) {
+        if (outcome.isDataDriven()) {
+            return outcome.getTestSteps().stream().mapToLong(TestStep::getDuration).max().orElse(0);
+        } else {
+            return outcome.getDuration();
+        }
+    }
+
+    private Long minDurationOf(TestOutcome outcome) {
+        if (outcome.isDataDriven()) {
+            return outcome.getTestSteps().stream().mapToLong(TestStep::getDuration).min().orElse(0);
+        } else {
+            return outcome.getDuration();
+        }
+    }
     private static class TagFinder {
         private final String tagType;
 

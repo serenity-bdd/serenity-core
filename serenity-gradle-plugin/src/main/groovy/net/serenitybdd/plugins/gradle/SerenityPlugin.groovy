@@ -31,11 +31,12 @@ class SerenityPlugin implements Plugin<Project> {
             description = 'Generates aggregated Serenity reports'
             doLast {
                 updateProperties(project)
-                def reportDirectory = prepareReportDirectory(project)
+                Path reportDirectory = prepareReportDirectory(project)
+
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
                 }
-                logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
+                logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory ${reportDirectory.toUri()}")
                 System.properties['serenity.project.key'] = project.serenity.projectKey
 
                 if (project.serenity.requirementsBaseDir) {
@@ -54,6 +55,7 @@ class SerenityPlugin implements Plugin<Project> {
                     reporter.setGenerateTestOutcomeReports();
                 }
                 reporter.generateReportsForTestResultsFrom(reportDirectory.toFile())
+                new ResultChecker(reporter.outputDirectory).checkTestResults();
             }
         }
 
@@ -88,13 +90,13 @@ class SerenityPlugin implements Plugin<Project> {
 
             def reportDirectory = prepareReportDirectory(project)
 
-            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory}")
+            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory.toUri()}")
 
             inputs.files(project.fileTree(reportDirectory))
 
             doLast {
                 updateProperties(project)
-                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
+                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory.toUri()")
                 if (reportDirectory.toFile().exists()) {
                     def checker = new ResultChecker(reportDirectory.toFile())
                     checker.checkTestResults()

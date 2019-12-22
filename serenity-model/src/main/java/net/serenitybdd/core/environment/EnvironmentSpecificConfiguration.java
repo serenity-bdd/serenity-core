@@ -2,28 +2,55 @@ package net.serenitybdd.core.environment;
 
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class EnvironmentSpecificConfiguration {
     private EnvironmentVariables environmentVariables;
     private EnvironmentStrategy environmentStrategy;
 
     public Properties getPropertiesWithPrefix(String prefix) {
-        Set<String> propertyNames = environmentVariables.getPropertiesWithPrefix(prefix).stringPropertyNames();
+
+        List<String> propertyNames = environmentVariables.getKeys().stream()
+                .filter(this::propertyMatchesEnvironment)
+                .filter(key -> propertyHasPrefix(key, prefix))
+                .collect(Collectors.toList());
+
         Properties propertiesWithPrefix = new Properties();
         propertyNames.forEach(
                 propertyName -> {
                     getOptionalProperty(propertyName).ifPresent(
-                            propertyValue -> propertiesWithPrefix.setProperty(propertyName, propertyValue)
+                            propertyValue -> propertiesWithPrefix.setProperty(stripEnvironmentPrefixFrom(propertyName), propertyValue)
                     );
                 }
         );
         return propertiesWithPrefix;
+    }
+
+    private boolean propertyMatchesEnvironment(String key) {
+        String environment = environmentVariables.getProperty("environment");
+        return (key.startsWith("environments." + environment + ".") || !isEnvironmentSpecific(key));
+    }
+
+    private boolean isEnvironmentSpecific(String key) {
+        return Pattern.compile(ENVIRONMENT_PREFIX).matcher(key).find();
+    }
+
+    private static final String ENVIRONMENT_PREFIX = "environments\\.([^.]*)\\.";
+
+    private String stripEnvironmentPrefixFrom(String key) {
+        return key.replaceFirst(ENVIRONMENT_PREFIX, "");
+    }
+
+    private boolean propertyHasPrefix(String key, String prefix) {
+        String regexPrefix = prefix.replaceAll("\\.","\\\\.");
+        Pattern propertyWithPrefix = Pattern.compile("environments\\.([^.]*)\\." + regexPrefix + "(.*)");
+        return key.startsWith(prefix) || propertyWithPrefix.matcher(key).matches();
     }
 
     enum EnvironmentStrategy {

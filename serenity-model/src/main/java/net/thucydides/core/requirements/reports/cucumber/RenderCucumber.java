@@ -34,7 +34,8 @@ public class RenderCucumber {
 
     private static String renderedExamples(Examples examples, String featureName, String scenarioName) {
 
-        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName, scenarioName);
+//        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName, scenarioName);
+        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName);
 
         StringBuffer renderedTable = new StringBuffer();
         renderExampleDescriptionOf(examples);

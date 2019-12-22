@@ -54,16 +54,16 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[31]}|
-| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[32]}|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do[31]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[32]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
 ### Do some other things
 
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[36]}|
-| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[37]}|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do[36]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[37]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
 """
@@ -105,15 +105,15 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
                 forText("{Examples} Do many things") ==  """
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[31]}|
-| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[32]}|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do[31]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[32]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
 
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[36]}|
-| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[37]}|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do[36]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[37]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
 """

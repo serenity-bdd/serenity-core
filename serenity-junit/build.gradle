@@ -3,9 +3,9 @@ ext {
     projectDescription = 'Serenity JUnit integration'
 }
 
-test {
-    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
-}
+//test {
+//    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
+//}
 
 configurations {
     compile {

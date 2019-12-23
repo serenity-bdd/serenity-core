@@ -21,7 +21,7 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
     def "should be able to declare a default driver"() {
         when:
             ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
-            ThucydidesWebDriverSupport.getDriver().manage()
+            ThucydidesWebDriverSupport.getDriver().manage().getCookies()
         then:
             ThucydidesWebDriverSupport.getCurrentDriverName() == "htmlunit"
     }

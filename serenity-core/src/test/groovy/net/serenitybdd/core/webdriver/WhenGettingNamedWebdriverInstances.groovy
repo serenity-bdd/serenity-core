@@ -21,8 +21,8 @@ class WhenGettingNamedWebdriverInstances extends Specification {
         given:
             def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
         when:
-            def driver1 = webdriverManager.getWebdriverByName("James")
-            def driver2 = webdriverManager.getWebdriverByName("Jane")
+            def driver1 = webdriverManager.getWebdriverByName("Fred")
+            def driver2 = webdriverManager.getWebdriverByName("Freda")
         then:
             driver1.driverClass.name.contains("Firefox")
             driver2.driverClass.name.contains("Firefox")
@@ -35,7 +35,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
             environmentVariables.setProperty("webdriver.driver", "chrome")
             def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
         when:
-            def driver = webdriverManager.getWebdriverByName("James")
+            def driver = webdriverManager.getWebdriverByName("Charlie")
         then:
             driver.driverClass.name.contains("Chrome")
     }
@@ -44,7 +44,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
         given:
             def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
         when:
-            def driver = webdriverManager.getWebdriverByName("James","htmlunit")
+            def driver = webdriverManager.getWebdriverByName("Henrietta","htmlunit")
         then:
             driver.driverClass.name.contains("HtmlUnit")
     }

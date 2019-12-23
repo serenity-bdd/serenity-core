@@ -31,7 +31,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
 
     }
 
-    @Ignore
+    @Ignore("Pending further investigation")
     def "Named driver instances should respect the default configured browser if provided"() {
         given:
             environmentVariables.setProperty("webdriver.driver", "chrome")

@@ -70,7 +70,7 @@ test {
     /* Pass all system properties: */
     systemProperties System.getProperties()
 
-    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
+//    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
 }
 
 task wrapper(type: Wrapper) {

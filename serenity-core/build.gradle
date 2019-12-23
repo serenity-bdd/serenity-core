@@ -13,9 +13,9 @@ jar {
     }
 }
 
-test {
-    maxParallelForks = Integer.parseInt(System.getProperty("forks","8"))
-}
+//test {
+//    maxParallelForks = Integer.parseInt(System.getProperty("forks","8"))
+//}
 
 //integrationTests {
 //    beforeTest { desc, result ->

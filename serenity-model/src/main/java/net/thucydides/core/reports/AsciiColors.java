@@ -1,47 +1,57 @@
 package net.thucydides.core.reports;
 
+import cucumber.api.formatter.AnsiEscapes;
+import net.serenitybdd.core.CurrentOS;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
 public class AsciiColors {
 
-    private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_RED = "\u001B[91m";
-    private static final String ANSI_GREEN = "\u001B[92m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_BLUE = "\u001B[34m";
-    private static final String ANSI_PURPLE = "\u001b[35m";
-    private static final String ANSI_CYAN = "\u001B[96m";
-    private static final String ANSI_ORANGE = "\u001B[96m";
-    private static final String ANSI_SERENITY_GREEN = "\u001B[36m";
-
     private final EnvironmentVariables environmentVariables;
+    private boolean isBold;
 
     public AsciiColors(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
+        this(environmentVariables, false);
     }
 
+    public AsciiColors(EnvironmentVariables environmentVariables, boolean isBold) {
+        this.environmentVariables = environmentVariables;
+        this.isBold = isBold;
+    }
     private boolean showColoredOutput() {
-        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
+        Boolean defaultValue = (!CurrentOS.isWindows());
+        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,defaultValue);
+    }
+
+    public AsciiColors bold() {
+        return new AsciiColors(environmentVariables, true);
     }
 
     public String red(String text) {
-        return (showColoredOutput()) ? ANSI_RED + text + ANSI_RESET : text;
+        return (showColoredOutput()) ? boldPrefix() +  AnsiEscapes.RED + text + AnsiEscapes.RESET : text;
+    }
+
+    private String boldPrefix() {
+        return isBold ? AnsiEscapes.INTENSITY_BOLD.toString() : "";
     }
 
     public String green(String text) {
-        return (showColoredOutput()) ? ANSI_GREEN + text + ANSI_RESET : text;
+        return (showColoredOutput()) ?  boldPrefix() + AnsiEscapes.GREEN + text + AnsiEscapes.RESET : text;
     }
 
     public String yellow(String text) {
-        return (showColoredOutput()) ? ANSI_YELLOW + text + ANSI_RESET : text;
+        return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.YELLOW + text + AnsiEscapes.RESET : text;
     }
 
     public String cyan(String text) {
-        return (showColoredOutput()) ? ANSI_CYAN + text + ANSI_RESET : text;
+        return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.CYAN + text + AnsiEscapes.RESET : text;
     }
 
-    public String purple(String text) {
-        return (showColoredOutput()) ? ANSI_PURPLE + text + ANSI_RESET : text;
+    public String magenta(String text) {
+        return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.MAGENTA + text + AnsiEscapes.RESET : text;
+    }
+
+    public String white(String text) {
+        return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.WHITE + text + AnsiEscapes.RESET : text;
     }
 }

@@ -1,4 +1,4 @@
-package net.serenitybdd.core.webdriver.servicepools;
+package net.serenitybdd.core;
 
 import java.util.Locale;
 public class CurrentOS {

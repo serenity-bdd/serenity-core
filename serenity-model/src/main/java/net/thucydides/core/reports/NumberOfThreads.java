@@ -34,7 +34,6 @@ public class NumberOfThreads {
     public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
         int reportThreads = configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
-        LOGGER.info("Configured report threads: {}", reportThreads);
         return reportThreads;
     }
 

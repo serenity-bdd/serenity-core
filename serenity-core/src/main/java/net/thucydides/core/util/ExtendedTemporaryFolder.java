@@ -1,6 +1,6 @@
 package net.thucydides.core.util;
 
-import net.serenitybdd.core.webdriver.servicepools.CurrentOS;
+import net.serenitybdd.core.CurrentOS;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;

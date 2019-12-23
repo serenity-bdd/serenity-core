@@ -1,6 +1,6 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.webdriver.servicepools.CurrentOS;
+import net.serenitybdd.core.CurrentOS;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static net.serenitybdd.core.webdriver.servicepools.CurrentOS.OSType.*;
+import static net.serenitybdd.core.CurrentOS.OSType.*;
 
 public class ClearContents {
 

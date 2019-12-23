@@ -94,7 +94,6 @@ public class FeatureFileScenarioOutcomes {
                 if(ex.getTags().size() > 0) {
                     List<String> alltagNames = ex.getTags().stream().map(Tag::getName).collect(Collectors.toList());
                     if(tagScanner.shouldRunForTags(alltagNames)){
-                        LOGGER.info("Added example " + ex.getName());
                         filteredExamples.add(ex);
                     }
                 } else {

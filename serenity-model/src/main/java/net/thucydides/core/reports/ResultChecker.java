@@ -63,37 +63,36 @@ public class ResultChecker {
     }
 
     private void logOutcomesFrom(TestOutcomes testOutcomes) {
-        logger.info("----------------------------------------");
-        logger.info("| SERENITY TEST OUTCOMES                |");
-        logger.info("----------------------------------------|");
-
+        logger.info(white("-----------------------------------------"));
+        logger.info(white(" SERENITY TESTS : ") + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
+        logger.info(white("-----------------------------------------"));
         logger.info(
-                resultLine(
-                        colored(testOutcomes.getResult(), "RESULT:"),
-                        colored(testOutcomes.getResult(), testOutcomes.getResult().toString()))
-        );
-        logger.info("| ---------------------- | ------------ |");
-        logger.info(resultLine("Tests executed:", Integer.toString(testOutcomes.getTotal())));
+                resultLine(white("Tests executed         "), white(Integer.toString(testOutcomes.getTotal()))));
         logger.info(
-                resultLine(green("Tests passed"), green(Integer.toString(testOutcomes.getPassingTests().getTotal())))
+                resultLine(green(
+                 "Tests passed           "), green(Integer.toString(testOutcomes.getPassingTests().getTotal())))
         );
         logger.info(
-                resultLine(red("Tests failed"), red(Integer.toString(testOutcomes.getFailingTests().getTotal())))
+                resultLine(red(
+                 "Tests failed           "), red(Integer.toString(testOutcomes.getFailingTests().getTotal())))
         );
         logger.info(
-                resultLine(yellow("Tests with errors"), yellow(Integer.toString(testOutcomes.getErrorTests().getTotal())))
+                resultLine(yellow(
+                 "Tests with errors      "), yellow(Integer.toString(testOutcomes.getErrorTests().getTotal())))
         );
         logger.info(
-                resultLine(purple("Tests compromised"), purple(Integer.toString(testOutcomes.getCompromisedTests().getTotal())))
+                resultLine(purple(
+                  "Tests compromised      "), purple(Integer.toString(testOutcomes.getCompromisedTests().getTotal())))
         );
         logger.info(
-                resultLine(cyan("Tests pending"), cyan(Integer.toString(testOutcomes.getPendingTests().getTotal())))
+                resultLine(cyan(
+                  "Tests pending          "), cyan(Integer.toString(testOutcomes.getPendingTests().getTotal())))
         );
-        logger.info("| ---------------------- | ------------ |");
-        logger.info(resultLine("Total Duration:", CompoundDuration.of(testOutcomes.getDuration())));
-        logger.info(resultLine("Fastest test took:", CompoundDuration.of(testOutcomes.getFastestTestDuration())));
-        logger.info(resultLine("Slowest test took:", CompoundDuration.of(testOutcomes.getSlowestTestDuration())));
-        logger.info("----------------------------------------|");
+        logger.info("------------------------ | --------------");
+        logger.info(resultLine("Total Duration         ", CompoundDuration.of(testOutcomes.getDuration())));
+        logger.info(resultLine("Fastest test took      ", CompoundDuration.of(testOutcomes.getFastestTestDuration())));
+        logger.info(resultLine("Slowest test took      ", CompoundDuration.of(testOutcomes.getSlowestTestDuration())));
+        logger.info("-----------------------------------------");
         logger.info("");
 
         Path index = outputDirectory.toPath().resolve("index.html");
@@ -103,9 +102,7 @@ public class ResultChecker {
     }
 
     private String resultLine(String label, String value) {
-        String paddedLabel = StringUtils.rightPad("| " + label, 25);
-        String paddedValue = StringUtils.rightPad("| " + value , 14) + " |";
-        return paddedLabel + paddedValue;
+        return  "| " + label + "| " + value;
     }
 
     private String pad(String text, int totalLength) {
@@ -128,27 +125,27 @@ public class ResultChecker {
     }
 
     private String red(String text) {
-        return asciiColors.red(text);
+        return asciiColors.bold().red(text);
     }
 
     private String green(String text) {
-        return asciiColors.green(text);
+        return asciiColors.bold().green(text);
     }
 
     private String cyan(String text) {
-        return asciiColors.cyan(text);
-    }
-
-    private String orange(String text) {
-        return asciiColors.yellow(text);
+        return asciiColors.bold().cyan(text);
     }
 
     private String yellow(String text) {
-        return asciiColors.yellow(text);
+        return asciiColors.bold().yellow(text);
     }
 
     private String purple(String text) {
-        return asciiColors.purple(text);
+        return asciiColors.bold().magenta(text);
+    }
+
+    private String white(String text) {
+        return asciiColors.bold().white(text);
     }
 
     private String testOutcomeSummary(TestOutcomes testOutcomes) {

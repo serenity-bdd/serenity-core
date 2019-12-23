@@ -33,7 +33,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
     def "Named driver instances should respect the default configured browser if provided"() {
         given:
             environmentVariables.setProperty("webdriver.driver", "chrome")
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(environmentVariables), configuration)
         when:
             def driver = webdriverManager.getWebdriverByName("Charlie")
         then:

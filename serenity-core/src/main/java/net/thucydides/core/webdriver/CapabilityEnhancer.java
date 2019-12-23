@@ -41,11 +41,13 @@ public class CapabilityEnhancer {
             Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
                                                          .getBaseStepListener()
                                                          .latestTestOutcome();
-            currentTestOutcome.ifPresent(
-                    outcome -> AddCustomDriverCapabilities.from(environmentVariables)
-                            .withTestDetails(driver, outcome)
-                            .to(capabilities)
-            );
+            if (currentTestOutcome != null) { // Technically not required but needed for some test scenarios
+                currentTestOutcome.ifPresent(
+                        outcome -> AddCustomDriverCapabilities.from(environmentVariables)
+                                .withTestDetails(driver, outcome)
+                                .to(capabilities)
+                );
+            }
         }
 
         return capabilities;

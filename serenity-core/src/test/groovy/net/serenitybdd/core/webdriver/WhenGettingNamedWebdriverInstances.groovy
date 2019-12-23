@@ -6,6 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class WhenGettingNamedWebdriverInstances extends Specification {
@@ -30,6 +31,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
 
     }
 
+    @Ignore
     def "Named driver instances should respect the default configured browser if provided"() {
         given:
             environmentVariables.setProperty("webdriver.driver", "chrome")

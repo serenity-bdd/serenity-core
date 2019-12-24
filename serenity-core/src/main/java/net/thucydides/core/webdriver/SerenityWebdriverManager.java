@@ -137,6 +137,10 @@ public class SerenityWebdriverManager implements WebdriverManager {
         inThisTestThread().resetCurrentDriver();
     }
 
+    public static void resetThisThread() {
+        webdriverInstancesThreadLocal.remove();
+    }
+
     @Override
     public void registerDriver(WebDriver driver) {
         if (driver != null) {

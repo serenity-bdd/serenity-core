@@ -16,6 +16,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
 
     def setup() {
         SerenityWebdriverManager.inThisTestThread().closeAllDrivers()
+        SerenityWebdriverManager.resetThisThread()
     }
 
     def "should be able to request explicitly several named driver instances"() {
@@ -31,7 +32,7 @@ class WhenGettingNamedWebdriverInstances extends Specification {
 
     }
 
-    @Ignore
+//    @Ignore
     def "Named driver instances should respect the default configured browser if provided"() {
         given:
             environmentVariables.setProperty("webdriver.driver", "chrome")

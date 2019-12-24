@@ -3,6 +3,7 @@ package net.serenitybdd.plugins.gradle
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.guice.Injectors
+import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.ExtendedReports
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
@@ -46,7 +47,7 @@ class SerenityPlugin implements Plugin<Project> {
 
                 reporter.outputDirectory = reportDirectory.toFile()
 
-                reporter.projectDirectory =  project.projectDir.absolutePath
+                reporter.projectDirectory = project.projectDir.absolutePath
                 reporter.issueTrackerUrl = project.serenity.issueTrackerUrl
                 reporter.jiraUrl = project.serenity.jiraUrl
                 reporter.jiraProject = project.serenity.jiraProject
@@ -77,12 +78,9 @@ class SerenityPlugin implements Plugin<Project> {
                 List<String> extendedReportTypes = project.serenity.reports
                 if (extendedReportTypes) {
                     logger.lifecycle("PROCESSING EXTENDED REPORTS: " + extendedReportTypes)
-                    ExtendedReports.named(extendedReportTypes).forEach {
-                        report -> {
-
-                            val generatedReport = report.generateReportFrom(reportDirectory)
-                            logger.lifecycle("REPORT ${report.name} GENERATED IN: ${generatedReport.toURI()}")
-                        }
+                    for (ExtendedReport report : ExtendedReports.named(extendedReportTypes)) {
+                        generatedReport = report.generateReportFrom(reportDirectory)
+                        logger.lifecycle("REPORT ${report.name} GENERATED IN: ${generatedReport.toURI()}")
                     }
                 }
             }

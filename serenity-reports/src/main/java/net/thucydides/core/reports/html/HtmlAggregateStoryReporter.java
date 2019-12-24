@@ -146,24 +146,24 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
-        LOGGER.info("Generating test results for {} tests", testOutcomes.getTestCount());
+        LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
-        LOGGER.info("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+        LOGGER.debug("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
         requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
 
-        LOGGER.info("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+        LOGGER.debug("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
         Set<ReportingTask> reportingTasks = new CopyOnWriteArraySet<>();
 
-        LOGGER.info("Generating test outcome reports: " + generateTestOutcomeReports);
+        LOGGER.debug("Generating test outcome reports: " + generateTestOutcomeReports);
         if (generateTestOutcomeReports) {
             reportingTasks.addAll(HtmlTestOutcomeReportingTask.testOutcomeReportsFor(testOutcomes).using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
         }

@@ -331,7 +331,7 @@
                                                     <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
                                                         <div>
                                                             <span class="scenario-heading">
-                                                                <a href="${scenario.scenarioReport}" title="View test results">${formatter.renderHeaders(scenario.title)}</a>
+                                                                <a href="${scenario.scenarioReport}" title="View test results">${formatter.renderTitle(scenario.title)}</a>
                                                             </span>
                                                             <span class="scenario-result-icon">
                                                                 <#if (scenario.isManual())> <i class="fa fa-user manual" title="Manual test"></i></#if>
@@ -691,9 +691,9 @@
                                                     </#if>
                                                     <td>
                                                         <#if outcome_icon?has_content>
-                                                            <a href="${scenario.scenarioReport}">${formatter.renderHeaders(scenario.title)}</a>
+                                                            <a href="${scenario.scenarioReport}">${formatter.renderTitle(scenario.title)}</a>
                                                         <#else>
-                                                            ${formatter.renderHeaders(scenario.title)}
+                                                            ${formatter.renderTitle(scenario.title)}
                                                         </#if>
                                                         <#if scenario.hasExamples() >
                                                                (${scenario.numberOfExamples})

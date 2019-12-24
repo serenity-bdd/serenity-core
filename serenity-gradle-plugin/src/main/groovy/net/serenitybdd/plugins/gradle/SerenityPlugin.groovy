@@ -78,7 +78,11 @@ class SerenityPlugin implements Plugin<Project> {
                 if (extendedReportTypes) {
                     logger.lifecycle("PROCESSING EXTENDED REPORTS: " + extendedReportTypes)
                     ExtendedReports.named(extendedReportTypes).forEach {
-                        report -> report.generateReportFrom(reportDirectory)
+                        report -> {
+
+                            val generatedReport = report.generateReportFrom(reportDirectory)
+                            logger.lifecycle("REPORT ${report.name} GENERATED IN: ${generatedReport.toURI()}")
+                        }
                     }
                 }
             }

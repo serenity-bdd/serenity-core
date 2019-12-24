@@ -159,6 +159,21 @@ public class Formatter {
                 .replaceAll("\\t", "");
     }
 
+    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<\\w*>");
+
+    public String renderTitle(String text) {
+
+        StringBuffer renderedTitle = new StringBuffer();
+        Matcher matchingTag = SIMPLE_HTML_TAG.matcher(text);
+        while (matchingTag.find()) {
+            String tag = matchingTag.group(1);
+            String htmlCompatibleTag = "&lt;" + tag.substring(1, tag.length() - 2) + "&gt;";
+            matchingTag.appendReplacement(renderedTitle, htmlCompatibleTag);
+        }
+        matchingTag.appendTail(renderedTitle);
+        return renderedTitle.toString();
+    }
+
 
     public String renderHtmlEscapedDescription(final String text) {
         return renderDescription(RenderMarkdown.preprocessMarkdownTables(withEscapedParameterFields(text)));

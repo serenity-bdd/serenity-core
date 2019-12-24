@@ -118,7 +118,7 @@
             <#if (breadcrumbs?has_content)>
                 <#list breadcrumbs as breadcrumb>
                     <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
-                    <#assign breadcrumbTitle = formatter.renderHeaders(inflection.of(breadcrumb.shortName).asATitle()) >
+                    <#assign breadcrumbTitle = formatter.renderTitle(inflection.of(breadcrumb.shortName).asATitle()) >
                     <#assign breadcrumbType = inflection.of(breadcrumb.type).asATitle() >
                     > <a href="${breadcrumbReport}" title="${breadcrumbTitle} (breadcrumbType)">
                     <#--${formatter.htmlCompatible(breadcrumbTitle)}-->
@@ -127,13 +127,13 @@
                 </#list>
             <#else>
                 <#if currentTagType?has_content>
-                    > ${inflection.of(currentTagType!"").asATitle()} ${formatter.renderHeaders(titleContext)}
+                    > ${inflection.of(currentTagType!"").asATitle()} ${formatter.renderTitle(titleContext)}
                 </#if>
             </#if>
             <#if testOutcomes.label?has_content>
             <#--> ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),60)}-->
                 > <span class="truncate-60">
-                    ${formatter.htmlCompatibleStoryTitle(formatter.renderHeaders(inflection.of(testOutcomes.label).asATitle()))}
+                    ${formatter.htmlCompatibleStoryTitle(formatter.renderTitle(inflection.of(testOutcomes.label).asATitle()))}
             </span>
             </#if>
         </span>

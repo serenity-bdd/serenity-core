@@ -44,7 +44,6 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
         val fields = templateFields(environmentVariables, testOutcomes)
 
         // Write the report
-        LOGGER.info("GENERATING EMAIL REPORT in $outputDirectory")
         return writeHtmlReportTo(outputDirectory, fields)
     }
 

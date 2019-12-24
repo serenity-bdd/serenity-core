@@ -41,7 +41,7 @@
             <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
             > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
-        > ${formatter.htmlCompatibleTestTitle(formatter.renderHeaders(testOutcome.title))}
+        > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}
         </span>
         </div>
         <div class="rightbg"></div>
@@ -138,7 +138,7 @@
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
                                 <span class="${outcome_text!ignore_color}">
-                                    ${formatter.htmlCompatibleTestTitle(formatter.renderHeaders(testOutcomeTitle))}
+                                    ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcomeTitle))}
                                     <#if (!testOutcome.titleWithIssues)>
                                         <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                     </#if>

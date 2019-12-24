@@ -22,6 +22,7 @@ import java.time.ZonedDateTime
  */
 class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedReport {
     override fun getName(): String = "email"
+    override fun getDescription(): String = "Emailable Summary"
 
     private val LOGGER = LoggerFactory.getLogger(SerenityEmailReport::class.java)
 

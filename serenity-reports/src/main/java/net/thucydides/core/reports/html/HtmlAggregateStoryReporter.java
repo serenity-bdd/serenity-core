@@ -11,6 +11,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -212,18 +213,21 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
+
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
         Set<ReportingTask> reportingTasks = new HashSet<>();
 
-        for (TestTag knownTag : testOutcomes.getTags()) {
-            reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
-                    context.withParentTag(knownTag),
-                    environmentVariables,
-                    getOutputDirectory(),
-                    reportNameProvider.inContext(knownTag.getCompleteName()),
-                    testOutcomes.getTags(),
-                    knownRequirementReportNames));
-        }
+        testOutcomes.getTags().stream()
+                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
+                .forEach(
+                        knownTag -> reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
+                                context.withParentTag(knownTag),
+                                environmentVariables,
+                                getOutputDirectory(),
+                                reportNameProvider.inContext(knownTag.getCompleteName()),
+                                testOutcomes.getTags(),
+                                knownRequirementReportNames))
+                );
         return reportingTasks;
     }
 

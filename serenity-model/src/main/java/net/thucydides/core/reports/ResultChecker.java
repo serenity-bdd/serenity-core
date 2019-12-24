@@ -97,7 +97,8 @@ public class ResultChecker {
 
         Path index = outputDirectory.toPath().resolve("index.html");
 
-        logger.info("View the full report at: " + index.toUri());
+        logger.info(white("SERENITY REPORTS"));
+        logger.info("  - Full Report: " + index.toUri());
 
     }
 

@@ -19,12 +19,20 @@ import java.util.stream.Collectors;
 public class JSONRequirementsTree {
 
     private final List<Node> nodes;
+    private final boolean displayAsParent;
+
+    private JSONRequirementsTree(List<Node> nodes,
+                                 boolean displayAsParent) {
+        this.nodes = nodes;
+        this.displayAsParent = displayAsParent;
+    }
 
     public JSONRequirementsTree(List<Requirement> requirements, RequirementsOutcomes requirementsOutcomes) {
         nodes = requirements.stream()
                 .map(requirement -> toNode(requirement, requirementsOutcomes))
                 .sorted()
                 .collect(Collectors.toList());
+        displayAsParent = false;
     }
 
     public static JSONRequirementsTree forRequirements(List<Requirement> requirements,
@@ -129,7 +137,10 @@ public class JSONRequirementsTree {
         return gson.toJson(nodes);
     }
 
+    public JSONRequirementsTree asAParentRequirement() {
+        return new JSONRequirementsTree(nodes, true);
+    }
     public Boolean isALeafNode() {
-        return nodes.size() == 1 && nodes.get(0).getNodes().isEmpty();
+        return !displayAsParent && (nodes.size() == 1 && nodes.get(0).getNodes().isEmpty());
     }
 }

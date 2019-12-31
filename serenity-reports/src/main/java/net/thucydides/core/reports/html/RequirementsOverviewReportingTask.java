@@ -43,6 +43,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     private final TestOutcomes testOutcomes;
     private final String relativeLink;
     private final String reportName;
+    private boolean asParentRequirement;
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
                                              EnvironmentVariables environmentVariables,
@@ -59,6 +60,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
         this.reportName = REPORT_NAME;
+        this.asParentRequirement = true;
     }
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
@@ -77,6 +79,17 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
         this.reportName = reportName;
+        this.asParentRequirement = true;
+    }
+
+    public RequirementsOverviewReportingTask asParentRequirement() {
+        this.asParentRequirement = true;
+        return this;
+    }
+
+    public RequirementsOverviewReportingTask asLeafRequirement() {
+        this.asParentRequirement = false;
+        return this;
     }
 
     @Override
@@ -99,6 +112,9 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
 //        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
         JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes.withoutUnrelatedRequirements());
+        if (asParentRequirement) {
+            requirementsTree = requirementsTree.asAParentRequirement();
+        }
 
         context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
         context.put("requirementsTree", requirementsTree.asString());

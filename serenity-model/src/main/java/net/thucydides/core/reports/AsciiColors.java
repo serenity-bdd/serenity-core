@@ -39,6 +39,9 @@ public class AsciiColors {
         return (showColoredOutput()) ?  boldPrefix() + AnsiEscapes.GREEN + text + AnsiEscapes.RESET : text;
     }
 
+    public String grey(String text) {
+        return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.GREY + text + AnsiEscapes.RESET : text;
+    }
     public String yellow(String text) {
         return (showColoredOutput()) ?  boldPrefix() +  AnsiEscapes.YELLOW + text + AnsiEscapes.RESET : text;
     }

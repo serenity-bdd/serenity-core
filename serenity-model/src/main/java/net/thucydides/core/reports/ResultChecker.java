@@ -67,26 +67,32 @@ public class ResultChecker {
         logger.info(white(" SERENITY TESTS : ") + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
         logger.info(white("-----------------------------------------"));
         logger.info(
-                resultLine(white("Tests executed         "), white(Integer.toString(testOutcomes.getTotal()))));
+                resultLine(white(
+                 "Tests executed         "), white(Integer.toString(testOutcomes.getTotal()))));
         logger.info(
                 resultLine(green(
-                 "Tests passed           "), green(Integer.toString(testOutcomes.getPassingTests().getTotal())))
+                 "Tests passed           "), green(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.SUCCESS))))
         );
         logger.info(
                 resultLine(red(
-                 "Tests failed           "), red(Integer.toString(testOutcomes.getFailingTests().getTotal())))
+                 "Tests failed           "), red(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE))))
         );
         logger.info(
                 resultLine(yellow(
-                 "Tests with errors      "), yellow(Integer.toString(testOutcomes.getErrorTests().getTotal())))
+                 "Tests with errors      "), yellow(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR))))
         );
         logger.info(
                 resultLine(purple(
-                  "Tests compromised      "), purple(Integer.toString(testOutcomes.getCompromisedTests().getTotal())))
+                  "Tests compromised      "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED))))
         );
         logger.info(
                 resultLine(cyan(
-                  "Tests pending          "), cyan(Integer.toString(testOutcomes.getPendingTests().getTotal())))
+                  "Tests pending          "), cyan(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.PENDING))))
+        );
+        logger.info(
+                resultLine(grey(
+                  "Tests ignored/skipped  "), grey(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.IGNORED)
+                                                                                        + testOutcomes.count(TestType.ANY).withResult(TestResult.SKIPPED))))
         );
         logger.info("------------------------ | --------------");
         logger.info(resultLine("Total Duration         ", CompoundDuration.of(testOutcomes.getDuration())));
@@ -135,6 +141,10 @@ public class ResultChecker {
 
     private String cyan(String text) {
         return asciiColors.bold().cyan(text);
+    }
+
+    private String grey(String text) {
+        return asciiColors.bold().grey(text);
     }
 
     private String yellow(String text) {

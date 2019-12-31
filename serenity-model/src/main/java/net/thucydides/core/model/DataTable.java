@@ -22,9 +22,8 @@ public class DataTable {
     private final boolean predefinedRows;
     private String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
-    private Map<Integer, Integer> lineNumbersForEachRow = new HashMap<>();
     private transient AtomicInteger currentRow = new AtomicInteger(0);
-
+    private transient Map<Integer, Integer> lineNumbersForEachRow = new HashMap<>();
     private final static String INFO_ICON = "<i class=\"fa fa-info-circle\"></i>";
 
     private final static List<DataTableRow> NO_ROWS = new ArrayList<>();
@@ -314,7 +313,7 @@ public class DataTable {
     }
 
     private void renderTableHeader(StringBuilder renderedTable, DataSetDescriptor dataSetDescriptor) {
-        renderedTable.append("__Examples: ").append(dataSetDescriptor.getName()).append("__").append(System.lineSeparator());
+        renderedTable.append("Examples: ").append(dataSetDescriptor.getName()).append(System.lineSeparator());
         if (isNotEmpty(dataSetDescriptor.getDescription())) {
             renderedTable.append(System.lineSeparator())
                     .append("<div class='example-description'>")

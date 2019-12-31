@@ -267,29 +267,23 @@ public class Formatter {
         Matcher matcher = EXAMPLE_RESULT_TOKEN.matcher(text);
         while (matcher.find()) {
             String feature = matcher.group(1);
-//            String scenario= matcher.group(2);
             int exampleLineNumber = Integer.parseInt(matcher.group(2));
-
-//            Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
-//                    outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
-//            ).findFirst();
 
             requirementsOutcomes.getTestOutcomes().getOutcomes().stream()
                     .filter(
                             outcome -> outcome.getUserStory().getName().equalsIgnoreCase(feature) && containsMatchingExampleRow(outcome, exampleLineNumber)
                     ).findFirst()
                     .ifPresent(
-//            matchingOutcome.ifPresent(
-                    testOutcome -> {
-                        Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
-                        if (matchingRow.isPresent()) {
-                            matcher.appendReplacement(newText,
-                                    resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
-                                            testOutcome.getHtmlReport()));
-                        } else {
-                            matcher.appendReplacement(newText, "&nbsp;");
-                        }
-                    });
+                            testOutcome -> {
+                                Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
+                                if (matchingRow.isPresent()) {
+                                    matcher.appendReplacement(newText,
+                                            resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
+                                                    testOutcome.getHtmlReport()));
+                                } else {
+                                    matcher.appendReplacement(newText, "&nbsp;");
+                                }
+                            });
         }
         matcher.appendTail(newText);
         return newText.toString();

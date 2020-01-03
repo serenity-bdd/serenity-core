@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -139,13 +140,22 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addPreferencesTo(ChromeOptions options) {
 
         Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
-
         chromePreferences.putAll(ChromePreferences.startingWith("chrome.preferences.").from(environmentVariables));
+        Map<String, Object> sanitizedChromePreferences = cleanUpPathsIn(chromePreferences);
 
         if (!chromePreferences.isEmpty()) {
-            options.setExperimentalOption("prefs", chromePreferences);
+            options.setExperimentalOption("prefs", sanitizedChromePreferences);
         }
     }
+
+    private Map<String, Object> cleanUpPathsIn(Map<String, Object> chromePreferences) {
+        Map<String, Object> preferences = new HashMap<>();
+        chromePreferences.forEach(
+                (key,value) -> preferences.put(key.toString(), SanitisedBrowserPreferenceValue.of(value))
+        );
+        return preferences;
+    }
+
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
 

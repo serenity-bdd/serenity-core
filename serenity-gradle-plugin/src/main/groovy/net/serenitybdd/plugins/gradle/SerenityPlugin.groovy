@@ -78,7 +78,7 @@ class SerenityPlugin implements Plugin<Project> {
                 List<String> extendedReportTypes = project.serenity.reports
                 if (extendedReportTypes) {
                     for (ExtendedReport report : ExtendedReports.named(extendedReportTypes)) {
-                        generatedReport = report.generateReportFrom(reportDirectory)
+                        def generatedReport = report.generateReportFrom(reportDirectory)
                         logger.lifecycle("  - ${report.description}: ${generatedReport.toURI()}")
                     }
                 }

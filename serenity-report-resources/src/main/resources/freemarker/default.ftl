@@ -506,7 +506,8 @@
                                     </#if>
                                     <#if step.hasData()>
                                         <#list step.reportData as recordedData>
-                                            <#assign restDataNumber = "EVIDENCE-${step.number}-${recordedData?index}">
+                                            <#assign stepIndex=recordedData?index>
+                                            <#assign restDataNumber = "EVIDENCE-${step.number}-${stepIndex}">
                                             <span class="piece-of-evidence">
                                                 <@reportData reportData=recordedData number=restDataNumber />
                                             </span>

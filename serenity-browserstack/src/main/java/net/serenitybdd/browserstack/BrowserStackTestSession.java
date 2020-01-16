@@ -49,6 +49,9 @@ public class BrowserStackTestSession {
     }
 
     public String getPublicUrl() throws URISyntaxException, IOException {
+        if ((browserStackUsername == null) || (browserStackKey == null)) {
+            return "";
+        }
         HttpGet querySessionInfo = new HttpGet(getSessionUri());
         HttpEntity sessionDetails = HttpClientBuilder.create().build().execute(querySessionInfo).getEntity();
         String sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));

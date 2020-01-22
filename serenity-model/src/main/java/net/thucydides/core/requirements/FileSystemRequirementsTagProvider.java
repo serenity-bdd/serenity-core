@@ -24,6 +24,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -607,6 +608,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             requirement = leafRequirementWithNarrative(storyName,
                     storyFile.getPath(),
                     narrative.get()).withType(type.toString());
+
+            if (narrative.get().getScenarios().isEmpty()) {
+                requirement = requirement.withNoScenarios();
+            }
         } else {
             requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
         }

@@ -174,7 +174,7 @@ public class WhenGeneratingAnXMLReport {
 
     @Test
     public void should_generate_an_XML_report_for_a_manual_acceptance_test_run() throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).asManualTest();
+        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).setToManual();
         DateTime startTime = new DateTime(2013,1,1,0,0,0,0);
         testOutcome.setStartTime(startTime);
         testOutcome.setDescription("Some description");

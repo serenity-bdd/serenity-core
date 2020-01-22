@@ -371,7 +371,7 @@ public class TestOutcome {
         return this;
     }
 
-    public TestOutcome asManualTest() {
+    public TestOutcome setToManual() {
         this.manual = true;
         addTag(TestTag.withName("manual").andType("tag"));
         return this;
@@ -988,6 +988,10 @@ public class TestOutcome {
         }
     }
 
+    public boolean hasNoSteps() {
+        return (testSteps == null || testSteps.isEmpty());
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -1215,12 +1219,14 @@ public class TestOutcome {
     }
 
     private List<TestStep> annotatedStepsFrom(List<TestStep> testSteps) {
-        if (isManual()) { // && annotatedResult != null) {
+        // For manual tests, all top level steps respect the manual test result if defined
+        if (isManual()) {
             return testSteps.stream().map(
-                    step -> step.withResult(getResult())
+                    step -> step.withResult(getResult()).asManual()
             ).collect(Collectors.toList());
+        } else {
+            return testSteps;
         }
-        return testSteps;
     }
 
     public boolean hasScreenshots() {
@@ -1324,11 +1330,11 @@ public class TestOutcome {
             return result;
         }
 
-        if ((TestResult.IGNORED == annotatedResult) || (TestResult.SKIPPED == annotatedResult) || TestResult.PENDING == annotatedResult) {
+        if (isManual() && (annotatedResult != null)) {
             return annotatedResult;
         }
 
-        if (isManual() && (annotatedResult != null)) {
+        if ((TestResult.IGNORED == annotatedResult) || (TestResult.SKIPPED == annotatedResult) || TestResult.PENDING == annotatedResult) {
             return annotatedResult;
         }
 

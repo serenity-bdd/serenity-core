@@ -209,19 +209,38 @@ public class TestAnnotations {
 
     public List<TestTag> getTagsForMethod(String methodName) {
 
-        List<TestTag> allTags = new ArrayList<>(getTags());
+        List<TestTag> allTags = new ArrayList<>(getClassTags());
         allTags.addAll(getTagsFor(methodName));
 
         return new ArrayList<>(allTags);
     }
 
-    public List<TestTag> getTags() {
-        return getTags(testClass);
+    public List<TestTag> getClassTags() {
+        return getClassTags(testClass);
+    }
+
+    public List<TestTag> getAllTags() {
+        Set<TestTag> classTags = new HashSet<>(getClassTags(testClass));
+        classTags.addAll(
+                Arrays.stream(testClass.getMethods())
+                .filter(method -> method.getDeclaredAnnotation(WithTag.class) != null)
+                .map(method -> method.getDeclaredAnnotation(WithTag.class).value() )
+                .map(TestTag::withValue)
+                .collect(Collectors.toSet()));
+
+        classTags.addAll(
+                Arrays.stream(testClass.getDeclaredMethods())
+                        .filter(method -> method.getDeclaredAnnotation(WithTag.class) != null)
+                        .map(method -> method.getDeclaredAnnotation(WithTag.class).value() )
+                        .map(TestTag::withValue)
+                        .collect(Collectors.toSet()));
+
+        return new ArrayList<>(classTags);
     }
 
     private final List<TestTag> NO_TAGS = new ArrayList<>();
 
-    private List<TestTag> getTags(Class<?> testClass) {
+    private List<TestTag> getClassTags(Class<?> testClass) {
         List<TestTag> tags = new ArrayList<>();
 
         if (testClass == null) { return NO_TAGS; }
@@ -230,7 +249,7 @@ public class TestAnnotations {
         addTags(tags, testClass.getAnnotation(WithTags.class));
         addTag(tags, testClass.getAnnotation(WithTag.class));
         if (testClass.getSuperclass() != Object.class) {
-            tags.addAll(getTags(testClass.getSuperclass()));
+            tags.addAll(getClassTags(testClass.getSuperclass()));
         }
         return tags;
     }

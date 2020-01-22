@@ -155,9 +155,10 @@ public class TestTag implements Comparable<TestTag> {
 
     @Override
     public String toString() {
-        return "TestTag{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+        if (type.isEmpty()) {
+            return name;
+        } else {
+            return type + ":" + name;
+        }
     }
 }

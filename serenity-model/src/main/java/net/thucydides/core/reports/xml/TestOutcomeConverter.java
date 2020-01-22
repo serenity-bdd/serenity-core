@@ -417,7 +417,7 @@ public class TestOutcomeConverter implements Converter {
         }
         boolean isManualTest = readManualTest(reader);
         if (isManualTest) {
-            testOutcome = testOutcome.asManualTest();
+            testOutcome = testOutcome.setToManual();
         }
         String sessionId = readSessionId(reader);
         testOutcome.setSessionId(sessionId);

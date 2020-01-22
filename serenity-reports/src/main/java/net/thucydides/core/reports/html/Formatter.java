@@ -269,21 +269,27 @@ public class Formatter {
             String feature = matcher.group(1);
             int exampleLineNumber = Integer.parseInt(matcher.group(2));
 
-            requirementsOutcomes.getTestOutcomes().getOutcomes().stream()
+            Optional<? extends TestOutcome> rowOutome = requirementsOutcomes
+                    .getTestOutcomes()
+                    .getOutcomes()
+                    .stream()
                     .filter(
                             outcome -> outcome.getUserStory().getName().equalsIgnoreCase(feature) && containsMatchingExampleRow(outcome, exampleLineNumber)
-                    ).findFirst()
-                    .ifPresent(
-                            testOutcome -> {
-                                Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
-                                if (matchingRow.isPresent()) {
-                                    matcher.appendReplacement(newText,
-                                            resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
-                                                    testOutcome.getHtmlReport()));
-                                } else {
-                                    matcher.appendReplacement(newText, "&nbsp;");
-                                }
-                            });
+                    ).findFirst();
+
+            if (rowOutome.isPresent()) {
+                TestOutcome testOutcome = rowOutome.get();
+                Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
+                if (matchingRow.isPresent()) {
+                    matcher.appendReplacement(newText,
+                            resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
+                                    testOutcome.getHtmlReport()));
+                } else {
+                    matcher.appendReplacement(newText, "&nbsp;");
+                }
+            } else {
+                matcher.appendReplacement(newText, "&nbsp;");
+            }
         }
         matcher.appendTail(newText);
         return newText.toString();

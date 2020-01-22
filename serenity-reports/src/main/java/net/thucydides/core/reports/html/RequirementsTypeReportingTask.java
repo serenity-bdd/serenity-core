@@ -62,7 +62,7 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
 
         context.put("report", ReportProperties.forAggregateResultsReport());
         context.put("requirementType", requirementType);
-        context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType).withoutUnrelatedRequirements());
+        context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType).filteredByDisplayTag());
 
         List<ScenarioOutcome> scenarios
                 = scenarioOutcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(requirementsOutcomes));

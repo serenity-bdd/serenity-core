@@ -53,6 +53,7 @@ public class TestStep implements Cloneable {
     private int level;
     private Integer lineNumber;
     private ExternalLink externalLink;
+    private Boolean manual;
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
     public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
@@ -432,11 +433,23 @@ public class TestStep implements Cloneable {
     }
 
     public TestResult getResult() {
+        if (isManual()) {
+            return getResultFromThisStep();
+        }
         if (isAGroup() && !groupResultOverridesChildren()) {
             return (result != null) ? TestResultComparison.overallResultFor(result, getResultFromChildren()) : getResultFromChildren();
         } else {
             return getResultFromThisStep();
         }
+    }
+
+    private boolean isManual() {
+        return manual != null && manual;
+    }
+
+    public TestStep asManual() {
+        manual = true;
+        return this;
     }
 
     private TestResult getResultFromThisStep() {

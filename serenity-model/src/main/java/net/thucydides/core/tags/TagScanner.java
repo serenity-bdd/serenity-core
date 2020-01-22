@@ -3,6 +3,7 @@ package net.thucydides.core.tags;
 import net.serenitybdd.core.tags.EnvironmentDefinedTags;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.reports.html.CucumberCompatibleFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.JUnitAdapter;
 
@@ -13,35 +14,48 @@ import java.util.stream.Collectors;
 public class TagScanner {
 
     private final List<TestTag> providedTags;
-
+    private final CucumberCompatibleFilter filter;
     public TagScanner(EnvironmentVariables environmentVariables) {
+
+        this.filter = new CucumberCompatibleFilter(environmentVariables);
+
         this.providedTags = EnvironmentDefinedTags.definedIn(environmentVariables);
     }
 
     public boolean shouldRunForTags(List<String> tags) {
-        if (providedTags.isEmpty()) {
-            return true;
-        }
 
-        return tagsMatchAPositiveTag(tags, providedTags) && !tagsMatchANegativeTag(tags, providedTags);
+        return filter.matches(tags);
+//        if (providedTags.isEmpty()) {
+//            return true;
+//        }
+//
+//        return tagsMatchAPositiveTag(tags, providedTags) && !tagsMatchANegativeTag(tags, providedTags);
     }
 
     public boolean shouldRunClass(Class<?> testClass) {
-        if (providedTags.isEmpty()) {
-            return true;
-        }
-
-        return testClassMatchesAPositiveTag(testClass, providedTags)
-                && testClassDoesNotMatchANegativeTag(testClass, providedTags);
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getClassTags();
+        return filter.matchesTags(tags);
+//        if (providedTags.isEmpty()) {
+//            return true;
+//        }
+//
+//        return testClassMatchesAPositiveTag(testClass, providedTags)
+//                && testClassDoesNotMatchANegativeTag(testClass, providedTags);
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
-        if (!isATaggable(testClass) || (providedTags.isEmpty())) {
+        if (!isATaggable(testClass)) {
             return true;
         }
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
+        return filter.matchesTags(tags);
 
-        return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
-                && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
+//        if (!isATaggable(testClass) || (providedTags.isEmpty())) {
+//            return true;
+//        }
+//
+//        return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
+//                && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
     }
 
     // Cucumber and JBehave have their own filtering mechanisms.
@@ -52,7 +66,7 @@ public class TagScanner {
     }
 
     private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {
-        List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getClassTags();
         return containsAPositiveMatch(expectedTags, tags);
     }
 
@@ -78,7 +92,7 @@ public class TagScanner {
     }
 
     private boolean testClassDoesNotMatchANegativeTag(Class<?> testClass, List<TestTag> negatedTags) {
-        List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getClassTags();
         return !containsANegativeMatch(negatedTags, tags);
     }
 

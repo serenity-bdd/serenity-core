@@ -1055,8 +1055,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return;
         }
 
-        getCurrentTestOutcome().asManualTest();
         getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
+        getCurrentTestOutcome().setToManual();
     }
 
     private TestResult defaulManualTestReportResult() {

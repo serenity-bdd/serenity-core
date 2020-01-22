@@ -318,7 +318,7 @@ public class StepEventBus {
 
     private TestOutcome checkForEmptyScenarioIn(TestOutcome outcome) {
         if (isAGherkinScenario(outcome)) {
-            if (outcome.getTestSteps().isEmpty()) {
+            if (outcome.hasNoSteps()) {
                 return outcome.withResult(TestResult.PENDING);
             }
         }

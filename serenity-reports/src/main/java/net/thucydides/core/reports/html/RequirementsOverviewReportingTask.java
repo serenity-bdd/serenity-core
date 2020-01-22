@@ -44,6 +44,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     private final String relativeLink;
     private final String reportName;
     private boolean asParentRequirement;
+    private  RequirementsFilter requirementsFilter;
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
                                              EnvironmentVariables environmentVariables,
@@ -61,6 +62,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.relativeLink = relativeLink;
         this.reportName = REPORT_NAME;
         this.asParentRequirement = true;
+        this.requirementsFilter = new RequirementsFilter(environmentVariables);
     }
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
@@ -80,6 +82,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.relativeLink = relativeLink;
         this.reportName = reportName;
         this.asParentRequirement = true;
+        this.requirementsFilter = new RequirementsFilter(environmentVariables);
     }
 
     public RequirementsOverviewReportingTask asParentRequirement() {
@@ -110,13 +113,13 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         }
 
-//        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes.withoutUnrelatedRequirements());
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
+                                                                                      requirementsOutcomes.filteredByDisplayTag());
         if (asParentRequirement) {
             requirementsTree = requirementsTree.asAParentRequirement();
         }
 
-        context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
+        context.put("requirements", requirementsOutcomes.filteredByDisplayTag());
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
         context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));

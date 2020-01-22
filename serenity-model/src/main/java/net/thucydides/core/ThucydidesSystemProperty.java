@@ -980,9 +980,16 @@ public enum ThucydidesSystemProperty {
     /**
      * If provided, only classes and/or methods with tags in this list will be executed. The parameter expects
      * a tag or comma-separated list of tags in the shortened form.
+     * This only works for JUnit tests. For Cucumber, use the -Dcucumber.options parameter
      * For example, -Dtags="iteration:I1" or -Dtags="color:red,flavor:strawberry"
      */
     TAGS,
+
+
+    /**
+     * Display only test results and requirements containing any of the specified tags
+     */
+    REPORT_ON_TAGS,
 
     /**
      * If provided, each test in a test run will have these tags added.

@@ -327,7 +327,12 @@
                         <tr>
                             <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
                             <#list row.values as value>
-                                <td class="test-${row.result}"><a
+                                <#if testOutcome.manual>
+                                    <#assign roeResult = testOutcome.result/>
+                                <#else>
+                                    <#assign roeResult = row.result/>
+                                </#if>
+                                <td class="test-${roeResult}"><a
                                             href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
                                 </td>
                             </#list>
@@ -484,18 +489,18 @@
                         <td class="step-description-column">
                             <div class="step-description">
                                 <#if showAccordion>
-                                    <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
-                                       style="display:block;">
-                                        </#if>
-                                        <span class="${step_class_root}-step">
+                                <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
+                                   style="display:block;">
+                                    </#if>
+                                    <span class="${step_class_root}-step">
                                             <#if step.hasRestQuery()>
                                                 ${formatter.restQuery(step.description)}
                                             <#else>
                                                 ${formatter.formatWithFields(step.description)}
                                             </#if>
                                         </span>
-                                        <#if showAccordion>
-                                    </a>
+                                    <#if showAccordion>
+                                </a>
                                 </#if>
                                 <span class="evidence">
                                     <#if step.hasRestQuery()>
@@ -558,15 +563,15 @@
                     <#if (step.errorMessage?has_content) && !step.hasNestedErrors()>
                         <tr class="test-${step.result}">
                             <td width="40">&nbsp</td>
-                                <#if step.errorMessage?has_content>
-                                    <#assign errorMessageTitle = step.errorMessage?html>
+                            <#if step.errorMessage?has_content>
+                                <#assign errorMessageTitle = step.errorMessage?html>
+                            <#else>
+                                <#assign errorMessageTitle = "">
+                            </#if>
+                            <#if testOutcome.hasScreenshots()>
+                            <td width="%" colspan="4" class="error-message-cell">
                                 <#else>
-                                    <#assign errorMessageTitle = "">
-                                </#if>
-                                <#if testOutcome.hasScreenshots()>
-                                    <td width="%" colspan="4" class="error-message-cell">
-                                <#else>
-                                    <td width="%" colspan="3" class="error-message-cell">
+                            <td width="%" colspan="3" class="error-message-cell">
                                 </#if>
 
                                 <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle, true) />
@@ -593,34 +598,36 @@
                     <tr class="test-${testOutcome.result}">
                         <td width="40">${step_outcome_icon}</td>
                         <#if testOutcome.hasScreenshots()>
-                            <td width="%" colspan="2">
-                        <#else>
-                            <td width="%" colspan="1">
-                        </#if>
-                        <#if testOutcome.errorMessage?has_content>
-                            <span class="top-level-step">${testOutcome.errorMessage}</span>
-                        <#else>
-                            <span class="top-level-step">An error occurred outside of step execution</span>
-                        </#if>
-                            </td>
-                        <td width="130"><span class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span></td>
+                        <td width="%" colspan="2">
+                            <#else>
+                        <td width="%" colspan="1">
+                            </#if>
+                            <#if testOutcome.errorMessage?has_content>
+                                <span class="top-level-step">${testOutcome.errorMessage}</span>
+                            <#else>
+                                <span class="top-level-step">An error occurred outside of step execution</span>
+                            </#if>
+                        </td>
+                        <td width="130"><span
+                                    class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>
+                        </td>
                         <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
                     </tr>
                     <tr class="test-${testOutcome.result}">
                         <td width="40">&nbsp</td>
                         <#if testOutcome.hasScreenshots()>
-                            <td width="%" colspan="4">
-                        <#else>
-                            <td width="%" colspan="3">
-                        </#if>
-                        <#if (testOutcome.errorMessage)??>
-                            <#if (testOutcome.nestedTestFailureCause)??>
-                                <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(testOutcome.errorMessage, true) />
-
-                                <@stacktrace title=formattedErrorMessageTitle cause=testOutcome.nestedTestFailureCause id="overall" />
+                        <td width="%" colspan="4">
+                            <#else>
+                        <td width="%" colspan="3">
                             </#if>
-                        </#if>
-                            </td>
+                            <#if (testOutcome.errorMessage)??>
+                                <#if (testOutcome.nestedTestFailureCause)??>
+                                    <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(testOutcome.errorMessage, true) />
+
+                                    <@stacktrace title=formattedErrorMessageTitle cause=testOutcome.nestedTestFailureCause id="overall" />
+                                </#if>
+                            </#if>
+                        </td>
                     </tr>
                 </#if>
                 <tr class="test-${testOutcome.result}">

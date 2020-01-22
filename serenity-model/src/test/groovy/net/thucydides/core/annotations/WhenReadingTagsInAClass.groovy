@@ -24,7 +24,7 @@ class WhenReadingTagsInAClass extends Specification {
 
    def "should find all the class-level tags"() {
        when:
-            def tags = TestAnnotations.forClass(RedClass).getTags()
+            def tags = TestAnnotations.forClass(RedClass).getClassTags()
        then:
             tags == [TestTag.withName("red").andType("color")]
    }
@@ -38,7 +38,7 @@ class WhenReadingTagsInAClass extends Specification {
 
     def "should find tags from parent classes"() {
         when:
-        def tags = TestAnnotations.forClass(StrawberryIcecream).getTags()
+        def tags = TestAnnotations.forClass(StrawberryIcecream).getClassTags()
         then:
         tags == [TestTag.withName("pink").andType("color"), TestTag.withName("strawberry").andType("flavor")]
     }

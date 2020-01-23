@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import com.rits.cloning.Cloner;
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -17,24 +18,17 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 public class InstrumentedTask {
 
     public static <T extends Performable> T of(T task) {
-        if (isInstrumented(task) || !shouldInstrument(task)) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
+            return task;
+        } else if(isInstrumented(task) || !shouldInstrument(task)) {
             return task;
         }
         return (T) instrumentedCopyOf(task, task.getClass());
     }
 
     public static <T extends Performable> boolean shouldInstrument(T task) {
-
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-
-        if (task.getClass().isAnonymousClass()) {
-            return false;
-        }
-
-        if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
-            return false;
-        }
-
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();

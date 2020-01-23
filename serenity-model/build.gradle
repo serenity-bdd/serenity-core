@@ -24,6 +24,7 @@ dependencies {
     }
     compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-collections', module: 'commons-collections'
     }
 //    compile "javax.validation:validation-api:${javaxValidationVersion}"
     compile "net.sf.opencsv:opencsv:${openCsvVersion}"
@@ -37,7 +38,7 @@ dependencies {
 
     compile("org.awaitility:awaitility:${awaitilityVersion}") {
         exclude group: 'cglib', module: 'cglib-nodep'
-        exclude group: 'org.objenesis', module: 'objenesis'
+//        exclude group: 'org.objenesis', module: 'objenesis'
     }
     testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
         exclude group: 'com.google.guava', module:'guava'
@@ -55,11 +56,13 @@ dependencies {
     }
     compile 'es.nitaur.markdown:txtmark:0.16'
 
+    compileOnly "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+
     testCompile project(':serenity-test-utils')
     testCompile project(':serenity-sample-alternative-resources')
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude group: "junit"
         exclude group: "org.codehaus.groovy"
-
     }
+    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
 }

@@ -22,6 +22,7 @@ import java.time.ZonedDateTime
  */
 class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedReport {
     override fun getName(): String = "email"
+    override fun getDescription(): String = "Emailable Summary"
 
     private val LOGGER = LoggerFactory.getLogger(SerenityEmailReport::class.java)
 
@@ -36,10 +37,8 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
      */
     override fun generateReportFrom(sourceDirectory: Path): File {
 
-        LOGGER.info("GENERATING EMAIL REPORT")
-
         // Fetch the test outcomes
-        val testOutcomes = testOutcomesIn(sourceDirectory)
+        val testOutcomes = testOutcomesIn(sourceDirectory).filteredByEnvironmentTags()
 
         // Prepare the parameters
         val outputDirectory = SerenityEmailReport.outputDirectory().configuredIn(environmentVariables)
@@ -64,15 +63,19 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
     private fun templateFields(environmentVariables: EnvironmentVariables,
                                testOutcomes: TestOutcomes): Map<String, Any> {
         val reportTitle = SerenityEmailReport.reportTitle().configuredIn(environmentVariables)
+        val reportLink = SerenityEmailReport.reportLink().configuredIn(environmentVariables)
         val scoreboardSize = SerenityEmailReport.scoreboardSize().configuredIn(environmentVariables)
         val customReportFields = CustomReportFields(environmentVariables)
         val tagTypes = SerenityEmailReport.tagTypes().configuredIn(environmentVariables)
         val tagCategoryTitle = SerenityEmailReport.tagCategoryTitle().configuredIn(environmentVariables)
+        val showFullTestResults = SerenityEmailReport.showFullTestResults().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
+                "showFullTestResults" to showFullTestResults,
                 "report" to ReportInfo(
                         title = reportTitle,
+                        link = reportLink,
                         tagCategoryTitle = tagCategoryTitle,
                         version = environmentVariables.getProperty("project.version", ""),
                         date = testOutcomes.startTime.orElse(ZonedDateTime.now()).toLocalDateTime()
@@ -88,6 +91,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
                         minTestDuration = formattedDuration(minDurationOf(testOutcomes.outcomes))
                 ),
                 "failuresByFeature" to FailuresByFeature.from(testOutcomes),
+                "resultsByFeature" to TestResultsByFeature.from(testOutcomes),
                 "frequentFailures" to FrequentFailures.from(testOutcomes).withMaxOf(scoreboardSize),
                 "unstableFeatures" to UnstableFeatures.from(testOutcomes).withMaxOf(scoreboardSize),
                 "coverage" to TagCoverage.from(testOutcomes).forTagTypes(tagTypes),

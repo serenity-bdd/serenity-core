@@ -20,6 +20,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import net.thucydides.core.util.TagInflector;
 import net.thucydides.core.util.VersionProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -156,7 +157,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("inflection", Inflector.getInstance());
-        context.put("styling", TagStylist.from(Injectors.getInjector().getInstance(EnvironmentVariables.class)));
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        context.put("tagInflector", new TagInflector(environmentVariables));
+        context.put("styling", TagStylist.from(environmentVariables));
         context.put("requirementTypes", requirementsService.getRequirementTypes());
 
         addParentRequirmentFieldToContext(testOutcome, context);
@@ -190,7 +193,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
         TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
         Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
-        filteredTags = tagFilter.removeRequirementsTagsFrom(filteredTags);
+        filteredTags = tagFilter.removeHiddenTagsFrom(filteredTags);
         context.put("filteredTags", filteredTags);
     }
 

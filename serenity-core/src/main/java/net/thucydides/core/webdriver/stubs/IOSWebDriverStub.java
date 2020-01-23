@@ -13,7 +13,7 @@ import org.openqa.selenium.remote.Response;
 import java.util.*;
 
 public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWithKeyName, ShakesDevice,
-        FindsByIosUIAutomation, PerformsTouchID, FindsByIosNSPredicate, FindsByIosClassChain, PushesFiles, LocksDevice {
+        PerformsTouchID, FindsByIosNSPredicate, FindsByIosClassChain, PushesFiles, LocksDevice {
 
     @Override
     public void get(String s) {
@@ -115,15 +115,15 @@ public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWith
         return new ArrayList();
     }
 
-    @Override
-    public WebElement findElementByIosUIAutomation(String using) {
-        return new WebElementFacadeStub();
-    }
-
-    @Override
-    public List findElementsByIosUIAutomation(String using) {
-        return new ArrayList();
-    }
+//    @Override
+//    public WebElement findElementByIosUIAutomation(String using) {
+//        return new WebElementFacadeStub();
+//    }
+//
+//    @Override
+//    public List findElementsByIosUIAutomation(String using) {
+//        return new ArrayList();
+//    }
 
     @Override
     public void shake() {

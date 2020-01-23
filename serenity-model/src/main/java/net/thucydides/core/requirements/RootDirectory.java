@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.replace;
  * This is normally src/test/resources/features or src/test/resources/stories. For multi-module projects, it
  * can be a directory with this name in one of the modules. There should only be one requirements directory in a
  * multi-module project. The easiest approach is to have a dedicated module for the acceptance tests.
- *
+ * <p>
  * You can hard-code this directory using serenity.requirements.dir. Milage may vary for multi-module projects.
  * If you need to override the root directory (e.g. to use src/test/resources/myFeatures), a better way is to
  * set the serenity.features.directory (for Cucumber) or serenity.stories.directory (for JBehave) property to
@@ -80,9 +81,14 @@ public class RootDirectory {
 
     }
 
-    public static RootDirectory definedIn(EnvironmentVariables environmentVariables) {
-        return new RootDirectory(environmentVariables,".");
+    public Set<String> requirementsDirectoryNames() {
+        return new HashSet<>(requirementsDirectoryNames);
     }
+
+    public static RootDirectory definedIn(EnvironmentVariables environmentVariables) {
+        return new RootDirectory(environmentVariables, ".");
+    }
+
     /**
      * Find the root directory in the classpath or on the file system from which the requirements will be read.
      */
@@ -92,9 +98,12 @@ public class RootDirectory {
             if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
                 return getRootDirectoryFromRequirementsBaseDir();
             } else {
-                return firstDefinedOf(getRootDirectoryFromClasspath(),
+                return firstDefinedOf(
+                        getRootDirectoryFromClasspath(),
+                        getGradleProjectDirectoryAsSet(),
                         getFileSystemDefinedDirectory(),
-                        getRootDirectoryFromWorkingDirectory());
+                        getRootDirectoryFromWorkingDirectory()
+                );
             }
         } catch (IOException e) {
             return new HashSet<>();
@@ -147,7 +156,6 @@ public class RootDirectory {
     }
 
     private Set<String> getFileSystemDefinedDirectory() {
-
         File rootDirectoryPathFile = FileSystems.getDefault().getPath(rootDirectoryPath).toFile();
 
         if (rootDirectoryPathFile.exists()) {
@@ -158,10 +166,29 @@ public class RootDirectory {
         return new HashSet<>();
     }
 
+    private Set<String> getGradleProjectDirectoryAsSet() {
+
+        String gradleProjectDir = getGradleProjectDirectory();
+        String gradleResourcetDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+
+        if (gradleProjectDir != null) {
+            Set<String> directory = new HashSet<>();
+            directory.add(gradleResourcetDir);
+            return directory;
+        }
+        return new HashSet<>();
+    }
+
+    private String getGradleProjectDirectory() {
+        return environmentVariables.getProperty("serenity.project.directory");
+    }
+
     private Set<String> getRootDirectoryFromWorkingDirectory() {
         final String workingDirectory = System.getProperty("user.dir");
         final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
-        String resultDir = (!isEmpty(mavenBuildDir)) ? mavenBuildDir :  workingDirectory;
+        final String gradleBuildDir = getGradleProjectDirectory();
+        String resultDir = (!isEmpty(mavenBuildDir)) ? mavenBuildDir : (!isEmpty(gradleBuildDir)) ? gradleBuildDir : workingDirectory;
+
         return getRootDirectoryFromParentDir(resultDir);
     }
 
@@ -194,7 +221,6 @@ public class RootDirectory {
                 directoryPaths.add(new File(resourceDirectory, storyDirectoryName).getAbsolutePath()); //stories
             }
         }
-
         return directoryPaths;
     }
 
@@ -220,7 +246,7 @@ public class RootDirectory {
         }
         List<File> resourceDirectories = getResourceDirectories(Paths.get(relativeRoot), environmentVariables);
         for (File resourceDir : resourceDirectories) {
-            for(String candidateDirectoryName : requirementsDirectoryNames) {
+            for (String candidateDirectoryName : requirementsDirectoryNames) {
                 if (new File(resourceDir, candidateDirectoryName).exists()) {
                     return Optional.of(resourceDir.toPath().resolve(candidateDirectoryName));
                 }
@@ -237,7 +263,6 @@ public class RootDirectory {
             return RESOURCE_DIRECTORY_CACHE.get(root);
         }
 
-        Stopwatch stopwatch = Stopwatch.started();
         List<File> results;
         if (ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
             results = new ArrayList<>();
@@ -247,8 +272,7 @@ public class RootDirectory {
                     .map(Path::toFile)
                     .collect(Collectors.toList());
         }
-        RESOURCE_DIRECTORY_CACHE.put(root,results);
-        LOGGER.debug("Resource directories found in {} in {} ms: {}", root, stopwatch.stop(), results);
+        RESOURCE_DIRECTORY_CACHE.put(root, results);
 
         return results;
     }
@@ -274,24 +298,32 @@ public class RootDirectory {
      * Don't bother looking for src/test/resources folders in directories with names like these
      */
     private final static List<Predicate<Path>> IGNORED_DIRECTORIES = new ArrayList<>();
+
     static {
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().startsWith("."));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("target"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("build"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("out"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("java"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("scala"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("groovy"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("kotlin"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("features"));
-        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("stories"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().startsWith("."));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("target"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("build"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("out"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("java"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("scala"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("groovy"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("kotlin"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("features"));
+        IGNORED_DIRECTORIES.add(path -> path.getFileName().toString().equals("stories"));
     }
+
     private static boolean isResourceDirectoryCandidate(Path entry) {
 
         try {
-            if (entry.toString().isEmpty()) { return true; }
-            if (!isDirectory(entry)) { return false; }
-            if (isHidden(entry)) { return false; }
+            if (entry.toString().isEmpty()) {
+                return true;
+            }
+            if (!isDirectory(entry)) {
+                return false;
+            }
+            if (isHidden(entry)) {
+                return false;
+            }
 
             return IGNORED_DIRECTORIES.stream().noneMatch(
                     shouldIgnore -> shouldIgnore.test(entry)
@@ -303,4 +335,30 @@ public class RootDirectory {
     }
 
 
+    Path getRelativePathOf(String path) {
+        if (path == null) {
+            return Paths.get("");
+        }
+        for (String requirementsDirectory : requirementsDirectoryNames) {
+            if (path.startsWith("classpath:" + requirementsDirectory + "/")) {
+                return Paths.get(path.substring(requirementsDirectory.length() + 11));
+            } else if (relativePathFromAbsolutePath(path, requirementsDirectory).isPresent()) {
+                return relativePathFromAbsolutePath(path, requirementsDirectory).get();
+            }
+        }
+        return Paths.get(path);
+    }
+
+    private Optional<Path> relativePathFromAbsolutePath(String absolutePath, String requirementsDirectory) {
+        if (absolutePath.startsWith("file:/")) {
+            String requirementsDirectoryInPath = "/" + requirementsDirectory + "/";
+            if (absolutePath.contains(requirementsDirectoryInPath)) {
+                int startOfRelativePath = absolutePath.lastIndexOf(requirementsDirectoryInPath) + requirementsDirectoryInPath.length();
+                return Optional.of(Paths.get(absolutePath.substring(startOfRelativePath)));
+            }
+        } else if (absolutePath.startsWith("file:")) {
+            return Optional.of(Paths.get(absolutePath.substring(5)));
+        }
+        return Optional.empty();
+    }
 }

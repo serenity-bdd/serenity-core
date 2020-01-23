@@ -13,6 +13,7 @@ public class OptionsSplitter {
 
         return options.stream()
                 .map(option -> "--" + option)
+                .distinct()
                 .collect(Collectors.toList());
     }
 }

@@ -4,6 +4,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
 //import io.vavr.collection.List;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -64,8 +65,8 @@ public class BuildInfoProvider {
             if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables) != null) {
                 buildProperties.put("Saucelabs target platform", ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables));
             }
-            if (ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables) != null) {
-                buildProperties.put("Saucelabs driver version", ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables));
+            if (ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables) != null) {
+                buildProperties.put("Saucelabs browser version", ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables));
             }
             if (ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables) != null) {
                 buildProperties.put("Remote OS", ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables));
@@ -86,7 +87,9 @@ public class BuildInfoProvider {
                                                         .collect(Collectors.toList());
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
-            String expression = environmentVariables.getProperty(key);
+            String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(key)
+                    .orElse(null);
 
             String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;
 

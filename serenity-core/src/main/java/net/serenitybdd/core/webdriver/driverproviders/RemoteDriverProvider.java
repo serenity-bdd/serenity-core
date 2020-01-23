@@ -41,6 +41,7 @@ public class RemoteDriverProvider implements DriverProvider {
         driverBuilders.put(RemoteDriverType.BROWSERSTACK, new BrowserStackDriverBuilder(environmentVariables, remoteDriverCapabilities));
         driverBuilders.put(RemoteDriverType.DEFAULT, new DefaultRemoteDriver(environmentVariables, remoteDriverCapabilities));
 
+
         return driverBuilders;
     }
 
@@ -59,8 +60,8 @@ public class RemoteDriverProvider implements DriverProvider {
 
         if (saucelabsUrlIsDefined(environmentVariables)) {
             return RemoteDriverType.SAUCELABS;
-        } else if (browserStackUrlIsDefined(environmentVariables)){
-            return RemoteDriverType.BROWSERSTACK;
+//        } else if (browserStackUrlIsDefined(environmentVariables)){
+//            return RemoteDriverType.BROWSERSTACK;
         } else {
             return RemoteDriverType.DEFAULT;
         }

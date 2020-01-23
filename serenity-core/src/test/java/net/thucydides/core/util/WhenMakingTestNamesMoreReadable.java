@@ -39,6 +39,11 @@ public class WhenMakingTestNamesMoreReadable {
     }
 
     @Test
+    public void should_cope_with_capitals_after_underscores() {
+        assertThat(NameConverter.humanize("SYSTEM_Availability_test"), is("SYSTEM availability test"));
+    }
+
+    @Test
     public void test_names_with_parameters_should_only_modify_the_name() {
         assertThat(NameConverter.humanize("aTestMethod: ABC def bGd"), is("A test method: ABC def bGd"));
     }

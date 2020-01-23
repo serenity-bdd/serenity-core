@@ -16,12 +16,12 @@ public class EnsureFieldVisible {
         return new EnsureFieldVisible(actor);
     }
 
-    public EnsureFieldVisible(Actor actor) {
+    private EnsureFieldVisible(Actor actor) {
         this.actor = actor;
     }
 
     public void canSee(WebElementFacade targetElement) {
-        if (!targetElement.isCurrentlyVisible()) {
+        if ((targetElement != null) && (!targetElement.isCurrentlyVisible())) {
             try {
                 actor.attemptsTo(Scroll.to(targetElement));
             } catch (WebDriverException failedToMoveToElement) {

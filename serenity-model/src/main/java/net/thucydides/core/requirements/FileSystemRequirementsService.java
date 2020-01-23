@@ -23,11 +23,12 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
 
     @Override
     public List<Requirement> getRequirements() {
-
-        requirements = fileSystemRequirementsTagProvider.getRequirements();
-        requirements = addParentsTo(requirements);
-        indexRequirements();
-        LOGGER.debug("Requirements found:" + requirements);
+        if (requirements == null) {
+            requirements = fileSystemRequirementsTagProvider.getRequirements();
+            requirements = RequirementAncestry.addParentsTo(requirements);
+            indexRequirements();
+            LOGGER.info("\nREQUIREMENTS HIERARCHY LOADED FROM THE FILE SYSTEM:\n" + RequirementsTree.from(requirements));
+        }
         return requirements;
 
     }

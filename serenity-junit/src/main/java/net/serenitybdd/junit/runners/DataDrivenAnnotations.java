@@ -65,13 +65,12 @@ public class DataDrivenAnnotations {
                 .build();
     }
 
-    public FrameworkMethod getTestMethod() {
+    public List<FrameworkMethod> getTestMethods() {
         List<FrameworkMethod> methods = testClass.getAnnotatedMethods(Test.class);
-
-        return methods.stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Parameterized test should have at least one @Test method"));
-
+        if (methods.isEmpty()) {
+            throw new IllegalStateException("Parameterized test should have at least one @Test method");
+        }
+        return methods;
     }
 
     public DataTable getParametersTableFromTestDataAnnotation() {

@@ -19,6 +19,12 @@ import static net.serenitybdd.screenplay.Tasks.instrumented;
  */
 public abstract class Hover implements Interaction {
 
+    String target;
+
+    public Hover() {
+        this.target = getTarget();
+    }
+
     public static Interaction over(Target target) {
         return instrumented(HoverOverTarget.class, target);
     }
@@ -46,4 +52,6 @@ public abstract class Hover implements Interaction {
     }
 
     protected abstract WebElement resolveElementFor(Actor actor);
+
+    protected abstract String getTarget();
 }

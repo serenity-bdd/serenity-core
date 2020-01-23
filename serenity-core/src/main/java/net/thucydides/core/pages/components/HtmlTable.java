@@ -14,15 +14,26 @@ import java.util.stream.Collectors;
 public class HtmlTable {
     private final WebElement tableElement;
     private List<String> headings;
+    private CellReaderStrategy cellReaderStrategy;
+
+    public enum CellReaderStrategy { GET_TEXT, TEXT_CONTENT_ATTRIBUTE, INNER_TEXT_ATTRIBUTE, OUTER_TEXT_ATTRIBUTE}
 
     public HtmlTable(final WebElement tableElement) {
         this.tableElement = tableElement;
         this.headings = null;
+        this.cellReaderStrategy = CellReaderStrategy.GET_TEXT;
     }
 
     public HtmlTable(final WebElement tableElement, List<String> headings) {
         this.tableElement = tableElement;
         this.headings = headings;
+        this.cellReaderStrategy = CellReaderStrategy.GET_TEXT;
+    }
+
+
+    public HtmlTable readingCellContentsWith(CellReaderStrategy cellReaderStrategy) {
+        this.cellReaderStrategy = cellReaderStrategy;
+        return this;
     }
 
     public static HtmlTable inTable(final WebElement table) {
@@ -112,13 +123,13 @@ public class HtmlTable {
         if (headings == null) {
             List<String> thHeadings = headingElements()
                                             .stream()
-                                            .map(WebElement::getText)
+                                            .map(this::cellToText)
                                             .collect(Collectors.toList());
 
             if (thHeadings.isEmpty()) {
                 headings = firstRowElements()
                             .stream()
-                            .map(WebElement::getText)
+                            .map(element -> element.getAttribute("textContent"))
                             .collect(Collectors.toList());
             } else {
                 headings = thHeadings;
@@ -160,7 +171,7 @@ public class HtmlTable {
     private boolean hasMatchingCellValuesIn(WebElement firstRow, List<String> headings) {
         List<WebElement> cells = firstRow.findElements(By.xpath("./td"));
         for(int cellIndex = 0; cellIndex < headings.size(); cellIndex++) {
-            if ((cells.size() < cellIndex) || (!cells.get(cellIndex).getText().equals(headings.get(cellIndex)))) {
+            if ((cells.size() < cellIndex) || !cellToText(cells.get(cellIndex)).equals(headings.get(cellIndex))) {
                 return false;
             }
         }
@@ -226,7 +237,17 @@ public class HtmlTable {
     }
 
     private String cellValueAt(final int column, final List<WebElement> cells) {
-        return cells.get(column).getText();
+        return cellToText(cells.get(column));
+    }
+
+    private String cellToText(WebElement cell) {
+        switch (cellReaderStrategy) {
+            case GET_TEXT: return cell.getText();
+            case TEXT_CONTENT_ATTRIBUTE: return cell.getAttribute("textContent");
+            case INNER_TEXT_ATTRIBUTE: return cell.getAttribute("innerText").trim().replaceAll("\\t"," ");
+            case OUTER_TEXT_ATTRIBUTE: return cell.getAttribute("outerText").trim().replaceAll("\\t"," ");
+        }
+        return cell.getText();
     }
 
     public static List<Map<Object, String>> rowsFrom(final WebElement table) {

@@ -1,17 +1,19 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
-import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
+import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
+import java.util.Optional;
 
-import static net.serenitybdd.core.webdriver.driverproviders.CapabilityValue.fromString;
 import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
-import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 /**
  * Created by john on 25/06/2016.
@@ -33,7 +35,20 @@ public class CapabilityEnhancer {
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
 
-        AddCustomDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
+        AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
+
+        if (StepEventBus.getEventBus() != null && StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
+                                                         .getBaseStepListener()
+                                                         .latestTestOutcome();
+            if (currentTestOutcome != null) { // Technically not required but needed for some test scenarios
+                currentTestOutcome.ifPresent(
+                        outcome -> AddCustomDriverCapabilities.from(environmentVariables)
+                                .withTestDetails(driver, outcome)
+                                .to(capabilities)
+                );
+            }
+        }
 
         return capabilities;
     }

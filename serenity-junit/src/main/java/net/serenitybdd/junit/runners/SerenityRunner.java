@@ -4,6 +4,7 @@ import com.google.inject.*;
 import net.serenitybdd.core.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.batches.*;
 import net.thucydides.core.guice.*;
@@ -29,7 +30,7 @@ import java.util.function.Consumer;
 
 import static net.serenitybdd.core.Serenity.*;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
-import static net.thucydides.core.model.TestResult.SUCCESS;
+import static net.thucydides.core.model.TestResult.FAILURE;
 import static org.apache.commons.lang3.StringUtils.*;
 
 /**
@@ -96,7 +97,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param module used to inject a custom Guice module
      * @throws InitializationError if some JUnit-related initialization problem occurred
      */
-    public SerenityRunner(Class<?> klass, Module module) throws InitializationError {
+    public SerenityRunner(Class<?> klass, com.google.inject.Module module) throws InitializationError {
         this(klass, Injectors.getInjector(module));
     }
 
@@ -429,7 +430,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             processTestMethodAnnotationsFor(method);
         }
 
-        initializeTestSession();
+        StepEventBus.getEventBus().initialiseSession();
+
         prepareBrowserForTest();
         additionalBrowserCleanup();
 
@@ -517,21 +519,36 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> outcome.setResult(theMethod.getManualResult())
+                outcome -> {
+                    outcome.setResult(theMethod.getManualResult());
+                    if (theMethod.getManualResult() == FAILURE) {
+                        outcome.setTestFailureMessage(manualReasonDeclaredIn(theMethod));
+                    }
+
+                }
         );
+
+        List<Integer> ages = Arrays.asList(20,40,50,15,80);
+
+        int totalAges = 0;
+        for(int age : ages) {
+            totalAges = totalAges + age;
+        }
+        double average = totalAges / ages.size();
+
         switch(theMethod.getManualResult()) {
             case SUCCESS:
                 StepEventBus.getEventBus().testFinished();
                 return (notifier -> notifier.fireTestFinished(Description.EMPTY));
             case FAILURE:
-                Throwable failure = new ManualTestMarkedAsFailure(theMethod.getManualResultReason());
+                Throwable failure = new ManualTestMarkedAsFailure(manualReasonDeclaredIn(theMethod));
                 StepEventBus.getEventBus().testFailed(failure);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),failure)));
             case ERROR:
             case COMPROMISED:
             case UNSUCCESSFUL:
-                Throwable error = new ManualTestMarkedAsError(theMethod.getManualResultReason());
+                Throwable error = new ManualTestMarkedAsError(manualReasonDeclaredIn(theMethod));
                 StepEventBus.getEventBus().testFailed(error);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),error)));
@@ -545,6 +562,10 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
                 StepEventBus.getEventBus().testPending();
                 return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
         }
+    }
+
+    private String manualReasonDeclaredIn(TestMethodConfiguration theMethod) {
+        return theMethod.getManualResultReason().isEmpty() ? "Manual test failure" : "Manual test failure: " + theMethod.getManualResultReason();
     }
 
     private void testStarted(FrameworkMethod method) {
@@ -609,7 +630,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     protected WebDriver driverFor(final FrameworkMethod method) {
         if (TestMethodAnnotations.forTest(method).isDriverSpecified()) {
             String testSpecificDriver = TestMethodAnnotations.forTest(method).specifiedDriver();
-            return getDriver(testSpecificDriver);
+            String driverOptions = TestMethodAnnotations.forTest(method).driverOptions();
+            return getDriver(testSpecificDriver, driverOptions);
         } else {
             return getDriver();
         }
@@ -641,9 +663,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
                 : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(requestedDriver);
     }
 
-    protected WebDriver getDriver(final String driver) {
-        return (isEmpty(driver)) ? ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver()
-                                 : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(driver);
+    protected WebDriver getDriver(final String driver, String driverOptions) {
+        return (isEmpty(driver)) ? ThucydidesWebDriverSupport.getWebdriverManager().withOptions(driverOptions).getWebdriver()
+                                 : ThucydidesWebDriverSupport.getWebdriverManager().withOptions(driverOptions).getWebdriver(driver);
     }
 
     /**

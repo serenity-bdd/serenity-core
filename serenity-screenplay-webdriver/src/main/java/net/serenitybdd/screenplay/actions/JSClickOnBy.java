@@ -9,7 +9,7 @@ import java.util.List;
 
 public class JSClickOnBy extends ByAction {
 
-    @Step("{0} clicks on #target")
+    @Step("{0} clicks on #locators")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).evaluateJavascript("arguments[0].click();", resolveFor(theUser));
     }

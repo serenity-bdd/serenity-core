@@ -2,30 +2,35 @@ package net.serenitybdd.core.pages;
 
 import io.appium.java_client.FindsByAccessibilityId;
 import io.appium.java_client.FindsByAndroidUIAutomator;
-import io.appium.java_client.FindsByIosUIAutomation;
+//import io.appium.java_client.FindsByIosUIAutomation;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.internal.Locatable;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.time.temporal.ChronoUnit;
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @ImplementedBy(WebElementFacadeImpl.class)
-public interface WebElementFacade extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator,
-        FindsByIosUIAutomation, ConfigurableTimeouts {
+public interface WebElementFacade
+        extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
 
     <T extends WebElementFacade> T then(String xpathOrCssSelector);
+    <T extends WebElementFacade> T thenFind(String xpathOrCssSelector);
+    <T extends WebElementFacade> T then(String xpathOrCssSelector, Object... arguments);
+    <T extends WebElementFacade> T thenFind(String xpathOrCssSelector, Object... arguments);
 
     <T extends WebElementFacade> T findBy(String xpathOrCssSelector);
+    <T extends WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments);
 
-    List<WebElementFacade> thenFindAll(
-            String xpathOrCssSelector);
+    List<WebElementFacade> thenFindAll(String xpathOrCssSelector);
+    List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments);
 
     <T extends WebElementFacade> T findBy(By selector);
 
@@ -39,7 +44,12 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     long getImplicitTimeoutInMilliseconds();
 
+    @Deprecated
     <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
+
+    <T extends WebElementFacade> T withTimeoutOf(int timeout, TemporalUnit unit);
+
+    <T extends WebElementFacade> T withTimeoutOf(Duration duration);
 
     /**
      * Convenience method to chain method calls more fluently.
@@ -56,9 +66,9 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
     /**
      * Type a value into a field, making sure that the field is empty first.
      *
-     * @param value
+     * @param keysToSend
      */
-    <T extends WebElementFacade> T type(String value);
+    <T extends WebElementFacade> T type(CharSequence... keysToSend);
 
     /**
      * Type a value into a field and then press Enter, making sure that the field is empty first.
@@ -76,6 +86,10 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
     <T extends WebElementFacade> T typeAndTab(String value);
 
     void setWindowFocus();
+
+    FluentDropdownSelect select();
+
+    FluentDropdownDeselect deselect();
 
     <T extends WebElementFacade> T deselectAll();
 
@@ -102,6 +116,10 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
     String getValue();
 
     String getText();
+
+    String getTextContent();
+
+    boolean isDisabled();
 
     <T extends WebElementFacade> T waitUntilEnabled();
 

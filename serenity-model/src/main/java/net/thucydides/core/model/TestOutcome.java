@@ -11,7 +11,6 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
@@ -40,16 +39,14 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -77,9 +74,6 @@ public class TestOutcome {
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
-    private ReportFormatter reportFormatter;
-
-
     /**
      * The name of the method implementing this test.
      */
@@ -101,7 +95,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private final List<TestStep> testSteps = new ArrayList<>();
+    private List<TestStep> testSteps = new ArrayList<>();
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -175,6 +169,21 @@ public class TestOutcome {
     private String driver;
 
     /**
+     * The last tested version for manual tests, defined by the @last-tested tag in Cucumber scenarios
+     */
+    private String lastTested;
+
+    /**
+     * True if a manual test has been marked as up-to-date. Only relevant if lastTested is defined.
+     */
+    private boolean isManualTestingUpToDate;
+
+    /**
+     * A relative or absolute link to test evidence related to the last manual test
+     */
+    private List<String> manualTestEvidence;
+
+    /**
      * Keeps track of step groups.
      * If not empty, the top of the stack contains the step corresponding to the current step group - new steps should
      * be added here.
@@ -234,6 +243,8 @@ public class TestOutcome {
      */
     private List<CastMember> actors;
 
+    private ExternalLink externalLink;
+
     /**
      * Fields used for serialization
      */
@@ -253,7 +264,7 @@ public class TestOutcome {
         groupStack = new Stack<>();
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
-        this.actors = new ArrayList<>();
+        this.actors = new CopyOnWriteArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -360,9 +371,9 @@ public class TestOutcome {
         return this;
     }
 
-    public TestOutcome asManualTest() {
+    public TestOutcome setToManual() {
         this.manual = true;
-        addTag(TestTag.withName("Manual").andType("External Tests"));
+        addTag(TestTag.withName("manual").andType("tag"));
         return this;
     }
 
@@ -457,8 +468,12 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -483,8 +498,12 @@ public class TestOutcome {
                           final Optional<String> qualifier,
                           final String driver,
                           final boolean manualTest,
+                          final boolean isManualTestingUpToDate,
+                          final String lastTested,
+                          final List<String> testEvidence,
                           final String projectKey,
-                          final EnvironmentVariables environmentVariables) {
+                          final EnvironmentVariables environmentVariables,
+                          final ExternalLink externalLink) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -512,8 +531,12 @@ public class TestOutcome {
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.driver = driver;
         this.manual = manualTest;
+        this.manualTestEvidence = testEvidence;
+        this.isManualTestingUpToDate = isManualTestingUpToDate;
+        this.lastTested = lastTested;
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
+        this.externalLink = this.externalLink;
     }
 
     private List<String> removeDuplicates(List<String> issues) {
@@ -563,8 +586,12 @@ public class TestOutcome {
                     Optional.ofNullable(qualifier),
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
-                    this.environmentVariables);
+                    this.environmentVariables,
+                    this.externalLink);
         } else {
             return this;
         }
@@ -593,8 +620,12 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -620,8 +651,12 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public TestOutcome withMethodName(String methodName) {
@@ -648,8 +683,12 @@ public class TestOutcome {
                     this.qualifier,
                     this.driver,
                     this.manual,
+                    this.isManualTestingUpToDate,
+                    this.lastTested,
+                    this.manualTestEvidence,
                     this.projectKey,
-                    this.environmentVariables);
+                    this.environmentVariables,
+                    this.externalLink);
         } else {
             return this;
         }
@@ -831,8 +870,12 @@ public class TestOutcome {
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
                 this.projectKey,
-                this.environmentVariables);
+                this.environmentVariables,
+                this.externalLink);
     }
 
     public void updateTopLevelStepResultsTo(TestResult result) {
@@ -857,19 +900,19 @@ public class TestOutcome {
     }
 
     public boolean hasTagWithName(String tagName) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getName().equalsIgnoreCase(tagName));
     }
 
     public boolean hasTagWithType(String tagType) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getType().equalsIgnoreCase(tagType));
     }
 
     public boolean hasTagWithTypes(List<String> tagTypes) {
-        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tagTypes.contains(tag.getType()));
     }
@@ -919,6 +962,34 @@ public class TestOutcome {
         actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
                 crewMember -> crewMember.withDescription(description)
         );
+    }
+
+    public void setManualTestEvidence(List<String> manualTestEvidence) {
+        this.manualTestEvidence = manualTestEvidence;
+    }
+
+    public List<String> getManualTestEvidence() {
+        return manualTestEvidence;
+    }
+
+    public List<ManualTestEvidence> getRenderedManualTestEvidence() {
+        return manualTestEvidence.stream()
+                .map(ManualTestEvidence::from)
+                .collect(Collectors.toList());
+    }
+
+    public void setLink(ExternalLink externalLink) {
+        if (isDataDriven()) {
+            getLatestTopLevelTestStep().ifPresent(
+                    latestStep -> latestStep.setExternalLink(externalLink)
+            );
+        } else {
+            this.externalLink = externalLink;
+        }
+    }
+
+    public boolean hasNoSteps() {
+        return (testSteps == null || testSteps.isEmpty());
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1137,7 +1208,25 @@ public class TestOutcome {
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
-        return new ArrayList<>(testSteps);
+        return annotatedStepsFrom(testSteps);
+    }
+
+    public Optional<TestStep> getLatestTopLevelTestStep() {
+        int latestStep = testSteps.size() - 1;
+        return (latestStep >= 0) ?
+                Optional.of(annotatedStepsFrom(testSteps).get(latestStep))
+                : Optional.empty();
+    }
+
+    private List<TestStep> annotatedStepsFrom(List<TestStep> testSteps) {
+        // For manual tests, all top level steps respect the manual test result if defined
+        if (isManual()) {
+            return testSteps.stream().map(
+                    step -> step.withResult(getResult()).asManual()
+            ).collect(Collectors.toList());
+        } else {
+            return testSteps;
+        }
     }
 
     public boolean hasScreenshots() {
@@ -1223,7 +1312,7 @@ public class TestOutcome {
                 leafTestSteps.add(step);
             }
         }
-        return new ArrayList<>(leafTestSteps);
+        return leafTestSteps;
     }
 
     /**
@@ -1239,6 +1328,10 @@ public class TestOutcome {
     public TestResult getResult() {
         if (result != null) {
             return result;
+        }
+
+        if (isManual() && (annotatedResult != null)) {
+            return annotatedResult;
         }
 
         if ((TestResult.IGNORED == annotatedResult) || (TestResult.SKIPPED == annotatedResult) || TestResult.PENDING == annotatedResult) {
@@ -1290,13 +1383,26 @@ public class TestOutcome {
     }
 
     private void addStep(TestStep step) {
-        testSteps.add(step);
-        renumberTestSteps();
+//        testSteps.add(step);
+//        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.add(step);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
     }
 
     private void addSteps(List<TestStep> steps) {
-        testSteps.addAll(steps);
-        renumberTestSteps();
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.addAll(steps);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+    }
+
+    private void renumberTestSteps(List<TestStep> testSteps) {
+        int count = 1;
+        for (TestStep step : testSteps) {
+            count = step.renumberFrom(count);
+        }
     }
 
     private void renumberTestSteps() {
@@ -1375,7 +1481,9 @@ public class TestOutcome {
      * @return The current step is the last step in the step list, or the last step in the children of the current step group.
      */
     public Optional<TestStep> currentStep() {
-        if (testSteps.isEmpty()) { return Optional.empty(); }
+        if (testSteps.isEmpty()) {
+            return Optional.empty();
+        }
 
         if (!inGroup()) {
             return Optional.ofNullable(lastStepIn(testSteps));
@@ -1398,7 +1506,9 @@ public class TestOutcome {
     }
 
     private TestStep lastStepIn(final List<TestStep> testSteps) {
-        if (testSteps.isEmpty()) { return null; }
+        if (testSteps.isEmpty()) {
+            return null;
+        }
         return testSteps.get(testSteps.size() - 1);
     }
 
@@ -1588,7 +1698,7 @@ public class TestOutcome {
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
-        return new ArrayList<>(allIssues);
+        return allIssues;
     }
 
     private List<String> versions() {
@@ -1609,7 +1719,7 @@ public class TestOutcome {
             allVersions.addAll(additionalVersions);
         }
         addVersionsDefinedInTagsTo(allVersions);
-        return new ArrayList<>(allVersions);
+        return allVersions;
     }
 
     private void addVersionsDefinedInTagsTo(List<String> allVersions) {
@@ -1736,6 +1846,14 @@ public class TestOutcome {
             tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
         return tags;
+    }
+
+    public Set<TestTag> getAllTags() {
+        Set<TestTag> allTags = new HashSet<>(getTags());
+        getFeatureTag().ifPresent(
+                featureTag -> allTags.add(featureTag)
+        );
+        return allTags;
     }
 
     public void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
@@ -1926,9 +2044,6 @@ public class TestOutcome {
             }
         }
         return matchingRowCount;
-//        List<DataTableRow> matchingRows
-//                = filter(having(on(DataTableRow.class).getResult(), is(expectedResult)), getDataTable().getRows());
-//        return matchingRows.size();
     }
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {
@@ -1964,11 +2079,17 @@ public class TestOutcome {
     }
 
     public boolean hasTag(TestTag tag) {
-        return getTags().contains(tag);
+        return getAllTags().contains(tag);
     }
 
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
-        return TestTags.of(getTags()).containsTagMatching(specificTag);
+        return TestTags.of(getAllTags()).containsTagMatching(specificTag);
+    }
+
+    public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
+        return getAllTags().stream().anyMatch(
+                tag -> tag.isAsOrMoreSpecificThan(generalTag)
+        );// TestTags.of(getTags()).containsTagMatching(specificTag);
     }
 
     public void setStartTime(ZonedDateTime startTime) {
@@ -1996,6 +2117,22 @@ public class TestOutcome {
 
     public boolean isManual() {
         return manual;
+    }
+
+    public String getLastTested() {
+        return lastTested;
+    }
+
+    public void setLastTested(String lastTested) {
+        this.lastTested = lastTested;
+    }
+
+    public boolean isManualTestingUpToDate() {
+        return isManualTestingUpToDate;
+    }
+
+    public void setManualTestingUpToDate(Boolean upToDate) {
+        this.isManualTestingUpToDate = upToDate;
     }
 
     public Set<? extends Flag> getFlags() {
@@ -2150,8 +2287,10 @@ public class TestOutcome {
     }
 
     public ZonedDateTime getEndTime() {
-        if (startTime == null) { return null; }
-        return startTime.plusNanos( duration * 1000);
+        if (startTime == null) {
+            return null;
+        }
+        return startTime.plusNanos(duration * 1000);
     }
 
     /**
@@ -2458,12 +2597,18 @@ public class TestOutcome {
     }
 
     private void removeSteps(List<TestStep> stepsToReplace) {
-        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
-        for (TestStep testStep : currentTestSteps) {
-            if (stepsToReplace.contains(testStep)) {
-                testSteps.remove(testStep);
-            }
-        }
+//        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
+//        for (TestStep testStep : currentTestSteps) {
+//            if (stepsToReplace.contains(testStep)) {
+//                testSteps.remove(testStep);
+//            }
+//        }
+//
+        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
+        updatedSteps.removeAll(stepsToReplace);
+        renumberTestSteps(updatedSteps);
+        testSteps = Collections.unmodifiableList(updatedSteps);
+
     }
 
     public FailureDetails getFailureDetails() {
@@ -2479,19 +2624,20 @@ public class TestOutcome {
     }
 
     public List<CastMember> getActors() {
-        return new ArrayList<>(actors);
+        return actors;
     }
 
     public boolean hasEvidence() {
         return testSteps.stream().anyMatch(
-                step -> step.getReportData().isEvidence()
+                step -> step.getReportData().stream().anyMatch(ReportData::isEvidence)
         );
     }
 
     public List<ReportData> getEvidence() {
-        return getFlattenedTestSteps().stream().filter(
-                step -> step.getReportData() != null && step.getReportData().isEvidence())
-                .map(TestStep::getReportData)
+        return getFlattenedTestSteps().stream()
+                .filter(step -> !step.getReportEvidence().isEmpty())
+                .map(TestStep::getReportEvidence)
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
@@ -2507,42 +2653,53 @@ public class TestOutcome {
         if (!TestTags.of(dataTable.getTags()).containsTagMatchingOneOf(filterTags)) {
             return this;
         }
+        if (testSteps.size() != dataTable.getSize()) {
+            return this;
+        }
 
         DataTable filteredDataTable = dataTable.containingOnlyRowsWithTagsFrom(filterTags);
-        List<TestStep> filteredSteps = dataTable.filterStepsWithTagsFrom(testSteps, tags);
+        List<TestStep> filteredSteps = testSteps;// dataTable.filterStepsWithTagsFrom(testSteps, tags);
 
         Collection<TestTag> originalDataTableTags = dataTable.getTags();
         Collection<TestTag> filteredDataTableTags = filteredDataTable.getTags();
 
-        Collection<TestTag> redundantTags = new HashSet(originalDataTableTags);
+        Collection<TestTag> redundantTags = new HashSet<>(originalDataTableTags);
         redundantTags.removeAll(filteredDataTableTags);
 
         Set<TestTag> outcomeTagsWithoutRedundentTags = new HashSet<>(tags);
         outcomeTagsWithoutRedundentTags.removeAll(redundantTags);
 
         return new TestOutcome(startTime,
-                                duration,
-                                title,
-                                description,
-                                name,
-                                id,
-                                testCase,
-                                filteredSteps,
-                                issues,
-                                additionalIssues,
-                                actors,
-                                outcomeTagsWithoutRedundentTags,
-                                userStory,
-                                testFailureCause,
-                                testFailureClassname,
-                                testFailureMessage,
-                                testFailureSummary,
-                                annotatedResult,
-                                filteredDataTable,
-                                qualifier,
-                                driver,
-                                manual,
-                                projectKey,
-                                environmentVariables);
+                duration,
+                title,
+                description,
+                name,
+                id,
+                testCase,
+                filteredSteps,
+                issues,
+                additionalIssues,
+                actors,
+                outcomeTagsWithoutRedundentTags,
+                userStory,
+                testFailureCause,
+                testFailureClassname,
+                testFailureMessage,
+                testFailureSummary,
+                annotatedResult,
+                filteredDataTable,
+                qualifier,
+                driver,
+                manual,
+                isManualTestingUpToDate,
+                lastTested,
+                manualTestEvidence,
+                projectKey,
+                environmentVariables,
+                externalLink);
+    }
+
+    public ExternalLink getExternalLink() {
+        return externalLink;
     }
 }

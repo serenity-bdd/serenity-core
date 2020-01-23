@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureService;
@@ -15,6 +16,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.thucydides.browsermob.fixtureservices.BrowserMobSystemProperties.BROWSER_MOB_PROXY;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
@@ -59,7 +61,7 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     private void initializeProxy(int port) throws Exception {
-        boolean refuseUntrustedCertificates = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES, false);
+        boolean refuseUntrustedCertificates = ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.booleanFrom(environmentVariables, false);
         threadLocalproxyServer.set(new BrowserMobProxyServer());
 
         getBrowserMobProxy().setTrustAllServers(!refuseUntrustedCertificates);
@@ -96,7 +98,10 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     private boolean useBrowserMobProxyManager() {
-        String browserMobFilter = environmentVariables.getProperty(BrowserMobSystemProperties.BROWSER_MOB_FILTER);
+        String browserMobFilter = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                        .getOptionalProperty(BrowserMobSystemProperties.BROWSER_MOB_FILTER.toString())
+                                        .orElse(null);
+//        String browserMobFilter = environmentVariables.getProperty(BrowserMobSystemProperties.BROWSER_MOB_FILTER);
         return (StringUtils.isEmpty(browserMobFilter) || shouldActivateBrowserMobWithDriver(browserMobFilter, environmentVariables));
     }
 
@@ -111,7 +116,8 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     protected int getAvailablePort() {
-        int defaultPort = environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
+//        int defaultPort = portDefinedIn(environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
+        int defaultPort = portDefinedIn(environmentVariables, BROWSER_MOB_PROXY);
         if (ports.isAvailable(defaultPort)) {
             return defaultPort;
         } else {
@@ -120,6 +126,13 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     private int defaultPortDefinedIn(EnvironmentVariables environmentVariables) {
-        return environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
+        return portDefinedIn(environmentVariables, BROWSER_MOB_PROXY);
+//        return environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
     }
+
+    private Integer portDefinedIn(EnvironmentVariables environmentVariables, BrowserMobSystemProperties propertyName) {
+        Optional<String> definedPort = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(propertyName.toString());
+        return definedPort.map(Integer::parseInt).orElse(DEFAULT_PORT);
+    }
+
 }

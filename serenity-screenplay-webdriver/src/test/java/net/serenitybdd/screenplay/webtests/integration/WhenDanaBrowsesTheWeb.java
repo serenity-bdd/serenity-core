@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.questions.WebDriverQuestion;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.serenitybdd.screenplay.webtests.model.Client;
@@ -47,7 +48,6 @@ public class WhenDanaBrowsesTheWeb {
 
         Actor dana = new Actor("Dana");
         dana.can(BrowseTheWeb.with(firstBrowser));
-
         givenThat(dana).has(openedTheApplication);
 
         when(dana).attemptsTo(viewHerProfile);
@@ -55,6 +55,15 @@ public class WhenDanaBrowsesTheWeb {
 
         then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
         and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
+
+        and(dana).should(
+                seeThat(
+                        WebDriverQuestion.about("the country").answeredBy(
+                                browser -> browser.findBy("#country").getValue()
+                        ),
+                        equalTo("FR")
+                )
+        );
     }
 
     public static class TheProfileName implements Question<Boolean> {
@@ -115,7 +124,7 @@ public class WhenDanaBrowsesTheWeb {
 
         when(dana).attemptsTo(viewHerProfile);
 
-        and(dana).attemptsTo(WaitUntil.the(nameField,  isVisible()));
+        and(dana).attemptsTo(WaitUntil.the(nameField, isVisible()));
 
         assertThat(the(nameField).answeredBy(dana), isVisible());
     }
@@ -219,7 +228,7 @@ public class WhenDanaBrowsesTheWeb {
 
         givenThat(dana).has(openedTheApplication);
         when(dana).attemptsTo(viewHerProfile,
-                              Enter.theValue("HSBC").into(BankAccountEntry.ACCOUNT_NAME));
+                Enter.theValue("HSBC").into(BankAccountEntry.ACCOUNT_NAME));
         then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
         and(dana).attemptsTo(Enter.theValue("Dana").into(ProfilePage.NAME));
         then(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));

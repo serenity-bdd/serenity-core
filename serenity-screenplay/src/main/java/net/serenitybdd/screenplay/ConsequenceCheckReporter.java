@@ -12,14 +12,16 @@ class ConsequenceCheckReporter {
             this.consequence = consequence;
         }
 
-        public void startQuestion() {
+        public void startQuestion(Actor actor) {
             if (shouldReportConsequence()) {
-                eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
+                eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence, actor));
             }
         }
 
         private boolean shouldReportConsequence() {
-            return !((consequence instanceof CanBeSilent) && (((CanBeSilent) consequence).isSilent()));
+            if ((consequence instanceof CanBeSilent) && (((CanBeSilent) consequence).isSilent())) return false;
+            if (SilentTasks.isNestedInSilentTask()) return false;
+            return true;
         }
 
 

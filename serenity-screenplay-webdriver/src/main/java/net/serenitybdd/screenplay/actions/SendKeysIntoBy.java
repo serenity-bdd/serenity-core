@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.By;
@@ -11,19 +10,23 @@ import java.util.List;
 public class SendKeysIntoBy extends EnterValue {
 
     private final List<By> locators;
+    private final String locatorNames;
 
     protected WebElement resolveFor(Actor theUser) {
         return WebElementLocator.forLocators(locators).andActor(theUser);
     }
 
-    public SendKeysIntoBy(String theText, By... locators) {
+    public SendKeysIntoBy(List<By> locators, CharSequence... theText) {
         super(theText);
-        this.locators = NewList.copyOf(locators);
+        this.locators = locators;
+        this.locatorNames = (locators.size() == 1) ? locators.get(0).toString() : locators.toString();
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters #theTextAsAString into #locatorNames")
     public <T extends Actor> void performAs(T theUser) {
         resolveFor(theUser).sendKeys(theText);
-        resolveFor(theUser).sendKeys(getFollowedByKeys());
+        if (getFollowedByKeys().length > 0) {
+            resolveFor(theUser).sendKeys(getFollowedByKeys());
+        } 
     }
 }

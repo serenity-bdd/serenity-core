@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
 import io.restassured.specification.ResponseSpecification
 import net.serenity.test.utils.rules.TestCase
+import net.serenitybdd.rest.SerenityRest
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
@@ -37,6 +38,9 @@ class WhenExecutingPutRequest extends Specification {
             reset()
         }
     },)
+    def setup() {
+        SerenityRest.clear()
+    }
 
     @Rule
     def TestCase<BaseStepListener> test = new TestCase({

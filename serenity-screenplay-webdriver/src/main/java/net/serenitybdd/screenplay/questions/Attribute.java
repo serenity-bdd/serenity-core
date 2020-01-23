@@ -4,6 +4,7 @@ import io.vavr.collection.List;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 
 public class Attribute extends TargetedUIState<String> {
 
@@ -16,6 +17,14 @@ public class Attribute extends TargetedUIState<String> {
 
     public static UIStateReaderWithNameBuilder<Attribute> of(Target target) {
         return new UIStateReaderWithNameBuilder<>(target, Attribute.class);
+    }
+
+    public static UIStateReaderBuilder<Attribute> of(By byLocator) {
+        return new UIStateReaderBuilder<>(Target.the(byLocator.toString()).located(byLocator), Attribute.class);
+    }
+
+    public static UIStateReaderBuilder<Attribute> of(String locator) {
+        return new UIStateReaderBuilder<>(Target.the(locator).locatedBy(locator), Attribute.class);
     }
 
     public String resolve() {

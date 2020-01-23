@@ -17,7 +17,7 @@ public class ThucydidesRunner extends SerenityRunner {
         super(klass);
     }
 
-    public ThucydidesRunner(Class<?> klass, Module module) throws InitializationError {
+    public ThucydidesRunner(Class<?> klass, com.google.inject.Module module) throws InitializationError {
         super(klass, module);
     }
 

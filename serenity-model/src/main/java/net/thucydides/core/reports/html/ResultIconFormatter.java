@@ -10,14 +10,14 @@ public class ResultIconFormatter {
 
     private final Map<TestResult, String> resultIcons = new HashMap();
     {
-        resultIcons.put(TestResult.COMPROMISED, "<i class='fa fa-chain-broken ${iconStyle} ${qualifier}' title='${result}'></i>");
-        resultIcons.put(TestResult.ERROR,  "<i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i>");
-        resultIcons.put(TestResult.FAILURE, "<i class='fa fa-times-circle ${iconStyle} ${qualifier}' title='${result}'></i>");
-        resultIcons.put(TestResult.SUCCESS, "<i class='fa fa-check-circle-o ${iconStyle} ${qualifier}' title='${result}'></i>");
-        resultIcons.put(TestResult.PENDING, "<i class='far fa-stop-circle ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.COMPROMISED, "<a href='${report}#beforetable'><i class='fa fa-chain-broken ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.ERROR,  "<a href='${report}#beforetable'><i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.FAILURE, "<a href='${report}#beforetable'><i class='fa fa-times-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.SUCCESS, "<a href='${report}#beforetable'><i class='fa fa-check-circle-o ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.PENDING, "<a href='${report}#beforetable'><i class='far fa-stop-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
 
-        resultIcons.put(TestResult.IGNORED, "<i class='fa fa-ban ${iconStyle} ${qualifier}' title='${result}'></i>");
-        resultIcons.put(TestResult.SKIPPED, "<i class='fa fa-fast-forward ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.IGNORED, "<a href='${report}#beforetable'><i class='fa fa-ban ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.SKIPPED, "<a href='${report}#beforetable'><i class='fa fa-fast-forward ${iconStyle} ${qualifier}' title='${result}'></i></a>");
         resultIcons.put(TestResult.UNDEFINED, "");
     }
 
@@ -46,13 +46,17 @@ public class ResultIconFormatter {
     }
 
     public String forResult(String result) {
-        return forResult(TestResult.valueOf(result));
+        return forResult(TestResult.valueOf(result), "#");
     }
 
     public String forResult(TestResult result) {
+        return forResult(result,"#");
+    }
+    public String forResult(TestResult result, String htmlReport) {
 
         TestResult testResult = Optional.ofNullable(result).orElse(TestResult.PENDING);
         return resultIcons.get(testResult)
+                .replace("${report}", htmlReport)
                 .replace("${iconStyle}", resultIconStyles.get(testResult))
                 .replace("${qualifier}", qualifier)
                 .replace("${result}", testResult.toString());

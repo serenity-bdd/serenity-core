@@ -1,5 +1,6 @@
 package net.thucydides.core;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public enum ThucydidesSystemProperty {
     /**
      * If using a provided driver, what type is it.
      * The implementation class needs to be defined in the webdriver.provided.{type} system property.
-    */
+     */
     WEBDRIVER_PROVIDED_TYPE,
 
     /**
@@ -48,6 +49,13 @@ public enum ThucydidesSystemProperty {
      * register with a Selenium hub, e.g. -Dphantomjs.webdriver=5555 -Dwebdriver.remote.url=http://localhost:4444
      */
     PHANTOMJS_WEBDRIVER_PORT,
+
+    /**
+     * Sets a number of common chrome options useful for automated testing.
+     * In particular, this includes: --enable-automation --test-type
+     * Set to false by default
+     */
+    USE_CHROME_AUTOMATION_OPTIONS,
 
     /**
      * The driver to be used for remote drivers
@@ -100,6 +108,23 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_PROJECT_NAME,
 
+    /**
+     * What name should appear on the email summary report
+     */
+    SERENITY_SUMMARY_REPORT_TITLE,
+
+    /**
+     * A subtitle to appear in the Serenity HTML reports.
+     * This can be useful to describe a qualified or filtered report.
+     */
+    REPORT_SUBTITLE,
+
+    REPORT_TIMEOUT_THREADDUMPS,
+
+    /**
+     * Link to the generated Serenity report to embed in the emailable summary report.
+     */
+    SERENITY_REPORT_URL,
 
     @Deprecated
     THUCYDIDES_HOME,
@@ -128,6 +153,8 @@ public enum ThucydidesSystemProperty {
      * Encoding for reports output
      */
     SERENITY_REPORT_ENCODING,
+
+    REMOTE_PLATFORM,
 
     @Deprecated
     THUCYDIDES_OUTPUT_DIRECTORY("thucydides.outputDirectory"),
@@ -193,6 +220,8 @@ public enum ThucydidesSystemProperty {
      * If set to true, WebElementFacade events and other step actions will be logged to the console.
      */
     SERENITY_VERBOSE_STEPS,
+
+    VERBOSE_REPORTING,
 
     /**
      * Words that will be recognised as pronouns by Serenity Screenplay in Cucumber and used to refer to the
@@ -308,6 +337,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * How long should the driver wait for elements not immediately visible, in seconds.
+     * @deprecated Use WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT instead.
      */
     SERENITY_TIMEOUT,
 
@@ -551,6 +581,25 @@ public enum ThucydidesSystemProperty {
      * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+    SERENITY_PROXY_FTP,
+    SERENITY_PROXY_NOPROXY,
+    SERENITY_PROXY_AUTOCONFIG,
+    SERENITY_PROXY_AUTODETECT,
+    SERENITY_PROXY_SOCKS_PROXY,
+    SERENITY_PROXY_SOCKS_USERNAME,
+    SERENITY_PROXY_SOCKS_PASSWORD,
+    SERENITY_PROXY_SOCKS_VERSION,
+
+
+    /**
+     * Possible values are:none, eager or normal
+     */
+    SERENITY_DRIVER_PAGE_LOAD_STRATEGY,
+    /**
+     *  Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
+     */
+    SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR,
+
 
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.
@@ -588,6 +637,11 @@ public enum ThucydidesSystemProperty {
     CHROME_EXTENSION,
 
     /**
+     * Set this to true to activate the "w3c" experimental option for chrome. This needs to be set to true for Saucelabs and false for Browserstack
+     */
+    CHROME_DEFAULT_OPTIONS_W3C,
+
+    /**
      * Preferences to be passed to the Firefox driver, separated by semi-colons (commas often appear in the preference
      * values.
      */
@@ -597,6 +651,11 @@ public enum ThucydidesSystemProperty {
      * Used to specify either chrome options or firefox preferences, depending on which driver is being used.
      */
     DRIVER_OPTIONS,
+
+    /**
+     * Try to create a Chrome driver using a driver service pool
+     */
+    WEBDRIVER_USE_DRIVER_SERVICE_POOL,
 
     /**
      * Full path to the Firefox profile to be used with Firefox.
@@ -619,7 +678,7 @@ public enum ThucydidesSystemProperty {
 
     SAUCELABS_TARGET_PLATFORM,
 
-    SAUCELABS_DRIVER_VERSION,
+    SAUCELABS_BROWSER_VERSION,
 
     SAUCELABS_TEST_NAME,
     /**
@@ -653,6 +712,9 @@ public enum ThucydidesSystemProperty {
      * BrowserStack Hub URL if running the tests on BrowserStack Cloud
      */
     BROWSERSTACK_URL,
+
+    BROWSERSTACK_USER,
+    BROWSERSTACK_KEY,
 
     BROWSERSTACK_OS,
 
@@ -763,6 +825,12 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_TEST_ROOT,
 
+    /**
+     * Property used to define the current target version for manual tests defined in Cucumber scenarios
+     * with the @manual and @@last-version-tested annotations.
+     */
+    CURRENT_TARGET_VERSION,
+
     @Deprecated
     THUCYDIDES_REQUIREMENTS_DIR,
 
@@ -785,6 +853,12 @@ public enum ThucydidesSystemProperty {
      * would put serenity.features.directory = myFeatures for src/test/resources/myFeatures
      */
     SERENITY_FEATURES_DIRECTORY,
+
+    /**
+     * If set to true, the full description of the parent story or feature is displayed at the top of an individual test report.
+     * Set to false by default/
+     */
+    SERENITY_SHOW_STORY_DETAILS_IN_TESTS,
 
     /**
      * Same as serenity.features.directory but for src/test/stories
@@ -906,9 +980,16 @@ public enum ThucydidesSystemProperty {
     /**
      * If provided, only classes and/or methods with tags in this list will be executed. The parameter expects
      * a tag or comma-separated list of tags in the shortened form.
+     * This only works for JUnit tests. For Cucumber, use the -Dcucumber.options parameter
      * For example, -Dtags="iteration:I1" or -Dtags="color:red,flavor:strawberry"
      */
     TAGS,
+
+
+    /**
+     * Display only test results and requirements containing any of the specified tags
+     */
+    REPORT_ON_TAGS,
 
     /**
      * If provided, each test in a test run will have these tags added.
@@ -1025,6 +1106,12 @@ public enum ThucydidesSystemProperty {
      * If set, this will define the list of tag types to be excluded from the dashboard screens
      */
     DASHBOARD_EXCLUDED_TAG_LIST,
+
+    /**
+     * If set, this will define the list of tag types which will be not formatted with title case in HTML report.
+     * This option allows to preserve underscores or camel case in tag name.
+     */
+    REPORT_RAW_TAG_LIST,
 
     /**
      * Format the JSON test outcomes nicely.
@@ -1175,12 +1262,6 @@ public enum ThucydidesSystemProperty {
     SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY("serenity.webdriver.collection_loading_strategy"),
 
     /**
-     * Serenity will try to download drivers not present on the system.
-     * If you don't want this behaviour, set this property to false
-     */
-    AUTOMATIC_DRIVER_DOWNLOAD,
-
-    /**
      * If the Gecko Driver is on the system path, it will be used (with Marionnette) by default.
      * If you want to use the old-style Firefox driver, but have gecko on the system path,
      * then set this property to false.
@@ -1223,6 +1304,8 @@ public enum ThucydidesSystemProperty {
      */
     CONTEXT,
 
+    APPIUM_HUB,
+
     /**
      * By default, new @Steps libraries are made as new instances, unless declared `shared`, in which case they are
      * cached by type. Use this property to make Serenity use the older strategy, which was to default to 'shared' and
@@ -1242,7 +1325,7 @@ public enum ThucydidesSystemProperty {
     HEADLESS_MODE,
 
     /**
-     * Where to find images used in the reports (defaults to src/test/resourcesFC/assets)
+     * Where to find images used in the reports (defaults to src/test/resources/assets)
      */
     REPORT_ASSETS_DIRECTORY,
 
@@ -1258,6 +1341,7 @@ public enum ThucydidesSystemProperty {
      */
     APPIUM_DEVICE_NAME("appium.deviceName"),
 
+    APPIUM_PLATFORMNAME("appium.platformName"),
     /**
      * (Experimental) Specifies a list of devices to be used for parallel testing.
      * Will only be used if manage.appium.servers is set to true
@@ -1268,6 +1352,23 @@ public enum ThucydidesSystemProperty {
      * Should Serenity Manage your appium servers for you
      */
     MANAGE_APPIUM_SERVERS,
+
+    /**
+     * List of capabilities that should be provided in addition to supported by w3c or Appium.
+     * Properties, that match w3c pattern or listed in Appium's interfaces, will be included as is and
+     * 'appium:' prefix will be added to each name provided in this property
+     */
+    APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.capabilities"),
+
+
+    /**
+     * Set to true to enable processing of desired capabilities, created from the provided 'appium:' properties.
+     * If processing is enabled, only capabilities supported by w3c, Appium or mentioned in
+     * {@link ThucydidesSystemProperty#APPIUM_ADDITIONAL_CAPABILITIES} will be included into desired capabilities.
+     * If processing is disabled, all of the properties that have 'appium:' prefix will be included into desired capabilities.
+     * Disabled by default
+     */
+    APPIUM_PROCESS_DESIRED_CAPABILITIES("appium.process.desired.capabilities"),
 
     /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
@@ -1299,6 +1400,11 @@ public enum ThucydidesSystemProperty {
     REPORT_SCOREBOARD_SIZE,
 
     /**
+     * Show the full test results in the emailable reports
+     */
+    SHOW_FULL_TEST_RESULTS,
+
+    /**
      * What tag types should be listed in the report summary
      */
     REPORT_TAGTYPES,
@@ -1306,6 +1412,8 @@ public enum ThucydidesSystemProperty {
     MAX_FREQUENT_FAILURES,
 
     CUCUMBER_PRETTY_FORMAT_TABLES,
+
+    IO_BLOCKING_COEFFICIENT,
 
     /**
      * How many days before a manually configured test result expires and goes back to pending.
@@ -1316,6 +1424,44 @@ public enum ThucydidesSystemProperty {
      * Set this property to true if you don't want Serenity to try to instrument tasks for you.
      */
     MANUAL_TASK_INSTRUMENTATION,
+
+    /**
+     * The root package or packages used to look for Serenity extension classes, as a comma-separated list.
+     */
+    SERENITY_EXTENSION_PACKAGES,
+
+    /**
+     * A semi-colon list of (partial) error messages.
+     * If WebDriver creation fails for a reason mentioned in this list, Serenity will retry driver creation
+     * every thirty seconds for at most WEBDRIVER_CREATION_RETRY_MAX_TIME times (the default is 30)
+     * The default recognises BrowserStack timeouts ("All parallel tests are currently in use")
+     */
+    WEBDRIVER_CREATION_RETRY_CAUSES,
+
+    WEBDRIVER_CREATION_RETRY_MAX_TIME,
+
+    /**
+     * If set to true, the name of the actor will appear in "should" statements for Screenplay tests.
+     */
+    SERENITY_INCLUDE_ACTOR_NAME_IN_CONSEQUENCES,
+
+    /**
+     * Wait for an element to be visible and fail if the element is not visible.
+     * By default, this behaviour is deactivated as of version 2.0.49, and the behaviour of getText()
+     * replicates the standard Selenium behavior of returning an empty string if an element is not visible.
+     */
+    LEGACY_WAIT_FOR_TEXT,
+
+    ENVIRONMENT,
+
+    /**
+     * Enable WebDriver calls in @After methods, even after a step has failed (true by default).
+     */
+    SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS,
+
+    IE_OPTIONS_ENABLE_NATIVE_EVENTS("ieOptions.EnableNativeEvents"),
+    IE_OPTIONS_IGNORE_ZOOM_LEVEL("ieOptions.IgnoreZoomLevel"),
+    IE_OPTIONS_REQUIRE_WINDOW_FOCUS("ieOptions.RequireWindowFocus"),
 
     /**
      * The title to appear in the tag type table in the email reports
@@ -1344,9 +1490,21 @@ public enum ThucydidesSystemProperty {
         return propertyName;
     }
 
+    public String getLegacyPropertyName() {
+        if (propertyName.startsWith("serenity.")) {
+            return "thucydides." + propertyName.substring(9);
+        } else {
+            return propertyName;
+        }
+    }
+
     @Override
     public String toString() {
         return propertyName;
+    }
+
+    public Optional<String> optionalFrom(EnvironmentVariables environmentVariables) {
+        return Optional.ofNullable(from(environmentVariables, null));
     }
 
     public String from(EnvironmentVariables environmentVariables) {
@@ -1380,8 +1538,8 @@ public enum ThucydidesSystemProperty {
     }
 
     public String from(EnvironmentVariables environmentVariables, String defaultValue) {
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return newPropertyValue.get();
@@ -1400,8 +1558,8 @@ public enum ThucydidesSystemProperty {
     }
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Integer.parseInt(newPropertyValue.get().trim());
@@ -1418,8 +1576,8 @@ public enum ThucydidesSystemProperty {
     public Boolean booleanFrom(EnvironmentVariables environmentVariables, Boolean defaultValue) {
         if (environmentVariables == null) { return defaultValue; }
 
-        Optional<String> newPropertyValue
-                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
+//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Boolean.valueOf(newPropertyValue.get().trim());
@@ -1427,6 +1585,10 @@ public enum ThucydidesSystemProperty {
             Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
             return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get().trim()) : defaultValue;
         }
+    }
+
+    private Optional<String> optionalPropertyValueDefinedIn(EnvironmentVariables environmentVariables) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(withSerenityPrefix(getPropertyName()));
     }
 
     public boolean isDefinedIn(EnvironmentVariables environmentVariables) {

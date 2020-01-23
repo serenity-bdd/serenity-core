@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -25,13 +26,13 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "when a photographer takes a screenshot the photographer returns the future path of the screenshot"() {
         given:
-            def photographer = new Photographer(darkroom);
+            def photographer = new Photographer(darkroom)
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
                                                 .with(driver)
                                                 .andSaveToDirectory(screenshotDirectory);
         then:
-            darkroom.waitUntilClose();
+            darkroom.waitUntilClose()
             photo.getPathToScreenshot().startsWith(screenshotDirectory)
     }
 
@@ -116,7 +117,9 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def setup() {
         screenshotDirectory =  Files.createTempDirectory("screenshots");//Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
-        driver = new ChromeDriver()
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        driver = new ChromeDriver(chromeOptions)
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
 

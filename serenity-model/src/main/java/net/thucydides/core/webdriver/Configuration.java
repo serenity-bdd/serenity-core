@@ -10,7 +10,7 @@ public interface Configuration<T extends Configuration> {
 
     int getStepDelay();
 
-    int getElementTimeout();
+    int getElementTimeoutInSeconds();
 
     /**
      * Use shouldUseAUniqueBrowser() instead
@@ -54,8 +54,6 @@ public interface Configuration<T extends Configuration> {
     Optional<TakeScreenshots> getScreenshotLevel();
 
     void setIfUndefined(String property, String value);
-
-    T copy();
 
     T withEnvironmentVariables(EnvironmentVariables environmentVariables);
 

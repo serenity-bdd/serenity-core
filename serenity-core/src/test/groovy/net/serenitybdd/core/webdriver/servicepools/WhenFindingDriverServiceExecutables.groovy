@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools
 
+import net.serenitybdd.core.CurrentOS
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
@@ -7,7 +8,6 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class WhenFindingDriverServiceExecutables extends Specification {
 
@@ -24,26 +24,13 @@ class WhenFindingDriverServiceExecutables extends Specification {
         gitExe.exists()
     }
 
-    def "should look for a file using the configured environment property if defined"() {
-        given:
-        EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-        String configuredPath = Paths.get(ClassLoader.getResource("/binaries/phantomjs").toURI())
-        environmentVariables.setProperty("my.exe.path", configuredPath)
-        when:
-        File gitExe = DriverServiceExecutable.called("git")
-                .withSystemProperty("my.exe.path")
-                .usingEnvironmentVariables(environmentVariables)
-                .downloadableFrom("the internet")
-                .asAFile()
-        then:
-        gitExe.getAbsolutePath() == configuredPath
-    }
+    def MY_PATH = File.separator + "my" + File.separator + "path";
 
     def "should be able to configure OS-specific drivers"() {
         given:
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
         String os = CurrentOS.type
-        environmentVariables.setProperty("drivers.${os}.my.exe.path","/my/path")
+        environmentVariables.setProperty("drivers.${os}.my.exe.path",MY_PATH)
 
         when:
             Path driverPath = DriverServiceExecutable.called("myexe")
@@ -53,7 +40,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
                     .downloadableFrom("the internet")
                     .asAPath()
         then:
-            driverPath.toString() == "/my/path"
+            driverPath.toString() == MY_PATH
 
     }
 }

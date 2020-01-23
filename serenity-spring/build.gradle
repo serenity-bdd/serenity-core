@@ -16,6 +16,8 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-test:${springBootVersion}"
     testCompile 'commons-dbcp:commons-dbcp:1.4'
 
+    testCompile 'javax.annotation:javax.annotation-api:1.3.2'
+    
     testCompile ("org.hibernate:hibernate-entitymanager:5.2.10.Final") {
         exclude group: 'commons-logging'
         exclude group: 'org.slf4j'

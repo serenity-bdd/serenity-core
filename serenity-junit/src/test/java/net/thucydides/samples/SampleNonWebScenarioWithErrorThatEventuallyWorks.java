@@ -14,7 +14,7 @@ public class SampleNonWebScenarioWithErrorThatEventuallyWorks {
     @Test
     public void happy_day_scenario() {
         steps.stepThatSucceeds();
-        steps.stepThatIsIgnored();
+        //steps.stepThatIsIgnored();
         steps.anotherStepThatSucceeds();
         steps.aStepThatFailsOnOddTries();
     }

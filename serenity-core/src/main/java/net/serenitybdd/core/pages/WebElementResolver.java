@@ -5,9 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
+import java.util.List;
+
 public abstract class WebElementResolver {
 
     public abstract WebElement resolveForDriver(WebDriver driver);
+
+    public abstract List<WebElement> resolveAllForDriver(WebDriver driver);
 
     public static WebElementResolver by(By bySelector) {
         return new WebElementResolverByLocator(bySelector);

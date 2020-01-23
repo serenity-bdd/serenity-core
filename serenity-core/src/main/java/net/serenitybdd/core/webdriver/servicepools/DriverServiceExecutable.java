@@ -1,6 +1,8 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import net.serenitybdd.core.CurrentOS;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.os.ExecutableFinder;
 import org.slf4j.Logger;
@@ -27,23 +29,22 @@ public class DriverServiceExecutable {
     private static final String ANSI_RESET = "\u001B[0m";
     private final static String DRIVER_ISSUE_BANNER =
             "  ___      _                ___           __ _                    _   _            ___                \n" +
-            " |   \\ _ _(_)_ _____ _ _   / __|___ _ _  / _(_)__ _ _  _ _ _ __ _| |_(_)___ _ _   |_ _|_______  _ ___ \n" +
-            " | |) | '_| \\ V / -_) '_| | (__/ _ \\ ' \\|  _| / _` | || | '_/ _` |  _| / _ \\ ' \\   | |(_-<_-< || / -_)\n" +
-            " |___/|_| |_|\\_/\\___|_|    \\___\\___/_||_|_| |_\\__, |\\_,_|_| \\__,_|\\__|_\\___/_||_| |___/__/__/\\_,_\\___|\n" +
-            "  ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ |___/__ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ \n" +
-            " |___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|\n" +
-            "                                                                                                      \n" +
-            "                                                                                                      ";
+                    " |   \\ _ _(_)_ _____ _ _   / __|___ _ _  / _(_)__ _ _  _ _ _ __ _| |_(_)___ _ _   |_ _|_______  _ ___ \n" +
+                    " | |) | '_| \\ V / -_) '_| | (__/ _ \\ ' \\|  _| / _` | || | '_/ _` |  _| / _ \\ ' \\   | |(_-<_-< || / -_)\n" +
+                    " |___/|_| |_|\\_/\\___|_|    \\___\\___/_||_|_| |_\\__, |\\_,_|_| \\__,_|\\__|_\\___/_||_| |___/__/__/\\_,_\\___|\n" +
+                    "  ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ |___/__ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ \n" +
+                    " |___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|\n" +
+                    "                                                                                                      \n" +
+                    "                                                                                                      ";
 
     private final static String MISSING_BINARY =
             "The path to the %s driver executable must be set by the %s system property, or be available on the system path;"
-            + " for more information, see %s. "
-            + "The latest version can be downloaded from %s";
+                    + " for more information, see %s. "
+                    + "The latest version can be downloaded from %s";
 
     private final static String NON_EXECUTABLE_BINARY =
             "The specified driver value of '%s' appears to be incorrect. Make sure it is the correct WebDriver driver for this operating system.";
     private static final Logger LOGGER = LoggerFactory.getLogger(DriverServiceExecutable.class);
-
 
 
     public DriverServiceExecutable(String exeName,
@@ -88,7 +89,8 @@ public class DriverServiceExecutable {
         }
 
         public DriverServiceExecutableBuilder reportMissingBinary() {
-            this.reportMissingBinary = true;
+            //this.reportMissingBinary = true;
+            // Todo: Report Missing Binaries does not work in multi-module Gradle projects, and is disabled until this is resolved.
             return this;
         }
 
@@ -124,13 +126,22 @@ public class DriverServiceExecutable {
         String pathOnFilesystem = new ExecutableFinder().find(exeName);
         Optional<String> defaultPath = Optional.ofNullable(pathOnFilesystem);
 
-        Optional<String> osSpecificPath = Optional.ofNullable(nullIfEmpty(environmentVariables.getProperty(osSpecific(exeProperty))));
+        Optional<String> osSpecificPath
+                = Optional.ofNullable(nullIfEmpty(
+                configuredPath(osSpecific(exeProperty))
+        ));
 
-        Optional<String> configuredBinaryPath = Optional.ofNullable(nullIfEmpty((environmentVariables.getProperty(exeProperty))));
+        Optional<String> configuredBinaryPath = Optional.ofNullable(nullIfEmpty((configuredPath(exeProperty))));
 
         String exePath = configuredBinaryPath.orElse(osSpecificPath.orElse(defaultPath.orElse(null)));
 
         return (exePath == null) ? null : Paths.get(exePath);
+    }
+
+    private String configuredPath(String propertyName) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(propertyName)
+                .orElse(null);
     }
 
     private String nullIfEmpty(String value) {
@@ -146,18 +157,17 @@ public class DriverServiceExecutable {
 
         if (binaryPath == null) {
             logErrorBanner(System.lineSeparator() + DRIVER_ISSUE_BANNER
-            + System.lineSeparator()
-            + String.format(MISSING_BINARY, exeName, exeProperty, documentationSource, downloadUrl));
+                    + System.lineSeparator()
+                    + String.format(MISSING_BINARY, exeName, exeProperty, documentationSource, downloadUrl));
         } else if (!isExecutable(binaryPath.toFile())) {
             logErrorBanner(System.lineSeparator() + DRIVER_ISSUE_BANNER
-            + System.lineSeparator()
-            + String.format(NON_EXECUTABLE_BINARY, binaryPath.toFile()));
+                    + System.lineSeparator()
+                    + String.format(NON_EXECUTABLE_BINARY, binaryPath.toFile()));
         }
 
         checkState(binaryPath != null, "Path to the driver file was not defined");
         checkExecutable(binaryPath.toFile());
     }
-
 
 
     protected static boolean isExecutable(File exe) {

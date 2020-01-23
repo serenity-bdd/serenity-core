@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
  */
 public class WhenUsingStepLibrariesToModelPersonas {
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "chrome", options = "--headless")
     WebDriver driver;
 
     public static class AccountApplicationPage extends PageObject {

@@ -8,6 +8,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 import sample.deserialization.DeserializationClass
 import sample.deserialization.DeserializationWithInjection
@@ -26,7 +27,9 @@ class WhenDeserializingJSONObjects extends Specification {
 	JavascriptExecutorFacade jsFacade;
 	
 	def setupSpec() {
-		driver = new ChromeDriver();
+		ChromeOptions chromeOptions = new ChromeOptions();
+		chromeOptions.addArguments("--headless");
+		driver = new ChromeDriver(chromeOptions)
 		jsFacade = new JavascriptExecutorFacade(driver)
 	}
 

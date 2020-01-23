@@ -6,6 +6,7 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
 /**
  * An event bus for Step-related notifications.
@@ -35,8 +38,6 @@ public class StepEventBus {
 
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
-
-
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
@@ -91,11 +92,12 @@ public class StepEventBus {
     private Optional<Boolean> isDryRun = Optional.empty();
 
     private final EnvironmentVariables environmentVariables;
+    private final CleanupMethodLocator cleanupMethodLocator;
 
     @Inject
     public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-
+        this.cleanupMethodLocator = new CleanupMethodLocator();
 //        Darkroom.isOpenForBusiness();
     }
 
@@ -239,6 +241,10 @@ public class StepEventBus {
         storyUnderTest = story;
     }
 
+    public void updateExampleLineNumber(int lineNumber) {
+        getBaseStepListener().updateExampleLineNumber(lineNumber);
+    }
+
     public void testSuiteStarted(final Story story) {
         LOGGER.debug("Test suite started for story {}", story);
         updateStoryUnderTest(story);
@@ -250,7 +256,6 @@ public class StepEventBus {
 
     public void clear() {
         stepStack.clear();
-        StepFactory.getFactory().reset();
         clearStepFailures();
         currentTestIsNotSuspended();
         noAssumptionsViolated();
@@ -258,6 +263,7 @@ public class StepEventBus {
 
         if (clearSessionForEachTest()) {
             Serenity.clearCurrentSession();
+            StepFactory.getFactory().reset();
         }
 
         resultTally = null;
@@ -294,13 +300,34 @@ public class StepEventBus {
         return resultTally;
     }
 
-    public void testFinished() {
+    public void testFinished(boolean inDataDrivenTest) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+        outcome = checkForEmptyScenarioIn(outcome);
+
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.testFinished(outcome);
+            stepListener.testFinished(outcome, inDataDrivenTest);
         }
+
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         clear();
+    }
+
+    public void testFinished() {
+        testFinished(false);
+    }
+
+    private TestOutcome checkForEmptyScenarioIn(TestOutcome outcome) {
+        if (isAGherkinScenario(outcome)) {
+            if (outcome.hasNoSteps()) {
+                return outcome.withResult(TestResult.PENDING);
+            }
+        }
+        return outcome;
+    }
+
+    private boolean isAGherkinScenario(TestOutcome outcome) {
+        if ((outcome == null) || (outcome.getTestSource() == null)) return false;
+        return outcome.getTestSource().equalsIgnoreCase("cucumber") || outcome.getTestSource().equalsIgnoreCase("jbehave");
     }
 
     public void testFinished(TestOutcome result) {
@@ -458,8 +485,23 @@ public class StepEventBus {
         registeredListeners.clear();
     }
 
+    private boolean driverReenabled = false;
+
+    public void reenableWebDriver() {
+        driverReenabled = true;
+    }
+
+    private boolean inFixureMethod() {
+        boolean activateWebDriverInFixtureMethods = SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS.booleanFrom(environmentVariables, true);
+
+        return (activateWebDriverInFixtureMethods && cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod());
+    }
+
     public boolean webdriverCallsAreSuspended() {
 
+        if (driverReenabled || inFixureMethod()) {
+            return false;
+        }
         if (softAssertsActive()) {
             return !webdriverSuspensions.isEmpty();
         }
@@ -706,7 +748,9 @@ public class StepEventBus {
     }
 
     public void updateOverallResults() {
-        baseStepListener.updateOverallResults();
+        if (baseStepListener != null) {
+            baseStepListener.updateOverallResults();
+        }
     }
 
     public void reset() {
@@ -755,6 +799,12 @@ public class StepEventBus {
             baseStepListener.latestTestOutcome().ifPresent(
                     testOutcome -> testOutcome.castActor(name)
             );
+        }
+    }
+
+    public void initialiseSession() {
+        if (clearSessionForEachTest()) {
+            Serenity.clearCurrentSession();
         }
     }
 }

@@ -321,7 +321,7 @@ public class WhenManagingAPageObject {
         when(field.getTagName()).thenReturn("input");
         BasicPageObject page = new BasicPageObject(driver);
 
-        page.enter("some value").intoField(By.id("field-id"));
+        page.enter("some value").into(By.id("field-id"));
 
         verify(field).clear();
         verify(field).sendKeys("some value");

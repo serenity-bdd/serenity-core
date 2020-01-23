@@ -2,11 +2,10 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
+import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.JSONRequirementsTree;
 import net.thucydides.core.requirements.RequirementsService;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
@@ -45,6 +43,8 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     private final TestOutcomes testOutcomes;
     private final String relativeLink;
     private final String reportName;
+    private boolean asParentRequirement;
+    private  RequirementsFilter requirementsFilter;
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
                                              EnvironmentVariables environmentVariables,
@@ -61,6 +61,8 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
         this.reportName = REPORT_NAME;
+        this.asParentRequirement = true;
+        this.requirementsFilter = new RequirementsFilter(environmentVariables);
     }
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
@@ -79,6 +81,18 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
         this.reportName = reportName;
+        this.asParentRequirement = true;
+        this.requirementsFilter = new RequirementsFilter(environmentVariables);
+    }
+
+    public RequirementsOverviewReportingTask asParentRequirement() {
+        this.asParentRequirement = true;
+        return this;
+    }
+
+    public RequirementsOverviewReportingTask asLeafRequirement() {
+        this.asParentRequirement = false;
+        return this;
     }
 
     @Override
@@ -89,6 +103,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
 
         String requirementsOverview = requirementsOutcomes.getOverview();
+        OutcomeTagFilter outcomeFilter = new OutcomeTagFilter(environmentVariables);
 
         List<Requirement> requirements;
         if (requirementsOutcomes.getParentRequirement().isPresent()) {
@@ -98,9 +113,13 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
+                                                                                      requirementsOutcomes.filteredByDisplayTag());
+        if (asParentRequirement) {
+            requirementsTree = requirementsTree.asAParentRequirement();
+        }
 
-        context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
+        context.put("requirements", requirementsOutcomes.filteredByDisplayTag());
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
         context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));
@@ -108,27 +127,36 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("isLeafRequirement", requirementsTree.isALeafNode());
 
         context.put("requirementTypes", requirementsService.getRequirementTypes());
-        context.put("testOutcomes", requirementsOutcomes.getTestOutcomes());
-        context.put("resultCounts", ResultCounts.forOutcomesIn(requirementsOutcomes.getTestOutcomes()));
+
+        TestOutcomes filteredTestOutcomes = requirementsOutcomes.getTestOutcomes().filteredByEnvironmentTags();
+
+        context.put("testOutcomes", filteredTestOutcomes);
+        context.put("resultCounts", ResultCounts.forOutcomesIn(filteredTestOutcomes));
         context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));
         context.put("allTestOutcomes", testOutcomes);
-        context.put("timestamp", TestOutcomeTimestamp.from(testOutcomes));
+        context.put("timestamp", TestOutcomeTimestamp.from(filteredTestOutcomes));
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
-        context.put("evidence", EvidenceData.from(requirementsOutcomes.getTestOutcomes()));
+        context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(filteredTestOutcomes.getOutcomes())));
 
         requirementsOutcomes.getParentRequirement().map(
                 parentRequirement -> context.put("currentTag", parentRequirement.asTag())
         );
 
-        context.put("scenarios", ScenarioOutcomes.from(requirementsOutcomes));
-        context.put("testCases", executedScenariosIn(requirementsOutcomes));
-        context.put("automatedTestCases", automated(executedScenariosIn(requirementsOutcomes)));
-        context.put("manualTestCases", manual(executedScenariosIn(requirementsOutcomes)));
+        List<ScenarioOutcome> scenarios
+                = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(requirementsOutcomes));
 
-        addBreadcrumbs(requirementsOutcomes, context, requirementsOutcomes.getTestOutcomes().getTags());
+
+        List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
+
+        context.put("scenarios", scenarios);
+        context.put("testCases", executedScenarios);
+        context.put("automatedTestCases", automated(executedScenarios));
+        context.put("manualTestCases", manual(executedScenarios));
+
+        addBreadcrumbs(requirementsOutcomes, context, filteredTestOutcomes.getTags());
 
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());
@@ -143,17 +171,16 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         return executedScenariosIn.stream().filter(scenarioOutcome -> scenarioOutcome.isManual()).collect(Collectors.toList());
     }
 
-    private List<ScenarioOutcome> executedScenariosIn(RequirementsOutcomes requirementsOutcomes) {
-        return ScenarioOutcomes.from(requirementsOutcomes.getTestOutcomes())
-                                                  .stream()
-                                                  .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
-                                                  .collect(Collectors.toList());
+    private List<ScenarioOutcome> executedScenariosIn(List<ScenarioOutcome> scenarios) {
+        return scenarios.stream()
+                .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
+                .collect(Collectors.toList());
     }
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {
         if (this.requirementsOutcomes.getParentRequirement().isPresent()) {
             context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
-                                                  .fromTagsIn(allTags));
+                    .fromTagsIn(allTags));
         } else {
             context.put("breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
         }

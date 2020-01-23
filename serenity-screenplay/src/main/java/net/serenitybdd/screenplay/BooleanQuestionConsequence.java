@@ -30,7 +30,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     public void evaluateFor(Actor actor) {
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
-        Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
+        Broadcaster.getEventBus().post(new ActorAsksQuestion(question, actor.getName()));
         try {
             optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
             assertThat(reason(), question.answeredBy(actor), is(true));

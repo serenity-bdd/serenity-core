@@ -59,6 +59,9 @@ public class TagTypeReportingTask extends BaseReportingTask implements Reporting
         String report = reportName.forTagType(tagType);
         generateReportPage(context, TAGTYPE_TEMPLATE_PATH, report);
         generateCSVReportFor(testOutcomesForTagType, csvReport);
+
+        System.out.println("TAG REPORT: " + report);
+        System.out.println("TAG CSV REPORT: " + csvReport);
     }
 
 

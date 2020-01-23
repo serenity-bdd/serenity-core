@@ -19,6 +19,7 @@ class WhenPassingChromeSwitchesToWebdriver extends Specification {
         "--allow-file-access, --assert-test" | ["--allow-file-access", "--assert-test"]
         "--allow-file-access --assert-test" | ["--allow-file-access", "--assert-test"]
         "--allow-file-access; --assert-test" | ["--allow-file-access", "--assert-test"]
+        "test-type;--test-type;--enable-automation;--assert-test" | ["--test-type", "--enable-automation","--assert-test"]
         "--user-agent=Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 MobileSafari/535.19" | ["--user-agent=Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 MobileSafari/535.19"]
         "--allow-file-access, --user-agent=Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 MobileSafari/535.19" | ["--allow-file-access","--user-agent=Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 MobileSafari/535.19"]
     }

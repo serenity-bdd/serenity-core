@@ -1,9 +1,11 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import java.io.File;
+import java.util.Optional;
 
 /**
  * Builds a file path by substituting environment variables.
@@ -22,16 +24,20 @@ public class FilePathParser {
             return path;
         }
         String localizedPath = operatingSystemLocalized(path);
-        localizedPath = injectVariable(localizedPath, "HOME", environmentVariables.getProperty("user.home"));
-        localizedPath = injectVariable(localizedPath, "user.home", environmentVariables.getProperty("user.home"));
-        localizedPath = injectVariable(localizedPath, "USERDIR", environmentVariables.getProperty("user.dir"));
-        localizedPath = injectVariable(localizedPath, "USERPROFILE", environmentVariables.getProperty("user.home"));
-        localizedPath = injectVariable(localizedPath, "user.dir", environmentVariables.getProperty("user.dir"));
-        localizedPath = injectVariable(localizedPath, "APPDATA", environmentVariables.getValue("APPDATA"));
-        localizedPath = injectVariable(localizedPath, "DATADIR",
-                                        ThucydidesSystemProperty.THUCYDIDES_DATA_DIR.from(environmentVariables));
+        localizedPath = injectVariable(localizedPath, "HOME", valueDefinedIn(environmentVariables,"user.home"));
+        localizedPath = injectVariable(localizedPath, "user.home", valueDefinedIn(environmentVariables,"user.home"));
+        localizedPath = injectVariable(localizedPath, "USERDIR", valueDefinedIn(environmentVariables,"user.dir"));
+        localizedPath = injectVariable(localizedPath, "USERPROFILE", valueDefinedIn(environmentVariables,"user.home"));
+        localizedPath = injectVariable(localizedPath, "user.dir", valueDefinedIn(environmentVariables,"user.dir"));
+        localizedPath = injectVariable(localizedPath, "APPDATA", valueDefinedIn(environmentVariables,"APPDATA"));
+        localizedPath = injectVariable(localizedPath, "DATADIR",valueDefinedIn(environmentVariables,"thucydides.data.dir"));
 
         return localizedPath;
+    }
+
+    private String valueDefinedIn(EnvironmentVariables environmentVariables, String propertyName) {
+        return (environmentVariables.getValue(propertyName) != null)
+                ? environmentVariables.getValue(propertyName) : environmentVariables.getProperty(propertyName);
     }
 
     private String operatingSystemLocalized(String testDataSource) {

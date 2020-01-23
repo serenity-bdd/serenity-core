@@ -2,12 +2,14 @@ package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.EMPTY_LIST;
 
@@ -24,28 +26,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final int exampleCount;
     private final ZonedDateTime startTime;
     private final Long duration;
-    private final boolean manual;
+    private final Boolean manual;
     private final String parentName;
     private final String parentReport;
-
-    public SingleScenarioOutcome(String name, String simplifiedName, String type, TestResult result,
-                                 String scenarioReport, ZonedDateTime startTime, Long duration) {
-        this.name = name;
-        this.simplifiedName = simplifiedName;
-        this.type = type;
-        this.id = Digest.ofTextValue(name);
-        this.result = result;
-        this.scenarioReport = scenarioReport;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.description = "";
-        this.steps = EMPTY_LIST;
-        this.examples = EMPTY_LIST;
-        this.exampleCount = 0;
-        this.manual = false;
-        this.parentReport = "";
-        this.parentName = "";
-    }
+    private final Set<TestTag> tags;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -60,7 +44,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  List<String> examples,
                                  int exampleCount,
                                  String parentName,
-                                 String parentReport) {
+                                 String parentReport,
+                                 Set<TestTag> tags) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -76,6 +61,11 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
+        this.tags = tags;
+    }
+
+    public String toString() {
+        return "SingleScenarioOutcome[" + name + "]";
     }
 
     public String getName() {
@@ -130,6 +120,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     public String getNumberOfExamples() { return (exampleCount == 1) ? "1 example" : exampleCount + " examples"; }
 
 
+    @Override
     public String getScenarioReport() {
         return scenarioReport;
     }
@@ -150,17 +141,20 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return duration;
     }
 
-    public boolean isManual() {
+    public Boolean isManual() {
         return manual;
     }
 
+    public Boolean isManualScenario() {
+        return manual;
+    }
 
     public String getFormattedStartTime() {
         return (startTime != null) ? startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) : " ";
     }
 
     public String getFormattedDuration() {
-        return (duration != 0L) ? DurationFormatUtils.formatDuration(duration,"mm:ss") : " ";
+        return (duration != 0L) ? CompoundDuration.of(duration) : " ";
     }
 
     public String getParentName() {
@@ -169,5 +163,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
 
     public String getParentReport() {
         return parentReport;
+    }
+
+    @Override
+    public Set<TestTag> getTags() {
+        return tags;
     }
 }

@@ -5,8 +5,6 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
-import org.omg.CORBA.Context;
-
 
 import java.util.HashMap;
 import java.util.Map;

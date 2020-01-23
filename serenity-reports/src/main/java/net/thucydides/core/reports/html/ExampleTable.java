@@ -6,6 +6,7 @@ import org.apache.commons.lang3.*;
 import java.util.*;
 import java.util.regex.*;
 
+import static java.util.Arrays.asList;
 import static org.apache.commons.collections.IteratorUtils.*;
 
 public class ExampleTable {
@@ -65,7 +66,28 @@ public class ExampleTable {
     }
 
     public String inHtmlFormat() {
-        return "<table class='embedded'>" + getHtmlHeader() + getHtmlBody() + "</table>";
+        if (rows.size() == 0) {
+            return singleRowTable();
+        } else if (headers.size() == 1) {
+            return tabularList();
+        }  else {
+            return tableWithHeaderAndRows();
+        }
+    }
+
+    private String singleRowTable() {
+        return "<table class='embedded'>" + getHtmlBody(asList(headers)) + "</table>";
+    }
+
+    private String tabularList() {
+        List<List<String>> allRows = new ArrayList<>();
+        allRows.add(headers);
+        allRows.addAll(rows);
+        return "<table class='embedded'>" + getHtmlBody(allRows) + "</table>";
+    }
+
+    private String tableWithHeaderAndRows() {
+        return "<table class='embedded'>" + getHtmlHeader() + getHtmlBody(rows) + "</table>";
     }
 
     public String getHtmlHeader() {
@@ -78,7 +100,7 @@ public class ExampleTable {
         return htmlHeader.toString();
     }
 
-    public String getHtmlBody() {
+    public String getHtmlBody(List<List<String>> rows) {
         StringBuffer htmlBody = new StringBuffer();
         htmlBody.append("<tbody>");
         for(List<String> row : rows) {

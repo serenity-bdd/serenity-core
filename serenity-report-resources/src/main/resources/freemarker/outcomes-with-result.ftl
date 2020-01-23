@@ -61,7 +61,10 @@
     <div id="topbanner">
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
-            <span class="projectname">${reportOptions.projectName}</span>
+            <span class="projectname">
+                <span class="projecttitle">${reportOptions.projectName}</span>
+                <span class="projectsubtitle">${reportOptions.projectSubTitle}</span>
+            </span>
         </div>
     </div>
 </div>
@@ -350,15 +353,27 @@
                                                             </tr>
                                                             <tr>
                                                                 <#if resultCounts.hasManualTests() >
-                                                                    <td colspan="7"><a
-                                                                            href="${relativeLink}${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                            <td colspan="7"><a
+                                                                                    href="${relativeLink}${brokenReport}"><i
+                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        <#else>
+                                                                            <td colspan="7"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 <#else>
-                                                                    <td colspan="3"><a
-                                                                            href="${relativeLink}${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                            <td colspan="3"><a
+                                                                                    href="${relativeLink}${brokenReport}"><i
+                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        <#else>
+                                                                            <td colspan="3"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 </#if>
                                                             </tr>
                                                             <tr>
@@ -498,7 +513,7 @@
                                                                     <a href="${tagResult.report}">
                                                                         <span class="badge"
                                                                               style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
-                                                                                class="fa fa-tag"></i> ${inflection.of(tagResult.tag.name).asATitle()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
+                                                                                class="fa fa-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
                                                                     </a>
                                                                 </#list>
                                                                 </div>

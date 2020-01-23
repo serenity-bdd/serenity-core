@@ -104,14 +104,6 @@ public class RenderMarkdown {
         return inTable && !isDataTableLine(line);
     }
 
-    private String headingFrom(List<String> tableLines) {
-        return System.lineSeparator() + System.lineSeparator() + tableLines.get(0);
-    }
-
-    private List<String> bodyFrom(List<String> tableLines) {
-        return tableLines.subList(1, tableLines.size());
-    }
-
     static int numberOfColumnsIn(List<String> tableLines) {
         return Splitter.on("|").omitEmptyStrings().splitToList(tableLines.get(0)).size();
     }
@@ -123,8 +115,10 @@ public class RenderMarkdown {
         String line = lines.get(row);
         while (isDataTableLine(line) && row >= 0) {
             tableLines.add(trimSquareBracketsFrom(line));
-            line = lines.get(--row);
+            row--;
+            line = (row >= 0) ? lines.get(row) : "";
         }
+
 
         Collections.reverse(tableLines);
         return tableLines;

@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.configuration
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.util.EnvironmentVariables
 
@@ -7,6 +8,9 @@ class StringReportProperty(val property: String, val defaultValue: String) : Rep
     constructor(property: ThucydidesSystemProperty, defaultValue: String) : this(property.toString(), defaultValue)
 
     override fun configuredIn(environmentVariables: EnvironmentVariables) : String {
-        return environmentVariables.getProperty(property, defaultValue)
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(property)
+                .orElse(defaultValue)
+ //       return environmentVariables.getProperty(property, defaultValue)
     }
 }

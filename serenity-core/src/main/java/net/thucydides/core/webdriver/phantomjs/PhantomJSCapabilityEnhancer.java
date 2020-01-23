@@ -9,6 +9,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.ArrayList;
 
+import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static org.openqa.selenium.phantomjs.PhantomJSDriverService.PHANTOMJS_CLI_ARGS;
+
 public class PhantomJSCapabilityEnhancer {
 
     private final EnvironmentVariables environmentVariables;
@@ -18,23 +21,23 @@ public class PhantomJSCapabilityEnhancer {
     }
 
     public void enhanceCapabilities(DesiredCapabilities capabilities) {
-        if (environmentVariables.getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH) != null) {
+        if (PHANTOMJS_BINARY_PATH.from(environmentVariables) != null) {
             capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
-                    environmentVariables.getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH));
+                                       PHANTOMJS_BINARY_PATH.from(environmentVariables));
         }
 
         ArrayList<String> cliArgs = new ArrayList<>();
         setSecurityOptions(cliArgs);
         setLoggingOptions(cliArgs);
 
-        if (StringUtils.isNotEmpty(ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables))) {
+        if (StringUtils.isNotEmpty(SERENITY_PROXY_HTTP.from(environmentVariables))) {
             setProxyOptions(cliArgs);
         }
-        if (StringUtils.isNotEmpty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables))) {
+        if (StringUtils.isNotEmpty(WEBDRIVER_REMOTE_URL.from(environmentVariables))) {
             setRemoteOptions(cliArgs);
         }
-        if (StringUtils.isNotEmpty(ThucydidesSystemProperty.PHANTOMJS_SSL_PROTOCOL.from(environmentVariables))) {
-            String sslSupport = ThucydidesSystemProperty.PHANTOMJS_SSL_PROTOCOL.from(environmentVariables);
+        if (StringUtils.isNotEmpty(PHANTOMJS_SSL_PROTOCOL.from(environmentVariables))) {
+            String sslSupport = PHANTOMJS_SSL_PROTOCOL.from(environmentVariables);
             if (sslSupport.equals("sslv2") ||
                     sslSupport.equals("sslv3") ||
                     sslSupport.equals("tlsv1") ||
@@ -51,18 +54,18 @@ public class PhantomJSCapabilityEnhancer {
 
         AddCustomCapabilities.startingWith("phantomjs.").from(environmentVariables).withAndWithoutPrefixes().to(capabilities);
 
-        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgs.toArray(new String[]{}));
+        capabilities.setCapability(PHANTOMJS_CLI_ARGS, cliArgs.toArray(new String[]{}));
     }
 
     private void setRemoteOptions(ArrayList<String> cliArgs) {
-        cliArgs.add("--webdriver-selenium-grid-hub=" + ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables));
+        cliArgs.add("--webdriver-selenium-grid-hub=" + WEBDRIVER_REMOTE_URL.from(environmentVariables));
         if (StringUtils.isNotEmpty(ThucydidesSystemProperty.PHANTOMJS_WEBDRIVER_PORT.from(environmentVariables))) {
             cliArgs.add("--webdriver=" + ThucydidesSystemProperty.PHANTOMJS_WEBDRIVER_PORT.from(environmentVariables));
         }
     }
 
     private void setProxyOptions(ArrayList<String> cliArgs) {
-        String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
+        String proxyUrl = SERENITY_PROXY_HTTP.from(environmentVariables);
         String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
         String proxyType = ThucydidesSystemProperty.SERENITY_PROXY_TYPE.from(environmentVariables);
         String proxyUser = ThucydidesSystemProperty.SERENITY_PROXY_USER.from(environmentVariables);

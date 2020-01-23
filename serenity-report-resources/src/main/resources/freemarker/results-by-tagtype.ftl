@@ -30,7 +30,10 @@
     <div id="topbanner">
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
-            <span class="projectname">${reportOptions.projectName}</span>
+            <span class="projectname">
+                <span class="projecttitle">${reportOptions.projectName}</span>
+                <span class="projectsubtitle">${reportOptions.projectSubTitle}</span>
+            </span>
         </div>
     </div>
 </div>

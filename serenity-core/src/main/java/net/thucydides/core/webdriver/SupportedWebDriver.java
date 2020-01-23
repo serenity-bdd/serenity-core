@@ -89,7 +89,7 @@ public enum SupportedWebDriver {
 
     private final List<String> synonyms;
 
-    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass,
+    SupportedWebDriver(Class<? extends WebDriver> webdriverClass,
                                boolean supportsJavascriptInjection,
                                List<String> synonyms) {
         this.webdriverClass = webdriverClass;
@@ -97,11 +97,11 @@ public enum SupportedWebDriver {
         this.synonyms = NewList.copyOf(synonyms);
     }
 
-    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
+    SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
         this(webdriverClass, supportsJavascriptInjection, new ArrayList<String>());
     }
 
-    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass) {
+    SupportedWebDriver(Class<? extends WebDriver> webdriverClass) {
         this(webdriverClass, true, new ArrayList<String>());
     }
 
@@ -149,12 +149,12 @@ public enum SupportedWebDriver {
         return closestDriver;
     }
 
-    public static SupportedWebDriver getDriverTypeFor(final String value) throws UnsupportedDriverException {
+    public static SupportedWebDriver getDriverTypeFor(final String value) throws DriverConfigurationError {
         try {
             return SupportedWebDriver.valueOrSynonymOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
             SupportedWebDriver closestMatchingDriver = getClosestDriverValueTo(value);
-            throw new UnsupportedDriverException("Unsupported browser type: " + value
+            throw new DriverConfigurationError("Unsupported browser type: " + value
                     + ". Did you mean " + closestMatchingDriver.toString().toLowerCase()
                     + "?", e);
         }

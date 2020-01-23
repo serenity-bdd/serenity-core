@@ -68,7 +68,7 @@ public abstract class DriverServicePool<T extends DriverService> {
         }
     }
 
-    public WebDriver newDriver(Capabilities capabilities) throws IOException {
+    public WebDriver newDriver(Capabilities capabilities) {
         try {
             logger.debug("Creating new driver instance with capabilities: {}", capabilities);
             return new RemoteWebDriver(getDriverService().getUrl(), capabilities);

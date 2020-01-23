@@ -4,7 +4,6 @@ import net.thucydides.core.model.ReportData;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +33,11 @@ public class EvidenceData {
         return detailsLink;
     }
 
-    public static List<EvidenceData> from(TestOutcomes testOutcomes) {
+    public static List<EvidenceData> from(List<? extends TestOutcome> testOutcomes) {
 
         List<EvidenceData> evidence = new ArrayList<>();
 
-
-        for(TestOutcome testOutcome : testOutcomes.getOutcomes()) {
+        for(TestOutcome testOutcome : testOutcomes) {
             for(ReportData reportData : testOutcome.getEvidence()) {
                 evidence.add(new EvidenceData(testOutcome.getQualified().withContext().getTitle(),
                                               reportData.getTitle(),

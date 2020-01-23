@@ -86,7 +86,7 @@
 
     <script>
         $(document).ready(function () {
-            $(".scenario-docs p").html(function () {
+            $(".scenario-docs > div > p").html(function () {
                 var text = $(this).text().trim().split(" ");
                 var first = text.shift();
                 return (text.length > 0 ? "<strong>" + first + "</strong> " : first) + text.join(" ");
@@ -120,7 +120,10 @@
     <div id="topbanner">
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
-            <span class="projectname">${reportOptions.projectName}</span>
+            <span class="projectname">
+                <span class="projecttitle">${reportOptions.projectName}</span>
+                <span class="projectsubtitle">${reportOptions.projectSubTitle}</span>
+            </span>
         </div>
     </div>
 </div>
@@ -144,7 +147,7 @@
 
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
-                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
                 > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
             </#list>
 
@@ -281,14 +284,38 @@
                                                     <#list scenarios as scenario>
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
-                                                            <td style="width:99%;" class="toc-title"><a href="#${scenario.id}">${scenario.simplifiedName}</a>
+                                                            <td style="width:95%;" class="toc-title">
+                                                                <a href="#${scenario.id}" title="View scenario details" >${formatter.humanReadableFormOf(formatter.renderHeaders(scenario.simplifiedName))}</a>
                                                                  <#if scenario.hasExamples() >
                                                                      (${scenario.numberOfExamples})</#if>
 
                                                             </td>
-                                                            <td style="width:1%;">${outcome_icon}
-                                                               <#if (scenario.manual)> <i class="fa fa-user manual"
-                                                                                          title="Manual test"></i></#if>
+                                                            <td style="width:5%;">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <#if outcome_icon?has_content>
+                                                                            <a style="margin-left:0.5em;padding-right: 1.5em;"
+                                                                               href="${scenario.scenarioReport}"
+                                                                               title="View test results">
+                                                                            </#if>
+                                                                            ${outcome_icon}
+                                                                            <#if outcome_icon?has_content></a></#if>
+
+                                                                        <#if (scenario.isManual())> <i class="fa fa-user manual"
+                                                                                           title="Manual test"></i></#if>
+                                                                        </td>
+                                                                        <#if outcome_icon?has_content>
+                                                                        <td>
+                                                                            <a style="margin-left:0.5em;padding-right: 1.5em;"
+                                                                               href="${scenario.scenarioReport}"
+                                                                               title="View test results">
+                                                                                <i class="fas fa-search-plus"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                        </#if>
+                                                                    </tr>
+                                                                </table>
                                                             </td>
                                                         </tr>
                                                     </#list>
@@ -298,18 +325,16 @@
 
                                             <h3>Scenario details</h3>
                                             <#list scenarios as scenario>
-
                                                 <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
 
                                                 <div class="scenario-docs card" id="${scenario.id}">
                                                     <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
                                                         <div>
                                                             <span class="scenario-heading">
-                                                                ${scenario.title}
+                                                                <a href="${scenario.scenarioReport}" title="View test results">${formatter.renderTitle(scenario.title)}</a>
                                                             </span>
                                                             <span class="scenario-result-icon">
-                                                                <#if (scenario.manual)> <i class="fa fa-user manual"
-                                                                                           title="Manual test"></i></#if>
+                                                                <#if (scenario.isManual())> <i class="fa fa-user manual" title="Manual test"></i></#if>
 
                                                                 <#if outcome_icon?has_content>
                                                                     ${outcome_icon}
@@ -319,13 +344,13 @@
                                                                 </#if>
                                                             </span>
                                                         </div>
-                                                        <#if outcome_icon?has_content>
-                                                        <div class="scenario-report-badges">
-                                                            <#list scenario.scenarioReportBadges as scenarioReport>
-                                                                <span class="scenario-report-badge" style="float:right;">${scenarioReport}</span>
-                                                            </#list>
-                                                        </div>
-                                                        </#if>
+                                                        <#--<#if outcome_icon?has_content>-->
+                                                        <#--<div class="scenario-report-badges">-->
+                                                            <#--<#list scenario.scenarioReportBadges as scenarioReporBadge>-->
+                                                                <#--<span class="scenario-report-badge" style="float:right;">${scenarioReporBadge}</span>-->
+                                                            <#--</#list>-->
+                                                        <#--</div>-->
+                                                        <#--</#if>-->
                                                     </div>
                                                     <div class="scenario-docs card-body">
                                                         <#if scenario.description?has_content>
@@ -341,7 +366,6 @@
                                                             <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                         </#list>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </#list>
@@ -497,15 +521,28 @@
                                                                 </#if>
                                             </tr>
                                             <tr>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                    <td colspan="7"><a href="${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                 <#if resultCounts.hasManualTests() >
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                           <td colspan="7"><a href="${brokenReport}"><i
+                                                                                   class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                           </td>
+                                                                        <#else>
+                                                                            <td colspan="7"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 <#else>
-                                                                    <td colspan="3"><a href="${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                             <td colspan="3"><a href="${brokenReport}"><i
+                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        <#else>
+                                                                            <td colspan="3"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 </#if>
+
                                             </tr>
 
                                             <tr>
@@ -654,9 +691,9 @@
                                                     </#if>
                                                     <td>
                                                         <#if outcome_icon?has_content>
-                                                            <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                            <a href="${scenario.scenarioReport}">${formatter.renderTitle(scenario.title)}</a>
                                                         <#else>
-                                                            ${scenario.title}
+                                                            ${formatter.renderTitle(scenario.title)}
                                                         </#if>
                                                         <#if scenario.hasExamples() >
                                                                (${scenario.numberOfExamples})

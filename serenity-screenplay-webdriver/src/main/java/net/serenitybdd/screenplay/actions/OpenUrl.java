@@ -15,7 +15,7 @@ public class OpenUrl implements Interaction {
 
     @Step("{0} opens the #url")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).openAt(url);
+        BrowseTheWeb.as(theUser).openUrl(url);
     }
 
 

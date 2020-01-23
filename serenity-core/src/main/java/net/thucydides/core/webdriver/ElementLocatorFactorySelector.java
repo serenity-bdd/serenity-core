@@ -18,7 +18,7 @@ public class ElementLocatorFactorySelector {
     private final AppiumConfiguration appiumConfiguration;
 
     public ElementLocatorFactorySelector(Configuration configuration) {
-        this(configuration.getElementTimeout(), configuration.getEnvironmentVariables());
+        this(configuration.getElementTimeoutInSeconds(), configuration.getEnvironmentVariables());
     }
 
     public ElementLocatorFactorySelector(int timeoutInSeconds, EnvironmentVariables environmentVariables) {
@@ -32,13 +32,13 @@ public class ElementLocatorFactorySelector {
     }
     
     public ElementLocatorFactory getLocatorFor(SearchContext searchContext, WebDriver driver) {
-        String locatorType = ThucydidesSystemProperty.THUCYDIDES_LOCATOR_FACTORY.from(environmentVariables,"SmartElementLocatorFactory");
+        String locatorType = ThucydidesSystemProperty.SERENITY_LOCATOR_FACTORY.from(environmentVariables,"SmartElementLocatorFactory");
         if (locatorType.equals("AjaxElementLocatorFactory")) {
             return new AjaxElementLocatorFactory(searchContext, timeoutInSeconds);
         } else if (locatorType.equals("DefaultElementLocatorFactory")) {
             return new DefaultElementLocatorFactory(searchContext);
         } else if (locatorType.equals("SmartElementLocatorFactory")){
-        	return new SmartElementLocatorFactory(searchContext, platformFor(driver), timeoutInSeconds);
+        	return new SmartElementLocatorFactory(searchContext, platformFor(driver));
         } else {
             throw new IllegalArgumentException("Unsupported ElementLocatorFactory implementation: " + locatorType);
         }
@@ -48,7 +48,7 @@ public class ElementLocatorFactorySelector {
         if (!WebDriverType.isMobile(driver)) {
             return MobilePlatform.NONE;
         }
-        return appiumConfiguration.getTargetPlatform();
+        return appiumConfiguration.getTargetPlatform(driver);
     }
 
     public ElementLocatorFactorySelector withTimeout(int timeoutInSeconds) {

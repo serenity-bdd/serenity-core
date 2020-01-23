@@ -174,7 +174,7 @@ public class WhenGeneratingAnXMLReport {
 
     @Test
     public void should_generate_an_XML_report_for_a_manual_acceptance_test_run() throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).asManualTest();
+        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).setToManual();
         DateTime startTime = new DateTime(2013,1,1,0,0,0,0);
         testOutcome.setStartTime(startTime);
         testOutcome.setDescription("Some description");
@@ -182,8 +182,8 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' description='Some description' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00' manual='true'>\n"
                         + "  <tags>\n"
-                        + "    <tag name=\"Manual\" type=\"External Tests\"/>"
                         + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
+                        + "    <tag name=\"manual\" type=\"tag\"/>"
                         + "  </tags>"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"

@@ -11,17 +11,17 @@ import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 
 @ContextConfiguration(locations = "/spring/config.xml")
 public class FlatScenarioStepsWithSpringDependencies extends ScenarioSteps {
 
     @Autowired
     public WidgetService widgetService;
-
-
-    @Resource
-    public CatalogService catalogService;
+//
+//
+//    @Resource
+//    public CatalogService catalogService;
 
     public FlatScenarioStepsWithSpringDependencies(Pages pages) {
         super(pages);

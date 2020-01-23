@@ -14,4 +14,9 @@ public class HoverOverElement extends Hover {
     protected WebElement resolveElementFor(Actor actor) {
         return target;
     }
+
+    @Override
+    protected String getTarget() {
+        return target.toString();
+    }
 }

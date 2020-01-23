@@ -3,10 +3,13 @@ package net.thucydides.core.annotations.findby.integration
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WebElementFacade
+import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Shared
 import spock.lang.Specification
@@ -34,8 +37,15 @@ class WhenUsingSmartFindByOnPageObjects extends Specification {
 			}
 	}
 
+
+	def newDriver() {
+		EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+		environmentVariables.setProperty("headless.mode","true");
+		driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory(), environmentVariables);
+	}
+
 	@Shared
-	def driver =  new WebDriverFacade(PhantomJSDriver, new WebDriverFactory());
+	def driver = newDriver()
 
 	@Shared
 	StaticSitePageWithFindBy page =  new StaticSitePageWithFindBy(driver);

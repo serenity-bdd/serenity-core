@@ -1,6 +1,6 @@
 package net.thucydides.core.util;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StrSubstitutor;
 
 import java.util.Map;
 import java.util.Properties;

@@ -26,10 +26,6 @@ public class TestMethodConfiguration {
         return method.getAnnotation(Manual.class).result();
     }
 
-    public String getManualResultLastTested() {
-        return method.getAnnotation(Manual.class).lastTested();
-    }
-
     public boolean isIgnored() {
         return method.getAnnotation(Ignore.class) != null;
     }

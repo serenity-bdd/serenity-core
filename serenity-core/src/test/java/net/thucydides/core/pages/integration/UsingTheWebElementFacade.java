@@ -1,12 +1,9 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
 import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,10 +12,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-;
 
 
 public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
@@ -82,8 +80,32 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
      * Legacy code that uses Lists of the legacy WebElementFacades will need to be updated.
      */
     @Test
+    public void page_level_queries_should_return_elements_using_successive_filters() {
+        List<net.serenitybdd.core.pages.WebElementFacade> elements = page.findNestedElements("#demo", "#firstname");
+        assertThat(elements).isNotEmpty();
+    }
+
+    @Test
+    public void page_level_queries_should_return_elements_using_successive_filters_as_a_stream() {
+        Stream<net.serenitybdd.core.pages.WebElementFacade> elements = page.findEach("#demo", "#firstname");
+        assertThat(elements.collect(Collectors.toList())).isNotEmpty();
+    }
+
+    @Test
+    public void page_level_queries_should_return_elements_using_successive_filters_of_locatorsas_a_stream() {
+        Stream<net.serenitybdd.core.pages.WebElementFacade> elements = page.findEach(By.id("demo"),By.id("firstname"));
+        assertThat(elements.collect(Collectors.toList())).isNotEmpty();
+    }
+
+    @Test
+    public void page_level_queries_should_return_individual_elements_using_successive_filters() {
+        WebElementFacade element = page.findNested("#demo", "#firstname");
+        element.shouldBePresent();
+    }
+
+    @Test
     public void page_level_queries_should_return_new_webelementfacade_lists() {
-        List<net.serenitybdd.core.pages.WebElementFacade> element = page.findAll(".firstname");
+        List<net.serenitybdd.core.pages.WebElementFacade> element = page.findAll("#firstname");
         assertThat(element).isNotEmpty();
     }
 

@@ -3,10 +3,8 @@ package net.thucydides.core.requirements.reports;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.DescriptionSplitter;
-import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
@@ -53,8 +51,10 @@ public class ScenarioOutcomes {
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
 
+        String featureName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : "";
+        String scenarioName = testOutcome.getName();
         List<String> exampleTables = (testOutcome.isDataDriven()) ?
-                Collections.singletonList(testOutcome.getDataTable().toMarkdown()) : Collections.EMPTY_LIST;
+                Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName)) : Collections.EMPTY_LIST;
 
         String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;
@@ -78,7 +78,8 @@ public class ScenarioOutcomes {
                 exampleTables,
                 testOutcome.getDataTableRowCount(),
                 userStoryName,
-                userStoryReportName);
+                userStoryReportName,
+                testOutcome.getTags());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

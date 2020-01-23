@@ -135,7 +135,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         where:
         message             | formattedMessage
         "<expected \"a\">"  | "(expected 'a')"
-        "<expected \"a\"\nGot \"b\">"          | "(expected 'a' Got 'b')"
+        "<expected \"a\"\nGot \"b\">"          | "(expected 'a'<br>Got 'b')"
 
     }
 
@@ -233,12 +233,12 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
 
     def "should format single cell table"() {
         given:
-        def singleCellTable = "[|heading|]"
+        def singleCellTable = "[|value|]"
         def formatter = new Formatter();
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
-        embeddedTable == "<table class='embedded'><thead><th>heading</th></thead><tbody></tbody></table>"
+        embeddedTable == "<table class='embedded'><tbody><tr><td>value</td></tr></tbody></table>"
     }
 
     def "should ignore table formatting if configured"() {
@@ -263,14 +263,14 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         noEmbeddedTable == "fdg|dsf"
     }
 
-    def "should format multi cell table"() {
+    def "should format single row table"() {
         given:
         def singleCellTable = "[|heading1  |heading2  |]"
         def formatter = new Formatter();
         when:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
-        embeddedTable == "<table class='embedded'><thead><th>heading1</th><th>heading2</th></thead><tbody></tbody></table>"
+        embeddedTable == "<table class='embedded'><tbody><tr><td>heading1</td><td>heading2</td></tr></tbody></table>"
     }
 
     def "should format a table with a single row"() {
@@ -342,7 +342,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
-        embeddedTable == "I have the following document:<br><table class='embedded'><thead><th>CSV</th></thead><tbody><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
+        embeddedTable == "I have the following document:<br><table class='embedded'><tbody><tr><td>CSV</td></tr><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
     }
 
     def "should identify a table within a step using paragraph separator"() {
@@ -353,7 +353,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
-        embeddedTable == "I have the following document:<br><table class='embedded'><thead><th>CSV</th></thead><tbody><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
+        embeddedTable == "I have the following document:<br><table class='embedded'><tbody><tr><td>CSV</td></tr><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
     }
 
     def "should identify a table within a step using double spaced lines"() {
@@ -364,7 +364,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
         def embeddedTable = formatter.convertAnyTables(table)
         then:
-        embeddedTable == "I have the following document:<br><table class='embedded'><thead><th>CSV</th></thead><tbody><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
+        embeddedTable == "I have the following document:<br><table class='embedded'><tbody><tr><td>CSV</td></tr><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
     }
 
     def "should identify a table within a step using Windows new lines"() {
@@ -429,7 +429,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
             def formatter = new Formatter();
         then:
-            formatter.resultIcon().forResult(result) == expectedIcon
+            formatter.resultIcon().forResult(result).contains(expectedIcon)
         where:
             result              | expectedIcon
             TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i>"
@@ -442,7 +442,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
         def formatter = new Formatter();
         then:
-        formatter.resultIcon().inLarge().forResult(result) == expectedIcon
+        formatter.resultIcon().inLarge().forResult(result).contains(expectedIcon)
         where:
         result              | expectedIcon
         TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon fa-2x' title='ERROR'></i>"

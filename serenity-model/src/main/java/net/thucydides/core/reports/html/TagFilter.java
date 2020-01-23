@@ -17,6 +17,9 @@ public class TagFilter {
     private final EnvironmentVariables environmentVariables;
     private final RequirementsService requirementsService;
 
+    private final List<String> ALWAYS_HIDDEN_TAGS
+            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested");
+
     public TagFilter(EnvironmentVariables environmentVariables) {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
         this.environmentVariables = environmentVariables;
@@ -31,12 +34,10 @@ public class TagFilter {
             filteredTags = onlyKeepAllowedTypes(filteredTags, displayedTags);
         }
 
-        List<String> excludedTags = excludedTagTypes();
-        if (!excludedTags.isEmpty()) {
-            filteredTags = removeUnwantedTags(filteredTags, excludedTags);
-        }
+        List<String> excludedTags = new ArrayList<>(excludedTagTypes());
+        excludedTags.addAll(ALWAYS_HIDDEN_TAGS);
 
-        return filteredTags;
+        return removeUnwantedTags(filteredTags, excludedTags);
     }
 
     public boolean shouldDisplayTagWithType(String tagType) {
@@ -45,7 +46,7 @@ public class TagFilter {
 
 
     public Set<TestTag> removeTagsOfType(Set<TestTag> tags, String... redundantTagTypes) {
-        Set<TestTag> filteredTags = new HashSet();
+        Set<TestTag> filteredTags = new HashSet<>();
         List<String> maskedTagTypes = Arrays.asList(redundantTagTypes);
         for (TestTag tag : tags) {
             if (!maskedTagTypes.contains(tag.getType())) {
@@ -57,7 +58,7 @@ public class TagFilter {
 
 
     public Set<TestTag> removeTagsWithName(Set<TestTag> tags, String name) {
-        Set<TestTag> filteredTags = new HashSet();
+        Set<TestTag> filteredTags = new HashSet<>();
         for (TestTag tag : tags) {
             if (!tag.getShortName().equalsIgnoreCase(name)) {
                 filteredTags.add(tag);
@@ -65,7 +66,6 @@ public class TagFilter {
         }
         return filteredTags;
     }
-
 
     private List<String> onlyKeepAllowedTypes(List<String> tags, List<String> displayedTags) {
         List<String> allowedTags = new ArrayList<>();
@@ -80,12 +80,8 @@ public class TagFilter {
 
     private List<String> removeUnwantedTags(List<String> tags, List<String> unwantedTags) {
         for (String tag : unwantedTags) {
-            if (tags.contains(tag.toLowerCase())) {
-                tags.remove(tag.toLowerCase());
-            }
-            if (tags.contains(tag.toUpperCase())) {
-                tags.remove(tag.toUpperCase());
-            }
+            tags.remove(tag.toLowerCase());
+            tags.remove(tag.toUpperCase());
         }
         return tags;
     }
@@ -107,11 +103,17 @@ public class TagFilter {
         }
     }
 
-    public Set<TestTag> removeRequirementsTagsFrom(Set<TestTag> filteredTags) {
-        List<String> requirementTypes = requirementsService.getRequirementTypes();
+    public Set<TestTag> removeHiddenTagsFrom(Set<TestTag> filteredTags) {
+        List<String> hiddenTypes = requirementsService.getRequirementTypes();
+        hiddenTypes.addAll(ALWAYS_HIDDEN_TAGS);
+
         return filteredTags.stream()
                 .filter(
-                        tag -> !requirementTypes.contains(tag.getType())
+                        tag -> !hiddenTypes.contains(tag.getType())
                 ).collect(Collectors.toSet());
+    }
+
+    public Set<String> rawTagTypes() {
+        return new HashSet<>(asLowercaseList(ThucydidesSystemProperty.REPORT_RAW_TAG_LIST.from(environmentVariables)));
     }
 }

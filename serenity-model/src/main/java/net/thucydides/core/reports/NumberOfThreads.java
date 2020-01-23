@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
+import static net.thucydides.core.ThucydidesSystemProperty.*;
+
 public class NumberOfThreads {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfThreads.class);
@@ -26,17 +28,18 @@ public class NumberOfThreads {
 
     protected NumberOfThreads(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        this.blockingCoefficientForIO = Double.parseDouble(environmentVariables.getProperty("io.blocking.coefficient", DEFAULT_BLOCKING_COEFFICIENT_FOR_IO.toString()));
+        this.blockingCoefficientForIO = Double.parseDouble(IO_BLOCKING_COEFFICIENT.from(environmentVariables, DEFAULT_BLOCKING_COEFFICIENT_FOR_IO.toString()));
     }
 
     public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
         int reportThreads = configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
-        LOGGER.info("Configured report threads: {}", reportThreads);
         return reportThreads;
     }
 
     private Optional<Integer> configuredReportThreads() {
-        return Optional.ofNullable(environmentVariables.getPropertyAsInteger("report.threads", null));
+        int reportThreads = REPORT_THREADS.integerFrom(environmentVariables);
+        if (reportThreads == 0) { return Optional.empty(); }
+        return Optional.of(reportThreads);
     }
 }

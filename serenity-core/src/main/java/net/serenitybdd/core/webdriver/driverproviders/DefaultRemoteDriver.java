@@ -10,7 +10,7 @@ import java.net.URL;
 
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
-class DefaultRemoteDriver extends  RemoteDriverBuilder {
+class DefaultRemoteDriver extends RemoteDriverBuilder {
     private final DriverCapabilities remoteDriverCapabilities;
 
     DefaultRemoteDriver(EnvironmentVariables environmentVariables, DriverCapabilities remoteDriverCapabilities) {

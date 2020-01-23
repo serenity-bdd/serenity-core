@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
@@ -18,6 +19,8 @@ public class ClassFinder {
 
     private final ClassLoader classLoader;
     private final Class annotation;
+    private Class<?> parentInterface;
+    private Predicate<Class> condition;
 
     private ClassFinder(ClassLoader classLoader, Class annotation) {
         this.classLoader = classLoader;
@@ -43,7 +46,6 @@ public class ClassFinder {
      * @return The classes
      */
     public List<Class<?>> fromPackage(String packageName) {
-
         return filtered(getClasses(packageName));
     }
 
@@ -59,11 +61,16 @@ public class ClassFinder {
     }
 
     private boolean matchesConstraints(Class clazz) {
-        if (annotation == null) {
-            return true;
-        } else {
+        if (annotation != null) {
             return (clazz.getAnnotation(annotation) != null);
         }
+        if (parentInterface != null) {
+            return (parentInterface.isAssignableFrom(clazz) && !clazz.isInterface());
+        }
+        if (condition != null) {
+            return condition.test(clazz);
+        }
+        return true;
     }
 
     private static ClassLoader getDefaultClassLoader() {
@@ -179,5 +186,16 @@ public class ClassFinder {
     private static String classNameFor(ZipEntry entry) {
         return entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
     }
+
+    public ClassFinder thatImplement(Class<?> parentInterface) {
+        this.parentInterface = parentInterface;
+        return this;
+    }
+
+    public ClassFinder thatMatch(final Predicate<Class> condition) {
+        this.condition = condition;
+        return this;
+    }
+
 }
 

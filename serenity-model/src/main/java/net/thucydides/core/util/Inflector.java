@@ -111,7 +111,7 @@ public class Inflector {
         return wordStr;
     }
 
-    String pluralize(Object word,
+    public String pluralize(Object word,
                      int count) {
         if (word == null) return null;
         if (count == 1 || count == -1) {
@@ -190,6 +190,9 @@ public class Inflector {
     public String humanize( String lowerCaseAndUnderscoredWords,
                             String... removableTokens ) {
 
+        if (isCamelCase(lowerCaseAndUnderscoredWords)) {
+            lowerCaseAndUnderscoredWords = underscore(lowerCaseAndUnderscoredWords);
+        }
         String result = humanReadableFormOf(lowerCaseAndUnderscoredWords, removableTokens);
 
         Set<Acronym> acronyms = Acronym.acronymsIn(result);
@@ -201,6 +204,13 @@ public class Inflector {
         }
 
         return StringUtils.capitalize(result);
+    }
+
+    private final static Pattern LOWER_CAMEL_CASE = Pattern.compile("[a-z]+((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?");
+    private final static Pattern UPPER_CAMEL_CASE = Pattern.compile("([A-Z][a-z0-9]+)((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?");
+
+    private boolean isCamelCase(String text) {
+        return LOWER_CAMEL_CASE.matcher(text).matches() || UPPER_CAMEL_CASE.matcher(text).matches();
     }
 
     private String humanReadableFormOf(String lowerCaseAndUnderscoredWords,

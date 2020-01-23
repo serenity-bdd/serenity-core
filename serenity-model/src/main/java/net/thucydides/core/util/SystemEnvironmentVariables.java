@@ -22,7 +22,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
-        Map<String, String> propertyValues = new HashMap();
+        Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {
             propertyValues.put(property, systemProperties.getProperty(property));
         }
@@ -150,10 +150,17 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
         propertySetLock.lock();
 
-        HashMap<String, String> workingCopy = new HashMap(properties);
+        HashMap<String, String> workingCopy = new HashMap<>(properties);
         workingCopy.put(name, value);
         properties = NewMap.copyOf(workingCopy);
 
+        propertySetLock.unlock();
+    }
+
+    public void setProperties(Map<String, String> properties) {
+
+        propertySetLock.lock();
+        this.properties.putAll(properties);
         propertySetLock.unlock();
     }
 
@@ -166,6 +173,13 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         properties = NewMap.copyOf(workingCopy);
 
         propertySetLock.unlock();
+    }
+
+    @Override
+    public Map<String, String> asMap() {
+        Map<String, String> environmentValues = new HashMap<>(properties);
+        environmentValues.putAll(systemValues);
+        return environmentValues;
     }
 
     public EnvironmentVariables copy() {

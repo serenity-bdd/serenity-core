@@ -3,6 +3,8 @@ package net.thucydides.core.model;
 import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Preconditions;
 
+import java.util.Optional;
+
 import static org.apache.commons.lang3.ObjectUtils.compare;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -12,24 +14,35 @@ public class TestTag implements Comparable<TestTag> {
 
     private final String name;
     private final String type;
+    private final String displayName;
 
     private transient String normalisedName;
     private transient String normalisedType;
 
     private TestTag(String name, String type) {
+        this(name,type, name);
+    }
+
+    private TestTag(String name, String type, String displayName) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(type);
+        Preconditions.checkNotNull(displayName);
         this.name = name;
         this.type = type;
+        this.displayName = displayName;
     }
 
     public String normalisedName() {
-        if (normalisedName == null) { normalisedName = name.toLowerCase(); }
+        if (normalisedName == null) { normalisedName = normalised(name); }
         return normalisedName;
     }
 
+    private String normalised(String name) {
+        return name.replaceAll("[\\s_-]"," ").toLowerCase();
+    }
+
     public String normalisedType() {
-        if (normalisedType == null) { normalisedType = type.toLowerCase(); }
+        if (normalisedType == null) { normalisedType = normalised(type); }
         return normalisedType;
     }
 
@@ -44,6 +57,10 @@ public class TestTag implements Comparable<TestTag> {
         return name;
     }
 
+    public String getDisplayName() {
+        return Optional.ofNullable(displayName).orElse(name);
+    }
+
     public String getType() {
         return type;
     }
@@ -56,6 +73,7 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     public static TestTag withValue(String value) {
+        value = stripLeadingAtSymbol(value);
         if (value.contains(":")) {
             return getTestTag(value, value.indexOf(":"));
         } else if (value.contains("=")) {
@@ -63,6 +81,14 @@ public class TestTag implements Comparable<TestTag> {
         } else {
             return TestTag.withName(value.trim()).andType("tag");
         }
+    }
+
+    private static String stripLeadingAtSymbol(String value) {
+        return value.startsWith("@") ? value.substring(1) : value;
+    }
+
+    public TestTag withDisplayName(String displayName) {
+        return new TestTag(name, type, displayName);
     }
 
     private static TestTag getTestTag(String value, int separatorPosition) {
@@ -129,9 +155,10 @@ public class TestTag implements Comparable<TestTag> {
 
     @Override
     public String toString() {
-        return "TestTag{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+        if (type.isEmpty()) {
+            return name;
+        } else {
+            return type + ":" + name;
+        }
     }
 }

@@ -88,8 +88,13 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private String getThreadParameter(Concurrent concurrent) {
-        String systemPropertyThreadValue =
-                configuration.getEnvironmentVariables().getProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName());
+//        String systemPropertyThreadValue =
+//                configuration.getEnvironmentVariables().getProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName());
+//
+        String systemPropertyThreadValue = EnvironmentSpecificConfiguration.from(configuration.getEnvironmentVariables())
+                .getOptionalProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName())
+                .orElse(null);
+
         String annotatedThreadValue = concurrent.threads();
         return (StringUtils.isNotEmpty(systemPropertyThreadValue) ? systemPropertyThreadValue : annotatedThreadValue);
 
@@ -106,8 +111,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private List<Runner> buildTestRunnersForEachDataSetUsing(final WebDriverFactory webDriverFactory,
                                                      final BatchManager batchManager) throws Throwable {
-
-        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+        if (shouldSkipAllTests()) {
             return new ArrayList<>();
         }
 
@@ -129,8 +133,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private List<Runner> buildTestRunnersFromADataSourceUsing(final WebDriverFactory webDriverFactory,
                                                       final BatchManager batchManager) throws Throwable {
-
-        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+        if (shouldSkipAllTests()) {
             return new ArrayList<>();
         }
 
@@ -153,6 +156,13 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private boolean shouldSkipTest(FrameworkMethod method) {
         return !tagScanner.shouldRunMethod(getTestClass().getJavaClass(), method.getName());
+    }
+
+    private boolean shouldSkipAllTests() {
+        return getTestAnnotations()
+                .getTestMethods()
+                .stream()
+                .allMatch(this::shouldSkipTest);
     }
 
     private String getQualifierFor(final Object testCase) {

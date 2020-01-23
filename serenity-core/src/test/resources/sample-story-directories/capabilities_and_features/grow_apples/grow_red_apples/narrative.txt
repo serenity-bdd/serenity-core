@@ -1,4 +1,4 @@
-Grow red apples
+Grow shiny red apples
 
 Meta:
 @issues #123, #456

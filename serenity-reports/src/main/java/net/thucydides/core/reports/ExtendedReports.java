@@ -27,10 +27,9 @@ public class ExtendedReports {
 
     private static void ensureAllReportsExistForReportNames(List<String> reportNames) {
 
+        List<String> knownReports = getReports().stream().map(ExtendedReport::getName).collect(Collectors.toList());
 
-        List<String> knownReports = getReports().stream().map(report -> report.getName()).collect(Collectors.toList());
-
-        reportNames.stream().forEach(
+        reportNames.forEach(
                 reportName -> {
                     if (!knownReports.contains(reportName)) {
                         LOGGER.warn("No report found on classpath with name "+ reportName);

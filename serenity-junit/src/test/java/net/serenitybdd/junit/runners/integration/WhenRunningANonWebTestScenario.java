@@ -116,7 +116,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(inTheTesOutcomes(executedSteps).theResultFor("a_manual_test"), is(TestResult.PENDING));
         assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").isManual(), equalTo(true));
         assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").getTags(),
-                hasItem(TestTag.withName("Manual").andType("External Tests")));
+                hasItem(TestTag.withName("manual").andType("tag")));
     }
 
     public static final class ATestWithNoSteps {

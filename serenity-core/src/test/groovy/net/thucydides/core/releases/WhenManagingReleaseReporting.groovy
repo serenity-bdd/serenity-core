@@ -119,13 +119,15 @@ class WhenManagingReleaseReporting extends Specification {
   {
     "releaseTag": {
       "name": "Release 1.0",
-      "type": "version"
+      "type": "version",
+      "displayName": "Release 1.0"
     },
     "children": [
       {
         "releaseTag": {
           "name": "Iteration 1.1",
-          "type": "version"
+          "type": "version",
+          "displayName": "Iteration 1.1"
         },
         "children": [],
         "label": "Iteration 1.1",
@@ -134,7 +136,8 @@ class WhenManagingReleaseReporting extends Specification {
           {
             "releaseTag": {
               "name": "Release 1.0",
-              "type": "version"
+              "type": "version",
+              "displayName": "Release 1.0"
             },
             "children": [],
             "label": "Release 1.0",
@@ -146,7 +149,8 @@ class WhenManagingReleaseReporting extends Specification {
       {
         "releaseTag": {
           "name": "Iteration 1.3",
-          "type": "version"
+          "type": "version",
+          "displayName": "Iteration 1.3"
         },
         "children": [],
         "label": "Iteration 1.3",
@@ -155,7 +159,8 @@ class WhenManagingReleaseReporting extends Specification {
           {
             "releaseTag": {
               "name": "Release 1.0",
-              "type": "version"
+              "type": "version",
+              "displayName": "Release 1.0"
             },
             "children": [],
             "label": "Release 1.0",
@@ -172,13 +177,15 @@ class WhenManagingReleaseReporting extends Specification {
   {
     "releaseTag": {
       "name": "Release 2.0",
-      "type": "version"
+      "type": "version",
+      "displayName": "Release 2.0"
     },
     "children": [
       {
         "releaseTag": {
           "name": "Iteration 2.1",
-          "type": "version"
+          "type": "version",
+          "displayName": "Iteration 2.1"
         },
         "children": [],
         "label": "Iteration 2.1",
@@ -187,7 +194,8 @@ class WhenManagingReleaseReporting extends Specification {
           {
             "releaseTag": {
               "name": "Release 2.0",
-              "type": "version"
+              "type": "version",
+              "displayName": "Release 2.0"
             },
             "children": [],
             "label": "Release 2.0",

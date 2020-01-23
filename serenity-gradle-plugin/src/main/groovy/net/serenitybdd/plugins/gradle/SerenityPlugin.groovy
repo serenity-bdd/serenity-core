@@ -3,6 +3,7 @@ package net.serenitybdd.plugins.gradle
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.guice.Injectors
+import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.ExtendedReports
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
@@ -31,12 +32,14 @@ class SerenityPlugin implements Plugin<Project> {
             description = 'Generates aggregated Serenity reports'
             doLast {
                 updateProperties(project)
-                def reportDirectory = prepareReportDirectory(project)
+                Path reportDirectory = prepareReportDirectory(project)
+
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
                 }
-                logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
+                logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory ${reportDirectory.toUri()}")
                 System.properties['serenity.project.key'] = project.serenity.projectKey
+
                 if (project.serenity.requirementsBaseDir) {
                     System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
                 }
@@ -44,6 +47,7 @@ class SerenityPlugin implements Plugin<Project> {
 
                 reporter.outputDirectory = reportDirectory.toFile()
 
+                reporter.projectDirectory = project.projectDir.absolutePath
                 reporter.issueTrackerUrl = project.serenity.issueTrackerUrl
                 reporter.jiraUrl = project.serenity.jiraUrl
                 reporter.jiraProject = project.serenity.jiraProject
@@ -52,6 +56,7 @@ class SerenityPlugin implements Plugin<Project> {
                     reporter.setGenerateTestOutcomeReports();
                 }
                 reporter.generateReportsForTestResultsFrom(reportDirectory.toFile())
+                new ResultChecker(reporter.outputDirectory).checkTestResults();
             }
         }
 
@@ -72,9 +77,9 @@ class SerenityPlugin implements Plugin<Project> {
 
                 List<String> extendedReportTypes = project.serenity.reports
                 if (extendedReportTypes) {
-                    logger.lifecycle("PROCESSING EXTENDED REPORTS: " + extendedReportTypes)
-                    ExtendedReports.named(extendedReportTypes).forEach {
-                        report -> report.generateReportFrom(reportDirectory)
+                    for (ExtendedReport report : ExtendedReports.named(extendedReportTypes)) {
+                        generatedReport = report.generateReportFrom(reportDirectory).toPath()
+                        logger.lifecycle("  - ${report.description}: ${generatedReport.toURI()}")
                     }
                 }
             }
@@ -86,13 +91,13 @@ class SerenityPlugin implements Plugin<Project> {
 
             def reportDirectory = prepareReportDirectory(project)
 
-            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory}")
+            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory.toUri()}")
 
-            inputs.files reportDirectory
+            inputs.files(project.fileTree(reportDirectory))
 
             doLast {
                 updateProperties(project)
-                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
+                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory.toUri()")
                 if (reportDirectory.toFile().exists()) {
                     def checker = new ResultChecker(reportDirectory.toFile())
                     checker.checkTestResults()
@@ -172,7 +177,8 @@ class SerenityPlugin implements Plugin<Project> {
 
     static Boolean deletePreviousHistory() {
         SystemPropertiesConfiguration configuration = (SystemPropertiesConfiguration) Injectors.getInjector().getProvider(Configuration.class).get()
-        return configuration.environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.DELETE_HISTORY_DIRECTORY, true)
+        return ThucydidesSystemProperty.DELETE_HISTORY_DIRECTORY.booleanFrom(configuration.environmentVariables, true);
+//        return configuration.environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.DELETE_HISTORY_DIRECTORY, true)
     }
 
 

@@ -2,45 +2,61 @@ package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String name;
     private final String type;
     private final String id;
     private final TestResult result;
-    private final List<String> scenarioReports;
+    private final List<String> reportBadges;
+    private final String scenarioReport;
     private final String description;
     private final List<String> steps;
     private final List<String> examples;
     private final int exampleCount;
     private final String parentName;
     private final String parentReport;
+    private final Boolean manual;
+    private final Set<TestTag> tags;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
                                   TestResult result,
-                                  List<String> scenarioReports,
+                                  List<String> reportBadges,
+                                  String scenarioReport,
                                   String description,
                                   List<String> steps,
                                   List<String> examples,
                                   int exampleCount,
+                                  Boolean isManual,
                                   String parentName,
-                                  String parentReport) {
+                                  String parentReport,
+                                  Set<TestTag> tags) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
         this.result = result;
-        this.scenarioReports = scenarioReports;
+        this.reportBadges = reportBadges;
+        this.scenarioReport = scenarioReport;
         this.description = description;
         this.steps = steps;
         this.examples = examples;
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
+        this.manual = isManual;
+        this.tags = tags;
     }
+
+    public String toString() {
+        return "ScenarioSummaryOutcome for " + name;
+    }
+
 
     public String getName() {
         return name;
@@ -95,11 +111,11 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
 
     public String getScenarioReport() {
-        return "";
+        return scenarioReport;
     }
 
     public List<String> getScenarioReportBadges() {
-        return scenarioReports;
+        return reportBadges;
     }
 
     public Integer getStepCount() { return steps.size(); }
@@ -113,10 +129,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return 0L;
     }
 
-    public boolean isManual() {
-        return false;
+    public Boolean isManual() {
+        return manual;
     }
-
 
     public String getFormattedStartTime() {
         return " ";
@@ -132,5 +147,10 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
     public String getParentReport() {
         return parentReport;
+    }
+
+    @Override
+    public Set<TestTag> getTags() {
+        return tags;
     }
 }

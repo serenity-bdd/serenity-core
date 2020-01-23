@@ -6,6 +6,7 @@ import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.integration.PageWithFindBys
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Shared
 import spock.lang.Specification
@@ -29,7 +30,13 @@ class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
 
     def setup() {
         StepEventBus.eventBus.clear()
-        driver = chromeService.newDriver(DesiredCapabilities.chrome())
+
+        def desiredCapabilities = DesiredCapabilities.chrome();
+        def chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+
+        driver = chromeService.newDriver(desiredCapabilities);
     }
 
     def cleanup() {

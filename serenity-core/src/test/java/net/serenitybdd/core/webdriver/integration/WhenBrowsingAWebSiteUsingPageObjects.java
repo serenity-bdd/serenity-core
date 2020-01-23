@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
 import net.serenitybdd.core.pages.WebElementFacade;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.support.FindBy;
 
@@ -91,9 +93,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @BeforeClass
     public static void openDriver() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver();
+        driver =  new HtmlUnitDriver(BrowserVersion.CHROME, true);
     }
 
     @Before

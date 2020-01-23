@@ -10,8 +10,8 @@ import org.openqa.selenium.*;
 @RunWith(ThucydidesRunner.class)
 @UserStoryCode("US01")
 public class SuccessfulSingleTestScenarioWithABrowser {
-    
-    @Managed(driver = "phantomjs")
+
+    @Managed(driver = "chrome", options = "--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

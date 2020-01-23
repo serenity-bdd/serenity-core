@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay;
 
 import com.rits.cloning.Cloner;
-
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -29,8 +28,7 @@ public class InstrumentedTask {
         return (T) instrumentedCopyOf(task, task.getClass());
     }
 
-    private static <T extends Performable> boolean shouldInstrument(T task) {
-
+    public static <T extends Performable> boolean shouldInstrument(T task) {
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();
@@ -64,12 +62,11 @@ public class InstrumentedTask {
                                                 + ". If you are not instrumenting a Task class explicitly you need to give the class a default constructor."
                                                 + "A task class cannot be instrumented if it is final (so if you are writing in Kotlin, make sure the task class is 'open'.");
         }
-        Cloner cloner = new Cloner();
-        cloner.copyPropertiesOfInheritedClass(task, instrumentedTask);
+        CopyNonNullProperties.from(task).to(instrumentedTask);
         return instrumentedTask;
     }
 
     public static boolean isInstrumented(Performable task) {
-        return task.getClass().getSimpleName().contains("EnhancerByCGLIB");
+        return task.getClass().getSimpleName().contains("ByteBuddy");
     }
 }

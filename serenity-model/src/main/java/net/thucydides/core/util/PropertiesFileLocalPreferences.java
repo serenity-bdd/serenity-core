@@ -9,6 +9,7 @@ import org.slf4j.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -52,17 +53,17 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     public void loadPreferences() throws IOException {
 
         updatePreferencesFrom(
+                preferencesIn(preferencesFileWithAbsolutePath()),
+                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                typesafeConfigPreferencesInCustomDefinedConfigFile(),
                 typesafeConfigPreferences(),
-                preferencesIn(preferencesFileInHomeDirectory()),
-                preferencesIn(legacyPreferencesFileInHomeDirectory()),
                 preferencesIn(preferencesFileInMavenModuleDirectory()),
                 preferencesIn(preferencesFileInMavenParentModuleDirectory()),
                 preferencesIn(preferencesFileInWorkingDirectory()),
                 preferencesIn(legacyPreferencesFileInWorkingDirectory()),
-                preferencesIn(preferencesFileWithAbsolutePath()),
-                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                preferencesIn(preferencesFileInHomeDirectory()),
+                preferencesIn(legacyPreferencesFileInHomeDirectory()),
                 preferencesInClasspath());
-
     }
 
     private Properties preferencesInClasspath() throws IOException {
@@ -76,7 +77,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return new Properties();
     }
 
-    private InputStream propertiesInputStream(){
+    private InputStream propertiesInputStream() {
         InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
         if (input == null) {
             input = Thread.currentThread().getContextClassLoader().getResourceAsStream(legacyPropertiesFileName());
@@ -84,15 +85,32 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return input;
     }
 
+    private Properties typesafeConfigPreferencesInCustomDefinedConfigFile() {
+
+        Optional<File> providedConfigFile = defaultPropertiesConfFile();
+        if (!providedConfigFile.isPresent()) {
+            return new Properties();
+        }
+
+        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile.get()).resolve().entrySet();
+        return getPropertiesFromConfig(preferences);
+    }
+
     private Properties typesafeConfigPreferences() {
-        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+        return defaultPropertiesConfFile()
+                .filter(File::exists)
+                .map(configFile -> getPropertiesFromConfig(ConfigFactory.parseFile(configFile).resolve().entrySet()))
+                .orElse(getPropertiesFromConfig(ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet()));
+    }
+
+    private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {
         Properties properties = new Properties();
         for (Map.Entry<String, ConfigValue> preference : preferences) {
             properties.put(preference.getKey(), strip(preference.getValue().render(), "\""));
         }
         return properties;
     }
-    
+
     private void updatePreferencesFrom(Properties... propertySets) throws IOException {
         for (Properties localPreferences : propertySets) {
             PropertiesUtil.expandPropertyAndEnvironmentReferences(System.getenv(), localPreferences);
@@ -103,7 +121,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private Properties preferencesIn(File preferencesFile) throws IOException {
         Properties preferenceProperties = new Properties();
         if (preferencesFile.exists()) {
-            try(InputStream preferences = new FileInputStream(preferencesFile)) {
+            try (InputStream preferences = new FileInputStream(preferencesFile)) {
                 LOGGER.debug("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
                 preferenceProperties.load(preferences);
             }
@@ -158,13 +176,38 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return new File(legacyPropertiesFileName());
     }
 
+    private final String PROPERTIES = ThucydidesSystemProperty.PROPERTIES.getPropertyName();
+
+    private Optional<File> defaultPropertiesConfFile() {
+        List<String> possibleConfigFileNames = Arrays.asList(
+                optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf"),
+                "src/main/resources/serenity.conf");
+
+        return possibleConfigFileNames.stream()
+                .map(File::new)
+                .filter(File::exists)
+                .findFirst();
+    }
+
     private String defaultPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "serenity.properties");
+
+        return optionalEnvironmentVariable(System.getProperty(PROPERTIES))
+                .orElse(
+                        optionalEnvironmentVariable(System.getenv(PROPERTIES))
+                                .orElse("serenity.properties")
+                );
     }
 
     private String legacyPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "thucydides.properties");
+        return optionalEnvironmentVariable(System.getProperty(PROPERTIES))
+                .orElse(
+                        optionalEnvironmentVariable(System.getenv(PROPERTIES))
+                                .orElse("thucydides.properties")
+                );
     }
 
+    private Optional<String> optionalEnvironmentVariable(String value) {
+        return Optional.ofNullable(value);
+    }
 
 }

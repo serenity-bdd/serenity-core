@@ -17,14 +17,18 @@ public class TypeValueIntoBy extends TypeValue {
         return WebElementLocator.forLocators(locators).andActor(theUser);
     }
 
-    public TypeValueIntoBy(String theText, By... locators) {
+    public TypeValueIntoBy(List<By> locators, CharSequence... theText) {
         super(theText);
         this.locators = NewList.copyOf(locators);
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters #theTextAsAString into #locators")
     public <T extends Actor> void performAs(T theUser) {
-        resolveFor(theUser).sendKeys(theText);
-        resolveFor(theUser).sendKeys(getFollowedByKeys());
+        WebElement element = resolveFor(theUser);
+
+        element.sendKeys(theText);
+        if (getFollowedByKeys().length > 0) {
+            element.sendKeys(getFollowedByKeys());
+        }
     }
 }

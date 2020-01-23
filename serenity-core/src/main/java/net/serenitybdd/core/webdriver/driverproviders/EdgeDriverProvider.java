@@ -18,17 +18,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_USE_DRIVER_SERVICE_POOL;
+
 public class EdgeDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
-    private static final Logger LOGGER = LoggerFactory.getLogger(EdgeDriverProvider.class);
 
     private final DriverServicePool driverServicePool = new EdgeServicePool();
-
-    private DriverServicePool getDriverServicePool() throws IOException {
-        driverServicePool.ensureServiceIsRunning();
-        return driverServicePool;
-    }
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -47,11 +43,14 @@ public class EdgeDriverProvider implements DriverProvider {
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge(), SupportedWebDriver.EDGE);
         driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
 
-        try {
-            return getDriverServicePool().newDriver(desiredCapabilities);
-        } catch (IOException couldNotStartServer) {
-            LOGGER.warn("Failed to start the edge driver service, using a native driver instead",  couldNotStartServer.getMessage());
-            return new EdgeDriver(desiredCapabilities);
-        }
+        SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
+        AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
+
+        return ProvideNewDriver.withConfiguration(environmentVariables,
+                desiredCapabilities,
+                driverServicePool,
+                DriverServicePool::newDriver,
+                (pool, caps) -> new EdgeDriver(caps)
+        );
     }
 }

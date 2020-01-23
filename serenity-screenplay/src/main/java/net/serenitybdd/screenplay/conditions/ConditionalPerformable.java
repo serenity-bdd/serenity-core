@@ -1,13 +1,15 @@
 package net.serenitybdd.screenplay.conditions;
 
 import java.util.HashMap;
+
+import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ConditionalPerformable implements Performable {
+public abstract class ConditionalPerformable implements Performable, IsHidden {
 
     protected final Map<Boolean, Performable[]> outcomeToPerform;
 

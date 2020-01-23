@@ -52,8 +52,8 @@ public class WhenReadingEnvironmentVariables {
     @Test
     public void should_return_default_for_inexistant_environment_variable_if_specified() {
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getValue("DOES_NOT_EXIST","DEFAULT");
-        assertThat(value, is("DEFAULT"));
+        String value = environmentVariables.getValue("DOES_NOT_EXIST","NO_ENVIRONMENT_DEFINED");
+        assertThat(value, is("NO_ENVIRONMENT_DEFINED"));
     }
 
     enum LocalSystemProperties {
@@ -185,7 +185,7 @@ public class WhenReadingEnvironmentVariables {
         System.setProperty("some.other.property","some.value");
 
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getProperty("some.other.property", "DEFAULT");
+        String value = environmentVariables.getProperty("some.other.property", "NO_ENVIRONMENT_DEFINED");
         assertThat(value, is("some.value"));
     }
 
@@ -194,8 +194,8 @@ public class WhenReadingEnvironmentVariables {
         System.clearProperty("another.property");
 
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getProperty("another.property", "DEFAULT");
-        assertThat(value, is("DEFAULT"));
+        String value = environmentVariables.getProperty("another.property", "NO_ENVIRONMENT_DEFINED");
+        assertThat(value, is("NO_ENVIRONMENT_DEFINED"));
     }
 
     @Test

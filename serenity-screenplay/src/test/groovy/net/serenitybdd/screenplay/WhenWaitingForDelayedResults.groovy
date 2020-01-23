@@ -40,6 +40,7 @@ class WhenWaitingForDelayedResults extends Specification {
             theTestResult() == SUCCESS
     }
 
+
     def "should not wait forever if the result never arrives"() {
         given:
             Actor jane = Actor.named("Jane")
@@ -114,7 +115,29 @@ class TheClickerValue implements Question<Integer> {
 
     @Override
     Integer answeredBy(Actor actor) {
-        clicker.click();
+        clicker.click()
+        return clicker.count;
+    }
+}
+
+
+class TheClickerValueWithAnExpectedException implements Question<Integer> {
+    private final Clicker clicker;
+
+    TheClickerValueWithAnExpectedException(Clicker clicker) {
+        this.clicker = clicker
+    }
+
+    public static TheClickerValueWithAnExpectedException of(Clicker clicker) {
+        new TheClickerValueWithAnExpectedException(clicker)
+    }
+
+    @Override
+    Integer answeredBy(Actor actor) {
+        clicker.click()
+        if (clicker.count < 10) {
+            throw new IllegalStateException("Ignore this")
+        }
         return clicker.count;
     }
 }

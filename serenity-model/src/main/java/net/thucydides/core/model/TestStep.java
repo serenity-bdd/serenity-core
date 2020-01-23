@@ -48,10 +48,12 @@ public class TestStep implements Cloneable {
     private FailureCause exception;
     private TestResult result;
     private RestQuery restQuery;
-    private ReportData reportData;
+    private List<ReportData> reportData;
     private boolean precondition;
     private int level;
-
+    private Integer lineNumber;
+    private ExternalLink externalLink;
+    private Boolean manual;
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
     public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
@@ -120,6 +122,28 @@ public class TestStep implements Cloneable {
 
     public void setPrecondition(boolean precondition) {
         this.precondition = precondition;
+    }
+
+    public TestStep withResult(TestResult annotatedResult) {
+        TestStep annotatedStep = this.clone();
+        annotatedStep.result = annotatedResult;
+        return annotatedStep;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public boolean correspondsToLine(int lineNumber) {
+        return (this.lineNumber != null) && (this.lineNumber == lineNumber);
+    }
+
+    public ExternalLink getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(ExternalLink externalLink) {
+        this.externalLink = externalLink;
     }
 
     public static class TestStepBuilder {
@@ -344,7 +368,7 @@ public class TestStep implements Cloneable {
     }
 
     public boolean hasData() {
-        return reportData != null;
+        return reportData != null && ! reportData.isEmpty();
     }
 
     public RestQuery getRestQuery() {
@@ -355,8 +379,12 @@ public class TestStep implements Cloneable {
         return level;
     }
 
-    public ReportData getReportData() {
-        return reportData;
+    public List<ReportData> getReportEvidence() {
+        return getReportData().stream().filter(ReportData::isEvidence).collect(Collectors.toList());
+    }
+
+    public List<ReportData> getReportData() {
+        return (reportData == null) ? new ArrayList<>() : reportData;
     }
 
     public ScreenshotAndHtmlSource getFirstScreenshot() {
@@ -405,11 +433,23 @@ public class TestStep implements Cloneable {
     }
 
     public TestResult getResult() {
+        if (isManual()) {
+            return getResultFromThisStep();
+        }
         if (isAGroup() && !groupResultOverridesChildren()) {
             return (result != null) ? TestResultComparison.overallResultFor(result, getResultFromChildren()) : getResultFromChildren();
         } else {
             return getResultFromThisStep();
         }
+    }
+
+    private boolean isManual() {
+        return manual != null && manual;
+    }
+
+    public TestStep asManual() {
+        manual = true;
+        return this;
     }
 
     private TestResult getResultFromThisStep() {
@@ -622,6 +662,19 @@ public class TestStep implements Cloneable {
         return startTime;
     }
 
+    public int getActualScreenshotCount() {
+        int screenshotCount = 0;
+        if(hasChildren()){
+            for(TestStep step:children){
+                screenshotCount +=  step.getActualScreenshotCount()+1;
+            }
+            if(hasScreenshots()) screenshotCount += 1;
+            return screenshotCount;
+        }else{
+            return getScreenshotCount() - 1;
+        }
+    }
+
     public int getScreenshotCount() {
         return screenshots.size();
     }
@@ -631,8 +684,15 @@ public class TestStep implements Cloneable {
     }
 
     public TestStep withReportData(ReportData reportData) {
-        this.reportData = reportData;
+        if (this.reportData == null) {
+            this.reportData = new ArrayList<>();
+        }
+        this.reportData.add(reportData);
         return this;
+    }
+
+    public TestStep recordReportData(ReportData reportData) {
+        return this.withReportData(reportData);
     }
 
     @Override

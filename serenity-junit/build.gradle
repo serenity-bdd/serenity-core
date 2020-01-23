@@ -4,7 +4,16 @@ ext {
 }
 
 test {
-    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
+    maxParallelForks = Integer.parseInt(System.getProperty("forks","8"))
+}
+
+configurations {
+    compile {
+        exclude group: 'org.junit.jupiter'
+    }
+    testCompile {
+        exclude group: 'org.junit.jupiter'
+    }
 }
 
 dependencies {
@@ -15,10 +24,11 @@ dependencies {
 
     testCompile project(':serenity-test-utils')
     testCompile "commons-dbcp:commons-dbcp:1.3"
+//    testCompile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitDriverVersion}")
     testCompile "org.springframework:spring-jdbc:${springVersion}"
     testCompile "org.springframework:spring-aop:${springVersion}"
     testCompile "org.springframework:spring-orm:${springVersion}"
-    testCompile "org.javassist:javassist:3.19.0-GA"
+    testCompile "org.javassist:javassist:3.21.0-GA"
     testCompile "hsqldb:hsqldb:1.8.0.10"
 
     testCompile ("org.hibernate:hibernate-entitymanager:3.5.4-Final") {

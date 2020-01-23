@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver
 
-import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities
+import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities
 import net.serenitybdd.core.webdriver.driverproviders.CustomCapabilities
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -64,7 +64,7 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
         and:
         DesiredCapabilities capabilities = DesiredCapabilities.chrome()
         when:
-        capabilities = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(capabilities)
+        capabilities = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(capabilities)
         then:
         capabilities.getCapability("takesScreenshot") == true &&
         capabilities.getCapability("ie.ensureCleanSession") == true

@@ -56,9 +56,10 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     WebDriver newDriver() {
-        ChromeOptions chromeOptions = new ChromeOptions();
+        def desiredCapabilities = DesiredCapabilities.chrome();
+        def chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
-        DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome()
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         driver = driverService.newDriver(desiredCapabilities);
         return driver

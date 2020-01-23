@@ -1,9 +1,11 @@
 package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface ScenarioOutcome {
 
@@ -41,7 +43,7 @@ public interface ScenarioOutcome {
 
     Long getDuration();
 
-    boolean isManual();
+    Boolean isManual();
 
     String getFormattedStartTime();
 
@@ -50,4 +52,6 @@ public interface ScenarioOutcome {
     String getParentName();
 
     String getParentReport();
+
+    Set<TestTag> getTags();
 }

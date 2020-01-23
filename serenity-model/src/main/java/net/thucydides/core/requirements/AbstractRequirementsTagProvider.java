@@ -6,8 +6,11 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Arrays.stream;
 
 public abstract class AbstractRequirementsTagProvider {
 
@@ -70,8 +73,17 @@ public abstract class AbstractRequirementsTagProvider {
         return getDefaultType(level, getRequirementTypes().size() - 1);
     }
 
+    public List<String> getRequirementTypes(String rootDirectory) {
+        return new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
+    }
+
+    private List<String> requirementsTypes = null;
+
     public List<String> getRequirementTypes() {
-        return requirementsConfiguration.getRequirementTypes();
+        if (requirementsTypes == null) {
+            requirementsTypes = new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
+        }
+        return requirementsTypes;
     }
 
     protected String getDefaultRootDirectory() {
@@ -80,21 +92,27 @@ public abstract class AbstractRequirementsTagProvider {
 
 
     protected Optional<Requirement> firstRequirementFoundIn(Optional<Requirement>... requirements) {
-        for(Optional<Requirement> requirement : requirements) {
-            if (requirement.isPresent()) {
-                return requirement;
-            }
-        }
-        return Optional.empty();
+        return stream(requirements).filter(Optional::isPresent).findFirst().orElse(Optional.empty());
+//        for(Optional<Requirement> requirement : requirements) {
+//            if (requirement.isPresent()) {
+//                return requirement;
+//            }
+//        }
+//        return Optional.empty();
     }
 
     public Optional<Requirement> getParentRequirementOf(Requirement requirement) {
-        for (Requirement candidateParent : RequirementsList.of(getRequirements()).asFlattenedList()) {
-            if (candidateParent.getChildren().contains(requirement)) {
-                return Optional.of(candidateParent);
-            }
-        }
-        return Optional.empty();
+
+        return RequirementsTree.from(getRequirements()).stream().filter(
+                candidateParent -> candidateParent.hasChild(requirement)
+        ).findFirst();
+//
+//        for (Requirement candidateParent : RequirementsList.of(getRequirements()).asFlattenedList()) {
+//            if (candidateParent.getChildren().contains(requirement)) {
+//                return Optional.of(candidateParent);
+//            }
+//        }
+//        return Optional.empty();
     }
 
 

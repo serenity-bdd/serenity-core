@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -13,15 +14,17 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.File;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
@@ -31,11 +34,6 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
     private final DriverServicePool driverServicePool = new InternetExplorerServicePool();
     private final EnvironmentVariables environmentVariables;
-
-    private DriverServicePool getDriverServicePool() throws IOException {
-        driverServicePool.ensureServiceIsRunning();
-        return driverServicePool;
-    }
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -51,23 +49,26 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
+        updateIEDriverBinaryIfSpecified();
+
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
+        AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
 
         driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(desiredCapabilities));
 
-        try {
-            return retryCreateDriverOnNoSuchSession(desiredCapabilities);
-        } catch (Exception couldNotStartServer) {
-            LOGGER.warn("Failed to start the Internet driver service, using a native driver instead - " + couldNotStartServer.getMessage());
-            return new InternetExplorerDriver(desiredCapabilities);
-        }
+        return ProvideNewDriver.withConfiguration(environmentVariables,
+                desiredCapabilities,
+                driverServicePool,
+                this::retryCreateDriverOnNoSuchSession,
+                (pool, caps) -> new InternetExplorerDriver(new InternetExplorerOptions(caps))
+        );
     }
 
-    private WebDriver retryCreateDriverOnNoSuchSession(DesiredCapabilities desiredCapabilities) throws IOException {
-        return new TryAtMost(3).toStartNewDriverWith(desiredCapabilities);
+    private WebDriver retryCreateDriverOnNoSuchSession(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
+        return new TryAtMost(3).toStartNewDriverWith(pool, desiredCapabilities);
     }
 
     private class TryAtMost {
@@ -77,15 +78,17 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             this.maxTries = maxTries;
         }
 
-        public WebDriver toStartNewDriverWith(DesiredCapabilities desiredCapabilities) throws IOException {
+        public WebDriver toStartNewDriverWith(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
             try {
-                return getDriverServicePool().newDriver(desiredCapabilities);
+                return pool.newDriver(desiredCapabilities);
             } catch (NoSuchSessionException e) {
-                if (maxTries == 0) { throw e; }
+                if (maxTries == 0) {
+                    throw e;
+                }
 
                 LOGGER.error(e.getClass().getCanonicalName() + " happened - retrying in 2 seconds");
                 new InternalSystemClock().pauseFor(2000);
-                return new TryAtMost(maxTries - 1).toStartNewDriverWith(desiredCapabilities);
+                return new TryAtMost(maxTries - 1).toStartNewDriverWith(pool, desiredCapabilities);
             }
         }
     }
@@ -93,17 +96,41 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
         DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
 
-        defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
-        defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
-        defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
+        defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
+                               IE_OPTIONS_IGNORE_ZOOM_LEVEL.booleanFrom(environmentVariables, true));
+        defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS,
+                               IE_OPTIONS_ENABLE_NATIVE_EVENTS.booleanFrom(environmentVariables, true));
+        defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS,
+                               IE_OPTIONS_REQUIRE_WINDOW_FOCUS.booleanFrom(environmentVariables, false));
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
         defaults.setJavascriptEnabled(true);
 
-        defaults = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
 
-        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
+        /*
+        IgnoreZoomLevel = true,
+EnableNativeEvents = true, RequireWindowFocus = true};
+         */
+        defaults = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
+
+        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             defaults.acceptInsecureCerts();
         }
         return defaults;
     }
+
+    private void updateIEDriverBinaryIfSpecified() {
+
+        File executable = DriverServiceExecutable.called("InternetExplorerDriver.exe")
+                .withSystemProperty(WEBDRIVER_IE_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .reportMissingBinary()
+                .downloadableFrom("https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver")
+                .asAFile();
+
+        if (executable != null && executable.exists()) {
+            System.setProperty("webdriver.ie.driver", executable.getAbsolutePath());
+        }
+    }
+
+
 }

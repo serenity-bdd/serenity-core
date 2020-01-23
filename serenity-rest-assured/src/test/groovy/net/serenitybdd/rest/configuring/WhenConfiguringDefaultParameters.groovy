@@ -314,7 +314,8 @@ class WhenConfiguringDefaultParameters extends Specification {
             parser << [Parser.JSON, Parser.XML]
     }
 
-    def "should be possible add custom default filter to be used during request/response creating"(
+//    def "should be possible add custom default filter to be used during request/response creating"(
+    def add_custom_default_filter(
         final def Filter filter
     ) {
         given: "rest assured default filters updated"
@@ -341,7 +342,7 @@ class WhenConfiguringDefaultParameters extends Specification {
             }]
     }
 
-    def "should be possible add custom default filters to be used during request/response creating"() {
+    def add_custom_default_filter() {
         given: "rest assured default filters updated"
             def filter1 = new Filter() {
                 @Override
@@ -364,7 +365,7 @@ class WhenConfiguringDefaultParameters extends Specification {
             filters().containsAll(defaults)
     }
 
-    def "should be possible replace all default filters to be used during request/response creating"() {
+    def add_custom_default_filters() {
         given: "rest assured default filters updated"
             def filter1 = new Filter() {
                 @Override

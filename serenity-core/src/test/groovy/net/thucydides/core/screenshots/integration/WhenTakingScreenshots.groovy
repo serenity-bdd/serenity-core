@@ -14,6 +14,7 @@ import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Shared
 import spock.lang.Specification
@@ -52,7 +53,14 @@ class WhenTakingScreenshots extends Specification {
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
         StepEventBus.eventBus.clear()
-        driver = driverService.newDriver(DesiredCapabilities.chrome())
+
+        def desiredCapabilities = DesiredCapabilities.chrome();
+        def chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+
+        driver = driverService.newDriver(desiredCapabilities);
+
         ThucydidesWebDriverSupport.useDriver(driver)
 
         staticSite = "file://" + fileInClasspathCalled("static-site/static-index.html").getAbsolutePath();

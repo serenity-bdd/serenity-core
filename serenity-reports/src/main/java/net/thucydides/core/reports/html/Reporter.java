@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.time.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.*;
 import net.thucydides.core.guice.*;
 import net.thucydides.core.reports.*;
@@ -11,9 +12,11 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
 
+import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
+
 class Reporter {
 
-    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(60, TimeUnit.SECONDS);
+    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(600, TimeUnit.SECONDS);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 
@@ -83,7 +86,8 @@ class Reporter {
     }
 
     private boolean showThreaddumpOnReportTimeout() {
-        return environmentVariables.getPropertyAsBoolean("report.timeout.threaddumps", false);
+        return REPORT_TIMEOUT_THREADDUMPS.booleanFrom(environmentVariables, false);
+//        return environmentVariables.getPropertyAsBoolean("report.timeout.threaddumps", false);
     }
 
     private String reportFailureMessage(String reason, ReportExecutorFuture executedTask, Exception e) {

@@ -1,0 +1,7 @@
+ext {
+    projectDescription = 'Serenity BrowserStack Integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+}

@@ -92,7 +92,7 @@ public class JavascriptExecutorFacade {
     }
 
     private boolean shouldExecuteJavascript() {
-        return (!StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()
+        return (!StepEventBus.getEventBus().webdriverCallsAreSuspended()
                 && !StepEventBus.getEventBus().isDryRun()
                 && !StepEventBus.getEventBus().currentTestIsSuspended());
     }

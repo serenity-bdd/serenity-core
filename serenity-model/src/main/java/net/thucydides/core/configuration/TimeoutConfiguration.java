@@ -1,6 +1,7 @@
 package net.thucydides.core.configuration;
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
@@ -22,7 +23,13 @@ public class TimeoutConfiguration {
         }
 
         public TimeoutValue forProperty(String configurationProperty, TimeoutValue defaultTimeout) {
-            String timeout = environmentVariables.getProperty(configurationProperty);
+
+            String timeout = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(configurationProperty)
+                    .orElse(null);
+
+
+//            String timeout = environmentVariables.getProperty(configurationProperty);
             if (isEmpty(timeout)) {
                 return defaultTimeout;
             }

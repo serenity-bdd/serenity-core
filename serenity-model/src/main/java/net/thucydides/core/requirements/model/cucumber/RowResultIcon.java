@@ -1,5 +1,5 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 public interface RowResultIcon {
-    String resultToken();
+    String resultToken(int lineNumber);
 }

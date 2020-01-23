@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.DefaultUrl;
 public class HomePage extends PageObject {
 
     public final static String VIEW_PROFILE = ".view-profile";
+    public final static String TRAVEL_OPTION = "input[name='vehicle']";
 
     public void viewProfile() {
         $(VIEW_PROFILE).click();

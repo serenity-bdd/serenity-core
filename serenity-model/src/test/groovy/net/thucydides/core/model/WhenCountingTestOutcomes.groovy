@@ -20,12 +20,12 @@ class WhenCountingTestOutcomes extends Specification {
         def outcome1 = TestOutcome.forTest("test1",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
         def outcome2 = TestOutcome.forTest("test2",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
         def outcome3 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
-        def outcome4 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS)).asManualTest()
+        def outcome4 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS)).setToManual()
         def outcome5 = TestOutcome.forTest("test4",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING))
         def outcome6 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING))
-        def outcome7 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING)).asManualTest()
+        def outcome7 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING)).setToManual()
         def outcome8 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.FAILURE))
-        def outcome9 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.FAILURE)).asManualTest()
+        def outcome9 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.FAILURE)).setToManual()
         def outcome10 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.ERROR))
 
         outcomes = [outcome1,outcome2,outcome3,outcome4,outcome5,outcome6,outcome7,outcome8,outcome9,outcome10]
@@ -65,7 +65,7 @@ class WhenCountingTestOutcomes extends Specification {
             def outcome1 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
             def outcome2 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
             def outcome3 = TestOutcome.forTest("test4",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.FAILURE))
-            def outcome4 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING)).asManualTest()
+            def outcome4 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING)).setToManual()
             def outcomes = [outcome1,outcome2,outcome3,outcome4]
         when:
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+
+    <script type="text/javascript">
+        <!--
+
+        function initFields() {
+            hide('city')
+            displayFieldsAfterDelay();
+        }
+
+        function hide(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'none';
+        }
+
+        function show(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'block';
+        }
+
+        function displayCityField() {
+            show('city')
+        }
+
+        function displayFieldsAfterDelay() {
+            setTimeout("displayCityField()", 2000);
+        }
+
+        //-->
+    </script>
+</head>
+<body onLoad="initFields()">
+
+<h3>Text and text content</h3>
+<p id="block-of-text">
+    Some text content
+</p>
+
+<h3>Form elements</h3>
+<form id="form">
+    <h1 id="heading">Heading</h1>
+    <p>First Name: <input class="form-field" title="First Name" id="firstName" value="Joe"></p>
+    <p>Disabled field: <input class="form-field" title="Disabled" id="disabled-field" value="Dan" disabled></p>
+    <p id="hidden-field" style="display:none">Hidden value</p>
+
+    <select id="colors" class="color-list dropdown">
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green" selected>Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="purple">Purple</option>
+    </select>
+    <input id="city" value="Marseille">
+    <input id="itemCount" value="2">
+    <input id="totalCost" value="99.99">
+    <input id="currentDate" value="2019-06-20">
+    <input id="ddmmyyyyDate" value="20-06-2019">
+    <input id="currentTime" value="11:42">
+    <input id="altFormattedTime" value="11:42:12.345">
+    <input id="flag" value="true">
+
+</form>
+<div id="stations">
+    <div class="station">Canary Wharf</div>
+    <div class="station">London Bridge</div>
+    <div class="station">Waterloo</div>
+</div>
+
+<div id="hidden-stations" style="display:none">
+    <div class="hidden-station">Paddington</div>
+    <div class="hidden-station">Baker Street</div>
+    <div class="hidden-station">Bond Street</div>
+</div>
+
+<div id="train-lines">
+    <p>A list of London tube lines</p>
+    <div class="train-line">
+        <p class="train-line-name">Jubilee Line</p>
+    </div>
+    <div class="train-line">
+        <p class="train-line-name">Bakerloo Line</p>
+    </div>
+    <div class="train-line">
+        <p class="train-line-name">Central Line</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
@@ -120,7 +121,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 
     @Before
     public void openLocalStaticSite() {
-        driver = new HtmlUnitDriver();
+        driver =  new HtmlUnitDriver(BrowserVersion.CHROME, true);
         openStaticTestSite();
         indexPage = new TablesPage(driver, 1000);
         indexPage.setWaitForTimeout(100);

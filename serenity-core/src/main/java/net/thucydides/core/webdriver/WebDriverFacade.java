@@ -1,36 +1,26 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.eventbus.EventBus;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.HasInputDevices;
-import org.openqa.selenium.interactions.Keyboard;
-import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.time.Duration;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import java.util.*;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -150,8 +140,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
                 webDriverFactory.setupFixtureServices();
                 return webDriverFactory.newWebdriverInstance(driverClass, options, environmentVariables);
             }
-        } catch (UnsupportedDriverException e) {
-            throw new UnsupportedDriverException("Could not instantiate " + driverClass, e);
+        } catch (DriverConfigurationError e) {
+            throw new DriverConfigurationError("Could not instantiate " + driverClass, e);
         }
     }
 
@@ -235,37 +225,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         }
         return element;
    }
-
-    //    public <T extends WebElement> List<T> findElements(final By by) {
-//        if (!isEnabled()) {
-//            return Collections.emptyList();
-//        }
-//        List<T> elements;
-//        try {
-//            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
-//            elements = getProxiedDriver().findElements(by);
-//        } finally {
-//            webDriverFactory.resetTimeouts(getProxiedDriver());
-//        }
-//        return elements;
-//    }
-//
-//    public <T extends WebElement> T findElement(final By by) {
-//        if (!isEnabled()) {
-//            return (T) new WebElementFacadeStub();
-//        }
-//
-//        T element;
-//
-//        try {
-//            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
-//            element = getProxiedDriver().findElement(by);
-//        } finally {
-//            webDriverFactory.resetTimeouts(getProxiedDriver());
-//        }
-//        return element;
-//    }
-
 
     public String getPageSource() {
         if (!isEnabled()) {
@@ -435,7 +394,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     @Override
     public String toString() {
-        return "WebDriverFacade for " + getDriverName();
+        return (proxiedWebDriver == null) ? "Uninitialised WebDriverFacade" : proxiedWebDriver.toString();
     }
 
     public WebDriverFacade withOptions(String options) {
@@ -449,5 +408,25 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public boolean isDisabled() {
         return (proxyInstanciated() && proxiedWebDriver.getClass().getName().endsWith("Stub"));
+    }
+
+    @Override
+    public void perform(Collection<Sequence> actions) {
+        if (proxiedWebDriver instanceof Interactive) {
+            ((Interactive) proxiedWebDriver).perform(actions);
+            return;
+        }
+        throw new UnsupportedOperationException("Underlying driver does not implement advanced"
+                + " user interactions yet.");
+    }
+
+    @Override
+    public void resetInputState() {
+        if (proxiedWebDriver instanceof Interactive) {
+            ((Interactive) proxiedWebDriver).resetInputState();
+            return;
+        }
+        throw new UnsupportedOperationException("Underlying driver does not implement advanced"
+                + " user interactions yet.");
     }
 }

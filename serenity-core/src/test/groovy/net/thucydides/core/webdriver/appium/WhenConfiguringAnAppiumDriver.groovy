@@ -5,8 +5,10 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
+import net.thucydides.core.webdriver.WebDriverFacade
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * Created by Ben on 10/11/14.
@@ -26,6 +28,64 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         value     | expectedPlatform
         "IOS"     | MobilePlatform.IOS
         "android" | MobilePlatform.ANDROID
+    }
+
+    def "can alternatively derive the target platform from the context variable"() {
+        given:
+        environmentVariables.setProperty("context", value)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        value     | expectedPlatform
+        "IOS"     | MobilePlatform.IOS
+        "android" | MobilePlatform.ANDROID
+    }
+
+    def "the context overrides the environment property for the target platform"() {
+        given:
+        environmentVariables.setProperty("appium.platformName", env)
+        environmentVariables.setProperty("context", context)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        context   | env       | expectedPlatform
+        "IOS"     | "android" | MobilePlatform.IOS
+        "android" | "IOS"     | MobilePlatform.ANDROID
+    }
+
+    def "invalid contexts fall back to the environment property"() {
+        given:
+        environmentVariables.setProperty("appium.platformName", env)
+        environmentVariables.setProperty("context", context)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        env       | context      | expectedPlatform
+        "IOS"     | "Oreo"       | MobilePlatform.IOS
+        "android" | "IOS6.0"     | MobilePlatform.ANDROID
+    }
+
+    def "the platform may be defined by the driver capabilities"() {
+        given:
+        def driver = Stub(RemoteWebDriver)
+        def caps = new DesiredCapabilities()
+        caps.setCapability("platformName", value)
+        driver.getCapabilities() >> caps
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        def definedPlatform = appiumConfiguration.getTargetPlatform(driver)
+        then:
+        definedPlatform == expectedPlatform
+        where:
+        value     | expectedPlatform
+        "IOS"     | MobilePlatform.IOS
+        "ANDROID" | MobilePlatform.ANDROID
     }
 
     def "should provide meaningful message if the platform is not specified"() {
@@ -104,5 +164,41 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         ThucydidesConfigurationException invalidConfiguration = thrown()
         invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")
     }
+
+    def "should filter Appium properties that are not supported if 'appium.process.desired.capabilities' is enabled"() {
+        given:
+        environmentVariables.setProperty("appium.process.desired.capabilities", "true")
+        environmentVariables.setProperty("appium.unknown", "value")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        !appiumConfiguration.capabilities.getCapabilityNames().contains("unknown")
+    }
+
+    def "should not filter Appium properties that are not supported if 'appium.process.desired.capabilities' is disabled"() {
+        given:
+        environmentVariables.setProperty("appium.build", "value")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.capabilities.getCapabilityNames().contains("build")
+    }
+
+    def "should add 'appium:' prefix if capability listed in 'appium.additional.capabilities and 'appium.process.desired.capabilities' enabled"() {
+        given:
+        environmentVariables.setProperty("appium.process.desired.capabilities", "true")
+        environmentVariables.setProperty("appium.unknown", "value")
+        environmentVariables.setProperty("appium.additional.capabilities", "unknown, ")
+        environmentVariables.setProperty("appium.app", 'classpath:/apps/dummy-app')
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.capabilities.getCapability("appium:unknown") == "value"
+    }
+
+
+
 
 }

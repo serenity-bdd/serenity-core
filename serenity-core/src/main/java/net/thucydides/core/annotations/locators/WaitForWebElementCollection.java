@@ -22,7 +22,7 @@ public class WaitForWebElementCollection {
             if (elements == null) {
                 return false;
             }
-            return elements.isEmpty() || elements.get(0).isDisplayed();
+            return elements.isEmpty() || ElementIsUsable.forElement(elements.get(0));
         });
 
         COLLECTION_STRATEGY.put(Paranoid, elements -> {

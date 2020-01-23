@@ -50,6 +50,9 @@ class SaucelabsDriverBuilder extends RemoteDriverBuilder {
         String driver = getSaucelabsDriverFrom(environmentVariables);
         DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
+        AddLoggingPreferences.from(environmentVariables).to(capabilities);
+
         return saucelabsRemoteDriverCapabilities.getCapabilities(capabilities);
     }
 

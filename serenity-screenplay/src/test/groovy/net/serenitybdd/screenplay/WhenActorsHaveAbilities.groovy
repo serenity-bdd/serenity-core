@@ -4,6 +4,8 @@ import spock.lang.Specification
 
 class WhenActorsHaveAbilities extends Specification{
 
+    interface CanLevitate {}
+
     class PlayTheGuitar implements Ability {
     }
 
@@ -16,7 +18,10 @@ class WhenActorsHaveAbilities extends Specification{
         }
     }
 
-    class ReachEnlightenment extends Meditate {}
+    class ReachEnlightenment extends Meditate{
+    }
+
+    class AttainNirvana extends Meditate implements CanLevitate {}
 
     def "actors can be associated with Abilities"() {
         given:
@@ -48,6 +53,29 @@ class WhenActorsHaveAbilities extends Specification{
         actor.can(reachEnlightenment)
         then:
         actor.abilityTo(Meditate) instanceof ReachEnlightenment
+
+    }
+
+    def "actors don't care what the Ability is called, just what it can do"() {
+        given:
+        def actor = Actor.named("Bruce")
+        def attainNirvana = new AttainNirvana()
+        when:
+        actor.can(attainNirvana)
+        then:
+        UseAnAbility.of(actor).that(CanLevitate.class) instanceof CanLevitate
+
+    }
+
+    def "actors won't return just any old Ability"() {
+        given:
+        def actor = Actor.named("Bruce")
+        def reachEnlightenment = new ReachEnlightenment()
+        actor.can(reachEnlightenment)
+        when:
+        UseAnAbility.of(actor).that(CanLevitate.class)
+        then:
+        thrown NoMatchingAbilityException
 
     }
 

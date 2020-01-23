@@ -63,8 +63,7 @@ body {
 {
 
     min-width:1024px;
-    max-width:1024px;
-    margin:0 auto;
+    margin:0 1em;
     width: auto !important; /*IE6 hack*/
     width:1024px;
 
@@ -119,8 +118,7 @@ footer {
 #topbanner
 {
     min-width:1024px;
-    max-width:1024px;
-    margin:0 auto;
+    margin:0 1em;
     width: auto !important; /*IE6 hack*/
     width:1024px; /*IE6 hack*/
     /*border: 1px solid #FF0000;*/
@@ -280,6 +278,18 @@ h3.discreet-story-header {
     /*border: #6495ed solid thin;*/
     padding: 4px;
 }
+
+.discreet-requirement-narrative-title table {
+    border: #6495ed solid thin;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.discreet-requirement-narrative-title td, th {
+    padding: 0.25em;
+}
+
 .tags {
     vertical-align: text-top;
     padding: 4px;
@@ -519,15 +529,16 @@ i.tag {
     margin-right: 5px;
 }
 
-.error-message-cell {
-    max-width: 755px;
+.error-message-cell .table{
+    width: 99%;
 }
 .error-message {
     font-family:euphemia, verdana, sans-serif; font-size:12px; color:#CC0033; text-align:left; width:100%;
 }
 
 .error-message-title {
-    font-size: 16px;
+    font-family:monospace; font-size: 14px; color: black;
+    white-space: pre-wrap;
 }
 .parameters {
     display: block;
@@ -962,6 +973,7 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 .overview {
     border: 0px;
     padding-top: 10px;
+    width: 100%;
     min-height: 650px;
     min-width: 1000px;
 }
@@ -983,7 +995,6 @@ a.tagLink:visited, a.tagLink:link {
 }
 .story-title
 {
-    width:1008px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -1008,7 +1019,7 @@ a.tagLink:visited, a.tagLink:link {
 
 .step-table
 {
-    width:95%;
+    width:100%;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -1018,7 +1029,12 @@ a.tagLink:visited, a.tagLink:link {
     border-color: #e7e8e3;
     border-style: solid;
     table-layout: fixed;
+}
 
+.step-table-nested
+{
+    width:100%;
+    table-layout: fixed;
 }
 
 .test-case-caption {
@@ -1033,12 +1049,9 @@ a.tagLink:visited, a.tagLink:link {
 .outcome-icon {
     float: left;
 }
-.step-description-wide-column {
-    width: 750px;
-}
 
 .step-description-column {
-    width: 650px;
+    width: 100%;
 }
 
 .step-table th {
@@ -1046,7 +1059,7 @@ a.tagLink:visited, a.tagLink:link {
 }
 
 .step-table td {
-    padding: 5px;
+    padding: 5px 0px;
 }
 
 td.step-icon {
@@ -1055,7 +1068,7 @@ td.step-icon {
 
 .step-description {
     overflow: auto;
-    max-width: 700px;
+    margin-right: 1em;
 }
 
 .step-table-separator td {
@@ -1089,7 +1102,6 @@ td.step-icon {
 
 #results-dashboard
 {
-    width:1025px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -1491,7 +1503,6 @@ table.coverage_data td {
     color:#0d78ae;
     font-family:euphemia, verdana, sans-serif;
     font-size:14px;
-    width: 1008px;
     min-width: 1008px;
 }
 
@@ -1582,12 +1593,24 @@ ul.second-level-requirements  {
 }
 
 #projectname-banner {
-    float:right
+    float:right;
+    width:70%
 }
 
 .projectname {
     font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
-    font-weight:normal; font-size:2em; color:#428bca; position:relative; top:30px; right:20px;
+    float:right;
+}
+
+.projecttitle {
+    font-weight:normal; font-size:2em; color:#428bca; position:relative;
+    text-align: right;
+}
+
+.projectsubtitle {
+    font-weight:normal; font-style: italic; font-size:1.25em; color:#428bca; position:relative;
+    display: block;
+    text-align: right;
 }
 
 .togglePieChart {
@@ -1682,8 +1705,10 @@ ul.second-level-requirements  {
     color: grey;
 }
 
-.rest-query {
-    padding-left : 10px;
+.piece-of-evidence {
+    padding-left : 1em;
+    padding-top:0.5em;
+    display: block;
 }
 
 .parent-requirement-label {
@@ -1909,6 +1934,11 @@ h3 {
     margin: 0px;
 }
 
+.scenario-docs ul {
+    padding-left: 3.5em;
+    margin: 0px;
+}
+
 .summary-stats td {
     font-weight: bold;
 }
@@ -2062,23 +2092,26 @@ div.scenario-text:empty {
 }
 
 .stacktrace-details {
-    width: 100%;
+    width: 99%;
     margin-left: 0px !important;
     background-color: bisque;
     font-family: monospace;
 }
 
 .rest-query-details {
-    width: 100%;
+    width: 99%;
     margin-left: 0px !important;
     background-color: #EEEEE0;
     font-family: monospace;
 }
 
 .details-button  {
+    float: right;
     margin-top: 4px !important;
     margin-bottom: 4px !important;
+    margin-right: 5px; !important;
     font-size: 1em;
+    background-color: rgba(238,0,0,0.3);
 }
 
 .missing-scenario-warning {
@@ -2114,7 +2147,6 @@ td.indented-error-category i {
 
 .example-table table {
     min-width: 80%;
-    max-width: 80%;
 }
 .example-table table th {
     padding: 4px;
@@ -2138,7 +2170,7 @@ td.indented-error-category i {
 
 .test-report table {
     border: 0.75px solid dimgrey;
-    min-width: 98%;
+    min-width: 80%;
 }
 .test-report th {
     font-weight: bold;
@@ -2183,6 +2215,9 @@ td.indented-error-category i {
     color: grey;
 }
 
+.example-table-in-scenario .row {
+    margin-right: 15px;
+}
 
 
 .example-table-in-summary th:last-child {
@@ -2199,6 +2234,10 @@ td.indented-error-category i {
 
 .example-table-in-summary {
     padding-bottom: 0px;
+}
+
+.example-table-in-summary .row {
+    margin-right: 15px;
 }
 
 .example-table-in-scenario th:last-child {
@@ -2238,9 +2277,61 @@ td.indented-error-category i {
 .more-details-result-pending { background-color: #6884A6; !important;  }
 .more-details-result-success { background-color: #1D9918; !important;  }
 
+.badge-compromised { background-color: fuchsia; }
+.badge-error { background-color: darkorange; }
+.badge-failure { background-color: #f8001f; }
+.badge-skipped { background-color: #B2A671; }
+.badge-ignored { background-color: #777777; }
+.badge-pending { background-color: #6884A6; }
+.badge-success { background-color: #1D9918; }
+
+
 .scenario-report-badges {
     min-height:1.5em;
+    margin-left:0.5em;
 }
 .scenario-report-badge {
     float:right;
+}
+
+span.evidence {
+    display: block;
+}
+
+.scenario-docs blockquote {
+    font-style: italic;
+    font-size: 1em;
+}
+
+.manual-test-result {
+    display:block;
+    margin-left: 4em;
+}
+
+.environment {
+    background-color: #fff;
+    font-size: 16px;
+    table-layout: fixed;
+}
+
+.environment th {
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.environment td {
+    color: #69727f;
+    text-align: center;
+}
+
+.example-heading {
+    font-width: bold;
+}
+
+.example-description {
+    display: block;
+    margin-left: 2.5em;
+    padding: 0.25em;
+    font-style: italic;
 }

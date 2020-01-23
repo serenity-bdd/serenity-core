@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ public class WhenUsingAProvidedDriver {
 
         @Override
         public WebDriver newDriver() {
-            return new HtmlUnitDriver();
+            return  new HtmlUnitDriver(BrowserVersion.CHROME, true);
         }
 
         @Override

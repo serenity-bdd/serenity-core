@@ -21,10 +21,12 @@ public class Client {
 
     public static Question<String> color() {
         return new Question<String>() {
-            @Override
-            @Subject("favorite color")
             public String answeredBy(Actor actor) {
                 return SelectedVisibleTextValue.of(ProfilePage.COLOR).viewedBy(actor).asString();
+            }
+
+            public String getSubject() {
+                return "her favorite colour";
             }
         };
     }

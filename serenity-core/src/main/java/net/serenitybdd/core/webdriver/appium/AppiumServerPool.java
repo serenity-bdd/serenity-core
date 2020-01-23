@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.appium;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriverException;
@@ -38,7 +39,10 @@ public class AppiumServerPool {
     private Optional<String> defaultHubUrl = Optional.empty();
 
     protected AppiumServerPool(EnvironmentVariables environmentVariables) {
-        Optional<String> configuredAppiumHub = Optional.ofNullable(environmentVariables.getProperty("appium.hub"));
+        Optional<String> configuredAppiumHub = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                                               .getOptionalProperty("appium.hub");
+
+//        Optional<String> configuredAppiumHub = Optional.ofNullable(environmentVariables.getProperty("appium.hub"));
 
         if (configuredAppiumHub.isPresent() && AppiumDevicePool.instance(environmentVariables).hasOnlyOneDevice()) {
             LOGGER.info("Using configured default hub url " + configuredAppiumHub.get());

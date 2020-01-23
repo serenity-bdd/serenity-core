@@ -1,12 +1,9 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Examples;
 import gherkin.ast.Feature;
 import gherkin.ast.ScenarioDefinition;
 
 import java.util.Optional;
-
-import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
 
 public abstract class NamedExampleTable {
     public static NamedExampleTable forScenarioDefinition(Feature feature, ScenarioDefinition scenarioDefinition, String exampleName) {

@@ -1,14 +1,11 @@
 package net.serenitybdd.reports.model
 
+import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.util.EnvironmentVariables
 
 class ReportTags(val environmentVariables: EnvironmentVariables) {
 
-    companion object {
-        const val REPORTED_TAG_TYPES = "report.tagtypes"
-    }
-
-    val displayedTagTypes = environmentVariables.getProperty(REPORTED_TAG_TYPES, "")
+    val displayedTagTypes = ThucydidesSystemProperty.REPORT_TAGTYPES.from(environmentVariables)
             .split(",")
             .map { value -> value.trim() }
             .filter { value -> value.isNotEmpty() }

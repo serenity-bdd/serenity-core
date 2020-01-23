@@ -10,10 +10,8 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
 import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
 import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
-import net.thucydides.core.requirements.model.OverviewReader;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +46,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
-                                          String rootPackage,
-                                          RequirementsStore requirementsStore) {
+            String rootPackage,
+            RequirementsStore requirementsStore) {
         super(environmentVariables);
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
@@ -59,7 +57,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
         this(environmentVariables, rootPackage,
                 new FileSystemRequirementsStore(getRequirementsDirectory(ConfiguredEnvironment.getConfiguration().getOutputDirectory()),
-                                                rootPackage + "-package-requirements.json"));
+                        rootPackage + "-package-requirements.json"));
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables) {
@@ -125,7 +123,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             allRequirements = removeChildrenFromTopLevelRequirementsIn(allRequirements);
 
             if (!allRequirements.isEmpty()) {
-                classpathRequirements =new ArrayList<>(allRequirements);
+                classpathRequirements = new ArrayList<>(allRequirements);
                 Collections.sort(classpathRequirements);
 
                 requirementsStore.write(classpathRequirements);
@@ -151,7 +149,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private final Lock readingPaths = new ReentrantLock();
 
-    private List<String> requirementPathsStartingFrom(String rootPackage){
+    private List<String> requirementPathsStartingFrom(String rootPackage) {
 
         if (requirementPaths == null) {
             readingPaths.lock();
@@ -182,11 +180,12 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private boolean classRepresentsARequirementIn(ClassPath.ClassInfo classInfo) {
-        return (ClassInfoAnnotations.theClassDefinedIn(classInfo).hasAnAnnotation(RunWith.class, net.thucydides.core.annotations.Narrative.class))
-                || (ClassInfoAnnotations.theClassDefinedIn(classInfo).hasAPackageAnnotation(net.thucydides.core.annotations.Narrative.class))
+        return (ClassInfoAnnotations.theClassDefinedIn(classInfo)
+                .hasAnAnnotation(net.thucydides.core.annotations.Narrative.class))
+                || (ClassInfoAnnotations.theClassDefinedIn(classInfo)
+                .hasAPackageAnnotation(net.thucydides.core.annotations.Narrative.class))
                 || (ClassInfoAnnotations.theClassDefinedIn(classInfo).containsTests());
     }
-
 
     private Set<Requirement> removeChildrenFromTopLevelRequirementsIn(Set<Requirement> allRequirements) {
         Set<Requirement> prunedRequirements = new HashSet();
@@ -226,28 +225,40 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     }
 
-
     @Override
     public java.util.Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
         return getTestCaseRequirementOf(testOutcome);
     }
 
     public java.util.Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
-        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
-                return java.util.Optional.of(requirement);
-            }
-        }
-        return java.util.Optional.empty();
+//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+//            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
+//                return java.util.Optional.of(requirement);
+//            }
+//        }
+//        return java.util.Optional.empty();
+//
+        return AllRequirements.asStreamFrom(getRequirements())
+                .filter(
+                        requirement -> (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag()))
+                ).findFirst();
     }
 
     @Override
     public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
-        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
-                return Optional.of(requirement);
-            }
+        Optional<Requirement> matching = AllRequirements.asStreamFrom(getRequirements())
+                .filter(requirement -> requirement.asTag().isAsOrMoreSpecificThan(testTag))
+                .findFirst();
+
+        if (matching.isPresent()) {
+            return matching;
         }
+//
+//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+//            if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
+//                return Optional.of(requirement);
+//            }
+//        }
         return uniqueRequirementWithName(testTag.getName());
     }
 
@@ -278,18 +289,22 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private Optional<Requirement> parentOf(Requirement child) {
-        for (Requirement requirement : AllRequirements.in(requirements)) {
-            if (requirement.getChildren().contains(child)) {
-                return Optional.of(requirement);
-            }
-        }
-        return Optional.empty();
+        return AllRequirements.asStreamFrom(getRequirements())
+                .filter(requirement -> requirement.getChildren().contains(child))
+                .findFirst();
+//
+//
+//        for (Requirement requirement : AllRequirements.in(requirements)) {
+//            if (requirement.getChildren().contains(child)) {
+//                return Optional.of(requirement);
+//            }
+//        }
+//        return Optional.empty();
     }
 
     private static File getRequirementsDirectory(File directory) {
         return new File(directory, "requirements");
     }
-
 
     public void clearCache() {
         requirementsStore.clear();

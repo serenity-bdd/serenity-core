@@ -32,6 +32,7 @@ class WhenCreatingARequirement extends Specification {
                                          .withType("capability")
                                          .withNarrative("as a someone I want something so that something else")
        then: "we should have a correctly instantiated requirement"
+           requirement != null
     }
 
     def "should report no test results for requirements without associated tests"() {

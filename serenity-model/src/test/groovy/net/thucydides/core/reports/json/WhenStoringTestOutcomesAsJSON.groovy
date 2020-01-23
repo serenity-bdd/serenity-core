@@ -285,7 +285,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     def "should generate an JSON report for a manual acceptance test run"() {
         given:
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).asManualTest();
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).setToManual();
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:

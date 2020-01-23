@@ -11,7 +11,7 @@ import java.util.*;
 
 public class ExcludedUnrelatedRequirementTypes {
 
-    private final static String DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE = "capability,epic,feature";
+    private final static String DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE = "theme,epic,capability,feature";
 
     private final static List<String> EXCLUDE_NONE = NewList.of("none");
 
@@ -27,7 +27,7 @@ public class ExcludedUnrelatedRequirementTypes {
 
     public static ExcludedUnrelatedRequirementTypes definedIn(EnvironmentVariables environmentVariables) {
         String unrleatedRequirementTypes =
-                ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
+                ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
                         DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE);
 
         return new ExcludedUnrelatedRequirementTypes(

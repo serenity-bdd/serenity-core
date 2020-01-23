@@ -37,17 +37,11 @@ public abstract class BaseReportingTask implements ReportingTask {
                                     final String template,
                                     final String outputFile) throws IOException {
 
-        Stopwatch stopwatch = Stopwatch.started();
-
-        LOGGER.debug("Generating report in {}", outputFile);
-
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
         try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
             writer.flush();
         }
-
-        LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
     }
 
     protected Merger mergeTemplate(final String templateFile) {

@@ -28,16 +28,20 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
         Optional<String> driverDefinedInEnvironment = Optional.ofNullable(WebDriverFactory.getDriverFrom(getEnvironmentVariables()));
         Optional<String> driverDefinedInTest = ThucydidesWebDriverSupport.getDefaultDriverType();
 
-        String driverType =  driverDefinedInTest.orElse(driverDefinedInEnvironment.orElse(DEFAULT_WEBDRIVER_DRIVER));
+        String driverType = driverTypeOf(driverDefinedInTest.orElse(driverDefinedInEnvironment.orElse(DEFAULT_WEBDRIVER_DRIVER)));
 
         return lookupSupportedDriverTypeFor(driverType);
+    }
+
+    private String driverTypeOf(String driverName) {
+        return (driverName.contains(":") ? driverName.substring(0, driverName.indexOf(":")) : driverName);
     }
 
     /**
      * Transform a driver type into the SupportedWebDriver enum. Driver type can
      * be any case.
      *
-     * @throws UnsupportedDriverException
+     * @throws DriverConfigurationError
      */
     private SupportedWebDriver lookupSupportedDriverTypeFor(final String driverType) {
         SupportedWebDriver driver = null;
@@ -50,23 +54,8 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
     }
 
     private void throwUnsupportedDriverExceptionFor(final String driverType) {
-        throw new UnsupportedDriverException(driverType
+        throw new DriverConfigurationError(driverType
                 + " is not a supported browser. Supported driver values are: "
                 + SupportedWebDriver.listOfSupportedDrivers());
     }
-
-    @Override
-    public WebDriverConfiguration copy() {
-        return withEnvironmentVariables(getEnvironmentVariables());
-    }
-
-
-    @Override
-    public WebDriverConfiguration withEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        WebDriverConfiguration copy = new WebDriverConfiguration(environmentVariables.copy());
-        copy.outputDirectory = null; // Reset to be reloaded from the System properties
-        copy.defaultBaseUrl = defaultBaseUrl;
-        return copy;
-    }
-
 }

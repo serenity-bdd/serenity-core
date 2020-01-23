@@ -10,14 +10,14 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+//import org.openqa.selenium.firefox.FirefoxDriver
+//import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
 
 class WhenHandlingFailingTests extends Specification {
 
-    def firefoxDriver = Mock(FirefoxDriver)
-    def htmlUnitDriver = Mock(HtmlUnitDriver)
+//    def firefoxDriver = Mock(FirefoxDriver)
+//    def htmlUnitDriver = Mock(HtmlUnitDriver)
     def environmentVariables = new MockEnvironmentVariables()
     File temporaryDirectory
 

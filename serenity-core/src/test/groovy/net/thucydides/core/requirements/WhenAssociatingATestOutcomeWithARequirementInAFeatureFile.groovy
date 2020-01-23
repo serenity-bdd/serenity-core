@@ -79,7 +79,7 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
             def growPotatoesTag = TestTag.withName("Grow pink and purple potatoes").andType("capability")
         then:
             Optional<Requirement> requirement = capabilityProvider.getRequirementFor(growPotatoesTag)
-            requirement.empty()
+            !requirement.isPresent()
     }
 }
 

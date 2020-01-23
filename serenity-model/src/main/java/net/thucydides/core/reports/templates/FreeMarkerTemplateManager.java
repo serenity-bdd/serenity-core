@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.templates;
 
-import java.util.HashMap;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Version;
@@ -20,7 +19,7 @@ public class FreeMarkerTemplateManager implements TemplateManager {
 
     Map<String, ReportTemplate> templateCache = new ConcurrentHashMap();
 
-    public FreeMarkerTemplateManager() throws Exception {
+    public FreeMarkerTemplateManager() {
         cfg = new Configuration(FREEMARKER_VERSION);
         cfg.setNumberFormat("0.######");
         cfg.setLocale(Locale.UK);

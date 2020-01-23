@@ -14,3 +14,7 @@ out
 /serenity-smoketests/saucelabs.sh
 /wip.todo
 .okhttpcache
+.settings
+.project
+.classpath
+bin

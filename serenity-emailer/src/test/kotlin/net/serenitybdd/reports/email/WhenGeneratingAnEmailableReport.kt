@@ -14,13 +14,14 @@ import java.nio.file.Paths
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAnEmailableReport {
 
-    val TEST_OUTCOMES_WITH_A_SINGLE_TEST = ClassLoader.getSystemResource("test_outcomes/with_different_results").path
+    val TEST_OUTCOMES_WITH_MULTIPLE_RESULTS = ClassLoader.getSystemResource("test_outcomes/with_different_results").path
 
     private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
 
 
     init {
-        environmentVariables.setProperty("serenity.project.name", "A Simple Cucumber Report")
+        environmentVariables.setProperty("serenity.summary.report.title", "A Simple Cucumber Report")
+        environmentVariables.setProperty("serenity.report.url", "http://my.serenity.report")
         environmentVariables.setProperty("project.version", "1.2.3")
     }
 
@@ -31,7 +32,7 @@ class WhenGeneratingAnEmailableReport {
         private val reportContents: String
 
         init {
-            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
             reportContents = generatedReport.readText()
         }
 
@@ -43,7 +44,13 @@ class WhenGeneratingAnEmailableReport {
 
         @Test
         fun `should have a configurable title`() {
-            assertThat(reportContents).contains("Test Report - A Simple Cucumber Report")
+            assertThat(reportContents).contains("A Simple Cucumber Report")
+        }
+
+        @Test
+        fun `should have a report link`() {
+            assertThat(reportContents).contains("View full report")
+            assertThat(reportContents).contains("http://my.serenity.report")
         }
 
         @Test
@@ -51,6 +58,7 @@ class WhenGeneratingAnEmailableReport {
             assertThat(reportContents).contains("27 tests executed")
         }
     }
+
 
     @Nested
     inner class ReportWithCustomFields {
@@ -66,7 +74,7 @@ class WhenGeneratingAnEmailableReport {
             environmentVariables.setProperty("report.customfields.User", "tim")
             environmentVariables.setProperty("report.customfields.order", "environment,version,HostName,User")
 
-            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
             reportContents = generatedReport.readText()
             parsedReport = parse(reportContents)
         }
@@ -74,13 +82,13 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should get display customisable environment variables from the report-summary-* properties`() {
             val fieldValues = parsedReport.getElementsByClass("custom-value").map { element -> element.text() }
-            assertThat(fieldValues).contains("NAV Automation INT5","INT NAV 13.5.0","localhost","tim")
+            assertThat(fieldValues).contains("NAV Automation INT5", "INT NAV 13.5.0", "localhost", "tim")
         }
 
         @Test
         fun `customisable environment variables should appear in the order specified in the report-dot-customfields-order field`() {
             val fieldValues = parsedReport.getElementsByClass("custom-title").map { element -> element.text() }
-            assertThat(fieldValues).contains("Environment","Version","Host name","User")
+            assertThat(fieldValues).contains("Environment", "Version", "Host name", "User")
         }
     }
 
@@ -93,7 +101,7 @@ class WhenGeneratingAnEmailableReport {
         init {
             environmentVariables.setProperty("report.tagtypes", "group, feature")
 
-            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
             reportContents = generatedReport.readText()
             parsedReport = parse(reportContents)
         }
@@ -101,20 +109,20 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should list all configured summary tag types as headings`() {
             val tagTitles = parsedReport.getElementsByClass("tag-title").map { element -> element.text() }
-            assertThat(tagTitles).containsExactly("Group","Feature")
+            assertThat(tagTitles).containsExactly("Group", "Feature")
         }
 
         @Test
         fun `should list the tags of each specified tag type as sub-headings`() {
             val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
-            assertThat(tagSubTitles).contains("Alpha","Beta","Gamma")
+            assertThat(tagSubTitles).contains("Alpha", "Beta", "Gamma")
         }
 
         @Test
         fun `should list feature tags in their shortened form`() {
             val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
-            assertThat(tagSubTitles).contains("Broken scenarios","Compromised scenarios","Failed scenarios","Ignored scenarios",
-                                              "Mixed scenarios","Passing scenarios","Pending scenarios")
+            assertThat(tagSubTitles).contains("Broken scenarios", "Compromised scenarios", "Failed scenarios", "Ignored scenarios",
+                    "Mixed scenarios", "Passing scenarios", "Pending scenarios")
         }
 
         @Test
@@ -123,12 +131,13 @@ class WhenGeneratingAnEmailableReport {
                     .getElementsByClass("frequent-failure")
                     .map { it.text() }
 
-            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception") }
+            assertThat(unstableFeatures).containsExactly("Assertion error", "Illegal argument exception", "Test compromised exception")
+        }
 
         @Test
         fun `should list top most unstable features`() {
             val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-            assertThat(unstableFeatures).containsExactly("Broken scenarios","Failed scenarios","Mixed scenarios")
+            assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios", "Compromised scenarios", "Mixed scenarios")
         }
     }
 
@@ -139,7 +148,7 @@ class WhenGeneratingAnEmailableReport {
         private val parsedReport: Document
 
         init {
-            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
             reportContents = generatedReport.readText()
             parsedReport = parse(reportContents)
         }
@@ -148,22 +157,22 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should list feature tags in their shortened form`() {
             val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
-            assertThat(tagSubTitles).contains("Broken scenarios","Compromised scenarios","Failed scenarios","Ignored scenarios",
-                    "Mixed scenarios","Passing scenarios","Pending scenarios")
+            assertThat(tagSubTitles).contains("Broken scenarios", "Compromised scenarios", "Failed scenarios", "Ignored scenarios",
+                    "Mixed scenarios", "Passing scenarios", "Pending scenarios")
         }
 
         @Test
         fun `should list top most frequent failures features`() {
             val unstableFeatures = parsedReport.getElementsByClass("failure-scoreboard")[0]
-                                               .getElementsByClass("frequent-failure")
-                                               .map { it.text() }
-            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception")
+                    .getElementsByClass("frequent-failure")
+                    .map { it.text() }
+            assertThat(unstableFeatures).containsExactly("Assertion error", "Illegal argument exception", "Test compromised exception")
         }
 
         @Test
         fun `should list top most unstable features`() {
             val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-            assertThat(unstableFeatures).containsExactly("Broken scenarios","Failed scenarios","Mixed scenarios")
+            assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios", "Compromised scenarios", "Mixed scenarios")
         }
 
         @Nested
@@ -175,7 +184,7 @@ class WhenGeneratingAnEmailableReport {
             init {
                 environmentVariables.setProperty("report.scoreboard.size", "2")
 
-                generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+                generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
                 reportContents = generatedReport.readText()
                 parsedReport = parse(reportContents)
             }
@@ -184,11 +193,37 @@ class WhenGeneratingAnEmailableReport {
             @Test
             fun `should list no more than the configured number of errors or  unstable features`() {
                 val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-                assertThat(unstableFeatures).containsExactly("Broken scenarios", "Failed scenarios")
+                assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios")
             }
+        }
+    }
+
+    @Nested
+    inner class ReportShowingTheFullFeatureList {
+        private val generatedReport: File
+        private val reportContents: String
+        private val parsedReport: Document
+
+        init {
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
+            reportContents = generatedReport.readText()
+            parsedReport = parse(reportContents)
+        }
+
+
+        @Test
+        fun `should list feature titles`() {
+            val featureTitles = parsedReport.getElementsByClass("feature-title").map { element -> element.text() }
+            assertThat(featureTitles).contains("Broken scenarios",
+                    "Compromised scenarios",
+                    "Failed scenarios",
+                    "Ignored scenarios",
+                    "Mixed scenarios",
+                    "Passing scenarios",
+                    "Pending scenarios")
         }
     }
 }
 
-fun parse(html: String) : Document =  Jsoup.parse(html)
+fun parse(html: String): Document = Jsoup.parse(html)
 

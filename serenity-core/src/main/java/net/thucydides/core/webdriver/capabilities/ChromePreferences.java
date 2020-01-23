@@ -1,6 +1,8 @@
 package net.thucydides.core.webdriver.capabilities;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.CapabilityValue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,31 +29,36 @@ public class ChromePreferences {
                     .filter( key -> key.startsWith(prefix))
                     .collect(Collectors.toList());
 
-        Map<String, Object> preferences = new HashMap();
+        Map<String, Object> preferences = new HashMap<>();
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
-            String propertyValue = environmentVariables.getProperty(propertyKey);
+            String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalProperty(propertyKey)
+                    .orElse(null);
+
             if (isNotEmpty(propertyValue)) {
-                preferences.put(preparedPropertyKey, asObject(propertyValue));
+                preferences.put(preparedPropertyKey, CapabilityValue.asObject(propertyValue));
             }
         }
 
         return preferences;
     }
 
-    private Object asObject(String propertyValue) {
-        try {
-            return Integer.parseInt(propertyValue);
-        } catch(NumberFormatException noBiggy) {}
-
-
-        if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
-            return Boolean.parseBoolean(propertyValue);
-        }
-
-        return propertyValue;
-    }
+//    private Object asObject(String propertyValue) {
+//        try {
+//            return Integer.parseInt(propertyValue);
+//        } catch(NumberFormatException noBiggy) {}
+//
+//
+//        if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
+//            return Boolean.parseBoolean(propertyValue);
+//        }
+//
+//
+//
+//        return propertyValue;
+//    }
 
     private String getPreparedPropertyKey(String propertyKey) {
         return propertyKey.replace(prefix,"");

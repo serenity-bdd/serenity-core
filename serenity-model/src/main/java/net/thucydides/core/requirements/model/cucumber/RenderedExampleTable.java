@@ -34,11 +34,14 @@ public class RenderedExampleTable {
 
         final Map<Integer,Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
 
-        String headings = cellRow(exampleTable.getTableHeader().getCells(), maxColumnWidths, exampleRowIcon.noIcon())
+        String headings = cellRow(exampleTable.getTableHeader().getCells(),
+                                  maxColumnWidths,
+                                  exampleTable.getLocation().getLine(),
+                                  exampleRowIcon.noIcon())
                           + headerSeparator(maxColumnWidths);
 
         String body = exampleTable.getTableBody().stream()
-                .map(row -> cellRow(row.getCells(), maxColumnWidths, exampleRowIcon))
+                .map(row -> cellRow(row.getCells(), maxColumnWidths, row.getLocation().getLine(), exampleRowIcon))
                 .collect(Collectors.joining());
 
         return headings + body;
@@ -54,6 +57,7 @@ public class RenderedExampleTable {
 
     public static String cellRow(List<TableCell> cells,
                                  Map<Integer,Integer> maxColumnWidths,
+                                 int lineNumber,
                                  RowResultIcon exampleRowResultIcons) {
 
         StringBuilder headerRow = new StringBuilder("|");
@@ -63,7 +67,7 @@ public class RenderedExampleTable {
             int columnWidth = maxColumnWidths.get(column) + 1;
             headerRow.append(StringUtils.rightPad(" " + columnHeading, columnWidth)).append(" |");
         }
-        headerRow.append(exampleRowResultIcons.resultToken() + "|");
+        headerRow.append(exampleRowResultIcons.resultToken(lineNumber) + "|");
         return headerRow.toString() + lineSeparator();
     }
 

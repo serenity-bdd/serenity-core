@@ -22,9 +22,8 @@ public class RemoteTestingLinkManager implements LinkGenerator {
             return null;
         }
 
-        if (browserStackIsConfigured()) {
-            BrowserStackLinkGenerator browserStackLinkGenerator = new BrowserStackLinkGenerator(environmentVariables);
-            return browserStackLinkGenerator.linkFor(testOutcome);
+        if (browserStackIsConfigured() && testOutcome.getExternalLink() != null) {
+            return testOutcome.getExternalLink().getUrl();
         }
 
         if (sauceLabsIsConfigured()) {
@@ -40,7 +39,7 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     }
 
     private boolean browserStackIsConfigured() {
-        return (ThucydidesSystemProperty.BROWSERSTACK_URL.from(environmentVariables) != null);
+        return (ThucydidesSystemProperty.BROWSERSTACK_USER.from(environmentVariables) != null);
     }
 
     private boolean sauceLabsIsConfigured() {

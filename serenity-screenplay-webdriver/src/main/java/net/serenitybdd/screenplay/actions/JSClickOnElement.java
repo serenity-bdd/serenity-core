@@ -9,7 +9,7 @@ import net.thucydides.core.annotations.Step;
 public class JSClickOnElement implements Interaction {
     private final WebElementFacade element;
 
-    @Step("{0} clicks on #target")
+    @Step("{0} clicks on #element")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).evaluateJavascript("arguments[0].click();", element);
     }

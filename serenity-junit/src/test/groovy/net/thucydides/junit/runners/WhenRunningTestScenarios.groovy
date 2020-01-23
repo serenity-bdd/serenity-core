@@ -182,7 +182,7 @@ class WhenRunningTestScenarios extends Specification {
         then:
         manualOutcome.isManual()
         manualOutcome.getResult() == TestResult.FAILURE
-        manualOutcome.getTestFailureMessage() == "Doesn't work"
+        manualOutcome.getTestFailureMessage() == "Manual test failure: Doesn't work"
     }
 
     def "should mark @manual data-driven tests as manual"() {
@@ -294,7 +294,7 @@ class WhenRunningTestScenarios extends Specification {
     @Unroll
     def "annotated tests should have expected results"() {
         given:
-        def runner = new ThucydidesRunner(testclass, webDriverFactory)
+        def runner = new SerenityRunner(testclass, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;

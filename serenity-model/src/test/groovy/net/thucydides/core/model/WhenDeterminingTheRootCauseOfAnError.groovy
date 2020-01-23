@@ -18,7 +18,7 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
             def rootCause = new RootCauseAnalyzer(exception).getRootCause()
         then:
             rootCause.errorType == "java.lang.IllegalArgumentException"
-            rootCause.message == "Oh crap"
+            rootCause.message.contains("Oh crap")
             rootCause.stackTrace.size() == 1
     }
 

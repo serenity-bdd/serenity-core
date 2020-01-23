@@ -21,6 +21,7 @@ public class StackTraceSanitizer {
             "sun.",
             "com.sun",
             "java.",
+            "jdk.internal",
             "org.junit",
             "org.gradle",
             "org.testng",

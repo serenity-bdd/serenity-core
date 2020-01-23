@@ -6,6 +6,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 
 /**
  * Models the capabilities report page for testing purposes
@@ -13,7 +14,9 @@ import org.openqa.selenium.chrome.ChromeDriver
 class RequirementsReport extends PageObject {
 
     static RequirementsReport inDirectory(File directory) {
-        def driver = new ChromeDriver();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        def driver = new ChromeDriver(chromeOptions)
         def report = new RequirementsReport(driver)
         report.openAt("file:///" +  directory.getAbsolutePath() + "/capabilities.html");
         return report

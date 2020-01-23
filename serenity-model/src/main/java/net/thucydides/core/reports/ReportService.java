@@ -129,6 +129,8 @@ public class ReportService {
         for (final AcceptanceTestFullReporter reporter : getSubscribedFullReporters()) {
             generateFullReportFor(allTestOutcomes, reporter);
         }
+        generateJUnitTestResults(allTestOutcomes);
+
     }
 
     /**
@@ -176,7 +178,6 @@ public class ReportService {
                     LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
                 }));
             }
-            generateJUnitTestResults(testOutcomes);
             waitForReportGenerationToFinish(tasks);
         } finally {
             LOGGER.debug("Shutting down executor service");
@@ -216,15 +217,14 @@ public class ReportService {
 
         ServiceLoader<AcceptanceTestReporter> reporterServiceLoader = ServiceLoader.load(AcceptanceTestReporter.class);
         Iterator<AcceptanceTestReporter> reporterImplementations = reporterServiceLoader.iterator();
-        // Service.providers(AcceptanceTestReporter.class);
 
         LOGGER.debug("Reporting formats: " + formatConfiguration.getFormats());
 
         while (reporterImplementations.hasNext()) {
             AcceptanceTestReporter reporter = reporterImplementations.next();
-            LOGGER.debug("Found reporter: " + reporter + "(format = " + reporter.getFormat() + ")");
+            LOGGER.trace("Found reporter: " + reporter + "(format = " + reporter.getFormat() + ")");
             if (!reporter.getFormat().isPresent() || formatConfiguration.getFormats().contains(reporter.getFormat().get())) {
-                LOGGER.debug("Registering reporter: " + reporter);
+                LOGGER.trace("Registering reporter: " + reporter);
                 reporters.add(reporter);
             }
         }

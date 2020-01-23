@@ -106,6 +106,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
+    public boolean isDisabled() {
+        return false;
+    }
+
+    @Override
     public void shouldNotBeEnabled() {
 
     }
@@ -147,6 +152,16 @@ public class UnresolvedTargetWebElementState implements WebElementState {
 
     @Override
     public String getTextValue() {
+        return null;
+    }
+
+    @Override
+    public String getValue() {
+        return null;
+    }
+
+    @Override
+    public String getText() {
         return null;
     }
 

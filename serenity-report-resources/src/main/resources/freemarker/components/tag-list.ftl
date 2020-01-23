@@ -19,7 +19,7 @@
                 </td>
             </tr>
             <#foreach tag in tags>
-                <#assign tagTitle = formatter.htmlCompatible(inflection.of(tag.shortName).asATitle()) >
+                <#assign tagTitle = formatter.htmlCompatible(tagInflector.ofTag(tagType, tag.shortName).toFinalView()) >
                 <#assign tagLabel = inflection.of(tag.name).asATitle() >
                 <#assign tagReport = reportName.inContext(currentTag.completeName).forRequirementOrTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >

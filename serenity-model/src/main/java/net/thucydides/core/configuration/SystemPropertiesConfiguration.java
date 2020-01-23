@@ -1,6 +1,7 @@
 package net.thucydides.core.configuration;
 
 import com.google.inject.*;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.*;
 import net.thucydides.core.model.*;
 import net.thucydides.core.steps.*;
@@ -17,12 +18,11 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Centralized configuration of the test runner. You can configure the output
  * directory, the browser to use, and the reports to generate. Most
  * configuration elements can be set using system properties.
- *
  */
 public class SystemPropertiesConfiguration implements Configuration {
 
     /**
-     * Default timeout when waiting for AJAX elements in pages, in milliseconds.
+     * Default timeout when waiting for AJAX elements in pages, in seconds.
      */
     public static final int DEFAULT_ELEMENT_TIMEOUT_SECONDS = 5;
 
@@ -31,8 +31,8 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
      * be used for output for serenity test reports.
-     * By default maven NEVER push this properties to system environment, but they are available in maven pm.
-     * This property is used when maven/gradle build conta subprojects by serenity  plugins
+     * By default maven NEVER push this properties to system environment, but they are available in maven.
+     * This property is used when maven/gradle build contains sub-projects
      */
     public static final String PROJECT_BUILD_DIRECTORY = "project.build.directory";
 
@@ -60,7 +60,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     protected String defaultBaseUrl;
 
-    private final EnvironmentVariables environmentVariables;
+    protected EnvironmentVariables environmentVariables;
 
     private final FilePathParser filePathParser;
 
@@ -70,24 +70,16 @@ public class SystemPropertiesConfiguration implements Configuration {
         filePathParser = new FilePathParser(environmentVariables);
     }
 
-    public Configuration copy() {
-        return withEnvironmentVariables(environmentVariables);
-    }
-
-
-    public Configuration withEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        SystemPropertiesConfiguration copy = new SystemPropertiesConfiguration(environmentVariables.copy());
-        copy.outputDirectory = null; // Reset to be reloaded from the System properties
-        copy.defaultBaseUrl = defaultBaseUrl;
-        return copy;
+    @Override
+    public SystemPropertiesConfiguration withEnvironmentVariables(final EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        return this;
     }
 
     @Override
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
     }
-
-
 
     /**
      * Where should the reports go?
@@ -121,7 +113,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * If some property that can change output directory@Override was changed this method should be called
      */
-    public void reloadOutputDirectory(){
+    public void reloadOutputDirectory() {
         setOutputDirectory(loadOutputDirectoryFromSystemProperties());
     }
 
@@ -129,7 +121,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getStepDelay() {
         int stepDelay = 0;
 
-        String stepDelayValue = THUCYDIDES_STEP_DELAY.from(environmentVariables);
+        String stepDelayValue = propertyNamed(SERENITY_STEP_DELAY);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             stepDelay = Integer.parseInt(stepDelayValue);
         }
@@ -138,22 +130,35 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     @Override
-    public int getElementTimeout() {
-        int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
+    public int getElementTimeoutInSeconds() {
+        Optional<Integer> serenityDefinedTimeoutInSeconds = integerPropertyNamed(SERENITY_TIMEOUT);
+        Optional<Integer> implicitTimeoutInMilliseconds = integerPropertyNamed(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT);
 
-        String stepDelayValue = THUCYDIDES_TIMEOUT.from(environmentVariables);
-        if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
-            elementTimeout = Integer.parseInt(stepDelayValue);
+        if (serenityDefinedTimeoutInSeconds.isPresent()) {
+            return serenityDefinedTimeoutInSeconds.get();
+        } else {
+            return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(DEFAULT_ELEMENT_TIMEOUT_SECONDS);
         }
-        return elementTimeout;
+
+
+    }
+
+    private Optional<Integer> integerValueOf(String value) {
+        if ((value != null) && (!value.isEmpty())) {
+            return Optional.of(Integer.parseInt(value));
+        } else {
+            return Optional.empty();
+        }
 
     }
 
     @Override
+    @Deprecated
     public boolean getUseUniqueBrowser() {
         return shouldUseAUniqueBrowser();
     }
 
+    @Deprecated
     public boolean shouldUseAUniqueBrowser() {
         return THUCYDIDES_USE_UNIQUE_BROWSER.booleanFrom(getEnvironmentVariables());
     }
@@ -167,7 +172,6 @@ public class SystemPropertiesConfiguration implements Configuration {
      * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
-     *
      */
     public File getOutputDirectory() {
         if (outputDirectory == null) {
@@ -185,21 +189,23 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public double getEstimatedAverageStepCount() {
-        return THUCYDIDES_ESTIMATED_AVERAGE_STEP_COUNT.integerFrom(environmentVariables, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return integerPropertyNamed(SERENITY_ESTIMATED_AVERAGE_STEP_COUNT, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
+       return  Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
+        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS,"false"));
+//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {
-        String takeScreenshotsLevel = THUCYDIDES_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
+        String takeScreenshotsLevel = propertyNamed(SERENITY_TAKE_SCREENSHOTS);
         if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {
@@ -222,7 +228,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public int getRestartFrequency() {
-        return THUCYDIDES_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
+        return SERENITY_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
     }
 
     @Override
@@ -236,8 +242,36 @@ public class SystemPropertiesConfiguration implements Configuration {
      * It is also the base URL used to build relative paths.
      */
     public String getBaseUrl() {
-        return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
+//        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
+//            return EnvironmentSpecificConfiguration.from(environmentVariables)
+//                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
+//                    .orElse(defaultBaseUrl);
+//        } else {
+            return propertyNamed(WEBDRIVER_BASE_URL, defaultBaseUrl);
+//        }
     }
 
+    private String propertyNamed(ThucydidesSystemProperty property, String defaultValue) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                                               .getOptionalProperty(property.getPropertyName(), property.getLegacyPropertyName())
+                                               .orElse(defaultValue);
+    }
 
+    private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
+        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                                 .getOptionalProperty(property.getPropertyName(),
+                                                                                      property.getLegacyPropertyName());
+        return value.map(Integer::parseInt);
+    }
+
+    private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
+        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(property.getPropertyName(),
+                                     property.getLegacyPropertyName())
+                .orElse(Integer.toString(defaultValue)));
+    }
+
+    private String propertyNamed(ThucydidesSystemProperty propertyName) {
+        return propertyNamed(propertyName,null);
+    }
 }

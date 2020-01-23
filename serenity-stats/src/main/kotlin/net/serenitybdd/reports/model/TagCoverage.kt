@@ -27,8 +27,9 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
 
         return displayedTagTypes.map { displayedTagType ->
             CoverageByTagType(displayedTagType.capitalize(),
+                    humanize(displayedTagType),
                     testOutcomes.withTagType(displayedTagType),
-                    tagsToDisplay)
+                    tagsToDisplay.filter{ t -> t.type.equals(displayedTagType) })
         }.filter { coverage -> coverage.tagCoverage.isNotEmpty() }
     }
 
@@ -37,7 +38,7 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
     }
 }
 
-class CoverageByTagType(val tagType: String, val testOutcomes: TestOutcomes, tagsToDisplay: Collection<TestTag>) {
+class CoverageByTagType(val tagType: String, val tagTitle : String, val testOutcomes: TestOutcomes, tagsToDisplay: Collection<TestTag>) {
     val tagCoverage = coverageForEachTagOfType(tagType, testOutcomes, tagsToDisplay)
 
     private fun coverageForEachTagOfType(tagType: String,

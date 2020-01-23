@@ -10,8 +10,11 @@ import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.facts.Fact;
 import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
+import net.thucydides.core.annotations.Step;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Keys;
 
 import java.lang.reflect.Method;
@@ -19,6 +22,7 @@ import java.util.*;
 
 import static net.serenitybdd.screenplay.SilentTasks.isNestedInSilentTask;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
+import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
 
 /**
  * An actor represents the person or system using the application under test.
@@ -179,7 +183,18 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private boolean shouldNotReport(Performable task) {
+        if (manualTaskInstrumentation() && noStepAnnotationIsPresentIn(task)) {
+            return true;
+        }
         return !InstrumentedTask.isInstrumented(task) && !InstrumentedTask.shouldInstrument(task);
+    }
+
+    private boolean noStepAnnotationIsPresentIn(Performable task) {
+        try {
+            return task.getClass().getMethod("performAs").getAnnotation(Step.class) != null;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
@@ -397,5 +412,10 @@ public class Actor implements PerformsTasks, SkipNested {
 
     public void assignName(String name) {
         this.name = name;
+    }
+
+    private boolean manualTaskInstrumentation() {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false));
     }
 }

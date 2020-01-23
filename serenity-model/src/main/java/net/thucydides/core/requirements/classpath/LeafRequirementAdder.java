@@ -9,6 +9,7 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
@@ -89,12 +90,14 @@ public class LeafRequirementAdder {
         String narrativeType = PackageInfoNarrative.type().definedInPath(path)
                 .orElse(ClassNarrative.type().definedInPath(path).orElse(leafRequirementTypeFrom(pathElements)));
 
-        List<TestTag> storyTags = AnnotatedTags.definedInPath(path);
+        List<TestTag> storyTags = AnnotatedTags.forClassDefinedInPath(path);
+        Map<String, Collection<TestTag>> testTags = AnnotatedTags.forTestMethodsDefinedInPath(path);
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
                 .withNarrative(narrativeText)
                 .withParent(parent)
                 .withTags(storyTags)
+                .withScenarioTags(testTags)
                 .withPath(Joiner.on("/").join(allButLast(pathElements)));
 
         return story;

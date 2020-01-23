@@ -5,7 +5,9 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ScenarioSummaryOutcome implements ScenarioOutcome {
@@ -23,6 +25,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String parentReport;
     private final Boolean manual;
     private final Set<TestTag> tags;
+    private final Map<String, Collection<TestTag>> exampleTags;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -36,7 +39,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   Boolean isManual,
                                   String parentName,
                                   String parentReport,
-                                  Set<TestTag> tags) {
+                                  Set<TestTag> tags,
+                                  Map<String, Collection<TestTag>> exampleTags) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -51,6 +55,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.parentReport = parentReport;
         this.manual = isManual;
         this.tags = tags;
+        this.exampleTags = exampleTags;
     }
 
     public String toString() {
@@ -152,5 +157,10 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     @Override
     public Set<TestTag> getTags() {
         return tags;
+    }
+
+    @Override
+    public Map<String, Collection<TestTag>> getExampleTags() {
+        return exampleTags;
     }
 }

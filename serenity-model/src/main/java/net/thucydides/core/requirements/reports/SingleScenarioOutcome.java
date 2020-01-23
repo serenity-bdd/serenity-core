@@ -7,11 +7,10 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.EMPTY_MAP;
 
 public class SingleScenarioOutcome implements ScenarioOutcome {
     private final String name;
@@ -168,5 +167,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     @Override
     public Set<TestTag> getTags() {
         return tags;
+    }
+
+    @Override
+    public Map<String, Collection<TestTag>> getExampleTags() {
+        return EMPTY_MAP;
     }
 }

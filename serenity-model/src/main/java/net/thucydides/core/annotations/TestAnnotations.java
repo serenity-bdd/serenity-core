@@ -303,4 +303,16 @@ public class TestAnnotations {
         }
     }
 
+    public List<String> getTestMethodNames() {
+        return Arrays.stream(testClass.getDeclaredMethods())
+                        .filter(method -> hasAnnotationNamed(method,"Test"))
+                        .map(Method::getName)
+                        .collect(Collectors.toList());
+    }
+
+    private boolean hasAnnotationNamed(Method method, String annotationName) {
+        return Arrays.stream(method.getAnnotations()).anyMatch(
+                annotation -> annotation.toString().contains("." + annotationName + "(")
+        );
+    }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor

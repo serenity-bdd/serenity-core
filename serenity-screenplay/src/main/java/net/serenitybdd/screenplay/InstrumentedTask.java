@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import com.rits.cloning.Cloner;
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -28,7 +27,7 @@ public class InstrumentedTask {
         return (T) instrumentedCopyOf(task, task.getClass());
     }
 
-    public static <T extends Performable> boolean shouldInstrument(T task) {
+    static <T extends Performable> boolean shouldInstrument(T task) {
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();
@@ -66,7 +65,7 @@ public class InstrumentedTask {
         return instrumentedTask;
     }
 
-    public static boolean isInstrumented(Performable task) {
+    static boolean isInstrumented(Performable task) {
         return task.getClass().getSimpleName().contains("ByteBuddy");
     }
 }

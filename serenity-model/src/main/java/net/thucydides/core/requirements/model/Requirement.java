@@ -37,6 +37,7 @@ public class Requirement implements Comparable {
     private List<String> releaseVersions;
     private List<CustomFieldValue> customFields;
     private List<TestTag> tags = new ArrayList<>();
+    private Map<String, Collection<TestTag>> scenarioTags = new HashMap<>();
     private boolean containsNoScenarios = false;
 
     public Requirement() {
@@ -86,6 +87,7 @@ public class Requirement implements Comparable {
                           List<CustomFieldValue> customFields,
                           String featureFileName,
                           List<TestTag> tags,
+                          Map<String, Collection<TestTag>> scenarioTags,
                           boolean containsNoScenarios) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(type);
@@ -103,6 +105,7 @@ public class Requirement implements Comparable {
         this.customFields = Collections.unmodifiableList(customFields);
         this.featureFileName = featureFileName;
         this.tags = tags;
+        this.scenarioTags = scenarioTags;
         this.containsNoScenarios = containsNoScenarios;
     }
 
@@ -132,7 +135,7 @@ public class Requirement implements Comparable {
 
     public Requirement withNoScenarios() {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative,
-                this.children, this.examples, this.releaseVersions, this.customFields, this.name, this.tags, true);
+                this.children, this.examples, this.releaseVersions, this.customFields, this.name, this.tags, this.scenarioTags, true);
     }
 
     public String getName() {
@@ -209,11 +212,11 @@ public class Requirement implements Comparable {
 
     public Requirement definedInFile(File featureFile) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative,
-                this.children, this.examples, this.releaseVersions, this.customFields, featureFile.getName(), this.tags, this.containsNoScenarios);
+                this.children, this.examples, this.releaseVersions, this.customFields, featureFile.getName(), this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withChildren(List<Requirement> children) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public void setChildren(List<Requirement> children) {
@@ -221,43 +224,43 @@ public class Requirement implements Comparable {
     }
 
     public Requirement withParent(String parent) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
 
     public Requirement withType(String type) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withDisplayName(String displayName) {
-        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withFeatureFileyName(String featureFileName) {
-        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withExample(Example example) {
         List<Example> updatedExamples = new ArrayList<>(examples);
         updatedExamples.add(example);
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, updatedExamples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, updatedExamples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withExamples(List<Example> examples) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withReleaseVersions(List<String> releaseVersions) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public Requirement withCustomFields(List<CustomFieldValue> customFields) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
 
     public Requirement withPath(String path) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.containsNoScenarios);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags, this.scenarioTags, this.containsNoScenarios);
     }
 
     public boolean hasChildren() {
@@ -275,6 +278,10 @@ public class Requirement implements Comparable {
 
     public List<TestTag> getTags() {
         return new ArrayList<>(tags);
+    }
+
+    public Map<String, Collection<TestTag>> getScenarioTags() {
+        return scenarioTags;
     }
 
     public TestTag asTag() {
@@ -416,7 +423,7 @@ public class Requirement implements Comparable {
 
     public Requirement withNarrative(String narrativeText) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, new CustomFieldValue("Narrative", narrativeText),
-                children, examples, releaseVersions, customFields, featureFileName, tags, containsNoScenarios);
+                children, examples, releaseVersions, customFields, featureFileName, tags, this.scenarioTags, containsNoScenarios);
     }
 
     public String getPath() {
@@ -425,7 +432,12 @@ public class Requirement implements Comparable {
 
     public Requirement withTags(List<TestTag> tags) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative,
-                children, examples, releaseVersions, customFields, featureFileName, tags, containsNoScenarios);
+                children, examples, releaseVersions, customFields, featureFileName, tags, this.scenarioTags, containsNoScenarios);
+    }
+
+    public Requirement withScenarioTags(Map<String, Collection<TestTag>> scenarioTags) {
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative,
+                children, examples, releaseVersions, customFields, featureFileName, this.tags, scenarioTags, containsNoScenarios);
     }
 
     public boolean hasTag(TestTag tag) {

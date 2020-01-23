@@ -23,9 +23,11 @@ public class CucumberCompatibleFilter {
     }
 
     protected Expression cucumberTagExpressionUsing(ThucydidesSystemProperty tagProperty) {
-        String tagExpression = tagProperty.optionalFrom(environmentVariables)
-                .orElse(cucumberTagOptions().orElse(""))
-                .replace("@","")
+        String tagExpression = cucumberTagOptions()
+                .orElse(tagProperty.optionalFrom(environmentVariables)
+                        .orElse(""))
+                .replace("@", "")
+                .replace("=", ":")
                 .toLowerCase();
         TagExpressionParser parser = new TagExpressionParser();
         return parser.parse(tagExpression);
@@ -37,8 +39,8 @@ public class CucumberCompatibleFilter {
             int tagsFlag = cucumberOptions.indexOf("--tags ");
             int tagsOptionStart = tagsFlag + 7;
             int nextTagOptionStart = cucumberOptions.indexOf("--", tagsOptionStart);
-            String tagOption =(nextTagOptionStart > 0) ?
-                cucumberOptions.substring(tagsOptionStart, nextTagOptionStart) : cucumberOptions.substring(tagsOptionStart);
+            String tagOption = (nextTagOptionStart > 0) ?
+                    cucumberOptions.substring(tagsOptionStart, nextTagOptionStart) : cucumberOptions.substring(tagsOptionStart);
 
             String tagOptionsWithoutAtSigns = StringUtils.strip(tagOption, "'");
             return Optional.of(tagOptionsWithoutAtSigns);
@@ -46,18 +48,10 @@ public class CucumberCompatibleFilter {
         return Optional.empty();
     }
 
-
-    protected List<String> tagsAsStrings(Collection<TestTag> tags) {
-        return tags.stream()
-                .map(TestTag::toString)
-                .map(String::toLowerCase)
-                .collect(Collectors.toList());
-    }
-
     public boolean matchesTags(List<TestTag> testTags) {
         Expression expectedTags = cucumberTagExpressionUsing(TAGS);
 
-        List<String> tagValues = tagsAsStrings(testTags);
+        List<String> tagValues = CucumberTagConverter.toStrings(testTags);
         return expectedTags.evaluate(tagValues);
     }
 

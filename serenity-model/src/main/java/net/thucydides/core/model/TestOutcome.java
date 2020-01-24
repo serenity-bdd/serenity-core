@@ -473,7 +473,8 @@ public class TestOutcome {
                 this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables,
-                this.externalLink);
+                this.externalLink,
+                this.context);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -503,7 +504,8 @@ public class TestOutcome {
                           final List<String> testEvidence,
                           final String projectKey,
                           final EnvironmentVariables environmentVariables,
-                          final ExternalLink externalLink) {
+                          final ExternalLink externalLink,
+    final String context) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -536,7 +538,8 @@ public class TestOutcome {
         this.lastTested = lastTested;
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
-        this.externalLink = this.externalLink;
+        this.externalLink = externalLink;
+        this.context=context;
     }
 
     private List<String> removeDuplicates(List<String> issues) {
@@ -591,7 +594,8 @@ public class TestOutcome {
                     this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables,
-                    this.externalLink);
+                    this.externalLink,
+                    this.context);
         } else {
             return this;
         }
@@ -625,7 +629,8 @@ public class TestOutcome {
                 this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables,
-                this.externalLink);
+                this.externalLink,
+                this.context);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -656,7 +661,8 @@ public class TestOutcome {
                 this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables,
-                this.externalLink);
+                this.externalLink,
+                this.context);
     }
 
     public TestOutcome withMethodName(String methodName) {
@@ -688,7 +694,8 @@ public class TestOutcome {
                     this.manualTestEvidence,
                     this.projectKey,
                     this.environmentVariables,
-                    this.externalLink);
+                    this.externalLink,
+                    this.context);
         } else {
             return this;
         }
@@ -875,7 +882,8 @@ public class TestOutcome {
                 this.manualTestEvidence,
                 this.projectKey,
                 this.environmentVariables,
-                this.externalLink);
+                this.externalLink,
+                this.context);
     }
 
     public void updateTopLevelStepResultsTo(TestResult result) {
@@ -2696,7 +2704,8 @@ public class TestOutcome {
                 manualTestEvidence,
                 projectKey,
                 environmentVariables,
-                externalLink);
+                externalLink,
+                context);
     }
 
     public ExternalLink getExternalLink() {

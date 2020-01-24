@@ -47,7 +47,7 @@ And if you drill into the details, Serenity will give you a detailed account of 
 
 Check out Serenity BDD in more detail here:
 * [User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
-* [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
+* [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core) [![Join the chat at https://gitter.im/serenity-bdd/serenity-core](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
   
 ## What is the latest stable version I should use?
 

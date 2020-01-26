@@ -579,10 +579,10 @@ class WhenRunningTestScenarios extends Specification {
         then:
             runner.testOutcomes.size() == testcount
         where:
-            tag                     | testcount
-            "module:M1"             | 3
-            "module:M2"             | 0
-            "module:M1, module:M2"  | 3
+            tag                       | testcount
+            "module:M1"               | 3
+            "module:M2"               | 0
+            "module:M1 or module:M2"  | 3
     }
 
     @Unroll
@@ -596,11 +596,11 @@ class WhenRunningTestScenarios extends Specification {
         then:
             runner.testOutcomes.size() == testcount
         where:
-            tag                           | testcount
-            "iteration:I1"                | 2
-            "iteration:I2"                | 1
-            "iteration:I1, iteration:I2"  | 3
-            "iteration:I3"                | 0
+            tag                             | testcount
+            "iteration:I1"                  | 2
+            "iteration:I2"                  | 1
+            "iteration:I1 or iteration:I2"  | 3
+            "iteration:I3"                  | 0
     }
 
     private File reload(File old) {

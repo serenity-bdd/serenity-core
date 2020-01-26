@@ -134,7 +134,8 @@ public class JUnitAdapter {
 
     private static class JUnit4Strategy implements JUnitStrategy {
 
-        private final List<String> LEGAL_SERENITY_RUNNER_NAMES = NewList.of("SerenityRunner", "ThucydidesRunner");
+        private final List<String> LEGAL_SERENITY_RUNNER_NAMES
+                = NewList.of("SerenityRunner", "ThucydidesRunner", "SerenityParameterizedRunner","ThucydidesParameterizedRunner");
 
         @Override
         public boolean isTestClass(final Class<?> testClass) {

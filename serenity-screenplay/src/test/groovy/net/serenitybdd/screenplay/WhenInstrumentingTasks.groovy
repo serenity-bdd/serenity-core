@@ -1,12 +1,16 @@
 package net.serenitybdd.screenplay
 
-
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.core.util.EnvironmentVariables
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+
+import static net.serenitybdd.screenplay.Tasks.instrumented
+import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION
 
 class WhenInstrumentingTasks extends Specification {
 
@@ -14,12 +18,20 @@ class WhenInstrumentingTasks extends Specification {
     TemporaryFolder temporaryFolder
     File temporaryDirectory
     BaseStepListener listener = new BaseStepListener(temporaryDirectory)
+    EnvironmentVariables environmentVariables;
+    boolean currentManualInstrumentationSetting
 
     def setup() {
+        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        currentManualInstrumentationSetting = environmentVariables.getPropertyAsBoolean(MANUAL_TASK_INSTRUMENTATION, false);
         temporaryDirectory = temporaryFolder.newFolder()
         StepEventBus.eventBus.clear()
         StepEventBus.eventBus.registerListener(listener)
         StepEventBus.eventBus.testStarted("some test")
+    }
+
+    def cleanup() {
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), currentManualInstrumentationSetting.toString());
     }
 
     def "A non-instrumented class will be reported by default"() {
@@ -38,7 +50,7 @@ class WhenInstrumentingTasks extends Specification {
     def "A non-instrumented class with a builder will not be reported as long as it has a constructor"() {
 
         given:
-            Performable basicTask = EatsAPeach.loudly()
+        Performable basicTask = EatsFruit.loudly()
         when:
             Actor.named("Eddie").attemptsTo(basicTask);
         then:
@@ -71,7 +83,6 @@ class WhenInstrumentingTasks extends Specification {
         and:
             testOutcomeContainsStep("Annie eats a large orange")
     }
-
 
     def "For classes without a default constructor, you use an explicitly instrumented class"() {
 
@@ -106,6 +117,60 @@ class WhenInstrumentingTasks extends Specification {
             listener.latestTestOutcome().get().testSteps.size() == 1
             testOutcomeContainsStep("Annie eats a watermelon loudly")
     }
+
+
+    def "The @Step annotation is ignored in test output if task is manually instantiated and MANUAL_TASK_INSTRUMENTATION is true"() {
+
+        given:
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        Performable basicTask = new EatsAnOrange()
+        when:
+        Actor.named("Annie").attemptsTo(basicTask);
+        then:
+        testPassed()
+        and:
+        testOutcomeContainsNoSteps()
+    }
+
+    def "There should be no test output if an immmutable task with no @Step annotation and arguments is instrumented and MANUAL_TASK_INSTRUMENTATION is true"() {
+
+        given:
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        Performable basicTask = EatsImmutableFruit.ofType("pear")
+        when:
+        Actor.named("Annie").attemptsTo(basicTask);
+        then:
+        testPassed()
+        and:
+        testOutcomeContainsNoSteps()
+    }
+
+    def "There should be no test output if a task with no @Step annotation with no arguments is instrumented and MANUAL_TASK_INSTRUMENTATION is true"() {
+
+        given:
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        Performable basicTask = instrumented(EatsAnApple)
+        when:
+        Actor.named("Annie").attemptsTo(basicTask);
+        then:
+        testPassed()
+        and:
+        testOutcomeContainsNoSteps()
+    }
+
+    def "There should be no test output if a task is manually instantiated and MANUAL_TASK_INSTRUMENTATION is true"() {
+
+        given:
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        Performable basicTask = EatsFruit.loudly()
+        when:
+        Actor.named("Eddie").attemptsTo(basicTask);
+        then:
+        testPassed()
+        and:
+        testOutcomeContainsNoSteps()
+    }
+
 
     def testPassed() {
         listener.latestTestOutcome().get().result == TestResult.SUCCESS

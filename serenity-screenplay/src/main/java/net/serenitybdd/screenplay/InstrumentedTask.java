@@ -17,24 +17,17 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 public class InstrumentedTask {
 
     public static <T extends Performable> T of(T task) {
-        if (isInstrumented(task) || !shouldInstrument(task)) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
+            return task;
+        } else if(isInstrumented(task) || !shouldInstrument(task)) {
             return task;
         }
         return (T) instrumentedCopyOf(task, task.getClass());
     }
 
-    public static <T extends Performable> boolean shouldInstrument(T task) {
-
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-
-        if (task.getClass().isAnonymousClass()) {
-            return false;
-        }
-
-        if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
-            return false;
-        }
-
+    static <T extends Performable> boolean shouldInstrument(T task) {
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();
@@ -72,7 +65,7 @@ public class InstrumentedTask {
         return instrumentedTask;
     }
 
-    public static boolean isInstrumented(Performable task) {
+    static boolean isInstrumented(Performable task) {
         return task.getClass().getSimpleName().contains("ByteBuddy");
     }
 }

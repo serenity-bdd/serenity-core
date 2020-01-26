@@ -93,4 +93,72 @@ class WhenConfiguringCustomReportFields {
         assertThat(customReportFields.fieldNames).containsExactly("XYZ")
     }
 
+    @Test
+    fun `custom fields are provided in the serenity configuration file under report-dot-customfields using specific environment configuration`(){
+        val environmentVariables = MockEnvironmentVariables()
+
+        // GIVEN
+        environmentVariables.setProperty("environments.android.report.customfields.brand","pixel")
+        environmentVariables.setProperty("environments.android.report.customfields.model","2 xl")
+        environmentVariables.setProperty("environment","android")
+
+        // WHEN
+        val customReportFields = CustomReportFields(environmentVariables)
+
+        // THEN
+        assertThat(customReportFields.fieldNames).containsExactlyInAnyOrder("Brand","Model")
+        assertThat(customReportFields.values).containsExactlyInAnyOrder("pixel","2 xl")
+    }
+    @Test
+    fun `custom fields are provided in the serenity configuration file under report-dot-customfields using properties defined for all and specific environment`(){
+        val environmentVariables = MockEnvironmentVariables()
+
+        // GIVEN
+        environmentVariables.setProperty("environments.all.report.customfields.type","mobile")
+        environmentVariables.setProperty("environments.android.report.customfields.brand","pixel")
+        environmentVariables.setProperty("environments.android.report.customfields.model","2 xl")
+        environmentVariables.setProperty("environment","android")
+
+        // WHEN
+        val customReportFields = CustomReportFields(environmentVariables)
+
+        // THEN
+        assertThat(customReportFields.fieldNames).containsExactlyInAnyOrder("Type","Brand","Model")
+        assertThat(customReportFields.values).containsExactlyInAnyOrder("mobile","pixel","2 xl")
+    }
+
+    @Test
+    fun `only custom fields defined in the specific environment are provided in the serenity configuration file under report-dot-customfields`(){
+        val environmentVariables = MockEnvironmentVariables()
+
+        // GIVEN
+        environmentVariables.setProperty("environments.android.report.customfields.brand","pixel")
+        environmentVariables.setProperty("environments.android.report.customfields.model","2 xl")
+        environmentVariables.setProperty("environments.ios.report.customfields.brand","Iphone")
+        environmentVariables.setProperty("environment","android")
+
+        // WHEN
+        val customReportFields = CustomReportFields(environmentVariables)
+
+        // THEN
+        assertThat(customReportFields.fieldNames).containsExactlyInAnyOrder("Brand","Model")
+        assertThat(customReportFields.values).containsExactlyInAnyOrder("pixel","2 xl")
+    }
+    @Test
+    fun `when no environment is provided but default configuration is present custom fields are provided in the serenity configuration file under report-dot-customfields`(){
+        val environmentVariables = MockEnvironmentVariables()
+
+        // GIVEN
+        environmentVariables.setProperty("environments.default.report.customfields.type","mobile")
+        environmentVariables.setProperty("environments.android.report.customfields.brand","nokia")
+        environmentVariables.setProperty("environments.ios.report.customfields.brand","Iphone")
+
+        // WHEN
+        val customReportFields = CustomReportFields(environmentVariables)
+
+        // THEN
+        assertThat(customReportFields.fieldNames).containsExactlyInAnyOrder("Type")
+        assertThat(customReportFields.values).containsExactlyInAnyOrder("mobile")
+    }
+
 }

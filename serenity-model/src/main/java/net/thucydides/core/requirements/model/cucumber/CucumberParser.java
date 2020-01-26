@@ -4,12 +4,14 @@ import com.google.common.base.Splitter;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.model.CucumberFeature;
+import gherkin.ParserException;
 import gherkin.ast.*;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.TestType;
+import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -121,6 +123,9 @@ public class CucumberParser {
                     throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath", cucumber2Exception);
                 }
             }
+        } catch(ParserException gherkinParsingException) {
+            LOGGER.error("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
+            throw new RuntimeException("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
         }
     }
 
@@ -141,16 +146,28 @@ public class CucumberParser {
 
         String id = getIdFromName(title);
 
-        Set<TestTag> tags = feature.getTags().stream().map(tag -> TestTag.withValue(tag.getName())).collect(Collectors.toSet());
-        List<String> scenarios = feature.getChildren().stream().map(ScenarioDefinition::getName).collect(Collectors.toList());
+        Set<TestTag> requirementTags = feature.getTags().stream().map(tag -> TestTag.withValue(tag.getName())).collect(Collectors.toSet());
+        requirementTags.add(TestTag.withName(title).andType("feature"));
 
-        Set<TestTag> scenarioTags = new HashSet<>();
+        // Scenario Tags
+        Map<String, Collection<TestTag>> scenarioTags = new HashMap<>();
+
         feature.getChildren().forEach(
-                scenarioDefinition -> scenarioTags.addAll(tagsFrom(scenarioDefinition))
+                scenarioDefinition -> {
+                    if (scenarioDefinition instanceof ScenarioOutline) {
+                        scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(((ScenarioOutline) scenarioDefinition).getTags()));
+                        ((ScenarioOutline) scenarioDefinition).getExamples().forEach(
+                                example -> scenarioTags.put(scenarioDefinition.getName() + example.getLocation(),
+                                                            CucumberTagConverter.toSerenityTags(example.getTags()))
+                        );
+                    } else {
+                        scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
+                    }
+                }
         );
-        tags.addAll(scenarioTags);
 
-        tags.add(TestTag.withName(title).andType("feature"));
+        // Scenario Names
+        List<String> scenarios = feature.getChildren().stream().map(ScenarioDefinition::getName).collect(Collectors.toList());
 
         return Optional.of(new Narrative(Optional.ofNullable(title),
                 Optional.ofNullable(id),
@@ -158,8 +175,9 @@ public class CucumberParser {
                 versionNumbers,
                 "feature",
                 text != null ? text : "",
-                new ArrayList<>(tags),
-                scenarios));
+                new ArrayList<>(requirementTags),
+                scenarios,
+                scenarioTags));
 
     }
 

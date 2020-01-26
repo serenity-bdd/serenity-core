@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestResultList;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.AnnotatedFeature;
@@ -25,6 +26,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.thucydides.core.reports.html.CucumberTagConverter.fromGherkinTags;
 
 public class FeatureFileScenarioOutcomes {
 
@@ -88,18 +91,17 @@ public class FeatureFileScenarioOutcomes {
                 .collect(Collectors.toList());
 
         List<Examples> filteredExamples = new ArrayList<Examples>();
+        Map<String, Collection<TestTag>> exampleTags = new HashMap<>();
+
         if((scenarioDefinition instanceof ScenarioOutline)) {
             List<Examples> examples = ((ScenarioOutline) scenarioDefinition).getExamples();
-            for(Examples ex : examples) {
-                if(ex.getTags().size() > 0) {
-                    List<String> alltagNames = ex.getTags().stream().map(Tag::getName).collect(Collectors.toList());
-                    if(tagScanner.shouldRunForTags(alltagNames)){
-                        filteredExamples.add(ex);
-                    }
-                } else {
-                    filteredExamples.add(ex);
-                }
-            }
+            examples.stream()
+                    .filter(example -> example.getTags().isEmpty() || tagScanner.shouldRunForTags(fromGherkinTags(example.getTags())))
+                    .forEach(filteredExamples::add);
+
+            examples.stream().forEach(
+                    example -> exampleTags.put(example.getName() + ":" + example.getLocation(),CucumberTagConverter.toSerenityTags(example.getTags()))
+            );
         }
 
         List<Examples> examplesList = filteredExamples;
@@ -114,7 +116,11 @@ public class FeatureFileScenarioOutcomes {
 
         Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTags());
 
-        Set<TestTag> scenarioTags = scenarioTagsDefinedIn(scenarioDefinition);
+        Set<TestTag> scenarioTags = outcomes.stream()
+                                        .flatMap(outcome -> outcome.getTags().stream())
+                                        .collect(Collectors.toSet());
+
+        scenarioTags.addAll(scenarioTagsDefinedIn(scenarioDefinition));
 
         return new ScenarioSummaryOutcome(scenarioTitle,
                 scenarioDefinition.getKeyword(),
@@ -128,7 +134,8 @@ public class FeatureFileScenarioOutcomes {
                 isManual,
                 feature.getName(),
                 featureReport,
-                scenarioTags);
+                scenarioTags,
+                exampleTags);
     }
 
     private Set<TestTag> scenarioTagsDefinedIn(ScenarioDefinition scenarioDefinition) {

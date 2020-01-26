@@ -25,12 +25,19 @@ public class RequirementsFilter extends CucumberCompatibleFilter {
 
 
     private boolean requirementMatchesAnyTagIn(Requirement requirement, Expression expectedTags) {
-        List<String> requirementTags = tagsAsStrings(requirement.getTags());
+        List<String> requirementTags = CucumberTagConverter.toStrings(requirement.getTags());
 
-        if (expectedTags.evaluate(requirementTags)) {
+        if (expectedTags.evaluate(requirementTags) || (matchExistsInScenarios(expectedTags, requirement))) {
             return true;
         }
+
         return hasChildWithMatchingTag(requirement, expectedTags);
+    }
+
+    private boolean matchExistsInScenarios(Expression expectedTags, Requirement requirement) {
+        return requirement.getScenarioTags().values().stream()
+                .map(CucumberTagConverter::toStrings)
+                .anyMatch(expectedTags::evaluate);
     }
 
     private boolean hasChildWithMatchingTag(Requirement requirement, Expression expectedTags) {
@@ -38,7 +45,7 @@ public class RequirementsFilter extends CucumberCompatibleFilter {
             return false;
         }
         return requirement.getNestedChildren().stream().anyMatch(
-                child -> expectedTags.evaluate(tagsAsStrings(child.getTags()))
+                child -> expectedTags.evaluate(CucumberTagConverter.toStrings(child.getTags()))
         );
     }
 

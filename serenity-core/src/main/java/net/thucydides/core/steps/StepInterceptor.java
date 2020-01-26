@@ -14,6 +14,7 @@ import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
+import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
 /**
@@ -109,7 +111,22 @@ public class StepInterceptor implements MethodErrorReporter {
             return true;
         }
 
+        if (isNotAStepAnnotatedMethodWhenManualInstrumentationIsActive(method)) {
+            return true;
+        }
+
         return false;
+    }
+
+    private boolean isNotAStepAnnotatedMethodWhenManualInstrumentationIsActive(Method method) {
+        if (manualTaskInstrumentation()) {
+            return method.getAnnotation(Step.class) == null;
+        }
+        return false;
+    }
+
+    private boolean manualTaskInstrumentation() {
+        return (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false));
     }
 
     private boolean isNestedInSilentTask() {

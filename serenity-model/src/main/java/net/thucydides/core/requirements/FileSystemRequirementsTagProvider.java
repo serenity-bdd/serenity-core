@@ -737,7 +737,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withNarrative(requirementNarrative.getText())
                 .withPath(relativeDirectoryOf(path))
                 .withReleaseVersions(releaseVersions)
-                .withTags(requirementNarrative.getTags());
+                .withTags(requirementNarrative.getTags())
+                .withScenarioTags(requirementNarrative.getScenarioTags());
     }
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {

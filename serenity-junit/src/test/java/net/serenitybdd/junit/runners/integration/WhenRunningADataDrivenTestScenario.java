@@ -867,7 +867,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void parameterized_test_class_correct_number_of_test_methods_are_run_using_multiple_tags() throws Throwable {
         EnvironmentVariables environmentVariablesWithTags = environmentVariables;
-        environmentVariables.setProperty("tags", "a,c");
+        environmentVariables.setProperty("tags", "a or c");
         SerenityParameterizedRunner runner = getTestRunnerUsing(
                 ExampleDataDrivenWithTestMethodTags.class,
                 environmentVariablesWithTags

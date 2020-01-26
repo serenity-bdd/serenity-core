@@ -89,7 +89,7 @@ public class AppiumConfiguration {
      * Return the Appium platform defined in the system properties, or NONE if no platform is defined.
      */
     public MobilePlatform definedTargetPlatform() {
-        String targetPlatform = ThucydidesSystemProperty.APPIUM_PLATFORMNAME.from(environmentVariables,"NONE");
+        String targetPlatform = ThucydidesSystemProperty.APPIUM_PLATFORMNAME.from(environmentVariables, "NONE");
         try {
             return MobilePlatform.valueOf(targetPlatform.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -143,12 +143,10 @@ public class AppiumConfiguration {
         for (String capabilityName : capabilities.getCapabilityNames()) {
             if (ACCEPTED_W3C_PATTERNS.test(capabilityName) || APPIUM_SUPPORTED_CAPABILITIES.contains(capabilityName)) {
                 processedCapabilities.setCapability(capabilityName, capabilities.getCapability(capabilityName));
-            }
-            else if (additionalAppiumCapabilities.contains(capabilityName)) {
+            } else if (additionalAppiumCapabilities.contains(capabilityName)) {
                 LOGGER.info("appium: prefix added to capability {}", capabilityName);
                 processedCapabilities.setCapability("appium:" + capabilityName, capabilities.getCapability(capabilityName));
-            }
-            else {
+            } else {
                 LOGGER.warn("{} capability is not discovered in the list of supported by w3c or Appium. " +
                                 "If it is required then it should be listed in {@link ThucydidesSystemProperty#APPIUM_ADDITIONAL_CAPABILITIES}",
                         capabilityName);
@@ -165,10 +163,12 @@ public class AppiumConfiguration {
     private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
 
         Properties appiumProperties = new Properties();
+        String env = environmentVariables.getProperty("environment", "default");
+        String regex=String.format("environments\\.(all|%s)\\.appium",env);
         List<String> appiumKeys =
                 environmentVariables.getKeys()
                         .stream()
-                        .map(key->key.replaceFirst("environment.*.appium","appium"))
+                        .map(key -> key.replaceFirst(regex, "appium"))
                         .distinct()
                         .filter(key -> key.startsWith("appium."))
                         .collect(Collectors.toList());
@@ -185,7 +185,7 @@ public class AppiumConfiguration {
         }
 
         Map<String, String> optionsMap = OptionsMap.from(options);
-        for(String key : optionsMap.keySet()) {
+        for (String key : optionsMap.keySet()) {
             appiumProperties.setProperty(key, optionsMap.get(key));
         }
         ensureAppOrBrowserPathDefinedIn(appiumProperties);

@@ -115,7 +115,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             int requirementsDepth = longestPathIn(requirementPaths);
 
-            Set<Requirement> allRequirements = new HashSet();
+            Set<Requirement> allRequirements = new HashSet<>();
             for (String path : requirementPaths) {
                 addRequirementsDefinedIn(path, requirementsDepth, allRequirements);
             }
@@ -125,7 +125,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             if (!allRequirements.isEmpty()) {
                 classpathRequirements = new ArrayList<>(allRequirements);
                 Collections.sort(classpathRequirements);
-
                 requirementsStore.write(classpathRequirements);
             }
 

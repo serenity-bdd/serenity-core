@@ -294,6 +294,7 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE,
 
+    @Deprecated
     SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE,
 
     @Deprecated

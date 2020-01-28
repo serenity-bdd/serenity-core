@@ -78,8 +78,7 @@ class SerenityPlugin implements Plugin<Project> {
                 List<String> extendedReportTypes = project.serenity.reports
                 if (extendedReportTypes) {
                     for (ExtendedReport report : ExtendedReports.named(extendedReportTypes)) {
-                        generatedReport = report.generateReportFrom(reportDirectory).toPath()
-                        logger.lifecycle("  - ${report.description}: ${generatedReport.toURI()}")
+                        logger.lifecycle("  - ${report.description}: ${report.generateReport().toUri()}")
                     }
                 }
             }
@@ -89,15 +88,13 @@ class SerenityPlugin implements Plugin<Project> {
             group = 'Serenity BDD'
             description = "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
 
-            def reportDirectory = prepareReportDirectory(project)
-
-            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory.toUri()}")
+            Path reportDirectory = prepareReportDirectory(project)
 
             inputs.files(project.fileTree(reportDirectory))
 
             doLast {
                 updateProperties(project)
-                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory.toUri()")
+                logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
                 if (reportDirectory.toFile().exists()) {
                     def checker = new ResultChecker(reportDirectory.toFile())
                     checker.checkTestResults()

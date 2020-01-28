@@ -89,7 +89,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(String name) {
-        return properties.getProperty(name);
+        if (name != null) {
+            return properties.getProperty(name);
+        } else {
+            return null;
+        }
     }
 
     @Override

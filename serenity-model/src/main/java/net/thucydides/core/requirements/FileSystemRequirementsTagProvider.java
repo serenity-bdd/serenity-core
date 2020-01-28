@@ -124,6 +124,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
         directoryPaths = rootDirectories(rootDirectory, environmentVariables);
+
         this.level = requirementsConfiguration.startLevelForADepthOf(maxDirectoryDepthIn(directoryPaths) + 1);
         maxDepth = maxDirectoryDepthIn(directoryPaths);
         requirementsDirectoryPaths = RootDirectory.definedIn(environmentVariables).requirementsDirectoryNames();
@@ -186,7 +187,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Set<Requirement> capabilitiesAndStoriesIn(String path) {
         Set<Requirement> allRequirements = new HashSet<>();
         File rootDirectory = new File(path);
-
         if (rootDirectory.exists()) {
 
             loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())).forEach(
@@ -257,24 +257,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                                         ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(candidatePath))) ||
                                         ((requirement.getPath() != null) && (equivalentPaths(requirement.getPath(), candidatePath)))
                 ).findFirst();
-
-
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//
-//            if (requirement.getId() != null && requirement.getId().equals(parentRequirementId)) {
-//                return java.util.Optional.of(requirement);
-//            }
-//
-//            if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(candidatePath))) {
-//                return java.util.Optional.of(requirement);
-//            }
-//
-//            if ((requirement.getPath() != null) && (equivalentPaths(requirement.getPath(), candidatePath))) {
-//                return java.util.Optional.of(requirement);
-//            }
-//
-//        }
-//        return java.util.Optional.empty();
     }
 
 
@@ -295,12 +277,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return AllRequirements.asStreamFrom(getRequirements())
                 .filter(requirement -> requirement.getChildren().contains(matchingRequirement))
                 .findFirst();
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.getChildren().contains(matchingRequirement)) {
-//                return java.util.Optional.of(requirement);
-//            }
-//        }
-//        return java.util.Optional.empty();
     }
 
     private List<String> stripStorySuffixFrom(List<String> pathElements) {
@@ -466,12 +442,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                                 && (requirement.getId().equals(testOutcome.getParentId())))
                 )
                 .findFirst();
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.getId() != null && testOutcome.getParentId() != null && (requirement.getId().equals(testOutcome.getParentId()))) {
-//                return Optional.of(requirement);
-//            }
-//        }
-//        return Optional.empty();
     }
 
     public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
@@ -481,14 +451,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                                 && requirement.getType().equalsIgnoreCase(testTag.getType()))
                 )
                 .findFirst();
-//
-//
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.getName().equalsIgnoreCase(testTag.getName()) && requirement.getType().equalsIgnoreCase(testTag.getType())) {
-//                return Optional.of(requirement);
-//            }
-//        }
-//        return Optional.empty();
     }
 
     private java.util.Optional<Requirement> lastRequirementFrom(List<String> storyPathElements) {

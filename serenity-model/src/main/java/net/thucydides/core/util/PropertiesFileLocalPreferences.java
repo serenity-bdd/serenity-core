@@ -4,10 +4,15 @@ import com.google.inject.*;
 import com.typesafe.config.*;
 import net.thucydides.core.*;
 import net.thucydides.core.configuration.*;
+import net.thucydides.core.requirements.SearchForFilesWithName;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.*;
 import org.slf4j.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.Optional;
 
@@ -179,14 +184,31 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private final String PROPERTIES = ThucydidesSystemProperty.PROPERTIES.getPropertyName();
 
     private Optional<File> defaultPropertiesConfFile() {
-        List<String> possibleConfigFileNames = Arrays.asList(
-                optionalEnvironmentVariable(System.getProperty(PROPERTIES)).orElse("src/test/resources/serenity.conf"),
-                "src/main/resources/serenity.conf");
+
+        List<String> possibleConfigFileNames = new ArrayList<>();
+
+        environmentVariables.optionalProperty(System.getProperty(PROPERTIES)).ifPresent(
+                possibleConfigFileNames::add
+        );
+        serenityConfFileInASensibleLocation().ifPresent(possibleConfigFileNames::add);
 
         return possibleConfigFileNames.stream()
                 .map(File::new)
                 .filter(File::exists)
                 .findFirst();
+    }
+
+    private final String SERENITY_CONF_FILE = "(.*)[\\/\\\\]?src[\\/\\\\]test[\\/\\\\]resources[\\/\\\\]serenity.conf";
+
+    private Optional<String> serenityConfFileInASensibleLocation() {
+        try {
+            return SearchForFilesWithName.matching(Paths.get("."),SERENITY_CONF_FILE).getMatchingFiles()
+                    .stream()
+                    .findFirst()
+                    .map(path -> path.toAbsolutePath().toString());
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     private String defaultPropertiesFileName() {

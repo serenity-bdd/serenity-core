@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAnEmailableReport {
 
-    val TEST_OUTCOMES_WITH_MULTIPLE_RESULTS = ClassLoader.getSystemResource("test_outcomes/with_different_results").path
+    val TEST_OUTCOMES_WITH_MULTIPLE_RESULTS = File(ClassLoader.getSystemResource("test_outcomes/with_different_results").file).toPath()
 
     private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
 
@@ -28,18 +29,20 @@ class WhenGeneratingAnEmailableReport {
     @Nested
     inner class AllReports {
 
-        private val generatedReport: File
+        private val generatedReport: Path
         private val reportContents: String
 
         init {
-            generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-            reportContents = generatedReport.readText()
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            generatedReport = reporter.generateReport()
+            reportContents = generatedReport.toFile().readText()
         }
 
         @Test
         fun `should be written to serenity-summary_html`() {
             assertThat(generatedReport).exists()
-            assertThat(generatedReport.name).isEqualTo("serenity-summary.html")
+            assertThat(generatedReport.toFile().name).isEqualTo("serenity-summary.html")
         }
 
         @Test
@@ -63,7 +66,7 @@ class WhenGeneratingAnEmailableReport {
     @Nested
     inner class ReportWithCustomFields {
 
-        private val generatedReport: File
+        private val generatedReport: Path
         private val reportContents: String
         private val parsedReport: Document
 
@@ -74,8 +77,10 @@ class WhenGeneratingAnEmailableReport {
             environmentVariables.setProperty("report.customfields.User", "tim")
             environmentVariables.setProperty("report.customfields.order", "environment,version,HostName,User")
 
-            generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-            reportContents = generatedReport.readText()
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            generatedReport = reporter.generateReport()
+            reportContents = generatedReport.toFile().readText()
             parsedReport = parse(reportContents)
         }
 
@@ -94,15 +99,17 @@ class WhenGeneratingAnEmailableReport {
 
     @Nested
     inner class ReportsWithCustomTags {
-        private val generatedReport: File
+        private val generatedReport: Path
         private val reportContents: String
         private val parsedReport: Document
 
         init {
             environmentVariables.setProperty("report.tagtypes", "group, feature")
 
-            generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-            reportContents = generatedReport.readText()
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            generatedReport = reporter.generateReport()
+            reportContents = generatedReport.toFile().readText()
             parsedReport = parse(reportContents)
         }
 
@@ -143,13 +150,15 @@ class WhenGeneratingAnEmailableReport {
 
     @Nested
     inner class ReportsWithFailureScoreboards {
-        private val generatedReport: File
+        private val generatedReport: Path
         private val reportContents: String
         private val parsedReport: Document
 
         init {
-            generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-            reportContents = generatedReport.readText()
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            generatedReport = reporter.generateReport()
+            reportContents = generatedReport.toFile().readText()
             parsedReport = parse(reportContents)
         }
 
@@ -177,15 +186,18 @@ class WhenGeneratingAnEmailableReport {
 
         @Nested
         inner class AndAConfiguredScoreboardSize {
-            private val generatedReport: File
+            private val generatedReport: Path
             private val reportContents: String
             private val parsedReport: Document
 
             init {
                 environmentVariables.setProperty("report.scoreboard.size", "2")
 
-                generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-                reportContents = generatedReport.readText()
+                val reporter = SinglePageHtmlReporter(environmentVariables)
+                reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+                generatedReport = reporter.generateReport()
+                reportContents = generatedReport.toFile().readText()
+
                 parsedReport = parse(reportContents)
             }
 
@@ -200,13 +212,15 @@ class WhenGeneratingAnEmailableReport {
 
     @Nested
     inner class ReportShowingTheFullFeatureList {
-        private val generatedReport: File
+        private val generatedReport: Path
         private val reportContents: String
         private val parsedReport: Document
 
         init {
-            generatedReport = SinglePageHtmlReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS))
-            reportContents = generatedReport.readText()
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            generatedReport = reporter.generateReport()
+            reportContents = generatedReport.toFile().readText()
             parsedReport = parse(reportContents)
         }
 

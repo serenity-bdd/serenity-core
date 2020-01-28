@@ -1,6 +1,5 @@
-<a id="summary">
-
 # ![Serenity BDD](docs/serenity-bdd-logo.png "Logo Title Text 1")
+<a id="summary">
 
 [![Gitter](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 

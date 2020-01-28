@@ -1,5 +1,5 @@
 <a id="summary">
-
+  
 # ![Serenity BDD](docs/serenity-bdd-logo.png "Logo Title Text 1")
 
 [![Gitter](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -59,6 +59,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.1.0         | 2.1.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.90        | 2.0.90                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.84        | 2.0.84                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.71        | 2.0.71                | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -90,6 +91,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.1.0         | 2.1.0                 |  2.1.0            | 4.8.0                |
 | 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               | 
 | 2.0.84        | 2.0.84                | 1.0.21             | 4.2.0               | 
 | 2.0.69        | 2.0.69                | 1.0.18             | 4.2.0               | 

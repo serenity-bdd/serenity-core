@@ -94,20 +94,30 @@ public class RootDirectory {
      */
     public Set<String> getRootDirectoryPaths() {
 
+        Set<String> rootDirectories;
         try {
             if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
-                return getRootDirectoryFromRequirementsBaseDir();
+                rootDirectories = getRootDirectoryFromRequirementsBaseDir();
             } else {
-                return firstDefinedOf(
+                rootDirectories = firstDefinedOf(
                         getRootDirectoryFromClasspath(),
                         getGradleProjectDirectoryAsSet(),
                         getFileSystemDefinedDirectory(),
                         getRootDirectoryFromWorkingDirectory()
                 );
             }
+
+            return rootDirectories.stream().map(path -> toAbsolute(path)).collect(Collectors.toSet());
         } catch (IOException e) {
             return new HashSet<>();
         }
+    }
+
+    private String toAbsolute(String path) {
+        if (Paths.get(path).isAbsolute()) {
+            return path;
+        }
+        return Paths.get(System.getProperty("user.dir")).resolve(path).toString();
     }
 
     public String featureDirectoryName() {

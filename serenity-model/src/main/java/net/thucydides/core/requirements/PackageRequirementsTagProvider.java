@@ -93,7 +93,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private void fetchRequirements() {
-        logger.info("Loading requirements from package requirements at: " + rootPackage);
+        logger.debug("Loading requirements from package requirements at: " + rootPackage);
 
         requirements = reloadedRequirements().orElse(requirementsReadFromClasspath()
                 .orElse(NO_REQUIREMENTS));
@@ -291,14 +291,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return AllRequirements.asStreamFrom(getRequirements())
                 .filter(requirement -> requirement.getChildren().contains(child))
                 .findFirst();
-//
-//
-//        for (Requirement requirement : AllRequirements.in(requirements)) {
-//            if (requirement.getChildren().contains(child)) {
-//                return Optional.of(requirement);
-//            }
-//        }
-//        return Optional.empty();
     }
 
     private static File getRequirementsDirectory(File directory) {

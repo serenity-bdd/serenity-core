@@ -2,6 +2,28 @@ ext {
     bintrayPackage = 'serenity-reports'
     projectDescription = 'Serenity Reports'
 }
+buildscript {
+    ext.kotlin_version = '1.3.31'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'kotlin'
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
 
 dependencies {
     compile project(':serenity-model')
@@ -22,3 +44,4 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
 }
+

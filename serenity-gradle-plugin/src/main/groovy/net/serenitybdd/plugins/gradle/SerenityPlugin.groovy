@@ -78,7 +78,10 @@ class SerenityPlugin implements Plugin<Project> {
                 List<String> extendedReportTypes = project.serenity.reports
                 if (extendedReportTypes) {
                     for (ExtendedReport report : ExtendedReports.named(extendedReportTypes)) {
-                        logger.lifecycle("  - ${report.description}: ${report.generateReport().toUri()}")
+                        report.sourceDirectory = reportDirectory
+                        report.outputDirectory = reportDirectory
+                        URI reportPath = absolutePathOf(report.generateReport()).toUri()
+                        logger.lifecycle("  - ${report.description}: ${reportPath}")
                     }
                 }
             }
@@ -147,6 +150,10 @@ class SerenityPlugin implements Plugin<Project> {
         project.tasks.check {
             it.dependsOn 'checkOutcomes'
         }
+    }
+
+    static Path absolutePathOf(Path path) {
+        return Paths.get(System.getProperty("user.dir")).resolve(path)
     }
 
     static Path prepareReportDirectory(Project project) {

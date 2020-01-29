@@ -64,7 +64,7 @@ public class DriverCapabilities {
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
-        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap();
+        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap<>();
 
         selectors.put(CHROME, new ChromeDriverCapabilities(environmentVariables, options));
         selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));

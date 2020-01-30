@@ -1,0 +1,55 @@
+buildscript {
+    ext.kotlin_version = '1.3.31'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'kotlin'
+
+ext {
+    bintrayPackage = 'serenity-json-summary-reports'
+    projectDescription = 'Serenity JSON summary reports'
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+}
+
+dependencies {
+    compile project(':serenity-model')
+    compile project(':serenity-stats')
+    compile project(':serenity-reports')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // TEST DEPENDENCIES
+    testCompile project(':serenity-core')
+    testCompile "org.jsoup:jsoup:1.10.3"
+
+    // JUnit 5
+    testImplementation(
+            "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+    )
+    testRuntimeOnly(
+            "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
+    )
+}
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

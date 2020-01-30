@@ -1,0 +1,62 @@
+{
+  "name": "A fourth pending scenario",
+  "id": "pending-scenarios;a-fourth-pending-scenario",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given some precondition",
+      "duration": 1,
+      "startTime": "2018-08-01T19:24:54.680+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false
+    },
+    {
+      "number": 2,
+      "description": "When something is not ready",
+      "duration": 1,
+      "startTime": "2018-08-01T19:24:54.681+01:00[Europe/London]",
+      "result": "PENDING",
+      "precondition": false
+    },
+    {
+      "number": 3,
+      "description": "Then we should be happy",
+      "duration": 3,
+      "startTime": "2018-08-01T19:24:54.682+01:00[Europe/London]",
+      "result": "IGNORED",
+      "precondition": false
+    }
+  ],
+  "userStory": {
+    "id": "pending-scenarios",
+    "storyName": "Pending scenarios",
+    "path": "complete_scenario_set/pending_scenarios.feature",
+    "type": "feature"
+  },
+  "featureTag": {
+    "name": "Pending scenarios",
+    "type": "feature"
+  },
+  "title": "A fourth pending scenario",
+  "tags": [
+    {
+      "name": "Complete scenario set",
+      "type": "capability"
+    },
+    {
+      "name": "alpha",
+      "type": "group"
+    },
+    {
+      "name": "Complete scenario set/Pending scenarios",
+      "type": "feature"
+    }
+  ],
+  "startTime": "2018-08-01T19:24:54.678+01:00[Europe/London]",
+  "duration": 15,
+  "projectKey": "",
+  "annotatedResult": "PENDING",
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "PENDING"
+}

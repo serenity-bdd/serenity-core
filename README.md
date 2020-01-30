@@ -76,12 +76,13 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 
 ### Serenity with Cucumber
-Serenity works with both Cucumber 2 and Cucumber 4
+Serenity works with both Cucumber 2 and Cucumber 4 for versions up to 2.1.x. From version 2.2.x we will be supporting Cucumber 5 only.
 
 #### Cucumber 2
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
 |---------------|-----------------------|-------------------|---------------------|
+| 2.1.2         | 2.1.2                 | 1.9.49            | 2.4.0               |
 | 2.0.90        | 2.0.90                | 1.9.49            | 2.4.0               |
 | 2.0.84        | 2.0.84                | 1.9.48            | 2.4.0               |
 | 2.0.69        | 2.0.69                | 1.9.45            | 2.4.0               |
@@ -96,7 +97,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
-| 2.1.2         | 2.1.2                 |  2.1.0             | 4.8.0               |
+| 2.1.2         | 2.1.2                 |  2.1.2             | 4.8.0               |
 | 2.1.0         | 2.1.0                 |  2.1.0             | 4.8.0               |
 | 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               | 
 | 2.0.84        | 2.0.84                | 1.0.21             | 4.2.0               | 

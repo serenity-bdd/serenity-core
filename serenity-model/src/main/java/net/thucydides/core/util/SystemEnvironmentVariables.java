@@ -44,6 +44,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return (value == null) ? defaultValue : value;
     }
 
+    private void setValue(String name, String value) {
+        systemValues.put(name, value);
+    }
 
     public String getValue(Enum<?> property, String defaultValue) {
         return getValue(property.toString(), defaultValue);

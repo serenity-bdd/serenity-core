@@ -107,7 +107,8 @@ public class BuildInfoProvider {
 
     private String evaluateGroovyExpression(String key, String expression) {
         Binding binding = new Binding();
-        binding.setVariable("env", environmentVariables);
+        binding.setVariable("env", environmentVariables.asMap());
+
         GroovyShell shell = new GroovyShell(binding);
         Object result = null;
         try {
@@ -116,7 +117,8 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            LOGGER.warn("Failed to evaluate build info expression '{0}' for key {1}",expression, key);
+            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'",expression, key);
+            LOGGER.warn(error);
         }
         return (result != null) ? result.toString() : expression;
     }

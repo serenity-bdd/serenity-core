@@ -38,4 +38,15 @@ class WhenReportingCustomBuildInfo extends Specification {
         buildInfo.buildProperties.generalProperties["Build"] == "123"
     }
 
+    def "it should allow human-readable sections"() {
+        given:
+        environmentVariables.setProperty("sysinfo.staff.ran_by","John")
+        when:
+        def buildInfo = new BuildInfoProvider(environmentVariables)
+        then:
+        buildInfo.buildProperties.sectionTitles == ["Staff"]
+        and:
+        buildInfo.buildProperties.sections["Staff"]["Ran by"] == "John"
+    }
+
 }

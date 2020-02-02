@@ -237,7 +237,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void updateExampleLineNumber(int lineNumber) {
-        getCurrentStep().setLineNumber(lineNumber);
+        currentStep().ifPresent(
+                step -> step.setLineNumber(lineNumber)
+        );
     }
 
     public class StepMerger {

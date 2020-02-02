@@ -18,20 +18,20 @@ class WhenReportingCustomBuildInfo extends Specification {
         buildInfo.buildProperties.generalProperties["Lead"] == "Daisy"
     }
 
-    def "it should evaluate environment variables with the 'end' prefix"() {
+    def "it should evaluate environment variables with the 'env' prefix"() {
         given:
-        environmentVariables.setProperty("BUILD_NUMBER","123")
-        environmentVariables.setProperty("sysinfo.build",'${env.BUILD_NUMBER}')
+        environmentVariables.setProperty("THE_BUILD_NUMBER","123")
+        environmentVariables.setProperty("sysinfo.build",'${env.THE_BUILD_NUMBER}')
         when:
         def buildInfo = new BuildInfoProvider(environmentVariables)
         then:
         buildInfo.buildProperties.generalProperties["Build"] == "123"
     }
 
-    def "it should evaluate system variables with the 'sys' prefix"() {
+    def "it should evaluate system variables with the 'env' prefix"() {
         given:
-        environmentVariables.setValue("BUILD_NUMBER","123")
-        environmentVariables.setProperty("sysinfo.build",'${env.BUILD_NUMBER}')
+        environmentVariables.setValue("THE_BUILD_NUMBER","123")
+        environmentVariables.setProperty("sysinfo.build",'${env.THE_BUILD_NUMBER}')
         when:
         def buildInfo = new BuildInfoProvider(environmentVariables)
         then:

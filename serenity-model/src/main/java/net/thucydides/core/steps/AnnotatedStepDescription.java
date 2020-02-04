@@ -4,11 +4,18 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.reflection.MethodFinder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
@@ -252,13 +259,92 @@ public final class AnnotatedStepDescription {
     private String annotatedStepNameWithParameters(String annotatedStepTemplate) {
         String annotatedStepName = annotatedStepTemplate;
 
-        int counter = 0;
-        for(String parameter : description.getArguments()) {
-            String token = "{" + counter++ + "}";
-            annotatedStepName = StringUtils.replace(annotatedStepName, token, parameter);
+        for (int i = 0; i < description.getRawArguments().size(); i++) {
+            Pattern tokenPattern = Pattern.compile(String.format("\\{%d(\\.[^}]+)?\\}", i));
+            Matcher tokenMatcher = tokenPattern.matcher(annotatedStepName);
 
+            List<String> tokens = new ArrayList<>();
+            List<String> tokenDetails = new ArrayList<>();
+
+            //it could be several references to the same parameter
+            while (tokenMatcher.find()) {
+                String token = tokenMatcher.group();
+                if (!tokens.contains(token)) {
+                    tokens.add(token);
+                    String tokenDetail = tokenMatcher.group(1);
+                    tokenDetails.add(tokenDetail);
+                }
+            }
+
+            Object argument = description.getRawArguments().get(i);
+
+            for (int j = 0; j < tokens.size(); j++) {
+                String replacement;
+
+                //if there are some additional details of the parameter, they should be processed
+                if (tokenDetails.get(j) != null) {
+                    replacement = getReplacementForArgument(argument, tokenDetails.get(j));
+                }
+                //otherwise, replace based on toString() representation of parameter
+                else {
+                    replacement = description.getArguments().get(i);
+                }
+
+                annotatedStepName = StringUtils.replace(annotatedStepName, tokens.get(j), replacement);
+            }
         }
+
         return annotatedStepName;
+    }
+
+    private String getReplacementForArgument(Object argument, String tokenDetail)  {
+        List<String> references = Stream.of(tokenDetail.split("\\."))
+                .filter(e -> !e.isEmpty())
+                .map(String::trim)
+                .collect(Collectors.toList());
+
+        Object resolvedObject = argument;
+
+        for (String reference : references) {
+            boolean isMethod = isMethod(reference);
+            if (isMethod) {
+                resolvedObject = getMethodResult(resolvedObject, reference);
+            }
+            else {
+                resolvedObject = getFieldValue(resolvedObject, reference);
+            }
+        }
+
+        return String.valueOf(resolvedObject);
+    }
+
+    private Object getMethodResult(Object o, String methodName) {
+        if (o == null) {
+            return null;
+        }
+
+        String cleanedMethodName = methodName.replace("()", "").trim();
+
+        try {
+            return MethodUtils.invokeMethod(o, cleanedMethodName);
+        } catch (NoSuchMethodException|IllegalAccessException| InvocationTargetException e) {
+            return String.valueOf(o);
+        }
+    }
+
+    private Object getFieldValue(Object o, String fieldName) {
+        if (o == null) {
+            return null;
+        }
+        try {
+            return FieldUtils.readField(o, fieldName, true);
+        } catch (IllegalAccessException|IllegalArgumentException e) {
+            return String.valueOf(o);
+        }
+    }
+
+    private boolean isMethod(String reference) {
+        return reference.endsWith("()");
     }
 
     public boolean isAGroup() {

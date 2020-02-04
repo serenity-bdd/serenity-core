@@ -3,10 +3,7 @@ package net.thucydides.core.steps;
 import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.vavr.API.List;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -20,22 +17,24 @@ public class ExecutedStepDescription implements Cloneable {
 
     private final Class<? extends Object> stepsClass;
     private final String name;
-    private final List<String> argumentsList;
+    private final List<Object> argumentsList;
+    private final List<String> convertedArgumentsList;
     private final Map<String, Object> displayedFields;
     private boolean isAGroup;
 
     private final static Map<String,Object> NO_FIELDS = new HashMap();
-    private final static List<String> NO_ARGUMENTS = new ArrayList<>();
+    private final static List<Object> NO_ARGUMENTS = new ArrayList<>();
     private boolean isAQuestion;
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,
-                                      List<String> argumentsList,
+                                      List<Object> argumentsList,
                                       Map<String, Object> displayedFields,
                                       final boolean isAGroup) {
         this.stepsClass = stepsClass;
         this.name = name;
         this.argumentsList = argumentsList;
+        this.convertedArgumentsList = convertArguments(this.argumentsList.toArray());
         this.displayedFields = displayedFields;
         this.isAGroup = isAGroup;
         this.isAQuestion = false;
@@ -72,6 +71,10 @@ public class ExecutedStepDescription implements Cloneable {
     }
 
     public List<String> getArguments() {
+        return convertedArgumentsList;
+    }
+
+    public List<Object> getRawArguments() {
         return argumentsList;
     }
 
@@ -94,7 +97,7 @@ public class ExecutedStepDescription implements Cloneable {
     public static ExecutedStepDescription of(final Class<? extends Object> stepsClass,
                                              final String name,
                                              final Object[] arguments) {
-        return new ExecutedStepDescription(stepsClass, name, convertArguments(arguments), NO_FIELDS, false);
+        return new ExecutedStepDescription(stepsClass, name, Arrays.asList(arguments), NO_FIELDS, false);
     }
 
     private static List<String> convertArguments(Object[] arguments) {

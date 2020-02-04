@@ -25,11 +25,11 @@
       "error": ${results.percentageByResult.ERROR},
       "compromised": ${results.percentageByResult.COMPROMISED}
     },
-    "totalTestDuration": "${results.totalTestDuration}",
-    "totalClockDuration": "${results.clockTestDuration}",
-    "minTestDuration": "${results.minTestDuration}",
-    "maxTestDuration": "${results.maxTestDuration}",
-    "averageTestDuration": "${results.averageTestDuration}"
+    "totalTestDuration": ${results.totalTestDuration},
+    "totalClockDuration": ${results.clockTestDuration},
+    "minTestDuration": ${results.minTestDuration},
+    "maxTestDuration": ${results.maxTestDuration},
+    "averageTestDuration": ${results.averageTestDuration}
   },
   "resultsByFeature": [
     <#list resultsByFeature as feature>

@@ -114,7 +114,8 @@ public class RootDirectory {
     }
 
     private String toAbsolute(String path) {
-        if (Paths.get(path).isAbsolute()) {
+
+        if (Paths.get(WindowsFriendly.formOf(path)).isAbsolute()) {
             return path;
         }
         return Paths.get(System.getProperty("user.dir")).resolve(path).toString();

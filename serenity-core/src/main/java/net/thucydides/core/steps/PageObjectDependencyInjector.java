@@ -12,12 +12,15 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PageObjectDependencyInjector implements DependencyInjector {
 
     private final Pages pages;
 
     EnvironmentDependencyInjector environmentDependencyInjector;
+
+    private static final List<Field> NO_FIELDS = new ArrayList<>();
 
     public PageObjectDependencyInjector(Pages pages) {
         this.pages = pages;
@@ -71,13 +74,12 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     }
 
     private List<Field> pageObjectFieldsIn(Object target) {
+        if (target == null) { return NO_FIELDS; }
+
         Set<Field> allFields = Fields.of(target.getClass()).allFields();
-        List<Field> pageObjectFields = new ArrayList<>();
-        for(Field field : allFields) {
-            if (PageObject.class.isAssignableFrom(field.getType())) {
-                pageObjectFields.add(field);
-            }
-        }
-        return pageObjectFields;
+
+        return allFields.stream()
+                .filter(field -> PageObject.class.isAssignableFrom(field.getType()))
+                .collect(Collectors.toList());
     }
 }

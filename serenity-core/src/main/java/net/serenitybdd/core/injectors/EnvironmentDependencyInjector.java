@@ -85,7 +85,9 @@ public class EnvironmentDependencyInjector implements DependencyInjector {
     }
 
     private List<Field> matchingFieldsIn(Object target, Class fieldClass) {
-        Set<Field> allFields = Fields.of(target.getClass()).allFields();
+        Class targetClass = target.getClass();
+        Set<Field> allFields = Fields.of(targetClass)
+                                     .allFields();
         List<Field> matchingFields = new ArrayList<>();
         for(Field field : allFields) {
             if (fieldClass.isAssignableFrom(field.getType())) {

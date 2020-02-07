@@ -53,6 +53,7 @@ Check out Serenity BDD in more detail here:
   
 ## Release Notes
 Release notes are available for major releases: 
+* [2.1.5](docs/release-notes/2.1.5.md)
 * [2.1.4](docs/release-notes/2.1.4.md)
 * [2.1.2](docs/release-notes/2.1.2.md)
 
@@ -64,7 +65,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
-| 2.1.4         | 2.1.4                 | 3.141.59          | 3.3.0                | 7.2.0                 |
+| 2.1.5         | 2.1.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.1.0         | 2.1.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.90        | 2.0.90                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.84        | 2.0.84                | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -83,7 +84,7 @@ Serenity works with both Cucumber 2 and Cucumber 4 for versions up to 2.1.x. Fro
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
 |---------------|-----------------------|-------------------|---------------------|
-| 2.1.4         | 2.1.4                 | 1.9.50            | 2.4.0               |
+| 2.1.5         | 2.1.5                 | 1.9.50            | 2.4.0               |
 | 2.0.90        | 2.0.90                | 1.9.49            | 2.4.0               |
 | 2.0.84        | 2.0.84                | 1.9.48            | 2.4.0               |
 | 2.0.69        | 2.0.69                | 1.9.45            | 2.4.0               |
@@ -98,7 +99,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
-| 2.1.4         | 2.1.4                 |  2.1.2             | 4.8.0               |
+| 2.1.5         | 2.1.5                 |  2.1.2             | 4.8.0               |
 | 2.1.0         | 2.1.0                 |  2.1.0             | 4.8.0               |
 | 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               | 
 | 2.0.84        | 2.0.84                | 1.0.21             | 4.2.0               | 

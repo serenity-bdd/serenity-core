@@ -451,7 +451,7 @@ public class WhenFindingTagsForATestOutcome {
 
         File norwegenfeatureFile = new File(this.getClass().getResource("/features/PlantScandanavianPotatoes.feature").toURI());
 
-        Requirement norwegenRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(norwegenfeatureFile);
+        Requirement norwegenRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(norwegenfeatureFile).get();
 
         assertThat(norwegenRequirement.getName(), is("Summering"));
     }
@@ -463,7 +463,7 @@ public class WhenFindingTagsForATestOutcome {
 
         File featureFile = new File(this.getClass().getResource("/features/PlantPotatoes.feature").toURI());
 
-        Requirement featureRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(featureFile);
+        Requirement featureRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(featureFile).get();
 
         assertThat(featureRequirement.getName(), is("Planting some potatoes"));
     }

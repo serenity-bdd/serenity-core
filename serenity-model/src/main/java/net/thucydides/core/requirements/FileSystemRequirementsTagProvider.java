@@ -11,6 +11,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.*;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
+import net.thucydides.core.requirements.model.cucumber.InvalidFeatureFileException;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
@@ -543,7 +544,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Stream<Requirement> loadStoriesFrom(File[] storyFiles) {
         return Arrays.stream(storyFiles)
-                .map(this::readRequirementsFromStoryOrFeatureFile);
+                .map(this::readRequirementsFromStoryOrFeatureFile)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     public Requirement readRequirementFrom(File requirementDirectory) {
@@ -558,27 +561,37 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    public Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
+    private Set<File> invalidFeatureFiles = new HashSet<>();
+
+    public Optional<Requirement> readRequirementsFromStoryOrFeatureFile(File storyFile) {
+
+        if (invalidFeatureFiles.contains(storyFile)) { return Optional.empty(); }
+
         FeatureType type = featureTypeOf(storyFile);
 
-        java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
+        try {
+            java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
-        String storyName = storyNameFrom(narrative, type, storyFile);
+            String storyName = storyNameFrom(narrative, type, storyFile);
 
-        Requirement requirement;
-        if (narrative.isPresent()) {
-            requirement = leafRequirementWithNarrative(storyName,
-                    storyFile.getPath(),
-                    narrative.get()).withType(type.toString());
+            Requirement requirement;
+            if (narrative.isPresent()) {
+                requirement = leafRequirementWithNarrative(storyName,
+                        storyFile.getPath(),
+                        narrative.get()).withType(type.toString());
 
-            if (narrative.get().getScenarios().isEmpty()) {
-                requirement = requirement.withNoScenarios();
+                if (narrative.get().getScenarios().isEmpty()) {
+                    requirement = requirement.withNoScenarios();
+                }
+            } else {
+                requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
             }
-        } else {
-            requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
-        }
 
-        return requirement.definedInFile(storyFile);
+            return Optional.of(requirement.definedInFile(storyFile));
+        } catch (InvalidFeatureFileException invalidFeatureFile) {
+            invalidFeatureFiles.add(storyFile);
+            return Optional.empty();
+        }
     }
 
     private String storyNameFrom(java.util.Optional<Narrative> narrative, FeatureType type, File storyFile) {

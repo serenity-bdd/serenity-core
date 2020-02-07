@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Splitter;
+import cucumber.runtime.CucumberException;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.model.CucumberFeature;
@@ -103,21 +104,25 @@ public class CucumberParser {
             List<URI> uriList = listOfFiles.stream().map(filePath->new File(filePath).toURI()).collect(Collectors.toList());
             return  (List<CucumberFeature>)load.invoke(featureLoader,uriList);
         } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber426Exception) {
-            LOGGER.debug("Found no Cucumber 4.2.6 class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 4.2.0 ");
-            try { //try to load cucumber-core 4.2.0
+            reportAnyCucumberSyntaxErrorsIn(cucumber426Exception);
+
+            LOGGER.debug("Found no Cucumber 4.2.x class " + CUCUMBER_4_FEATURE_LOADER + " trying Cucumber 4.8.0 ");
+            try { //try to load cucumber-core 4.8.0
                 Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
                 Method load = featureLoaderClass.getMethod("load", List.class);
                 Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
                 return (List<CucumberFeature>) load.invoke(featureLoader, listOfFiles);
             } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber420Exception) {
-                LOGGER.debug("Found no Cucumber 4.2.0 class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
+                reportAnyCucumberSyntaxErrorsIn(cucumber420Exception);
+
+                LOGGER.debug("Found no Cucumber 4.8.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
                 try {
                     Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
                     Method load = featureLoaderClass.getMethod("load", ResourceLoader.class, List.class);
                     return (List<CucumberFeature>) load.invoke(null, multiLoader, listOfFiles);
-                } catch (InvocationTargetException gherkinParserException) {
-                    throw new SerenityManagedException(gherkinParserException.getTargetException());
-                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException cucumber2Exception) {
+                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException cucumber2Exception) {
+                    reportAnyCucumberSyntaxErrorsIn(cucumber2Exception);
+
                     LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
                     LOGGER.error("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath");
                     throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath", cucumber2Exception);
@@ -126,6 +131,15 @@ public class CucumberParser {
         } catch(ParserException gherkinParsingException) {
             LOGGER.error("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
             throw new RuntimeException("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
+        }
+    }
+
+    private void reportAnyCucumberSyntaxErrorsIn(Throwable possibleGherkinSyntaxError) {
+        if (possibleGherkinSyntaxError instanceof InvocationTargetException) {
+            Throwable gherkinError = ((InvocationTargetException) possibleGherkinSyntaxError).getTargetException();
+            if (gherkinError instanceof CucumberException) {
+                throw new InvalidFeatureFileException(gherkinError.getMessage(), gherkinError);
+            }
         }
     }
 

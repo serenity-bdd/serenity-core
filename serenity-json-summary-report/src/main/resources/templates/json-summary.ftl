@@ -45,8 +45,8 @@
             <#list scenario.results as scenarioOutcome>
             {
               "result": "${scenarioOutcome.result}",
-              "description": "${scenarioOutcome.description}",
-              "errorMessage": "${scenarioOutcome.errorMessage}"
+              "description": "${scenarioOutcome.description?json_string}",
+              "errorMessage": "${scenarioOutcome.errorMessage?json_string}"
             }<#sep>,</#sep>
             </#list>
           ]

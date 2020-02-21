@@ -15,10 +15,10 @@ class CopyNonNullProperties {
     }
 
     public void to(Object target) {
-        Arrays.stream(source.getClass().getDeclaredFields()).forEach(
+        Arrays.stream(source.getClass().getDeclaredFields()).filter(field -> !field.isSynthetic()).forEach(
                 field -> copyFieldValue(field, source, target)
         );
-        Arrays.stream(source.getClass().getFields()).forEach(
+        Arrays.stream(source.getClass().getFields()).filter(field -> !field.isSynthetic()).forEach(
                 field -> copyFieldValue(field, source, target)
         );
     }

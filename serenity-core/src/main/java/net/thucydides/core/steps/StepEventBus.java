@@ -398,7 +398,6 @@ public class StepEventBus {
 
         for (StepListener stepListener : getAllListeners()) {
             stepListener.skippedStepStarted(executedStepDescription);
-            stepListener.stepFinished();
         }
     }
 

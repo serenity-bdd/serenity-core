@@ -39,31 +39,31 @@ public class ConsoleLoggingListener implements StepListener {
 
     public static final String SERENITY_BIG_BANNER =
             "\n\n-------------------------------------------------------------------------------------\n" +
-            "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
-            "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
-            "   |   (----`|  |__   |  |_)  |    |  |__   |   \\|  | |  | `---|  |----` \\   \\/   /  \n" +
-            "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n" +
-            ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
-            "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
-            "                                                                                     \n" +
-            " News and tutorials at http://www.serenity-bdd.info                                  \n" +
-            " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
-            " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
-            " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
-            " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
-            "-------------------------------------------------------------------------------------\n";
+                    "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
+                    "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
+                    "   |   (----`|  |__   |  |_)  |    |  |__   |   \\|  | |  | `---|  |----` \\   \\/   /  \n" +
+                    "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n" +
+                    ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
+                    "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
+                    "                                                                                     \n" +
+                    " News and tutorials at http://www.serenity-bdd.info                                  \n" +
+                    " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
+                    " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
+                    " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
+                    " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
+                    "-------------------------------------------------------------------------------------\n";
 
     public static final String SERENITY_SMALL_BANNER =
             "\n\n____ ____ ____ ____ _  _ _ ___ _   _    ___  ___  ___  \n" +
-            "[__  |___ |__/ |___ |\\ | |  |   \\_/     |__] |  \\ |  \\ \n" +
-            "___] |___ |  \\ |___ | \\| |  |    |      |__] |__/ |__/ \n" +
-            "                                                                                     \n" +
-            " News and tutorials at http://www.serenity-bdd.info                                  \n" +
-            " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
-            " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
-            " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
-            " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
-            "-------------------------------------------------------------------------------------\n";
+                    "[__  |___ |__/ |___ |\\ | |  |   \\_/     |__] |  \\ |  \\ \n" +
+                    "___] |___ |  \\ |___ | \\| |  |    |      |__] |__/ |__/ \n" +
+                    "                                                                                     \n" +
+                    " News and tutorials at http://www.serenity-bdd.info                                  \n" +
+                    " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
+                    " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
+                    " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
+                    " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
+                    "-------------------------------------------------------------------------------------\n";
 
     // MAIN BANNERS
     private static final List<String> BANNER_HEADINGS = NewList.of(
@@ -84,7 +84,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private Stack<String> nestedSteps = new Stack<>();
 
-    private enum HeadingStyle { MINIMAL, NORMAL, ASCII}
+    private enum HeadingStyle {MINIMAL, NORMAL, ASCII}
 
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables,
                                   Logger logger) {
@@ -92,12 +92,12 @@ public class ConsoleLoggingListener implements StepListener {
         this.environmentVariables = environmentVariables;
         this.analysis = new FailureAnalysis(environmentVariables);
         this.consoleHeading = new ConsoleHeading(environmentVariables);
-        this.headingStyle =  ConsoleHeadingStyle.definedIn(environmentVariables);
-        this.bannerStyle =  ConsoleHeadingStyle.bannerStyleDefinedIn(environmentVariables);
+        this.headingStyle = ConsoleHeadingStyle.definedIn(environmentVariables);
+        this.bannerStyle = ConsoleHeadingStyle.bannerStyleDefinedIn(environmentVariables);
 
         logBanner();
     }
-    
+
     @Inject
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables) {
         this(environmentVariables, LoggerFactory.getLogger(""));
@@ -197,14 +197,14 @@ public class ConsoleLoggingListener implements StepListener {
 
     private Map<TestResult, BiConsumer<Logger, String>> coloredLogs() {
         Map<TestResult, BiConsumer<Logger, String>> coloredLogs = new HashMap<>();
-        coloredLogs.put(TestResult.SUCCESS, (log,msg) -> log.info(green(msg)));
-        coloredLogs.put(TestResult.FAILURE, (log,msg) -> log.error(red(msg)));
-        coloredLogs.put(TestResult.ERROR, (log,msg) -> log.error(red(msg)));
-        coloredLogs.put(TestResult.PENDING, (log,msg) -> log.info(cyan(msg)));
-        coloredLogs.put(TestResult.SKIPPED, (log,msg) -> log.info(yellow(msg)));
-        coloredLogs.put(TestResult.IGNORED, (log,msg) -> log.info(yellow(msg)));
-        coloredLogs.put(TestResult.COMPROMISED, (log,msg) -> log.error(purple(msg)));
-        coloredLogs.put(TestResult.UNDEFINED, (log,msg) -> log.info(white(msg)));
+        coloredLogs.put(TestResult.SUCCESS, (log, msg) -> log.info(green(msg)));
+        coloredLogs.put(TestResult.FAILURE, (log, msg) -> log.error(red(msg)));
+        coloredLogs.put(TestResult.ERROR, (log, msg) -> log.error(red(msg)));
+        coloredLogs.put(TestResult.PENDING, (log, msg) -> log.info(cyan(msg)));
+        coloredLogs.put(TestResult.SKIPPED, (log, msg) -> log.info(yellow(msg)));
+        coloredLogs.put(TestResult.IGNORED, (log, msg) -> log.info(yellow(msg)));
+        coloredLogs.put(TestResult.COMPROMISED, (log, msg) -> log.error(purple(msg)));
+        coloredLogs.put(TestResult.UNDEFINED, (log, msg) -> log.info(msg));
 
         return coloredLogs;
     }
@@ -213,9 +213,9 @@ public class ConsoleLoggingListener implements StepListener {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
 
             String message = consoleHeading.bannerFor(ConsoleEvent.forTestResult(result.getResult()),
-                                            result.getTitle() + " (manual test)");
+                    result.getTitle() + " (manual test)");
 
-            coloredLogs().get(result.getResult()).accept(getLogger(),message);
+            coloredLogs().get(result.getResult()).accept(getLogger(), message);
 
             logRelatedIssues(result);
         }
@@ -295,15 +295,21 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepFinished() {
-        nestedSteps.pop();
+        stepOut();
     }
 
     public void stepFailed(StepFailure failure) {
-        nestedSteps.pop();
+
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();
             getLogger().info(red("STEP {}: {}"), failureType, errorMessage);
+        }
+    }
+
+    private void stepOut() {
+        if (!nestedSteps.isEmpty()) {
+            nestedSteps.pop();
         }
     }
 
@@ -313,7 +319,7 @@ public class ConsoleLoggingListener implements StepListener {
 
 
     public void stepIgnored() {
-        nestedSteps.pop();
+        stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
             getLogger().info(yellow("      -> STEP IGNORED"));
             flaggedSteps.add(currentStep);
@@ -321,7 +327,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepPending() {
-        nestedSteps.pop();
+        stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
             getLogger().info(cyan("      -> STEP IS PENDING"));
             flaggedSteps.add(currentStep);
@@ -330,7 +336,7 @@ public class ConsoleLoggingListener implements StepListener {
 
 
     public void stepPending(String message) {
-        nestedSteps.pop();
+        stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
             getLogger().info(cyan("      -> PENDING STEP ({})"), message);
             flaggedSteps.add(currentStep);
@@ -375,7 +381,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     }
 
-    public void exampleStarted(Map<String,String> data) {
+    public void exampleStarted(Map<String, String> data) {
     }
 
     public void exampleFinished() {
@@ -396,7 +402,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private boolean showColoredOutput() {
-        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
+        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables, false);
     }
 
     private String red(String text) {
@@ -424,7 +430,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private String white(String text) {
-        return (showColoredOutput()) ? ANSI_WHITE + text + ANSI_RESET : text;
+        return text;
     }
 
 

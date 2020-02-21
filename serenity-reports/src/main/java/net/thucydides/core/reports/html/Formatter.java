@@ -280,7 +280,7 @@ public class Formatter {
             if (rowOutome.isPresent()) {
                 TestOutcome testOutcome = rowOutome.get();
                 Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
-                if (matchingRow.isPresent()) {
+                if (matchingRow.isPresent() && rowIsAvailable(testOutcome, matchingRow.get())) {
                     matcher.appendReplacement(newText,
                             resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
                                     testOutcome.getHtmlReport()));
@@ -293,6 +293,10 @@ public class Formatter {
         }
         matcher.appendTail(newText);
         return newText.toString();
+    }
+
+    private boolean rowIsAvailable(TestOutcome testOutcome, Integer row) {
+        return (testOutcome.getTestSteps().size() > row);
     }
 
     private boolean containsMatchingExampleRow(TestOutcome outcome, int exampleLineNumber) {

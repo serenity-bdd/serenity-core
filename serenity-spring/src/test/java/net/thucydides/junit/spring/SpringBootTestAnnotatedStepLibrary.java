@@ -20,7 +20,7 @@ import net.thucydides.junit.spring.samples.service.GizmoService;
 @SpringBootTest(classes=SpringBootTestAnnotatedStepLibrary.Config.class)
 public class SpringBootTestAnnotatedStepLibrary {
 	@ImportResource("/spring/dirty-config.xml")
-	public static class Config{
+	public static class  Config{
 	}
 
     @Autowired

@@ -807,6 +807,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return !currentStepStack.isEmpty();
     }
 
+    public int getCurrentLevel() { return currentStepStack.size(); }
+
     private void takeEndOfStepScreenshotFor(final TestResult result) {
         if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
             take(MANDATORY_SCREENSHOT, result);

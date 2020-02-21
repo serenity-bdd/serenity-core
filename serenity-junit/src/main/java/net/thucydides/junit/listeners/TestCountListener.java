@@ -16,36 +16,30 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_LOGGING;
+
 public class TestCountListener implements StepListener {
 
     private final Logger logger;
     private final EnvironmentVariables environmentVariables;
     private final TestCount testCount;
+    private final boolean reportTestCount;
 
     protected TestCountListener(EnvironmentVariables environmentVariables, Logger logger, TestCount testCount) {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
         this.testCount = testCount;
+        this.reportTestCount = SERENITY_DISPLAY_TEST_NUMBERS.booleanFrom(environmentVariables,false);
     }
 
     public TestCountListener(EnvironmentVariables environmentVariables, TestCount testCount) {
-        this(environmentVariables, LoggerFactory.getLogger(Serenity.class), testCount);
-    }
-
-    private boolean loggingLevelIsAtLeast(LoggingLevel minimumLoggingLevel) {
-        return (getLoggingLevel().compareTo(minimumLoggingLevel) >= 0);
+        this(environmentVariables, LoggerFactory.getLogger(""), testCount);
     }
 
     protected Logger getLogger() {
         return logger;
     }
-
-    private LoggingLevel getLoggingLevel() {
-        String logLevel = ThucydidesSystemProperty.THUCYDIDES_LOGGING.from(environmentVariables, LoggingLevel.NORMAL.name());
-
-        return LoggingLevel.valueOf(logLevel);
-    }
-
 
     public void testSuiteStarted(Class<?> storyClass) {
     }
@@ -61,7 +55,7 @@ public class TestCountListener implements StepListener {
 
     public void testStarted(String description) {
         int currentTestCount = testCount.getNextTest();
-        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+        if (reportTestCount && LoggingLevel.definedIn(environmentVariables).isAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("TEST NUMBER: {}", currentTestCount);
         }
     }

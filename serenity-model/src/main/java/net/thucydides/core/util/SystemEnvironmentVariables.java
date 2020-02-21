@@ -185,6 +185,17 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return environmentValues;
     }
 
+    @Override
+    public Map<String, String> simpleSystemPropertiesAsMap() {
+        Map<String, String> environmentValues = new HashMap<>();
+        properties.keySet().stream()
+                    .filter(key -> !key.contains("."))
+                    .forEach(
+                            key -> environmentValues.put(key, properties.get(key))
+                    );
+        return environmentValues;
+    }
+
     public EnvironmentVariables copy() {
         return new SystemEnvironmentVariables(getProperties(), systemValues);
     }

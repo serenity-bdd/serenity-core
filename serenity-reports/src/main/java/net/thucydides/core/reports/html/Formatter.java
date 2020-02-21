@@ -212,6 +212,18 @@ public class Formatter {
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table example-table-in-summary");
     }
 
+    public String renderDescriptionWithFormattedTables(final String text) {
+        return wrapTablesInDivs(renderDescription(text), "example-table example-table-in-summary");
+    }
+
+    public String renderDescriptionWithFormattedTables(final String text, RequirementsOutcomes requirementsOutcomes) {
+        if (requirementsOutcomes == null) {
+            return wrapTablesInDivs(renderDescription(text), "example-table example-table-in-summary");
+        } else {
+            return renderDescriptionWithEmbeddedResults(text, requirementsOutcomes);
+        }
+    }
+
     public String renderTableDescription(final String text, RequirementsOutcomes requirementsOutcomes) {
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table-in-scenario");

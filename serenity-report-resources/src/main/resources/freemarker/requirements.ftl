@@ -243,7 +243,7 @@
                     <div class="col-sm-12">
                         <div class="requirements-overview panel panel-default">
                             <div class="panel-body">
-                                ${formatter.renderDescription(requirements.overview)}
+                                ${formatter.renderDescriptionWithFormattedTables(requirements.overview, requirements)}
                             </div>
                         </div>
                     </div>

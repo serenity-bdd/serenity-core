@@ -20,8 +20,11 @@ public class ScreenshotPermission {
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
 
-        TakeScreenshots configuredLevel = methodOverride().
-                orElse(classOverride().orElse(configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED)));
+        TakeScreenshots configuredLevel= methodOverride()
+                .orElse(taskOverride()
+                        .orElse(classOverride()
+                                .orElse(configuration.getScreenshotLevel()
+                                        .orElse(TakeScreenshots.UNDEFINED))));
 
 
         if (configuredLevel != TakeScreenshots.UNDEFINED) {
@@ -51,6 +54,16 @@ public class ScreenshotPermission {
         return Optional.empty();
     }
 
+    private Optional<TakeScreenshots> taskOverride() {
+        for (Method callingMethod : StackTraceAnalyser.performAsMethodsIn(new Throwable().getStackTrace())) {
+            Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenTaskScreenshotPreferenceFor(callingMethod);
+            if (overriddenScreenshotPreference.isPresent()) {
+                return overriddenScreenshotPreference;
+            }
+        }
+        return Optional.empty();
+    }
+
     private Optional<TakeScreenshots> classOverride() {
         if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
             Optional<Method> currentStepMethod = StepEventBus.getEventBus().getBaseStepListener().getCurrentStepMethod();
@@ -70,6 +83,14 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> overriddenScreenshotPreferenceFor(Method callingMethod) {
+        if (callingMethod.getAnnotation(Screenshots.class) != null) {
+            return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
+        }
+
+        return Optional.empty();
+    }
+
+    private Optional<TakeScreenshots> overriddenTaskScreenshotPreferenceFor(Method callingMethod) {
         if (callingMethod.getAnnotation(Screenshots.class) != null) {
             return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
         }

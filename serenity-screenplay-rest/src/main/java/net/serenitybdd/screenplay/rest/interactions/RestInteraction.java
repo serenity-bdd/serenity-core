@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.rest.interactions;
 
 import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.markers.DisableScreenshots;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 /**
  * A base class for all Screenplay REST interactions, which gives direct access to the RestAssured API.
  */
-public abstract class RestInteraction implements Interaction {
+public abstract class RestInteraction implements Interaction, DisableScreenshots {
 
     List<Function<RequestSpecification, RequestSpecification>> restConfigurations = new ArrayList<>();
 

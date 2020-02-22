@@ -58,7 +58,7 @@ public class WhenLoggingStepEvents {
     public void should_print_shortened_header_banner_before_tests() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("serenity.console.headings", "normal");
+        environmentVariables.setProperty("serenity.console.banner", "normal");
 
         new ConsoleLoggingListener(environmentVariables, logger);
 
@@ -70,7 +70,7 @@ public class WhenLoggingStepEvents {
     public void should_print_full_header_banner_before_tests() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("serenity.console.headings", "ascii");
+        environmentVariables.setProperty("serenity.console.banner", "ascii");
         Logger logger = mock(Logger.class);
 
         new ConsoleLoggingListener(environmentVariables, logger);
@@ -82,7 +82,7 @@ public class WhenLoggingStepEvents {
     public void should_print_small_header_banner_before_tests_if_console_headings_is_set_to_none() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("serenity.console.headings", "none");
+        environmentVariables.setProperty("serenity.console.banner", "none");
 
         new ConsoleLoggingListener(environmentVariables, logger);
 

@@ -35,7 +35,7 @@ import net.thucydides.core.statistics.AtomicTestCount;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.statistics.service.ClasspathTagProviderService;
 import net.thucydides.core.statistics.service.TagProviderService;
-import net.thucydides.core.steps.ConsoleLoggingListener;
+import net.thucydides.core.logging.ConsoleLoggingListener;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
 import net.thucydides.core.steps.di.DependencyInjectorService;

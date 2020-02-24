@@ -177,6 +177,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return environmentValues;
     }
 
+    @Override
+    public Map<String, String> simpleSystemPropertiesAsMap() {
+        return new HashMap<>();
+    }
+
     public void setValue(String name, String value) {
         values.put(name, value);
     }

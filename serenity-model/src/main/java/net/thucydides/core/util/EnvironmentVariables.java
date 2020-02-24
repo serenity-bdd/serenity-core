@@ -70,4 +70,6 @@ public interface EnvironmentVariables {
     String injectSystemPropertiesInto(String value);
 
     Map<String, String> asMap();
+
+    Map<String,String> simpleSystemPropertiesAsMap();
 }

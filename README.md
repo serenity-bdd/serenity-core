@@ -8,6 +8,8 @@
 
 Serenity BDD is a library designed to make writing automated acceptance tests easier, and more fun. 
 
+Learn more about Serenity, and discover tutorials, docs and more, on the [official Serenity BDD website](http://www.serenity-bdd.info)
+
 ## What does it do?
 
 Serenity helps structure your automated acceptance tests in order to make them easier to understand and maintain, 

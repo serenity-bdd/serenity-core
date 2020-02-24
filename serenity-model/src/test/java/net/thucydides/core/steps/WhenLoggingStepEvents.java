@@ -1,5 +1,8 @@
 package net.thucydides.core.steps;
 
+import net.thucydides.core.logging.ConsoleEvent;
+import net.thucydides.core.logging.ConsoleHeading;
+import net.thucydides.core.logging.ConsoleLoggingListener;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestStepFactory;
@@ -29,14 +32,18 @@ public class WhenLoggingStepEvents {
 
     ConsoleLoggingListener consoleLoggingListener;
 
+    ConsoleHeading consoleHeading;
+
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         consoleLoggingListener = new ConsoleLoggingListener(environmentVariables, logger);
+        consoleHeading = new ConsoleHeading(environmentVariables);
     }
 
-    class SomeTestClass {}
+    class SomeTestClass {
+    }
 
     @Test
     public void should_print_header_banner_before_tests() {
@@ -51,9 +58,11 @@ public class WhenLoggingStepEvents {
     public void should_print_shortened_header_banner_before_tests() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("thucydides.console.headings", "normal");
-        ConsoleLoggingListener consoleLoggingListener = new ConsoleLoggingListener(environmentVariables, logger);
-        verify(logger).info(contains("SERENITY"));
+        environmentVariables.setProperty("serenity.console.banner", "normal");
+
+        new ConsoleLoggingListener(environmentVariables, logger);
+
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_SMALL_BANNER));
 
     }
 
@@ -61,19 +70,32 @@ public class WhenLoggingStepEvents {
     public void should_print_full_header_banner_before_tests() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("thucydides.console.headings", "ascii");
+        environmentVariables.setProperty("serenity.console.banner", "ascii");
         Logger logger = mock(Logger.class);
-        ConsoleLoggingListener consoleLoggingListener = new ConsoleLoggingListener(environmentVariables, logger);
-        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
 
+        new ConsoleLoggingListener(environmentVariables, logger);
+
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
     }
 
     @Test
-    public void should_not_print_header_banner_before_tests_in_quiet_mode() {
+    public void should_print_small_header_banner_before_tests_if_console_headings_is_set_to_none() {
 
-        environmentVariables.setProperty("thucydides.logging", "QUIET");
-        ConsoleLoggingListener quietListener = new ConsoleLoggingListener(environmentVariables, quietLogger);
-        quietListener.testSuiteStarted(SomeTestClass.class);
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("serenity.console.banner", "none");
+
+        new ConsoleLoggingListener(environmentVariables, logger);
+
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_SMALL_BANNER));
+
+    }
+
+
+    @Test
+    public void should_not_print_header_banner_before_tests_in_NONE_mode() {
+
+        environmentVariables.setProperty("thucydides.logging", "NONE");
+        new ConsoleLoggingListener(environmentVariables, quietLogger);
 
         verify(quietLogger, never()).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
 
@@ -83,52 +105,56 @@ public class WhenLoggingStepEvents {
     public void should_log_test_suite_name_when_a_test_suite_starts() {
         consoleLoggingListener.testSuiteStarted(SomeTestClass.class);
 
-        verify(logger).info(contains("Test Suite Started: {}"),eq("Some test class"));
+        verify(logger).info(contains("Test Suite Started: Some test class"));
     }
 
     @Test
     public void should_not_log_test_suite_name_when_a_test_suite_starts_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
 
         consoleLoggingListener.testSuiteStarted(SomeTestClass.class);
 
-        verify(logger, never()).info(contains("Test Suite Started: {}"),eq("Some test class"));
+        verify(logger, never()).info(contains("Test Suite Started: Some test class"));
     }
 
     @Test
     public void should_log_test_name_when_test_starts() {
         consoleLoggingListener.testStarted("Some test");
 
-        verify(logger).info(contains("TEST STARTED: Some test"));
+        String expectedMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_STARTED, "Some test");
+        verify(logger).info(contains(expectedMessage));
     }
 
     @Test
     public void should_not_log_messages_when_test_fails_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
         TestOutcome testOutcome = failingTestOutcome();
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger,never()).info(contains("TEST FAILED: Some test"));
+        verify(logger, never()).info(contains("TEST FAILED: Some test"));
     }
 
     @Test
     public void should_log_message_when_test_is_pending() {
+
+        String pendingMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_PENDING, "Some test");
+
         TestOutcome testOutcome = pendingTestOutcome();
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger).info(contains("TEST PENDING: "),contains("Some test"));
+        verify(logger).info(contains(pendingMessage));
     }
 
     @Test
     public void should_not_log_messages_when_test_is_pending_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
         TestOutcome testOutcome = pendingTestOutcome();
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger,never()).info(contains("TEST PENDING: {}"),eq("Some test"));
+        verify(logger, never()).info(contains("TEST PENDING: {}"), eq("Some test"));
     }
 
     @Test
@@ -137,17 +163,18 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger).info(contains("TEST SKIPPED: {}"),contains("Some test"));
+        String expectedMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_SKIPPED, "Some test");
+        verify(logger).info(contains(expectedMessage));
     }
 
     @Test
     public void should_not_log_messages_when_test_is_skipped_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
         TestOutcome testOutcome = skippedTestOutcome();
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger,never()).info(contains("TEST SKIPPED: "),eq("Some test"));
+        verify(logger, never()).info(contains("TEST SKIPPED: "), eq("Some test"));
     }
 
 //    @Test
@@ -159,12 +186,13 @@ public class WhenLoggingStepEvents {
 
     @Test
     public void should_not_log_messages_when_test_fails_directly_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
 
         consoleLoggingListener.testFailed(null, new AssertionError("something broke"));
 
-        verify(logger,never()).info(contains("something broke"));
+        verify(logger, never()).info(contains("something broke"));
     }
+
     @Test
     public void should_log_message_when_test_is_ignored() {
         consoleLoggingListener.testIgnored();
@@ -174,11 +202,11 @@ public class WhenLoggingStepEvents {
 
     @Test
     public void should_not_log_messages_when_test_is_ignored_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
 
         consoleLoggingListener.testIgnored();
 
-        verify(logger,never()).info(contains("TEST IGNORED"));
+        verify(logger, never()).info(contains("TEST IGNORED"));
     }
 
     @Test
@@ -187,55 +215,49 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger).info(contains("TEST PASSED: {}"),contains("Some test"));
+        String expectedMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_PASSED, "Some test");
+        verify(logger).info(contains(expectedMessage));
     }
 
     @Test
     public void should_not_log_messages_when_test_passes_in_quiet_mode() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        environmentVariables.setProperty("thucydides.logging", "QUIET");
         TestOutcome testOutcome = successfulTestOutcome();
 
         consoleLoggingListener.testFinished(testOutcome);
 
-        verify(logger,never()).info(contains("TEST PASSED: {}"),eq("Some test"));
-    }    
-    
+        verify(logger, never()).info(contains("TEST PASSED: {}"), eq("Some test"));
+    }
+
     @Test
     public void should_log_test_suite_name_when_a_test_story_starts() {
         consoleLoggingListener.testSuiteStarted(Story.from(SomeTestClass.class));
 
-        verify(logger).info(contains("Test Suite Started: {}"),eq("Some test class"));
+        verify(logger).info(contains("Test Suite Started: Some test class"));
     }
 
     @Test
     public void should_log_test_name_when_a_test_starts() {
         consoleLoggingListener.testStarted("some_test");
 
-        verify(logger).info(contains("TEST STARTED: some_test"));
+        String expectedMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_STARTED, "some_test");
+        verify(logger).info(contains(expectedMessage));
     }
 
     @Test
     public void should_log_step_name_when_a_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging","VERBOSE");
+        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
         consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).info(contains("STARTING STEP"), eq("some step"));
+        verify(logger).info(contains("  * some step"));
     }
 
     @Test
     public void should_log_step_name_when_a_skipped_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging","VERBOSE");
+        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
         consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).info(contains("STARTING STEP {}"), eq("some step"));
-    }
-
-    @Test
-    public void should_log_step_finish_events_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        consoleLoggingListener.stepFinished();
-
-        verify(logger).info(contains("FINISHING STEP"));
+        verify(logger).info(contains("  * some step"));
     }
 
     @Test
@@ -244,7 +266,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepIgnored();
 
-        verify(logger).info(contains("IGNORING STEP"));
+        verify(logger).info(contains("STEP IGNORED"));
     }
 
     @Test
@@ -253,7 +275,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepPending();
 
-        verify(logger).info(contains("PENDING STEP"));
+        verify(logger).info(contains("STEP IS PENDING"));
     }
 
     @Test

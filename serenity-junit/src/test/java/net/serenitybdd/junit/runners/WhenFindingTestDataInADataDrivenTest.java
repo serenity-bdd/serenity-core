@@ -354,7 +354,7 @@ public class WhenFindingTestDataInADataDrivenTest {
     public void should_load_test_data_from_a_specified_directory() throws IOException {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("thucydides.data.dir","test-data");
+        environmentVariables.setProperty("serenity.data.dir","test-data");
         TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSpecifiedDataDirectory.class);
 
         List<PersonTestScenario> testScenarios

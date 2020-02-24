@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.*;
+import net.thucydides.core.logging.ConsoleLoggingListener;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.EnvironmentVariables;

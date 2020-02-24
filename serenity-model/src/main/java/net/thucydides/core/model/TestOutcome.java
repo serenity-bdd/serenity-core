@@ -2047,11 +2047,21 @@ public class TestOutcome {
     private int countDataRowsWithResult(TestResult expectedResult, TestType expectedType) {
         int matchingRowCount = 0;
         if (typeCompatibleWith(expectedType)) {
-            for (DataTableRow row : getDataTable().getRows()) {
-                matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
+            if (resultsAreUndefinedIn(getDataTable())) {
+                for (TestStep step : getTestSteps()) {
+                    matchingRowCount += (step.getResult() == expectedResult) ? 1 : 0;
+                }
+            } else {
+                for (DataTableRow row : getDataTable().getRows()) {
+                    matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
+                }
             }
         }
         return matchingRowCount;
+    }
+
+    private boolean resultsAreUndefinedIn(DataTable dataTable) {
+        return dataTable.getRows().stream().allMatch( row -> row.getResult() == TestResult.UNDEFINED);
     }
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {

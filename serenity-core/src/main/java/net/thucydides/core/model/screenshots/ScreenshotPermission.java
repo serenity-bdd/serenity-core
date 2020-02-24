@@ -1,5 +1,7 @@
 package net.thucydides.core.model.screenshots;
 
+import net.serenitybdd.markers.DisableScreenshots;
+import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.annotations.Screenshots;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.reflection.StackTraceAnalyser;
@@ -7,6 +9,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class ScreenshotPermission {
@@ -20,8 +23,11 @@ public class ScreenshotPermission {
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
 
-        TakeScreenshots configuredLevel = methodOverride().
-                orElse(classOverride().orElse(configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED)));
+        TakeScreenshots configuredLevel= methodOverride()
+                .orElse(taskOverride()
+                        .orElse(classOverride()
+                                .orElse(configuration.getScreenshotLevel()
+                                        .orElse(TakeScreenshots.UNDEFINED))));
 
 
         if (configuredLevel != TakeScreenshots.UNDEFINED) {
@@ -44,6 +50,16 @@ public class ScreenshotPermission {
     private Optional<TakeScreenshots> methodOverride() {
         for (Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
             Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenScreenshotPreferenceFor(callingMethod);
+            if (overriddenScreenshotPreference.isPresent()) {
+                return overriddenScreenshotPreference;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<TakeScreenshots> taskOverride() {
+        for (Method callingMethod : StackTraceAnalyser.performAsMethodsIn(new Throwable().getStackTrace())) {
+            Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenTaskScreenshotPreferenceFor(callingMethod);
             if (overriddenScreenshotPreference.isPresent()) {
                 return overriddenScreenshotPreference;
             }
@@ -75,6 +91,32 @@ public class ScreenshotPermission {
         }
 
         return Optional.empty();
+    }
+
+    private Optional<TakeScreenshots> overriddenTaskScreenshotPreferenceFor(Method callingMethod) {
+        // Is there a @Screenshots annotation on the performAs() method
+        if (callingMethod.getAnnotation(Screenshots.class) != null) {
+            return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
+        }
+        // Is there a @Screenshots annotation on the Performable class
+        if (callingMethod.getDeclaringClass().getAnnotation(Screenshots.class) != null){
+            return Optional.of(screenshotLevelFrom(callingMethod.getDeclaringClass().getAnnotation(Screenshots.class)));
+        }
+        // Does the Performable have the IsSilent marker interface
+        if (isSilent(callingMethod.getDeclaringClass()) || isABackendOperation(callingMethod.getDeclaringClass())){
+            return Optional.of(TakeScreenshots.DISABLED);
+        }
+
+        return Optional.empty();
+    }
+
+
+    private boolean isSilent(Class<?> declaringClass) {
+        return IsSilent.class.isAssignableFrom(declaringClass);
+    }
+
+    private boolean isABackendOperation(Class<?> declaringClass) {
+        return DisableScreenshots.class.isAssignableFrom(declaringClass);
     }
 
     private TakeScreenshots screenshotLevelFrom(Screenshots screenshots) {

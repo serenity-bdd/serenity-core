@@ -19,11 +19,9 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
-import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 
@@ -40,7 +38,9 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        driver = HtmlUnitDriver()
+        val options = ChromeOptions()
+        options.addArguments("--headless")
+        driver = ChromeDriver(options)
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)

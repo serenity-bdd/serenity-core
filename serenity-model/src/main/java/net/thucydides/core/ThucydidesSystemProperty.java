@@ -807,7 +807,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_LOGGING,
 
     /**
-     * Three levels are supported: QUIET, NORMAL and VERBOSE
+     * Four levels are supported: NONE, QUIET, NORMAL and VERBOSE
+     *   - NONE: Disable Serenity logging
+     *   - QUIET: Only report compromised tests, errors and failures.
+     *   - NORMAL: Log the start and end of each test, and the result of each test.
+     *   - VERBOSE: Log the start and end of each test, and the result of each test, and each test step.
      */
     SERENITY_LOGGING,
 
@@ -1026,13 +1030,27 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_CONSOLE_HEADINGS,
 
     /**
+     * Write the console banner using ascii-art ("ascii", default value) or in smaller text ("normal")
+     */
+    SERENITY_CONSOLE_BANNER,
+
+    /**
      * Write the console headings using ascii-art ("ascii", default value) or in normal text ("normal")
      */
     SERENITY_CONSOLE_HEADINGS,
 
     @Deprecated
     THUCYDIDES_CONSOLE_COLORS,
+
+    /**
+     * Use ASCII color codes when outputing the console logs.
+     */
     SERENITY_CONSOLE_COLORS,
+
+    /**
+     * Set to true to write the chronological number of each test as it is executed to the console
+     */
+    SERENITY_DISPLAY_TEST_NUMBERS,
 
     /**
      * If set to true, Asciidoc formatting will be supported in the narrative texts.

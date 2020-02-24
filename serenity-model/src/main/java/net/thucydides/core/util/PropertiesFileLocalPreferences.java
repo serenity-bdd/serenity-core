@@ -34,6 +34,8 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private final EnvironmentVariables environmentVariables;
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileLocalPreferences.class);
 
+    private static final Config systemProperties = ConfigFactory.systemProperties();
+
     @Inject
     public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -97,15 +99,24 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             return new Properties();
         }
 
-        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile.get()).resolve().entrySet();
+        Set<Map.Entry<String, ConfigValue>> preferences = typesafeConfigFile(providedConfigFile.get()).entrySet();
         return getPropertiesFromConfig(preferences);
     }
 
     private Properties typesafeConfigPreferences() {
         return defaultPropertiesConfFile()
                 .filter(File::exists)
-                .map(configFile -> getPropertiesFromConfig(ConfigFactory.parseFile(configFile).resolve().entrySet()))
+                .map(configFile -> getPropertiesFromConfig(typesafeConfigFile(configFile).entrySet()))
                 .orElse(getPropertiesFromConfig(ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet()));
+    }
+
+    private Config typesafeConfigFile(File configFile) {
+
+        Config commandLineSpecifiedProperties = ConfigFactory.parseMap(environmentVariables.simpleSystemPropertiesAsMap());
+
+        // TODO: Cache resolved config for the aggregate phase
+        return ConfigFactory.parseFile(configFile).resolveWith(commandLineSpecifiedProperties);
+
     }
 
     private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {

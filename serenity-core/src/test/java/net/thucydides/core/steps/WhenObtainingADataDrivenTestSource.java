@@ -12,7 +12,7 @@ public class WhenObtainingADataDrivenTestSource {
     @Test
     public void should_convert_data_file_path_to_operating_system_localized_path() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("thucydides.data.dir","C:\\some\\dir");
+        environmentVariables.setProperty("serenity.data.dir","C:\\some\\dir");
 
         FilePathParser testDataSourcePath = new FilePathParser(environmentVariables) {
             @Override
@@ -24,10 +24,41 @@ public class WhenObtainingADataDrivenTestSource {
         assertThat(testDataSourcePath.getInstanciatedPath("${DATADIR}/simple-semicolon-data.csv"), is("C:\\some\\dir\\simple-semicolon-data.csv"));
     }
 
+
+    @Test
+    public void should_work_without_curly_brackets() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("serenity.data.dir","C:\\some\\dir");
+
+        FilePathParser testDataSourcePath = new FilePathParser(environmentVariables) {
+            @Override
+            protected String getFileSeparator() {
+                return "\\";
+            }
+        };
+
+        assertThat(testDataSourcePath.getInstanciatedPath("$DATADIR/simple-semicolon-data.csv"), is("C:\\some\\dir\\simple-semicolon-data.csv"));
+    }
+
+    @Test
+    public void should_work_with_environment_specific_config() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("environments.dev.serenity.data.dir","C:\\some\\dir");
+        environmentVariables.setProperty("environment","dev");
+
+        FilePathParser testDataSourcePath = new FilePathParser(environmentVariables) {
+            @Override
+            protected String getFileSeparator() {
+                return "\\";
+            }
+        };
+
+        assertThat(testDataSourcePath.getInstanciatedPath("$DATADIR/simple-semicolon-data.csv"), is("C:\\some\\dir\\simple-semicolon-data.csv"));
+    }
     @Test
     public void should_convert_data_file_path_to_operating_system_localized_path_in_unix() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("thucydides.data.dir","/some/dir");
+        environmentVariables.setProperty("serenity.data.dir","/some/dir");
 
         FilePathParser testDataSourcePath = new FilePathParser(environmentVariables) {
             @Override

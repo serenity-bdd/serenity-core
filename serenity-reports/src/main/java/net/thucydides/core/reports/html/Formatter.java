@@ -212,6 +212,18 @@ public class Formatter {
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table example-table-in-summary");
     }
 
+    public String renderDescriptionWithFormattedTables(final String text) {
+        return wrapTablesInDivs(renderDescription(text), "example-table example-table-in-summary");
+    }
+
+    public String renderDescriptionWithFormattedTables(final String text, RequirementsOutcomes requirementsOutcomes) {
+        if (requirementsOutcomes == null) {
+            return wrapTablesInDivs(renderDescription(text), "example-table example-table-in-summary");
+        } else {
+            return renderDescriptionWithEmbeddedResults(text, requirementsOutcomes);
+        }
+    }
+
     public String renderTableDescription(final String text, RequirementsOutcomes requirementsOutcomes) {
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table-in-scenario");
@@ -280,7 +292,7 @@ public class Formatter {
             if (rowOutome.isPresent()) {
                 TestOutcome testOutcome = rowOutome.get();
                 Optional<Integer> matchingRow = testOutcome.getDataTable().getResultRowWithLineNumber(exampleLineNumber);
-                if (matchingRow.isPresent()) {
+                if (matchingRow.isPresent() && rowIsAvailable(testOutcome, matchingRow.get())) {
                     matcher.appendReplacement(newText,
                             resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
                                     testOutcome.getHtmlReport()));
@@ -293,6 +305,10 @@ public class Formatter {
         }
         matcher.appendTail(newText);
         return newText.toString();
+    }
+
+    private boolean rowIsAvailable(TestOutcome testOutcome, Integer row) {
+        return (testOutcome.getTestSteps().size() > row);
     }
 
     private boolean containsMatchingExampleRow(TestOutcome outcome, int exampleLineNumber) {

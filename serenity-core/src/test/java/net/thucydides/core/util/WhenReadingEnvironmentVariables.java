@@ -28,7 +28,7 @@ public class WhenReadingEnvironmentVariables {
 
     private Map<String, String> getEnvVars() {
         Map<String, String> environmentVars = new HashMap<String, String>(System.getenv());
-        if (! environmentVars.containsKey("JAVA_HOME")) {
+        if (!environmentVars.containsKey("JAVA_HOME")) {
             environmentVars.put("JAVA_HOME", "sample");
         }
         return environmentVars;

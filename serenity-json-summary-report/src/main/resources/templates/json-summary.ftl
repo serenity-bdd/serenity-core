@@ -1,8 +1,8 @@
 {
   "report": {
-    "title": "${report.title}",
-    "tagCategoryTitle": "${report.tagCategoryTitle}",
-    "version": "${report.version}",
+    "title": "${report.title?json_string}",
+    "tagCategoryTitle": "${report.tagCategoryTitle?json_string}",
+    "version": "${report.version?json_string}",
     "date": "${report.date}"
   },
   "results": {
@@ -34,11 +34,11 @@
   "resultsByFeature": [
     <#list resultsByFeature as feature>
     {
-      "featureName": "${feature.featureName}",
+      "featureName": "${feature.featureName?json_string}",
       "scenarios": [
         <#list feature.scenarios as scenario>
         {
-          "title": "${scenario.title}",
+          "title": "${scenario.title?json_string}",
           "result": "${scenario.result}",
           <#if (scenario.results?has_content)>
           "outcomes": [
@@ -62,7 +62,7 @@
   "frequentFailures": [
     <#list frequentFailures as frequentFailure>
     {
-      "name": "${frequentFailure.name}",
+      "name": "${frequentFailure.name?json_string}",
       "count": ${frequentFailure.count}
     }<#sep>,</#sep>
     </#list>
@@ -70,7 +70,7 @@
   "unstableFeatures": [
     <#list unstableFeatures as unstableFeature>
     {
-      "name": "${unstableFeature.name}",
+      "name": "${unstableFeature.name?json_string}",
       "failurePercentage": ${unstableFeature.failurePercentage}
     }<#sep>,</#sep>
     </#list>
@@ -78,11 +78,11 @@
   "coverage": [
     <#list coverage as tagCoverageByType>
     {
-      "tagTitle": "${tagCoverageByType.tagTitle}",
+      "tagTitle": "${tagCoverageByType.tagTitle?json_string}",
       "tagCoverages": [
         <#list tagCoverageByType.tagCoverage as tagCoverage>
         {
-          "tagName": "${tagCoverage.tagName}",
+          "tagName": "${tagCoverage.tagName?json_string}",
           "testCount": ${tagCoverage.testCount},
           "successRate": "${tagCoverage.successRate}",
           "counts": {
@@ -113,11 +113,11 @@
   "tags": [
     <#list tagResults as tagResultGroup>
     {
-      "tagType": "${tagResultGroup.tagType}",
+      "tagType": "${tagResultGroup.tagType?json_string}",
       "tagResults": [
         <#list tagResultGroup.tagResults as tagResult>
         {
-          "tagName": "${tagResult.tag.name}",
+          "tagName": "${tagResult.tag.name?json_string}",
           "count": ${tagResult.count}
         }<#sep>,</#sep>
         </#list>

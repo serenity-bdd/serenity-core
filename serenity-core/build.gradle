@@ -106,6 +106,8 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
 
+    compile("com.assertthat:selenium-shutterbug:${shutterBugVersion}")
+
     compile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
         exclude group: 'xml-apis', module: 'xml-apis'
         exclude group: "commons-codec", module:"commons-codec"

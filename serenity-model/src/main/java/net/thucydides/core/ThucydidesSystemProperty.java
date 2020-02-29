@@ -1104,6 +1104,11 @@ public enum ThucydidesSystemProperty {
     SERENITY_COMPRESS_SCREENSHOTS,
 
     /**
+     * If set, Serenity will use full page screenshot strategy.
+     */
+    SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY,
+
+    /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens
      */
     DASHBOARD_EXCLUDED_TAG_LIST,

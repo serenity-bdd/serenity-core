@@ -37,6 +37,18 @@ class WhenAPhotographerTakesScreenshots extends Specification {
             photo.getPathToScreenshot().startsWith(screenshotDirectory)
     }
 
+    def "a screenshot of the whole page can also be taken."() {
+        given:
+        def photographer = new Photographer(darkroom,ScrollStrategy.WHOLE_PAGE)
+        when:
+        ScreenshotPhoto photo = photographer.takesAScreenshot()
+                .with(driver)
+                .andSaveToDirectory(screenshotDirectory);
+        then:
+        darkroom.waitUntilClose()
+        photo.getPathToScreenshot().startsWith(screenshotDirectory)
+    }
+
     @Ignore("Unstable on SnapCI")
     def "when a photographer takes a screenshot the screenshot should be stored after processing"() {
         given:

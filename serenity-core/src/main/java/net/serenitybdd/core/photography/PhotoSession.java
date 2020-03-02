@@ -57,20 +57,12 @@ public class PhotoSession {
             return previousScreenshot.get();
         }
 
-        ScreenshotPhoto photo;
-
         byte[] screenshotData = null;
 
         if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
             try {
-                if (scrollStrategy == ScrollStrategy.VIEWPORT_ONLY) {
-                    screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                    Path path = Paths.get("file.png");
-                    Files.write(path, screenshotData);
-                } else {
-                    final PageSnapshot snapshot = Shutterbug.shootPage(driver, scrollStrategy, 500);
-                    snapshot.save("file.png");
-                }
+                PageSnapshot snapshot = Shutterbug.shootPage(driver, scrollStrategy, 500);
+                screenshotData = asByteArray(snapshot.getImage());
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);
                 return ScreenshotPhoto.None;
@@ -81,11 +73,19 @@ public class PhotoSession {
             return ScreenshotPhoto.None;
         }
 
-        photo = storedScreenshot(screenshotData);
+        ScreenshotPhoto photo = storedScreenshot(screenshotData);
         previousScreenshot.set(photo);
         previousScreenshotTimestamp.set(System.currentTimeMillis());
 
         return photo;
+    }
+
+    private byte[] asByteArray(BufferedImage image) throws IOException {
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", outputStream);
+            outputStream.flush();
+            return outputStream.toByteArray();
+        }
     }
 
     private boolean shouldIgnore(byte[] screenshotData) {

@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.di.WebDriverInjectors;
@@ -96,7 +97,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
-
+    private ScrollStrategy scrollStrategy;
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
@@ -199,7 +200,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public Photographer getPhotographer() {
         if (photographer == null) {
-            photographer = new Photographer(getDarkroom());
+            if (shouldUseFullPageScreenshotStrategy()){
+                scrollStrategy = ScrollStrategy.WHOLE_PAGE;
+            } else {
+                scrollStrategy = ScrollStrategy.VIEWPORT_ONLY;
+            }
+            photographer = new Photographer(getDarkroom(), scrollStrategy);
         }
         return photographer;
     }
@@ -755,6 +761,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return ThucydidesSystemProperty.SERENITY_TAG_FAILURES.booleanFrom(configuration.getEnvironmentVariables());
     }
 
+    private boolean shouldUseFullPageScreenshotStrategy() {
+        return ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(configuration.getEnvironmentVariables());
+    }
+
     public void stepIgnored() {
         if (aStepHasFailed()) {
             markCurrentStepAs(SKIPPED);
@@ -920,7 +930,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
-
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }

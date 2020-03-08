@@ -1,6 +1,8 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
-import gherkin.ast.*;
+
+
+import io.cucumber.core.internal.gherkin.ast.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -100,7 +102,7 @@ public class FeatureFileScenarioOutcomes {
                     .forEach(filteredExamples::add);
 
             examples.stream().forEach(
-                    example -> exampleTags.put(example.getName() + ":" + example.getLocation(),CucumberTagConverter.toSerenityTags(example.getTags()))
+                    example -> exampleTags.put(example.getName() + ":" + example.getLocation(), CucumberTagConverter.toSerenityTags(example.getTags()))
             );
         }
 

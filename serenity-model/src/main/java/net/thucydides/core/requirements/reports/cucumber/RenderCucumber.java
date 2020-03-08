@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
-import gherkin.ast.*;
+
+import io.cucumber.core.internal.gherkin.ast.*;
 import net.thucydides.core.requirements.model.cucumber.ExampleRowResultIcon;
 
 import java.util.ArrayList;

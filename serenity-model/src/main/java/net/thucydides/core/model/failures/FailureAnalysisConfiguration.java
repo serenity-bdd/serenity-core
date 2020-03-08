@@ -1,7 +1,7 @@
 package net.thucydides.core.model.failures;
 
 import com.google.common.base.Splitter;
-import cucumber.api.PendingException;
+import io.cucumber.java.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.SkipStepException;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;

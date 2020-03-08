@@ -246,7 +246,13 @@ subprojects {
         compile "org.objenesis:objenesis:${objenesisVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile "io.cucumber:cucumber-core:${cucumberVersion}"
+        compile ("io.cucumber:cucumber-core:${cucumberVersion}") {
+            exclude group: "org.apiguardian", module: 'apiguardian-api'
+        }
+        compile ("io.cucumber:cucumber-java:${cucumberVersion}") {
+            exclude group: "org.apiguardian", module: 'apiguardian-api'
+        }
+
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
         testCompile "junit:junit:${junitVersion}"

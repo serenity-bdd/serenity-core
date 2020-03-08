@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Feature;
+
+import io.cucumber.core.internal.gherkin.ast.Feature;
 
 /**
  * A scenario that is mentioned by name in a feature narrative.

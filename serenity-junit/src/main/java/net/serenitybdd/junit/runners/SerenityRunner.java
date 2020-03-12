@@ -446,14 +446,15 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
                              RerunTest rerunTest) {
         if (remainingTries <= 0) { return; }
 
-        logger.info(rerunTest.toString() + ": attempt " + (maxRetries() - remainingTries));
+        int attemptNum = maxRetries() - remainingTries + 1;
+        logger.info(rerunTest.toString() + ": attempt " + attemptNum);
         StepEventBus.getEventBus().cancelPreviousTest();
         rerunTest.perform();
 
         if (failureDetectingStepListener.lastTestFailed()) {
             retryAtMost(remainingTries - 1, rerunTest);
         } else {
-            StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries,
+            StepEventBus.getEventBus().lastTestPassedAfterRetries(attemptNum,
                                                                   failureDetectingStepListener.getFailureMessages(),failureDetectingStepListener.getTestFailureCause());
         }
     }

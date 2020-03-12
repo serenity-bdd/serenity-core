@@ -14,6 +14,9 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     private final long timeoutInMilliseconds;
     private final boolean isSilent;
 
+    private Class<? extends Error> complaintType;
+    private String complaintDetails;
+
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
@@ -83,9 +86,11 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     private void throwAnyCaughtErrors() {
         if (caughtAssertionError != null) {
+            throwComplaintTypeErrorIfSpecified(caughtAssertionError);
             throw caughtAssertionError;
         }
         if (caughtRuntimeException != null) {
+            throwComplaintTypeErrorIfSpecified(caughtRuntimeException);
             throw caughtRuntimeException;
         }
     }
@@ -97,8 +102,8 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType) {
-        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType),
-            timeoutInMilliseconds, isSilent);
+        this.complaintType = complaintType;
+        return this;
     }
 
     public Consequence<T> ignoringExceptions(Class<? extends Throwable>... exceptionsToIgnore) {
@@ -108,8 +113,9 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType, String complaintDetails) {
-        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType,
-            complaintDetails), timeoutInMilliseconds, isSilent);
+        this.complaintType = complaintType;
+        this.complaintDetails = complaintDetails;
+        return this;
     }
 
     @Override
@@ -132,4 +138,11 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public EventualConsequence<T>  withNoReporting() {
         return new EventualConsequence<T>(consequenceThatMightTakeSomeTime, timeoutInMilliseconds, true);
     }
+
+    private void throwComplaintTypeErrorIfSpecified(Throwable actualError) {
+        if (complaintType != null) {
+            throw Complaint.from(complaintType, complaintDetails, actualError);
+        }
+    }
+
 }

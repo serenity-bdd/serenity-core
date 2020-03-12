@@ -6,7 +6,7 @@ public class Complaint {
 
     public static Error from(Class<? extends Error> complaintType,
                                         String complaintDetails,
-                                        Error actualError) {
+                                        Throwable actualError) {
 
         if ((complaintDetails == null) && (actualError.getMessage() == null)) {
             return from(complaintType, actualError);
@@ -21,7 +21,7 @@ public class Complaint {
         }
     }
 
-    private static String errorMessageFrom(String complaintDetails, Error actualError) {
+    private static String errorMessageFrom(String complaintDetails, Throwable actualError) {
         if (complaintDetails == null) {
             return actualError.getMessage();
         }

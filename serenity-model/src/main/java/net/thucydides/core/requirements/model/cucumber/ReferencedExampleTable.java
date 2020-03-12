@@ -1,8 +1,9 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Feature;
-import gherkin.ast.ScenarioDefinition;
-import gherkin.ast.ScenarioOutline;
+
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
+import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
 
 /**
  * An example table that is mentioned by name in a feature narrative.

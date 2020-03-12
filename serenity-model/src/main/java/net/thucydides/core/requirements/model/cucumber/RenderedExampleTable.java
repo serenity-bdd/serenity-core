@@ -1,7 +1,8 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Examples;
-import gherkin.ast.TableCell;
+
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.TableCell;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class RenderedExampleTable {
 
     public static String renderedTable(Examples exampleTable, ExampleRowResultIcon exampleRowIcon) {
 
-        final Map<Integer,Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
+        final Map<Integer, Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
 
         String headings = cellRow(exampleTable.getTableHeader().getCells(),
                                   maxColumnWidths,
@@ -56,7 +57,7 @@ public class RenderedExampleTable {
     }
 
     public static String cellRow(List<TableCell> cells,
-                                 Map<Integer,Integer> maxColumnWidths,
+                                 Map<Integer, Integer> maxColumnWidths,
                                  int lineNumber,
                                  RowResultIcon exampleRowResultIcons) {
 

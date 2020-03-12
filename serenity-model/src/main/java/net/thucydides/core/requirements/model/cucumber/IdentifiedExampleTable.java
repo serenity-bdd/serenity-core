@@ -1,17 +1,13 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Examples;
-import gherkin.ast.Feature;
-import gherkin.ast.ScenarioDefinition;
-import gherkin.ast.ScenarioOutline;
-import net.thucydides.core.requirements.reports.cucumber.RenderCucumber;
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
+import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static java.lang.System.lineSeparator;
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithNoTitle;
-import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
 
 public class IdentifiedExampleTable extends NamedExampleTable {
     private Feature feature;

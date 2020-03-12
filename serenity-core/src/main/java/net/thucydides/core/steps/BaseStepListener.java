@@ -218,14 +218,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages, TestFailureCause testfailureCause) {
+    public void lastTestPassedAfterRetries(int attemptNum, List<String> failureMessages, TestFailureCause testfailureCause) {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().recordStep(
                     TestStep.forStepCalled("UNSTABLE TEST:\n" + failureHistoryFor(failureMessages))
                             .withResult(UNDEFINED));
 //                            .withResult(TestResult.IGNORED));
 
-            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
+            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + attemptNum).andType("unstable test"));
             latestTestOutcome().get().setFlakyTestFailureCause(testfailureCause);
         }
     }

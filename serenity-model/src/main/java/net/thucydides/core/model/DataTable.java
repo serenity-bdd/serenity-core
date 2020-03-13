@@ -1,8 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.reports.html.ResultIconFormatter;
 import net.thucydides.core.requirements.model.cucumber.ExampleRowResultIcon;
-import net.thucydides.core.requirements.model.cucumber.RowResultIcon;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;

@@ -63,8 +63,7 @@ public class EnvironmentSpecificConfiguration {
         NO_ENVIRONMENT_DEFINED
     }
 
-    private Function<String, String> contextlessProperty = property
-            -> environmentVariables.getProperty(property);
+    private Function<String, String> contextlessProperty = property -> environmentVariables.getProperty(property);
 
     private Function<String, String> defaultProperty = property -> {
 

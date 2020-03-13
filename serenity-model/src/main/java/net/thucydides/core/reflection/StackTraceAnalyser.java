@@ -34,9 +34,9 @@ public class StackTraceAnalyser {
                 return extractMethod(stackTraceElement, callingClass);
             }
         } catch (ClassNotFoundException classNotFoundIgnored) {
-            logger.debug("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
+            logger.trace("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
         } catch (NoClassDefFoundError noClassDefFoundErrorIgnored) {
-            logger.debug("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
+            logger.trace("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
         }
         return null;
     }

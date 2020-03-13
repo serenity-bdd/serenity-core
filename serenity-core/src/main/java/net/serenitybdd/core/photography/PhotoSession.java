@@ -7,6 +7,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -61,7 +62,7 @@ public class PhotoSession {
 
         if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
             try {
-                PageSnapshot snapshot = Shutterbug.shootPage(driver, scrollStrategy, 500);
+                PageSnapshot snapshot = Shutterbug.shootPage(unproxied(driver), scrollStrategy, 500);
                 screenshotData = asByteArray(snapshot.getImage());
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);
@@ -78,6 +79,14 @@ public class PhotoSession {
         previousScreenshotTimestamp.set(System.currentTimeMillis());
 
         return photo;
+    }
+
+    private WebDriver unproxied(WebDriver driver) {
+        if (driver instanceof WebDriverFacade) {
+            return ((WebDriverFacade) driver).getProxiedDriver();
+        } else {
+            return driver;
+        }
     }
 
     private byte[] asByteArray(BufferedImage image) throws IOException {

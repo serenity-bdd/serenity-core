@@ -249,25 +249,30 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void setIssueTrackerUrl(String issueTrackerUrl) {
         if (issueTrackerUrl != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL, issueTrackerUrl);
+            setEnvironmentProperty(ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL, issueTrackerUrl);
         }
+    }
+
+    private void setEnvironmentProperty(ThucydidesSystemProperty property, String value) {
+        getSystemProperties().setValue(property, value);
+        environmentVariables.setProperty(property.getPropertyName(), value);
     }
 
     public void setJiraUrl(String jiraUrl) {
         if (jiraUrl != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_URL, jiraUrl);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_URL, jiraUrl);
         }
     }
 
     public void setJiraProject(String jiraProject) {
         if (jiraProject != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_PROJECT, jiraProject);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_PROJECT, jiraProject);
         }
     }
 
     public void setJiraUsername(String jiraUsername) {
         if (jiraUsername != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_USERNAME, jiraUsername);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_USERNAME, jiraUsername);
         }
     }
 
@@ -277,7 +282,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void setJiraPassword(String jiraPassword) {
         if (jiraPassword != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_PASSWORD, jiraPassword);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_PASSWORD, jiraPassword);
         }
     }
 

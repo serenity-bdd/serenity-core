@@ -1,6 +1,5 @@
 package net.thucydides.core.reports;
 
-import cucumber.api.formatter.AnsiEscapes;
 import net.serenitybdd.core.CurrentOS;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;

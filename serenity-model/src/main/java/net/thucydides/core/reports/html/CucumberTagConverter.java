@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import gherkin.ast.Tag;
+
+import io.cucumber.core.internal.gherkin.ast.Tag;
 import net.thucydides.core.model.TestTag;
 
 import java.util.Collection;

@@ -1,8 +1,9 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Examples;
-import gherkin.ast.Feature;
-import gherkin.ast.ScenarioDefinition;
+
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
 import net.thucydides.core.digest.Digest;
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;

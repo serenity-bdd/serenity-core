@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber
 
-import cucumber.runtime.io.MultiLoader
-import cucumber.runtime.model.CucumberFeature
+
 import spock.lang.Specification
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle

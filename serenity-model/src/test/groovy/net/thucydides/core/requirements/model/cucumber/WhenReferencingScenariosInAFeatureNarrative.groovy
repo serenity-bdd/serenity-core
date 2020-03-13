@@ -1,16 +1,35 @@
 package net.thucydides.core.requirements.model.cucumber
 
-import cucumber.runtime.io.MultiLoader
-import cucumber.runtime.model.CucumberFeature
+import io.cucumber.core.internal.gherkin.ast.Feature
+import io.cucumber.core.internal.gherkin.ast.GherkinDocument
+import io.cucumber.core.internal.gherkin.events.CucumberEvent
+import io.cucumber.core.internal.gherkin.events.GherkinDocumentEvent
+import io.cucumber.core.internal.gherkin.events.SourceEvent
+import io.cucumber.core.internal.gherkin.stream.GherkinEvents
+import io.cucumber.core.internal.gherkin.stream.SourceEvents
 import spock.lang.Specification
-
-import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle
 
 class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def featureFile = "src/test/resources/serenity-cucumber/features/maintain_my_todo_list/filtering_todos.feature"
-    def features = CucumberFeature.load(new MultiLoader(CucumberParser.class.getClassLoader()), [featureFile])
-    def filteringTodoFeature = features[0].getGherkinFeature().feature
+    def features = loadCucumberFeatures([featureFile])
+    def filteringTodoFeature = features[0]
+
+    private static List<Feature> loadCucumberFeatures(List<String> listOfFiles) {
+        List<Feature> loadedFeatures = new ArrayList<>();
+        SourceEvents sourceEvents = new SourceEvents(listOfFiles);
+        GherkinEvents gherkinEvents = new GherkinEvents(true,true,true);
+        for (SourceEvent sourceEventEvent : sourceEvents) {
+            for (CucumberEvent cucumberEvent : gherkinEvents.iterable(sourceEventEvent)) {
+                if(cucumberEvent instanceof GherkinDocumentEvent) {
+                    GherkinDocumentEvent gherkinDocumentEvent = (GherkinDocumentEvent)cucumberEvent;
+                    GherkinDocument gherkinDocument = gherkinDocumentEvent.document;
+                    loadedFeatures.add(gherkinDocument.getFeature());
+                }
+            }
+        }
+        return loadedFeatures;
+    }
 
     def "Should be able to identify scenarios in a feature file by name"() {
         when:
@@ -46,7 +65,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def "Should return the examples table alone for scenario outline if requested"() {
         when:
-        def examples = ReferencedScenario.in(filteringTodoFeature).withName("Do many things").asExampleTable(WithTitle)
+        def examples = ReferencedScenario.in(filteringTodoFeature).withName("Do many things").asExampleTable(ScenarioDisplayOption.WithTitle)
         then:
         examples.isPresent()
         and:
@@ -72,7 +91,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def "Should not change lines with no scenario references"() {
         expect:
-            DescriptionWithScenarioReferences.from(filteringTodoFeature).forText("No scenario reference") == "No scenario reference"
+        DescriptionWithScenarioReferences.from(filteringTodoFeature).forText("No scenario reference") == "No scenario reference"
     }
 
     def "Should replace scenario references with the Given-When-Then text"() {
@@ -124,7 +143,7 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
 
     def "should render narratives with example tables"() {
         given:
-            CucumberParser parser = new CucumberParser()
+        CucumberParser parser = new CucumberParser()
         when:
             def narrative = parser.loadFeatureNarrative(new File(featureFile))
         then:

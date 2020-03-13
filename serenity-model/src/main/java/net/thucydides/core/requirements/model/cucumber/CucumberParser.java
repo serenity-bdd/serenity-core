@@ -1,29 +1,28 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Splitter;
-import cucumber.runtime.CucumberException;
-import cucumber.runtime.io.MultiLoader;
-import cucumber.runtime.io.ResourceLoader;
-import cucumber.runtime.model.CucumberFeature;
-import gherkin.ParserException;
-import gherkin.ast.*;
+import io.cucumber.core.feature.FeatureParser;
+import io.cucumber.core.gherkin.FeatureParserException;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.ParserException;
+import io.cucumber.core.internal.gherkin.ast.*;
+import io.cucumber.core.internal.gherkin.events.CucumberEvent;
+import io.cucumber.core.internal.gherkin.events.GherkinDocumentEvent;
+import io.cucumber.core.internal.gherkin.events.SourceEvent;
+import io.cucumber.core.internal.gherkin.stream.GherkinEvents;
+import io.cucumber.core.internal.gherkin.stream.SourceEvents;
+import io.cucumber.core.resource.Resource;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
-import net.thucydides.core.model.TestType;
 import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.requirements.model.Narrative;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,18 +68,14 @@ public class CucumberParser {
 
         List<String> listOfFiles = new ArrayList<>();
         listOfFiles.add(narrativeFile.getAbsolutePath());
-        MultiLoader multiLoader = new MultiLoader(CucumberParser.class.getClassLoader());
-        List<CucumberFeature> cucumberFeatures = loadCucumberFeatures(multiLoader, listOfFiles);
+
+        List<GherkinDocument> gherkinDocuments = loadCucumberFeatures(listOfFiles);
         try {
-            if (cucumberFeatures.size() == 0) {
+            if (gherkinDocuments.size() == 0) {
                 return Optional.empty();
             }
-            CucumberFeature cucumberFeature = cucumberFeatures.get(0);
-
-            List<ScenarioDefinition> scenarios = cucumberFeature.getGherkinFeature().getFeature().getChildren();
-
-            GherkinDocument gherkinDocument = cucumberFeature.getGherkinFeature();
-
+            GherkinDocument gherkinDocument = gherkinDocuments.get(0);
+            
             String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getComments());
 
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
@@ -95,53 +90,46 @@ public class CucumberParser {
         }
     }
 
-
-    private List<CucumberFeature> loadCucumberFeatures(MultiLoader multiLoader, List<String> listOfFiles) {
-        try { //try to load cucumber-core 4.2.6
-            Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
-            Method load = featureLoaderClass.getMethod("load", List.class);
-            Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
-            List<URI> uriList = listOfFiles.stream().map(filePath->new File(filePath).toURI()).collect(Collectors.toList());
-            return  (List<CucumberFeature>)load.invoke(featureLoader,uriList);
-        } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber426Exception) {
-            reportAnyCucumberSyntaxErrorsIn(cucumber426Exception);
-
-            LOGGER.debug("Found no Cucumber 4.2.x class " + CUCUMBER_4_FEATURE_LOADER + " trying Cucumber 4.8.0 ");
-            try { //try to load cucumber-core 4.8.0
-                Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
-                Method load = featureLoaderClass.getMethod("load", List.class);
-                Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
-                return (List<CucumberFeature>) load.invoke(featureLoader, listOfFiles);
-            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber420Exception) {
-                reportAnyCucumberSyntaxErrorsIn(cucumber420Exception);
-
-                LOGGER.debug("Found no Cucumber 4.8.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
-                try {
-                    Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
-                    Method load = featureLoaderClass.getMethod("load", ResourceLoader.class, List.class);
-                    return (List<CucumberFeature>) load.invoke(null, multiLoader, listOfFiles);
-                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException cucumber2Exception) {
-                    reportAnyCucumberSyntaxErrorsIn(cucumber2Exception);
-
-                    LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
-                    LOGGER.error("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath");
-                    throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath", cucumber2Exception);
+    private List<GherkinDocument> loadCucumberFeatures(List<String> listOfFiles) {
+        for(String cucumberFile : listOfFiles) {
+            searchForCucumberSyntaxErrorsIn(cucumberFile);
+        }
+        List<GherkinDocument> loadedFeatures = new ArrayList<>();
+        SourceEvents sourceEvents = new SourceEvents(listOfFiles);
+        GherkinEvents gherkinEvents = new GherkinEvents(true,true,true);
+        for (SourceEvent sourceEventEvent : sourceEvents) {
+            for (CucumberEvent cucumberEvent : gherkinEvents.iterable(sourceEventEvent)) {
+                if(cucumberEvent instanceof GherkinDocumentEvent) {
+                    GherkinDocumentEvent gherkinDocumentEvent = (GherkinDocumentEvent)cucumberEvent;
+                    GherkinDocument gherkinDocument = gherkinDocumentEvent.document;
+                    loadedFeatures.add(gherkinDocument);
+                    LOGGER.debug("Added feature " +  gherkinDocument.getFeature().getName());
                 }
             }
-        } catch(ParserException gherkinParsingException) {
-            LOGGER.error("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
-            throw new RuntimeException("Syntax error in feature file from " + listOfFiles,gherkinParsingException);
+        }
+        return loadedFeatures;
+    }
+
+    private void searchForCucumberSyntaxErrorsIn(String cucumberFile) {
+        FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
+        Path cucumberFilePath = new File(cucumberFile).toPath();
+        Resource cucumberResource = new URIResource(cucumberFilePath);
+        try {
+            featureParser.parseResource(cucumberResource);
+        } catch(Throwable throwable) {
+            reportAnyCucumberSyntaxErrorsIn(throwable);
         }
     }
 
     private void reportAnyCucumberSyntaxErrorsIn(Throwable possibleGherkinSyntaxError) {
-        if (possibleGherkinSyntaxError instanceof InvocationTargetException) {
-            Throwable gherkinError = ((InvocationTargetException) possibleGherkinSyntaxError).getTargetException();
-            if (gherkinError instanceof CucumberException) {
+        if (possibleGherkinSyntaxError instanceof FeatureParserException) {
+            Throwable gherkinError = possibleGherkinSyntaxError.getCause();
+            if (gherkinError instanceof ParserException) {
                 throw new InvalidFeatureFileException(gherkinError.getMessage(), gherkinError);
             }
         }
     }
+
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile) {
 

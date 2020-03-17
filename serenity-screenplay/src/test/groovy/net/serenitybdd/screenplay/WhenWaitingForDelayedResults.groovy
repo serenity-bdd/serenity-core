@@ -70,7 +70,7 @@ class WhenWaitingForDelayedResults extends Specification {
                                   orComplainWith(SomethingBadHappenedException)).
                         waitingForNoLongerThan(100).milliseconds())
         then:
-            theTestResult() == ERROR
+        theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 
     def "should report custom error if one is declared outside of the eventually scope"() {
@@ -81,11 +81,15 @@ class WhenWaitingForDelayedResults extends Specification {
         jane.should(eventually(seeThat(TheClickerValue.of(clicker), equalTo(-1))).
                 waitingForNoLongerThan(100).milliseconds().orComplainWith(SomethingBadHappenedException))
         then:
-        theTestResult() == ERROR
+        theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 
     private TestResult theTestResult() {
         StepEventBus.eventBus.baseStepListener.testOutcomes[0].result
+    }
+
+    private String theFailureClass() {
+        StepEventBus.eventBus.baseStepListener.testOutcomes[0].testFailureClassname
     }
 }
 

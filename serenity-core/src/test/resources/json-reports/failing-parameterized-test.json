@@ -1,0 +1,161 @@
+{
+  "name": "getWeather",
+  "id": "com.shbtechno.tests.applicationService.get.getWeather:getWeather",
+  "testCaseName": "com.shbtechno.tests.applicationService.get.getWeather",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Get weather by city ",
+      "duration": 1573,
+      "startTime": "2020-03-07T17:06:05.622697-05:00[America/New_York]",
+      "exception": {
+        "errorType": "java.lang.AssertionError",
+        "message": "1 expectation failed.\nExpected status code \u003c201\u003e but was \u003c200\u003e.\n",
+        "stackTrace": [
+          {
+            "classLoaderName": "app",
+            "declaringClass": "io.restassured.internal.ResponseSpecificationImpl",
+            "methodName": "validateResponseIfRequired",
+            "fileName": "ResponseSpecificationImpl.groovy",
+            "lineNumber": 656,
+            "format": 1
+          },
+          {
+            "classLoaderName": "app",
+            "declaringClass": "io.restassured.internal.ResponseSpecificationImpl",
+            "methodName": "statusCode",
+            "fileName": "ResponseSpecificationImpl.groovy",
+            "lineNumber": 125,
+            "format": 1
+          },
+          {
+            "classLoaderName": "app",
+            "declaringClass": "io.restassured.internal.ResponseSpecificationImpl",
+            "methodName": "statusCode",
+            "fileName": "ResponseSpecificationImpl.groovy",
+            "lineNumber": 133,
+            "format": 1
+          },
+          {
+            "classLoaderName": "app",
+            "declaringClass": "io.restassured.internal.ValidatableResponseOptionsImpl",
+            "methodName": "statusCode",
+            "fileName": "ValidatableResponseOptionsImpl.java",
+            "lineNumber": 119,
+            "format": 1
+          },
+          {
+            "classLoaderName": "app",
+            "declaringClass": "com.shbtechno.tests.applicationService.get.getWeather",
+            "methodName": "getWeather",
+            "fileName": "getWeather.java",
+            "lineNumber": 72,
+            "format": 1
+          }
+        ]
+      },
+      "result": "FAILURE",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 2,
+          "description": "Getting weather information by city",
+          "duration": 1573,
+          "startTime": "2020-03-07T17:06:03.883589-05:00[America/New_York]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1,
+          "children": [
+            {
+              "number": 3,
+              "description": "GET http://restapi.demoqa.com/utilities/weather/city/Hyderabad",
+              "duration": 0,
+              "startTime": "2020-03-07T17:06:05.449704-05:00[America/New_York]",
+              "result": "SUCCESS",
+              "restQuery": {
+                "method": "GET",
+                "path": "http://restapi.demoqa.com/utilities/weather/city/Hyderabad",
+                "content": "",
+                "contentType": "application/json",
+                "requestHeaders": "Accept\u003d*/*\n\t\t\t\tContent-Type\u003dapplication/json; charset\u003dUTF-8",
+                "requestCookies": "",
+                "responseHeaders": "Server: nginx\nDate: Sat, 07 Mar 2020 22:04:56 GMT\nContent-Type: application/json\nContent-Length: 162\nConnection: keep-alive\nVary: Accept-Encoding\nContent-Encoding: gzip\nCache-Control: max-age\u003d0\nExpires: Sat, 07 Mar 2020 22:04:56 GMT\nAccess-Control-Allow-Origin: *\nX-Proxy-Cache: BYPASS\nalt-svc: quic\u003d\":443\"; ma\u003d86400; v\u003d\"43,39\"",
+                "responseCookies": "",
+                "responseBody": "{\n    \"City\": \"Hyderabad\",\n    \"Temperature\": \"23.16 Degree celsius\",\n    \"Humidity\": \"94 Percent\",\n    \"WeatherDescription\": \"mist\",\n    \"WindSpeed\": \"2.6 Km per hour\",\n    \"WindDirectionDegree\": \"120 Degree\"\n}",
+                "statusCode": 200
+              },
+              "precondition": false,
+              "level": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.shbtechno.tests.applicationService.get.getWeather",
+    "storyName": "Get weather",
+    "storyClassName": "com.shbtechno.tests.applicationService.get.getWeather",
+    "path": "applicationService.get",
+    "type": "stories"
+  },
+  "featureTag": {
+    "name": "Get/Get weather",
+    "type": "stories",
+    "displayName": "Get/Get weather"
+  },
+  "title": "Get weather by city",
+  "tags": [
+    {
+      "name": "Get/Get weather",
+      "type": "stories",
+      "displayName": "Get/Get weather"
+    },
+    {
+      "name": "Application service/Get",
+      "type": "features",
+      "displayName": "Get"
+    },
+    {
+      "name": "Application service",
+      "type": "epic",
+      "displayName": "Application service"
+    },
+    {
+      "name": "weather",
+      "type": "ms",
+      "displayName": "weather"
+    }
+  ],
+  "startTime": "2020-03-07T17:06:05.497471-05:00[America/New_York]",
+  "duration": 0,
+  "isManualTestingUpToDate": false,
+  "dataTable": {
+    "headers": [
+      "ENDPOINT",
+      "INPUT",
+      "STATUSCODE"
+    ],
+    "rows": [
+      {
+        "values": [
+          "/weather/city/{input}",
+          "Hyderabad",
+          "201"
+        ],
+        "lineNumber": 0,
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": false,
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0
+      }
+    ]
+  },
+  "manual": false,
+  "result": "FAILURE"
+}

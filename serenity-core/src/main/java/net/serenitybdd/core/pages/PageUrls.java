@@ -154,9 +154,13 @@ public class PageUrls {
     }
 
     private String prefixedWithDefaultUrl(String url) {
-        Optional<String> declaredDefaultUrl = getDeclaredDefaultUrl();
-        if (declaredDefaultUrl.isPresent() && isARelativeUrl(url)) {
-            return StringUtils.stripEnd(declaredDefaultUrl.get(), "/")
+        Optional<String> optionalDeclaredDefaultUrl = getDeclaredDefaultUrl();
+        if (optionalDeclaredDefaultUrl.isPresent() && isARelativeUrl(url)) {
+            String declaredDefaultUrl = optionalDeclaredDefaultUrl.get();
+            if (isANamedUrl(declaredDefaultUrl)) {
+                declaredDefaultUrl = namedUrlFrom(declaredDefaultUrl);
+            }
+            return StringUtils.stripEnd(declaredDefaultUrl, "/")
                     + "/"
                     + StringUtils.stripStart(url, "/");
         } else {

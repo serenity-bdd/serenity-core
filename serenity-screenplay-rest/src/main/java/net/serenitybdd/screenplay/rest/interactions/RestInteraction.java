@@ -23,10 +23,20 @@ public abstract class RestInteraction implements Interaction, DisableScreenshots
         this.restConfigurations.add(restConfiguration);
         return this;
     }
+    
+     // Alias methods for Groovy
+    public RestInteraction withRequest(RestQueryFunction restConfiguration) {
+        return with(restConfiguration);
+    }
 
     public RestInteraction with(List<RestQueryFunction> restConfigurations) {
         this.restConfigurations.addAll(restConfigurations);
         return this;
+    }
+    
+    // Alias methods for Groovy
+    public RestInteraction withRequest(List<RestQueryFunction> restConfigurations) {
+        return with(restConfigurations);
     }
 
     protected RequestSpecification rest() {

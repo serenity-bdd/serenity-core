@@ -55,6 +55,7 @@ Check out Serenity BDD in more detail here:
   
 ## Release Notes
 Release notes are available for major releases: 
+* [2.2.0](docs/release-notes/2.2.0.md)
 * [2.1.5](docs/release-notes/2.1.5.md)
 * [2.1.4](docs/release-notes/2.1.4.md)
 * [2.1.2](docs/release-notes/2.1.2.md)
@@ -67,6 +68,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.2.0         | 2.2.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.1.5         | 2.1.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.1.0         | 2.1.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.0.90        | 2.0.90                | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -82,20 +84,13 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 ### Serenity with Cucumber
 Serenity works with both Cucumber 2 and Cucumber 4 for versions up to 2.1.x. From version 2.2.x we will be supporting Cucumber 5 only.
 
-#### Cucumber 2
+#### Cucumber 5
 
-| serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
-|---------------|-----------------------|-------------------|---------------------|
-| 2.1.5         | 2.1.5                 | 1.9.50            | 2.4.0               |
-| 2.0.90        | 2.0.90                | 1.9.49            | 2.4.0               |
-| 2.0.84        | 2.0.84                | 1.9.48            | 2.4.0               |
-| 2.0.69        | 2.0.69                | 1.9.45            | 2.4.0               |
-| 2.0.56        | 2.0.56                | 1.9.40            | 2.4.0               |
-| 2.0.54        | 2.0.54                | 1.9.39            | 2.4.0               |
-| 2.0.52        | 2.0.52                | 1.9.39            | 2.4.0               |
-| 2.0.48        | 2.0.48                | 1.9.37            | 2.4.0               |
-
-Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-bdd/serenity-cucumber-starter).
+| serenity-core | serenity-maven-plugin | serenity-cucumber5 | Cucumber            |
+|---------------|-----------------------|--------------------|---------------------|
+| 2.2.0         | 2.2.0                 |  2.2.0             | 5.5.0               |
+ 
+Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenity-bdd/serenity-cucumber4-starter).
 
 #### Cucumber 4
 
@@ -112,6 +107,22 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 | 2.0.48        | 2.0.48                | 1.0.12             | 4.2.0               |
  
 Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenity-bdd/serenity-cucumber4-starter).
+
+
+#### Cucumber 2
+
+| serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
+|---------------|-----------------------|-------------------|---------------------|
+| 2.1.5         | 2.1.5                 | 1.9.50            | 2.4.0               |
+| 2.0.90        | 2.0.90                | 1.9.49            | 2.4.0               |
+| 2.0.84        | 2.0.84                | 1.9.48            | 2.4.0               |
+| 2.0.69        | 2.0.69                | 1.9.45            | 2.4.0               |
+| 2.0.56        | 2.0.56                | 1.9.40            | 2.4.0               |
+| 2.0.54        | 2.0.54                | 1.9.39            | 2.4.0               |
+| 2.0.52        | 2.0.52                | 1.9.39            | 2.4.0               |
+| 2.0.48        | 2.0.48                | 1.9.37            | 2.4.0               |
+
+Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-bdd/serenity-cucumber-starter).
 
 ### Serenity with JBehave
 

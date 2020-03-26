@@ -94,6 +94,8 @@ Sample project: [Serenity Cucumber 5 Starter Project](https://github.com/serenit
 
 #### Cucumber 4
 
+_Note:_ Cucumber 4 is no longer supported in newer versions of Serenity.
+
 | serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
 | 2.1.5         | 2.1.5                 |  2.1.2             | 4.8.0               |
@@ -110,6 +112,8 @@ Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenit
 
 
 #### Cucumber 2
+
+_Note:_ Cucumber 2 is no longer supported in newer versions of Serenity.
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
 |---------------|-----------------------|-------------------|---------------------|

@@ -102,8 +102,12 @@ public class CucumberParser {
                 if(cucumberEvent instanceof GherkinDocumentEvent) {
                     GherkinDocumentEvent gherkinDocumentEvent = (GherkinDocumentEvent)cucumberEvent;
                     GherkinDocument gherkinDocument = gherkinDocumentEvent.document;
-                    loadedFeatures.add(gherkinDocument);
-                    LOGGER.debug("Added feature " +  gherkinDocument.getFeature().getName());
+                    if (gherkinDocument.getFeature() != null) {
+                        loadedFeatures.add(gherkinDocument);
+                        LOGGER.debug("Added feature %s", gherkinDocument.getFeature().getName());
+                    } else {
+                        LOGGER.warn("Couldn't read the feature file: %s", gherkinDocumentEvent.uri);
+                    }
                 }
             }
         }

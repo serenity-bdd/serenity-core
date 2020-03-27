@@ -104,9 +104,9 @@ public class CucumberParser {
                     GherkinDocument gherkinDocument = gherkinDocumentEvent.document;
                     if (gherkinDocument.getFeature() != null) {
                         loadedFeatures.add(gherkinDocument);
-                        LOGGER.debug("Added feature %s", gherkinDocument.getFeature().getName());
+                        LOGGER.debug("Added feature {}", gherkinDocument.getFeature().getName());
                     } else {
-                        LOGGER.warn("Couldn't read the feature file: %s", gherkinDocumentEvent.uri);
+                        LOGGER.warn("Couldn't read the feature file {} - it will be ignored", gherkinDocumentEvent.uri);
                     }
                 }
             }
@@ -117,6 +117,7 @@ public class CucumberParser {
     private void searchForCucumberSyntaxErrorsIn(String cucumberFile) {
         FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
         Path cucumberFilePath = new File(cucumberFile).toPath();
+
         Resource cucumberResource = new URIResource(cucumberFilePath);
         try {
             featureParser.parseResource(cucumberResource);

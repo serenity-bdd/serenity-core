@@ -96,7 +96,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             updateResultsUsingTestAnnotations(description);
             stepEventBus().testFinished();
-            stepEventBus().setTestSource(null);
+            stepEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
             endTest();
         }
     }

@@ -13,6 +13,7 @@ import net.thucydides.core.model.formatters.TestCoverageFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.RequirementsTree;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.steps.TestSourceType;
 import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
@@ -455,14 +456,18 @@ public class TestOutcomes {
             return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
         }
 
-        if (dataTableRowResultsAreUndefinedIn(outcome.getDataTable())
-            && outcome.getTestSteps().size() == outcome.getDataTable().getSize()) {
+        if ((dataTableRowResultsAreUndefinedIn(outcome.getDataTable()) || isJUnit(outcome))
+            && outcome.getTestSteps().size() >= outcome.getDataTable().getSize()) {
             return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
         }
 
         return (int) outcome.getDataTable().getRows().stream()
                 .filter(row -> expectedResults.contains(row.getResult()))
                 .count();
+    }
+
+    private boolean isJUnit(TestOutcome outcome) {
+        return (outcome.getTestSource() == null) || (TestSourceType.TEST_SOURCE_JUNIT.getValue().equalsIgnoreCase(outcome.getTestSource()));
     }
 
     private long stepsWithResultIn(List<TestStep> steps, List<TestResult> expectedResults) {

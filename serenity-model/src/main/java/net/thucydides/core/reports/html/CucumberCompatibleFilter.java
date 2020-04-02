@@ -34,18 +34,26 @@ public class CucumberCompatibleFilter {
     }
 
     protected Optional<String> cucumberTagOptions() {
+        String cucumberFilterTags = environmentVariables.getProperty("cucumber.filter.tags");
+        if (StringUtils.isNotEmpty(cucumberFilterTags)) {
+            return Optional.of(StringUtils.strip(cucumberFilterTags, "'"));
+        }
         String cucumberOptions = environmentVariables.getProperty("cucumber.options");
         if (StringUtils.isNotEmpty(cucumberOptions) && (cucumberOptions.contains("--tags "))) {
-            int tagsFlag = cucumberOptions.indexOf("--tags ");
-            int tagsOptionStart = tagsFlag + 7;
-            int nextTagOptionStart = cucumberOptions.indexOf("--", tagsOptionStart);
-            String tagOption = (nextTagOptionStart > 0) ?
-                    cucumberOptions.substring(tagsOptionStart, nextTagOptionStart) : cucumberOptions.substring(tagsOptionStart);
-
-            String tagOptionsWithoutAtSigns = StringUtils.strip(tagOption, "'");
-            return Optional.of(tagOptionsWithoutAtSigns);
+            return getTagsFromCucumberOptions(cucumberOptions);
         }
         return Optional.empty();
+    }
+
+    private Optional<String> getTagsFromCucumberOptions(String cucumberOptions) {
+        int tagsFlag = cucumberOptions.indexOf("--tags ");
+        int tagsOptionStart = tagsFlag + 7;
+        int nextTagOptionStart = cucumberOptions.indexOf("--", tagsOptionStart);
+        String tagOption = (nextTagOptionStart > 0) ?
+                cucumberOptions.substring(tagsOptionStart, nextTagOptionStart) : cucumberOptions.substring(tagsOptionStart);
+
+        String tagOptionsWithoutAtSigns = StringUtils.strip(tagOption, "'");
+        return Optional.of(tagOptionsWithoutAtSigns);
     }
 
     public boolean matchesTags(List<TestTag> testTags) {

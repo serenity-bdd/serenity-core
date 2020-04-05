@@ -1,13 +1,11 @@
 package net.thucydides.core.reports.html;
 
 import io.cucumber.tagexpressions.Expression;
-import io.cucumber.tagexpressions.TagExpressionParser;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
@@ -25,12 +23,9 @@ public class RequirementsFilter extends CucumberCompatibleFilter {
 
 
     private boolean requirementMatchesAnyTagIn(Requirement requirement, Expression expectedTags) {
-        List<String> requirementTags = CucumberTagConverter.toStrings(requirement.getTags());
-
-        if (expectedTags.evaluate(requirementTags) || (matchExistsInScenarios(expectedTags, requirement))) {
+        if (new RequirementTagMatcher(expectedTags).test(requirement)) {
             return true;
         }
-
         return hasChildWithMatchingTag(requirement, expectedTags);
     }
 
@@ -44,10 +39,23 @@ public class RequirementsFilter extends CucumberCompatibleFilter {
         if (!requirement.hasChildren()) {
             return false;
         }
-        return requirement.getNestedChildren().stream().anyMatch(
-                child -> expectedTags.evaluate(CucumberTagConverter.toStrings(child.getTags()))
-        );
+        return requirement.getNestedChildren().stream().anyMatch(new RequirementTagMatcher(expectedTags));
     }
+
+    private class RequirementTagMatcher implements Predicate<Requirement> {
+
+        private Expression expectedTags;
+
+        public RequirementTagMatcher(Expression expectedTags) {
+            this.expectedTags = expectedTags;
+        }
+
+        @Override
+        public boolean test(Requirement requirement) {
+            return expectedTags.evaluate(CucumberTagConverter.toStrings(requirement.getTags())) ||  matchExistsInScenarios(expectedTags, requirement);
+        }
+    }
+
 
 
     public List<Requirement> filteredByDisplayTag(List<Requirement> requirements) {

@@ -671,7 +671,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Enable JQuery integration.
      * If set to true, JQuery will be injected into any page that does not already have it.
-     * This option is deactivated by default, as it can slow down page loading.
+     * This option is activated by default, deactivating can speed up the page loading.
      */
     SERENITY_JQUERY_INTEGRATION,
 

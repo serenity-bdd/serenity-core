@@ -162,11 +162,16 @@ public class CucumberParser {
         feature.getChildren().forEach(
                 scenarioDefinition -> {
                     if (scenarioDefinition instanceof ScenarioOutline) {
-                        scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(((ScenarioOutline) scenarioDefinition).getTags()));
-                        ((ScenarioOutline) scenarioDefinition).getExamples().forEach(
-                                example -> scenarioTags.put(scenarioDefinition.getName() + example.getLocation(),
-                                                            CucumberTagConverter.toSerenityTags(example.getTags()))
-                        );
+                        List<Tag> scenarioOutlineTags = ((ScenarioOutline) scenarioDefinition).getTags();
+                        scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(scenarioOutlineTags));
+                        List<Examples> examples = ((ScenarioOutline) scenarioDefinition).getExamples();
+                        for(Examples currentExample :  examples) {
+                            List<Tag> allExampleTags = new ArrayList<>();
+                            allExampleTags.addAll(scenarioOutlineTags);
+                            allExampleTags.addAll(currentExample.getTags());
+                            scenarioTags.put(scenarioDefinition.getName() + "_examples_at_line:" + currentExample.getLocation().getLine(),
+                                    CucumberTagConverter.toSerenityTags(allExampleTags));
+                        }
                     } else {
                         scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
                     }

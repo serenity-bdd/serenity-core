@@ -20,12 +20,16 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
 
     private static final String BROWSERSTACK = "browserstack.";
     private static final Map<String, String> LEGACY_TO_W3C = new HashMap<>();
-    private static final List<String> UNOVERRIDABLE_FIELDS  = Arrays.asList("user", "key","server");
+    private static final List<String> UNOVERRIDABLE_FIELDS  = Collections.singletonList("server");
 
     static {
+        LEGACY_TO_W3C.put("user", "userName");
+        LEGACY_TO_W3C.put("key", "accessKey");
         LEGACY_TO_W3C.put("os_version", "osVersion");
         LEGACY_TO_W3C.put("browser", "browserName");
         LEGACY_TO_W3C.put("browser_version", "browserVersion");
+        LEGACY_TO_W3C.put("project", "projectName");
+        LEGACY_TO_W3C.put("name", "sessionName");
         LEGACY_TO_W3C.put("build", "buildName");
         LEGACY_TO_W3C.put("device", "deviceName");
         LEGACY_TO_W3C.put("appium_version", "appiumVersion");

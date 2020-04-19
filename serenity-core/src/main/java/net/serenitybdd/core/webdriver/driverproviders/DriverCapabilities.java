@@ -120,9 +120,12 @@ public class DriverCapabilities {
             capabilities.setCapability("version", WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables));
         }
 
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
-                .to(capabilities);
+        AddCustomDriverCapabilities addCustomDriverCapabilities = AddCustomDriverCapabilities.from(environmentVariables);
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+    		addCustomDriverCapabilities = addCustomDriverCapabilities
+    				.withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome());
+        }
+        addCustomDriverCapabilities.to(capabilities);
 
         return capabilities;
     }

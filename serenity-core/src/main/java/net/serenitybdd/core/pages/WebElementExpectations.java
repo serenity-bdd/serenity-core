@@ -73,7 +73,7 @@ public class WebElementExpectations {
     }
 
 
-    public static ExpectedCondition<Boolean> elementIsNotEnabled(final WebElementFacadeImpl element) {
+    public static ExpectedCondition<Boolean> elementIsNotEnabled(final WebElementFacade element) {
         return new ExpectedCondition<Boolean>() {
             private WebElementFacade element;
             public ExpectedCondition<Boolean> forElement(WebElementFacade element) {
@@ -94,10 +94,10 @@ public class WebElementExpectations {
     }
 
 
-    public static ExpectedCondition<Boolean> elementIsClickable(final WebElementFacadeImpl element) {
+    public static ExpectedCondition<Boolean> elementIsClickable(final WebElementFacade element) {
         return new ExpectedCondition<Boolean>() {
-            private WebElementFacadeImpl element;
-            public ExpectedCondition<Boolean> forElement(WebElementFacadeImpl element) {
+            private WebElementFacade element;
+            public ExpectedCondition<Boolean> forElement(WebElementFacade element) {
                 this.element = element;
                 return this;
             }

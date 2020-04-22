@@ -94,10 +94,10 @@ public class WebElementExpectations {
     }
 
 
-    public static ExpectedCondition<Boolean> elementIsClickable(final WebElementFacade element) {
+    public static ExpectedCondition<Boolean> elementIsClickable(final WebElementFacadeImpl element) {
         return new ExpectedCondition<Boolean>() {
-            private WebElementFacade element;
-            public ExpectedCondition<Boolean> forElement(WebElementFacade element) {
+            private WebElementFacadeImpl element;
+            public ExpectedCondition<Boolean> forElement(WebElementFacadeImpl element) {
                 this.element = element;
                 return this;
             }

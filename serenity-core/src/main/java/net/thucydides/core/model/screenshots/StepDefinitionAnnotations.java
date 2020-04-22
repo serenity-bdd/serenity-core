@@ -4,7 +4,7 @@ import net.thucydides.core.model.TakeScreenshots;
 
 public class StepDefinitionAnnotations {
 
-    private final static ThreadLocal<TakeScreenshots> screenshotOverride = ThreadLocal.withInitial(() -> TakeScreenshots.UNDEFINED);
+    private final static ThreadLocal<TakeScreenshots> screenshotOverride = new ThreadLocal<>();
 
     public static void setScreenshotPreferencesTo(TakeScreenshots takeScreenshotPreference) {
         screenshotOverride.set(takeScreenshotPreference);
@@ -14,5 +14,5 @@ public class StepDefinitionAnnotations {
         return screenshotOverride.get();
     }
 
-    public static void clear() { screenshotOverride.set(TakeScreenshots.UNDEFINED); };
+    public static void clear() { screenshotOverride.remove(); };
 }

@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import net.serenitybdd.core.CurrentOS;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.HashMap;
 import java.util.Map;

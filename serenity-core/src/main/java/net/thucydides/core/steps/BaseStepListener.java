@@ -855,6 +855,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return false;
         }
 
+        if (screenshots.areDisabledForThisAction()) {
+            return false;
+        }
+
         return (currentStepExists()
                 && browserIsOpen()
                 && !StepEventBus.getEventBus().isDryRun()

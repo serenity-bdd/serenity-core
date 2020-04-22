@@ -1,5 +1,7 @@
 package net.thucydides.core.annotations;
 
+import net.thucydides.core.model.TakeScreenshots;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

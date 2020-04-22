@@ -31,6 +31,10 @@ public class StackTraceAnalyser {
         try {
             if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName())) {
                 Class callingClass = Class.forName(stackTraceElement.getClassName());
+
+                if (stackTraceElement.getClassName().contains("$")) {
+                    callingClass = callingClass.getSuperclass();
+                }
                 return extractMethod(stackTraceElement, callingClass);
             }
         } catch (ClassNotFoundException classNotFoundIgnored) {
@@ -85,7 +89,7 @@ public class StackTraceAnalyser {
     private final static List<String> HIDDEN_PACKAGES = NewList.of("sun.", "java", "org.gradle");
 
     private boolean allowedClassName(String className) {
-        if (className.contains("$")) {
+        if (className.contains("$$")) {
             return false;
         }
         if (inHiddenPackage(className)) {

@@ -1,34 +1,17 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.CurrentOS;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import static net.serenitybdd.core.CurrentOS.OSType.*;
+import static org.openqa.selenium.Keys.DELETE;
 
 public class ClearContents {
 
-    private static final Consumer<WebElement> CONTROL_A_DELETE
-            = element -> element.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-
-    private static final Consumer<WebElement> COMMAND_A_DELETE
-            = element -> element.sendKeys(Keys.chord(Keys.COMMAND, "a"), Keys.DELETE);
-
-    private static Map<CurrentOS.OSType, Consumer<WebElement>> CLEAR_ELEMENT_PER_OS = new HashMap<>();
-
-    static {
-        CLEAR_ELEMENT_PER_OS.put(linux, CONTROL_A_DELETE);
-        CLEAR_ELEMENT_PER_OS.put(windows, CONTROL_A_DELETE);
-        CLEAR_ELEMENT_PER_OS.put(other, CONTROL_A_DELETE);
-        CLEAR_ELEMENT_PER_OS.put(mac, COMMAND_A_DELETE);
-    }
+    private static final String CONTROL_A = Keys.chord(Keys.CONTROL, "a");
+    private static final String COMMAND_A = Keys.chord(Keys.COMMAND, "a");
 
     public static void ofElement(WebElement element) {
-        CLEAR_ELEMENT_PER_OS.get(CurrentOS.getType()).accept(element);
+        element.sendKeys(COMMAND_A, DELETE);
+        element.sendKeys(CONTROL_A, DELETE);
     }
 }

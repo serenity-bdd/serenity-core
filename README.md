@@ -68,6 +68,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.2.2         | 2.2.2                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.0         | 2.2.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.1.5         | 2.1.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.1.0         | 2.1.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -88,6 +89,7 @@ Serenity works with both Cucumber 2 and Cucumber 4 for versions up to 2.1.x. Fro
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber5 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.2.2         | 2.2.2                 |  2.2.2             | 5.6.0               |
 | 2.2.0         | 2.2.0                 |  2.2.0             | 5.5.0               |
  
 Sample project: [Serenity Cucumber 5 Starter Project](https://github.com/serenity-bdd/serenity-cucumber5-starter).

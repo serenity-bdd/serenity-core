@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Invoke a step multiple times, each time initialized with a different set of test data.
  */
-public class DataDrivenStepInterceptor {
+public class DataDrivenStepInterceptor implements Interceptor {
 
     private List<?> instantiatedSteps;
 
@@ -40,11 +40,6 @@ public class DataDrivenStepInterceptor {
         }
         method.setAccessible(true);
         return method.invoke(steps, args);
-        /*try {
-            return zuperMethod.invoke(steps, args);
-        } catch(java.lang.IllegalArgumentException illegalArgumentException) {
-            return method.invoke(steps, args);
-        }*/
     }
 
     private boolean isFinalizer(Method method) {

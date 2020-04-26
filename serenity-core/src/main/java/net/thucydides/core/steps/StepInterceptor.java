@@ -45,7 +45,7 @@ import static net.thucydides.core.steps.ErrorConvertor.forError;
  *
  * @author johnsmart
  */
-public class StepInterceptor implements MethodErrorReporter {
+public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private final Class<?> testStepClass;
     private Throwable error = null;

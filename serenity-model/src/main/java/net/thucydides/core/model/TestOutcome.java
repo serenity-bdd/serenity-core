@@ -743,11 +743,11 @@ public class TestOutcome {
     }
 
     public TitleBuilder getUnqualified() {
-        return new TitleBuilder(this, issueTracking, environmentVariables, false);
+        return new TitleBuilder(this, issueTracking, getEnvironmentVariables(), false);
     }
 
     public TitleBuilder getQualified() {
-        return new TitleBuilder(this, issueTracking, environmentVariables, true);
+        return new TitleBuilder(this, issueTracking, getEnvironmentVariables(), true);
     }
 
     public void setAllStepsTo(TestResult result) {
@@ -1917,7 +1917,7 @@ public class TestOutcome {
 
     public List<String> getIssueKeys() {
         return getIssues().stream()
-                .map(issue -> IssueKeyFormat.forEnvironment(environmentVariables).andKey(issue))
+                .map(issue -> IssueKeyFormat.forEnvironment(getEnvironmentVariables()).andKey(issue))
                 .collect(Collectors.toList());
     }
 
@@ -1947,7 +1947,7 @@ public class TestOutcome {
 
     public String getContext() {
         if (context == null) {
-            context = contextFrom(environmentVariables);
+            context = contextFrom(getEnvironmentVariables());
         }
 
         return context;

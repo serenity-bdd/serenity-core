@@ -209,7 +209,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return WebElementResolver.byLocator(locator).withImplicitTimeout(implicitTimeoutInMilliseconds);
     }
 
-    protected WebElement getElement() {
+    public WebElement getElement() {
         if (driverIsDisabled()) {
             return new WebElementFacadeStub();
         }
@@ -944,7 +944,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driverIsDisabled()) {
             return null;
         }
-        return getWrappedElement().getScreenshotAs(target);
+        return getElement().getScreenshotAs(target);
     }
 
     protected void waitUntilElementAvailable() {
@@ -1357,10 +1357,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public String getCssValue(String propertyName) {
         return getElement().getCssValue(propertyName);
-    }
-
-    public WebElement getWrappedElement() {
-        return getElement();
     }
 
     @Override

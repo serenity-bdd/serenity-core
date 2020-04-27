@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 public class WebElementFacadeStub implements WebElementFacade {
 
-    protected WebElement getElement() {
+    public WebElement getElement() {
         return this;
     }
 

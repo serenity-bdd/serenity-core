@@ -26,7 +26,7 @@ public class Dropdown {
 
     public static Dropdown forWebElement(final WebElement webElement) {
         if (webElement instanceof WebElementFacade) {
-            return new Dropdown(((WebElementFacade) webElement).getWrappedElement());
+            return new Dropdown((((WebElementFacade) webElement).getElement()));
         } else {
             return new Dropdown(webElement);
         }

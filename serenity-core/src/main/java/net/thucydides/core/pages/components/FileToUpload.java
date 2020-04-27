@@ -7,6 +7,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
 
@@ -161,8 +162,8 @@ public class FileToUpload {
         public String forFile(String filename) {
             LocalFileDetector detector = new LocalFileDetector();
             File localFile = detector.getLocalFile(osSpecificPathOf(filename));
-            WebElement resolvedField = (uploadFileField instanceof WebElementFacade)
-                    ? ((WebElementFacade) uploadFileField).getWrappedElement() : uploadFileField;
+            WebElement resolvedField = (uploadFileField instanceof WrapsElement)
+                    ? ((WrapsElement) uploadFileField).getWrappedElement() : uploadFileField;
 
             if (resolvedField instanceof RemoteWebElement) {
                 ((RemoteWebElement) resolvedField).setFileDetector(detector);

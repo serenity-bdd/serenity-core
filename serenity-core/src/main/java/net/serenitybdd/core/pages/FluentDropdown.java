@@ -15,7 +15,8 @@ public class FluentDropdown implements ISelect {
     }
 
     protected Select select() {
-        return new Select(webElementFacade.getWrappedElement());
+
+        return new Select(webElementFacade.getElement());
     }
 
     @Override

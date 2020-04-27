@@ -104,6 +104,6 @@ public class ByTarget extends Target {
     }
 
     public ByTarget called(String name) {
-        return new ByTarget(targetElementName, locator, androidLocator, iosLocator, iFrame, timeout);
+        return new ByTarget(name, locator, androidLocator, iosLocator, iFrame, timeout);
     }
 }

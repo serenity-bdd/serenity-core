@@ -17,8 +17,8 @@ public class OutcomeTagFilter {
         this.testOutcomeFilter = new TestOutcomeFilter(environmentVariables);
     }
 
-    public List<ScenarioOutcome> scenariosFilteredByTagIn(List<ScenarioOutcome> testOutcomes) {
-        return testOutcomes.stream()
+    public List<ScenarioOutcome> scenariosFilteredByTagIn(List<ScenarioOutcome> scenarioOutcomes) {
+        return scenarioOutcomes.stream()
                 .filter(testOutcomeFilter::matches)
                 .collect(Collectors.toList());
 

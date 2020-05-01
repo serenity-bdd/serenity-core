@@ -100,10 +100,13 @@ public class FeatureFileScenarioOutcomes {
             examples.stream()
                     .filter(example -> example.getTags().isEmpty() || tagScanner.shouldRunForTags(fromGherkinTags(example.getTags())))
                     .forEach(filteredExamples::add);
-
+            Set<TestTag> scenarioOutlineTags = scenarioOutlineTagsIn(((ScenarioOutline) scenarioDefinition));
             examples.stream().forEach(
-                    example -> exampleTags.put(example.getName() + ":" + example.getLocation(), CucumberTagConverter.toSerenityTags(example.getTags()))
-            );
+                    example -> {
+                        Collection<TestTag> testTags = CucumberTagConverter.toSerenityTags(example.getTags());
+                        testTags.addAll(scenarioOutlineTags);
+                        exampleTags.put(example.getName() + ":" + example.getLocation(), testTags);
+                    });
         }
 
         List<Examples> examplesList = filteredExamples;
@@ -142,7 +145,7 @@ public class FeatureFileScenarioOutcomes {
 
     private Set<TestTag> scenarioTagsDefinedIn(ScenarioDefinition scenarioDefinition) {
         if (scenarioDefinition instanceof ScenarioOutline) {
-            return scenarioOutlineTagsIn((ScenarioOutline) scenarioDefinition);
+            return scenarioOutlineTagsIncludingExamplesIn((ScenarioOutline) scenarioDefinition);
         } else if (scenarioDefinition instanceof Scenario) {
             return scenarioTagsIn((Scenario) scenarioDefinition);
         }
@@ -153,6 +156,11 @@ public class FeatureFileScenarioOutcomes {
         Set<TestTag> testTags = scenarioOutline.getTags().stream()
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
+        return testTags;
+    }
+
+    private Set<TestTag> scenarioOutlineTagsIncludingExamplesIn(ScenarioOutline scenarioOutline) {
+        Set<TestTag> testTags = scenarioOutlineTagsIn(scenarioOutline);
 
         Set<TestTag> exampleTags = scenarioOutline.getExamples().stream()
                 .flatMap(examples -> examples.getTags().stream())

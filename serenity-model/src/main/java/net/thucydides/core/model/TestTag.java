@@ -11,6 +11,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class TestTag implements Comparable<TestTag> {
 
     public static final TestTag EMPTY_TAG = new TestTag("","");
+    public static final String DEFAULT_TAG_TYPE = "tag";
 
     private final String name;
     private final String type;
@@ -79,7 +80,7 @@ public class TestTag implements Comparable<TestTag> {
         } else if (value.contains("=")) {
             return getTestTag(value, value.indexOf("="));
         } else {
-            return TestTag.withName(value.trim()).andType("tag");
+            return TestTag.withName(value.trim()).andType(DEFAULT_TAG_TYPE);
         }
     }
 

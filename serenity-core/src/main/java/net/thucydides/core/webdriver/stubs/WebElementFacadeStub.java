@@ -5,7 +5,7 @@ import net.serenitybdd.core.pages.*;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;

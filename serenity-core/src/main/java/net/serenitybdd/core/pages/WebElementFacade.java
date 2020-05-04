@@ -2,16 +2,13 @@ package net.serenitybdd.core.pages;
 
 import io.appium.java_client.FindsByAccessibilityId;
 import io.appium.java_client.FindsByAndroidUIAutomator;
-//import io.appium.java_client.FindsByIosUIAutomation;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.Wait;
-
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.List;

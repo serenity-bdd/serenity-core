@@ -198,9 +198,8 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
         List<String> possibleConfigFileNames = new ArrayList<>();
 
-        environmentVariables.optionalProperty(System.getProperty(PROPERTIES)).ifPresent(
-                possibleConfigFileNames::add
-        );
+        optionalEnvironmentVariable(System.getProperty(PROPERTIES)).ifPresent(possibleConfigFileNames::add);
+
         serenityConfFileInASensibleLocation().ifPresent(possibleConfigFileNames::add);
 
         return possibleConfigFileNames.stream()

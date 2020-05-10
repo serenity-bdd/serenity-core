@@ -47,8 +47,14 @@ public class ClassInfoAnnotations {
 
     private Set<Method> allMethods() {
         Set<Method> allMethods = new HashSet<>();
-        allMethods.addAll(Arrays.asList(classInfo.load().getMethods()));
-        allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
+        try {
+            allMethods.addAll(Arrays.asList(classInfo.load().getMethods()));
+        } catch (java.lang.NoClassDefFoundError probablyAnInstrumentedMethodSoIgnoring) {}
+
+        try {
+            allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
+        } catch (java.lang.NoClassDefFoundError probablyAnInstrumentedMethodSoIgnoring) {}
+
         return allMethods;
     }
 }

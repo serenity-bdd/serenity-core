@@ -75,6 +75,9 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> stepDefinitionOverride() {
+        if (StepDefinitionAnnotations.getScreenshotPreferences() == TakeScreenshots.UNDEFINED) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(StepDefinitionAnnotations.getScreenshotPreferences());
     }
 

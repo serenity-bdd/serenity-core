@@ -115,7 +115,18 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         Config commandLineSpecifiedProperties = ConfigFactory.parseMap(environmentVariables.simpleSystemPropertiesAsMap());
 
         // TODO: Cache resolved config for the aggregate phase
-        return ConfigFactory.parseFile(configFile).resolveWith(commandLineSpecifiedProperties);
+        try {
+            return ConfigFactory.parseFile(configFile).resolveWith(commandLineSpecifiedProperties);
+        } catch (ConfigException failedToReadTheSerenityConfFile) {
+            try {
+                LOGGER.warn("Failed to read the serenity.conf file: " + failedToReadTheSerenityConfFile.getMessage()
+                        + " - Falling back on serenity.conf without using environment variables");
+                return ConfigFactory.parseFile(configFile);
+            } catch (ConfigException failedToReadTheUnresolvedSerenityConfFile) {
+                LOGGER.error("Failed to parse the serenity.conf file", failedToReadTheUnresolvedSerenityConfFile);
+                throw failedToReadTheUnresolvedSerenityConfFile;
+            }
+        }
 
     }
 
@@ -212,7 +223,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private Optional<String> serenityConfFileInASensibleLocation() {
         try {
-            return SearchForFilesWithName.matching(Paths.get("."),SERENITY_CONF_FILE).getMatchingFiles()
+            return SearchForFilesWithName.matching(Paths.get("."), SERENITY_CONF_FILE).getMatchingFiles()
                     .stream()
                     .findFirst()
                     .map(path -> path.toAbsolutePath().toString());

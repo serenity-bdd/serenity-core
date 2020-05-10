@@ -55,6 +55,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun text(): StringEnsure = StringEnsure(textValueOf(value), "$targetDescription with text value")
 
     /**
+     * Verifies that the text value of an element exacly matches the specified value
+     */
+    fun hasText(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text value").isEqualTo(expectedValue)
+
+    /**
      * Verifies the text value of the specified element
      */
     fun textValues(): CollectionEnsure<String> = CollectionEnsure(textValuesOf(value), "$targetDescription with text values")
@@ -65,6 +70,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun textContent(): StringEnsure = StringEnsure(textValueOf(value), "$targetDescription with text content")
 
     /**
+     * Verifies the text content of the specified element is equal to the expected value
+     */
+    fun hasTextContent(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text content").isEqualTo(expectedValue)
+
+    /**
      * Verifies the text content of the specified element
      */
     fun textContentValues(): CollectionEnsure<String> = CollectionEnsure(textContentsOf(value), "$targetDescription with text contents")
@@ -73,6 +83,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
      * Verifies the value attribute of an element
      */
     fun value(): StringEnsure = StringEnsure(valueOf(value), "$targetDescription with value")
+
+    /**
+     * Verifies the value attribute of an element is equal to the expected value
+     */
+    fun hasValue(expectedValue: String) = StringEnsure(valueOf(value), "$targetDescription with value").isEqualTo(expectedValue)
 
     /**
      * Verifies the value attributes of all matching elements
@@ -95,10 +110,14 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
      */
     fun selectedValue(): StringEnsure = StringEnsure(selectedValueOf(value), "$targetDescription with selected value")
 
+    fun hasSelectedValue(expectedValue: String) = StringEnsure(selectedValueOf(value), "$targetDescription with selected value").isEqualTo(expectedValue)
+
     /**
      * Verifies the selected value attribute of a dropdown list
      */
     fun selectedVisibleText(): StringEnsure = StringEnsure(selectedVisibleTextOf(value), "$targetDescription with selected visible text")
+
+    fun hasSelectedVisibleText(expectedValue: String) = StringEnsure(selectedVisibleTextOf(value), "$targetDescription with selected visible text").isEqualTo(expectedValue)
 
     /**
      * Verifies that the element has a given CSS class

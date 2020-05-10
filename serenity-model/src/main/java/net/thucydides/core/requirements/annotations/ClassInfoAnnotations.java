@@ -15,7 +15,6 @@ public class ClassInfoAnnotations {
     private final ClassPath.ClassInfo classInfo;
 
     public ClassInfoAnnotations(ClassPath.ClassInfo classInfo) {
-
         this.classInfo = classInfo;
     }
 
@@ -49,11 +48,11 @@ public class ClassInfoAnnotations {
         Set<Method> allMethods = new HashSet<>();
         try {
             allMethods.addAll(Arrays.asList(classInfo.load().getMethods()));
-        } catch (java.lang.NoClassDefFoundError probablyAnInstrumentedMethodSoIgnoring) {}
+        } catch (java.lang.NoClassDefFoundError ignored) {}
 
         try {
             allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
-        } catch (java.lang.NoClassDefFoundError probablyAnInstrumentedMethodSoIgnoring) {}
+        } catch (java.lang.NoClassDefFoundError ignored) {}
 
         return allMethods;
     }

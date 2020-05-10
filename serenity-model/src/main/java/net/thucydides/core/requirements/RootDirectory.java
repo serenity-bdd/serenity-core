@@ -357,7 +357,7 @@ public class RootDirectory {
                 return relativePathFromAbsolutePath(path, requirementsDirectory).get();
             }
         }
-        return Paths.get(path);
+        return new File(path).toPath();
     }
 
     private Optional<Path> relativePathFromAbsolutePath(String absolutePath, String requirementsDirectory) {

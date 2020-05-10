@@ -220,7 +220,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `when the element is on the page`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Heading"), wendy)
-                    shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasText"Heading"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#heading").hasText"Heading"), wendy)
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isGreaterThan("Aardvark"), wendy)
                 }
 
@@ -330,7 +330,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `for a dropdown list field`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#colors")).selectedValue().isEqualTo("green"), wendy),
-                    shouldPassWhenChecking(that(ElementLocated.by("#colors")).hasSelectedValue("green"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#colors").hasSelectedValue("green"), wendy)
                 }
 
                 @Test

@@ -12,6 +12,8 @@ import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
 import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +22,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
@@ -46,8 +50,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
-            String rootPackage,
-            RequirementsStore requirementsStore) {
+                                          String rootPackage,
+                                          RequirementsStore requirementsStore) {
         super(environmentVariables);
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
@@ -55,9 +59,12 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
-        this(environmentVariables, rootPackage,
-                new FileSystemRequirementsStore(getRequirementsDirectory(ConfiguredEnvironment.getConfiguration().getOutputDirectory()),
-                        rootPackage + "-package-requirements.json"));
+        this(environmentVariables,
+                rootPackage,
+                (isEmpty(rootPackage) ?
+                        new DisabledRequirementsStore() :
+                        new FileSystemRequirementsStore(getRequirementsDirectory(ConfiguredEnvironment.getConfiguration().getOutputDirectory()),
+                                rootPackage + "-package-requirements.json")));
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables) {
@@ -136,19 +143,20 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private Comparator<? super String> byDescendingPackageLength() {
-        return new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                Integer o1Length = Splitter.on(".").splitToList(o1).size();
-                Integer o2Length = Splitter.on(".").splitToList(o2).size();
-                return o1Length.compareTo(o2Length);
-            }
+        return (Comparator<String>) (o1, o2) -> {
+            Integer o1Length = Splitter.on(".").splitToList(o1).size();
+            Integer o2Length = Splitter.on(".").splitToList(o2).size();
+            return o1Length.compareTo(o2Length);
         };
     }
 
     private final Lock readingPaths = new ReentrantLock();
 
     private List<String> requirementPathsStartingFrom(String rootPackage) {
+
+        if (isEmpty(rootPackage)) {
+            return new ArrayList<>();
+        }
 
         if (requirementPaths == null) {
             readingPaths.lock();
@@ -161,21 +169,16 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
-        List<String> requirementPaths = new ArrayList<>();
-
-        ClassPath classpath;
         try {
-            classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+            ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+            return classpath.getTopLevelClassesRecursive(rootPackage)
+                    .stream()
+                    .filter(classInfo -> classRepresentsARequirementIn(classInfo))
+                    .map(classInfo -> classInfo.getName())
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new CouldNotLoadRequirementsException(e);
         }
-
-        for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(rootPackage)) {
-            if (classRepresentsARequirementIn(classInfo)) {
-                requirementPaths.add(classInfo.getName());
-            }
-        }
-        return requirementPaths;
     }
 
     private boolean classRepresentsARequirementIn(ClassPath.ClassInfo classInfo) {
@@ -187,7 +190,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private Set<Requirement> removeChildrenFromTopLevelRequirementsIn(Set<Requirement> allRequirements) {
-        Set<Requirement> prunedRequirements = new HashSet();
+        Set<Requirement> prunedRequirements = new HashSet<>();
         for (Requirement requirement : allRequirements) {
             if (requirement.getParent() == null) {
                 prunedRequirements.add(requirement);

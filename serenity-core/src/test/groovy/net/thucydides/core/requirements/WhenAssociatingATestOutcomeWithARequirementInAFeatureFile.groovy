@@ -31,7 +31,8 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
         and: "We define the root package in the 'thucydides.test.root' property"
             vars.setProperty("thucydides.test.root","net.thucydides.core.requirements.stories")
         when: "We load requirements with nested capability directories and no .narrative files"
-        def testOutcome = TestOutcome.forTestInStory("someTest", Story.withIdAndPath("PlantPotatoes","Plant potatoes","PlantPotatoes.story"))
+        def testOutcome = TestOutcome.forTestInStory("someTest",
+                                                      Story.withIdAndPath("PlantPotatoes","Plant potatoes","PlantPotatoes.story"))
         then:
             capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
             capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant Potatoes"

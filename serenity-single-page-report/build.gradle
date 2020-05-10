@@ -30,7 +30,9 @@ dependencies {
 
     compile ("org.thymeleaf:thymeleaf:${thymeleafVersion}") {
         exclude group: 'org.slf4j', module: 'slf4j-api'
+        exclude group: 'org.javassist'
     }
+    compile("org.javassist:javassist:3.21.0-GA")
     compile "org.knowm.xchart:xchart:${xchartVersion}"
     compile ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.1.RELEASE') {
         exclude group: "org.thymeleaf", module:"thymeleaf"

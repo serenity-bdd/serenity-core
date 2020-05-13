@@ -1022,6 +1022,11 @@ public enum ThucydidesSystemProperty {
     DELETE_HISTORY_DIRECTORY,
 
     /**
+     * Generate a CSV report for each test result (true by default)
+     */
+    SERENITY_GENERATE_CSV_REPORTS,
+
+    /**
      * Add extra columns to the CSV output, obtained from tag values.
      */
     SERENITY_CSV_EXTRA_COLUMNS,
@@ -1601,7 +1606,6 @@ public enum ThucydidesSystemProperty {
         if (environmentVariables == null) { return defaultValue; }
 
         Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
-//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Boolean.valueOf(newPropertyValue.get().trim());

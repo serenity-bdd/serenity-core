@@ -50,7 +50,6 @@ public class ConsoleLoggingListener implements StepListener {
                     " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
                     " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
                     " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
-                    " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
                     "-------------------------------------------------------------------------------------\n";
 
     public static final String SERENITY_SMALL_BANNER =
@@ -62,7 +61,6 @@ public class ConsoleLoggingListener implements StepListener {
                     " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
                     " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
                     " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
-                    " Learn Serenity BDD online at https://www.serenitydojo.net                           \n" +
                     "-------------------------------------------------------------------------------------\n";
 
     // MAIN BANNERS

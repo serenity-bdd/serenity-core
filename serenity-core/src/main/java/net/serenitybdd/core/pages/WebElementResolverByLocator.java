@@ -8,13 +8,20 @@ import java.util.List;
 
 public class WebElementResolverByLocator extends WebElementResolver {
     private final By bySelector;
+    private final long implicitTimeoutInMilliseconds;
+
+    public WebElementResolverByLocator(By bySelector, long implicitTimeoutInMilliseconds) {
+        this.bySelector = bySelector;
+        this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
+    }
 
     public WebElementResolverByLocator(By bySelector) {
-        this.bySelector = bySelector;
+        this(bySelector, 0L);
     }
 
     @Override
     public WebElement resolveForDriver(WebDriver driver) {
+
         return driver.findElement(bySelector);
     }
 

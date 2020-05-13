@@ -40,16 +40,24 @@ class BuildWebElementFacade {
     }
 
     public static <T extends WebElementFacade> T from(final WebDriver driver,
-                                                                final By bySelector,
-                                                                final long timeoutInMilliseconds,
-                                                                final long waitForTimeoutInMilliseconds,
-                                                                final String foundBy) {
+                                                      final By bySelector,
+                                                      final long timeoutInMilliseconds,
+                                                      final long waitForTimeoutInMilliseconds,
+                                                      final String foundBy) {
+
         return (T) new WebElementFacadeImpl(driver, null, driver.findElement(bySelector), timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
+//        WebElement resolvedElement = driver.findElement(bySelector);
+//
+//        WebElementResolver.by(bySelector);
+//
+//        return (resolvedElement instanceof WrapsElement)
+//                ? (T) new WrappedWebElementFacadeImpl(driver, null, resolvedElement, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
+//                : (T) new WebElementFacadeImpl(driver, null, driver.findElement(bySelector), timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
     }
 
     public static <T extends WebElementFacade> T from(final WebDriver driver,
-                                                                final WebElement element,
-                                                                final long timeout) {
+                                                      final WebElement element,
+                                                      final long timeout) {
         return (element instanceof WrapsElement)
                 ? (T) new WrappedWebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString())
                 : (T) new WebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString());
@@ -57,7 +65,7 @@ class BuildWebElementFacade {
 
     public static <T extends WebElementFacade> T from(WebDriver driver, ElementLocator locator, WebElement element, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
         return (element instanceof WrapsElement)
-             ?  (T) new WrappedWebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds)
-             :  (T) new WebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+                ? (T) new WrappedWebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds)
+                : (T) new WebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 }

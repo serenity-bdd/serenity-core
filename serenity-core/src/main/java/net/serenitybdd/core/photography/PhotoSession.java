@@ -60,7 +60,7 @@ public class PhotoSession {
 
         byte[] screenshotData = null;
 
-        if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
+        if (WebDriverFactory.isAlive(driver) && unproxied(driver) instanceof TakesScreenshot) {
             try {
                 PageSnapshot snapshot = Shutterbug.shootPage(unproxied(driver), scrollStrategy, 500);
                 screenshotData = asByteArray(snapshot.getImage());

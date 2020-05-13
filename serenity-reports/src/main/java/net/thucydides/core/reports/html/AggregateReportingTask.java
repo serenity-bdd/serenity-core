@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_GENERATE_CSV_REPORTS;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 public class AggregateReportingTask extends BaseReportingTask implements ReportingTask  {
@@ -40,12 +41,19 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         Map<String, Object> context = freemarker.getBuildContext(testOutcomes, defaultNameProvider, true);
 
         context.put("report", ReportProperties.forAggregateResultsReport());
-        context.put("csvReport", "results.csv");
 
         generateReportPage(context, HOME_PAGE_TEMPLATE_PATH, "index.html");
         generateReportPage(context, BUILD_INFO_TEMPLATE_PATH, "build-info.html");
-        generateCSVReportFor(testOutcomes, "results.csv");
+
+        if (csvReportsAreActivated()) {
+            context.put("csvReport", "results.csv");
+            generateCSVReportFor(testOutcomes, "results.csv");
+        }
 
          LOGGER.debug("Aggregate reports generated in {} ms ", stopwatch.stop());
+    }
+
+    private boolean csvReportsAreActivated() {
+        return SERENITY_GENERATE_CSV_REPORTS.booleanFrom(environmentVariables, true);
     }
 }

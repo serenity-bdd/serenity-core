@@ -62,7 +62,6 @@ public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
 
         then(jill).should(seeThat(herProfile, hasProperty("name", equalTo("Jill"))));
         and(jill).should(seeThat(herProfile, hasProperty("country", equalTo("France"))));
-
     }
 
 
@@ -98,8 +97,8 @@ public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
 
         then(jill).should(seeThat(herProfile, hasProperty("name", equalTo("Jill"))));
         and(jill).should(seeThat(herProfile, hasProperty("country", equalTo("France"))));
-
     }
+
     @Steps
     OpenTheApplication openedTheApplication;
 

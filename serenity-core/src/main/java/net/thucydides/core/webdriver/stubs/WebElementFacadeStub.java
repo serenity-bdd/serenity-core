@@ -23,50 +23,6 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
     }
 
-    protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
-        return new JavascriptExecutorFacade() {
-
-            @Override
-            protected Gson getGson() {
-                return null;
-            }
-
-            @Override
-            public void registerTypeAdapter(Type type, Object typeAdapter) {
-            }
-
-            @Override
-            public Object executeScript(String script) {
-                return null;
-            }
-
-            @Override
-            public Object executeScript(String script, Object... params) {
-                return null;
-            }
-
-            @Override
-            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Map<String, Object> injectedFields, Object... params) throws IllegalAccessException {
-                return null;
-            }
-
-            @Override
-            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Object... params) throws IllegalAccessException {
-                return null;
-            }
-
-            @Override
-            public <T> List<T> deserializeScriptResultAsListOf(String script, Object... params) {
-                return null;
-            }
-        };
-    }
-
-    protected InternalSystemClock getClock() {
-        return new InternalSystemClock();
-    }
-
-
     @Override
     public WebElementFacade then(String xpathOrCssSelector) {
         return this;
@@ -580,7 +536,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     public WebElement getWrappedElement() {
-        return this;
+        return new WrappedElementStub();
     }
 
     @Override

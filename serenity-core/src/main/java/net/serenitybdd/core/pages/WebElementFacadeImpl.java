@@ -48,7 +48,8 @@ import static net.thucydides.core.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
 /**
  * A proxy class for a web element, providing some more methods.
  */
-public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.core.pages.WebElementFacade {
+public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.core.pages.WebElementFacade, Locatable, WebElementState,
+                    FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
 
     private final WebElement webElement;
     private final WebDriver driver;
@@ -77,6 +78,23 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.webElement = webElement;
         this.driver = driver;
         this.locator = locator;
+        this.bySelector = bySelector;
+        this.webdriverClock = Clock.systemDefaultZone();
+        this.sleeper = Sleeper.SYSTEM_SLEEPER;
+        this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
+        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
+        this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
+    }
+
+    public WebElementFacadeImpl(final WebDriver driver,
+                                final WebElement webElement,
+                                final long implicitTimeoutInMilliseconds,
+                                final long waitForTimeoutInMilliseconds,
+                                final By bySelector) {
+        this.webElement = webElement;
+        this.driver = driver;
+        this.locator = null;
         this.bySelector = bySelector;
         this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
@@ -138,7 +156,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private WebElementFacadeImpl copy() {
-        return new WebElementFacadeImpl(driver, locator, webElement, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+        return BuildWebElementFacade.from(driver, locator, webElement, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 
     public WebElementFacadeImpl(final WebDriver driver,
@@ -146,6 +164,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                 final long implicitTimeoutInMilliseconds) {
         this(driver, locator, null, implicitTimeoutInMilliseconds, implicitTimeoutInMilliseconds);
     }
+
 
     public WebElementFacadeImpl(final WebDriver driver,
                                 final ElementLocator locator,
@@ -158,8 +177,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 final WebElement element,
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds) {
-        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds)
-                .foundBy("<Undefined web element>");
+        return BuildWebElementFacade.from(driver, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
@@ -167,8 +185,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds,
                                                                 final String foundBy) {
-        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds)
-                .foundBy(foundBy);
+        return BuildWebElementFacade.from(driver, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(WebDriver driver,
@@ -179,8 +196,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 long timeoutInMilliseconds,
                                                                 long waitForTimeoutInMilliseconds,
                                                                 String foundBy) {
-        return (T) new WebElementFacadeImpl(driver, locator, element, resolvedELement, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds)
-                .foundBy(foundBy);
+        return BuildWebElementFacade.from(driver, resolvedELement, element, bySelector, locator, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
@@ -188,15 +204,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds,
                                                                 final String foundBy) {
-        return (T) new WebElementFacadeImpl(driver, null, null, timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector)
-                .foundBy(foundBy);
+        return BuildWebElementFacade.from(driver,bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeout) {
-        return (T) new WebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString());
-
+        return BuildWebElementFacade.from(driver,element, timeout);
     }
 
     private WebElementResolver getElementResolver() {
@@ -1403,4 +1417,5 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public Coordinates getCoordinates() {
         return ((Locatable) getElement()).getCoordinates();
     }
+
 }

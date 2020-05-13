@@ -7,6 +7,7 @@ import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.ui.Wait;
 import java.time.Duration;
@@ -15,9 +16,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @ImplementedBy(WebElementFacadeImpl.class)
-public interface WebElementFacade
+public interface WebElementFacade extends WebElement, WebElementState, Locatable, ConfigurableTimeouts, FindsByAccessibilityId, FindsByAndroidUIAutomator {
 //        extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
-        extends WebElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
 
     <T extends WebElementFacade> T then(String xpathOrCssSelector);
     <T extends WebElementFacade> T thenFind(String xpathOrCssSelector);

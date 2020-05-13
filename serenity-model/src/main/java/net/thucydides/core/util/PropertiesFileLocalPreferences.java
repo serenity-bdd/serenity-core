@@ -112,11 +112,9 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private Config typesafeConfigFile(File configFile) {
 
-        Config commandLineSpecifiedProperties = ConfigFactory.parseMap(environmentVariables.simpleSystemPropertiesAsMap());
-
         // TODO: Cache resolved config for the aggregate phase
         try {
-            return ConfigFactory.parseFile(configFile).resolveWith(commandLineSpecifiedProperties);
+            return ConfigFactory.parseFile(configFile).resolveWith(ConfigFactory.systemProperties());
         } catch (ConfigException failedToReadTheSerenityConfFile) {
             try {
                 LOGGER.warn("Failed to read the serenity.conf file: " + failedToReadTheSerenityConfFile.getMessage()

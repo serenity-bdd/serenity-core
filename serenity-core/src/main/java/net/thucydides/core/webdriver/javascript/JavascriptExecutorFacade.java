@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.javascript;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -11,9 +12,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
@@ -65,12 +68,26 @@ public class JavascriptExecutorFacade {
     }
 
     public Object executeScript(final String script, final Object... params) {
+        Object parameters[] = extractedWebElementsAndPrimitiveTypesFrom(params);
         if (javascriptIsSupportedIn(driver) && shouldExecuteJavascript()) {
             JavascriptExecutor js = getJavascriptEnabledDriver();
-            return js.executeScript(script, params);
+            return js.executeScript(script, parameters);
         } else {
             return null;
         }
+    }
+
+    private Object[] extractedWebElementsAndPrimitiveTypesFrom(Object[] params) {
+        return Arrays.stream(params).map(
+                param -> webElementOrPrimitiveTypeOf(param)
+        ).collect(Collectors.toList()).toArray();
+    }
+
+    private Object webElementOrPrimitiveTypeOf(Object param) {
+        if (param != null && param instanceof WebElementFacade) {
+            return ((WebElementFacade) param).getElement();
+        }
+        return param;
     }
 
     public Object executeAsyncScript(final String script) {

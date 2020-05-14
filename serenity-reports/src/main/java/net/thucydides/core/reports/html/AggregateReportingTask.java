@@ -37,7 +37,6 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         Stopwatch stopwatch = Stopwatch.started();
 
         ReportNameProvider defaultNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService);
-
         Map<String, Object> context = freemarker.getBuildContext(testOutcomes, defaultNameProvider, true);
 
         context.put("report", ReportProperties.forAggregateResultsReport());
@@ -45,15 +44,11 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         generateReportPage(context, HOME_PAGE_TEMPLATE_PATH, "index.html");
         generateReportPage(context, BUILD_INFO_TEMPLATE_PATH, "build-info.html");
 
-        if (csvReportsAreActivated()) {
-            context.put("csvReport", "results.csv");
-            generateCSVReportFor(testOutcomes, "results.csv");
-        }
+        generateCSVReportFor(testOutcomes, "results.csv").ifPresent(
+                csvReport -> context.put("csvReport", "results.csv")
+        );
 
          LOGGER.debug("Aggregate reports generated in {} ms ", stopwatch.stop());
     }
 
-    private boolean csvReportsAreActivated() {
-        return SERENITY_GENERATE_CSV_REPORTS.booleanFrom(environmentVariables, true);
-    }
 }

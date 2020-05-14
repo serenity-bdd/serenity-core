@@ -173,14 +173,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this(driver, locator, null, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 
-    public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
+    public static WebElementFacade wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds) {
         return BuildWebElementFacade.from(driver, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 
-    public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
+    public static WebElementFacade wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds,
@@ -188,7 +188,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return BuildWebElementFacade.from(driver, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
-    public static <T extends WebElementFacade> T wrapWebElement(WebDriver driver,
+    public static WebElementFacade wrapWebElement(WebDriver driver,
                                                                 WebElement resolvedELement,
                                                                 WebElement element,
                                                                 By bySelector,
@@ -199,7 +199,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return BuildWebElementFacade.from(driver, resolvedELement, element, bySelector, locator, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
-    public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
+    public static WebElementFacade wrapWebElement(final WebDriver driver,
                                                                 final By bySelector,
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds,
@@ -207,7 +207,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return BuildWebElementFacade.from(driver,bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
-    public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
+    public static WebElementFacade wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeout) {
         return BuildWebElementFacade.from(driver,element, timeout);
@@ -265,7 +265,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public <T extends WebElementFacade> T findBy(String xpathOrCssSelector) {
+    public WebElementFacade findBy(String xpathOrCssSelector) {
         logIfVerbose("findBy " + xpathOrCssSelector);
         WebElement nestedElement;
         if (driverIsDisabled()) {
@@ -282,7 +282,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 "element located by " + xpathOrCssSelector);
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
+    public WebElementFacade findBy(String xpathOrCssSelector, Object... arguments) {
         return findBy(withArguments(xpathOrCssSelector, arguments));
     }
 

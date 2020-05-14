@@ -542,7 +542,7 @@ public class RenderedPageObjectView {
         return find(xpathOrCssSelector(xpathOrCssSelector));
     }
 
-    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
+    public WebElementFacade moveTo(String xpathOrCssSelector) {
         pageObject.withAction().moveToElement(pageObject.findBy(xpathOrCssSelector));
         return pageObject.findBy(xpathOrCssSelector);
     }

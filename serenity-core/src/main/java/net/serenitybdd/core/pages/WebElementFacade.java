@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @ImplementedBy(WebElementFacadeImpl.class)
-public interface WebElementFacade extends WebElement, WebElementState, Locatable, ConfigurableTimeouts, FindsByAccessibilityId, FindsByAndroidUIAutomator {
-//        extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
+public interface WebElementFacade extends WebElement, WrapsElement, WebElementState, Locatable, ConfigurableTimeouts, FindsByAccessibilityId, FindsByAndroidUIAutomator {
 
     <T extends WebElementFacade> T then(String xpathOrCssSelector);
     <T extends WebElementFacade> T thenFind(String xpathOrCssSelector);

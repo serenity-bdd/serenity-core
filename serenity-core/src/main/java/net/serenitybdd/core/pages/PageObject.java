@@ -1272,7 +1272,7 @@ public abstract class PageObject {
     public Actions withAction() {
         WebDriver proxiedDriver = (getDriver() instanceof WebDriverFacade) ?
                 ((WebDriverFacade) getDriver()).getProxiedDriver() : getDriver();
-        return new Actions(proxiedDriver);
+        return new SerenityActions(proxiedDriver);
     }
 
     public class FieldEntry {

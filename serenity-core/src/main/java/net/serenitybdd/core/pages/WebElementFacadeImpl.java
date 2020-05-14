@@ -48,8 +48,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
 /**
  * A proxy class for a web element, providing some more methods.
  */
-public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.core.pages.WebElementFacade, Locatable, WebElementState,
-                    FindsByAccessibilityId, FindsByAndroidUIAutomator, ConfigurableTimeouts {
+public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.core.pages.WebElementFacade {
 
     private final WebElement webElement;
     private final WebDriver driver;
@@ -204,13 +203,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds,
                                                                 final String foundBy) {
-        return BuildWebElementFacade.from(driver,bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
+        return BuildWebElementFacade.from(driver, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds, foundBy);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeout) {
-        return BuildWebElementFacade.from(driver,element, timeout);
+        return BuildWebElementFacade.from(driver, element, timeout);
     }
 
     private WebElementResolver getElementResolver() {
@@ -227,12 +226,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driverIsDisabled()) {
             return new WebElementFacadeStub();
         }
+        return getResolvedELement();
+    }
 
-        if (resolvedELement != null) {
-            return resolvedELement;
+    private WebElement getResolvedELement() {
+        if (resolvedELement == null) {
+            resolvedELement = getElementResolver().resolveForDriver(driver);
         }
 
-        return (resolvedELement = getElementResolver().resolveForDriver(driver));
+        return resolvedELement;
+
     }
 
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
@@ -1418,4 +1421,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return ((Locatable) getElement()).getCoordinates();
     }
 
+    @Override
+    public WebElement getWrappedElement() {
+        return getResolvedELement();
+    }
 }

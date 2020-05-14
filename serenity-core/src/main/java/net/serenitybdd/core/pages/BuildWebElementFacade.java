@@ -45,14 +45,7 @@ class BuildWebElementFacade {
                                                       final long waitForTimeoutInMilliseconds,
                                                       final String foundBy) {
 
-        return (T) new WebElementFacadeImpl(driver, null, driver.findElement(bySelector), timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
-//        WebElement resolvedElement = driver.findElement(bySelector);
-//
-//        WebElementResolver.by(bySelector);
-//
-//        return (resolvedElement instanceof WrapsElement)
-//                ? (T) new WrappedWebElementFacadeImpl(driver, null, resolvedElement, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
-//                : (T) new WebElementFacadeImpl(driver, null, driver.findElement(bySelector), timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
+        return (T) new WebElementFacadeImpl(driver, null, null, timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
     }
 
     public static <T extends WebElementFacade> T from(final WebDriver driver,

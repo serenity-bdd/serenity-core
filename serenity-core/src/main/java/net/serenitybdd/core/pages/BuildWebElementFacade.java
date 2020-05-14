@@ -7,26 +7,26 @@ import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 class BuildWebElementFacade {
-    public static WebElementFacade from(final WebDriver driver,
+    public static <T extends WebElementFacade> T from(final WebDriver driver,
                                                       final WebElement element,
                                                       final long timeoutInMilliseconds,
                                                       final long waitForTimeoutInMilliseconds) {
         return (element instanceof WrapsElement)
-                ?  new WrappedWebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy("<Undefined web element>")
-                : new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy("<Undefined web element>");
+                ? (T) new WrappedWebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy("<Undefined web element>")
+                : (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy("<Undefined web element>");
     }
 
-    public static WebElementFacade from(final WebDriver driver,
+    public static <T extends WebElementFacade> T from(final WebDriver driver,
                                                       final WebElement element,
                                                       final long timeoutInMilliseconds,
                                                       final long waitForTimeoutInMilliseconds,
                                                       final String foundBy) {
         return (element instanceof WrapsElement)
-                ? new WrappedWebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
-                : new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy);
+                ? (T) new WrappedWebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
+                : (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy);
     }
 
-    public static WebElementFacade from(WebDriver driver,
+    public static <T extends WebElementFacade> T from(WebDriver driver,
                                                       WebElement resolvedELement,
                                                       WebElement element,
                                                       By bySelector,
@@ -35,30 +35,30 @@ class BuildWebElementFacade {
                                                       long waitForTimeoutInMilliseconds,
                                                       String foundBy) {
         return (element instanceof WrapsElement)
-                ? new WrappedWebElementFacadeImpl(driver, locator, element, resolvedELement, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
-                : new WebElementFacadeImpl(driver, locator, element, resolvedELement, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy);
+                ? (T) new WrappedWebElementFacadeImpl(driver, locator, element, resolvedELement, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy)
+                : (T) new WebElementFacadeImpl(driver, locator, element, resolvedELement, bySelector, timeoutInMilliseconds, waitForTimeoutInMilliseconds).foundBy(foundBy);
     }
 
-    public static  WebElementFacade from(final WebDriver driver,
+    public static <T extends WebElementFacade> T from(final WebDriver driver,
                                                       final By bySelector,
                                                       final long timeoutInMilliseconds,
                                                       final long waitForTimeoutInMilliseconds,
                                                       final String foundBy) {
 
-        return new WebElementFacadeImpl(driver, null, null, timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
+        return (T) new WebElementFacadeImpl(driver, null, null, timeoutInMilliseconds, waitForTimeoutInMilliseconds, bySelector).foundBy(foundBy);
     }
 
-    public static WebElementFacade from(final WebDriver driver,
+    public static <T extends WebElementFacade> T from(final WebDriver driver,
                                                       final WebElement element,
                                                       final long timeout) {
         return (element instanceof WrapsElement)
-                ? new WrappedWebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString())
-                : new WebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString());
+                ? (T) new WrappedWebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString())
+                : (T) new WebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString());
     }
 
-    public static WebElementFacadeImpl from(WebDriver driver, ElementLocator locator, WebElement element, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
+    public static <T extends WebElementFacade> T from(WebDriver driver, ElementLocator locator, WebElement element, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
         return (element instanceof WrapsElement)
-                ? new WrappedWebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds)
-                : new WebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+                ? (T) new WrappedWebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds)
+                : (T) new WebElementFacadeImpl(driver, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
     }
 }

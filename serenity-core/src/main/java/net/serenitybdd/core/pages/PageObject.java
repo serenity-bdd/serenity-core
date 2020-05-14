@@ -963,7 +963,7 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(WebElement webElement) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement,
                 getImplicitWaitTimeout().toMillis(),
                 getWaitForTimeout().toMillis(),
@@ -978,23 +978,23 @@ public abstract class PageObject {
         }
     }
 
-    public WebElementFacade $(WithLocator locator) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WithLocator locator) {
         return element(locator.getLocator());
     }
 
-    public WebElementFacade $(WithByLocator locator) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WithByLocator locator) {
         return element(locator.getLocator());
     }
 
-    public WebElementFacade $(WebElement webElement) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
         return element(webElement);
     }
 
-    public WebElementFacade $(String xpathOrCssSelector, Object... arguments) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector, Object... arguments) {
         return element(xpathOrCssSelector, arguments);
     }
 
-    public WebElementFacade $(By bySelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(By bySelector) {
         return element(bySelector);
     }
 
@@ -1010,7 +1010,7 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public net.serenitybdd.core.pages.WebElementFacade element(By bySelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
                 bySelector,
                 getImplicitWaitTimeout().toMillis(),
@@ -1018,18 +1018,18 @@ public abstract class PageObject {
                 bySelector.toString());
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade find(By selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
     }
-    public net.serenitybdd.core.pages.WebElementFacade find(WithByLocator selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithByLocator selector) {
         return element(selector.getLocator());
     }
-    public net.serenitybdd.core.pages.WebElementFacade find(WithLocator selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithLocator selector) {
         return element(selector.getLocator());
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade find(List<By> selectors) {
-        WebElementFacade element = null;
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(List<By> selectors) {
+        T element = null;
         for (By selector : selectors) {
             if (element == null) {
                 element = element(selector);
@@ -1040,8 +1040,8 @@ public abstract class PageObject {
         return element;
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade findBy(List<String> selectors) {
-        WebElementFacade element = null;
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(List<String> selectors) {
+        T element = null;
         for (String selector : selectors) {
             if (element == null) {
                 element = element(selector);
@@ -1052,8 +1052,8 @@ public abstract class PageObject {
         return element;
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade findNested(By... selectors) {
-        WebElementFacade element = null;
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findNested(By... selectors) {
+        T element = null;
         for (By selector : selectors) {
             if (element == null) {
                 element = element(selector);
@@ -1064,11 +1064,11 @@ public abstract class PageObject {
         return element;
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade find(String selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(String selector) {
         return findBy(NewList.of(selector));
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade findNested(String... selectors) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findNested(String... selectors) {
         return findBy(NewList.of(selectors));
     }
 
@@ -1160,11 +1160,11 @@ public abstract class PageObject {
         /**
          * Provides a fluent API for querying web elements.
          */
-    public net.serenitybdd.core.pages.WebElementFacade element(String xpathOrCssSelector, Object... arguments) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector, Object... arguments) {
         return element(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade findBy(String xpathOrCssSelector, Object... arguments) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
         return element(withArguments(xpathOrCssSelector,arguments));
     }
 
@@ -1308,14 +1308,14 @@ public abstract class PageObject {
         return new ThucydidesFluentAdapter(getDriver());
     }
 
-    public WebElementFacade moveTo(String xpathOrCssSelector, Object... arguments) {
+    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector, Object... arguments) {
         if (!driverIsDisabled()) {
             withAction().moveToElement(findBy(xpathOrCssSelector, arguments)).perform();
         }
         return findBy(xpathOrCssSelector, arguments);
     }
 
-    public WebElementFacade moveTo(By locator) {
+    public <T extends WebElementFacade> T moveTo(By locator) {
         if (!driverIsDisabled()) {
             withAction().moveToElement(find(locator)).perform();
         }

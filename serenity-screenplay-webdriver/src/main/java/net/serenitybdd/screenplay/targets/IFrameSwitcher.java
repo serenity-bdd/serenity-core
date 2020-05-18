@@ -25,9 +25,7 @@ class IFrameSwitcher {
         return iFrameSwitcher;
     }
 
-
-    private IFrameSwitcher() {
-    }
+    private IFrameSwitcher() {}
 
     void switchToIFrame(WebDriver driver, final Target target) {
         if (!currentIFrames.containsKey(driver)) {

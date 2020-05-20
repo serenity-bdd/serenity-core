@@ -1,24 +1,34 @@
 package net.serenitybdd.rest.decorators.request;
 
 import io.restassured.authentication.AuthenticationScheme;
-import io.restassured.filter.*;
-import io.restassured.http.Method;
-import io.restassured.internal.*;
-import io.restassured.response.*;
-import io.restassured.specification.*;
-import net.serenitybdd.core.*;
-import net.serenitybdd.core.rest.*;
-import net.serenitybdd.rest.stubs.*;
-import net.serenitybdd.rest.utils.*;
+import io.restassured.filter.Filter;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.ProxySpecification;
+import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.rest.RestMethod;
+import net.serenitybdd.rest.stubs.ResponseStub;
+import net.serenitybdd.rest.utils.RestExecutionHelper;
 import org.apache.http.client.HttpClient;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.*;
-import java.util.*;
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
-import static net.serenitybdd.core.rest.RestMethod.*;
-import static net.thucydides.core.steps.StepEventBus.*;
-import static org.apache.http.util.Args.*;
+import static net.serenitybdd.core.rest.RestMethod.DELETE;
+import static net.serenitybdd.core.rest.RestMethod.GET;
+import static net.serenitybdd.core.rest.RestMethod.HEAD;
+import static net.serenitybdd.core.rest.RestMethod.OPTIONS;
+import static net.serenitybdd.core.rest.RestMethod.PATCH;
+import static net.serenitybdd.core.rest.RestMethod.POST;
+import static net.serenitybdd.core.rest.RestMethod.PUT;
+import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static org.apache.http.util.Args.notNull;
 
 /**
  * User: YamStranger
@@ -324,8 +334,9 @@ public abstract class RequestSpecificationDecorated
      */
     @Override
     public RequestSpecification filter(Filter filter){
-        return RestDecorationHelper.decorate(core.filter(filter));
-    };
+        core.filter(filter);
+        return this;
+    }
 
     @Override
     public List<Filter> getDefinedFilters() {

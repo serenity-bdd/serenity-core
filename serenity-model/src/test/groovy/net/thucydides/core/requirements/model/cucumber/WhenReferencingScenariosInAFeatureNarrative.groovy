@@ -9,6 +9,8 @@ import io.cucumber.core.internal.gherkin.stream.GherkinEvents
 import io.cucumber.core.internal.gherkin.stream.SourceEvents
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def featureFile = "src/test/resources/serenity-cucumber/features/maintain_my_todo_list/filtering_todos.feature"
@@ -148,6 +150,19 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
             def narrative = parser.loadFeatureNarrative(new File(featureFile))
         then:
             narrative.isPresent()
+    }
+
+    def "should render narratives with scenarios and examples tags"() {
+        def expectedTag = ["tag:Manual", "tag:Example1", "Type:A"]
+
+        given:
+            CucumberParser parser = new CucumberParser()
+        when:
+            def narrative = parser.loadFeatureNarrative(new File(featureFile))
+        then:
+            def actualTags = narrative.get().tags.stream()
+                    .map({ t -> t.toString() }).collect(Collectors.toList())
+            assert expectedTag.every {actualTags.contains(it)}
     }
 
 }

@@ -75,7 +75,7 @@ public class CucumberParser {
                 return Optional.empty();
             }
             GherkinDocument gherkinDocument = gherkinDocuments.get(0);
-
+            
             String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getComments());
 
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
@@ -177,9 +177,6 @@ public class CucumberParser {
                     }
                 }
         );
-
-        // Include Scenarios And Examples Tags To Features Tags Set
-        requirementTags.addAll(scenarioTags.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
 
         // Scenario Names
         List<String> scenarios = feature.getChildren().stream().map(ScenarioDefinition::getName).collect(Collectors.toList());

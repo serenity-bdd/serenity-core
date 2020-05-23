@@ -25,12 +25,12 @@ Feature: Filtering things I need to do
     And she has completed the task called 'Walk the dog'
     When she filters her list to show only <filter> tasks
     Then her todo list should contain <expected>
-    @Example1
+
     Examples: Do some things
       | tasks                       | filter    | expected      |
       | Buy some milk, Walk the dog | Completed | Walk the dog  |
       | Buy some milk, Walk the dog | Active    | Buy some milk |
-    @Type:A
+
     Examples: Do some other things
       | tasks                       | filter    | expected      |
       | Buy some milk, Walk the dog | Completed | Walk the dog  |

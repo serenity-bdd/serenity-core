@@ -858,8 +858,8 @@
                                                             width="30%"
                                                             valign="middle"
                                                             align="center"
-                                                            style="background-color: #52B255;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.SUCCESS} + '%', style=${results.countByResult.SUCCESS == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.SUCCESS} + '%', style=${results.countByResult.SUCCESS == 0  ? 'padding:0px;' : 'background-color: #52B255;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Passing tests"
                                                                       th:attr="title=${results.countByResult.SUCCESS} + ' passing tests'"
                                                                       data-th-text="${results.percentageByResult.SUCCESS} + '%'"
@@ -867,16 +867,16 @@
                                                         </td>
                                                         <td class="pending-background summary summary-bar-cell"
                                                             width=20% valign="middle" align="center"
-                                                            style="background-color: #5FB0E0;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.PENDING} + '%', style=${results.countByResult.PENDING == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.PENDING} + '%', style=${results.countByResult.PENDING == 0  ? 'padding:0px;' : 'background-color: #5FB0E0;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Pending tests"
                                                                       th:attr="title=${results.countByResult.PENDING} + ' pending tests'"
                                                                       data-th-text="${results.percentageByResult.PENDING} + '%'"
                                                                       th:unless="${results.countByResult.PENDING == 0}">20%</span>
                                                         </td>
                                                         <td class="ignored-background summary summary-bar-cell" width=5%
-                                                            valign="middle" align="center" style="background-color: #C9C9C9;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.IGNORED} + '%', style=${results.countByResult.IGNORED == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            valign="middle" align="center" style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.IGNORED} + '%', style=${results.countByResult.IGNORED == 0  ? 'padding:0px;' : 'background-color: #C9C9C9;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Ignored tests"
                                                                       th:attr="title=${results.countByResult.IGNORED} + ' ignored tests'"
                                                                       data-th-text="${results.percentageByResult.IGNORED} + '%'"
@@ -884,16 +884,16 @@
                                                         </td>
                                                         <td class="failure-background summary summary-bar-cell"
                                                             width=10% valign="middle" align="center"
-                                                            style="background-color: #f44336;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.FAILURE} + '%', style=${results.countByResult.FAILURE == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.FAILURE} + '%', style=${results.countByResult.FAILURE == 0  ? 'padding:0px;' : 'background-color: #f44336;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Failing tests"
                                                                       th:attr="title=${results.countByResult.FAILURE} + ' failing tests'"
                                                                       data-th-text="${results.percentageByResult.FAILURE} + '%'"
                                                                       th:unless="${results.countByResult.FAILURE == 0}">10%</span>
                                                         </td>
                                                         <td class="error-background summary summary-bar-cell" width=15%
-                                                            valign="middle" align="center" style="background-color: #ECA43A;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.ERROR} + '%', style=${results.countByResult.ERROR == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            valign="middle" align="center" style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.ERROR} + '%', style=${results.countByResult.ERROR == 0  ? 'padding:0px;' : 'background-color: #ECA43A;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Broken tests"
                                                                       th:attr="title=${results.countByResult.ERROR} + ' brokem tests'"
                                                                       data-th-text="${results.percentageByResult.ERROR} + '%'"
@@ -901,8 +901,8 @@
                                                         </td>
                                                         <td class="compromised-background summary summary-bar-cell"
                                                             width=20% valign="middle" align="center"
-                                                            style="background-color: #9C77AD;color: white;padding:8px;white-space: nowrap;"
-                                                            th:attr="width=${results.percentageByResult.COMPROMISED} + '%', style=${results.countByResult.COMPROMISED == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            style="padding:8px;"
+                                                            th:attr="width=${results.percentageByResult.COMPROMISED} + '%', style=${results.countByResult.COMPROMISED == 0  ? 'padding:0px;' : 'background-color: #9C77AD;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Compromised tests"
                                                                       th:attr="title=${results.countByResult.COMPROMISED} + ' compromised tests'"
                                                                       data-th-text="${results.percentageByResult.COMPROMISED} + '%'"

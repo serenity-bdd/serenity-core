@@ -1,23 +1,44 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.collect.*;
-import net.serenitybdd.core.di.*;
-import net.serenitybdd.core.exceptions.*;
-import net.serenitybdd.core.injectors.*;
-import net.sf.cglib.proxy.*;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.pages.*;
-import net.thucydides.core.steps.construction.*;
-import net.thucydides.core.steps.di.*;
-import org.apache.commons.lang3.*;
-import org.slf4j.*;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.TypeCache;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassInjector;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.bytecode.assign.Assigner;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewSet;
+import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.exceptions.StepInitialisationException;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
+import net.thucydides.core.annotations.Fields;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.construction.ConstructionStrategy;
+import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
+import net.thucydides.core.steps.construction.StepLibraryType;
+import net.thucydides.core.steps.di.DependencyInjectorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 
-import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
-import static net.thucydides.core.steps.construction.StepLibraryType.*;
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
+import static net.bytebuddy.matcher.ElementMatchers.not;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.CONSTRUCTOR_WITH_PARAMETERS;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.INNER_CLASS_CONSTRUCTOR;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_PAGES;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_WEBDRIVER;
+import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**
  * Produces an instance of a set of requirement steps for use in the acceptance tests.
@@ -34,6 +55,11 @@ public class StepFactory {
     private final DependencyInjectorService dependencyInjectorService;
 
     private static ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial(() -> new StepFactory());
+    private Method privateLookupIn;
+    private Object lookup;
+
+    private final ByteBuddy byteBuddy;
+    private TypeCache<TypeCache.SimpleKey> proxyCache;
 
     /**
      * Create a new step factory.
@@ -41,8 +67,22 @@ public class StepFactory {
      * are created.
      */
     public StepFactory(final Pages pages) {
+        this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED );
         this.pages = pages;
         this.dependencyInjectorService = Injectors.getInjector().getInstance(DependencyInjectorService.class);
+        this.proxyCache = new TypeCache.WithInlineExpunction<TypeCache.SimpleKey>( TypeCache.Sort.WEAK );
+        try {
+            if (ClassInjector.UsingLookup.isAvailable()) {
+                Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
+                lookup = methodHandles.getMethod("lookup").invoke(null);
+                privateLookupIn = methodHandles.getMethod("privateLookupIn",
+                        Class.class,
+                        Class.forName("java.lang.invoke.MethodHandles$Lookup"));
+            }
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            LOGGER.error("Cannot get privateLookupIn method ClassInjector using lookup", e);
+            throw new IllegalStateException("No code generation strategy available");
+        }
     }
 
     /**
@@ -143,7 +183,7 @@ public class StepFactory {
      * Create a new instance of a class containing test steps using custom interceptors.
      */
     public <T> T instantiateNewStepLibraryFor(Class<T> scenarioStepsClass,
-                                              MethodInterceptor interceptor,
+                                              Interceptor interceptor,
                                               boolean useCache) {
         T steps = createProxyStepLibrary(scenarioStepsClass, interceptor);
 
@@ -187,29 +227,72 @@ public class StepFactory {
 
     @SuppressWarnings("unchecked")
     private <T> T createProxyStepLibrary(Class<T> scenarioStepsClass,
-                                         MethodInterceptor interceptor,
+                                         Interceptor interceptor,
                                          Object... parameters) {
-        Enhancer e = new Enhancer();
-        e.setSuperclass(scenarioStepsClass);
-        e.setCallback(interceptor);
+        final TypeCache.SimpleKey cacheKey = getCacheKey( scenarioStepsClass, interceptor.getClass() );
 
-        final ConstructionStrategy strategy = StepLibraryConstructionStrategy.forClass(scenarioStepsClass)
-                .getStrategy();
-        if (STEP_LIBRARY_WITH_WEBDRIVER.equals(strategy)) {
-            return webEnabledStepLibrary(scenarioStepsClass, e);
-        } else if (STEP_LIBRARY_WITH_PAGES.equals(strategy)) {
-            return stepLibraryWithPages(scenarioStepsClass, e);
-        } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
-            return immutableStepLibrary(scenarioStepsClass, e, parameters);
-        } else if (INNER_CLASS_CONSTRUCTOR.equals(strategy)) {
-            return immutableStepLibrary(scenarioStepsClass, e, EnclosingClass.of(scenarioStepsClass).asParameters());
-        } else {
-            return (T) e.create();
+        Class proxyClass = load(scenarioStepsClass,proxyCache,cacheKey,byteBuddy->byteBuddy.subclass(scenarioStepsClass)
+                .defineField( ProxyConfiguration.INTERCEPTOR_FIELD_NAME, Interceptor.class, Visibility.PRIVATE )
+                .method(not(isDeclaredBy(Object.class)))
+                .intercept( MethodDelegation.to( ProxyConfiguration.InterceptorDispatcher.class ))
+                .implement( ProxyConfiguration.class )
+                .intercept( FieldAccessor.ofField( ProxyConfiguration.INTERCEPTOR_FIELD_NAME ).withAssigner( Assigner.DEFAULT, Assigner.Typing.DYNAMIC )));
+
+        try {
+            final ConstructionStrategy strategy = StepLibraryConstructionStrategy.forClass(scenarioStepsClass)
+                    .getStrategy();
+            if (STEP_LIBRARY_WITH_WEBDRIVER.equals(strategy)) {
+                return webEnabledStepLibrary(scenarioStepsClass, proxyClass,interceptor);
+            } else if (STEP_LIBRARY_WITH_PAGES.equals(strategy)) {
+                return stepLibraryWithPages(scenarioStepsClass, proxyClass,interceptor);
+            } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
+                return immutableStepLibrary(scenarioStepsClass, proxyClass, parameters,interceptor);
+            } else if (INNER_CLASS_CONSTRUCTOR.equals(strategy)) {
+                return immutableStepLibrary(scenarioStepsClass, proxyClass, EnclosingClass.of(scenarioStepsClass).asParameters(),interceptor);
+            } else {
+                final ProxyConfiguration proxy = (ProxyConfiguration)proxyClass.getDeclaredConstructor().newInstance();
+                proxy.$$_serenity_set_interceptor(interceptor);
+                return (T) proxy;
+            }
+        } catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException|InstantiationException ex) {
+            LOGGER.error("Cannot create StepFactory for  " + scenarioStepsClass , ex);
+            return null;
         }
     }
 
-    private <T> T immutableStepLibrary(Class<T> scenarioStepsClass, Enhancer e, Object[] parameters) {
-        return (T) e.create(argumentTypesFrom(scenarioStepsClass, parameters), parameters);
+    private Class<?> load(Class<?> referenceClass, TypeCache<TypeCache.SimpleKey> cache,
+                          TypeCache.SimpleKey cacheKey, Function<ByteBuddy, DynamicType.Builder<?>> makeProxyFunction) {
+        return cache.findOrInsert(
+                referenceClass.getClassLoader(),
+                cacheKey,
+                () -> makeProxyFunction.apply(byteBuddy).make()
+                        .load(referenceClass.getClassLoader(), getClassLoadingStrategy(referenceClass))
+                        .getLoaded(),
+                cache );
+    }
+
+    private ClassLoadingStrategy getClassLoadingStrategy(Class targetClass) {
+        ClassLoadingStrategy<ClassLoader> strategy;
+        try {
+            if (ClassInjector.UsingLookup.isAvailable()) {
+                Object privateLookup = privateLookupIn.invoke(null, targetClass, lookup);
+                strategy = ClassLoadingStrategy.UsingLookup.of(privateLookup);
+            } else if (ClassInjector.UsingReflection.isAvailable()) {
+                strategy = ClassLoadingStrategy.Default.INJECTION;
+            } else {
+                throw new IllegalStateException("No code generation strategy available");
+            }
+            return strategy;
+        } catch (InvocationTargetException | IllegalAccessException  e) {
+            LOGGER.error("Cannot get ClassLoadingStrategy  for target class " +  targetClass , e);
+            throw new IllegalStateException("No code generation strategy available");
+        }
+    }
+
+    private <T> T immutableStepLibrary(Class<T> scenarioStepsClass, Class proxyClass, Object[] parameters,Interceptor interceptor) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        final ProxyConfiguration proxy = (ProxyConfiguration)proxyClass.getDeclaredConstructor(argumentTypesFrom(scenarioStepsClass,parameters)).newInstance(parameters);
+        proxy.$$_serenity_set_interceptor(interceptor);
+        return (T) proxy;
     }
 
     private Class<?>[] argumentTypesFrom(Class<?> scenarioStepsClass, Object[] parameters) {
@@ -257,20 +340,24 @@ public class StepFactory {
         return new ParameterAssignementChecker(parameter);
     }
 
-    private <T> T webEnabledStepLibrary(final Class<T> scenarioStepsClass, final Enhancer e) {
+    private <T> T webEnabledStepLibrary(final Class<T> scenarioStepsClass, final Class proxyClass,Interceptor interceptor)throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         if (StepLibraryType.ofClass(scenarioStepsClass).hasAPagesConstructor()) {
             Object[] arguments = new Object[1];
             arguments[0] = pages;
-            return (T) e.create(CONSTRUCTOR_ARG_TYPES, arguments);
+            final ProxyConfiguration proxy = (ProxyConfiguration)proxyClass.getDeclaredConstructor(CONSTRUCTOR_ARG_TYPES).newInstance(arguments);
+            proxy.$$_serenity_set_interceptor(interceptor);
+            return (T) proxy;
         } else {
-            T newStepLibrary = (T) e.create();
-            return injectPagesInto(scenarioStepsClass, newStepLibrary);
+            final ProxyConfiguration newStepLibrary = (ProxyConfiguration)proxyClass.newInstance();
+            newStepLibrary.$$_serenity_set_interceptor(interceptor);
+            return injectPagesInto(scenarioStepsClass, (T)newStepLibrary);
         }
     }
 
-    private <T> T stepLibraryWithPages(final Class<T> scenarioStepsClass, final Enhancer e) {
-        T newStepLibrary = (T) e.create();
-        return injectPagesInto(scenarioStepsClass, newStepLibrary);
+    private <T> T stepLibraryWithPages(final Class<T> scenarioStepsClass, final Class proxyClass, final Interceptor interceptor) throws IllegalAccessException, InstantiationException {
+        final ProxyConfiguration newStepLibrary = (ProxyConfiguration)(T) proxyClass.newInstance();;
+        newStepLibrary.$$_serenity_set_interceptor(interceptor);
+        return injectPagesInto(scenarioStepsClass, (T)newStepLibrary);
     }
 
     public void usePageFactory(Pages pages) {
@@ -392,5 +479,14 @@ public class StepFactory {
         return (fieldType.equals(Byte.class) || fieldType.equals(byte.class));
     }
 
-
+    private TypeCache.SimpleKey getCacheKey(Class<?> scenarioStepsClass, Class<?> interceptorClass) {
+        Set<Class<?>> key = new HashSet<Class<?>>();
+        if ( scenarioStepsClass != null ) {
+            key.add( scenarioStepsClass );
+        }
+        if ( interceptorClass != null ) {
+            key.add ( interceptorClass );
+        }
+        return new TypeCache.SimpleKey( key );
+    }
 }

@@ -53,7 +53,7 @@ public class WebElementResolverByElementLocator extends WebElementResolver {
     }
 
     private long getLocatorTimeout() {
-        if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed() || (MethodTiming.forThisThread().isInQuickMethod())) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() || (MethodTiming.forThisThread().isInQuickMethod())) {
             return 0;
         } else {
             return TimeUnit.SECONDS.convert(implicitTimeoutInMilliseconds, TimeUnit.MILLISECONDS);

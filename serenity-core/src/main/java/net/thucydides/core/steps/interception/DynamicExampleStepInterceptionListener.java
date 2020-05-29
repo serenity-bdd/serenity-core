@@ -1,7 +1,6 @@
 package net.thucydides.core.steps.interception;
 
 import com.google.common.base.Preconditions;
-import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.steps.ExampleTables;
 import net.thucydides.core.steps.StepEventBus;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 public class DynamicExampleStepInterceptionListener implements StepInterceptionListener {
     @Override
-    public void start(Object obj, Method method, Object[] args, MethodProxy proxy) {
+    public void start(Object obj, Method method, Object[] args, Method zuperMethod) {
         if (ExampleTables.isUsingAnExampleTable() && TestAnnotations.isAnExampleStep(method)) {
 
             List<String> headers = ExampleTables.getCurrentExampleTable().getHeaders();
@@ -37,7 +36,7 @@ public class DynamicExampleStepInterceptionListener implements StepInterceptionL
     }
 
     @Override
-    public void end(Object obj, Method method, Object[] args, MethodProxy proxy) {
+    public void end(Object obj, Method method, Object[] args, Method zuperMethod) {
         if (ExampleTables.isUsingAnExampleTable() && TestAnnotations.isAnExampleStep(method)) {
             StepEventBus.getEventBus().exampleFinished();
         }

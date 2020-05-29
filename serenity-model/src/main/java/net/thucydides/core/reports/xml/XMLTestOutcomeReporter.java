@@ -120,10 +120,10 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
             xstream.registerConverter(usingXmlConverter());
             return Optional.of((TestOutcome) xstream.fromXML(reader));
         } catch (CannotResolveClassException e) {
-            LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
+            LOGGER.debug("Failed to resolve a serialised class during report generation: " + reportFile, e);
             return Optional.empty();
         } catch (FileNotFoundException e) {
-            LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
+            LOGGER.debug("Could not find expected file during report generation: " + reportFile);
             return Optional.empty();
         } catch (IOException e) {
             LOGGER.warn("Could not load a report for some reason" + e.getMessage());

@@ -28,8 +28,6 @@ public class TimeoutConfiguration {
                     .getOptionalProperty(configurationProperty)
                     .orElse(null);
 
-
-//            String timeout = environmentVariables.getProperty(configurationProperty);
             if (isEmpty(timeout)) {
                 return defaultTimeout;
             }

@@ -1,7 +1,7 @@
 package net.thucydides.core.model.failures;
 
 import com.google.common.base.Splitter;
-import cucumber.api.PendingException;
+import io.cucumber.java.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.SkipStepException;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;
@@ -38,7 +38,7 @@ public class FailureAnalysisConfiguration {
 
     private final List<Class<?>> DEFAULT_SKIPPED_TYPES = new ArrayList<>();
     {
-        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(SkipStepException.class));
+        DEFAULT_SKIPPED_TYPES.addAll(Arrays.asList(SkipStepException.class));
     }
 
     private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();
@@ -90,15 +90,15 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> skippedTypes() {
-        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
-        pendingTypes.addAll(skippedTypesDefinedIn(environmentVariables));
+        List<Class<?>> skippedTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
+        skippedTypes.addAll(skippedTypesDefinedIn(environmentVariables));
 
-        pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
-        pendingTypes.removeAll(failureTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(errorTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        skippedTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
-        return pendingTypes;
+        return skippedTypes;
     }
 
     public List<Class<?>> errorTypes() {

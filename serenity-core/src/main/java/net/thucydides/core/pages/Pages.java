@@ -1,5 +1,6 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
@@ -69,7 +70,7 @@ public class Pages implements Serializable {
     }
 
     public WebDriver getDriver() {
-        return driver;
+        return (driver != null) ? driver : Serenity.getWebdriverManager().getWebdriver();
     }
 
     protected WebdriverProxyFactory getProxyFactory() {
@@ -135,7 +136,7 @@ public class Pages implements Serializable {
 
     private void openHeadlessDriverIfNotOpen() {
         if (browserIsHeadless()) {
-            driver.get("about:blank");
+            getDriver().get("about:blank");
         }
     }
 
@@ -234,12 +235,12 @@ public class Pages implements Serializable {
                 Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(constructorArgs);
                 constructor.setAccessible(true);
                 newPage = (T) constructor.newInstance();
-                newPage.setDriver(driver);
+                newPage.setDriver(getDriver());
             } else if (hasOuterClassConstructor(pageObjectClass)) {
                 Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(new Class[] {pageObjectClass.getEnclosingClass()});
                 constructor.setAccessible(true);
                 newPage = (T) constructor.newInstance(EnclosingClass.of(pageObjectClass).newInstance());
-                newPage.setDriver(driver);
+                newPage.setDriver(getDriver());
             }
 
         } catch (NoSuchMethodException e) {
@@ -265,7 +266,7 @@ public class Pages implements Serializable {
         Class[] constructorArgs = new Class[1];
         constructorArgs[0] = WebDriver.class;
         Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(constructorArgs);
-        return (T) constructor.newInstance(driver);
+        return (T) constructor.newInstance(getDriver());
     }
 
     private boolean hasPageFactoryProperty(Object pageObject) {

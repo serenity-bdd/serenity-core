@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 
 public class StackTraceAnalyser {
@@ -27,12 +31,16 @@ public class StackTraceAnalyser {
         try {
             if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName())) {
                 Class callingClass = Class.forName(stackTraceElement.getClassName());
+
+                if (stackTraceElement.getClassName().contains("$")) {
+                    callingClass = callingClass.getSuperclass();
+                }
                 return extractMethod(stackTraceElement, callingClass);
             }
         } catch (ClassNotFoundException classNotFoundIgnored) {
-            logger.debug("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
+            logger.trace("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
         } catch (NoClassDefFoundError noClassDefFoundErrorIgnored) {
-            logger.debug("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
+            logger.trace("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
         }
         return null;
     }
@@ -65,7 +73,7 @@ public class StackTraceAnalyser {
         }
         try {
             Method methodFound = targetClass.getMethod(stackTraceElement.getMethodName());
-            if (methodFound == null ){
+            if (methodFound == null) {
                 methodFound = targetClass.getDeclaredMethod(stackTraceElement.getMethodName());
             }
             return methodFound;
@@ -78,17 +86,24 @@ public class StackTraceAnalyser {
         return StringUtils.isNotEmpty(stackTraceElement.getFileName()) && (stackTraceElement.getFileName().equals("<generated>"));
     }
 
-    private final static List<String> HIDDEN_PACKAGES = NewList.of("sun.","java","org.gradle");
+    private final static List<String> HIDDEN_PACKAGES = NewList.of("sun.", "java", "org.gradle");
+
     private boolean allowedClassName(String className) {
-        if (className.contains("$")) { return false; }
-        if (inHiddenPackage(className)) { return false; }
+        if (className.contains("$$")) {
+            return false;
+        }
+        if (inHiddenPackage(className)) {
+            return false;
+        }
 
         return true;
     }
 
     private boolean inHiddenPackage(String className) {
-        for(String hiddenPackage : HIDDEN_PACKAGES) {
-            if (className.startsWith(hiddenPackage)) { return true; }
+        for (String hiddenPackage : HIDDEN_PACKAGES) {
+            if (className.startsWith(hiddenPackage)) {
+                return true;
+            }
         }
         return false;
     }
@@ -104,4 +119,37 @@ public class StackTraceAnalyser {
         return methods;
     }
 
+    public static List<Method> performAsMethodsIn(StackTraceElement[] stackTrace) {
+        return stream(stackTrace)
+                .filter(stackTraceElement -> stackTraceElement.getMethodName().equals("performAs"))
+                .map(StackTraceElement::getClassName)
+                .map(StackTraceAnalyser::uninstrumentedTaskClass)
+                .filter(Optional::isPresent)
+                .map(StackTraceAnalyser::performAsMethod)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    private static Optional<Method> performAsMethod(Optional<Class<?>> taskClass) {
+        return stream(taskClass.get().getMethods())
+                .filter(method -> method.getName().equals("performAs"))
+                .findFirst();
+    }
+
+    private static Optional<Class<?>> uninstrumentedTaskClass(String taskClassName) {
+        try {
+            Class<?> performingClass = Thread.currentThread().getContextClassLoader().loadClass(taskClassName);
+            while (isInstrumented(performingClass)) {
+                performingClass = performingClass.getSuperclass();
+            }
+            return Optional.of(performingClass);
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
+        }
+    }
+
+    private static boolean isInstrumented(Class<?> performingClass) {
+        return performingClass.getName().contains("$");
+    }
 }

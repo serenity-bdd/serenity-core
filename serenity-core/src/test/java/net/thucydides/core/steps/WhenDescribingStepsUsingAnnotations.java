@@ -66,6 +66,28 @@ public class WhenDescribingStepsUsingAnnotations {
         @Step("a step about a person called {0}, aged {1}")
         public void a_customized_step_with_two_parameters(String name, int age) {}
 
+        @Step("a step with complex parameter '{0.email}'")
+        public void a_customized_step_with_complex_parameter_property(User user){}
+
+        @Step("a step with complex parameter '{0.getEmail()}'")
+        public void a_customized_step_with_complex_parameter_method(User user){}
+
+        @Step("a step with complex parameter '{0.id}'")
+        public void a_customized_step_with_complex_parameter_invalid_property(User user){}
+
+        @Step("a step with complex parameter '{0.getId()}'")
+        public void a_customized_step_with_complex_parameter_invalid_method(User user){}
+
+        @Step("a step with complex parameter '{1.getId()}' and '{0.email}'")
+        public void a_customized_step_with_several_complex_parameters(User user, DbUser dbUser){}
+
+        @Step("a step with several usage of param: email - '{0.email}', nickname - '{0.nickname}', id - '{0.id}'")
+        public void a_customized_step_with_several_refs_to_same_complex_parameter(DbUser dbUser){}
+
+        @Step("a step with ref to nested object: email - '{0.email}', city - '{0.address.city}'")
+        public void a_customized_step_with_references_to_nested_object_as_parameter(User user){}
+
+
         @TestsRequirement("REQ-1")
         @Step
         public void a_step_testing_a_requirement() {}
@@ -76,7 +98,60 @@ public class WhenDescribingStepsUsingAnnotations {
 
         @Given("A step with a given annotation")
         public void a_given_annotated_step() {}
+    }
 
+    static class User {
+        private String email;
+        private String nickname;
+        private Address address;
+
+        public User(String email) {
+            this.email = email;
+        }
+
+        public User(String email, String nickname) {
+            this(email);
+            this.nickname = nickname;
+        }
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+        }
+
+        public void setAddress(Address address) {
+            this.address = address;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String toString() {
+            return "User: email - " + email + ", nickname - " + nickname;
+        }
+    }
+
+    static class DbUser extends User {
+        private int id;
+
+        public DbUser(int id, String email) {
+            super(email);
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
+
+    static class Address {
+        private String city;
+        private String address1;
+
+        public Address(String city, String address1) {
+            this.city = city;
+            this.address1 = address1;
+        }
     }
 
     @Test
@@ -319,5 +394,102 @@ public class WhenDescribingStepsUsingAnnotations {
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
         assertThat(annotatedStepDescription.getName(), is("a step with no class"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_property_of_object_parameter() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_complex_parameter_property",
+                new Object[] {new User("user@example.com")});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with complex parameter 'user@example.com'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_method_of_object_parameter() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_complex_parameter_method",
+                new Object[] {new User("user@example.com")});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with complex parameter 'user@example.com'"));
+    }
+
+    @Test
+    public void should_use_null_if_property_of_object_parameter_is_null() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_complex_parameter_property",
+                new Object[] {new User(null)});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with complex parameter 'null'"));
+    }
+
+    @Test
+    public void should_fall_back_to_default_toString_if_property_of_object_parameter_doesnt_exist() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_complex_parameter_invalid_property",
+                new Object[] {new User("user@example.com")});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(),
+                is("a step with complex parameter 'User: email - user@example.com, nickname - null'"));
+    }
+
+    @Test
+    public void should_fall_back_to_default_toString_if_method_of_object_parameter_doesnt_exist() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_complex_parameter_invalid_method",
+                new Object[] {new User("user@example.com")});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(),
+                is("a step with complex parameter 'User: email - user@example.com, nickname - null'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_several_object_parameters() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_several_complex_parameters",
+                new Object[] {new User("user@example.com"), new DbUser(1, "id@example.com")});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with complex parameter '1' and 'user@example.com'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_several_references_to_same_object_parameter() {
+        DbUser dbUser = new DbUser(1, "user@example.com");
+        dbUser.setNickname("Sunny");
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_several_refs_to_same_complex_parameter",
+                new Object[] {dbUser});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(),
+                is("a step with several usage of param: email - 'user@example.com', nickname - 'Sunny', id - '1'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_references_to_nested_object() {
+        User user = new User("user@example.com");
+        Address address = new Address("New York", "5th Avenue");
+        user.setAddress(address);
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_references_to_nested_object_as_parameter",
+                new Object[] {user});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(),
+                is("a step with ref to nested object: email - 'user@example.com', city - 'New York'"));
     }
 }

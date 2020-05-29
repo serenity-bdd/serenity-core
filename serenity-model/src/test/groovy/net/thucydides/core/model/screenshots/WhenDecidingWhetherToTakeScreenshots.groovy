@@ -1,5 +1,6 @@
 package net.thucydides.core.model.screenshots
 
+import io.cucumber.java.StepDefinitionAnnotation
 import net.thucydides.core.annotations.Screenshots
 import net.thucydides.core.model.TakeScreenshots
 import net.thucydides.core.util.EnvironmentVariables
@@ -15,6 +16,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
 
     def setup() {
         configuration.screenshotLevel >> Optional.empty()
+        StepDefinitionAnnotations.clear()
     }
 
     @Unroll

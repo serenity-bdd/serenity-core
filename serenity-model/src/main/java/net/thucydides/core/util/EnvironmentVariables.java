@@ -68,4 +68,8 @@ public interface EnvironmentVariables {
     boolean aValueIsDefinedFor(String property);
 
     String injectSystemPropertiesInto(String value);
+
+    Map<String, String> asMap();
+
+    Map<String,String> simpleSystemPropertiesAsMap();
 }

@@ -1,44 +1,35 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.ResultChecker;
-import net.thucydides.core.reports.TestOutcomesError;
-import net.thucydides.core.reports.TestOutcomesFailures;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.ReportProperties;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import org.hamcrest.Matcher;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.thucydides.core.matchers.FileMatchers.exists;
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 public class WhenGeneratingAnAggregateHtmlReportSet {
 
     private static File outputDirectory;
-
-    static WebDriver driver;
 
     private static EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
@@ -46,24 +37,17 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     public static void generateReports() throws IOException {
         IssueTracking issueTracking = mock(IssueTracking.class);
         environmentVariables.setProperty("output.formats", "xml");
+        environmentVariables.setProperty("report.customfields.env", "testenv");
         HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking, environmentVariables);
         outputDirectory = newTemporaryDirectory();
         reporter.setOutputDirectory(outputDirectory);
 
         File sourceDirectory = directoryInClasspathCalled("/test-outcomes/containing-nostep-errors");
         reporter.generateReportsForTestResultsFrom(sourceDirectory);
-
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver(chromeOptions);
     }
 
     @AfterClass
     public static void deleteReportDirectory() {
-        if (driver != null) {
-            driver.close();
-            driver.quit();
-        }
         outputDirectory.delete();
     }
 
@@ -101,17 +85,24 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         String expectedPendingReport = reportName.forTestResult("pending");
 
         File report = new File(outputDirectory, "index.html");
-        driver.get(urlFor(report));
 
-        driver.findElement(By.cssSelector("a[href='" + expectedSuccessReport + "']"));
-        driver.findElement(By.cssSelector("a[href='" + expectedPendingReport + "']"));
+        Document reportHomePage = Jsoup.parse(report, "UTF-8");
+
+        Elements successReports = reportHomePage.select("a[href='" + expectedSuccessReport + "']");
+        Elements pendingReports = reportHomePage.select("a[href='" + expectedPendingReport + "']");
+
+        assertThat(successReports.size(), equalTo(1));
+        assertThat(pendingReports.size(), equalTo(1));
     }
 
     @Test
     public void should_display_the_date_and_time_of_tests_on_the_home_page() throws Exception {
+
         File report = new File(outputDirectory, "index.html");
-        driver.get(urlFor(report));
-        assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
+        Document reportHomePage = Jsoup.parse(report, "UTF-8");
+
+        Elements dateAndTime = reportHomePage.select(".date-and-time");
+        assertThat(dateAndTime.size(), is(1));
     }
 
     @Test
@@ -120,18 +111,23 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         String expectedSuccessReport = reportName.forTestResult("success");
 
         File report = new File(outputDirectory, expectedSuccessReport);
-        driver.get(urlFor(report));
-        assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
+        Document reportHomePage = Jsoup.parse(report, "UTF-8");
+
+        Elements dateAndTime = reportHomePage.select(".date-and-time");
+        assertThat(dateAndTime.size(), is(1));
     }
 
-    private String urlFor(File report) {
-        return "file:///" + report.getAbsolutePath();
-    }
+    @Test
+    public void should_display_custom_field_on_the_home_page() throws IOException {
+        File report = new File(outputDirectory, "index.html");
 
-    private List<String> convertToStrings(List<WebElement> elements) {
-        return elements.stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
+        Document reportHomePage = Jsoup.parse(report, "UTF-8");
+
+        String customTitle = reportHomePage.select(".custom-title").first().text();
+        String customValue = reportHomePage.select(".custom-value").first().text();
+
+        assertThat(customTitle, equalTo("Env"));
+        assertThat(customValue, equalTo("testenv"));
     }
 
     @Test

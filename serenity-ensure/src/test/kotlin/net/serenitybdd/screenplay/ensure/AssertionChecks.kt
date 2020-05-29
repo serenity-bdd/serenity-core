@@ -11,6 +11,7 @@ fun shouldPassWhenChecking(assertion: Performable, actor : Actor? = aster) {
 }
 
 fun shouldFailWhenChecking(assertion: Performable, actor: Actor? = aster) {
+
     try {
         assertion.performAs(actor)
     } catch (webError: Throwable) { return }

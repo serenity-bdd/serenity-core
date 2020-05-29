@@ -39,7 +39,10 @@
                 "language": {
                     searchPlaceholder: "Filter",
                     search: ""
-                }
+                },
+                columnDefs: [
+                    { type: 'time-elapsed-dhms', targets: 4 }
+                ]
             });
 
             // Results table
@@ -115,7 +118,7 @@
             <#if (breadcrumbs?has_content)>
                 <#list breadcrumbs as breadcrumb>
                     <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
-                    <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                    <#assign breadcrumbTitle = formatter.renderTitle(inflection.of(breadcrumb.shortName).asATitle()) >
                     <#assign breadcrumbType = inflection.of(breadcrumb.type).asATitle() >
                     > <a href="${breadcrumbReport}" title="${breadcrumbTitle} (breadcrumbType)">
                     <#--${formatter.htmlCompatible(breadcrumbTitle)}-->
@@ -124,13 +127,14 @@
                 </#list>
             <#else>
                 <#if currentTagType?has_content>
-                    > ${inflection.of(currentTagType!"").asATitle()} ${titleContext}
+                    > ${inflection.of(currentTagType!"").asATitle()} ${formatter.renderTitle(titleContext)}
                 </#if>
             </#if>
             <#if testOutcomes.label?has_content>
             <#--> ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),60)}-->
-                > <span
-                    class="truncate-60">${formatter.htmlCompatibleStoryTitle(inflection.of(testOutcomes.label).asATitle())}</span>
+                > <span class="truncate-60">
+                    ${formatter.htmlCompatibleStoryTitle(formatter.renderTitle(inflection.of(testOutcomes.label).asATitle()))}
+            </span>
             </#if>
         </span>
         </div>
@@ -139,6 +143,26 @@
 
     <div class="clr"></div>
     <!--/* starts second table*/-->
+    <#if (customFields?has_content) && (customFields?size > 0) >
+        <div>
+            <table class="table environment">
+                <tr>
+                    <#list customFields as customField>
+                        <th class="custom-title">
+                            ${customField}
+                        </th>
+                    </#list>
+                </tr>
+                <tr>
+                    <#list customFieldValues as customFieldValue>
+                        <td class="custom-value">
+                            ${customFieldValue}
+                        </td>
+                    </#list>
+                </tr>
+            </table>
+        </div>
+    </#if>
     <#include "menu.ftl">
     <@main_menu selected="home" />
     <div class="clr"></div>
@@ -770,11 +794,12 @@
                                                 </div>
                                             </div>
                                         </#if>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
-
                     </tr>
                 </table>
-
             </div>
         </div>
     </div>

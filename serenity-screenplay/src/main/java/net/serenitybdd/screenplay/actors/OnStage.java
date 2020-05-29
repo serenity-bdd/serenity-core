@@ -8,6 +8,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OnStage {
 
@@ -65,7 +66,8 @@ public class OnStage {
     }
 
     private static Stage stage() {
-        return stage.get();
+        return Optional.ofNullable(stage.get())
+                .orElseThrow(() -> new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one."));
     }
 
     public static void drawTheCurtain() {

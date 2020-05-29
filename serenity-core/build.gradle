@@ -5,9 +5,11 @@ ext {
 }
 
 jar {
+
     manifest {
         attributes("Implementation-Title": "Serenity Core",
-                "Implementation-Version": project.version.toString())
+                   "Implementation-Version": project.version.toString(),
+        )
     }
 }
 
@@ -104,6 +106,11 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
 
+    compile("com.assertthat:selenium-shutterbug:${shutterBugVersion}"){
+        exclude group: "net.bytebuddy", module:"byte-buddy"
+        exclude group: "net.bytebuddy", module:"byte-buddy-agent"
+    }
+
     compile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
         exclude group: 'xml-apis', module: 'xml-apis'
         exclude group: "commons-codec", module:"commons-codec"
@@ -114,8 +121,8 @@ dependencies {
     }
 
     compile "commons-codec:commons-codec:${commonsCodecVersion}"
-    compile "org.eclipse.jetty:jetty-util:${jettyVersion}"
-    compile "org.eclipse.jetty:jetty-io:${jettyVersion}"
+//    compile "org.eclipse.jetty:jetty-util:${jettyVersion}"
+//    compile "org.eclipse.jetty:jetty-io:${jettyVersion}"
 
 
     compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitDriverVersion}") {
@@ -129,8 +136,6 @@ dependencies {
         exclude group: 'commons-text', module: 'commons-text'
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
-//        exclude group: 'org.apache.httpcomponents', module: 'httpmimet'
-//        exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
     compile("io.appium:java-client:${appiumJavaClientVersion}") {
@@ -149,7 +154,7 @@ dependencies {
         exclude group: "org.springframework", module:"spring-context"
     }
     compile "org.springframework:spring-context-support:${springVersion}"
-    compile "org.glassfish.tyrus:tyrus-core:1.13.1"
+//    compile "org.glassfish.tyrus:tyrus-core:1.13.1"
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
 
@@ -220,7 +225,7 @@ dependencies {
     compile("com.google.jimfs:jimfs:${jimfsVersion}") {
         exclude group: 'com.google.guava', module: 'guava'
     }
-    compile 'es.nitaur.markdown:txtmark:0.16'
+//    compile 'es.nitaur.markdown:txtmark:0.16'
     //compile 'org.commonjava.googlecode.markdown4j:markdown4j:2.2-cj-1.1'
 
     compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {

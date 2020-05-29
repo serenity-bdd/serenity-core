@@ -1,6 +1,6 @@
 package net.thucydides.core.model.failures;
 
-import cucumber.api.PendingException;
+import io.cucumber.java.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;

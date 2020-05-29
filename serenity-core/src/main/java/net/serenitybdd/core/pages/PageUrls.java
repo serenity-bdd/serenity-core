@@ -1,12 +1,10 @@
 package net.serenitybdd.core.pages;
 
-import cucumber.runtime.Env;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.NamedUrl;
 import net.thucydides.core.annotations.NamedUrls;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -156,9 +154,13 @@ public class PageUrls {
     }
 
     private String prefixedWithDefaultUrl(String url) {
-        Optional<String> declaredDefaultUrl = getDeclaredDefaultUrl();
-        if (declaredDefaultUrl.isPresent() && isARelativeUrl(url)) {
-            return StringUtils.stripEnd(declaredDefaultUrl.get(), "/")
+        Optional<String> optionalDeclaredDefaultUrl = getDeclaredDefaultUrl();
+        if (optionalDeclaredDefaultUrl.isPresent() && isARelativeUrl(url)) {
+            String declaredDefaultUrl = optionalDeclaredDefaultUrl.get();
+            if (isANamedUrl(declaredDefaultUrl)) {
+                declaredDefaultUrl = namedUrlFrom(declaredDefaultUrl);
+            }
+            return StringUtils.stripEnd(declaredDefaultUrl, "/")
                     + "/"
                     + StringUtils.stripStart(url, "/");
         } else {

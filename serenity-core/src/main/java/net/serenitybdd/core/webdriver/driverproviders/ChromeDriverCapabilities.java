@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,12 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation", "--test-type");
+    private static final List<String> LIST_BASED_EXPERIMENTAL_OPTIONS = Arrays.asList(
+            "args",
+            "extensions",
+            "excludeSwitches",
+            "windowTypes"
+    );
     private final EnvironmentVariables environmentVariables;
     private final String driverOptions;
 
@@ -117,7 +124,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addRuntimeOptionsTo(ChromeOptions options) {
 
 
-        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, true)) {
+        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, false)) {
             options.addArguments(AUTOMATION_OPTIONS);
         }
 
@@ -133,23 +140,38 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addPreferencesTo(ChromeOptions options) {
 
         Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
-
         chromePreferences.putAll(ChromePreferences.startingWith("chrome.preferences.").from(environmentVariables));
+        Map<String, Object> sanitizedChromePreferences = cleanUpPathsIn(chromePreferences);
 
         if (!chromePreferences.isEmpty()) {
-            options.setExperimentalOption("prefs", chromePreferences);
+            options.setExperimentalOption("prefs", sanitizedChromePreferences);
         }
     }
 
+    private Map<String, Object> cleanUpPathsIn(Map<String, Object> chromePreferences) {
+        Map<String, Object> preferences = new HashMap<>();
+        chromePreferences.forEach(
+                (key,value) -> preferences.put(key.toString(), SanitisedBrowserPreferenceValue.of(value))
+        );
+        return preferences;
+    }
+
+
     private void addExperimentalOptionsTo(ChromeOptions options) {
 
-        Map<String, Object> chromeExperimentalOptions = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
-
-        Map<String, Object> nestedExperimentalOptions = ChromePreferences.startingWith("chrome.experimental_options.").from(environmentVariables);
-        chromeExperimentalOptions.putAll(nestedExperimentalOptions);
+        Map<String, Object> chromeExperimentalOptions = ChromePreferences.startingWith("chrome_experimental_options.")
+                                                                         .from(environmentVariables);
 
         chromeExperimentalOptions.keySet().forEach(
-                key -> options.setExperimentalOption(key, chromeExperimentalOptions.get(key))
+                key -> {
+                    Object value = chromeExperimentalOptions.get(key);
+                    if( LIST_BASED_EXPERIMENTAL_OPTIONS.contains(key) ) {
+                        List<String> arguments = new OptionsSplitter().split((String)value);
+                        options.setExperimentalOption(key, arguments);
+                    }else {
+                        options.setExperimentalOption(key, value);
+                    }
+                }
         );
     }
 

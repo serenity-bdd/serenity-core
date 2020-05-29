@@ -75,6 +75,19 @@
                     </table>
                 </#list>
 
+                <#assign sectionTitles = build.sectionTitles>
+                <#list sectionTitles as sectionTitle>
+                    <h2>${sectionTitle}</h2>
+                    <#assign sectionValues = build.sections[sectionTitle]>
+                    <#assign sectionValueLabels = sectionValues?keys>
+                    <table class="table table-striped build-info">
+                        <#list sectionValueLabels as section>
+                            <tr>
+                                <td style="width: 30%">${section}</td><td>${sectionValues[section]}</td>
+                            </tr>
+                        </#list>
+                    </table>
+                </#list>
 
             </div>
         <#--- Test Results end -->

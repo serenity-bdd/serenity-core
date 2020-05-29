@@ -51,7 +51,9 @@ public class TestStep implements Cloneable {
     private List<ReportData> reportData;
     private boolean precondition;
     private int level;
-
+    private Integer lineNumber;
+    private ExternalLink externalLink;
+    private Boolean manual;
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
     public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
@@ -120,6 +122,28 @@ public class TestStep implements Cloneable {
 
     public void setPrecondition(boolean precondition) {
         this.precondition = precondition;
+    }
+
+    public TestStep withResult(TestResult annotatedResult) {
+        TestStep annotatedStep = this.clone();
+        annotatedStep.result = annotatedResult;
+        return annotatedStep;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public boolean correspondsToLine(int lineNumber) {
+        return (this.lineNumber != null) && (this.lineNumber == lineNumber);
+    }
+
+    public ExternalLink getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(ExternalLink externalLink) {
+        this.externalLink = externalLink;
     }
 
     public static class TestStepBuilder {
@@ -409,11 +433,23 @@ public class TestStep implements Cloneable {
     }
 
     public TestResult getResult() {
+        if (isManual()) {
+            return getResultFromThisStep();
+        }
         if (isAGroup() && !groupResultOverridesChildren()) {
             return (result != null) ? TestResultComparison.overallResultFor(result, getResultFromChildren()) : getResultFromChildren();
         } else {
             return getResultFromThisStep();
         }
+    }
+
+    private boolean isManual() {
+        return manual != null && manual;
+    }
+
+    public TestStep asManual() {
+        manual = true;
+        return this;
     }
 
     private TestResult getResultFromThisStep() {

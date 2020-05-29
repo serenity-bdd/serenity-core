@@ -69,7 +69,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
 
         TestOutcome testOutcome = new TestOutcome("a_simple_test_case");
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-        testOutcome.asManualTest();
+        testOutcome.setToManual();
         testOutcome.setAnnotatedResult(TestResult.FAILURE);
         File htmlReport = reporter.generateReportFor(testOutcome);
 

@@ -42,7 +42,8 @@ public class TestStepFactory {
     }
 
     private static TestStep createNewFlakyTestStep(String description) {
-        return TestStep.forStepCalled(description).withResult(TestResult.IGNORED);
+//        return TestStep.forStepCalled(description).withResult(TestResult.IGNORED);
+        return TestStep.forStepCalled(description).withResult(TestResult.UNDEFINED);
     }
 
 }

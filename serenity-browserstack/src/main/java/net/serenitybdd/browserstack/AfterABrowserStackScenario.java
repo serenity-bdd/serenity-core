@@ -1,32 +1,28 @@
 package net.serenitybdd.browserstack;
 
+import com.google.gson.Gson;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Properties;
+
 
 public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AfterABrowserStackScenario.class);
+
+    private static final String BROWSERSTACK_URL_LINK = "https://api.browserstack.com/automate/builds/%s/sessions/%s.json";
+
+    private Gson gson = new Gson();
 
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
@@ -36,36 +32,23 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         try {
             String sessionId = RemoteDriver.of(driver).getSessionId().toString();
-//            String browserStackUsername = environmentVariables.getProperty("browserstack.user");
-            String browserStackUsername = EnvironmentSpecificConfiguration.from(environmentVariables)
+            String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty("browserstack.user")
                     .orElse(null);
 
-//            String browserStackKey = environmentVariables.getProperty("browserstack.key");
-            String browserStackKey = EnvironmentSpecificConfiguration.from(environmentVariables)
+            String key = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty("browserstack.key")
                     .orElse(null);
-            
-            URI uri = new URI("https://" + browserStackUsername
-                              + ":" + browserStackKey + "@api.browserstack.com/automate/sessions/"
-                              + sessionId + ".json");
-            HttpPut putRequest = new HttpPut(uri);
 
-            String result = "completed";
-            if (testOutcome.isSuccess()) {
-                result = "passed";
-            } else if (testOutcome.isFailure() || testOutcome.isError() || testOutcome.isCompromised()) {
-                result = "failed";
-            }
-            ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add((new BasicNameValuePair("status", result)));
-            nameValuePairs.add((new BasicNameValuePair("reason", testOutcome.getErrorMessage())));
-            putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            BrowserStackTestSession browserStackTestSession = new BrowserStackTestSession(userName, key, sessionId);
+            browserStackTestSession.updateTestResultFor(testOutcome);
 
-            HttpClientBuilder.create().build().execute(putRequest);
+            String publicUrl = browserStackTestSession.getPublicUrl();
+            testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
 
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to update BrowserStack",e);
         }
     }
+
 }

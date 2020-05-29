@@ -87,7 +87,7 @@ public class RequirementsReports {
                 requirementsService,
                 requirementsOutcomes.withoutUnrelatedRequirements(),
                 relativeLink,
-                testOutcomes));
+                testOutcomes).asParentRequirement());
 
         reportingTasks.addAll(reporter.reportsForChildRequirements(requirementsOutcomes));
 
@@ -124,7 +124,7 @@ public class RequirementsReports {
                         requirementsOutcomes,
                         relativeLink,
                         requirementsOutcomes.getTestOutcomes(),
-                        reportName)
+                        reportName).asLeafRequirement()
         );
 
         reportingTasks.addAll(requirementsReportsForChildRequirements(requirementsOutcomes));

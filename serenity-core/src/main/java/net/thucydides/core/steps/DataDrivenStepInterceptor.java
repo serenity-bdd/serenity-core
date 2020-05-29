@@ -1,7 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
+import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * Invoke a step multiple times, each time initialized with a different set of test data.
  */
-public class DataDrivenStepInterceptor implements MethodInterceptor {
+public class DataDrivenStepInterceptor implements Interceptor {
 
     private List<?> instantiatedSteps;
 
@@ -17,24 +16,30 @@ public class DataDrivenStepInterceptor implements MethodInterceptor {
         this.instantiatedSteps = instantiatedSteps;
     }
 
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    @RuntimeType
+    public  Object intercept(
+            @Origin Method method,
+            @This Object self,
+            @AllArguments Object[] args,
+            @SuperMethod Method zuperMethod
+    ) throws Throwable {
 
         DataDrivenStep.startDataDrivenStep();
         Object lastResult = null;
         for (Object steps : instantiatedSteps) {
-            lastResult = runMethodAndIgnoreExceptions(steps, proxy, method, args);
-//            StepEventBus.getEventBus().exampleFinished();
+            lastResult = runMethodAndIgnoreExceptions(steps, zuperMethod, method, args);
             StepEventBus.getEventBus().clearStepFailures();
         }
         DataDrivenStep.endDataDrivenStep();
         return lastResult;
     }
 
-    private Object runMethodAndIgnoreExceptions(Object steps,  MethodProxy proxy, Method method, Object[] args) throws Throwable {
+    private Object runMethodAndIgnoreExceptions(Object steps,  Method zuperMethod, Method method, Object[] args) throws Throwable {
         if (isFinalizer(method)) {
             return this;
         }
-        return proxy.invoke(steps, args);
+        method.setAccessible(true);
+        return method.invoke(steps, args);
     }
 
     private boolean isFinalizer(Method method) {

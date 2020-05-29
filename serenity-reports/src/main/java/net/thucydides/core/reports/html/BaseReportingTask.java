@@ -14,6 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Optional;
+
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_GENERATE_CSV_REPORTS;
 
 public abstract class BaseReportingTask implements ReportingTask {
 
@@ -34,11 +37,11 @@ public abstract class BaseReportingTask implements ReportingTask {
     public abstract void generateReports() throws IOException;
 
     protected void generateReportPage(final Map<String, Object> context,
-                                    final String template,
-                                    final String outputFile) throws IOException {
+                                      final String template,
+                                      final String outputFile) throws IOException {
 
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
-        try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
             writer.flush();
         }
@@ -49,8 +52,19 @@ public abstract class BaseReportingTask implements ReportingTask {
     }
 
 
-    protected void generateCSVReportFor(TestOutcomes testOutcomes, String reportName) throws IOException {
-        CSVReporter csvReporter = new CSVReporter(outputDirectory, environmentVariables);
-        csvReporter.generateReportFor(testOutcomes, reportName);
+    protected Optional<String> generateCSVReportFor(TestOutcomes testOutcomes, String reportName) throws IOException {
+
+        if (csvReportsAreActivated()) {
+            CSVReporter csvReporter = new CSVReporter(outputDirectory, environmentVariables);
+            csvReporter.generateReportFor(testOutcomes, reportName);
+            return Optional.of(reportName);
+        }
+
+        return Optional.empty();
     }
+
+    private boolean csvReportsAreActivated() {
+        return SERENITY_GENERATE_CSV_REPORTS.booleanFrom(environmentVariables, true);
+    }
+
 }

@@ -75,29 +75,38 @@ class KnownValue<A>(val value: A?, val description: String) : KnowableValue<A> {
     override fun toString() = description
 }
 
-class KnowableAnswer<A>(val question: Question<A>, val description: String) : KnowableValue<A> {
+interface HasSubject {
+    fun subject() : String
+}
+
+class KnowableAnswer<A>(val question: Question<A>, val description: String) : KnowableValue<A>, HasSubject {
     override fun invoke(actor: Actor): A? = question.answeredBy(actor)
     override fun toString() = description
+    override fun subject() = question.subject
 }
 
-class KnowableStringAnswer(val question: Question<String?>, val description: String) : KnowableValue<String?> {
+class KnowableStringAnswer(val question: Question<String?>, val description: String) : KnowableValue<String?>, HasSubject {
     override fun invoke(actor: Actor): String? = question.answeredBy(actor)
     override fun toString() = description
+    override fun subject() = question.subject
 }
 
-class KnowableBooleanAnswer(val question: Question<Boolean?>, val description: String) : KnowableValue<Boolean?> {
+class KnowableBooleanAnswer(val question: Question<Boolean?>, val description: String) : KnowableValue<Boolean?>, HasSubject {
     override fun invoke(actor: Actor): Boolean? = question.answeredBy(actor)
     override fun toString() = description
+    override fun subject() = question.subject
 }
 
-class KnowableComparableAnswer<A>(val question: Question<A>, val description: String) : KnowableValue<A> {
+class KnowableComparableAnswer<A>(val question: Question<A>, val description: String) : KnowableValue<A>, HasSubject {
     override fun invoke(actor: Actor): A = question.answeredBy(actor)
     override fun toString() = description
+    override fun subject() = question.subject
 }
 
-class KnowableCollectionAnswer<A>(val question: Question<Collection<A>>, val description: String) : KnowableValue<Collection<A>> {
+class KnowableCollectionAnswer<A>(val question: Question<Collection<A>>, val description: String) : KnowableValue<Collection<A>>, HasSubject {
     override fun invoke(actor: Actor): Collection<A> = question.answeredBy(actor)
     override fun toString() = description
+    override fun subject() = question.subject
 }
 
 class KnowableCollectionTarget(val target: Target, val description: String = pluralFormOf(target.name)) : KnowableValue<List<WebElementFacade>?> {

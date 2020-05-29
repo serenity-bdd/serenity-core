@@ -1,7 +1,8 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Examples;
-import gherkin.ast.TableCell;
+
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.TableCell;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -32,13 +33,16 @@ public class RenderedExampleTable {
 
     public static String renderedTable(Examples exampleTable, ExampleRowResultIcon exampleRowIcon) {
 
-        final Map<Integer,Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
+        final Map<Integer, Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
 
-        String headings = cellRow(exampleTable.getTableHeader().getCells(), maxColumnWidths, exampleRowIcon.noIcon())
+        String headings = cellRow(exampleTable.getTableHeader().getCells(),
+                                  maxColumnWidths,
+                                  exampleTable.getLocation().getLine(),
+                                  exampleRowIcon.noIcon())
                           + headerSeparator(maxColumnWidths);
 
         String body = exampleTable.getTableBody().stream()
-                .map(row -> cellRow(row.getCells(), maxColumnWidths, exampleRowIcon))
+                .map(row -> cellRow(row.getCells(), maxColumnWidths, row.getLocation().getLine(), exampleRowIcon))
                 .collect(Collectors.joining());
 
         return headings + body;
@@ -53,7 +57,8 @@ public class RenderedExampleTable {
     }
 
     public static String cellRow(List<TableCell> cells,
-                                 Map<Integer,Integer> maxColumnWidths,
+                                 Map<Integer, Integer> maxColumnWidths,
+                                 int lineNumber,
                                  RowResultIcon exampleRowResultIcons) {
 
         StringBuilder headerRow = new StringBuilder("|");
@@ -63,7 +68,7 @@ public class RenderedExampleTable {
             int columnWidth = maxColumnWidths.get(column) + 1;
             headerRow.append(StringUtils.rightPad(" " + columnHeading, columnWidth)).append(" |");
         }
-        headerRow.append(exampleRowResultIcons.resultToken() + "|");
+        headerRow.append(exampleRowResultIcons.resultToken(lineNumber) + "|");
         return headerRow.toString() + lineSeparator();
     }
 

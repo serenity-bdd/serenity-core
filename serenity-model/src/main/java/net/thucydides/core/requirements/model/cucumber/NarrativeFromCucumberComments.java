@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.Comment;
+
+import io.cucumber.core.internal.gherkin.ast.Comment;
 
 import java.util.List;
 

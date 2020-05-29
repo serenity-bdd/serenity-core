@@ -27,17 +27,53 @@ public class CleanupMethodLocator {
         return stream(stackTrace).anyMatch(this::isAnnotatedWithAFixtureMethod);
     }
 
+    private List<String> DEFAULT_CLEANUP_PACKAGES_TO_SKIP = Arrays.asList(
+            "java.lang",
+            "net.serenitybdd.core",
+            "net.thucydides",
+            "org.junit",
+            "org.openqa.selenium");
+
     private boolean isAnnotatedWithAFixtureMethod(StackTraceElement stackTraceElement) {
         try {
-            Method method = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+            if (inPackageToSkip(stackTraceElement.getClassName())) {
+                return false;
+            }
+            Method method = forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
             return (stream(method.getAnnotations()).anyMatch(
                     annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
                             || cleanupMethodsAnnotations.contains(annotation.toString()))
             ));
-        } catch (Exception ignored) {
+        } catch (ClassNotFoundException | NoSuchMethodException ignored) {
             return false;
         }
     }
+
+    private boolean inPackageToSkip(String className) {
+        return DEFAULT_CLEANUP_PACKAGES_TO_SKIP.stream().anyMatch(className::startsWith);
+    }
+
+    private static Class<?> forName(String className) throws ClassNotFoundException {
+        return forName(className, null);
+    }
+
+    private static Class<?> forName(String className, ClassLoader classLoader) throws ClassNotFoundException {
+        if (classLoader == null) try {
+            // Check the thread's class loader
+            classLoader = Thread.currentThread().getContextClassLoader();
+            if (classLoader != null) {
+                return Class.forName(className, false, classLoader);
+            }
+        } catch (ClassNotFoundException e) {
+            // not found, use the class' loader
+            classLoader = null;
+        }
+        if (classLoader != null) {
+            return Class.forName(className, false, classLoader);
+        }
+        return Class.forName(className);
+    }
+
     private boolean isAnAfterAnnotation(String annotationName) {
         return annotationName.startsWith("After");
     }

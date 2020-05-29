@@ -1,5 +1,6 @@
 package net.serenitybdd.core.photography
 
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy
 import net.thucydides.core.screenshots.BlurLevel
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -25,7 +26,7 @@ class WhenTakingScreenshotsFromBrowserWithoutTakingScreenshotAbility extends Spe
         given:
             def driver = Mock(WebDriver)
             driver.getTitle() >> "value";
-            def session = new PhotoSession(driver, darkroom, folder.newFolder().toPath(), BlurLevel.NONE)
+            def session = new PhotoSession(driver, darkroom, folder.newFolder().toPath(), BlurLevel.NONE, ScrollStrategy.VIEWPORT_ONLY)
         when:
             def photo = session.takeScreenshot()
         then:

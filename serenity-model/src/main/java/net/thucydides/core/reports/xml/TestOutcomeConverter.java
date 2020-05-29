@@ -417,7 +417,7 @@ public class TestOutcomeConverter implements Converter {
         }
         boolean isManualTest = readManualTest(reader);
         if (isManualTest) {
-            testOutcome = testOutcome.asManualTest();
+            testOutcome = testOutcome.setToManual();
         }
         String sessionId = readSessionId(reader);
         testOutcome.setSessionId(sessionId);
@@ -615,6 +615,8 @@ public class TestOutcomeConverter implements Converter {
     private DataTableRow readRow(final HierarchicalStreamReader reader) {
         List<String> rowValues = new ArrayList<>();
         TestResult result = null;
+        String rowValue = reader.getAttribute("row");
+        int row = (rowValue != null) ? Integer.parseInt(rowValue) : 0;
         String resultValue = reader.getAttribute("result");
         while (reader.hasMoreChildren()) {
             if (resultValue != null) {
@@ -629,7 +631,7 @@ public class TestOutcomeConverter implements Converter {
             }
             reader.moveUp();
         }
-        DataTableRow newRow = new DataTableRow(rowValues);
+        DataTableRow newRow = new DataTableRow(rowValues, row);
         if (result != null) {
             newRow.setResult(result);
         }

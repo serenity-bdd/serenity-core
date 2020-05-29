@@ -15,7 +15,7 @@ import java.util.regex.Pattern
 
 class StringEnsure(override val value: KnowableValue<String?>,
                    comparator: Comparator<String>,
-                   expectedDescription: String = "a string") : ComparableEnsure<String>(value, comparator, expectedDescription) {
+                   expectedDescription: String = descriptionOf(value)) : ComparableEnsure<String>(value, comparator, expectedDescription) {
 
     constructor(value: KnowableValue<String?>) : this(value, Comparator.naturalOrder<String>())
 

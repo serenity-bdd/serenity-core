@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -33,7 +34,7 @@ public class HtmlDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.HTMLUNIT);
+        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
 
         HtmlUnitDriver driver = new HtmlUnitDriver(enhancedCapabilities);
         driverProperties.registerCapabilities("htmlunit", capabilitiesToProperties(enhancedCapabilities));

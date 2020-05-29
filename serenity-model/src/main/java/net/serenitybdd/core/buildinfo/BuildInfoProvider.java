@@ -1,5 +1,6 @@
 package net.serenitybdd.core.buildinfo;
 
+import com.google.common.base.Splitter;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
@@ -24,12 +25,14 @@ import java.util.stream.Collectors;
 public class BuildInfoProvider {
     private final EnvironmentVariables environmentVariables;
     private final DriverCapabilityRecord driverCapabilityRecord;
+    private final Map<String, Map<String, String>> sections;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildInfoProvider.class);
 
     public BuildInfoProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.driverCapabilityRecord = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.sections = new HashMap<>();
     }
 
     public BuildProperties getBuildProperties() {
@@ -41,7 +44,7 @@ public class BuildInfoProvider {
         addCustomPropertiesTo(generalProperties);
 
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();
-        return new BuildProperties(generalProperties, driverCapabilityRecord.getDrivers(), driverPropertiesMap);
+        return new BuildProperties(generalProperties, driverCapabilityRecord.getDrivers(), driverPropertiesMap, sections);
     }
 
     private void addRemoteDriverPropertiesTo(Map<String, String> buildProperties) {
@@ -80,6 +83,7 @@ public class BuildInfoProvider {
         return url.substring(0,apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
     }
 
+
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
         List<String> sysInfoKeys = environmentVariables.getKeys().stream()
@@ -87,14 +91,35 @@ public class BuildInfoProvider {
                                                         .collect(Collectors.toList());
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
+
             String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty(key)
                     .orElse(null);
 
             String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;
 
-            buildProperties.put(humanizedFormOf(simplifiedKey), value);
+            if (isInASection(simplifiedKey)) {
+                String sectionKey = humanizedFormOf(sectionKeyFrom(simplifiedKey));
+                String fieldKey = humanizedFormOf(sectionLabelFrom(simplifiedKey));
+                Map<String, String> sectionValues = sections.getOrDefault(sectionKey, new HashMap<>());
+                sectionValues.put(fieldKey, value);
+                sections.put(sectionKey, sectionValues);
+            } else {
+                buildProperties.put(humanizedFormOf(simplifiedKey), value);
+            }
         }
+
+    }
+
+    private String sectionKeyFrom(String simplifiedKey) {
+        return Splitter.on(".").splitToList(simplifiedKey).get(0);
+    }
+    private String sectionLabelFrom(String simplifiedKey) {
+        return Splitter.on(".").splitToList(simplifiedKey).get(1);
+    }
+
+    private boolean isInASection(String simplifiedKey) {
+        return simplifiedKey.contains(".");
     }
 
     private boolean isGroovyExpression(String expression) {
@@ -102,13 +127,20 @@ public class BuildInfoProvider {
     }
 
     private String humanizedFormOf(String simplifiedKey) {
-        return StringUtils.capitalize(StringUtils.replace(simplifiedKey,"."," "));
+        return StringUtils.strip(StringUtils.capitalize(
+                StringUtils.replace(simplifiedKey,"."," ")
+                           .replace("_"," ")),"\"");
+    }
+
+    private Binding binding;
+    private Binding groovyBinding() {
+        binding = new Binding();
+        binding.setVariable("env", environmentVariables.asMap());
+        return binding;
     }
 
     private String evaluateGroovyExpression(String key, String expression) {
-        Binding binding = new Binding();
-        binding.setVariable("env", environmentVariables);
-        GroovyShell shell = new GroovyShell(binding);
+        GroovyShell shell = new GroovyShell(groovyBinding());
         Object result = null;
         try {
             String groovy = expression.substring(2, expression.length() - 1);
@@ -116,7 +148,8 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            LOGGER.warn("Failed to evaluate build info expression '{0}' for key {1}",expression, key);
+            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'",expression, key);
+            LOGGER.warn(error);
         }
         return (result != null) ? result.toString() : expression;
     }

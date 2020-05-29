@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -40,11 +41,13 @@ public class CapabilityEnhancer {
             Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
                                                          .getBaseStepListener()
                                                          .latestTestOutcome();
-
-            TestOutcome outcome = (currentTestOutcome == null) ? null : currentTestOutcome.orElse(null);
-            AddCustomDriverCapabilities.from(environmentVariables)
-                                       .withTestDetails(driver, outcome)
-                                       .to(capabilities);
+            if (currentTestOutcome != null) { // Technically not required but needed for some test scenarios
+                currentTestOutcome.ifPresent(
+                        outcome -> AddCustomDriverCapabilities.from(environmentVariables)
+                                .withTestDetails(driver, outcome)
+                                .to(capabilities)
+                );
+            }
         }
 
         return capabilities;

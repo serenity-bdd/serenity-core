@@ -5,6 +5,7 @@ import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
@@ -13,6 +14,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
+import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -69,12 +72,18 @@ public class FreemarkerContext {
         this(environmentVariables, requirements, issueTracking, relativeLink, TestTag.EMPTY_TAG);
     }
 
-    public Map<String, Object> getBuildContext(TestOutcomes testOutcomes,
+    public Map<String, Object> getBuildContext(TestOutcomes completeTestOutcomes,
                                                ReportNameProvider reportName,
                                                boolean useFiltering) {
         Map<String, Object> context = new HashMap<>();
         TagFilter tagFilter = new TagFilter(environmentVariables);
         OutcomeTagFilter outcomeFilter = new OutcomeTagFilter(environmentVariables);
+
+        // WIP
+
+        TestOutcomes testOutcomes =  completeTestOutcomes.filteredByEnvironmentTags();
+
+        // EWIP
 
         context.put("testOutcomes", testOutcomes);
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());
@@ -129,13 +138,21 @@ public class FreemarkerContext {
         context.put("inflection", Inflector.getInstance());
         context.put("tagInflector", new TagInflector(environmentVariables));
 
-        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
-                .filter(tag -> testOutcomes.containsTagMatching(tag))
+        RequirementsFilter requirementsFilter = new RequirementsFilter(environmentVariables);
+
+        Collection<TestTag> coveredTags = requirements.getRequirementsWithTagsOfType(tagTypes).stream()
+                .filter(requirement -> testOutcomes.containTestFor(requirement) || requirement.containsNoScenarios())
+                .filter(requirementsFilter::inDisplayOnlyTags)
+                .map(Requirement::asTag)
                 .collect(Collectors.toSet());
 
+//        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
+//                .filter( tag -> testOutcomes.containsMatchingTag(tag) || (requirements.containsEmptyRequirementWithTag(tag)))
+//                .filter(this::inDisplayOnlyTags)
+//                .collect(Collectors.toSet());
 
         context.put("coverage", TagCoverage.from(testOutcomes)
-//                .showingTags(requirements.getTagsOfType(tagTypes))
+                .showingTags(requirements.getTagsOfType(tagTypes))
                 .showingTags(coveredTags)
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
@@ -145,6 +162,10 @@ public class FreemarkerContext {
         );
 
         context.put("tagResults", TagResults.from(testOutcomes).groupedByType());
+
+        CustomReportFields customReportFields = new CustomReportFields(environmentVariables);
+        context.put("customFields", customReportFields.getFieldNames());
+        context.put("customFieldValues", customReportFields.getValues());
 
         return context;
     }
@@ -186,6 +207,7 @@ public class FreemarkerContext {
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
         context.put("reportOptions", new ReportOptions(environmentVariables));
+        context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 
 

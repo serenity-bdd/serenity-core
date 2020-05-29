@@ -5,5 +5,6 @@ public enum TakeScreenshots {
     BEFORE_AND_AFTER_EACH_STEP,
     AFTER_EACH_STEP,
     FOR_FAILURES,
-    UNDEFINED, DISABLED
+    UNDEFINED,
+    DISABLED
 }

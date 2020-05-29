@@ -1,9 +1,11 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.ast.*;
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
+import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.requirements.reports.cucumber.RenderCucumber;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;

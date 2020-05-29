@@ -115,7 +115,7 @@ public class WhenMatchingTags {
         try {
             assertThat(testOutcome, havingTag(TestTag.withName("a different story").andType("feature")));
         } catch (AssertionError error) {
-            assertThat(error.getMessage(), containsString("Expected: a test outcome with a tag <TestTag{name='a different story', type='feature'}>"));
+            assertThat(error.getMessage(), containsString("Expected: a test outcome with a tag <feature:a different story>"));
             return;
         }
         fail();

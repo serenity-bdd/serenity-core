@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by john on 26/03/2015.
@@ -21,6 +22,8 @@ public class EnvironmentDependencyInjector implements DependencyInjector {
     private final EnvironmentVariables environmentVariables;
     private final Configuration systemPropertiesConfiguration;
     private final DriverConfiguration webDriverConfiguration;
+
+    private static final List<Field> NO_FIELDS = new ArrayList<>();
 
     public EnvironmentDependencyInjector() {
         environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
@@ -85,14 +88,13 @@ public class EnvironmentDependencyInjector implements DependencyInjector {
     }
 
     private List<Field> matchingFieldsIn(Object target, Class fieldClass) {
+        if (target == null) { return NO_FIELDS; }
+
         Set<Field> allFields = Fields.of(target.getClass()).allFields();
-        List<Field> matchingFields = new ArrayList<>();
-        for(Field field : allFields) {
-            if (fieldClass.isAssignableFrom(field.getType())) {
-                matchingFields.add(field);
-            }
-        }
-        return matchingFields;
+
+        return allFields.stream()
+                .filter(field -> fieldClass.isAssignableFrom(field.getType()))
+                .collect(Collectors.toList());
     }
 }
 

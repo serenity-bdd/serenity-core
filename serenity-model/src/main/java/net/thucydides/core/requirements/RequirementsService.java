@@ -30,4 +30,9 @@ public interface RequirementsService extends ParentRequirementProvider {
     List<String> getRequirementTypes();
 
     Collection<TestTag> getTagsOfType(List<String> tagTypes);
+
+    Collection<Requirement> getRequirementsWithTagsOfType(List<String> tagTypes);
+
+    boolean containsEmptyRequirementWithTag(TestTag tag);
+
 }

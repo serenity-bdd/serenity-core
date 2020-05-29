@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
-import gherkin.ast.*;
+
+import io.cucumber.core.internal.gherkin.ast.*;
 import net.thucydides.core.requirements.model.cucumber.ExampleRowResultIcon;
 
 import java.util.ArrayList;
@@ -26,39 +27,25 @@ public class RenderCucumber {
 
 
         List<String> renderedExamples = new ArrayList<>();
-        int exampleTableNumber = 0;
         for (Examples exampleTable : examples) {
-            renderedExamples.add(renderedExamples(exampleTable, featureName, scenarioName, exampleTableNumber++));
+            renderedExamples.add(renderedExamples(exampleTable, featureName, scenarioName));
         }
         return renderedExamples;
     }
 
-    private static String renderedExamples(Examples examples, String featureName, String scenarioName, int exampleTableNumber) {
+    private static String renderedExamples(Examples examples, String featureName, String scenarioName) {
 
-        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName, scenarioName, exampleTableNumber);
+//        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName, scenarioName);
+        ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName);
 
         StringBuffer renderedTable = new StringBuffer();
         renderExampleDescriptionOf(examples);
         renderedTable.append(renderExampleDescriptionOf(examples));
-//        renderedTable.append(examples.getKeyword()).append(": ");
-//        if (examples.getName() != null) {
-//            renderedTable.append(examples.getName());
-//        }
-//        renderedTable.append("  ").append(System.lineSeparator());
-//
-//        if (examples.getDescription() != null) {
-//            renderedTable.append(System.lineSeparator())
-//                    .append("> ")
-//                    .append(examples.getDescription().trim())
-//                    .append(System.lineSeparator());
-//        }
-//
-//        renderedTable.append(System.lineSeparator());
         addRow(renderedTable, examples.getTableHeader().getCells(), " ");
         addSeparatorCells(renderedTable, examples.getTableHeader().getCells().size());
 
         for (TableRow row : examples.getTableBody()) {
-            addRow(renderedTable, row.getCells(), exampleRowResultIcon.resultToken());
+            addRow(renderedTable, row.getCells(), exampleRowResultIcon.resultToken(row.getLocation().getLine()));
         }
 
         return renderedTable.toString();

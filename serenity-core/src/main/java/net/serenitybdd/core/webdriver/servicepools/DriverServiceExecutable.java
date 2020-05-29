@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import net.serenitybdd.core.CurrentOS;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;

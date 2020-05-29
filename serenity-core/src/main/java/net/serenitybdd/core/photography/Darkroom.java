@@ -16,7 +16,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_SCR
 public class Darkroom {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
-    private final static List<PhotoFilter> DEFAULT_PROCESSERS = Arrays.asList(new Blurer());
+    private final static List<PhotoFilter> DEFAULT_PROCESSORS = Arrays.asList(new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
     private final EnvironmentVariables environmentVariables;
@@ -41,7 +41,7 @@ public class Darkroom {
         if (SERENITY_COMPRESS_SCREENSHOTS.booleanFrom(environmentVariables, false)) {
             processors.add(new Resizer());
         }
-        processors.addAll(DEFAULT_PROCESSERS);
+        processors.addAll(DEFAULT_PROCESSORS);
 
         return processors;
     }

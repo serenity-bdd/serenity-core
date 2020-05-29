@@ -243,7 +243,7 @@
                     <div class="col-sm-12">
                         <div class="requirements-overview panel panel-default">
                             <div class="panel-body">
-                                ${formatter.renderDescription(requirements.overview)}
+                                ${formatter.renderDescriptionWithFormattedTables(requirements.overview, requirements)}
                             </div>
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
                                                             <td style="width:95%;" class="toc-title">
-                                                                <a href="#${scenario.id}" title="View scenario details" >${scenario.simplifiedName}</a>
+                                                                <a href="#${scenario.id}" title="View scenario details" >${formatter.humanReadableFormOf(formatter.renderHeaders(scenario.simplifiedName))}</a>
                                                                  <#if scenario.hasExamples() >
                                                                      (${scenario.numberOfExamples})</#if>
 
@@ -331,7 +331,7 @@
                                                     <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
                                                         <div>
                                                             <span class="scenario-heading">
-                                                                <a href="${scenario.scenarioReport}" title="View test results">${scenario.title}</a>
+                                                                <a href="${scenario.scenarioReport}" title="View test results">${formatter.renderTitle(scenario.title)}</a>
                                                             </span>
                                                             <span class="scenario-result-icon">
                                                                 <#if (scenario.isManual())> <i class="fa fa-user manual" title="Manual test"></i></#if>
@@ -366,7 +366,6 @@
                                                             <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                         </#list>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </#list>
@@ -692,9 +691,9 @@
                                                     </#if>
                                                     <td>
                                                         <#if outcome_icon?has_content>
-                                                            <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                            <a href="${scenario.scenarioReport}">${formatter.renderTitle(scenario.title)}</a>
                                                         <#else>
-                                                            ${scenario.title}
+                                                            ${formatter.renderTitle(scenario.title)}
                                                         </#if>
                                                         <#if scenario.hasExamples() >
                                                                (${scenario.numberOfExamples})

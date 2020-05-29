@@ -53,12 +53,12 @@ public class TagTypeReportingTask extends BaseReportingTask implements Reporting
         context.put("report", ReportProperties.forTagTypeResultsReport());
         context.put("tagType", tagType);
 
-        String csvReport = reportName.forCSVFiles().forTagType(tagType);
-        context.put("csvReport", csvReport);
-
         String report = reportName.forTagType(tagType);
         generateReportPage(context, TAGTYPE_TEMPLATE_PATH, report);
-        generateCSVReportFor(testOutcomesForTagType, csvReport);
+
+        generateCSVReportFor(testOutcomesForTagType, reportName.forCSVFiles().forTagType(tagType)).ifPresent(
+                csvReport -> context.put("csvReport", csvReport)
+        );
     }
 
 

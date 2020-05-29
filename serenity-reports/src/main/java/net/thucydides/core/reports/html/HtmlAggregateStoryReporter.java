@@ -11,6 +11,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -146,24 +147,24 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
-        LOGGER.info("Generating test results for {} tests", testOutcomes.getTestCount());
+        LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
-        LOGGER.info("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+        LOGGER.debug("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
         requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
 
-        LOGGER.info("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+        LOGGER.debug("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
         Set<ReportingTask> reportingTasks = new CopyOnWriteArraySet<>();
 
-        LOGGER.info("Generating test outcome reports: " + generateTestOutcomeReports);
+        LOGGER.debug("Generating test outcome reports: " + generateTestOutcomeReports);
         if (generateTestOutcomeReports) {
             reportingTasks.addAll(HtmlTestOutcomeReportingTask.testOutcomeReportsFor(testOutcomes).using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
         }
@@ -208,23 +209,25 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 )
         );
 
-        LOGGER.info("Starting generating reports after {}", stopwatch.lapTimeFormatted());
         Reporter.generateReportsFor(reportingTasks);
-        LOGGER.info("Test results for {} tests generated in {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted());
+        LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
+
 
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
         Set<ReportingTask> reportingTasks = new HashSet<>();
 
-        for (TestTag knownTag : testOutcomes.getTags()) {
-            reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
-                    context.withParentTag(knownTag),
-                    environmentVariables,
-                    getOutputDirectory(),
-                    reportNameProvider.inContext(knownTag.getCompleteName()),
-                    testOutcomes.getTags(),
-                    knownRequirementReportNames));
-        }
+        testOutcomes.getTags().stream()
+                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
+                .forEach(
+                        knownTag -> reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
+                                context.withParentTag(knownTag),
+                                environmentVariables,
+                                getOutputDirectory(),
+                                reportNameProvider.inContext(knownTag.getCompleteName()),
+                                testOutcomes.getTags(),
+                                knownRequirementReportNames))
+                );
         return reportingTasks;
     }
 
@@ -246,35 +249,40 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void setIssueTrackerUrl(String issueTrackerUrl) {
         if (issueTrackerUrl != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL, issueTrackerUrl);
+            setEnvironmentProperty(ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL, issueTrackerUrl);
         }
+    }
+
+    private void setEnvironmentProperty(ThucydidesSystemProperty property, String value) {
+        getSystemProperties().setValue(property, value);
+        environmentVariables.setProperty(property.getPropertyName(), value);
     }
 
     public void setJiraUrl(String jiraUrl) {
         if (jiraUrl != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_URL, jiraUrl);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_URL, jiraUrl);
         }
     }
 
     public void setJiraProject(String jiraProject) {
         if (jiraProject != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_PROJECT, jiraProject);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_PROJECT, jiraProject);
         }
     }
 
     public void setJiraUsername(String jiraUsername) {
         if (jiraUsername != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_USERNAME, jiraUsername);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_USERNAME, jiraUsername);
         }
     }
 
     public void setTags(String tags) {
-        this.tags = tags;
+        this.tags = (tags != null) ? tags.replaceAll("\\s+((or)|(OR))\\s+",",") : null;
     }
 
     public void setJiraPassword(String jiraPassword) {
         if (jiraPassword != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_PASSWORD, jiraPassword);
+            setEnvironmentProperty(ThucydidesSystemProperty.JIRA_PASSWORD, jiraPassword);
         }
     }
 

@@ -68,11 +68,11 @@ class WhenCheckingTestTags extends Specification {
 //            ClassWithTags   | "blue"            | "color:blue"        | true
 //            ClassWithTags   | "blue"            | "flavor:strawberry" | true
             ClassWithTags   | "blue"            | "color:yellow"      | false
-            ClassWithTags   | "blue"            | "~color:yellow"     | true
-            ClassWithTags   | "blue"            | "~color:blue"       | false
+            ClassWithTags   | "blue"            | "not color:yellow"     | true
+            ClassWithTags   | "blue"            | "not color:blue"       | false
             ClassWithTags   | "doesnotexist"    | "color:yellow"      | false
             ClassWithTags   | "orange"          | "flavor:licorice"   | true
-            ClassWithTags   | "red"             | "red"               | true
+            ClassWithTags   | "red"             | "tag:red"               | true
     }
 
     @Unroll
@@ -92,12 +92,12 @@ class WhenCheckingTestTags extends Specification {
             ""                  | true
             "color:blue"        | false
             "flavor:strawberry" | true
-            "~flavor:strawberry"| false
-            "~color:red"        | false
-            "~color:red"        | false
-            "~color:blue"       | true
-            "~@color:red"       | false
-            "~@color:blue"      | true
+            "not flavor:strawberry"| false
+            "not color:red"        | false
+            "not color:red"        | false
+            "not color:blue"       | true
+            "not @color:red"       | false
+            "not @color:blue"      | true
     }
 
 

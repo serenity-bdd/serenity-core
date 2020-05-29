@@ -56,11 +56,13 @@ class Acronym {
     }
 
     private static char firstLetterIn(String word) {
-        return word.toCharArray()[0];
+        String wordWithoutDigits = word.replaceAll("\\d", "");
+        return wordWithoutDigits.length() == 0 ? word.charAt(0) : wordWithoutDigits.charAt(0);
     }
 
     private static char lastLetterIn(String word) {
-        return word.toCharArray()[word.length() - 1];
+        String wordWithoutDigits = word.replaceAll("\\d", "");
+        return wordWithoutDigits.length() == 0 ? word.charAt(word.length() - 1) : wordWithoutDigits.charAt(wordWithoutDigits.length() - 1);
     }
 
     @Override

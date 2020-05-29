@@ -39,7 +39,7 @@ public class ParameterizedTestsOutcomeAggregator {
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
 
             if (testOutcome.isManual()) {
-                scenarioOutcome = scenarioOutcome.asManualTest();
+                scenarioOutcome = scenarioOutcome.setToManual();
             }
 
             if (testOutcome.isDataDriven()) {

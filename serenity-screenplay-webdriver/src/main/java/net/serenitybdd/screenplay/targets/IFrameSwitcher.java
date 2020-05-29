@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -13,7 +14,7 @@ class IFrameSwitcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IFrameSwitcher.class);
     private final static ThreadLocal<IFrameSwitcher> frameSwitcher = new ThreadLocal<>();
-    private Optional<IFrame> currentIFrame = empty();
+    private final HashMap<WebDriver,Optional<IFrame>> currentIFrames = new HashMap<>();
 
     static synchronized IFrameSwitcher getInstance() {
         IFrameSwitcher iFrameSwitcher = frameSwitcher.get();
@@ -24,21 +25,23 @@ class IFrameSwitcher {
         return iFrameSwitcher;
     }
 
-
-    private IFrameSwitcher() {
-    }
+    private IFrameSwitcher() {}
 
     void switchToIFrame(WebDriver driver, final Target target) {
-        if (target.getIFrame().equals(this.currentIFrame)) {
-            LOGGER.debug("{} already selected for {}", printIFrame(this.currentIFrame), target);
-        } else if (!target.getIFrame().isPresent() && this.currentIFrame.isPresent()) {
-            LOGGER.debug("switching from {} to {} for {}", printIFrame(this.currentIFrame), printIFrame(target.getIFrame()), target);
+        if (!currentIFrames.containsKey(driver)) {
+            currentIFrames.put(driver, empty());
+        }
+        Optional<IFrame> currentIFrame = currentIFrames.get(driver);
+        if (target.getIFrame().equals(currentIFrame)) {
+            LOGGER.debug("{} already selected for {}", printIFrame(currentIFrame), target);
+        } else if (!target.getIFrame().isPresent() && currentIFrame.isPresent()) {
+            LOGGER.debug("switching from {} to {} for {}", printIFrame(currentIFrame), printIFrame(target.getIFrame()), target);
             driver.switchTo().defaultContent();
-            this.currentIFrame = empty();
+            currentIFrames.put(driver, empty());
         } else {
             driver.switchTo().defaultContent();
             target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame((WebElement)driver.findElement(frameLocator))));
-            this.currentIFrame = target.getIFrame();
+            currentIFrames.put(driver, target.getIFrame());
         }
     }
 

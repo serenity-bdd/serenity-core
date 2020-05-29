@@ -8,7 +8,7 @@ public class SummaryRowResultIcon implements RowResultIcon {
         this.fullScenarioName = fullScenarioName;
     }
 
-    public String resultToken() {
+    public String resultToken(int lineNumber) {
         return "**{result:" + fullScenarioName  + "}**";
     }
 }

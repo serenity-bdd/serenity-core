@@ -37,7 +37,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     public abstract List<Requirement> getRequirements();
 
-    public abstract  List<? extends RequirementsTagProvider> getRequirementsTagProviders();
+    public abstract List<? extends RequirementsTagProvider> getRequirementsTagProviders();
 
     public abstract Optional<ReleaseProvider> getReleaseProvider();
 
@@ -91,7 +91,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     Optional<Requirement> matchingAncestorFor(Requirement requirement) {
         return getRequirementAncestors().keySet().stream().filter(
-               requirementKey -> requirementKey.matches(requirement)
+                requirementKey -> requirementKey.matches(requirement)
         ).findFirst();
     }
 
@@ -147,7 +147,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
     private java.util.Optional<Requirement> findMatchingIndexedRequirement(Requirement requirement) {
         return AllRequirements.asStreamFrom(requirements)
                 .filter(requirement::matches)
-                .map(matchingRequirement ->  mostPreciseOf(requirement, matchingRequirement))
+                .map(matchingRequirement -> mostPreciseOf(requirement, matchingRequirement))
                 .findFirst();
 //
 //        for(Requirement indexedRequirement : AllRequirements.in(requirements)) {
@@ -210,7 +210,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     private Collection<String> requirementTypesDefinedIn(List<Requirement> requirements) {
         List<String> requirementTypes = new ArrayList<>();
-        for(Requirement requirement : requirements) {
+        for (Requirement requirement : requirements) {
             if (!requirementTypes.contains(requirement.getType())) {
                 requirementTypes.add(requirement.getType());
             }
@@ -222,27 +222,16 @@ public abstract class BaseRequirementsService implements RequirementsService {
     }
 
     private Collection<TestTag> requirementTagsOfType(List<Requirement> requirements, List<String> tagTypes) {
-
         return AllRequirements.asStreamFrom(requirements)
                 .map(requirement -> tagsWithTypes(requirement, tagTypes))
                 .flatMap(Function.identity())
                 .collect(Collectors.toList());
-
-//        Set<TestTag> requirementTypes = new HashSet<>();
-//        for(Requirement requirement : AllRequirements.in(requirements)) {
-//            List<TestTag> matchingTags = requirement.getTags().stream()
-//                                                    .filter( tag -> tagTypes.contains(tag.getType()))
-//                                                    .collect(Collectors.toList());
-//
-//            requirementTypes.addAll(matchingTags);
-//        }
-//        return requirementTypes;
     }
 
     private Stream<TestTag> tagsWithTypes(Requirement requirement, List<String> tagTypes) {
-        return requirement.getTags()
-                          .stream()
-                          .filter( tag -> tagTypes.contains(tag.getType() ));
+            return requirement.getTags()
+                    .stream()
+                    .filter(tag -> tagTypes.contains(tag.getType()));
     }
 
     @Override
@@ -272,5 +261,27 @@ public abstract class BaseRequirementsService implements RequirementsService {
     @Override
     public Collection<TestTag> getTagsOfType(List<String> tagTypes) {
         return requirementTagsOfType(getRequirements(), tagTypes);
+    }
+
+    @Override
+    public Collection<Requirement> getRequirementsWithTagsOfType(List<String> tagTypes) {
+        return AllRequirements.asStreamFrom(requirements)
+                .filter(requirement -> hasTagOfType(requirement, tagTypes))
+                .collect(Collectors.toList());
+    }
+
+
+    private boolean hasTagOfType(Requirement requirement, List<String> tagTypes) {
+        return requirement.getTags()
+                .stream()
+                .anyMatch(tag -> tagTypes.contains(tag.getType()));
+    }
+
+
+    public boolean containsEmptyRequirementWithTag(TestTag tag) {
+        return AllRequirements.asStreamFrom(requirements)
+                .anyMatch(
+                        requirement -> (requirement.hasTag(tag) && requirement.containsNoScenarios())
+                );
     }
 }

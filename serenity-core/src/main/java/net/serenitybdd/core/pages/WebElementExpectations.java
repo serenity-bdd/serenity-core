@@ -73,7 +73,7 @@ public class WebElementExpectations {
     }
 
 
-    public static ExpectedCondition<Boolean> elementIsNotEnabled(final WebElementFacadeImpl element) {
+    public static ExpectedCondition<Boolean> elementIsNotEnabled(final WebElementFacade element) {
         return new ExpectedCondition<Boolean>() {
             private WebElementFacade element;
             public ExpectedCondition<Boolean> forElement(WebElementFacade element) {

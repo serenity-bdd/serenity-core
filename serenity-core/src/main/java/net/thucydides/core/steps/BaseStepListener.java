@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.di.WebDriverInjectors;
@@ -12,6 +13,7 @@ import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -95,7 +97,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
-
+    private ScrollStrategy scrollStrategy;
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
@@ -198,7 +200,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public Photographer getPhotographer() {
         if (photographer == null) {
-            photographer = new Photographer(getDarkroom());
+            if (shouldUseFullPageScreenshotStrategy()){
+                scrollStrategy = ScrollStrategy.WHOLE_PAGE;
+            } else {
+                scrollStrategy = ScrollStrategy.VIEWPORT_ONLY;
+            }
+            photographer = new Photographer(getDarkroom(), scrollStrategy);
         }
         return photographer;
     }
@@ -211,13 +218,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages, TestFailureCause testfailureCause) {
+    public void lastTestPassedAfterRetries(int attemptNum, List<String> failureMessages, TestFailureCause testfailureCause) {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().recordStep(
                     TestStep.forStepCalled("UNSTABLE TEST:\n" + failureHistoryFor(failureMessages))
-                            .withResult(TestResult.IGNORED));
+                            .withResult(UNDEFINED));
+//                            .withResult(TestResult.IGNORED));
 
-            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
+            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + attemptNum).andType("unstable test"));
             latestTestOutcome().get().setFlakyTestFailureCause(testfailureCause);
         }
     }
@@ -232,6 +240,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void currentStepIsAPrecondition() {
         getCurrentStep().setPrecondition(true);
+    }
+
+    public void updateExampleLineNumber(int lineNumber) {
+        currentStep().ifPresent(
+                step -> step.setLineNumber(lineNumber)
+        );
     }
 
     public class StepMerger {
@@ -336,7 +350,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return proxyFactory;
     }
 
-    protected TestOutcome getCurrentTestOutcome() {
+    public TestOutcome getCurrentTestOutcome() {
         return latestTestOutcome().orElse(unavailableTestOutcome());
     }
 
@@ -505,6 +519,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
             testAndTopLevelStepsShouldBeIgnored();
         }
 
+        OverrideDriverCapabilities.clear();
+
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
@@ -513,7 +529,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     getEventBus().getEnvironmentVariables(),
                     outcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
-
 
             if (inDataDrivenTest) {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
@@ -543,6 +558,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private boolean currentTestIsABrowserTest() {
         return SerenityJUnitTestCase.inClass(testSuite).isAWebTest()
                 || (testSuite == null && ThucydidesWebDriverSupport.isDriverInstantiated());
+//                || (!ThucydidesWebDriverSupport.getDriversUsed().isEmpty());
     }
 
     public void testRetried() {
@@ -676,7 +692,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished() {
-//        updateSessionIdIfKnown();
         takeEndOfStepScreenshotFor(SUCCESS);
         currentStepDone(SUCCESS);
         pauseIfRequired();
@@ -746,6 +761,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return ThucydidesSystemProperty.SERENITY_TAG_FAILURES.booleanFrom(configuration.getEnvironmentVariables());
     }
 
+    private boolean shouldUseFullPageScreenshotStrategy() {
+        return ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(configuration.getEnvironmentVariables());
+    }
+
     public void stepIgnored() {
         if (aStepHasFailed()) {
             markCurrentStepAs(SKIPPED);
@@ -798,6 +817,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return !currentStepStack.isEmpty();
     }
 
+    public int getCurrentLevel() { return currentStepStack.size(); }
+
     private void takeEndOfStepScreenshotFor(final TestResult result) {
         if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
             take(MANDATORY_SCREENSHOT, result);
@@ -830,7 +851,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean shouldTakeScreenshots() {
-        if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed() && !StepEventBus.getEventBus().softAssertsActive()) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
+            return false;
+        }
+
+        if (screenshots.areDisabledForThisAction()) {
             return false;
         }
 
@@ -909,7 +934,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
-
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
@@ -1048,8 +1072,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return;
         }
 
-        getCurrentTestOutcome().asManualTest();
         getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
+        getCurrentTestOutcome().setToManual();
     }
 
     private TestResult defaulManualTestReportResult() {
@@ -1120,6 +1144,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().moveToNextRow();
         }
+        OverrideDriverCapabilities.clear();
+        if (currentTestIsABrowserTest()) {
+            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+        //    updateSessionIdIfKnown();
+
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    getCurrentTestOutcome(),
+                    SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
+        }
+
         closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
     }
 

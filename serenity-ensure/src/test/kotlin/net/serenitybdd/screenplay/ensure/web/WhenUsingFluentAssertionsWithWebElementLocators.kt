@@ -19,10 +19,11 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.phantomjs.PhantomJSDriver
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
-import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 
@@ -39,9 +40,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        val browserOptions = ChromeOptions()
-        browserOptions.setHeadless(true)
-        driver = ChromeDriver(browserOptions)
+        driver = PhantomJSDriver() // ChromeDriver(options)
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)
@@ -101,7 +100,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `has a given page HTML content`() {
-                shouldPassWhenChecking(thatTheCurrentPage().pageSource().contains("<title>Test Page</title>"), wendy)
+                shouldPassWhenChecking(thatTheCurrentPage().pageSource().contains("Test Page"), wendy)
             }
 
             @Test
@@ -221,6 +220,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `when the element is on the page`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Heading"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasText("Heading"), wendy)
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isGreaterThan("Aardvark"), wendy)
                 }
 
@@ -284,6 +284,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `for an input field`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#firstName")).value().isEqualTo("Joe"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).hasValue("Joe"), wendy)
                 }
 
                 @Test
@@ -329,6 +330,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `for a dropdown list field`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#colors")).selectedValue().isEqualTo("green"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#colors")).hasSelectedValue("green"), wendy)
                 }
 
                 @Test

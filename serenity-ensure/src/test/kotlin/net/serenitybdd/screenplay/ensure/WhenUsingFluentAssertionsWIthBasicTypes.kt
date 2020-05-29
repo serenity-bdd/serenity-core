@@ -21,8 +21,8 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases with strings`() {
-                shouldFailWithMessage("""|Expecting a string that is equal to: <"bar">
-                                         |But got............................: <"foo">"""
+                shouldFailWithMessage("""|Expecting a value that is equal to: <"bar">
+                                         |But got...........................: <"foo">"""
                         .trimMargin())
                         .whenChecking(that("foo").isEqualTo("bar"))
             }
@@ -69,8 +69,8 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is not equal to: <"bar">
-                                         |But got................................: <"bar">"""
+                shouldFailWithMessage("""|Expecting a value that is not equal to: <"bar">
+                                         |But got...............................: <"bar">"""
                         .trimMargin())
                         .whenChecking(that("bar").isNotEqualTo("bar"))
             }
@@ -87,7 +87,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is null
+                shouldFailWithMessage("""|Expecting a value that is null
                                      |But got: "bar""""
                         .trimMargin())
                         .whenChecking(that("bar").isNull())
@@ -107,7 +107,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
             @Test
             fun `for negative cases`() {
                 val nullName: String? = null
-                shouldFailWithMessage("""|Expecting a string that is not null
+                shouldFailWithMessage("""|Expecting a value that is not null
                                      |But got: <null>"""
                         .trimMargin())
                         .whenChecking(that(nullName).isNotNull())
@@ -124,14 +124,14 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is in: <[red, green, blue]>
-                                         |But got......................: <"yellow">"""
+                shouldFailWithMessage("""|Expecting a value that is in: <[red, green, blue]>
+                                         |But got.....................: <"yellow">"""
                         .trimMargin())
                         .whenChecking(that("yellow").isIn("red", "green", "blue"))
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldFailWhenChecking(that(nullValue).isIn("red", "green", "blue"))
             }
         }
@@ -146,14 +146,14 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is not in: <[red, green, blue]>
-                                         |But got..........................: <"red">"""
+                shouldFailWithMessage("""|Expecting a value that is not in: <[red, green, blue]>
+                                         |But got.........................: <"red">"""
                         .trimMargin())
                         .whenChecking(that("red").isNotIn("red", "green", "blue"))
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldPassWhenChecking(that(nullValue).isNotIn("red", "green", "blue"))
             }
         }
@@ -168,14 +168,14 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is in: <[red, green, blue]>
-                                         |But got......................: <"yellow">"""
+                shouldFailWithMessage("""|Expecting a value that is in: <[red, green, blue]>
+                                         |But got.....................: <"yellow">"""
                         .trimMargin())
                         .whenChecking(that("yellow").isIn(listOf("red", "green", "blue")))
             }
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldFailWhenChecking(that(nullValue).isIn(listOf("red", "green", "blue")))
             }
         }
@@ -190,15 +190,15 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is not in: <[red, green, blue]>
-                                         |But got..........................: <"red">"""
+                shouldFailWithMessage("""|Expecting a value that is not in: <[red, green, blue]>
+                                         |But got.........................: <"red">"""
                         .trimMargin())
                         .whenChecking(that("red").isNotIn(setOf("red", "green", "blue")))
             }
 
             @Test
             fun `for null values`() {
-                val nullValue: String? = null;
+                val nullValue: String? = null
                 shouldPassWhenChecking(that(nullValue).isNotIn(setOf("red", "green", "blue")))
             }
         }
@@ -212,8 +212,8 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a string that is not in: <[red, green, blue]>
-                                         |But got..........................: <"red">"""
+                shouldFailWithMessage("""|Expecting a value that is not in: <[red, green, blue]>
+                                         |But got.........................: <"red">"""
                         .trimMargin())
                         .whenChecking(that("red").not().isIn(setOf("red", "green", "blue")))
             }

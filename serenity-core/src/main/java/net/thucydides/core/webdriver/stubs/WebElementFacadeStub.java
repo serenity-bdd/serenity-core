@@ -5,7 +5,7 @@ import net.serenitybdd.core.pages.*;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;
@@ -19,53 +19,9 @@ import java.util.function.Function;
 
 public class WebElementFacadeStub implements WebElementFacade {
 
-    protected WebElement getElement() {
+    public WebElement getElement() {
         return this;
     }
-
-    protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
-        return new JavascriptExecutorFacade() {
-
-            @Override
-            protected Gson getGson() {
-                return null;
-            }
-
-            @Override
-            public void registerTypeAdapter(Type type, Object typeAdapter) {
-            }
-
-            @Override
-            public Object executeScript(String script) {
-                return null;
-            }
-
-            @Override
-            public Object executeScript(String script, Object... params) {
-                return null;
-            }
-
-            @Override
-            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Map<String, Object> injectedFields, Object... params) throws IllegalAccessException {
-                return null;
-            }
-
-            @Override
-            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Object... params) throws IllegalAccessException {
-                return null;
-            }
-
-            @Override
-            public <T> List<T> deserializeScriptResultAsListOf(String script, Object... params) {
-                return null;
-            }
-        };
-    }
-
-    protected InternalSystemClock getClock() {
-        return new InternalSystemClock();
-    }
-
 
     @Override
     public WebElementFacade then(String xpathOrCssSelector) {
@@ -580,7 +536,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     public WebElement getWrappedElement() {
-        return this;
+        return new WrappedElementStub();
     }
 
     @Override
@@ -627,16 +583,6 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElement> findElementsByAndroidUIAutomator(String using) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public WebElement findElementByIosUIAutomation(String using) {
-        return this;
-    }
-
-    @Override
-    public List<WebElement> findElementsByIosUIAutomation(String using) {
         return new ArrayList<>();
     }
 

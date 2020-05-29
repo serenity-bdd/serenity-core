@@ -1,8 +1,10 @@
 package net.serenitybdd.core.model
-import cucumber.api.PendingException
+
+import io.cucumber.java.PendingException
 import net.serenitybdd.core.PendingStepException
 import net.serenitybdd.core.exceptions.TestCompromisedException
 import net.serenitybdd.core.model.sampleexceptions.MyFailureException
+import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.failures.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -12,8 +14,6 @@ import org.junit.internal.ArrayComparisonFailure
 import org.openqa.selenium.WebDriverException
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import static net.thucydides.core.model.TestResult.*
 
 class WhenReportingExceptions extends Specification {
 
@@ -29,21 +29,21 @@ class WhenReportingExceptions extends Specification {
 
         where:
             exception                                                                  | expectedResult
-            new WebdriverAssertionError(new NullPointerException())                    | ERROR
-            new WebdriverAssertionError(new NoSuchElementException())                  | ERROR
-            new StepFailureException("bother", new NoSuchElementException())           | ERROR
-            new AssertionError("test message")                            | FAILURE
-            new SoftAssertionError(["test message"])                                     | FAILURE
+            new WebdriverAssertionError(new NullPointerException())                    | TestResult.ERROR
+            new WebdriverAssertionError(new NoSuchElementException())                  | TestResult.ERROR
+            new StepFailureException("bother", new NoSuchElementException())           | TestResult.ERROR
+            new AssertionError("test message")                                         | TestResult.FAILURE
+            new SoftAssertionError(["test message"])                                   | TestResult.FAILURE
             new ArrayComparisonFailure("test message",
-                                        new AssertionError("wrapped exception"), 1)    | FAILURE
-            new WebdriverAssertionError(new AssertionError("wrapped assertion error")) | FAILURE
-            new StepFailureException("bother", new AssertionError("test message"))     | FAILURE
-            new RuntimeException("message")                                                             | ERROR
-            new NullPointerException()                                                                  | ERROR
-            new WebDriverException()                                                                    | ERROR
-            new PendingStepException("step is pending")                                                 | PENDING
-            new PendingException("step is pending")                                                     | PENDING
-            new TestCompromisedException("test is compromised")                                         | COMPROMISED
+                                        new AssertionError("wrapped exception"), 1)    | TestResult.FAILURE
+            new WebdriverAssertionError(new AssertionError("wrapped assertion error")) | TestResult.FAILURE
+            new StepFailureException("bother", new AssertionError("test message"))     | TestResult.FAILURE
+            new RuntimeException("message")                                            | TestResult.ERROR
+            new NullPointerException()                                                 | TestResult.ERROR
+            new WebDriverException()                                                   | TestResult.ERROR
+            new PendingStepException("step is pending")                                | TestResult.PENDING
+            new PendingException("step is pending")                                    | TestResult.PENDING
+            new TestCompromisedException("test is compromised")                        | TestResult.COMPROMISED
     }
 
     def "non-assertion exceptions should be reported as Errors by default"() {
@@ -51,7 +51,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis()
             def result = failureAnalysisOf.resultFor(new MyFailureException())
         then:
-            result == ERROR
+            result == TestResult.ERROR
     }
 
     def "should be able to define what exceptions cause failures using serenity.fail.on"() {
@@ -63,7 +63,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis(environmentVariables)
             def result = failureAnalysisOf.resultFor(new MyFailureException())
         then:
-            result == FAILURE
+            result == TestResult.FAILURE
     }
 
     def "should be able to override failures as errors using serenity.error.on"() {
@@ -75,7 +75,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis(environmentVariables)
             def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
         then:
-            result == ERROR
+            result == TestResult.ERROR
     }
 
     def "should be able to override errors as compromised using serenity.compromised.on"() {
@@ -87,7 +87,7 @@ class WhenReportingExceptions extends Specification {
         def failureAnalysisOf = new FailureAnalysis(environmentVariables)
         def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
         then:
-        result == COMPROMISED
+        result == TestResult.COMPROMISED
     }
 
     def "should be able to override errors as skipped using serenity.skip.on"() {
@@ -99,7 +99,7 @@ class WhenReportingExceptions extends Specification {
         def failureAnalysisOf = new FailureAnalysis(environmentVariables)
         def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
         then:
-        result == SKIPPED
+        result == TestResult.SKIPPED
     }
 
     def "should be able to override errors as failures"() {
@@ -112,7 +112,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis(environmentVariables)
             def result = failureAnalysisOf.resultFor(new NoSuchElementException())
         then:
-            result == FAILURE
+            result == TestResult.FAILURE
     }
 
     def "should be able to override errors as pending"() {
@@ -124,7 +124,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis(environmentVariables)
             def result = failureAnalysisOf.resultFor(new MyFailureException())
         then:
-            result == PENDING
+            result == TestResult.PENDING
     }
 
     def "should be able to override errors as failures even with nested errors"() {
@@ -137,7 +137,7 @@ class WhenReportingExceptions extends Specification {
             def failureAnalysisOf = new FailureAnalysis(environmentVariables)
             def result = failureAnalysisOf.resultFor(new StepFailureException("oh bother!",new NoSuchElementException()))
         then:
-            result == FAILURE
+            result == TestResult.FAILURE
     }
 
 }

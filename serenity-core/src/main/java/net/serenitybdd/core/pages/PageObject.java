@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Predicate;
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
@@ -905,6 +906,25 @@ public abstract class PageObject {
         }
     }
 
+    /**
+     * Open an environment-specific page defined in the `serenity.conf` file under the `pages` section.
+     *
+     * @param pageName
+     */
+    public void openPageNamed(String pageName) {
+        getDriver().get(environmentSpecificPageUrl(pageName));
+    }
+
+    public void navigateToPageNamed(String pageName) {
+        getDriver().navigate().to(environmentSpecificPageUrl(pageName));
+    }
+
+    private String environmentSpecificPageUrl(String pageName) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("pages." + pageName)
+                .orElseThrow(() -> new UnknownPageException("No page called " + pageName + " was specified in the serenity.conf file"));
+    }
+
     public void clickOn(final WebElement webElement) {
         element(webElement).click();
     }
@@ -1252,7 +1272,7 @@ public abstract class PageObject {
     public Actions withAction() {
         WebDriver proxiedDriver = (getDriver() instanceof WebDriverFacade) ?
                 ((WebDriverFacade) getDriver()).getProxiedDriver() : getDriver();
-        return new Actions(proxiedDriver);
+        return new SerenityActions(proxiedDriver);
     }
 
     public class FieldEntry {

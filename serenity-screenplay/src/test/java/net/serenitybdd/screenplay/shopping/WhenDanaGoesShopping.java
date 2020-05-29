@@ -68,7 +68,5 @@ public class WhenDanaGoesShopping {
             return instrumented(LookThroughTheBags.class);
         }
     }
-
-
 }
 

@@ -16,7 +16,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREAD
 
 class Reporter {
 
-    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(60, TimeUnit.SECONDS);
+    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(600, TimeUnit.SECONDS);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 

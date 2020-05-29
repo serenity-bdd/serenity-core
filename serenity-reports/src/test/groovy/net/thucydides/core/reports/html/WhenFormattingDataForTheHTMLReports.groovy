@@ -429,7 +429,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
             def formatter = new Formatter();
         then:
-            formatter.resultIcon().forResult(result) == expectedIcon
+            formatter.resultIcon().forResult(result).contains(expectedIcon)
         where:
             result              | expectedIcon
             TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i>"
@@ -442,7 +442,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         when:
         def formatter = new Formatter();
         then:
-        formatter.resultIcon().inLarge().forResult(result) == expectedIcon
+        formatter.resultIcon().inLarge().forResult(result).contains(expectedIcon)
         where:
         result              | expectedIcon
         TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon fa-2x' title='ERROR'></i>"

@@ -22,6 +22,7 @@ plugins {
     id 'project-report'
     id "org.sonarqube" version "2.6"
     id 'org.jetbrains.dokka' version '0.9.17'
+    id 'java-library'
 }
 
 apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
@@ -47,6 +48,7 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
+    apply plugin:  'java-library'
     apply plugin: 'com.github.ben-manes.versions'
 
     dependencyUpdates.resolutionStrategy = {
@@ -214,7 +216,7 @@ subprojects {
         options.addStringOption('debug')
         options.addStringOption('Xdoclint:none')
         options.encoding = 'UTF-8'
-        classpath = configurations.compile
+        classpath = configurations.compileClasspath
     }
 
     dokka {
@@ -230,7 +232,7 @@ subprojects {
         compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
         compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
         compile "com.google.guava:guava:${guavaVersion}"
-        
+
         compile("com.google.inject:guice:${guiceVersion}") {
             exclude group: "org.ow2.asm", module: "asm"
             exclude group: "asm", module: "asm"
@@ -238,20 +240,22 @@ subprojects {
             exclude group: "org.sonatype.sisu.inject", module: "cglib"
         }
 
-        compile("cglib:cglib:${cglibVersion}") {
-            exclude group: "org.ow2.asm", module: "asm"
-            exclude group: "org.apache.ant", module: "ant"
-        }
         compile("org.ow2.asm:asm:${asmVersion}")
 
         compile "commons-codec:commons-codec:${commonsCodecVersion}"
         compile "org.objenesis:objenesis:${objenesisVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile "io.cucumber:cucumber-core:${cucumberVersion}"
+        compile ("io.cucumber:cucumber-core:${cucumberVersion}") {
+            exclude group: "org.apiguardian", module: 'apiguardian-api'
+        }
+        compile ("io.cucumber:cucumber-java:${cucumberVersion}") {
+            exclude group: "org.apiguardian", module: 'apiguardian-api'
+        }
+
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
-        compile "junit:junit:${junitVersion}"
+        testCompile "junit:junit:${junitVersion}"
 
         compile "io.vavr:vavr:${vavrVersion}"
 
@@ -274,7 +278,9 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
 
-        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
+        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
+            exclude group: "org.junit.jupiter"
+        }
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "junit"
             exclude group: "org.codehaus.groovy"
@@ -301,10 +307,13 @@ subprojects {
     }
 
     jar {
+        inputs.property("moduleName", project.name)
+
         manifest.attributes["Created-By"] =
                 "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
+        manifest.attributes["Automatic-Module-Name"] = project.name
 
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
@@ -452,7 +461,7 @@ Changelog of Git Changelog Gradle plugin.
 **{{{messageTitle}}}**
 
 {{#messageBodyItems}}
- * {{.}} 
+ * {{.}}
 {{/messageBodyItems}}
 
 [{{hash}}](https://github.com/tomasbjerre/git-changelog-gradle-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*

@@ -28,7 +28,7 @@ public class SamplePassingScenarioWithEmptyTests {
     @Test
     public void happy_day_scenario() throws Throwable {
         steps.stepThatSucceeds();
-        steps.stepThatIsIgnored();
+//        steps.stepThatIsIgnored();
         steps.anotherStepThatSucceeds();
     }
 

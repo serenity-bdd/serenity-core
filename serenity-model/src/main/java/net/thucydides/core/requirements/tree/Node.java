@@ -5,7 +5,7 @@ import com.google.common.base.Objects;
 import java.util.Arrays;
 import java.util.List;
 
-public class Node {
+public class Node implements Comparable<Node> {
 
     private final String text;
     private String type;
@@ -47,5 +47,11 @@ public class Node {
     @Override
     public int hashCode() {
         return Objects.hashCode(text, href);
+    }
+
+
+    @Override
+    public int compareTo(Node otherNode) {
+        return this.text.compareTo(otherNode.text);
     }
 }

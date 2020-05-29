@@ -1,30 +1,24 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 public class ExampleRowResultIcon implements RowResultIcon {
-    private int exampleTableNumber = 0;
-    private int exampleRow = 0;
-    private final String fullScenarioName;
+//    private final String fullScenarioName;
+    private final String featureName;
 
-    public ExampleRowResultIcon(String featureName, String scenarioName, int exampleTableNumber) {
-//        this.fullScenarioName = featureName + "∫" + scenarioName;
-        this.fullScenarioName = featureName + "!" + scenarioName;
-        this.exampleTableNumber = exampleTableNumber;
+    public ExampleRowResultIcon(String featureName) {
+//        this.fullScenarioName = featureName + "!" + scenarioName;
+        this.featureName = featureName;
     }
 
-    public String resultToken() {
-//        return "{example-result:" + fullScenarioName + "≤" + exampleTableNumber + "≥≤" + exampleRow++ + "≥}";
-        return "{example-result:" + fullScenarioName + "[" + exampleTableNumber + "][" + exampleRow++ + "]}";
+    private static String RESULT_TOKEN_TEMPLATE = "{example-result:%s[%d]}";
+    public String resultToken(int lineNumber) {
+//        return String.format(RESULT_TOKEN_TEMPLATE, fullScenarioName, lineNumber);
+        return String.format(RESULT_TOKEN_TEMPLATE, featureName, lineNumber);
     }
 
-    public ExampleRowResultIcon nextExampleTable() {
-        exampleTableNumber++;
-        exampleRow = 0;
-        return this;
-    }
-
-    public SummaryRowResultIcon summaryIcon() {
-        return new SummaryRowResultIcon(fullScenarioName);
-    }
+//    public SummaryRowResultIcon summaryIcon() {
+//        return new SummaryRowResultIcon(featureName);
+//        return new SummaryRowResultIcon(fullScenarioName);
+//    }
 
     public RowResultIcon noIcon() {
         return new BlankRowResultIcon();

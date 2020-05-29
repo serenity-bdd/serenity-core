@@ -7,8 +7,7 @@ import net.serenitybdd.core.di.*;
 import net.serenitybdd.core.pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WrapsElement;
-import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.internal.*;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.*;
 import org.openqa.selenium.support.pagefactory.*;
 import org.openqa.selenium.support.pagefactory.internal.*;
@@ -90,12 +89,12 @@ public class SmartFieldDecorator implements FieldDecorator {
             = Arrays.asList(FindBy.class,
                             net.thucydides.core.annotations.findby.FindBy.class,
                             org.openqa.selenium.support.FindBy.class,
-                            FindBys.class,
-                            FindAll.class,
-                            AndroidFindBy.class,
-                            AndroidFindBys.class,
-                            iOSFindBy.class,
-                            iOSFindBys.class);
+                            FindBys.class, FindAll.class, AndroidFindBy.class,
+                            AndroidFindBys.class, AndroidFindAll.class,
+                            iOSXCUITFindBy.class, iOSXCUITFindBys.class,
+                            iOSXCUITFindAll.class);
+//                            iOSFindBy.class,
+//                            iOSFindBys.class);
 
 
     private boolean annotatedByLegalFindByAnnotation(Field field) {

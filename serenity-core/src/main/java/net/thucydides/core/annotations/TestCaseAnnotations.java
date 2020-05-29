@@ -2,9 +2,9 @@ package net.thucydides.core.annotations;
 
 import net.serenitybdd.core.environment.*;
 import net.thucydides.core.configuration.*;
+import net.thucydides.core.requirements.SerenityTestCaseFinder;
 import net.thucydides.core.webdriver.*;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.runner.*;
 import org.openqa.selenium.*;
 
 import java.util.*;
@@ -14,13 +14,14 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Utility class used to inject fields into a test case.
- * @author johnsmart
  *
+ * @author johnsmart
  */
 public final class TestCaseAnnotations {
 
     private final Object testCase;
     private final DriverConfiguration configuration;
+    private static final SerenityTestCaseFinder serenityTestCaseFinder = new SerenityTestCaseFinder();
 
     public TestCaseAnnotations(final Object testCase, WebDriverConfiguration configuration) {
         this.testCase = testCase;
@@ -46,7 +47,7 @@ public final class TestCaseAnnotations {
     }
 
     public void injectDrivers(final WebdriverManager webdriverManager) {
-        injectDrivers(ThucydidesWebDriverSupport.getDriver(),webdriverManager);
+        injectDrivers(ThucydidesWebDriverSupport.getDriver(), webdriverManager);
     }
 
     public void injectDrivers(final WebDriver defaultDriver, final WebdriverManager webdriverManager) {
@@ -54,7 +55,7 @@ public final class TestCaseAnnotations {
         int driverCount = 1;
 
         String suffix = "";
-        for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
+        for (ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
             String driverName = driverRootName + suffix;
             String driverOptions = webDriverField.getOptions();
@@ -74,8 +75,8 @@ public final class TestCaseAnnotations {
     private WebDriver requestedDriverFrom(WebdriverManager webdriverManager, String fieldName, String driverName, String driverOptions) {
 
         return RequestedDrivers.withEnvironmentVariables(configuration.getEnvironmentVariables())
-                               .andWebDriverManager(webdriverManager)
-                               .requestedDriverFor(fieldName, driverName, driverOptions);
+                .andWebDriverManager(webdriverManager)
+                .requestedDriverFor(fieldName, driverName, driverOptions);
     }
 
     private String configuredDriverType() {
@@ -102,7 +103,6 @@ public final class TestCaseAnnotations {
         return isUniqueSession(testCase.getClass());
     }
 
-
     public static boolean isUniqueSession(Class<?> testClass) {
         ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
         return webDriverField.isUniqueSession();
@@ -122,8 +122,7 @@ public final class TestCaseAnnotations {
     }
 
     public static boolean isASerenityTestCase(Class<?> testClass) {
-        return (testClass != null)
-                && (testClass.getAnnotation(RunWith.class) != null)
-                && (testClass.getAnnotation(RunWith.class).value().toString().contains("Serenity") || testClass.getAnnotation(RunWith.class).value().toString().contains("Thucydides"));
+        return serenityTestCaseFinder.isSerenityTestCase(testClass);
     }
+
 }

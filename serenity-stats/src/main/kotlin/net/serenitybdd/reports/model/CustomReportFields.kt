@@ -20,18 +20,28 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
     private val fields: List<String> = customFieldsDefinedIn(environmentVariables)
     val fieldNames: List<String> = customFieldOrderDefinedIn(fields, environmentVariables)
     val values: List<String> = customFieldValueDefinedIn(fields, environmentVariables)
+    private val env
+        get() = environmentVariables.getProperty("environment", "default")
+    private val fieldsRegex
+        get() = "($CUSTOM_FIELDS_PREFIX|environments\\.(all|$env)\\.$CUSTOM_FIELDS_PREFIX).*".toRegex()
+    private val orderedFieldsRegex
+        get() = "($CUSTOM_FIELD_ORDER|environments\\.(all|$env)\\.$CUSTOM_FIELD_ORDER).*".toRegex()
 
     private fun customFieldsDefinedIn(environmentVariables: EnvironmentVariables): List<String> {
 
         return if (orderedFields.isNotEmpty()) {
             orderedFields
         } else {
-            environmentVariables.getPropertiesWithPrefix(CUSTOM_FIELDS_PREFIX).keys.map { key -> key.toString() }
+            environmentVariables
+                    .keys
+                    .filter { key -> key.matches(fieldsRegex) }
         }
     }
 
     private fun customFieldValueDefinedIn(fields: List<String>, environmentVariables: EnvironmentVariables): List<String> =
-            fields.map { key -> environmentVariables.injectSystemPropertiesInto(environmentVariables.getProperty(key))?:"" }
+            fields.map { key ->
+                environmentVariables.injectSystemPropertiesInto(environmentVariables.getProperty(key)) ?: ""
+            }
 
 
     private fun customFieldOrderDefinedIn(fields: List<String>, environmentVariables: EnvironmentVariables): List<String> {
@@ -43,10 +53,14 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
         }
     }
 
-    private fun humanReadableLabelOf(field: String): String = humanize(field.substring(CUSTOM_FIELDS_PREFIX.length + 1))
+    private fun humanReadableLabelOf(field: String): String = humanize(field.substringAfter("$CUSTOM_FIELDS_PREFIX."))
 
-    private fun orderedFields(environmentVariables: EnvironmentVariables): List<String> =
-            if (environmentVariables.getProperty(CUSTOM_FIELD_ORDER) != null)
-                environmentVariables.getProperty(CUSTOM_FIELD_ORDER).split(",").map { field -> field.trim() }
-            else listOf()
+    private fun orderedFields(environmentVariables: EnvironmentVariables): List<String> = environmentVariables
+            .keys
+            .firstOrNull { key ->
+                key.matches(orderedFieldsRegex)
+            }?.let { key ->
+                environmentVariables.getProperty(key).split(",").map { field -> field.trim() }
+            } ?: emptyList()
+
 }

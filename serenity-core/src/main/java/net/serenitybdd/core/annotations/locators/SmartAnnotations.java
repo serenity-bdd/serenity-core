@@ -41,9 +41,9 @@ public class SmartAnnotations extends Annotations {
                 if (annotation.annotationType().equals(AndroidFindBy.class)) {
                     return MobileBy.AndroidUIAutomator(value);
                 }
-                if (annotation.annotationType().equals(iOSFindBy.class)) {
-                    return MobileBy.IosUIAutomation(value);
-                }
+//                if (annotation.annotationType().equals(iOSXCUITFindBy.class)) {
+//                    return MobileBy.IosUIAutomation(value);
+//                }
                 return super.getBy(annotation);
             }
         },
@@ -111,6 +111,18 @@ public class SmartAnnotations extends Annotations {
             @Override
             org.openqa.selenium.By getBy(Annotation annotation) {
                 return By.sclocator(getValue(annotation, this));
+            }
+        },
+        BYIOSCLASSCHAIN("iOSClassChain") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return MobileBy.iOSClassChain(getValue(annotation, this));
+            }
+        },
+        BYIOSNSPREDICATE("iOSNsPredicate") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return MobileBy.iOSNsPredicateString(getValue(annotation, this));
             }
         };
 
@@ -206,19 +218,19 @@ public class SmartAnnotations extends Annotations {
             by = getComplexMobileBy(androidFindAll.value(), ByChained.class);
         }
 
-        iOSFindBy iOSBy = field.getAnnotation(iOSFindBy.class);
+        iOSXCUITFindBy iOSBy = field.getAnnotation(iOSXCUITFindBy.class);
         if (iOSBy != null && IOS.toUpperCase().equals(platform.name())) {
             by = getMobileBy(iOSBy, getFieldValue(iOSBy));
         }
 
-        iOSFindBys iOSBys = field.getAnnotation(iOSFindBys.class);
+        iOSXCUITFindBys iOSBys = field.getAnnotation(iOSXCUITFindBys.class);
         if (iOSBys != null && IOS.toUpperCase().equals(platform.name())) {
             by = getComplexMobileBy(iOSBys.value(), ByChained.class);
         }
 
-        iOSFindAll iOSFindAll = field.getAnnotation(iOSFindAll.class);
-        if (iOSFindAll != null && IOS.toUpperCase().equals(platform.name())) {
-            by = getComplexMobileBy(iOSFindAll.value(), ByChained.class);
+        iOSXCUITFindAll iOSXCUITFindAll = field.getAnnotation(iOSXCUITFindAll.class);
+        if (iOSXCUITFindAll != null && IOS.toUpperCase().equals(platform.name())) {
+            by = getComplexMobileBy(iOSXCUITFindAll.value(), ByChained.class);
         }
 
         //my additions to FindBy
@@ -329,8 +341,8 @@ public class SmartAnnotations extends Annotations {
             case ACCESSIBILITY_ID:
                 return MobileBy.AccessibilityId(using);
 
-            case IOS_UI_AUTOMATION:
-                return MobileBy.IosUIAutomation(using);
+//            case IOS_UI_AUTOMATION:
+//                return MobileBy.IosUIAutomation(using);
 
             case ANDROID_UI_AUTOMATOR:
                 return MobileBy.AndroidUIAutomator(using);
@@ -391,10 +403,10 @@ public class SmartAnnotations extends Annotations {
         if (isNotEmpty(myFindBy.androidUIAutomator())) {
             return MobileBy.AndroidUIAutomator(myFindBy.androidUIAutomator());
         }
-        if (isNotEmpty(myFindBy.iOSUIAutomation())) {
-            // FIXME: Need to support android with platform switch
-            return MobileBy.IosUIAutomation(myFindBy.iOSUIAutomation());
-        }
+//        if (isNotEmpty(myFindBy.iOSUIAutomation())) {
+//            // FIXME: Need to support android with platform switch
+//            return MobileBy.IosUIAutomation(myFindBy.iOSUIAutomation());
+//        }
         // Fall through
         return null;
     }

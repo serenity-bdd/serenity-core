@@ -110,7 +110,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     @Override
     public WebElement findElement() {
-        if (aPreviousStepHasFailed()) {
+        if (inADisabledStep()) {
             return new WebElementFacadeStub();
         } else if (shouldFindElementImmediately()) {
             return findElementImmediately();
@@ -183,7 +183,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
      * Will poll the interface on a regular basis until at least one element is present.
      */
     public List<WebElement> findElements() {
-        if (aPreviousStepHasFailed()) {
+        if (inADisabledStep()) {
             return EMPTY_LIST_OF_WEBELEMENTS;
         }
         SlowLoadingElementList list = new SlowLoadingElementList(clock, annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()));
@@ -197,8 +197,8 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     }
 
 
-    private boolean aPreviousStepHasFailed() {
-        return (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
+    private boolean inADisabledStep() {
+        return (StepEventBus.getEventBus().webdriverCallsAreSuspended());
     }
 
     /**

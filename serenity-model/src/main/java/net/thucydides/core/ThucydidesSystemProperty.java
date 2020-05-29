@@ -31,7 +31,7 @@ public enum ThucydidesSystemProperty {
     /**
      * If using a provided driver, what type is it.
      * The implementation class needs to be defined in the webdriver.provided.{type} system property.
-    */
+     */
     WEBDRIVER_PROVIDED_TYPE,
 
     /**
@@ -53,6 +53,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Sets a number of common chrome options useful for automated testing.
      * In particular, this includes: --enable-automation --test-type
+     * Set to false by default
      */
     USE_CHROME_AUTOMATION_OPTIONS,
 
@@ -293,6 +294,7 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE,
 
+    @Deprecated
     SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE,
 
     @Deprecated
@@ -669,7 +671,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Enable JQuery integration.
      * If set to true, JQuery will be injected into any page that does not already have it.
-     * This option is deactivated by default, as it can slow down page loading.
+     * This option is activated by default, deactivating can speed up the page loading.
      */
     SERENITY_JQUERY_INTEGRATION,
 
@@ -711,6 +713,9 @@ public enum ThucydidesSystemProperty {
      * BrowserStack Hub URL if running the tests on BrowserStack Cloud
      */
     BROWSERSTACK_URL,
+
+    BROWSERSTACK_USER,
+    BROWSERSTACK_KEY,
 
     BROWSERSTACK_OS,
 
@@ -802,7 +807,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_LOGGING,
 
     /**
-     * Three levels are supported: QUIET, NORMAL and VERBOSE
+     * Four levels are supported: NONE, QUIET, NORMAL and VERBOSE
+     *   - NONE: Disable Serenity logging
+     *   - QUIET: Only report compromised tests, errors and failures.
+     *   - NORMAL: Log the start and end of each test, and the result of each test.
+     *   - VERBOSE: Log the start and end of each test, and the result of each test, and each test step.
      */
     SERENITY_LOGGING,
 
@@ -849,6 +858,12 @@ public enum ThucydidesSystemProperty {
      * would put serenity.features.directory = myFeatures for src/test/resources/myFeatures
      */
     SERENITY_FEATURES_DIRECTORY,
+
+    /**
+     * If set to true, the full description of the parent story or feature is displayed at the top of an individual test report.
+     * Set to false by default/
+     */
+    SERENITY_SHOW_STORY_DETAILS_IN_TESTS,
 
     /**
      * Same as serenity.features.directory but for src/test/stories
@@ -970,9 +985,16 @@ public enum ThucydidesSystemProperty {
     /**
      * If provided, only classes and/or methods with tags in this list will be executed. The parameter expects
      * a tag or comma-separated list of tags in the shortened form.
+     * This only works for JUnit tests. For Cucumber, use the -Dcucumber.options parameter
      * For example, -Dtags="iteration:I1" or -Dtags="color:red,flavor:strawberry"
      */
     TAGS,
+
+
+    /**
+     * Display only test results and requirements containing any of the specified tags
+     */
+    REPORT_ON_TAGS,
 
     /**
      * If provided, each test in a test run will have these tags added.
@@ -1000,6 +1022,11 @@ public enum ThucydidesSystemProperty {
     DELETE_HISTORY_DIRECTORY,
 
     /**
+     * Generate a CSV report for each test result (true by default)
+     */
+    SERENITY_GENERATE_CSV_REPORTS,
+
+    /**
      * Add extra columns to the CSV output, obtained from tag values.
      */
     SERENITY_CSV_EXTRA_COLUMNS,
@@ -1008,13 +1035,27 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_CONSOLE_HEADINGS,
 
     /**
+     * Write the console banner using ascii-art ("ascii", default value) or in smaller text ("normal")
+     */
+    SERENITY_CONSOLE_BANNER,
+
+    /**
      * Write the console headings using ascii-art ("ascii", default value) or in normal text ("normal")
      */
     SERENITY_CONSOLE_HEADINGS,
 
     @Deprecated
     THUCYDIDES_CONSOLE_COLORS,
+
+    /**
+     * Use ASCII color codes when outputing the console logs.
+     */
     SERENITY_CONSOLE_COLORS,
+
+    /**
+     * Set to true to write the chronological number of each test as it is executed to the console
+     */
+    SERENITY_DISPLAY_TEST_NUMBERS,
 
     /**
      * If set to true, Asciidoc formatting will be supported in the narrative texts.
@@ -1084,6 +1125,11 @@ public enum ThucydidesSystemProperty {
      * screenshot page. This results in a loss of quality but a gain in disk space.
      */
     SERENITY_COMPRESS_SCREENSHOTS,
+
+    /**
+     * If set, Serenity will use full page screenshot strategy.
+     */
+    SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY,
 
     /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens
@@ -1337,6 +1383,23 @@ public enum ThucydidesSystemProperty {
     MANAGE_APPIUM_SERVERS,
 
     /**
+     * List of capabilities that should be provided in addition to supported by w3c or Appium.
+     * Properties, that match w3c pattern or listed in Appium's interfaces, will be included as is and
+     * 'appium:' prefix will be added to each name provided in this property
+     */
+    APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.capabilities"),
+
+
+    /**
+     * Set to true to enable processing of desired capabilities, created from the provided 'appium:' properties.
+     * If processing is enabled, only capabilities supported by w3c, Appium or mentioned in
+     * {@link ThucydidesSystemProperty#APPIUM_ADDITIONAL_CAPABILITIES} will be included into desired capabilities.
+     * If processing is disabled, all of the properties that have 'appium:' prefix will be included into desired capabilities.
+     * Disabled by default
+     */
+    APPIUM_PROCESS_DESIRED_CAPABILITIES("appium.process.desired.capabilities"),
+
+    /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
      */
     ACCEPT_INSECURE_CERTIFICATES,
@@ -1424,6 +1487,10 @@ public enum ThucydidesSystemProperty {
      * Enable WebDriver calls in @After methods, even after a step has failed (true by default).
      */
     SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS,
+
+    IE_OPTIONS_ENABLE_NATIVE_EVENTS("ieOptions.EnableNativeEvents"),
+    IE_OPTIONS_IGNORE_ZOOM_LEVEL("ieOptions.IgnoreZoomLevel"),
+    IE_OPTIONS_REQUIRE_WINDOW_FOCUS("ieOptions.RequireWindowFocus"),
 
     /**
      * The title to appear in the tag type table in the email reports
@@ -1539,7 +1606,6 @@ public enum ThucydidesSystemProperty {
         if (environmentVariables == null) { return defaultValue; }
 
         Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
-//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Boolean.valueOf(newPropertyValue.get().trim());

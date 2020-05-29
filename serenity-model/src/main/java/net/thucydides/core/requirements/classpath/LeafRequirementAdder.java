@@ -2,12 +2,14 @@ package net.thucydides.core.requirements.classpath;
 
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
@@ -88,10 +90,14 @@ public class LeafRequirementAdder {
         String narrativeType = PackageInfoNarrative.type().definedInPath(path)
                 .orElse(ClassNarrative.type().definedInPath(path).orElse(leafRequirementTypeFrom(pathElements)));
 
+        List<TestTag> storyTags = AnnotatedTags.forClassDefinedInPath(path);
+        Map<String, Collection<TestTag>> testTags = AnnotatedTags.forTestMethodsDefinedInPath(path);
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
                 .withNarrative(narrativeText)
                 .withParent(parent)
+                .withTags(storyTags)
+                .withScenarioTags(testTags)
                 .withPath(Joiner.on("/").join(allButLast(pathElements)));
 
         return story;

@@ -13,5 +13,4 @@ public class FileSystemUtils {
     private static String stripLeadingSlash(String resourceName) {
         return (resourceName.startsWith("/")) ? resourceName.substring(1) : resourceName;
     }
-
 }

@@ -96,12 +96,20 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
         DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
 
-        defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
-        defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
-        defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
+        defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
+                               IE_OPTIONS_IGNORE_ZOOM_LEVEL.booleanFrom(environmentVariables, true));
+        defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS,
+                               IE_OPTIONS_ENABLE_NATIVE_EVENTS.booleanFrom(environmentVariables, true));
+        defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS,
+                               IE_OPTIONS_REQUIRE_WINDOW_FOCUS.booleanFrom(environmentVariables, false));
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
         defaults.setJavascriptEnabled(true);
 
+
+        /*
+        IgnoreZoomLevel = true,
+EnableNativeEvents = true, RequireWindowFocus = true};
+         */
         defaults = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
 
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {

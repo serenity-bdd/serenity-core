@@ -1,10 +1,13 @@
 package net.serenitybdd.core.photography;
 
-import net.serenitybdd.core.time.Stopwatch;
+import com.assertthat.selenium_shutterbug.core.PageSnapshot;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -12,9 +15,13 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static net.serenitybdd.core.photography.ScreenshotNegative.prepareNegativeIn;
 
@@ -24,6 +31,7 @@ public class PhotoSession {
     private final Path outputDirectory;
     private final Darkroom darkroom;
     private BlurLevel blurLevel;
+    private ScrollStrategy scrollStrategy;
     private EnvironmentVariables environmentVariables;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -33,11 +41,12 @@ public class PhotoSession {
 
     private static final String BLANK_SCREEN = "c118a2e3019c996cb56584ec6f8cd0b2be4c056ce4ae6b83de3c32c2e364cc61.png";
 
-    public PhotoSession(WebDriver driver, Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
+    public PhotoSession(WebDriver driver, Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel, ScrollStrategy scrollStrategy) {
         this.driver = driver;
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
         this.darkroom = darkroom;
+        this.scrollStrategy = scrollStrategy;
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 
         darkroom.isOpenForBusiness();
@@ -49,12 +58,12 @@ public class PhotoSession {
             return previousScreenshot.get();
         }
 
-        ScreenshotPhoto photo;
-
         byte[] screenshotData = null;
-        if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
+
+        if (WebDriverFactory.isAlive(driver) && unproxied(driver) instanceof TakesScreenshot) {
             try {
-                screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                PageSnapshot snapshot = Shutterbug.shootPage(unproxied(driver), scrollStrategy, 500);
+                screenshotData = asByteArray(snapshot.getImage());
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);
                 return ScreenshotPhoto.None;
@@ -65,11 +74,27 @@ public class PhotoSession {
             return ScreenshotPhoto.None;
         }
 
-        photo = storedScreenshot(screenshotData);
+        ScreenshotPhoto photo = storedScreenshot(screenshotData);
         previousScreenshot.set(photo);
         previousScreenshotTimestamp.set(System.currentTimeMillis());
 
         return photo;
+    }
+
+    private WebDriver unproxied(WebDriver driver) {
+        if (driver instanceof WebDriverFacade) {
+            return ((WebDriverFacade) driver).getProxiedDriver();
+        } else {
+            return driver;
+        }
+    }
+
+    private byte[] asByteArray(BufferedImage image) throws IOException {
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", outputStream);
+            outputStream.flush();
+            return outputStream.toByteArray();
+        }
     }
 
     private boolean shouldIgnore(byte[] screenshotData) {
@@ -85,7 +110,7 @@ public class PhotoSession {
 
     private boolean tooSoonForNewPhoto() {
         long previousPhotoTaken = previousScreenshotTimestamp.get();
-        long minimumInterval = ThucydidesSystemProperty.WEBDRIVER_MIN_SCREENSHOT_INTERVAL.integerFrom(environmentVariables,50);
+        long minimumInterval = ThucydidesSystemProperty.WEBDRIVER_MIN_SCREENSHOT_INTERVAL.integerFrom(environmentVariables, 50);
         return (System.currentTimeMillis() - previousPhotoTaken < minimumInterval);
     }
 

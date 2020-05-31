@@ -357,10 +357,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public List<WebElementFacade> thenFindAll(By selector) {
+    public ListOfWebElementFacades thenFindAll(By selector) {
         logIfVerbose("findAll " + selector);
         if (driverIsDisabled()) {
-            return new ArrayList<>();
+            return new ListOfWebElementFacades(new ArrayList<>());
         }
 
         List<WebElement> nestedElements = findElements(selector);

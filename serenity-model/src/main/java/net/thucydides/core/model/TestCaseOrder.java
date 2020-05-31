@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.annotations.ScenarioOrder;
+import net.thucydides.core.annotations.SectionNumber;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class TestCaseOrder {
     }
 
     private static Integer readAnnotatedOrderOf(Method method) {
-        ScenarioOrder scenarioOrder = method.getAnnotation(ScenarioOrder.class);
+        SectionNumber scenarioOrder = method.getAnnotation(SectionNumber.class);
         if (scenarioOrder == null) {
             return null;
         }

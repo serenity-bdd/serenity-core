@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ListOfWebElementFacades extends ArrayList<WebElementFacade> {
@@ -26,5 +27,9 @@ public class ListOfWebElementFacades extends ArrayList<WebElementFacade> {
      */
     public List<String> textContents() {
         return this.stream().map(WebElementFacade::getTextContent).collect(Collectors.toList());
+    }
+
+    public <T> List<T> map(Function<? super WebElementFacade, T> elementConverter) {
+        return this.stream().map(elementConverter).collect(Collectors.toList());
     }
 }

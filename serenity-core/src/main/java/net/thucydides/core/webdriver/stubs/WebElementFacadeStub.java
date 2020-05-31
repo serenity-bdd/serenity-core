@@ -85,8 +85,8 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public List<WebElementFacade> thenFindAll(By selector) {
-        return new ArrayList<>();
+    public ListOfWebElementFacades thenFindAll(By selector) {
+        return new ListOfWebElementFacades(new ArrayList<>());
     }
 
     @Override

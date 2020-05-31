@@ -813,11 +813,11 @@
 </head>
 <body style="font-family:Helvetica, sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.4;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;background-color:#f6f6f6;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;width:100%;">
 <table border="0" cellpadding="0" cellspacing="0" class="body"
-       style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+       style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:90%;" align="center">
     <tr>
         <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">&nbsp;</td>
         <td class="container"
-            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px;padding-top:24px;padding-bottom:0;padding-right:0;padding-left:0;width:90%;">
+            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px;padding-top:24px;padding-bottom:0;padding-right:0;padding-left:0;width:100%;">
             <div class="content"
                  style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:100%;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;">
                 <!-- START CENTERED WHITE CONTAINER -->
@@ -859,7 +859,7 @@
                                                             valign="middle"
                                                             align="center"
                                                             style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.SUCCESS} + '%', style=${results.countByResult.SUCCESS == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.SUCCESS} + '%', style=${results.countByResult.SUCCESS == 0  ? 'padding:0px;' : 'background-color: #52B255;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Passing tests"
                                                                       th:attr="title=${results.countByResult.SUCCESS} + ' passing tests'"
                                                                       data-th-text="${results.percentageByResult.SUCCESS} + '%'"
@@ -868,7 +868,7 @@
                                                         <td class="pending-background summary summary-bar-cell"
                                                             width=20% valign="middle" align="center"
                                                             style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.PENDING} + '%', style=${results.countByResult.PENDING == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.PENDING} + '%', style=${results.countByResult.PENDING == 0  ? 'padding:0px;' : 'background-color: #5FB0E0;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Pending tests"
                                                                       th:attr="title=${results.countByResult.PENDING} + ' pending tests'"
                                                                       data-th-text="${results.percentageByResult.PENDING} + '%'"
@@ -876,7 +876,7 @@
                                                         </td>
                                                         <td class="ignored-background summary summary-bar-cell" width=5%
                                                             valign="middle" align="center" style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.IGNORED} + '%', style=${results.countByResult.IGNORED == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.IGNORED} + '%', style=${results.countByResult.IGNORED == 0  ? 'padding:0px;' : 'background-color: #C9C9C9;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Ignored tests"
                                                                       th:attr="title=${results.countByResult.IGNORED} + ' ignored tests'"
                                                                       data-th-text="${results.percentageByResult.IGNORED} + '%'"
@@ -885,7 +885,7 @@
                                                         <td class="failure-background summary summary-bar-cell"
                                                             width=10% valign="middle" align="center"
                                                             style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.FAILURE} + '%', style=${results.countByResult.FAILURE == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.FAILURE} + '%', style=${results.countByResult.FAILURE == 0  ? 'padding:0px;' : 'background-color: #f44336;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Failing tests"
                                                                       th:attr="title=${results.countByResult.FAILURE} + ' failing tests'"
                                                                       data-th-text="${results.percentageByResult.FAILURE} + '%'"
@@ -893,7 +893,7 @@
                                                         </td>
                                                         <td class="error-background summary summary-bar-cell" width=15%
                                                             valign="middle" align="center" style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.ERROR} + '%', style=${results.countByResult.ERROR == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.ERROR} + '%', style=${results.countByResult.ERROR == 0  ? 'padding:0px;' : 'background-color: #ECA43A;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Broken tests"
                                                                       th:attr="title=${results.countByResult.ERROR} + ' brokem tests'"
                                                                       data-th-text="${results.percentageByResult.ERROR} + '%'"
@@ -902,7 +902,7 @@
                                                         <td class="compromised-background summary summary-bar-cell"
                                                             width=20% valign="middle" align="center"
                                                             style="padding:8px;"
-                                                            th:attr="width=${results.percentageByResult.COMPROMISED} + '%', style=${results.countByResult.COMPROMISED == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                            th:attr="width=${results.percentageByResult.COMPROMISED} + '%', style=${results.countByResult.COMPROMISED == 0  ? 'padding:0px;' : 'background-color: #9C77AD;color: white;padding:8px;white-space: nowrap;'}">
                                                                 <span class="summary" title="Compromised tests"
                                                                       th:attr="title=${results.countByResult.COMPROMISED} + ' compromised tests'"
                                                                       data-th-text="${results.percentageByResult.COMPROMISED} + '%'"
@@ -1077,203 +1077,213 @@
                                         </table>
                                     </td>
                                 </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr th:block th:if="${!#strings.isEmpty(report.link)}">
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <a style="text-transform: uppercase;color:#8accf2; text-decoration: none; font-weight: bold; padding: 0.5em 1em; background: #316d91;"
-                               th:href="${report.link}">View full report</a>
-                        </td>
-                    </tr>
-                    <tr th:block th:if="${#lists.size(coverage) > 0}">
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
-                                Functional Coverage</h3></td>
-                    </tr>
-                    <tr th:each="tagCoverageByType : ${coverage}">
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;"
-                            th:if="${#lists.size(tagCoverageByType.tagCoverage) > 0}">
-                            <h4 class="tag-title" th:text="${tagCoverageByType.tagTitle}"
-                                style="color:#222222;font-family:Helvetica, sans-serif;line-height:1.4;margin-bottom:0;margin-right:0;margin-left:0;font-weight:500;font-size:18px;margin-top:20px;text-transform:capitalize;">
-                                Control Creation</h4>
-                            <table class="test-results-table categories"
-                                   style="mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-width:1px;border-style:solid;border-color:grey;margin-bottom:26px;border-collapse:collapse;">
                                 <tr>
-                                    <th width="60%" th:text="${report.tagCategoryTitle}">Category</th>
-                                    <th class="tag-coverage" width="5%" style="text-align:left;white-space:nowrap;">
-                                        Tests
-                                    </th>
-                                    <th class="tag-coverage" width="5%" style="text-align:left;white-space:nowrap;">
-                                        Pass
-                                    </th>
-                                    <th class="tag-coverage" style="text-align:left;white-space:nowrap;">Results</th>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        &nbsp;
+                                    </td>
                                 </tr>
-                                <tr th:each="tagCoverage : ${tagCoverageByType.tagCoverage}">
-                                    <td class="tag-subtitle categories" th:text="${tagCoverage.tagName}" width="90%"
-                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;text-transform:capitalize;width:50%;border-width:0.5px;border-style:solid;border-color:#dddddd;">
-                                        ACO Acknowledgement - ICG Debt
+                                <tr th:block th:if="${!#strings.isEmpty(report.link)}">
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <a style="text-transform: uppercase;color:#8accf2; text-decoration: none; font-weight: bold; padding: 0.5em 1em; background: #316d91;"
+                                           th:href="${report.link}">View full report</a>
                                     </td>
-                                    <td th:text="${tagCoverage.testCount}"
-                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
-                                        100
+                                </tr>
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        &nbsp;
                                     </td>
-                                    <td th:text="${tagCoverage.successRate}"
-                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
-                                        10%
+                                </tr>
+                                <tr th:block th:if="${#lists.size(coverage) > 0}">
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Functional Coverage</h3>
                                     </td>
-                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
-                                        <table cellspacing="0" cellpadding="0" class="result-bar" width="100%"
-                                               style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                </tr>
+                                <tr th:each="tagCoverageByType : ${coverage}">
+
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;"
+                                        th:if="${#lists.size(tagCoverageByType.tagCoverage) > 0}">
+                                        <h4 class="tag-title" th:text="${tagCoverageByType.tagTitle}"
+                                            style="color:#222222;font-family:Helvetica, sans-serif;line-height:1.4;margin-bottom:0;margin-right:0;margin-left:0;font-weight:500;font-size:18px;margin-top:20px;text-transform:capitalize;">
+                                            Control Creation</h4>
+                                        <table class="test-results-table categories"
+                                               style="mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-width:1px;border-style:solid;border-color:grey;margin-bottom:26px;border-collapse:collapse;">
                                             <tr>
-                                                <td class="success-background"
-                                                    th:unless="${tagCoverage.countByResult.SUCCESS == 0}"
-                                                    width="30%"
-                                                    th:attr="width=${tagCoverage.percentageByResult.SUCCESS} + '%'"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#52B255;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                <th width="60%" th:text="${report.tagCategoryTitle}">Category</th>
+                                                <th class="tag-coverage" width="5%" style="text-align:left;white-space:nowrap;">
+                                                    Tests
+                                                </th>
+                                                <th class="tag-coverage" width="5%" style="text-align:left;white-space:nowrap;">
+                                                    Pass
+                                                </th>
+                                                <th class="tag-coverage" style="text-align:left;white-space:nowrap;">Results</th>
+                                            </tr>
+                                            <tr th:each="tagCoverage : ${tagCoverageByType.tagCoverage}">
+                                                <td class="tag-subtitle categories" th:text="${tagCoverage.tagName}" width="90%"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;text-transform:capitalize;width:50%;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                    ACO Acknowledgement - ICG Debt
+                                                </td>
+                                                <td th:text="${tagCoverage.testCount}"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                    100
+                                                </td>
+                                                <td th:text="${tagCoverage.successRate}"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                    10%
+                                                </td>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                    <table cellspacing="0" cellpadding="0" class="result-bar" width="100%"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                                        <tr>
+                                                            <td class="success-background"
+                                                                th:unless="${tagCoverage.countByResult.SUCCESS == 0}"
+                                                                width="30%"
+                                                                th:attr="width=${tagCoverage.percentageByResult.SUCCESS} + '%'"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#52B255;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
                                                     <span th:attr="title=${tagCoverage.percentageByResult.SUCCESS} + '% passing tests'"
                                                           class="summary"
                                                           data-th-text="${tagCoverage.countByResult.SUCCESS}"
                                                           th:unless="${tagCoverage.countByResult.SUCCESS == 0}"
                                                           style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">30</span>
-                                                </td>
-                                                <td title="Pending tests" class="pending-background"
-                                                    th:unless="${tagCoverage.countByResult.PENDING == 0}"
-                                                    width="20%"
-                                                    th:attr="width=${tagCoverage.percentageByResult.PENDING} + '%'"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#5FB0E0;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                            </td>
+                                                            <td title="Pending tests" class="pending-background"
+                                                                th:unless="${tagCoverage.countByResult.PENDING == 0}"
+                                                                width="20%"
+                                                                th:attr="width=${tagCoverage.percentageByResult.PENDING} + '%'"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#5FB0E0;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
                                                     <span class="summary"
                                                           th:attr="title=${tagCoverage.percentageByResult.PENDING} + '% pending tests'"
                                                           data-th-text="${tagCoverage.countByResult.PENDING}"
                                                           th:unless="${tagCoverage.countByResult.PENDING == 0}"
                                                           style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">20</span>
-                                                </td>
-                                                <td title="Ignored tests" class="ignored-background"
-                                                    th:unless="${tagCoverage.countByResult.IGNORED == 0}"
-                                                    width="5%"
-                                                    th:attr="width=${tagCoverage.percentageByResult.IGNORED} + '%'"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#C9C9C9;color:black;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                            </td>
+                                                            <td title="Ignored tests" class="ignored-background"
+                                                                th:unless="${tagCoverage.countByResult.IGNORED == 0}"
+                                                                width="5%"
+                                                                th:attr="width=${tagCoverage.percentageByResult.IGNORED} + '%'"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#C9C9C9;color:black;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
                                                     <span th:attr="title=${tagCoverage.percentageByResult.IGNORED} + '% ignored tests'"
                                                           class="summary"
                                                           data-th-text="${tagCoverage.countByResult.IGNORED}"
                                                           th:unless="${tagCoverage.countByResult.IGNORED == 0}"
                                                           style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">5</span>
-                                                </td>
-                                                <td class="failure-background"
-                                                    th:unless="${tagCoverage.countByResult.FAILURE == 0}"
-                                                    width="10%"
-                                                    th:attr="width=${tagCoverage.percentageByResult.FAILURE} + '%'"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#f44336;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                            </td>
+                                                            <td class="failure-background"
+                                                                th:unless="${tagCoverage.countByResult.FAILURE == 0}"
+                                                                width="10%"
+                                                                th:attr="width=${tagCoverage.percentageByResult.FAILURE} + '%'"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#f44336;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
                                                     <span class="summary" title="Failing tests"
                                                           th:attr="title=${tagCoverage.percentageByResult.FAILURE} + '% failed tests'"
                                                           data-th-text="${tagCoverage.countByResult.FAILURE}"
                                                           th:unless="${tagCoverage.countByResult.FAILURE == 0}"
                                                           style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">10</span>
-                                                </td>
-                                                <td class="error-background"
-                                                    th:unless="${tagCoverage.countByResult.ERROR == 0}"
-                                                    title="Broken tests"
-                                                    th:attr="width=${tagCoverage.percentageByResult.ERROR} + '%'"
-                                                    width="15%"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#ECA43A;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;"><span
-                                                        class="summary"
-                                                        th:attr="title=${tagCoverage.percentageByResult.ERROR} + '% broken tests'"
-                                                        data-th-text="${tagCoverage.countByResult.ERROR}"
-                                                        th:unless="${tagCoverage.countByResult.ERROR == 0}"
-                                                        style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">15</span>
-                                                </td>
-                                                <td title="Compromised tests"
-                                                    class="compromised-background"
-                                                    th:unless="${tagCoverage.countByResult.COMPROMISED == 0}"
-                                                    th:attr="width=${tagCoverage.percentageByResult.COMPROMISED} + '%'"
-                                                    width="20%"
-                                                    style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#9C77AD;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
+                                                            </td>
+                                                            <td class="error-background"
+                                                                th:unless="${tagCoverage.countByResult.ERROR == 0}"
+                                                                title="Broken tests"
+                                                                th:attr="width=${tagCoverage.percentageByResult.ERROR} + '%'"
+                                                                width="15%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#ECA43A;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;"><span
+                                                                    class="summary"
+                                                                    th:attr="title=${tagCoverage.percentageByResult.ERROR} + '% broken tests'"
+                                                                    data-th-text="${tagCoverage.countByResult.ERROR}"
+                                                                    th:unless="${tagCoverage.countByResult.ERROR == 0}"
+                                                                    style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">15</span>
+                                                            </td>
+                                                            <td title="Compromised tests"
+                                                                class="compromised-background"
+                                                                th:unless="${tagCoverage.countByResult.COMPROMISED == 0}"
+                                                                th:attr="width=${tagCoverage.percentageByResult.COMPROMISED} + '%'"
+                                                                width="20%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;background-color:#9C77AD;color:white;text-align:center;font-size:0.9em;border-width:0.5px;border-style:solid;border-color:#dddddd;">
                                                     <span class="summary"
                                                           th:attr="title=${tagCoverage.percentageByResult.COMPROMISED} + '% compromised tests'"
                                                           data-th-text="${tagCoverage.countByResult.COMPROMISED}"
                                                           th:unless="${tagCoverage.countByResult.COMPROMISED == 0}"
                                                           style="height:30px;font-size:1em;font-weight:bold;text-align:center;padding-top:10px;vertical-align:center;white-space:nowrap;">20</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
-                                Test Failure Overview</h3></td>
-                    </tr>
-                    <tr>
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <table style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
                                 <tr>
-                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
-                                        <table class="failure-scoreboard"
-                                               style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Test Failure Overview</h3></td>
+                                </tr>
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <table style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
                                             <tr>
-                                                <th colspan="2" style="text-align:left;">Most Frequent Failures</th>
-                                            </tr>
-                                            <tr class="for-failure" th:each="frequentFailure : ${frequentFailures}"
-                                                style="color:#f44336;">
-                                                <td th:attr="class='frequent-failure for-' + ${frequentFailure.resultClass}"
-                                                    width="100%" th:text="${frequentFailure.name}"
-                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
-                                                    Web Element Not Found
-                                                </td>
                                                 <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table class="failure-scoreboard"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
+                                                        <tr>
+                                                            <th colspan="2" style="text-align:left;">Most Frequent Failures</th>
+                                                        </tr>
+                                                        <tr class="for-failure" th:each="frequentFailure : ${frequentFailures}"
+                                                            style="color:#f44336;">
+                                                            <td th:attr="class='frequent-failure for-' + ${frequentFailure.resultClass}"
+                                                                width="100%" th:text="${frequentFailure.name}"
+                                                                style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                                Web Element Not Found
+                                                            </td>
+                                                            <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
                                                     <span data-th-text=" ${frequentFailure.count} "
                                                           class='count-badge for-failure'
                                                           style="color:#f44336;">100</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
-                                        <table class="failure-scoreboard"
-                                               style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
-                                            <tr>
-                                                <th style="text-align:left;">Most Unstable Features</th>
-                                                <th style="text-align:left;">Fails</th>
-                                            </tr>
-                                            <tr class="for-failure" th:each="unstableFeature : ${unstableFeatures}"
-                                                style="color:#f44336;">
-                                                <td class="unstable-feature" width="100%"
-                                                    th:text="${unstableFeature.name}"
-                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
-                                                    ACO Acknowledgement
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                                 <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table class="failure-scoreboard"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
+                                                        <tr>
+                                                            <th style="text-align:left;">Most Unstable Features</th>
+                                                            <th style="text-align:left;">Fails</th>
+                                                        </tr>
+                                                        <tr class="for-failure" th:each="unstableFeature : ${unstableFeatures}"
+                                                            style="color:#f44336;">
+                                                            <td class="unstable-feature" width="100%"
+                                                                th:text="${unstableFeature.name}"
+                                                                style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                                ACO Acknowledgement
+                                                            </td>
+                                                            <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
                                                     <span data-th-text="${unstableFeature.failurePercentage + '%'}"
                                                           class='count-badge for-failure'
                                                           style="color:#f44336;">100%</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
-                                Full Failure List</h3>
-                            <table class="failure-list failure-scoreboard"
-                                   style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                <!-- TEST RESULT LIST -->
                                 <tr>
-                                    <th style="text-align:left;">Requirement</th>
-                                    <th style="text-align:left;">Failure</th>
-                                </tr>
-                                <span th:each="failingFeature : ${failuresByFeature}">
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Full Failure List</h3>
+                                        <table class="failure-list failure-scoreboard"
+                                               style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <th style="text-align:left;">Requirement</th>
+                                                <th style="text-align:left;">Failure</th>
+                                            </tr>
+                                            <span th:each="failingFeature : ${failuresByFeature}">
                                     <tr>
                                         <td colspan="2" th:text=${failingFeature.featureName} class="feature"
                                             style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">
@@ -1320,29 +1330,27 @@
                                         </td>
                                     </tr>
                                 </span>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- TEST RESULT LIST -->
-                    <tr>
-                        <td class="compact-wrapper"
-                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                            <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
-                                Full Test Results</h3>
-                            <table class="failure-list failure-scoreboard"
-                                   style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
-                                <tr>
-                                    <th style="text-align:left;">Requirement</th>
-                                    <th style="text-align:left;">Result</th>
+                                        </table>
+                                    </td>
                                 </tr>
-                                <span th:each="feature : ${resultsByFeature}">
-                                    <tr>
-                                        <td colspan="2" th:text=${feature.featureName} class="feature feature-title"
-                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">A Feature
-                                        </td>
-                                    </tr>
-                                    <tr th:each="scenario: ${feature.scenarios}">
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Full Test Results</h3>
+                                        <table class="failure-list failure-scoreboard"
+                                               style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <th style="text-align:left;">Requirement</th>
+                                                <th style="text-align:left;">Result</th>
+                                            </tr>
+                                            <span th:each="feature : ${resultsByFeature}">
+											<tr>
+												<td colspan="2" th:text=${feature.featureName} class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">A Feature
+												</td>
+											</tr>
+											<tr th:each="scenario: ${feature.scenarios}">
                                         <td class="scenarioName"
                                             style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
 	                                        <a th:if="${!#strings.isEmpty(report.link)}"
@@ -1387,16 +1395,19 @@
 
 	                                    </td>
                                 </span>
-                            </table>
-                        </td>
-                    </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-                    <tr class="footer" style="clear:both;padding-top:24px;text-align:center;width:100%;">
-                        <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
-                            Report produced by Serenity BDD
+                                <tr class="footer" style="clear:both;padding-top:24px;text-align:center;width:100%;">
+                                    <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
+                                        Report produced by Serenity BDD
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END MAIN CONTENT AREA -->
                         </td>
                     </tr>
-                    <!-- END MAIN CONTENT AREA -->
                 </table>
                 <!-- END CENTERED WHITE CONTAINER -->
             </div>

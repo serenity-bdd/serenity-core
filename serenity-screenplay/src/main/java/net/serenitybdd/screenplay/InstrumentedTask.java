@@ -66,6 +66,13 @@ public class InstrumentedTask {
     }
 
     static boolean isInstrumented(Performable task) {
-        return task.getClass().getSimpleName().contains("ByteBuddy");
+
+        try {
+            return task.getClass().getSimpleName().contains("ByteBuddy");
+        } catch(NullPointerException ignore) {
+            throw new TaskInstantiationException("Could not instantiate "
+                                                 + task.getClass()
+                                                 + ". Your Task class must have a public constructor.");
+        }
     }
 }

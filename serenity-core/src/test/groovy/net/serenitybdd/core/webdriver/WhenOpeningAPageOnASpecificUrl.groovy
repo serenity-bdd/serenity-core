@@ -78,6 +78,19 @@ class WhenOpeningAPageOnASpecificUrl extends Specification {
 
     }
 
+    def "should use the base url from the system conf with a relative path if specified"() {
+        given:
+        def env = new MockEnvironmentVariables()
+        env.setProperty("webdriver.base.url","http://localhost:8080")
+        and:
+        def page = new OrdinaryPageObject(driver, env)
+        when:
+        page.openAt("/relative-path")
+        then:
+        1*driver.get("http://localhost:8080/relative-path")
+
+    }
+
     def "should open a named URL defined in the serenity.conf file"() {
         given:
         EnvironmentVariables environment = new MockEnvironmentVariables()

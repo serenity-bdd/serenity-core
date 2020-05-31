@@ -4,7 +4,6 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.TestCompromisedException;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.model.CastMember;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;

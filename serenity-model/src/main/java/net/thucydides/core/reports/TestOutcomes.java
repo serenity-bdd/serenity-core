@@ -86,8 +86,8 @@ public class TestOutcomes {
         return outcomes.stream()
                 .sorted(Comparator.comparing(TestOutcome::getPath,
                         Comparator.nullsFirst(naturalOrder()))
-                .thenComparing(TestOutcome::getStartTime,
-                               Comparator.nullsFirst(naturalOrder())))
+                .thenComparing(TestOutcome::getOrder, Comparator.nullsFirst(naturalOrder()))
+                .thenComparing(TestOutcome::getStartTime, Comparator.nullsFirst(naturalOrder())))
                 .collect(Collectors.toList());
     }
 

@@ -300,10 +300,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
+    public ListOfWebElementFacades thenFindAll(String xpathOrCssSelector) {
         logIfVerbose("findAll " + xpathOrCssSelector);
         if (driverIsDisabled()) {
-            return new ArrayList<>();
+            return new ListOfWebElementFacades(new ArrayList<>());
         }
 
         List<WebElement> nestedElements;
@@ -316,16 +316,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return webElementFacadesFrom(nestedElements);
     }
 
-    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments) {
+    public ListOfWebElementFacades thenFindAll(String xpathOrCssSelector, Object... arguments) {
         return thenFindAll(withArguments(xpathOrCssSelector, arguments));
     }
 
-    private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
+    private ListOfWebElementFacades webElementFacadesFrom(List<WebElement> nestedElements) {
         List<WebElementFacade> results = new ArrayList<>();
         for (WebElement element : nestedElements) {
             results.add(wrapWebElement(driver, element, timeoutInMilliseconds(), waitForTimeoutInMilliseconds, element.toString()));
         }
-        return results;
+        return new ListOfWebElementFacades(results);
     }
 
     @Override
@@ -402,24 +402,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(using);
     }
-//
-//    @Override
-//    public WebElement findElementByIosUIAutomation(String using) {
-//        if (driverIsDisabled()) {
-//            return this;
-//        }
-//
-//        return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(using);
-//    }
-//
-//    @Override
-//    public List<WebElement> findElementsByIosUIAutomation(String using) {
-//        if (driverIsDisabled()) {
-//            return new ArrayList<>();
-//        }
-//
-//        return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(using);
-//    }
 
     @Override
     public long getImplicitTimeoutInMilliseconds() {

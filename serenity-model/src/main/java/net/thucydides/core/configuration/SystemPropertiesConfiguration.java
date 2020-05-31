@@ -194,13 +194,13 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
-       return  Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS,"false"));
+        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS, "false"));
 //        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
-        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS,"false"));
+        return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS, "false"));
 //        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
@@ -242,36 +242,30 @@ public class SystemPropertiesConfiguration implements Configuration {
      * It is also the base URL used to build relative paths.
      */
     public String getBaseUrl() {
-//        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
-//            return EnvironmentSpecificConfiguration.from(environmentVariables)
-//                    .getOptionalProperty(WEBDRIVER_BASE_URL.getPropertyName())
-//                    .orElse(defaultBaseUrl);
-//        } else {
-            return propertyNamed(WEBDRIVER_BASE_URL, defaultBaseUrl);
-//        }
+        return propertyNamed(WEBDRIVER_BASE_URL, defaultBaseUrl);
     }
 
     private String propertyNamed(ThucydidesSystemProperty property, String defaultValue) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
-                                               .getOptionalProperty(property.getPropertyName(), property.getLegacyPropertyName())
-                                               .orElse(defaultValue);
+                .getOptionalProperty(property.getPropertyName(), property.getLegacyPropertyName())
+                .orElse(defaultValue);
     }
 
     private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
         Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables)
-                                                                 .getOptionalProperty(property.getPropertyName(),
-                                                                                      property.getLegacyPropertyName());
+                .getOptionalProperty(property.getPropertyName(),
+                        property.getLegacyPropertyName());
         return value.map(Integer::parseInt);
     }
 
     private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
         return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty(property.getPropertyName(),
-                                     property.getLegacyPropertyName())
+                        property.getLegacyPropertyName())
                 .orElse(Integer.toString(defaultValue)));
     }
 
     private String propertyNamed(ThucydidesSystemProperty propertyName) {
-        return propertyNamed(propertyName,null);
+        return propertyNamed(propertyName, null);
     }
 }

@@ -1,11 +1,19 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.thucydides.core.annotations.Fields;
+import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -14,24 +22,35 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static net.serenitybdd.core.Serenity.getStepFactory;
+
 public class PageObjectDependencyInjector implements DependencyInjector {
 
-    private final Pages pages;
+//    private final Pages pages;
 
     EnvironmentDependencyInjector environmentDependencyInjector;
+    Configuration configuration;
 
     private static final List<Field> NO_FIELDS = new ArrayList<>();
 
+    /**
+     * @deprecated
+     */
     public PageObjectDependencyInjector(Pages pages) {
-        this.pages = pages;
+//        this.pages = pages;
+        this();
+    }
+
+    public PageObjectDependencyInjector() {
         this.environmentDependencyInjector = new EnvironmentDependencyInjector();
+        this.configuration = Injectors.getInjector().getInstance(Configuration.class);
     }
 
     public void injectDependenciesInto(Object target) {
         environmentDependencyInjector.injectDependenciesInto(target);
         List<Field> pageObjectFields = pageObjectFieldsIn(target);
 
-        updatePageObject(target, pages);
+        updatePageObject(target);
         for(Field pageObjectField : nonAbstract(pageObjectFields)) {
             instantiatePageObjectIfNotAssigned(pageObjectField, target);
         }
@@ -51,25 +70,40 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     public void reset() {}
 
     private void instantiatePageObjectIfNotAssigned(Field pageObjectField, Object target) {
+
+        PageFactory factory = new PageFactory(Serenity.getWebdriverManager().getWebdriver());
+
         try {
             pageObjectField.setAccessible(true);
-            if (pageObjectField.get(target) == null) {
+
+            if (shouldInstrumentField(pageObjectField)) {
+                StepAnnotations.injector().instrumentStepsInField(target, pageObjectField, getStepFactory());
+            }
+
+            if (pageObjectField.get(target) != null) {
+                updatePageObject(pageObjectField.get(target));//, pages);
+                return;
+            } else {
                 Class<PageObject> pageObjectClass = (Class<PageObject>) pageObjectField.getType();
-                PageObject newPageObject = pages.getPage(pageObjectClass);
+                PageObject newPageObject = factory.createPageOfType(pageObjectClass);
                 injectDependenciesInto(newPageObject);
                 pageObjectField.set(target, newPageObject);
-            } else {
-                updatePageObject(pageObjectField.get(target), pages);
             }
         } catch (IllegalAccessException e) {
             throw new IllegalArgumentException("Could not instanciate page objects in " + target);
         }
     }
 
-    private void updatePageObject(Object pageObject, Pages pages) {
+    private boolean shouldInstrumentField(Field pageObjectField) {
+        return (pageObjectField.getDeclaringClass().isAssignableFrom(UIInteractionSteps.class))
+                || (pageObjectField.getAnnotation(Steps.class) != null);
+    }
+
+    private void updatePageObject(Object pageObject) {//, Pages pages) {
         if (pageObject instanceof PageObject) {
-            ((PageObject) pageObject).setPages(pages);
-            ((PageObject) pageObject).setDriver(pages.getDriver());
+//            ((PageObject) pageObject).setPages(pages);
+            ((PageObject) pageObject).setDriver(Serenity.getWebdriverManager().getWebdriver());
+            ((PageObject) pageObject).setDefaultBaseUrl(configuration.getBaseUrl());
         }
     }
 

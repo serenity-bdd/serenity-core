@@ -49,6 +49,7 @@ public interface WebElementState {
      */
     void shouldNotBeCurrentlyVisible();
 
+
     /**
      * Does this element currently have the focus.
      */

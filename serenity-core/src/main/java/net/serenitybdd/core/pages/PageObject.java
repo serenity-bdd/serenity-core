@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -16,7 +15,6 @@ import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.scheduling.FluentWaitWithRefresh;
-import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.SerenityFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.PageObjectStepDelayer;
@@ -31,13 +29,12 @@ import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Sleeper;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Clock;
-import java.time.Duration;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -47,6 +44,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +55,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.MINUTES;
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_FLUENTWAIT;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -135,7 +131,6 @@ public abstract class PageObject {
         this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.time.SystemClock.class);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
-        setupPageUrls();
     }
 
     protected PageObject(final WebDriver driver, Predicate<? super PageObject> callback) {
@@ -159,7 +154,6 @@ public abstract class PageObject {
         this();
         this.environmentVariables = environmentVariables;
         setDriver(driver);
-        setupPageUrls();
     }
 
     protected void setDriver(WebDriver driver, long timeout) {
@@ -211,6 +205,7 @@ public abstract class PageObject {
         this.pages = pages;
     }
 
+    @Deprecated
     public <T extends PageObject> T switchToPage(final Class<T> pageObjectClass) {
         if (pages.getDriver() == null) {
             pages.setDriver(driver);
@@ -246,8 +241,11 @@ public abstract class PageObject {
         return isRemoteUrl || isSaucelabsUrl || isBrowserStack;
     }
 
-    private void setupPageUrls() {
-        setPageUrls(new PageUrls(this, environmentVariables));
+    private PageUrls getPageUrls() {
+        if (pageUrls == null) {
+            pageUrls = new PageUrls(this, environmentVariables);
+        }
+        return pageUrls;
     }
 
     /**
@@ -644,19 +642,28 @@ public abstract class PageObject {
 
     public String updateUrlWithBaseUrlIfDefined(String startingUrl) {
 
-        if (pageUrls.getDeclaredDefaultUrl().isPresent()) {
-            startingUrl = pageUrls.addDefaultUrlTo(startingUrl);
+        if (getPageUrls().getDeclaredDefaultUrl().isPresent()) {
+            startingUrl = getPageUrls().addDefaultUrlTo(startingUrl);
         }
 
-        String baseUrl = pageUrls.getSystemBaseUrl();
-        if ((baseUrl != null) && (!StringUtils.isEmpty(baseUrl)) && isFullUrl(startingUrl)) {
-            return replaceHost(startingUrl, baseUrl);//pageUrls.addBaseUrlTo(startingUrl);// replaceHost(startingUrl, baseUrl);
+        String baseUrl = getPageUrls().getSystemBaseUrl();
+        if (isDefined(baseUrl)) {
+            if (isFullUrl(startingUrl)) {
+                return replaceHost(startingUrl, baseUrl);
+            } else if (isRelative(startingUrl)) {
+                return getPageUrls().addBaseUrlTo(startingUrl);
+            }
         }
-//        else if (pageUrls.getDeclaredDefaultUrl().isPresent()) {
-//            return pageUrls.addDefaultUrlTo(startingUrl);
-//        }
 
         return startingUrl;
+    }
+
+    protected boolean isRelative(String startingUrl) {
+        return !(isFullUrl(startingUrl));
+    }
+
+    private boolean isDefined(String url) {
+        return (url != null) && (!StringUtils.isEmpty(url));
     }
 
     private boolean isFullUrl(String startingUrl) {
@@ -717,7 +724,7 @@ public abstract class PageObject {
     }
 
     private void open(final OpenMode openMode, final String... parameterValues) {
-        String startingUrl = pageUrls.getStartingUrl(parameterValues);
+        String startingUrl = getPageUrls().getStartingUrl(parameterValues);
         LOGGER.debug("Opening page at url {}", startingUrl);
         openPageAtUrl(startingUrl);
         checkUrlPatterns(openMode);
@@ -759,7 +766,7 @@ public abstract class PageObject {
 
     private void open(final OpenMode openMode, final String urlTemplateName,
                       final String[] parameterValues) {
-        String startingUrl = pageUrls.getNamedUrl(urlTemplateName, parameterValues);
+        String startingUrl = getPageUrls().getNamedUrl(urlTemplateName, parameterValues);
         LOGGER.debug("Opening page at url {}", startingUrl);
         openPageAtUrl(startingUrl);
         checkUrlPatterns(openMode);
@@ -800,7 +807,7 @@ public abstract class PageObject {
     }
 
     private void open(final OpenMode openMode) {
-        String startingUrl = updateUrlWithBaseUrlIfDefined(pageUrls.getStartingUrl());
+        String startingUrl = updateUrlWithBaseUrlIfDefined(getPageUrls().getStartingUrl());
         openPageAtUrl(startingUrl);
         checkUrlPatterns(openMode);
         initializePage();
@@ -937,7 +944,7 @@ public abstract class PageObject {
     }
 
     public void setDefaultBaseUrl(final String defaultBaseUrl) {
-        pageUrls.overrideDefaultBaseUrl(defaultBaseUrl);
+        getPageUrls().overrideDefaultBaseUrl(defaultBaseUrl);
     }
 
     /**
@@ -998,11 +1005,11 @@ public abstract class PageObject {
         return element(bySelector);
     }
 
-    public List<WebElementFacade> $$(String xpathOrCssSelector, Object... arguments) {
+    public ListOfWebElementFacades $$(String xpathOrCssSelector, Object... arguments) {
         return findAll(xpathOrCssSelector, arguments);
     }
 
-    public List<WebElementFacade> $$(By bySelector) {
+    public ListOfWebElementFacades $$(By bySelector) {
         return findAll(bySelector);
     }
 
@@ -1114,7 +1121,7 @@ public abstract class PageObject {
                 .thenFindAll(lastIn(xpathOrCssSelectors)).stream();
     }
 
-    public List<WebElementFacade> findNestedElements(String... xpathOrCssSelectors) {
+    public ListOfWebElementFacades findNestedElements(String... xpathOrCssSelectors) {
         if (xpathOrCssSelectors.length == 1) {
             return findAll(xpathOrCssSelectors[0]);
         }
@@ -1138,7 +1145,8 @@ public abstract class PageObject {
         return findAll(xpathOrCSSSelector).stream();
     }
 
-    public List<WebElementFacade> findAll(By bySelector) {
+    public ListOfWebElementFacades findAll(By bySelector) {
+//    public List<WebElementFacade> findAll(By bySelector) {
 
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
 
@@ -1147,14 +1155,14 @@ public abstract class PageObject {
             allElements.add($(matchingElement));
         }
 
-        return allElements;
+        return new ListOfWebElementFacades(allElements);
     }
 
-    public List<WebElementFacade> findAll(WithLocator bySelector) {
+    public ListOfWebElementFacades findAll(WithLocator bySelector) {
         return findAll(bySelector.getLocator());
     }
 
-    public List<WebElementFacade> findAll(WithByLocator bySelector) {
+    public ListOfWebElementFacades findAll(WithByLocator bySelector) {
         return findAll(bySelector.getLocator());
     }
         /**
@@ -1172,7 +1180,7 @@ public abstract class PageObject {
         return findAll(xpathOrCssSelector, arguments).stream().findFirst();
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector, Object... arguments) {
+    public ListOfWebElementFacades findAll(String xpathOrCssSelector, Object... arguments) {
         return findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
     }
 

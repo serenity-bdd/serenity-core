@@ -1,19 +1,14 @@
 package net.thucydides.core.webdriver.stubs;
 
-import com.google.gson.Gson;
 import net.serenitybdd.core.pages.*;
-import net.serenitybdd.core.time.InternalSystemClock;
-import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -56,13 +51,13 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
-        return new ArrayList<>();
+    public ListOfWebElementFacades thenFindAll(String xpathOrCssSelector) {
+        return new ListOfWebElementFacades(new ArrayList<>());
     }
 
     @Override
-    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments) {
-        return new ArrayList<>();
+    public ListOfWebElementFacades thenFindAll(String xpathOrCssSelector, Object... arguments) {
+        return new ListOfWebElementFacades(new ArrayList<>());
     }
 
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {

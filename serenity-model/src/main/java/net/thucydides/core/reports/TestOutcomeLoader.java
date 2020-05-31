@@ -72,8 +72,11 @@ public class TestOutcomeLoader {
                 testOutcomes.addAll(loadedTestOutcome.get());
             }
             executorPool.shutdown();
-
-            return inOrderOfTestExecution(testOutcomes);
+            if (hasAnnotatedOrder(testOutcomes)) {
+                return inAnnotatedOrder(testOutcomes);
+            } else {
+                return inOrderOfTestExecution(testOutcomes);
+            }
         } catch (Exception e) {
             throw new ReportLoadingFailedError("Can not load reports for some reason", e);
         }
@@ -150,8 +153,17 @@ public class TestOutcomeLoader {
                     .sorted(Comparator.comparing(TestOutcome::getStartTime,
                             Comparator.nullsFirst(Comparator.naturalOrder())))
                     .collect(Collectors.toList());
+    }
 
+    private static boolean hasAnnotatedOrder(List<TestOutcome> testOutcomes) {
+        return testOutcomes.stream().anyMatch(outcome -> outcome.getOrder() > 0);
+    }
 
+    private static List<TestOutcome> inAnnotatedOrder(List<TestOutcome> testOutcomes) {
+        return testOutcomes.stream()
+                .sorted(Comparator.comparing(TestOutcome::getOrder,
+                        Comparator.nullsFirst(Comparator.naturalOrder())))
+                .collect(Collectors.toList());
     }
 
     private AcceptanceTestLoader getOutcomeReporter() {

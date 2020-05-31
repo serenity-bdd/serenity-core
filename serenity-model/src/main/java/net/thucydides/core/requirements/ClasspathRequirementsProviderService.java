@@ -19,7 +19,6 @@ import java.util.List;
  * name for the class.
  */
 public class ClasspathRequirementsProviderService implements RequirementsProviderService {
-    private final Logger logger = LoggerFactory.getLogger(ClasspathRequirementsProviderService.class);
 
     private TagProviderService tagProviderService;
 
@@ -44,7 +43,7 @@ public class ClasspathRequirementsProviderService implements RequirementsProvide
     }
 
     private List<RequirementsTagProvider> loadRequirementsTagProviders() {
-        List<RequirementsTagProvider> providers = new ArrayList<RequirementsTagProvider>();
+        List<RequirementsTagProvider> providers = new ArrayList<>();
 
         List<TagProvider> tagProviders = tagProviderService.getTagProviders();
         for (TagProvider tagProvider : tagProviders) {

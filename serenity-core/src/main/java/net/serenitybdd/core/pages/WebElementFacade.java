@@ -26,8 +26,8 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
     <T extends WebElementFacade> T findBy(String xpathOrCssSelector);
     <T extends WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments);
 
-    List<WebElementFacade> thenFindAll(String xpathOrCssSelector);
-    List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments);
+    ListOfWebElementFacades thenFindAll(String xpathOrCssSelector);
+    ListOfWebElementFacades thenFindAll(String xpathOrCssSelector, Object... arguments);
 
     <T extends WebElementFacade> T findBy(By selector);
 

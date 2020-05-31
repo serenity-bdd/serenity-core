@@ -5,6 +5,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -53,12 +54,17 @@ public final class StepAnnotations {
     }
 
 
-    private void instanciateScenarioStepFields(
-            final Object testCaseOrSteps, final StepFactory stepFactory,
-            final List<StepsAnnotatedField> stepsFields) {
+    private void instanciateScenarioStepFields(final Object testCaseOrSteps,
+                                               final StepFactory stepFactory,
+                                               final List<StepsAnnotatedField> stepsFields) {
         for (StepsAnnotatedField stepsField : stepsFields) {
             instantiateAnyUnitiaializedSteps(testCaseOrSteps, stepFactory, stepsField);
         }
+    }
+
+    public void instrumentStepsInField(Object target, Field field, StepFactory stepFactory) {
+        StepsAnnotatedField annotatedField = new StepsAnnotatedField(field);
+        instantiateAnyUnitiaializedSteps(target, stepFactory, annotatedField);
     }
 
     private void instantiateAnyUnitiaializedSteps(Object testCaseOrSteps,
@@ -70,9 +76,7 @@ public final class StepAnnotations {
 
             Class<?> scenarioStepsClass = stepsField.getFieldClass();
 
-            Object steps = StepLibraryCreator.usingConfiguredCreationStrategy(stepFactory,
-                                                                              stepsField,
-                                                                              environmentVariables)
+            Object steps = StepLibraryCreator.usingConfiguredCreationStrategy(stepFactory, stepsField, environmentVariables)
                                              .initiateStepsFor(scenarioStepsClass);
 
             stepsField.setValue(testCaseOrSteps, steps);
@@ -83,14 +87,14 @@ public final class StepAnnotations {
 
     private void ensureThatThisFieldIsNotCyclicOrRecursive(StepsAnnotatedField stepsAnnotatedField) {
         StackTraceElement[] stackTrace = new Exception().getStackTrace();
-        long levelsOfNesting = Stream.of(stackTrace).filter( element -> element.getMethodName().equals("instantiateAnyUnitiaializedSteps"))
-                                     .count();
+        long levelsOfNesting = Stream.of(stackTrace).filter(element -> element.getMethodName().equals("instantiateAnyUnitiaializedSteps"))
+                .count();
 
         int maxAllowedNesting = SERENITY_MAXIMUM_STEP_NESTING_DEPTH.integerFrom(environmentVariables, 32);
         if (levelsOfNesting > maxAllowedNesting) {
             String message = String.format(
                     "A recursive or cyclic reference was detected for the @Steps-annotated field %s in class %s. " +
-                    "You may need to use @Steps(shared=true) to ensure that the same step library instance is used everywhere.",
+                            "You may need to use @Steps(shared=true) to ensure that the same step library instance is used everywhere.",
                     stepsAnnotatedField.getFieldName(), stepsAnnotatedField.getFieldClass().getName());
             throw new RecursiveOrCyclicStepLibraryReferenceException(message);
         }

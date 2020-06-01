@@ -70,9 +70,7 @@ public class InstrumentedTask {
         try {
             return task.getClass().getSimpleName().contains("ByteBuddy");
         } catch(NullPointerException ignore) {
-            throw new TaskInstantiationException("Could not instantiate "
-                                                 + task.getClass()
-                                                 + ". Your Task class must have a public constructor.");
+            throw new TaskInstantiationException("Your Task class must have a public constructor.");
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * Transforms words to singular, plural, humanized (human readable), underscore, camel case, or ordinal form. This is inspired by
- * the <a href="http://api.rubyonrails.org/classes/Inflector.html">Inflector</a> class in <a
+ * the <a href="https://api.rubyonrails.org/classes/ActiveSupport/Inflector.html">Inflector</a> class in <a
  * href="http://www.rubyonrails.org">Ruby on Rails</a>, which is distributed under the <a
  * href="http://wiki.rubyonrails.org/rails/pages/License">Rails license</a>.
  *

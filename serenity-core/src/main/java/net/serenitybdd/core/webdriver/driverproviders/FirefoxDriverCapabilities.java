@@ -10,10 +10,9 @@ import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.remote.CapabilityType;
@@ -46,8 +45,11 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     public DesiredCapabilities getCapabilities() {
-        DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-        capabilities.setCapability("firefox_profile",buildFirefoxProfile());
+        DesiredCapabilities capabilities = new DesiredCapabilities(new FirefoxOptions());
+
+        capabilities.setCapability("firefox_profile", buildFirefoxProfile());
+        capabilities.acceptInsecureCerts();
+
         Map<String, Object> firefoxOptions = new HashMap<>();
         String geckoOptions = (!options.isEmpty()) ? options : ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables,"");
         if (!geckoOptions.isEmpty()) {

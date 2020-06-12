@@ -357,6 +357,9 @@ public class RootDirectory {
                 return relativePathFromAbsolutePath(path, requirementsDirectory).get();
             }
         }
+        if (path.startsWith("classpath:")) {
+            return Paths.get(path.substring(10));
+        }
         return new File(path).toPath();
     }
 

@@ -1,7 +1,5 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.common.base.Optional;
-import com.google.gson.JsonObject;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -10,7 +8,6 @@ import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -42,11 +39,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     @Override
     public DesiredCapabilities getCapabilities() {
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-        ChromeOptions chromeOptions = configuredOptions();
-
-        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+        DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
 
         String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
         capabilities.setCapability("chrome.switches", chromeSwitches);

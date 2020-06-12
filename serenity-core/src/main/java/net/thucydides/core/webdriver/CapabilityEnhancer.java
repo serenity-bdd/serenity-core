@@ -29,7 +29,7 @@ public class CapabilityEnhancer {
     public DesiredCapabilities enhanced(DesiredCapabilities capabilities, SupportedWebDriver driver) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         addExtraCapabilities(capabilities, capabilitySet);
-        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
+        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             capabilities.acceptInsecureCerts();
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
@@ -38,28 +38,30 @@ public class CapabilityEnhancer {
 
         if (StepEventBus.getEventBus() != null && StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
             Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
-                                                         .getBaseStepListener()
-                                                         .latestTestOutcome();
-             // Technically not required but needed for some test scenarios
-            currentTestOutcome.ifPresent(
-                    outcome -> AddCustomDriverCapabilities.from(environmentVariables)
-                            .withTestDetails(driver, outcome)
-                            .to(capabilities)
-            );
+                    .getBaseStepListener()
+                    .latestTestOutcome();
+            // Technically not required but needed for some test scenarios
+            if (currentTestOutcome != null) {
+                currentTestOutcome.ifPresent(
+                        outcome -> AddCustomDriverCapabilities.from(environmentVariables)
+                                .withTestDetails(driver, outcome)
+                                .to(capabilities)
+                );
+            }
         }
 
         return capabilities;
-    }
+}
 
     private void addExtraCapabilities(DesiredCapabilities capabilities, CapabilitySet capabilitySet) {
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
-        for(String capabilityName : extraCapabilities.keySet()) {
+        for (String capabilityName : extraCapabilities.keySet()) {
             capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
     }
 
     private void addCapabilitiesFromFixtureServicesTo(DesiredCapabilities capabilities) {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.addCapabilitiesTo(capabilities);
         }
     }

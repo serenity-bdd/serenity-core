@@ -277,7 +277,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     public void setTags(String tags) {
-        this.tags = (tags != null) ? tags.replaceAll("\\s+((or)|(OR))\\s+",",") : null;
+        this.tags = (tags != null) ? tags.replaceAll("\\s+((or)|(OR)|(and)|(AND))\\s+",",") : null;
     }
 
     public void setJiraPassword(String jiraPassword) {

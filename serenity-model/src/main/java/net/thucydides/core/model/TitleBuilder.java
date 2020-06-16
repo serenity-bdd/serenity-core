@@ -6,9 +6,6 @@ import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class TitleBuilder {
 
     private final boolean qualified;

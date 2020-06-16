@@ -282,7 +282,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
                 webDriverFactory.releaseTimoutFor(getDriverInstance());
 
             } catch (WebDriverException e) {
-                LOGGER.warn("Error while quitting the driver (" + e.getMessage() + ")");
+                LOGGER.warn("Error while quitting the driver (" + e.getMessage() + ")", e);
             }
             proxiedWebDriver = null;
         }

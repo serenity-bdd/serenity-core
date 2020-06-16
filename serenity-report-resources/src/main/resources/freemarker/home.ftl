@@ -133,7 +133,8 @@
             <#if testOutcomes.label?has_content>
             <#--> ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),60)}-->
                 > <span class="truncate-60">
-                    ${formatter.htmlCompatibleStoryTitle(formatter.renderTitle(inflection.of(testOutcomes.label).asATitle()))}
+<#--                    ${formatter.htmlCompatibleStoryTitle(formatter.renderTitle(inflection.of(testOutcomes.label).asATitle()))}-->
+                    ${formatter.htmlCompatibleStoryTitle(formatter.renderHeader(inflection.of(testOutcomes.label).asATitle()))}
             </span>
             </#if>
         </span>

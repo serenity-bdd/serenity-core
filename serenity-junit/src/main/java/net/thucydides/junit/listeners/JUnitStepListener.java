@@ -25,14 +25,15 @@ public class JUnitStepListener extends RunListener {
     private StepListener[] extraListeners;
     private Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
     private Class<?> testClass;
-    private boolean testStarted;
+    private ThreadLocal<Boolean> testStarted;
 
     public static JUnitStepListenerBuilder withOutputDirectory(File outputDirectory) {
         return new JUnitStepListenerBuilder(outputDirectory);
     }
 
     protected JUnitStepListener(Class<?> testClass, BaseStepListener baseStepListener, StepListener... listeners) {
-        testStarted = false;
+        testStarted = new ThreadLocal<>();
+        testStarted.set(new Boolean(false));
         this.baseStepListener = baseStepListener;
         this.extraListeners = listeners;
         this.testClass = testClass;
@@ -133,7 +134,7 @@ public class JUnitStepListener extends RunListener {
     }
 
     private void startTestIfNotYetStarted(Description description) {
-        if (!testStarted) {
+        if (!testStarted.get()) {
            testStarted(description);
         }
     }
@@ -166,10 +167,10 @@ public class JUnitStepListener extends RunListener {
     }
 
     private void startTest() {
-        testStarted = true;
+        testStarted.set(true);
     }
     private void endTest() {
-        testStarted = false;
+        testStarted.set(false);
     }
 
     private boolean testingThisTest(Description description) {

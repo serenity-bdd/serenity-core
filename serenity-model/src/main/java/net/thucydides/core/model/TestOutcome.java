@@ -1958,6 +1958,14 @@ public class TestOutcome {
 
         return context;
     }
+    
+    /**
+     * Setting the context
+     * @param context
+     */
+    public void setContext(String context) {
+    	this.context = context;
+    }
 
     /**
      * Returns the name of the test prefixed by the name of the story.

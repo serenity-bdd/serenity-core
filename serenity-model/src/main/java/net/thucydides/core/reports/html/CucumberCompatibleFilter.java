@@ -3,15 +3,12 @@ package net.thucydides.core.reports.html;
 import io.cucumber.tagexpressions.Expression;
 import io.cucumber.tagexpressions.TagExpressionParser;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
 
@@ -29,8 +26,7 @@ public class CucumberCompatibleFilter {
                 .replace("@", "")
                 .replace("=", ":")
                 .toLowerCase();
-        TagExpressionParser parser = new TagExpressionParser();
-        return parser.parse(tagExpression);
+        return TagExpressionParser.parse(tagExpression);
     }
 
     protected Optional<String> cucumberTagOptions() {

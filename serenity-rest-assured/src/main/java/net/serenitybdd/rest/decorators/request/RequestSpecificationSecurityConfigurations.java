@@ -63,7 +63,6 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
         return this;
     }
 
-    @Override
     public AuthenticationSpecification authentication() {
         return new AuthenticationSpecificationImpl(this);
     }

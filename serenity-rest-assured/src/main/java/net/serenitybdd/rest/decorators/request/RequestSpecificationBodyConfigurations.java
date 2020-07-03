@@ -3,8 +3,8 @@ package net.serenitybdd.rest.decorators.request;
 import com.google.common.base.Preconditions;
 import io.restassured.http.ContentType;
 import io.restassured.internal.RequestSpecificationImpl;
-import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
+import io.restassured.mapper.ObjectMapperType;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.InputStream;
 
-import static net.serenitybdd.rest.HeaderNames.*;
+import static net.serenitybdd.rest.HeaderNames.CONTENT_TYPE;
 
 
 abstract class RequestSpecificationBodyConfigurations extends RequestSpecificationHeaderConfigurations
@@ -72,46 +72,6 @@ abstract class RequestSpecificationBodyConfigurations extends RequestSpecificati
     public RequestSpecification body(InputStream body) {
         core.body(body);
         return this;
-    }
-
-    @Override
-    public RequestSpecification content(String content) {
-        core.content(content);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(byte[] content) {
-        core.content(content);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(File content) {
-        core.content(content);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(InputStream content) {
-        core.content(content);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(Object object) {
-        core.content(object);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(Object object, ObjectMapperType mapperType) {
-        return body(object, mapperType);
-    }
-
-    @Override
-    public RequestSpecification content(Object object, ObjectMapper mapper) {
-        return body(object, mapper);
     }
 
     @Override

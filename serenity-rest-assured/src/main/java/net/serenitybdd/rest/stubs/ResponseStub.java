@@ -1,16 +1,18 @@
 package net.serenitybdd.rest.stubs;
 
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
-import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
-import io.restassured.mapper.TypeRef;
+import io.restassured.mapper.ObjectMapperType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.path.xml.config.XmlPathConfig;
-import io.restassured.response.*;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.response.ValidatableResponse;
 import org.mockito.Mockito;
 
 import java.io.InputStream;

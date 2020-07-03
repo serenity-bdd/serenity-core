@@ -2,12 +2,22 @@ package net.serenitybdd.rest.stubs;
 
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.Filter;
-import io.restassured.http.*;
+import io.restassured.http.ContentType;
+import io.restassured.http.Cookie;
+import io.restassured.http.Cookies;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.http.Method;
 import io.restassured.internal.RequestLogSpecificationImpl;
-import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
-import io.restassured.response.*;
-import io.restassured.specification.*;
+import io.restassured.mapper.ObjectMapperType;
+import io.restassured.response.Response;
+import io.restassured.specification.AuthenticationSpecification;
+import io.restassured.specification.MultiPartSpecification;
+import io.restassured.specification.ProxySpecification;
+import io.restassured.specification.RequestLogSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import java.io.File;
 import java.io.InputStream;
@@ -55,41 +65,6 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification content(final String content) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final byte[] content) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final File content) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final InputStream content) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final Object object) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final Object object, final ObjectMapperType mapperType) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification content(final Object object, final ObjectMapper mapper) {
-        return this;
-    }
-
-    @Override
     public RedirectSpecificationStub redirects() {
         return new RedirectSpecificationStub();
     }
@@ -127,27 +102,6 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification parameters(final String firstParameterName, final Object firstParameterValue,
-                                           final Object... parameterNameValuePairs) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification parameters(final Map<String, ?> parametersMap) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification parameter(final String parameterName, final Object... parameterValues) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification parameter(final String parameterName, final Collection<?> parameterValues) {
-        return this;
-    }
-
-    @Override
     public RequestSpecification params(final String firstParameterName, final Object firstParameterValue,
                                        final Object... parameterNameValuePairs) {
         return this;
@@ -165,27 +119,6 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public RequestSpecification param(final String parameterName, final Collection<?> parameterValues) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification queryParameters(final String firstParameterName, final Object firstParameterValue,
-                                                final Object... parameterNameValuePairs) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification queryParameters(final Map<String, ?> parametersMap) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification queryParameter(final String parameterName, final Object... parameterValues) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification queryParameter(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
@@ -211,27 +144,6 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification formParameters(final String firstParameterName, final Object firstParameterValue,
-                                               final Object... parameterNameValuePairs) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification formParameters(final Map<String, ?> parametersMap) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification formParameter(final String parameterName, final Object... parameterValues) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification formParameter(final String parameterName, final Collection<?> parameterValues) {
-        return this;
-    }
-
-    @Override
     public RequestSpecification formParams(final String firstParameterName, final Object firstParameterValue,
                                            final Object... parameterNameValuePairs) {
         return this;
@@ -249,22 +161,6 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public RequestSpecification formParam(final String parameterName, final Collection<?> parameterValues) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification pathParameter(final String parameterName, final Object parameterValue) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification pathParameters(final String firstParameterName, final Object firstParameterValue,
-                                               final Object... parameterNameValuePairs) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification pathParameters(final Map<String, ?> parameterNameValuePairs) {
         return this;
     }
 
@@ -444,11 +340,6 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public AuthenticationSpecification authentication() {
-        return new AuthenticationSpecificationStub();
-    }
-
-    @Override
     public AuthenticationSpecification auth() {
         return new AuthenticationSpecificationStub();
     }
@@ -460,11 +351,6 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public RequestSpecification spec(final RequestSpecification requestSpecificationToMerge) {
-        return this;
-    }
-
-    @Override
-    public RequestSpecification specification(final RequestSpecification requestSpecificationToMerge) {
         return this;
     }
 

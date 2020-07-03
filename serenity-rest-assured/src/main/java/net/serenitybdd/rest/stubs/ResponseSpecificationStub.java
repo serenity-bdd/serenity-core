@@ -1,41 +1,31 @@
 package net.serenitybdd.rest.stubs;
 
 import io.restassured.filter.log.LogDetail;
-import io.restassured.function.RestAssuredFunction;
 import io.restassured.http.ContentType;
 import io.restassured.matcher.DetailedCookieMatcher;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
-import io.restassured.specification.*;
+import io.restassured.specification.Argument;
+import io.restassured.specification.RequestSender;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseLogSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.commons.lang3.NotImplementedException;
 import org.hamcrest.Matcher;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * Created by john on 23/07/2015.
  */
 public class ResponseSpecificationStub implements ResponseSpecification {
-    @Override
-    public ResponseSpecification content(final Matcher<?> matcher, final Matcher<?>... additionalMatchers) {
-        return this;
-    }
-
-    @Override
-    public ResponseSpecification content(final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
-        return this;
-    }
 
     @Override
     public Response validate(final Response response) {
         return new ResponseStub();
-    }
-
-    @Override
-    public ResponseSpecification content(final String key, final Matcher<?> matcher, final Object... additionalKeyMatcherPairs) {
-        return this;
     }
 
     @Override
@@ -94,7 +84,7 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
-    public <T> ResponseSpecification header(String s, RestAssuredFunction<String, T> restAssuredFunction, Matcher<? super T> matcher) {
+    public <T> ResponseSpecification header(String s, Function<String, T> restAssuredFunction, Matcher<? super T> matcher) {
         return this;
     }
 
@@ -164,12 +154,27 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
+    public ResponseSpecification appendRootPath(String pathToAppend) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification appendRootPath(String pathToAppend, List<Argument> arguments) {
+        return this;
+    }
+
+    @Override
     public ResponseSpecification noRootPath() {
         return this;
     }
 
     @Override
     public ResponseSpecification appendRoot(final String pathToAppend) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification detachRootPath(String pathToDetach) {
         return this;
     }
 
@@ -205,11 +210,6 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification body(final String path, final Matcher<?> matcher, final Object... additionalKeyMatcherPairs) {
-        return this;
-    }
-
-    @Override
-    public ResponseSpecification content(final String path, final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
@@ -260,11 +260,6 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification spec(final ResponseSpecification responseSpecificationToMerge) {
-        return this;
-    }
-
-    @Override
-    public ResponseSpecification specification(final ResponseSpecification responseSpecificationToMerge) {
         return this;
     }
 

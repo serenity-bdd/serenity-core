@@ -605,7 +605,17 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         WebElement element = getElement();
-        return ((element != null) && (element.getText().equals(value)));
+
+	if (element == null)
+	    return false;
+
+	String text = element.getText();
+	if (text.isEmpty()) {
+	    // https://github.com/serenity-bdd/serenity-core/issues/2134
+	    // maybe it's an input element?
+	    text = element.getAttribute("value");
+	}
+	return text.equals(value);
     }
 
     /**

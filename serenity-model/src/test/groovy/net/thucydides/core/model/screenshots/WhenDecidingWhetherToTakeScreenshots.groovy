@@ -2,13 +2,18 @@ package net.thucydides.core.model.screenshots
 
 import io.cucumber.java.StepDefinitionAnnotation
 import net.thucydides.core.annotations.Screenshots
+import net.thucydides.core.annotations.Step
 import net.thucydides.core.model.TakeScreenshots
+import net.thucydides.core.steps.BaseStepListener
+import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
 import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.lang.reflect.Method
 
 class WhenDecidingWhetherToTakeScreenshots extends Specification {
 
@@ -23,30 +28,30 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
     def "should be able to configure screenshots using the legacy system properties"() {
 
         when:
-            configuration.takeVerboseScreenshots() >> takeVerboseScreenshots
-            configuration.onlySaveFailingScreenshots() >> onlyTakeFailingverboseScreenshots
-            configuration.screenshotLevel >> Optional.empty()
-            ScreenshotPermission permissions = new ScreenshotPermission(configuration)
+        configuration.takeVerboseScreenshots() >> takeVerboseScreenshots
+        configuration.onlySaveFailingScreenshots() >> onlyTakeFailingverboseScreenshots
+        configuration.screenshotLevel >> Optional.empty()
+        ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
         then:
-            permissions.areAllowed(screenshotLevel) == shouldBeAllowed
+        permissions.areAllowed(screenshotLevel) == shouldBeAllowed
 
         where:
-        onlyTakeFailingverboseScreenshots | takeVerboseScreenshots | screenshotLevel                             | shouldBeAllowed
-        true                              | true                    | TakeScreenshots.FOR_EACH_ACTION            | false
-        true                              | true                    | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP | false
-        true                              | true                    | TakeScreenshots.AFTER_EACH_STEP            | false
-        true                              | true                    | TakeScreenshots.FOR_FAILURES               | true
+        onlyTakeFailingverboseScreenshots | takeVerboseScreenshots | screenshotLevel                            | shouldBeAllowed
+        true                              | true                   | TakeScreenshots.FOR_EACH_ACTION            | false
+        true                              | true                   | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP | false
+        true                              | true                   | TakeScreenshots.AFTER_EACH_STEP            | false
+        true                              | true                   | TakeScreenshots.FOR_FAILURES               | true
 
-        false                             | false                   | TakeScreenshots.FOR_EACH_ACTION            | false
-        false                             | false                   | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP| true
-        false                             | false                   | TakeScreenshots.AFTER_EACH_STEP           | true
-        false                             | false                   | TakeScreenshots.FOR_FAILURES              | true
+        false                             | false                  | TakeScreenshots.FOR_EACH_ACTION            | false
+        false                             | false                  | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP | true
+        false                             | false                  | TakeScreenshots.AFTER_EACH_STEP            | true
+        false                             | false                  | TakeScreenshots.FOR_FAILURES               | true
 
-        false                             | true                    | TakeScreenshots.FOR_EACH_ACTION           | true
-        false                             | true                    | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP| true
-        false                             | true                    | TakeScreenshots.AFTER_EACH_STEP           | true
-        false                             | true                    | TakeScreenshots.FOR_FAILURES              | true
+        false                             | true                   | TakeScreenshots.FOR_EACH_ACTION            | true
+        false                             | true                   | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP | true
+        false                             | true                   | TakeScreenshots.AFTER_EACH_STEP            | true
+        false                             | true                   | TakeScreenshots.FOR_FAILURES               | true
     }
 
 
@@ -57,11 +62,11 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
     def "should be able to configure screenshot level via the new thucydides.take.screenshots system properties"() {
 
         when:
-            environmentVariables.setProperty("thucydides.take.screenshots", takeScreenshotsConfiguration)
-            ScreenshotPermission permissions = new ScreenshotPermission(systemPropConfiguration)
+        environmentVariables.setProperty("thucydides.take.screenshots", takeScreenshotsConfiguration)
+        ScreenshotPermission permissions = new ScreenshotPermission(systemPropConfiguration)
 
         then:
-            permissions.areAllowed(screenshotLevel) == shouldBeAllowed
+        permissions.areAllowed(screenshotLevel) == shouldBeAllowed
 
         where:
         takeScreenshotsConfiguration | screenshotLevel                            | shouldBeAllowed
@@ -88,34 +93,50 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
 
     def "overriding screenshot configuration using method annotations"() {
         when:
-            configuration.takeVerboseScreenshots() >> true
+        configuration.takeVerboseScreenshots() >> true
         then:
-            checkOnlyTakeOnFailures()
-            checkOnEachStep()
-            checkOnBeforeAndAfterEachStep()
-            checkDefaultScreenshotPermissions()
+        checkOnlyTakeOnFailures()
+        checkOnEachStep()
+        checkOnBeforeAndAfterEachStep()
+        checkDefaultScreenshotPermissions()
     }
 
     def "overriding only-on-failure screenshot configuration using method annotations"() {
         when:
-            configuration.onlySaveFailingScreenshots() >> true
+        configuration.onlySaveFailingScreenshots() >> true
         then:
-            checkOverrideOnlyOnFailure()
-            checkOverrideOnlyOnFailureWithPerStepMode()
-            checkOverrideOnlyOnFailureWithVerboseMode()
+        checkOverrideOnlyOnFailure()
+        checkOverrideOnlyOnFailureWithPerStepMode()
+        checkOverrideOnlyOnFailureWithVerboseMode()
     }
 
     def "onlyOnFailures in annotations should override AFTER_EACH_STEP in system properties"() {
         when:
-            EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-            environmentVariables.setProperty("thucydides.take.screenshots","AFTER_EACH_STEP")
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("thucydides.take.screenshots", "AFTER_EACH_STEP")
 
-            Configuration configuration = new SystemPropertiesConfiguration(environmentVariables)
+        Configuration configuration = new SystemPropertiesConfiguration(environmentVariables)
         then:
-            shouldTakeScreenshotsOnlyOnFailures(configuration)
+        shouldTakeScreenshotsOnlyOnFailures(configuration)
     }
 
-    @Screenshots(onlyOnFailures=true)
+    def "allow screenshot configuration using annotations over test step methods"() {
+        given:
+            def listener = Mock(BaseStepListener)
+            def testMethod =this.class.getMethod("testStepWithScreenshotConfiguration")
+            listener.getCurrentStepMethod() >> Optional.of(testMethod)
+            StepEventBus.getEventBus().registerListener(listener)
+        when:
+            configuration.takeVerboseScreenshots() >> true
+        then:
+            ScreenshotPermission permissions = new ScreenshotPermission(configuration)
+            assert !permissions.areAllowed(TakeScreenshots.FOR_EACH_ACTION)
+            assert !permissions.areAllowed(TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP)
+            assert !permissions.areAllowed(TakeScreenshots.AFTER_EACH_STEP)
+            assert !permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
+    }
+
+    @Screenshots(onlyOnFailures = true)
     void checkOnlyTakeOnFailures() {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
@@ -125,7 +146,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
 
-    @Screenshots(afterEachStep=true)
+    @Screenshots(afterEachStep = true)
     void checkOnEachStep() {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
@@ -135,7 +156,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
 
-    @Screenshots(beforeAndAfterEachStep=true)
+    @Screenshots(beforeAndAfterEachStep = true)
     void checkOnBeforeAndAfterEachStep() {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
@@ -165,7 +186,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
 
-    @Screenshots(afterEachStep=true)
+    @Screenshots(afterEachStep = true)
     void checkOverrideOnlyOnFailureWithPerStepMode() {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
@@ -174,7 +195,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
 
-    @Screenshots(forEachAction=true)
+    @Screenshots(forEachAction = true)
     void checkOverrideOnlyOnFailureWithVerboseMode() {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
@@ -183,7 +204,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
 
-    @Screenshots(onlyOnFailures=true)
+    @Screenshots(onlyOnFailures = true)
     public void shouldTakeScreenshotsOnlyOnFailures(Configuration configuration) {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
@@ -198,4 +219,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert !permissions.areAllowed(TakeScreenshots.AFTER_EACH_STEP)
         assert !permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
     }
+    @Screenshots(disabled = true)
+    @Step
+    void testStepWithScreenshotConfiguration(){}
 }

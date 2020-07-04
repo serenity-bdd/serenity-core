@@ -22,19 +22,20 @@ public class ScreenshotPermission {
 
     public boolean areDisabledForThisAction() {
         TakeScreenshots codeLevelScreenshotConfiguration
-                = methodOverride().orElse(taskOverride().orElse(classOverride().orElse(TakeScreenshots.UNDEFINED)));
+                = stepMethodOverride().orElseGet(() -> methodOverride().orElse(taskOverride().orElse(classOverride().orElse(TakeScreenshots.UNDEFINED))));
 
         return codeLevelScreenshotConfiguration == TakeScreenshots.DISABLED;
     }
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
 
-        TakeScreenshots configuredLevel = methodOverride()
-                .orElse(taskOverride()
-                        .orElse(classOverride()
-                                .orElse(stepDefinitionOverride()
-                                        .orElse(configuration.getScreenshotLevel()
-                                                .orElse(TakeScreenshots.UNDEFINED)))));
+        TakeScreenshots configuredLevel = stepMethodOverride()
+                .orElseGet(() -> methodOverride()
+                        .orElse(taskOverride()
+                                .orElse(classOverride()
+                                        .orElse(stepDefinitionOverride()
+                                                .orElse(configuration.getScreenshotLevel()
+                                                        .orElse(TakeScreenshots.UNDEFINED))))));
 
 
         if (configuredLevel != TakeScreenshots.UNDEFINED) {
@@ -52,6 +53,19 @@ public class ScreenshotPermission {
             return takeScreenshotLevel(takeScreenshots).isAtLeast(TakeScreenshots.FOR_EACH_ACTION);
         }
         return takeScreenshotLevel(takeScreenshots).isAtLeast(TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP);
+    }
+
+    private Optional<TakeScreenshots> stepMethodOverride() {
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            Optional<Method> currentStepMethod = StepEventBus.getEventBus().getBaseStepListener().getCurrentStepMethod();
+            if (currentStepMethod != null && currentStepMethod.isPresent()) {
+                Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenScreenshotPreferenceFor(currentStepMethod.get());
+                if (overriddenScreenshotPreference.isPresent()) {
+                    return overriddenScreenshotPreference;
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     private Optional<TakeScreenshots> methodOverride() {

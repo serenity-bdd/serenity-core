@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.questions
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
+import net.serenitybdd.screenplay.Question
 import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException
 import net.serenitybdd.screenplay.targets.Target
 import org.joda.time.DateTime
@@ -26,6 +27,14 @@ class WhenReadingUIValues extends Specification {
             element.getValue() >> "some value"
         then:
             Value.of(target).viewedBy(actor).as(String) == "some value"
+    }
+
+    def "questions about string values"() {
+        when:
+        element.getValue() >> "some value"
+        def theValue = Value.of(target).asAString();
+        then:
+        theValue.answeredBy(actor) == "some value"
     }
 
     def "should read string values when specifying the type"() {
@@ -67,6 +76,7 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getValue() >> "2015-10-15"
         then:
+        def question = Value.of(target).asADate();
             Value.of(target).viewedBy(actor).asDate() == new DateTime(2015,10,15,0,0)
     }
 
@@ -77,7 +87,7 @@ class WhenReadingUIValues extends Specification {
            Value.of(target).viewedBy(actor).asDate("dd/MM/yyyy") == new DateTime(2015,10,15,0,0)
     }
 
-    public static enum Color { red, blue }
+    static enum Color { red, blue }
 
     def "should convert string values to other enums"() {
         when:
@@ -103,12 +113,31 @@ class WhenReadingUIValues extends Specification {
             Value.of(target).viewedBy(actor).asList() == ["A", "B"]
     }
 
+    def "should be possible to provide a question about lists of values"() {
+        when:
+            element.getValue() >> "A"
+            element2.getValue() >> "B"
+        then:
+            def theValues = Value.of(target).asAList();
+            theValues.answeredBy(actor) == ["A", "B"]
+    }
+
+
     def "should convert lists of string enums"() {
         when:
             element.getValue() >> "red"
             element2.getValue() >> "blue"
         then:
             Value.of(target).viewedBy(actor).asListOf(Color) == [Color.red, Color.blue]
+    }
+
+    def "questions about lists of string enums"() {
+        when:
+        element.getValue() >> "red"
+        element2.getValue() >> "blue"
+        then:
+        def theValues = Value.of(target).asAListOf(Color)
+        theValues.answeredBy(actor) == [Color.red, Color.blue]
     }
 
     def "should throw exception if an invalid enum is found"() {

@@ -205,7 +205,6 @@ public abstract class PageObject {
         this.pages = pages;
     }
 
-    @Deprecated
     public <T extends PageObject> T switchToPage(final Class<T> pageObjectClass) {
         if (pages.getDriver() == null) {
             pages.setDriver(driver);
@@ -1225,7 +1224,7 @@ public abstract class PageObject {
     }
 
     private Boolean jqueryIntegrationIsActivated() {
-        return THUCYDIDES_JQUERY_INTEGRATION.booleanFrom(environmentVariables, true);
+        return SERENITY_JQUERY_INTEGRATION.booleanFrom(environmentVariables, true);
     }
 
     public RadioButtonGroup inRadioButtonGroup(String name) {

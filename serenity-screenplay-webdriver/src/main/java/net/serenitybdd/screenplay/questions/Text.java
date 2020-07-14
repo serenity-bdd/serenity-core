@@ -2,9 +2,11 @@ package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class Text extends TargetedUIState<String> {
@@ -34,4 +36,5 @@ public class Text extends TargetedUIState<String> {
                 .map(WebElementFacade::getText)
                 .collect(Collectors.toList());
     }
+
 }

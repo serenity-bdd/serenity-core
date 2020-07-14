@@ -9,6 +9,11 @@ import java.util.Arrays;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+/**
+ * @deprecated The screenplay model states that abilities enable interactions. Using abilities to switch test execution
+ * paths is a bit of a stretch. Switching based on e.g. parameters, environment variables or actor memories is more
+ * reasonable
+ */
 public class PerformBasedOnAbility implements Performable, IsSilent {
 
   private final PossibleAction[] possibleActions;

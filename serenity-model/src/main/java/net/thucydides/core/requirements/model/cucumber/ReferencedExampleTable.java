@@ -1,10 +1,5 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-
-/*import io.cucumber.core.internal.gherkin.ast.Feature;
-import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
-import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;*/
-
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 

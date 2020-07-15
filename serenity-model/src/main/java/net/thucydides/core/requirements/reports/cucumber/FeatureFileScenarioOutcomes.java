@@ -2,8 +2,6 @@ package net.thucydides.core.requirements.reports.cucumber;
 
 
 
-//import io.cucumber.core.internal.gherkin.ast.*;
-
 import io.cucumber.messages.Messages.*;
 import io.cucumber.messages.Messages.GherkinDocument;
 import io.cucumber.messages.Messages.GherkinDocument.*;
@@ -58,7 +56,7 @@ public class FeatureFileScenarioOutcomes {
         this(requirement, Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
-    public static FeatureFileScenarioOutcomes from(Requirement requirement) {//}, RequirementsOutcomes requirementsOutcomes) {
+    public static FeatureFileScenarioOutcomes from(Requirement requirement) {
         return new FeatureFileScenarioOutcomes(requirement);
     }
 

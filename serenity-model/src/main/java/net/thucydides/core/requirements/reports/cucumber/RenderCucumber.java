@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
 
-//import io.cucumber.core.internal.gherkin.ast.*;
 
 import io.cucumber.messages.Messages;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
@@ -17,13 +16,24 @@ import java.util.List;
 
 public class RenderCucumber {
     public static String step(Step step) {
-        return step.getKeyword() + withEscapedParameterFields(step.getText()) + "  " + renderedArgument(step.getArgumentCase());
+        return step.getKeyword() + withEscapedParameterFields(step.getText()) + "  " + renderedArgument(step);
     }
 
 //    private static String renderedArgument(Node argument) {
-    private static String renderedArgument(ArgumentCase argument) {
+    private static String renderedArgument(Step step) {
+
+        /*if (argument instanceof DataTable) {
+            return renderedDataTable((DataTable) argument);
+        } else if (argument instanceof Examples) {
+            return renderedExamples((Examples) argument);
+        }
+        return "";*/
         //TODO
-        //if(argument.equals(ArgumentCase.DATA_TABLE))
+        if(step.getArgumentCase().equals(ArgumentCase.DATA_TABLE)) {
+            return renderedDataTable(step.getDataTable());
+        } else if(step.getArgumentCase().equals(ArgumentCase.DOC_STRING)) {
+            return step.getDocString().getContent();
+        }
         //if (argument instanceof DataTable) {
             /*return renderedDataTable((DataTable) argument.);
         } else if (argument instanceof Messages.GherkinDocument.Feature.Scenario.Examples) {

@@ -178,8 +178,48 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
         result.statusCode(200)
     }
 
+    def "Should record RestAssured get() method calls with parameter provided as a list and using list of filters"() {
+        given:
+        def JsonObject json = new JsonObject()
+        json.addProperty("Weather", "rain")
+        json.addProperty("temperature", "+2")
+        def body = gson.toJson(json)
+        json.addProperty("SomeValue","value")
+        def requestBody = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/weather"
+        def url = "$base$path"
+
+        stubFor(WireMock.get(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "$APPLICATION_JSON")
+                        .withBody(body)));
+        when:
+        def result = SerenityRest.given().filters(Arrays.asList(new MyFilter(), new SecondFilter())).get("$url?status={status}", "available").then()
+        then: "The JSON request should be recorded in the test steps"
+        1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+            assert "$query" == "GET $url?status=available"
+            assert query.method == GET
+            assert query.statusCode == 200
+            assert formatted(query.responseBody) == formatted(body)
+        }
+        and:
+        result.statusCode(200)
+    }
+
 
     class MyFilter implements Filter {
+
+        @Override
+        public Response filter(FilterableRequestSpecification filterableRequestSpecification, FilterableResponseSpecification filterableResponseSpecification, FilterContext filterContext) {
+            return filterContext.next(filterableRequestSpecification,filterableResponseSpecification);
+        }
+    }
+
+    class SecondFilter implements Filter {
 
         @Override
         public Response filter(FilterableRequestSpecification filterableRequestSpecification, FilterableResponseSpecification filterableResponseSpecification, FilterContext filterContext) {

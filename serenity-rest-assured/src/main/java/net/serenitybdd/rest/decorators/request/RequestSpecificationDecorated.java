@@ -338,6 +338,17 @@ public abstract class RequestSpecificationDecorated
         return this;
     }
 
+    /**
+     * Add list of filters that will be used in the request
+     * @param filters Filter list to add
+     * @return the decorated request specification
+     */
+    @Override
+    public RequestSpecification filters(final List<Filter> filters) {
+        core.filters(filters);
+        return this;
+    }
+
     @Override
     public List<Filter> getDefinedFilters() {
         return core.getDefinedFilters();

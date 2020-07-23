@@ -20,7 +20,7 @@ import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.NoSuchElementException;
+import net.serenitybdd.core.exceptions.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;

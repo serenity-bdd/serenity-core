@@ -4,10 +4,7 @@ import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 import static java.util.Arrays.stream;
 
@@ -39,12 +36,17 @@ public class CleanupMethodLocator {
             if (inPackageToSkip(stackTraceElement.getClassName())) {
                 return false;
             }
-            Method method = forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
-            return (stream(method.getAnnotations()).anyMatch(
+            Optional<Method> fixtureMethod = stream(forName(stackTraceElement.getClassName()).getMethods())
+                                                            .filter(method -> method.getName().equals(stackTraceElement.getMethodName())).findFirst();
+
+            if (!fixtureMethod.isPresent()) {
+                return false;
+            }
+            return (stream(fixtureMethod.get().getAnnotations()).anyMatch(
                     annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
                             || cleanupMethodsAnnotations.contains(annotation.toString()))
             ));
-        } catch (ClassNotFoundException | NoSuchMethodException ignored) {
+        } catch (ClassNotFoundException ignored) {
             return false;
         }
     }

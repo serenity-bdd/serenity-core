@@ -26,7 +26,7 @@ It is easy to make changes, and test them as well. If you need some instructions
 ## <a name="submitting_changes"></a> Submitting Changes
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository, please follow [Pull Request Template](#pull_request_template), it makes much easy to review updates and test them.
-  * If automatic build enabled - you will find some status of testing this pullre quest. 
+  * If automatic build enabled - you will find some status of testing this pull request. 
 * After feedback has been given we expect responses within two weeks. After two  weeks we may close the pull request if it isn't showing any activity.
 
 ## <a name="commit_message_conventions"></a> Commit message conventions
@@ -49,7 +49,7 @@ where <type> is one of the following:
   - test: Adding missing tests
   - chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
   
-Also commits can consists of several lines - to include some additional information in relase notes. For example:
+Also commits can consists of several lines - to include some additional information in release notes. For example:
 ```  
 feat: A new feature to make something better
 now it will be available to call api.function() with additional parameters like api.function(Integer)
@@ -60,7 +60,7 @@ it will be included in release notes as:
      
      > now it will be available to call api.function() with additional parameters like api.function(Integer)
 
-Please take a look at release notes to find some more examples of mutiline commits. 
+Please take a look at release notes to find some more examples of multiline commits. 
   
 Starting from version 1.1.26, any commits without one of these prefixes will not appear in the release notes.
 
@@ -106,12 +106,12 @@ examples:
 * [#243 Upgrading typesafe.config from 1.2 to 1.3](serenity-bdd/serenity-core/pull/248)
 
 ## <a name="how_to_build"></a> How to build
-First of all make sure that your environment is ready to build this module. We actively use [Selenium](http://www.seleniumhq.org/) so Chrome, Firefox, Phantomsjs, chromedriver should be available in your PATH. Also java shuold be installed on your dev machine. 
+First of all make sure that your environment is ready to build this module. We actively use [Selenium](http://www.seleniumhq.org/) so Chrome, Firefox, Phantomsjs, chromedriver should be available in your PATH. Also java should be installed on your dev machine. 
 
 #### Chrome 
-To get instructions about installing Chrome use [offical site](https://www.google.com/chrome/). 
+To get instructions about installing Chrome use [official site](https://www.google.com/chrome/). 
 #### FireFox
-To get instructions about installing FireFox use [offical site](https://www.mozilla.org/en-US/firefox/new/). 
+To get instructions about installing FireFox use [official site](https://www.mozilla.org/en-US/firefox/new/). 
 It is possible to check if all fine with your installation, run in console
 ```
 firefox
@@ -119,7 +119,7 @@ firefox
 If executed without error - this part is ready. 
 
 #### PhantomJs 
-PhantomJs it is headless browser, it is sutable for writing tests as with real browsers and using less resources for such tests. 
+PhantomJs it is headless browser, it is suitable for writing tests as with real browsers and using less resources for such tests. 
 To install phantomJs follow [instructions](http://phantomjs.org/download.html). 
 It is possible to check if all fine with phantomJs just run in console
 ```
@@ -135,9 +135,9 @@ chromedriver
 ```
 this command will run chromedriver as server and if output does not contains errors - chromedriver and Chrome are ready. 
 
-For builds we use [gradle](http://gradle.org), and to achive that all developers will use same version - [wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) is configured.
-So, now you are redy to build module. After you checkout it go to folder and execute:
+For builds we use [gradle](http://gradle.org), and to achieve that all developers will use same version - [wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) is configured.
+So, now you are ready to build module. After you checkout it go to folder and execute:
 ```
 ./gradlew clean test integrationTests install
 ```
-It will take some time... A lot of tests should execute before build can be marked successfull. Using gradle documenation you can configure executing only your tests.
+It will take some time... A lot of tests should execute before build can be marked successful. Using gradle documentation you can configure executing only your tests.

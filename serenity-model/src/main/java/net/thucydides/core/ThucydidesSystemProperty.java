@@ -1064,7 +1064,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * What format should test results be generated in.
-     * By default, this is "json,xml".
+     * By default, this is "json, html".
      */
     OUTPUT_FORMATS,
 

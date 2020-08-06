@@ -25,8 +25,6 @@ class SinglePageHtmlReporter(
         private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
         private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
-    private val LOGGER = LoggerFactory.getLogger(SerenitySinglePageReport::class.java)
-
     constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
 
     override fun getName(): String = "single-page-html"

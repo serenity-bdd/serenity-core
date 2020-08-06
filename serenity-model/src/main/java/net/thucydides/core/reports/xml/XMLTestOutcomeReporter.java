@@ -23,7 +23,7 @@ import static net.thucydides.core.model.ReportType.XML;
 
 /**
  * Generates acceptance test results in XML form.
- *
+ * @deprecated XML outputs are no longer supported.
  */
 public class XMLTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 

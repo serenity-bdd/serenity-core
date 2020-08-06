@@ -2561,10 +2561,13 @@ public class TestOutcome {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (testCase != null ? testCase.hashCode() : 0);
-        result = 31 * result + (userStory != null ? userStory.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0);
+        result = 31 * result + (context != null ? context.hashCode() : 0);
+        result = 31 * result + (testCaseName != null ? testCaseName.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (userStory != null ? userStory.hashCode() : 0);
         result = 31 * result + (manual ? 1 : 0);
         return result;
     }

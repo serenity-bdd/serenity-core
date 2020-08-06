@@ -1,4 +1,3 @@
-net.thucydides.core.reports.xml.XMLTestOutcomeReporter
 net.thucydides.core.reports.json.JSONTestOutcomeReporter
 net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
 

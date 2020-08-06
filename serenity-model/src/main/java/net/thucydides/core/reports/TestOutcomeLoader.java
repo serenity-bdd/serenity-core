@@ -43,7 +43,6 @@ public class TestOutcomeLoader {
     }
 
     public TestOutcomeLoader forFormat(OutcomeFormat format) {
-
         return new TestOutcomeLoader(environmentVariables, new FormatConfiguration(format));
     }
 

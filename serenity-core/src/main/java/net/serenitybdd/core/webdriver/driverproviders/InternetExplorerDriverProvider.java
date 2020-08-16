@@ -15,7 +15,6 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;

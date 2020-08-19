@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
@@ -10,6 +11,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,15 +19,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_USE_DRIVER_SERVICE_POOL;
 
 public class ChromeDriverProvider implements DriverProvider {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DriverCapabilityRecord driverProperties;
 
@@ -44,6 +41,12 @@ public class ChromeDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
+        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+            logger.info("Using automatically driver download");
+            WebDriverManager.chromedriver().setup();
+        } else {
+            logger.info("Not using automatically driver download");
+        }
         DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 

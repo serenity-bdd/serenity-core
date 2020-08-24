@@ -1,9 +1,9 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
+import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.requirements.reports.cucumber.RenderCucumber;
 
@@ -18,10 +18,10 @@ public class IdentifiedScenario extends NamedScenario {
     private Feature feature;
     private String scenarioReport;
     private String scenarioId;
-    private Feature.Scenario scenarioDefinition;
+    private ScenarioDefinition scenarioDefinition;
     private ExampleTableInMarkdown exampleTableInMarkdown;
 
-    protected IdentifiedScenario(Feature feature, Scenario scenarioDefinition) {
+    protected IdentifiedScenario(Feature feature, ScenarioDefinition scenarioDefinition) {
         this.feature = feature;
         this.scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
         this.scenarioId = Digest.ofTextValue(scenarioDefinition.getName());
@@ -44,7 +44,7 @@ public class IdentifiedScenario extends NamedScenario {
         } else {
             suffix = resultToken();
         }
-        renderedDescription += scenarioDefinition.getStepsList().stream()
+        renderedDescription += scenarioDefinition.getSteps().stream()
                         .map(step -> RenderCucumber.step(step) + "  ")
                         .collect(Collectors.joining(lineSeparator())) + suffix;
 
@@ -67,16 +67,18 @@ public class IdentifiedScenario extends NamedScenario {
 
     @Override
     public Optional<String> asExampleTable(ScenarioDisplayOption withDisplayOption) {
-        if (scenarioDefinition.getExamplesCount() == 0) {
+        if (!(scenarioDefinition instanceof ScenarioOutline)) {
             return Optional.empty();
         }
+
+        ScenarioOutline scenarioOutline = (ScenarioOutline) scenarioDefinition;
 
         StringBuilder renderedExamples = new StringBuilder();
 
         int exampleRow = 0;
-        for(Examples example : scenarioDefinition.getExamplesList()) {
+        for(Examples example : scenarioOutline.getExamples()) {
             renderedExamples.append(exampleTableInMarkdown.renderedFormOf(example, exampleRow++, withDisplayOption));
-            if (exampleRow < scenarioDefinition.getExamplesCount() - 1) {
+            if (exampleRow < scenarioOutline.getExamples().size() - 1) {
                 renderedExamples.append(lineSeparator());
             }
         }

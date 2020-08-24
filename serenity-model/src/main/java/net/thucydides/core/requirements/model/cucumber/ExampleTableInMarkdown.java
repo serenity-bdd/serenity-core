@@ -1,10 +1,9 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
+import io.cucumber.core.internal.gherkin.ast.Examples;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
 import net.thucydides.core.digest.Digest;
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
@@ -14,9 +13,9 @@ public class ExampleTableInMarkdown {
     private final Feature feature;
     private final String scenarioReport;
     private final String scenarioId;
-    private final Scenario scenarioDefinition;
+    private final ScenarioDefinition scenarioDefinition;
 
-    public ExampleTableInMarkdown(Feature feature, String scenarioReport, Scenario scenarioDefinition) {
+    public ExampleTableInMarkdown(Feature feature, String scenarioReport, ScenarioDefinition scenarioDefinition) {
         this.feature = feature;
         this.scenarioReport = scenarioReport;
         this.scenarioId = Digest.ofTextValue(scenarioDefinition.getName());

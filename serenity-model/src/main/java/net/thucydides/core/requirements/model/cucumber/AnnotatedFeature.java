@@ -2,18 +2,17 @@ package net.thucydides.core.requirements.model.cucumber;
 
 
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
 
 import java.util.List;
 
 public class AnnotatedFeature {
     private final Feature feature;
-    private final List<Scenario> scenarioDefinitions;
+    private final List<ScenarioDefinition> scenarioDefinitions;
     private final String descriptionInComments;
 
-    public AnnotatedFeature(Feature feature, List<Scenario> scenarioDefinitions, String descriptionInComments) {
+    public AnnotatedFeature(Feature feature, List<ScenarioDefinition> scenarioDefinitions, String descriptionInComments) {
         this.feature = feature;
         this.scenarioDefinitions = scenarioDefinitions;
         this.descriptionInComments = descriptionInComments;
@@ -27,7 +26,7 @@ public class AnnotatedFeature {
         return descriptionInComments;
     }
 
-    public List<Scenario> getScenarioDefinitions() {
+    public List<ScenarioDefinition> getScenarioDefinitions() {
         return scenarioDefinitions;
     }
 }

@@ -1,13 +1,14 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
+
+import io.cucumber.core.internal.gherkin.ast.Feature;
+import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
 
 import java.util.Optional;
 
 public abstract class NamedExampleTable {
-    public static NamedExampleTable forScenarioDefinition(Feature feature, Scenario scenarioDefinition, String exampleName) {
+    public static NamedExampleTable forScenarioDefinition(Feature feature, ScenarioDefinition scenarioDefinition, String exampleName) {
         return new IdentifiedExampleTable(feature, scenarioDefinition, exampleName);
     }
 

@@ -134,6 +134,82 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
 
     }
 
+    def """The special 'all' environment variable can be built based on nested variables substitution from previous sections.
+        For environment configuration variable substitution, we sue the # symbol to avoid conflicts with the TypeSafe variable substitution.
+        environments {
+            default {
+                db.host = 5432
+                db.port = localhost
+                db.jdbc = jdbc:postgres://#{db.host}:#{db.port}
+                db.name = my_db
+            }
+
+            test {
+                db.host = 127.0.0.1
+                db.port = 5432
+                db.jdbc = jdbc:postgres://#{db.host}:#{db.port}
+                db.name = your_db
+            }
+
+            all {
+                db.connection.url = #{db.jdbc}/#{db.name}
+            }
+        }
+        """() {
+
+        given:
+        environmentVariables.setProperties([
+                "environments.default.db.host"      : "localhost",
+                "environments.default.db.port"      : "5432",
+                "environments.default.db.jdbc"      : "jdbc:postgres://#{db.host}:#{db.port}",
+                "environments.default.db.name"      : "my_db",
+                "environments.test.db.host"         : "127.0.0.1",
+                "environments.test.db.port"         : "5432",
+                "environments.test.db.jdbc"         : "jdbc:postgres://#{db.host}:#{db.port}",
+                "environments.test.db.name"         : "your_db",
+                "environment"                       : "test",
+                "environments.all.db.connection.url": "#{db.jdbc}/#{db.name}"
+        ])
+        when:
+        def baseUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("db.connection.url")
+        then:
+        baseUrl == "jdbc:postgres://127.0.0.1:5432/your_db"
+    }
+
+    def """The special 'all' environment variable can be built based on multi variable substitution from previous sections.
+        For environment configuration variable substitution, we sue the # symbol to avoid conflicts with the TypeSafe variable substitution.
+        environments {
+            default {
+                db.jdbc = jdbc:postgres://localhost:5432
+                db.name = my_db
+            }
+
+            test {
+                db.jdbc = jdbc:postgres://127.0.0.1:5432
+                db.name = your_db
+            }
+
+            all {
+                db.connection.url = #{db.jdbc}/#{db.name}
+            }
+        }
+        """() {
+
+        given:
+        environmentVariables.setProperties([
+                "environments.default.db.jdbc"      : "jdbc:postgres://localhost:5432",
+                "environments.default.db.name"      : "my_db",
+                "environments.test.db.jdbc"         : "jdbc:postgres://127.0.0.1:5432",
+                "environments.test.db.name"         : "your_db",
+                "environment"                       : "test",
+                "environments.all.db.connection.url": "#{db.jdbc}/#{db.name}"
+        ])
+        when:
+        def baseUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("db.connection.url")
+        then:
+        baseUrl == "jdbc:postgres://127.0.0.1:5432/your_db"
+    }
+
 
     def """The 'all' environment properties work for any Serenity property"() For environment configuration variable substitution, we sue the # symbol to avoid conflicts with the TypeSafe variable substitution.
         default {

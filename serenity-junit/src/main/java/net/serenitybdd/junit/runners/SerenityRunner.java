@@ -4,6 +4,7 @@ import com.google.inject.*;
 import net.serenitybdd.core.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.batches.*;
@@ -164,6 +165,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         this.batchManager = batchManager;
 
         batchManager.registerTestCase(klass);
+        LifecycleRegister.register(theTest);
+
 
     }
 

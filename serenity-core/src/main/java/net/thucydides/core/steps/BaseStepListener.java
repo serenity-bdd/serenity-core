@@ -3,8 +3,10 @@ package net.thucydides.core.steps;
 import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.annotations.events.*;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.ScreenshotPhoto;
@@ -403,6 +405,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         testedStory = story;
         suiteStarted = true;
         clearStorywideTagsAndIssues();
+
     }
 
     public boolean testSuiteRunning() {
@@ -446,12 +449,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
         this.currentTestOutcome.set(newTestOutcome);
         recordNewTestOutcome(testMethod, currentTestOutcome.get());
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
     public void testStarted(final String testMethod, final String id) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
         this.currentTestOutcome.set(newTestOutcome);
         recordNewTestOutcome(testMethod, currentTestOutcome.get());
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
     private void recordNewTestOutcome(String testMethod, TestOutcome newTestOutcome) {
@@ -516,6 +523,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return;
         }
 
+        LifecycleRegister.invokeMethodsAnnotatedBy(AfterScenario.class, getCurrentTestOutcome());
+
         recordTestDuration();
         getCurrentTestOutcome().addIssues(storywideIssues);
         // TODO: Disable when run from an IDE
@@ -546,6 +555,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         currentStepStack.get().clear();
+        LifecycleRegister.clear();
     }
 
     private void testAndTopLevelStepsShouldBeIgnored() {
@@ -1137,6 +1147,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (newStepForEachExample()) {
             getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle(currentExample, data)));
         }
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeExample.class, getCurrentTestOutcome());
     }
 
     private String exampleTitle(int exampleNumber, Map<String, String> data) {
@@ -1144,6 +1156,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void exampleFinished() {
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(AfterExample.class, getCurrentTestOutcome());
+
         if (newStepForEachExample()) {
             currentStepDone(null);
         }

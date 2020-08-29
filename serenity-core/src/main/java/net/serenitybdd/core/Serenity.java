@@ -5,6 +5,7 @@ import net.serenitybdd.core.configurers.WebDriverConfigurer;
 import net.serenitybdd.core.di.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.reports.ReportDataSaver;
 import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.*;
@@ -165,6 +166,7 @@ public class Serenity {
         }
         notifyTestFinished();
         resetDependencyInjectors();
+        LifecycleRegister.clear();
     }
 
     private static void notifyTestFinished() {

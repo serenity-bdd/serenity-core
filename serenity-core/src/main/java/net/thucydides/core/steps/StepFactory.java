@@ -15,6 +15,7 @@ import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
@@ -187,6 +188,8 @@ public class StepFactory {
                                               boolean useCache) {
         T steps = createProxyStepLibrary(scenarioStepsClass, interceptor);
 
+        LifecycleRegister.register(steps);
+
         if (useCache) {
             indexStepLibrary(scenarioStepsClass, steps);
         }
@@ -217,6 +220,8 @@ public class StepFactory {
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass, Object... parameters) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
         T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor, parameters);
+
+        LifecycleRegister.register(steps);
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
 

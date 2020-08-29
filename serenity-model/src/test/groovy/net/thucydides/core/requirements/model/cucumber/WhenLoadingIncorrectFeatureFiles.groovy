@@ -1,9 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber
 
-
 import spock.lang.Specification
-
-import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle
 
 class WhenLoadingIncorrectFeatureFiles extends Specification {
 
@@ -11,10 +8,10 @@ class WhenLoadingIncorrectFeatureFiles extends Specification {
 
     def "Should display a meaningful error message if there is a Gherkin syntax error"() {
         when:
-            CucumberParser parser = new CucumberParser()
-            parser.loadFeature(new File(invalidFeatureFile))
+        CucumberParser parser = new CucumberParser()
+        AnnotatedFeature feature = parser.loadFeature(new File(invalidFeatureFile))
         then:
-            InvalidFeatureFileException ex = thrown()
-            ex.message.contains("Parser errors")
+        InvalidFeatureFileException ex = thrown()
+            ex.message.contains("Failed to parse resource")
     }
 }

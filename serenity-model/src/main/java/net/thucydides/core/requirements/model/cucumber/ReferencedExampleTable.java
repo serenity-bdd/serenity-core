@@ -1,9 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-
-import io.cucumber.core.internal.gherkin.ast.Feature;
-import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
-import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
+import io.cucumber.messages.Messages.GherkinDocument.Feature;
+import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 
 /**
  * An example table that is mentioned by name in a feature narrative.
@@ -20,24 +18,25 @@ public class ReferencedExampleTable {
     }
 
     public NamedExampleTable withName(String exampleTableName) {
-        return feature.getChildren().stream()
+        return feature.getChildrenList().stream()
+                        .filter(featureChild -> featureChild.hasScenario())
                         .filter(scenarioDefinition -> featureContainsExampleTableWithName(exampleTableName))
-                        .map(scenarioDefinition -> NamedExampleTable.forScenarioDefinition(feature, scenarioDefinition, exampleTableName))
+                        .map(featureChild -> NamedExampleTable.forScenarioDefinition(feature, featureChild.getScenario(), exampleTableName))
                         .findFirst()
                         .orElse(NamedExampleTable.withNoMatchingScenario());
     }
 
     private boolean featureContainsExampleTableWithName(String exampleTableName) {
-        return feature.getChildren().stream()
+        return feature.getChildrenList().stream()
                                     .anyMatch(
-                                            scenarioDefinition -> scenarioContainsExampleTableWithName(scenarioDefinition, exampleTableName)
+                                            featureChild -> scenarioContainsExampleTableWithName(featureChild.getScenario(), exampleTableName)
                                     );
     }
 
-    private boolean scenarioContainsExampleTableWithName(ScenarioDefinition scenarioDefinition, String exampleTableName) {
-        if (!(scenarioDefinition instanceof ScenarioOutline)) { return false; }
+    private boolean scenarioContainsExampleTableWithName(Scenario scenario, String exampleTableName) {
+        if (scenario.getExamplesCount() == 0) { return false; }
 
-        return ((ScenarioOutline) scenarioDefinition).getExamples().stream()
+        return scenario.getExamplesList().stream()
                 .anyMatch(
                         examplesTable -> examplesTable.getName().equalsIgnoreCase(exampleTableName.trim())
                 );

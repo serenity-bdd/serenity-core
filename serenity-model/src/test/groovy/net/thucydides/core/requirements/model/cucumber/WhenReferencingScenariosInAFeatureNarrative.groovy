@@ -1,13 +1,12 @@
 package net.thucydides.core.requirements.model.cucumber
 
-import io.cucumber.core.internal.gherkin.ast.Feature
-import io.cucumber.core.internal.gherkin.ast.GherkinDocument
-import io.cucumber.core.internal.gherkin.events.CucumberEvent
-import io.cucumber.core.internal.gherkin.events.GherkinDocumentEvent
-import io.cucumber.core.internal.gherkin.events.SourceEvent
-import io.cucumber.core.internal.gherkin.stream.GherkinEvents
-import io.cucumber.core.internal.gherkin.stream.SourceEvents
+import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
+import io.cucumber.messages.IdGenerator
+import io.cucumber.messages.Messages.Envelope
+import io.cucumber.messages.Messages.GherkinDocument.Feature
 import spock.lang.Specification
+
+import java.util.stream.Collectors
 
 class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
@@ -15,22 +14,22 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def features = loadCucumberFeatures([featureFile])
     def filteringTodoFeature = features[0]
 
-    private static List<Feature> loadCucumberFeatures(List<String> listOfFiles) {
+    private List<Feature> loadCucumberFeatures(List<String> listOfFiles) {
+        IdGenerator idGenerator = new IdGenerator.Incrementing();
         List<Feature> loadedFeatures = new ArrayList<>();
-        SourceEvents sourceEvents = new SourceEvents(listOfFiles);
-        GherkinEvents gherkinEvents = new GherkinEvents(true,true,true);
-        for (SourceEvent sourceEventEvent : sourceEvents) {
-            for (CucumberEvent cucumberEvent : gherkinEvents.iterable(sourceEventEvent)) {
-                if(cucumberEvent instanceof GherkinDocumentEvent) {
-                    GherkinDocumentEvent gherkinDocumentEvent = (GherkinDocumentEvent)cucumberEvent;
-                    GherkinDocument gherkinDocument = gherkinDocumentEvent.document;
-                    loadedFeatures.add(gherkinDocument.getFeature());
-                }
+        boolean includeSource = false;
+        boolean includeAst = true;
+        boolean includePickles = false;
+        List<Envelope> envelopes = Gherkin.fromPaths(listOfFiles, includeSource, includeAst, includePickles, idGenerator).collect(Collectors.toList());
+        for(Envelope envelope : envelopes )
+        {
+            if(envelope.hasGherkinDocument() && envelope.getGherkinDocument().hasFeature())
+            {
+                loadedFeatures.add(envelope.getGherkinDocument().getFeature());
             }
         }
         return loadedFeatures;
     }
-
     def "Should be able to identify scenarios in a feature file by name"() {
         when:
         def scenarioDescription = ReferencedScenario.in(filteringTodoFeature).withName("View only completed items").asGivenWhenThen()

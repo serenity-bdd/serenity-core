@@ -1,7 +1,8 @@
 package net.serenitybdd.core.lifecycle;
 
-import net.serenitybdd.core.annotations.events.AfterFeature;
-import net.serenitybdd.core.annotations.events.BeforeFeature;
+import net.serenitybdd.core.annotations.events.AfterScenario;
+import net.serenitybdd.core.annotations.events.BeforeScenario;
+import net.thucydides.core.model.TestOutcome;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,13 +14,18 @@ public class WhenRunningLifecycleEvents {
         boolean beforeFeatureExecuted;
         boolean afterFeatureExecuted;
 
-        @BeforeFeature
-        public void beforeFeature() {
+        @BeforeScenario
+        public void beforeScenario() {
             beforeFeatureExecuted = true;
         }
 
-        @AfterFeature
-        public void afterFeature() {
+        @AfterScenario
+        public void afterScenario() {
+            afterFeatureExecuted = true;
+        }
+
+        @BeforeScenario
+        public void beforeScenarioWithTestOutcome(TestOutcome testOutcome) {
             afterFeatureExecuted = true;
         }
     }
@@ -30,8 +36,10 @@ public class WhenRunningLifecycleEvents {
 
         LifecycleRegister.register(enabled);
 
-        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeFeature.class);
-        LifecycleRegister.invokeMethodsAnnotatedBy(AfterFeature.class);
+        TestOutcome testOutcome = TestOutcome.forTest("beforeScenario",FeatureLifecycleEnabled.class);
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, testOutcome);
+        LifecycleRegister.invokeMethodsAnnotatedBy(AfterScenario.class, testOutcome);
 
         assertThat(enabled.beforeFeatureExecuted).isTrue();
         assertThat(enabled.afterFeatureExecuted).isTrue();

@@ -1092,7 +1092,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        if (!withTimeoutOf(Duration.ofMillis(0)).isVisible()) {
+        if (!isCurrentlyVisible()) {
             return this;
         }
 

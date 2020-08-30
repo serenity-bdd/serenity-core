@@ -1,10 +1,7 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
 
-
-import io.cucumber.messages.Messages.*;
 import io.cucumber.messages.Messages.GherkinDocument;
-import io.cucumber.messages.Messages.GherkinDocument.*;
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;

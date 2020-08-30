@@ -1,16 +1,16 @@
 package net.thucydides.core.requirements.model;
 
-import net.serenitybdd.core.collect.*;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.requirements.*;
-import net.thucydides.core.requirements.model.cucumber.*;
+import net.thucydides.core.requirements.RequirementsPath;
+import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URISyntaxException;
-import java.util.*;
-
-import static java.lang.Math.max;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Load a narrative text from a directory.

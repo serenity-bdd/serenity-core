@@ -1,8 +1,9 @@
 package net.thucydides.core.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 /**
  * Created by john on 13/08/2014.

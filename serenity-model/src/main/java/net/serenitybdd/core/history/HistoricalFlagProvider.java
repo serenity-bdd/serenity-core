@@ -1,7 +1,7 @@
 package net.serenitybdd.core.history;
 
-import net.serenitybdd.core.collect.NewSet;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.flags.Flag;

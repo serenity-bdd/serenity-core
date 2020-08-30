@@ -1,12 +1,13 @@
 package net.thucydides.core.util;
 
-import net.serenitybdd.core.collect.*;
-import org.apache.commons.lang3.*;
+import net.serenitybdd.core.collect.NewMap;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.locks.*;
-import java.util.stream.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * Return system environment variable values.

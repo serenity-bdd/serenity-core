@@ -1,27 +1,33 @@
 package net.thucydides.core.reports.integration;
 
-import net.serenitybdd.core.collect.*;
-import net.thucydides.core.annotations.*;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.Story;
-import net.thucydides.core.digest.*;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.*;
-import net.thucydides.core.reports.*;
-import net.thucydides.core.reports.xml.*;
-import net.thucydides.core.screenshots.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import org.apache.commons.io.*;
-import org.joda.time.*;
-import org.junit.*;
-import org.mockito.*;
-import sample.steps.*;
+import net.thucydides.core.reports.AcceptanceTestReporter;
+import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.steps.TestSourceType;
+import net.thucydides.core.util.ExtendedTemporaryFolder;
+import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import sample.steps.FailingStep;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static net.thucydides.core.hamcrest.XMLMatchers.*;
-import static net.thucydides.core.reports.integration.TestStepFactory.*;
-import static org.hamcrest.MatcherAssert.*;
+import static net.thucydides.core.hamcrest.XMLMatchers.isSimilarTo;
+import static net.thucydides.core.reports.integration.TestStepFactory.successfulTestStepCalled;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class WhenGeneratingAnXMLReport {

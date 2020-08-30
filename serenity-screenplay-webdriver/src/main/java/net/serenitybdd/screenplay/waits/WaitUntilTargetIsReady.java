@@ -11,7 +11,6 @@ import org.hamcrest.Matcher;
 
 import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
-import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class WaitUntilTargetIsReady implements Interaction, IsSilent {
     private final Target target;

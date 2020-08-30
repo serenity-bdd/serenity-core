@@ -35,10 +35,7 @@ import java.util.function.Function;
 
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 import static net.bytebuddy.matcher.ElementMatchers.not;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.CONSTRUCTOR_WITH_PARAMETERS;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.INNER_CLASS_CONSTRUCTOR;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_PAGES;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_WEBDRIVER;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
 import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**

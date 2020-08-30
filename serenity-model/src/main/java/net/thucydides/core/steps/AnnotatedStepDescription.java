@@ -10,7 +10,6 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.thucydides.core.util.NameConverter.humanize;
-import static net.thucydides.core.util.NameConverter.withNoArguments;
 
 /**
  * Test steps and step groups can be described by various annotations.

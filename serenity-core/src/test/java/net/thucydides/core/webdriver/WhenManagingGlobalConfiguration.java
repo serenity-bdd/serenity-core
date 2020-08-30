@@ -1,13 +1,14 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 
 import static net.thucydides.core.util.FileSeparatorUtil.changeSeparatorIfRequired;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.is;
 
 public class WhenManagingGlobalConfiguration {
 

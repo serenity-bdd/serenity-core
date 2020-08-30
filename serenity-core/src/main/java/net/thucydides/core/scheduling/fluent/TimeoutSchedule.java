@@ -1,9 +1,7 @@
 package net.thucydides.core.scheduling.fluent;
 
 import net.thucydides.core.scheduling.SerenityFluentWait;
-import net.thucydides.core.scheduling.ThucydidesFluentWait;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class TimeoutSchedule<T> extends TimeSchedule<T> {

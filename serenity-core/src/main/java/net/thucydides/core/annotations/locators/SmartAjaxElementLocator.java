@@ -16,17 +16,15 @@ import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError
 import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutError;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
 
 import java.lang.reflect.Field;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 import static net.thucydides.core.annotations.locators.SearchContextType.*;

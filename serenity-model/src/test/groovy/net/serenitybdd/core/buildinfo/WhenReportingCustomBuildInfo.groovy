@@ -1,7 +1,6 @@
 package net.serenitybdd.core.buildinfo
 
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.SystemEnvironmentVariables
 import spock.lang.Specification
 

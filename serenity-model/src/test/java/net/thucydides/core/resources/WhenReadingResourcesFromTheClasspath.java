@@ -19,9 +19,7 @@ import java.util.zip.ZipFile;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;

@@ -4,10 +4,7 @@ package net.thucydides.core.pages.integration;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.StaticTestSite;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -17,8 +14,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
-
-import static net.thucydides.core.webdriver.SupportedWebDriver.CHROME;
 
 public class FluentElementAPITestsBaseClass {
 

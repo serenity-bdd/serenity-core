@@ -3,13 +3,14 @@ package net.thucydides.core.requirements.reports;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.EMPTY_MAP;
 
 public class SingleScenarioOutcome implements ScenarioOutcome {

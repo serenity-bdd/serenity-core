@@ -1,7 +1,6 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
@@ -11,9 +10,7 @@ import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

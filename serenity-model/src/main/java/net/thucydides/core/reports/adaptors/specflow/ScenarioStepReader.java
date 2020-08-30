@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
 import net.serenitybdd.core.collect.NewSet;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestStep;
 
 import java.util.ArrayList;

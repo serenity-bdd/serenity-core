@@ -1,6 +1,5 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Step;
 import net.thucydides.core.pages.Pages;
 import org.junit.Test;
 

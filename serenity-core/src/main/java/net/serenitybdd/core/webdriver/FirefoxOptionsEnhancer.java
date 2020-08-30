@@ -4,9 +4,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
-import static net.thucydides.core.ThucydidesSystemProperty.FIREFOX_LOG_LEVEL;
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class FirefoxOptionsEnhancer {
     private FirefoxOptions options;

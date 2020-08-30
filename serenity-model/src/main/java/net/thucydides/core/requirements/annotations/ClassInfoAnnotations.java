@@ -1,14 +1,13 @@
 package net.thucydides.core.requirements.annotations;
 
 import com.google.common.reflect.ClassPath;
+import net.thucydides.core.util.JUnitAdapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.thucydides.core.util.JUnitAdapter;
 
 public class ClassInfoAnnotations {
 

@@ -1,10 +1,8 @@
 package net.thucydides.core.model.stacktrace;
 
+import net.serenitybdd.core.exceptions.UnrecognisedException;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-
-import net.serenitybdd.core.exceptions.UnrecognisedException;
-import net.thucydides.core.model.stacktrace.FailureCause;
 
 /**
  * @author Robert Zimmermann

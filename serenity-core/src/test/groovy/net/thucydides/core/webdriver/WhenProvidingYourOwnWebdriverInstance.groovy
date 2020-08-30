@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver
 
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification

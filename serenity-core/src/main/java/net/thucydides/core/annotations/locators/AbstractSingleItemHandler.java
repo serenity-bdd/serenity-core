@@ -1,9 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.WebElementDescriber;
 import net.thucydides.core.annotations.NotImplementedException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.InvocationHandler;

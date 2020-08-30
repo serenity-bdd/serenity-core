@@ -19,10 +19,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-import static net.thucydides.core.ThucydidesSystemProperty.*;
-
 public class FirefoxDriverProvider implements DriverProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.adaptors.xunit;
 
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.reports.adaptors.xunit.model.TestCase;
 import net.thucydides.core.reports.adaptors.xunit.model.TestException;
 import net.thucydides.core.reports.adaptors.xunit.model.TestSuite;

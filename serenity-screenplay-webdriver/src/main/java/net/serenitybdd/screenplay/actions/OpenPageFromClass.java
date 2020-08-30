@@ -7,7 +7,6 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.NameConverter;
-import org.openqa.selenium.support.PageFactory;
 
 public class OpenPageFromClass implements Interaction {
 

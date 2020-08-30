@@ -1,7 +1,6 @@
 package net.serenitybdd.core.tags;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;

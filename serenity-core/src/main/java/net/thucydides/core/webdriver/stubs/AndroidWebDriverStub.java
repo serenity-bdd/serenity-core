@@ -1,7 +1,11 @@
 package net.thucydides.core.webdriver.stubs;
 
-import io.appium.java_client.*;
-import io.appium.java_client.android.*;
+import io.appium.java_client.FindsByAndroidUIAutomator;
+import io.appium.java_client.LocksDevice;
+import io.appium.java_client.android.HasAndroidDeviceDetails;
+import io.appium.java_client.android.HasSupportedPerformanceDataType;
+import io.appium.java_client.android.PushesFiles;
+import io.appium.java_client.android.StartsActivity;
 import io.appium.java_client.android.connection.HasNetworkConnection;
 import io.appium.java_client.windows.PressesKeyCode;
 import org.openqa.selenium.By;

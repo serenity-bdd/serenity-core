@@ -1,10 +1,10 @@
 package net.serenitybdd.core.selectors;
 
-import java.util.HashMap;
 import org.openqa.selenium.By;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Selectors {

@@ -7,8 +7,6 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import static org.hamcrest.Matchers.is;
-
 public final class TestOutcomeMatchers {
 
     public static Matcher<TestOutcome> havingTagType(final String tagType) {

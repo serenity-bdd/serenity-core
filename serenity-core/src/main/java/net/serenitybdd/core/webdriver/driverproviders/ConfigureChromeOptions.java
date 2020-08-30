@@ -1,14 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.CustomChromeOptions;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Arrays;
 import java.util.List;

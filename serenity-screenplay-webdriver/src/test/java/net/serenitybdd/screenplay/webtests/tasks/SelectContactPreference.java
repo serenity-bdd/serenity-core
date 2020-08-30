@@ -1,10 +1,11 @@
 package net.serenitybdd.screenplay.webtests.tasks;
 
-import net.serenitybdd.screenplay.*;
-import net.serenitybdd.screenplay.actions.*;
-import net.thucydides.core.annotations.*;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
+import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.CONTACT_PREFERENCES;
 
 public class SelectContactPreference implements Performable {
 

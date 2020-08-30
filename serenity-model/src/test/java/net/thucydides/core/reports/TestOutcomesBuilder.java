@@ -2,7 +2,6 @@ package net.thucydides.core.reports;
 
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.model.*;
-import org.joda.time.DateTime;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

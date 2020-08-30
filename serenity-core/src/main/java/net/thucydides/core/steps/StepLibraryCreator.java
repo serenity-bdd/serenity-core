@@ -2,7 +2,7 @@ package net.thucydides.core.steps;
 
 import net.thucydides.core.util.EnvironmentVariables;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.core.ThucydidesSystemProperty.STEP_CREATION_STRATEGY;
 
 class StepLibraryCreator {
     static StepLibraryCreationStrategy usingConfiguredCreationStrategy(StepFactory stepFactory,

@@ -1,7 +1,9 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.actions.deselectactions.*;
+import net.serenitybdd.screenplay.actions.deselectactions.DeselectByIndexFromTarget;
+import net.serenitybdd.screenplay.actions.deselectactions.DeselectByValueFromTarget;
+import net.serenitybdd.screenplay.actions.deselectactions.DeselectByVisibleTextFromTarget;
 import net.serenitybdd.screenplay.targets.Target;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;

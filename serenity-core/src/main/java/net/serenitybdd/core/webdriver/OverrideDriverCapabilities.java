@@ -1,11 +1,8 @@
 package net.serenitybdd.core.webdriver;
 
 
-import org.openqa.selenium.remote.DesiredCapabilities;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;

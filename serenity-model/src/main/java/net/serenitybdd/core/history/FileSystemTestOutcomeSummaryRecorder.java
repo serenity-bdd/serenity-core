@@ -1,7 +1,7 @@
 package net.serenitybdd.core.history;
 
-import net.serenitybdd.core.collect.NewMap;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;

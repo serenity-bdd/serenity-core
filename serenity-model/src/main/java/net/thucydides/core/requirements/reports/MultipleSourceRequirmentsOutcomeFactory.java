@@ -8,7 +8,6 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RequirementsMerger;
 import net.thucydides.core.requirements.RequirementsProvided;
 import net.thucydides.core.requirements.RequirementsTagProvider;
-import net.thucydides.core.requirements.RequirementsTree;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTree;
 import net.thucydides.core.util.EnvironmentVariables;

@@ -1,18 +1,18 @@
 package net.thucydides.core.configuration;
 
-import com.google.inject.*;
+import com.google.inject.Inject;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.*;
-import net.thucydides.core.model.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.TakeScreenshots;
+import net.thucydides.core.steps.FilePathParser;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.Configuration;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Centralized configuration of the test runner. You can configure the output

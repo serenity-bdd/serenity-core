@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.finder;
 
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.junit.runners.DataDrivenAnnotations;
 import org.junit.runners.model.TestClass;
 

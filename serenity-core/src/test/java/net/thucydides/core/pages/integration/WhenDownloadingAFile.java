@@ -3,11 +3,9 @@ package net.thucydides.core.pages.integration;
 import net.thucydides.core.pages.components.FileToDownload;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static net.thucydides.core.util.TestResources.fileInClasspathCalled;
 import static org.assertj.core.api.Assertions.assertThat;
 
 ;

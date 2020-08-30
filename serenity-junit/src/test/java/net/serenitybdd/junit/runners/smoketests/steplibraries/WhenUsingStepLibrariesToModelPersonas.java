@@ -2,7 +2,6 @@ package net.serenitybdd.junit.runners.smoketests.steplibraries;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
@@ -15,7 +14,6 @@ import org.openqa.selenium.WebDriver;
 import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SerenityRunner.class)

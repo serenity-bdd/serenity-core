@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.*;
 import net.thucydides.core.reports.adaptors.common.FilebasedOutcomeAdaptor;
 

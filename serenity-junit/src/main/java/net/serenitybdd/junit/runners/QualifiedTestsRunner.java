@@ -1,13 +1,15 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.inject.*;
-import com.google.inject.Module;
-import net.thucydides.core.batches.*;
-import net.thucydides.core.model.*;
-import net.thucydides.core.webdriver.*;
-import org.junit.runners.model.*;
+import com.google.inject.Injector;
+import net.thucydides.core.batches.BatchManager;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.webdriver.DriverConfiguration;
+import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.core.webdriver.WebdriverManager;
+import org.junit.runners.model.InitializationError;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: YamStranger

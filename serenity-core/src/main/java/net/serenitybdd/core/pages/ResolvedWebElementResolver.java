@@ -3,7 +3,6 @@ package net.serenitybdd.core.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

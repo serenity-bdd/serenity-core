@@ -5,7 +5,7 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
 import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
+import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.COUNTRY;
 
 public class SelectCountry implements Task {
   

@@ -1,10 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ISelect;
-import org.openqa.selenium.support.ui.Select;
-
-import java.util.List;
 
 public class FluentDropdownSelect extends FluentDropdown {
 

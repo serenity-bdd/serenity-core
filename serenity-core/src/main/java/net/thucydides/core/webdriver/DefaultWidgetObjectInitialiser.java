@@ -1,8 +1,9 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.di.*;
-import net.serenitybdd.core.pages.*;
-import org.openqa.selenium.*;
+import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WidgetObject;
+import org.openqa.selenium.WebDriver;
 
 /**
  * Initializes the {@link WebElementFacade} members of a {@link WidgetObject}.

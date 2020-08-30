@@ -1,7 +1,5 @@
 package net.thucydides.junit.listeners;
 
-import net.serenitybdd.core.Serenity;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_LOGGING;
 
 public class TestCountListener implements StepListener {
 

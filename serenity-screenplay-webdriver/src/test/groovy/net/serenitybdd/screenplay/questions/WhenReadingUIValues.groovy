@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.questions
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.Question
 import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException
 import net.serenitybdd.screenplay.targets.Target
 import org.joda.time.DateTime

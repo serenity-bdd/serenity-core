@@ -1,11 +1,12 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.*;
+import com.google.common.base.Splitter;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
-import static org.apache.commons.collections.IteratorUtils.*;
+import static org.apache.commons.collections.IteratorUtils.toList;
 
 public class RequirementsPath {
 

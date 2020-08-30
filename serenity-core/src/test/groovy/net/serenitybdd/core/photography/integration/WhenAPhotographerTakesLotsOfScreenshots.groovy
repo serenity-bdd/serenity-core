@@ -8,6 +8,7 @@ import net.serenitybdd.core.photography.ScreenshotPhoto
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Ignore
 import spock.lang.Specification
+
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.Callable

@@ -1,7 +1,7 @@
 package net.thucydides.core.reports;
 
-import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;

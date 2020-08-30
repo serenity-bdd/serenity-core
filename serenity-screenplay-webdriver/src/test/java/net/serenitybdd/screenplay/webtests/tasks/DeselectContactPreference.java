@@ -3,9 +3,9 @@ package net.serenitybdd.screenplay.webtests.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.DeselectFromOptions;
-import net.thucydides.core.annotations.*;
+import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
+import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.CONTACT_PREFERENCES;
 
 public class DeselectContactPreference implements Performable {
 

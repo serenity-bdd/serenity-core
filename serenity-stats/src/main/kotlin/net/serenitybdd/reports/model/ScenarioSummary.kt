@@ -2,7 +2,6 @@ package net.serenitybdd.reports.model
 
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.stacktrace.FailureCause
 
 /**
  * A summary of a failing scenario to appear in the email reports

@@ -1,8 +1,8 @@
 package net.serenitybdd.core.di;
 
-import com.google.inject.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.guice.webdriver.*;
+import com.google.inject.Injector;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.guice.webdriver.WebDriverModule;
 
 public class WebDriverInjectors {
 

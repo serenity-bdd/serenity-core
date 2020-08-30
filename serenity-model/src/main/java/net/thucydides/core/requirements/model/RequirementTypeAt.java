@@ -1,8 +1,8 @@
 package net.thucydides.core.requirements.model;
 
-import net.thucydides.core.requirements.classpath.*;
+import net.thucydides.core.requirements.classpath.PathElements;
 
-import java.util.*;
+import java.util.List;
 
 public class RequirementTypeAt {
     private final int level;

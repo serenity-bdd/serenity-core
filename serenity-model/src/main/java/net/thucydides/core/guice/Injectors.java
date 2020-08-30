@@ -1,11 +1,11 @@
 package net.thucydides.core.guice;
 
-import com.google.inject.Module;
-import com.google.inject.Injector;
 import com.google.inject.Guice;
-import java.util.Map;
-import java.util.HashMap;
+import com.google.inject.Injector;
+
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Somewhere to hold the Guice injector.

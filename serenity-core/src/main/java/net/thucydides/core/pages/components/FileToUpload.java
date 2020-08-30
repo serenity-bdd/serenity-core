@@ -1,6 +1,5 @@
 package net.thucydides.core.pages.components;
 
-import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.ConfigureFileDetector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -13,7 +12,6 @@ import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.regex.Pattern;

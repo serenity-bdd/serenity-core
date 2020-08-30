@@ -2,7 +2,6 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.ProvidedDriverConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;

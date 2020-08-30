@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.reports
 
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.core.requirements.JSONRequirementsTree
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

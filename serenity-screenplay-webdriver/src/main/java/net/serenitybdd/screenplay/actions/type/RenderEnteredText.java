@@ -5,7 +5,6 @@ import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

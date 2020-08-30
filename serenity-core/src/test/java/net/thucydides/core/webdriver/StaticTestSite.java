@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.configuration.*;
+import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.FileSystemUtils;
 import net.thucydides.core.util.MockEnvironmentVariables;

@@ -1,13 +1,12 @@
 package net.thucydides.core.util;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.thucydides.core.ThucydidesSystemProperty;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class TagInflectorTest {
 

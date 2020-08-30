@@ -1,7 +1,5 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.reports.html.ReportNameProvider;
-
 /**
  * Helper methods to deal with stories and related classes.
  */

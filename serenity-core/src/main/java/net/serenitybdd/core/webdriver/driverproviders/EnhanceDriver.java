@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.webdriver.enhancers.CustomChromeOptions;
 import net.serenitybdd.core.webdriver.enhancers.CustomDriverEnhancer;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.reflection.ClassFinder;

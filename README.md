@@ -1,19 +1,19 @@
 <a id="summary">
-  
+
 # ![Serenity BDD](docs/serenity-bdd-logo.png "Logo Title Text 1")
 
 [![Gitter](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ### That feeling you get when you know you can trust your tests
 
-Serenity BDD is a library designed to make writing automated acceptance tests easier, and more fun. 
+Serenity BDD is a library designed to make writing automated acceptance tests easier, and more fun.
 
 Learn more about Serenity, and discover tutorials, docs and more, on the [official Serenity BDD website](http://www.serenity-bdd.info)
 
 ## What does it do?
 
-Serenity helps structure your automated acceptance tests in order to make them easier to understand and maintain, 
-and provides great reporting capabilties on top of tools like Cucumber and JUnit. It also provides tight integration 
+Serenity helps structure your automated acceptance tests in order to make them easier to understand and maintain,
+and provides great reporting capabilties on top of tools like Cucumber and JUnit. It also provides tight integration
 with WebDriver and RestAssured, to make both web testing and API testing easier and more efficient.
 
 Serenity works in two ways:
@@ -22,14 +22,14 @@ Serenity works in two ways:
   - It aggregates these test results into clear and meaningful reports, that reflect not only the outcomes of your tests,
   but also the status of your project. For example, you can get Serenity to report on what requirements, features or stories
   you have implemented, and how well (or not) they were tested.
-  
+
 ### Serenity makes your test cleaner
 
 Serenity provides libraries and patterns that make it easier to write cleaner, more reusable code. It provides tight integration with Selenium WebDriver, and modern testing patterns such as Lean Page Objects, Action Classes, and the [Screenplay Pattern](https://serenity-bdd.github.io/theserenitybook/latest/serenity-screenplay.html). You can learn more about these patterns [in this article](https://johnfergusonsmart.com/page-objects-that-suck-less-tips-for-writing-more-maintainable-page-objects/).
 
 ### Serenity makes your reports richer
 
-Serenity reports aim to be more than simple test reports - they are designed to provide _living documentation_ of your product. 
+Serenity reports aim to be more than simple test reports - they are designed to provide _living documentation_ of your product.
 The reports give an overview of the test results:
 
 ![Serenity Test Summary](docs/serenity-dashboard.png "Logo Title Text 1")
@@ -46,15 +46,16 @@ And if you drill into the details, Serenity will give you a detailed account of 
 
 ![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
 
-  
+
 ## Where can I learn more?
 
 Check out Serenity BDD in more detail here:
 * [User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
 * [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
-  
+
 ## Release Notes
-Release notes are available for major releases: 
+Release notes are available for major releases:
+* [2.3.2](docs/release-notes/2.3.2.md)
 * [2.2.0](docs/release-notes/2.2.0.md)
 * [2.1.5](docs/release-notes/2.1.5.md)
 * [2.1.4](docs/release-notes/2.1.4.md)
@@ -62,12 +63,13 @@ Release notes are available for major releases:
 
 ## What is the latest stable version I should use?
 
-The tables below list the latest stable and tested versions of Serenity BDD and other related libraries. 
+The tables below list the latest stable and tested versions of Serenity BDD and other related libraries.
 
 ### Serenity with JUnit
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.3.2         | 2.3.2                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.12        | 2.2.12                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.5         | 2.2.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.2         | 2.2.2                 | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -85,17 +87,18 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 
 ### Serenity with Cucumber
-Serenity works with both Cucumber 2 and Cucumber 4 for versions up to 2.1.x. From version 2.2.x we will be supporting Cucumber 5 only.
+From version 2.3.x we will be supporting Cucumber 6 only.
 
-#### Cucumber 5
+#### Cucumber 6
 
-| serenity-core | serenity-maven-plugin | serenity-cucumber5 | Cucumber            |
+| serenity-core | serenity-maven-plugin | serenity-cucumber6 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.3.2         | 2.3.2                 |  2.3.2             | 6.6.0               |
 | 2.2.12        | 2.2.5                 |  2.2.5             | 5.6.0               |
 | 2.2.2         | 2.2.2                 |  2.2.2             | 5.6.0               |
 | 2.2.0         | 2.2.0                 |  2.2.0             | 5.5.0               |
- 
-Sample project: [Serenity Cucumber 5 Starter Project](https://github.com/serenity-bdd/serenity-cucumber5-starter).
+
+Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-bdd/serenity-cucumber-starter).
 
 #### Cucumber 4
 
@@ -105,14 +108,14 @@ _Note:_ Cucumber 4 is no longer supported in newer versions of Serenity.
 |---------------|-----------------------|--------------------|---------------------|
 | 2.1.5         | 2.1.5                 |  2.1.2             | 4.8.0               |
 | 2.1.0         | 2.1.0                 |  2.1.0             | 4.8.0               |
-| 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               | 
-| 2.0.84        | 2.0.84                | 1.0.21             | 4.2.0               | 
-| 2.0.69        | 2.0.69                | 1.0.18             | 4.2.0               | 
-| 2.0.56        | 2.0.56                | 1.0.15             | 4.2.0               | 
-| 2.0.54        | 2.0.54                | 1.0.14             | 4.2.0               | 
-| 2.0.52        | 2.0.52                | 1.0.14             | 4.2.0               | 
+| 2.0.90        | 2.0.90                | 1.0.29             | 4.8.0               |
+| 2.0.84        | 2.0.84                | 1.0.21             | 4.2.0               |
+| 2.0.69        | 2.0.69                | 1.0.18             | 4.2.0               |
+| 2.0.56        | 2.0.56                | 1.0.15             | 4.2.0               |
+| 2.0.54        | 2.0.54                | 1.0.14             | 4.2.0               |
+| 2.0.52        | 2.0.52                | 1.0.14             | 4.2.0               |
 | 2.0.48        | 2.0.48                | 1.0.12             | 4.2.0               |
- 
+
 Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenity-bdd/serenity-cucumber4-starter).
 
 
@@ -135,6 +138,8 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 ### Serenity with JBehave
 
+No new development is being done with the Serenity/JBehave integration. Latest versions _should_ continue to work but new Cucumber-specific features may not.
+
 | serenity-core | serenity-maven-plugin | serenity-jbehave  | JBehave             |
 |---------------|-----------------------|-------------------|---------------------|
 | 2.0.52        | 2.0.52                | 1.0.46            | 4.5                 |
@@ -148,7 +153,7 @@ Serenity uses a three-digit version number notation, with the following meaning:
 ```
  <major>.<minor>.<build>
 ```
-The first and second digits are for more significant updates, including new features or important bug fixes. The third is 
+The first and second digits are for more significant updates, including new features or important bug fixes. The third is
 updated automatically for every new release, and is generated by the build process.
 
 ## Commit message conventions
@@ -175,10 +180,10 @@ now it will be available to call api.function() with additional parameters like 
 it will be included in release notes as:
 
  - feat: A new feature to make something better
-     
+
      > now it will be available to call api.function() with additional parameters like api.function(Integer)
 
-Please take a look at release notes to find some more examples of mutiline commits. 
+Please take a look at release notes to find some more examples of mutiline commits.
 
 **For more information, read the Contributing guide for this repo.**
 
@@ -190,8 +195,8 @@ This distribution, as a whole, is licensed under the terms of the Apache License
 
 ## History - Serenity and Thucydides
 
-Serenity was originally called [Thucydides](https://github.com/thucydides-webtests), and the package structure still reflects this history. 
-Thucydides is discussed at length in the [BDD in Action](http://www.amazon.com/BDD-Action-Behavior-driven-development-lifecycle/dp/161729165X) 
+Serenity was originally called [Thucydides](https://github.com/thucydides-webtests), and the package structure still reflects this history.
+Thucydides is discussed at length in the [BDD in Action](http://www.amazon.com/BDD-Action-Behavior-driven-development-lifecycle/dp/161729165X)
 under the name *Thucydides* - everything discussed in "BDD in Action" is directly applicable for Serenity except for the artifact names.
 
 *Thucydides* was renamed *Serenity* in November 2014, and moving forward, all new work will be done on Serenity. The artifact names reflect this change, e.g.
@@ -199,7 +204,7 @@ under the name *Thucydides* - everything discussed in "BDD in Action" is directl
   - *net.thucydides:thucydides-junit* becomes *net.serenity:serenity-junit*
   - *net.thucydides:thucydides-jbehave* becomes *net.serenity:serenity-jbehave*
   - *net.thucydides:thucydides-cucumber* becomes *net.serenity:serenity-cucumber*
- 
+
 and so on.
 
 ## Found a bug? Please read this before you raise an issue.
@@ -222,7 +227,7 @@ It is easier for us to fix something we can see breaking. If someone has to volu
 
 ### Submit a Pull Request
 
-The fastest way to fix a defect is often to dig into the code and to submit a pull request. 
+The fastest way to fix a defect is often to dig into the code and to submit a pull request.
 
 ## Online Training
 

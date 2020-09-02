@@ -10,12 +10,9 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.RequirementsFilter;
 import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.RequirementsTagProvider;
-import net.thucydides.core.requirements.model.NarrativeReader;
-import net.thucydides.core.requirements.model.OverviewReader;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;

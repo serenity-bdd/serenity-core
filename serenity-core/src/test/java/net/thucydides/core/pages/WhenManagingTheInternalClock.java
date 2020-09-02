@@ -5,11 +5,8 @@ import org.junit.Test;
 
 import java.time.ZonedDateTime;
 
-import static net.thucydides.core.matchers.dates.DateMatchers.isAfter;
-import static net.thucydides.core.matchers.dates.DateMatchers.isBefore;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
 public class WhenManagingTheInternalClock {

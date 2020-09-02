@@ -5,8 +5,6 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.steps.TestFailureCause
-import org.joda.time.DateTime
-import org.joda.time.LocalDateTime
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification

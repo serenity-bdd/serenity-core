@@ -2,7 +2,6 @@ package net.thucydides.core.steps;
 
 import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 

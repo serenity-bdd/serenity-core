@@ -2,7 +2,6 @@ package net.thucydides.core.reports.adaptors.xunit.model;
 
 
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 
 import java.util.ArrayList;
 import java.util.List;

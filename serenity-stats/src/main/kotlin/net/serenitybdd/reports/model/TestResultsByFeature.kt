@@ -1,7 +1,6 @@
 package net.serenitybdd.reports.model
 
 import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.TestOutcomes
 
 class TestResultsByFeature(val featureName: String, val scenarios: List<ScenarioSummary>) {

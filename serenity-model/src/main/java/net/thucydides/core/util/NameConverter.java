@@ -1,7 +1,7 @@
 package net.thucydides.core.util;
 
-import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.strings.Joiner;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 

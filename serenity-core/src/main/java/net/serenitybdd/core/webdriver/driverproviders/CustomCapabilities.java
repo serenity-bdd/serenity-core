@@ -1,11 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 
 import static java.util.stream.Collectors.toMap;

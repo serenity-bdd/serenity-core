@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.*;
-import net.serenitybdd.core.collect.*;
-import net.thucydides.core.*;
-import net.thucydides.core.requirements.model.*;
-import net.thucydides.core.util.*;
+import com.google.common.base.Splitter;
+import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.requirements.model.RequirementsConfiguration;
+import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.*;
+import java.util.List;
 
 
 public class ExcludedUnrelatedRequirementTypes {

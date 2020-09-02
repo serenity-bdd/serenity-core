@@ -1,9 +1,7 @@
 package net.serenitybdd.reports.model
 
 import net.thucydides.core.model.DataTableRow
-import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider

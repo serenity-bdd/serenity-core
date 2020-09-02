@@ -3,7 +3,6 @@ package net.thucydides.core.scheduling;
 import org.openqa.selenium.support.ui.Sleeper;
 
 import java.time.Clock;
-import java.util.function.Function;
 
 public class NormalFluentWait<T> extends ThucydidesFluentWait<T> {
 

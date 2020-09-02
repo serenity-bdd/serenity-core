@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
 
 import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
-import static net.serenitybdd.screenplay.questions.WebElementQuestion.*;
+import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 
 public class WaitUntilBuilder {
     private final Target target;

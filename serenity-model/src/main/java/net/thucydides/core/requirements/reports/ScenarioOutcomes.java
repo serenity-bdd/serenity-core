@@ -8,10 +8,9 @@ import net.thucydides.core.reports.html.DescriptionSplitter;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 public class ScenarioOutcomes {
 

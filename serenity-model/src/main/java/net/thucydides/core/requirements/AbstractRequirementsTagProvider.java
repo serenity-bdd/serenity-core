@@ -6,7 +6,6 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

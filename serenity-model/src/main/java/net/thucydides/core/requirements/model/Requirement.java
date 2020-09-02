@@ -2,15 +2,12 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.model.LastElement;
 import net.thucydides.core.model.TestTag;
-import net.thucydides.core.requirements.AllRequirements;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

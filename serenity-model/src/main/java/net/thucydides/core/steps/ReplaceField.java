@@ -1,10 +1,12 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.strings.*;
-import net.thucydides.core.annotations.*;
-import org.apache.commons.lang3.*;
+import net.serenitybdd.core.strings.Joiner;
+import net.thucydides.core.annotations.Fields;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ReplaceField {
     private final String stepDescription;

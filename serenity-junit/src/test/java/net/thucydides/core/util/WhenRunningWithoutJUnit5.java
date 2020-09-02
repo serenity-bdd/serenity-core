@@ -1,9 +1,8 @@
 package net.thucydides.core.util;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import net.serenitybdd.junit.runners.SerenityRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

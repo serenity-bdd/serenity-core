@@ -17,7 +17,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;

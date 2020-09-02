@@ -1,8 +1,9 @@
 package net.thucydides.junit.runners;
 
-import net.serenitybdd.junit.runners.*;
-import net.thucydides.core.batches.*;
-import net.thucydides.core.webdriver.*;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
+import net.thucydides.core.batches.BatchManager;
+import net.thucydides.core.webdriver.DriverConfiguration;
+import net.thucydides.core.webdriver.WebDriverFactory;
 
 /**
  * @deprecated Replaced by SerenityParameterizedRunner

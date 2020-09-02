@@ -1,9 +1,8 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
-
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * Provides BrowserStack specific capabilities

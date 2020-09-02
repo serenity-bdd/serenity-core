@@ -1,7 +1,9 @@
 package net.serenitybdd.core.strings;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Joiner {
     private String separator;

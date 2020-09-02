@@ -1,9 +1,8 @@
 package net.thucydides.core.model;
 
-import net.serenitybdd.core.environment.*;
-import net.thucydides.core.*;
-import net.thucydides.core.digest.*;
-import net.thucydides.core.util.*;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.digest.Digest;
+import net.thucydides.core.util.NameConverter;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
 

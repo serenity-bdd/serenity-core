@@ -1,37 +1,49 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.inject.*;
-import net.serenitybdd.core.*;
-import net.serenitybdd.core.environment.*;
-import net.serenitybdd.core.injectors.*;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.batches.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.guice.webdriver.*;
-import net.thucydides.core.model.*;
-import net.thucydides.core.pages.*;
-import net.thucydides.core.reports.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.steps.stepdata.*;
-import net.thucydides.core.tags.*;
+import com.google.inject.Injector;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
+import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
+import net.thucydides.core.annotations.ManualTestMarkedAsError;
+import net.thucydides.core.annotations.ManualTestMarkedAsFailure;
+import net.thucydides.core.annotations.TestCaseAnnotations;
+import net.thucydides.core.batches.BatchManager;
+import net.thucydides.core.batches.BatchManagerProvider;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.guice.webdriver.WebDriverModule;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.reports.AcceptanceTestReporter;
+import net.thucydides.core.reports.ReportService;
+import net.thucydides.core.steps.PageObjectDependencyInjector;
+import net.thucydides.core.steps.StepAnnotations;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepFactory;
+import net.thucydides.core.steps.stepdata.StepData;
+import net.thucydides.core.tags.TagScanner;
+import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.*;
-import net.thucydides.junit.listeners.*;
-import org.junit.runner.*;
-import org.junit.runner.notification.*;
-import org.junit.runners.*;
-import org.junit.runners.model.*;
-import org.openqa.selenium.*;
-import org.slf4j.*;
+import net.thucydides.junit.listeners.JUnitStepListener;
+import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
+import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static net.serenitybdd.core.Serenity.*;
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
 import static net.thucydides.core.model.TestResult.FAILURE;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * A test runner for WebDriver-based web tests. This test runner initializes a
@@ -164,6 +176,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         this.batchManager = batchManager;
 
         batchManager.registerTestCase(klass);
+        LifecycleRegister.register(theTest);
+
 
     }
 

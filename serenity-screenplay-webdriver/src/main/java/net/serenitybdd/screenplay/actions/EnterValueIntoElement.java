@@ -4,8 +4,6 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 
-import java.util.stream.Stream;
-
 public class EnterValueIntoElement extends EnterValue {
 
     private WebElementFacade element;

@@ -1,8 +1,8 @@
 package net.thucydides.core.csv;
 
 import au.com.bytecode.opencsv.CSVReader;
-import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
+import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import org.junit.Before;
 import org.junit.Rule;

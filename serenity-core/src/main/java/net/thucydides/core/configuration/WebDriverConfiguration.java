@@ -1,7 +1,7 @@
 package net.thucydides.core.configuration;
 
-import com.google.inject.*;
-import net.thucydides.core.util.*;
+import com.google.inject.Inject;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 
 import java.util.Optional;

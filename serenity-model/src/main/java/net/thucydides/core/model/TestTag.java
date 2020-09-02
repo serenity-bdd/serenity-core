@@ -1,7 +1,7 @@
 package net.thucydides.core.model;
 
-import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Preconditions;
+import net.serenitybdd.core.strings.Joiner;
 
 import java.util.Optional;
 

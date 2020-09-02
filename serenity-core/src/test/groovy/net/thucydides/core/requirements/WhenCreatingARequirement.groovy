@@ -7,8 +7,8 @@ import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.requirements.model.Example
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
+import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 

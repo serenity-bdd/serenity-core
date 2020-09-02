@@ -1,13 +1,14 @@
 package net.thucydides.core.webdriver.stubs;
 
-import io.appium.java_client.*;
+import io.appium.java_client.FindsByIosClassChain;
+import io.appium.java_client.FindsByIosNSPredicate;
+import io.appium.java_client.HidesKeyboardWithKeyName;
+import io.appium.java_client.LocksDevice;
 import io.appium.java_client.ios.PerformsTouchID;
 import io.appium.java_client.ios.PushesFiles;
 import io.appium.java_client.ios.ShakesDevice;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.Response;
 
 import java.util.*;

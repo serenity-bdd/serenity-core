@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements;
 
-import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;

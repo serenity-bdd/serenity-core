@@ -1,15 +1,10 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;
-import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getFollowedByKeysDescriptionFor;

@@ -13,7 +13,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 public class WhenResizingTheBrowser {
 

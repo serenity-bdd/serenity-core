@@ -5,7 +5,6 @@ import net.serenitybdd.screenplay.Interaction;
 import org.openqa.selenium.Keys;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getFollowedByKeysDescriptionFor;

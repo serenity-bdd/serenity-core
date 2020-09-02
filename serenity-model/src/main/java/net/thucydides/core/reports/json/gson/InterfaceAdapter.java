@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.json.gson;
 
 import com.google.gson.*;
+
 import java.lang.reflect.Type;
 
 final class InterfaceAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {

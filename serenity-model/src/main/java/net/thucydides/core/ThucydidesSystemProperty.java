@@ -58,6 +58,11 @@ public enum ThucydidesSystemProperty {
     USE_CHROME_AUTOMATION_OPTIONS,
 
     /**
+     * If the automatic webdriver download should happen.
+     */
+    WEBDRIVER_AUTODOWNLOAD,
+
+    /**
      * The driver to be used for remote drivers
      */
     WEBDRIVER_REMOTE_DRIVER,

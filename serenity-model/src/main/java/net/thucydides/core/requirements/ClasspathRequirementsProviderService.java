@@ -1,12 +1,10 @@
 package net.thucydides.core.requirements;
 
-import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderFilter;
 import net.thucydides.core.statistics.service.TagProviderService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,6 @@
 package net.thucydides.core.util;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import net.thucydides.core.tags.Taggable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -20,7 +15,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
 
-import net.thucydides.core.tags.Taggable;
+import java.lang.annotation.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -11,7 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.join;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class BeanMatcherAsserts {
     private static final String NEW_LINE = System.getProperty("line.separator");

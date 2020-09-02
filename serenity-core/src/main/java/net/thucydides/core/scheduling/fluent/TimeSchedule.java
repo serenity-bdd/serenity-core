@@ -1,7 +1,6 @@
 package net.thucydides.core.scheduling.fluent;
 
 import net.thucydides.core.scheduling.SerenityFluentWait;
-import net.thucydides.core.scheduling.ThucydidesFluentWait;
 
 import java.util.concurrent.TimeUnit;
 

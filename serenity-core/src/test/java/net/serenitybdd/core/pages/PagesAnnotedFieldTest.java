@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import net.thucydides.core.pages.Pages;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 

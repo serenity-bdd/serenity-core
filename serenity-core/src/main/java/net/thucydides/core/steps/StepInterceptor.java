@@ -15,13 +15,11 @@ import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.JUnitAdapter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mockito.Mockito;
 import org.slf4j.Logger;

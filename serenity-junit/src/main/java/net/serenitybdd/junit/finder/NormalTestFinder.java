@@ -1,7 +1,5 @@
 package net.serenitybdd.junit.finder;
 
-import net.serenitybdd.core.collect.NewList;
-
 import java.util.ArrayList;
 import java.util.List;
 

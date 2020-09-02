@@ -1,7 +1,6 @@
 package net.serenitybdd.core.steps
 
 import net.thucydides.core.annotations.Step
-import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
 import static org.assertj.core.api.Java6Assertions.assertThat

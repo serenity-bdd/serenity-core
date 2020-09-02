@@ -1,12 +1,12 @@
 package net.serenitybdd.screenplay.webtests.questions;
 
-import java.util.Set;
-
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+
+import java.util.Set;
 
 public class CountryQuestion {
     public static Question<Set<String>> nowSelected() {

@@ -2,7 +2,6 @@ package net.serenitybdd.core.pages
 
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.WebDriverFacade
-import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade

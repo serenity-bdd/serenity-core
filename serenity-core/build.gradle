@@ -1,4 +1,4 @@
-import org.apache.tools.ant.filters.*
+import org.apache.tools.ant.filters.ReplaceTokens
 
 ext {
     bintrayPackage = 'serenity-core'
@@ -230,6 +230,14 @@ dependencies {
 
     compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:"org.jsoup", module:"jsoup"
+    }
+
+    compile("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}") {
+        exclude group:"org.slf4j", module:"slf4j-api"
+        exclude group:"commons-io", module:"commons-io"
+        exclude group:"org.apache.commons", module:"commons-lang3"
+        exclude group:"org.jsoup", module:"jsoup"
+        exclude group:"commons-codec", module:"commons-codec"
     }
 
 

@@ -1,19 +1,17 @@
 package net.thucydides.core.model.screenshots
 
-import io.cucumber.java.StepDefinitionAnnotation
+
 import net.thucydides.core.annotations.Screenshots
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.model.TakeScreenshots
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.lang.reflect.Method
 
 class WhenDecidingWhetherToTakeScreenshots extends Specification {
 

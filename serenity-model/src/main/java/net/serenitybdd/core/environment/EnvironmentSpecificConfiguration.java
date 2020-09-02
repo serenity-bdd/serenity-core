@@ -148,6 +148,7 @@ public class EnvironmentSpecificConfiguration {
             String value = getPropertyValue(nestedProperty);
             if (value != null) {
                 propertyValue = matcher.replaceFirst(value);
+                matcher.reset(propertyValue);
             }
         }
         return propertyValue;

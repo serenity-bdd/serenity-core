@@ -2,7 +2,6 @@ package net.thucydides.core.requirements.model;
 
 import net.serenitybdd.core.strings.FirstLine;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;

@@ -1,20 +1,22 @@
 package net.thucydides.core.util;
 
-import com.google.inject.*;
-import com.typesafe.config.*;
-import net.thucydides.core.*;
-import net.thucydides.core.configuration.*;
+import com.google.inject.Inject;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValue;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.requirements.SearchForFilesWithName;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.lang3.*;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.*;
 

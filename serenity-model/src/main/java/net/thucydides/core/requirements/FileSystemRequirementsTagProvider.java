@@ -1,8 +1,6 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.Sets;
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
@@ -25,16 +23,12 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Collections.max;
-import static java.util.Collections.sort;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;

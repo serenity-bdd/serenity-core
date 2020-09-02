@@ -1,16 +1,19 @@
 package net.thucydides.core.annotations;
 
-import net.serenitybdd.core.environment.*;
-import net.thucydides.core.configuration.*;
+import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
+import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.requirements.SerenityTestCaseFinder;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.DriverConfiguration;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebdriverManager;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 
-import java.util.*;
+import java.util.List;
 
 import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Utility class used to inject fields into a test case.

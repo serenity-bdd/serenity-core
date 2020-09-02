@@ -1,6 +1,8 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import io.cucumber.core.internal.gherkin.ast.Feature;
+
+
+import io.cucumber.messages.Messages.GherkinDocument.Feature;
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
 

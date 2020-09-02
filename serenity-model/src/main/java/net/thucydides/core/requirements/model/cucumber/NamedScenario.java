@@ -1,12 +1,13 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import io.cucumber.core.internal.gherkin.ast.Feature;
-import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
+
+import io.cucumber.messages.Messages.GherkinDocument.Feature;
+import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 
 import java.util.Optional;
 
 public abstract class NamedScenario {
-    public static NamedScenario forScenarioDefinition(Feature feature, ScenarioDefinition scenarioDefinition) {
+    public static NamedScenario forScenarioDefinition(Feature feature, Scenario scenarioDefinition) {
         return new IdentifiedScenario(feature, scenarioDefinition);
     }
 

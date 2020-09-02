@@ -1,23 +1,30 @@
 package net.thucydides.core.releases;
 
-import com.google.common.base.*;
-import com.google.gson.*;
-import net.serenitybdd.core.collect.*;
-import net.thucydides.core.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.model.*;
-import net.thucydides.core.reports.*;
-import net.thucydides.core.reports.html.*;
-import net.thucydides.core.requirements.*;
-import net.thucydides.core.requirements.reports.*;
-import net.thucydides.core.util.*;
-import org.hamcrest.*;
-import org.slf4j.*;
+import com.google.common.base.Splitter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.Release;
+import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.ReportNameProvider;
+import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.RequirementsTagProvider;
+import net.thucydides.core.requirements.reports.RequirementOutcome;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.hamcrest.Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.*;
-import static org.hamcrest.Matchers.*;
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.hamcrest.Matchers.containsString;
 
 public class ReleaseManager {
 

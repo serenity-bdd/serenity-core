@@ -3,8 +3,6 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.WebElement;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
 /**
  * Switch to a different frame or window.
  * This wraps the WebDriver.switchTo() methods as Screenplay interactions.

@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.targets
 
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileBy
-import net.serenitybdd.core.webdriver.UnexpectedDriverExpected
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
@@ -15,7 +14,6 @@ import spock.lang.Specification
 
 import static org.mockito.Mockito.when
 import static org.mockito.MockitoAnnotations.initMocks
-
 
 class WhenDefiningTargets extends Specification {
 

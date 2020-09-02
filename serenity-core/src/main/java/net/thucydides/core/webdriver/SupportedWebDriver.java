@@ -1,8 +1,8 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.collect.NewList;
 import io.appium.java_client.AppiumDriver;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.strings.Joiner;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

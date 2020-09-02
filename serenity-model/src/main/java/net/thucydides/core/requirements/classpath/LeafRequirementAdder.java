@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements.classpath;
 
-import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;

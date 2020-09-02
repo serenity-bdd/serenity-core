@@ -3,8 +3,6 @@ package net.thucydides.core.reports.json.gson
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.util.MockEnvironmentVariables
-import org.joda.time.DateTime
-import org.joda.time.LocalDateTime
 import org.skyscreamer.jsonassert.JSONCompare
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Shared

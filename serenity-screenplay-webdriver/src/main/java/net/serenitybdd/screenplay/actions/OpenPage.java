@@ -6,8 +6,6 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
 public class OpenPage implements Interaction {
 
     private final PageObject targetPage;

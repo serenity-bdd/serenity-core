@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.openqa.selenium.WebDriver;
 

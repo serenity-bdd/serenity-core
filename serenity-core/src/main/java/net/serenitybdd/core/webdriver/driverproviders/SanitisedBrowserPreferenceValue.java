@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;

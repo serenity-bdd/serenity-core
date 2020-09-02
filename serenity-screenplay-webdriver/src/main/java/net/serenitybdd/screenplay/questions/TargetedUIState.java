@@ -2,10 +2,8 @@ package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.targets.Target;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 

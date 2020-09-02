@@ -1,11 +1,11 @@
 package net.thucydides.core.util;
 
-import net.serenitybdd.core.collect.*;
-import net.serenitybdd.core.environment.*;
-import org.apache.commons.lang3.*;
+import net.serenitybdd.core.collect.NewMap;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class MockEnvironmentVariables implements EnvironmentVariables {
 

@@ -5,12 +5,9 @@ import net.thucydides.core.annotations.ElementIsUsable;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.WebdriverCollectionStrategy.Optimistic;
-import static net.thucydides.core.WebdriverCollectionStrategy.Paranoid;
-import static net.thucydides.core.WebdriverCollectionStrategy.Pessimistic;
+import static net.thucydides.core.WebdriverCollectionStrategy.*;
 
 public class WaitForWebElementCollection {
 

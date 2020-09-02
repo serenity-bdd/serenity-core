@@ -1,11 +1,11 @@
 package net.thucydides.core.scheduling;
 
+import net.thucydides.core.scheduling.fluent.PollingSchedule;
+import net.thucydides.core.scheduling.fluent.TimeoutSchedule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Sleeper;
 
-import net.thucydides.core.scheduling.fluent.TimeoutSchedule;
-import net.thucydides.core.scheduling.fluent.PollingSchedule;
 import java.time.Clock;
 
 public class SerenityFluentWait extends FluentWait<WebDriver> {

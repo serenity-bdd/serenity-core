@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.core.ThucydidesSystemProperty.IO_BLOCKING_COEFFICIENT;
+import static net.thucydides.core.ThucydidesSystemProperty.REPORT_THREADS;
 
 public class NumberOfThreads {
 

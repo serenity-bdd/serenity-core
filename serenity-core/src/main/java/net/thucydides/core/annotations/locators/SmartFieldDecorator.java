@@ -2,20 +2,28 @@ package net.thucydides.core.annotations.locators;
 
 import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.FindBy;
-import net.serenitybdd.core.annotations.findby.di.*;
-import net.serenitybdd.core.di.*;
-import net.serenitybdd.core.pages.*;
-import org.openqa.selenium.*;
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
+import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WebElementFacadeImpl;
+import net.serenitybdd.core.pages.WidgetObject;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.support.*;
-import org.openqa.selenium.support.pagefactory.*;
-import org.openqa.selenium.support.pagefactory.internal.*;
+import org.openqa.selenium.support.FindAll;
+import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
+import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
+import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
+import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class SmartFieldDecorator implements FieldDecorator {
 

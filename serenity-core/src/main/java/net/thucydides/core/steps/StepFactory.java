@@ -15,6 +15,7 @@ import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
+import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
@@ -34,10 +35,7 @@ import java.util.function.Function;
 
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 import static net.bytebuddy.matcher.ElementMatchers.not;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.CONSTRUCTOR_WITH_PARAMETERS;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.INNER_CLASS_CONSTRUCTOR;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_PAGES;
-import static net.thucydides.core.steps.construction.ConstructionStrategy.STEP_LIBRARY_WITH_WEBDRIVER;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
 import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**
@@ -187,6 +185,8 @@ public class StepFactory {
                                               boolean useCache) {
         T steps = createProxyStepLibrary(scenarioStepsClass, interceptor);
 
+        LifecycleRegister.register(steps);
+
         if (useCache) {
             indexStepLibrary(scenarioStepsClass, steps);
         }
@@ -217,6 +217,8 @@ public class StepFactory {
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass, Object... parameters) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
         T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor, parameters);
+
+        LifecycleRegister.register(steps);
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
 

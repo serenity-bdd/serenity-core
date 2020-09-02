@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 
 import java.util.ArrayList;
 import java.util.List;

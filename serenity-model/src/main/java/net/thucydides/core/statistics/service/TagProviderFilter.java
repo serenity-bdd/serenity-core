@@ -1,6 +1,5 @@
 package net.thucydides.core.statistics.service;
 
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.requirements.CoreTagProvider;
 import net.thucydides.core.requirements.OverridableTagProvider;
 

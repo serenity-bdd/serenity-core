@@ -9,7 +9,6 @@ import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static net.serenitybdd.core.photography.ScreenshotNegative.prepareNegativeIn;
 

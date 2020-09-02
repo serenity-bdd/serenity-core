@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.screenplay.Actor;
 import org.openqa.selenium.WebDriver;
 
 class TargetResolver extends PageObject {

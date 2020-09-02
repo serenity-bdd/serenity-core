@@ -10,9 +10,10 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
+import spock.lang.Specification
+
 //import org.openqa.selenium.firefox.FirefoxDriver
 //import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import spock.lang.Specification
 
 class WhenHandlingFailingTests extends Specification {
 

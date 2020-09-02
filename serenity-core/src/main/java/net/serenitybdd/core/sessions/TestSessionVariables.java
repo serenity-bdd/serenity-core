@@ -1,7 +1,7 @@
 package net.serenitybdd.core.sessions;
 
-import net.serenitybdd.core.collect.NewMap;
 import net.serenitybdd.core.SessionMap;
+import net.serenitybdd.core.collect.NewMap;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

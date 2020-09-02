@@ -1,10 +1,10 @@
 package net.serenitybdd.core.reports
 
 import net.serenitybdd.core.SerenityReports
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.reports.NumberOfThreads
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 
 class WhenSettingUpReportServices extends Specification {

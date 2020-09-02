@@ -1,6 +1,6 @@
 package net.thucydides.core.model
 
-import net.thucydides.core.reports.TestOutcomes
+
 import spock.lang.Specification
 
 class WhenDisplayingUnqualifiedTestTitles extends Specification {

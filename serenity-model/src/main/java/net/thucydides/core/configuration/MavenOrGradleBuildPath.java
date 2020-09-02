@@ -7,7 +7,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.nio.file.Paths;
 
-import static net.thucydides.core.configuration.MavenBuildDirectory.*;
 import static net.thucydides.core.configuration.SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;

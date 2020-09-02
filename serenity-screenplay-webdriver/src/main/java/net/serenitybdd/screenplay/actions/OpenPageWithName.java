@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;

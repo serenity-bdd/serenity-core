@@ -2,13 +2,9 @@ package net.thucydides.core.matchers.dates;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class DateCollectionContainsSameDatesMatcher extends TypeSafeMatcher<Collection<Date>> {
     private final Collection<Date> expectedDates;

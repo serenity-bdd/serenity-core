@@ -2,10 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-
-import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_PROVIDED_TYPE;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;

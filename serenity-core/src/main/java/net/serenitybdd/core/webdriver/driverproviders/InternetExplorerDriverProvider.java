@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.time.InternalSystemClock;
@@ -14,7 +15,6 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;
@@ -28,6 +28,8 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DriverCapabilityRecord driverProperties;
     private static final Logger LOGGER = LoggerFactory.getLogger(InternetExplorerDriverProvider.class);
@@ -47,6 +49,13 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
+        }
+
+        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+            logger.info("Using automatically driver download");
+            WebDriverManager.iedriver().setup();
+        } else {
+            logger.info("Not using automatically driver download");
         }
 
         updateIEDriverBinaryIfSpecified();

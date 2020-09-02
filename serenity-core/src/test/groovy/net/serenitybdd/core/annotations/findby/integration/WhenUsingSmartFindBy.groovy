@@ -2,7 +2,6 @@ package net.serenitybdd.core.annotations.findby.integration
 
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.pages.integration.StaticSitePageWithFacades
-import net.thucydides.core.steps.StepEventBus
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Shared

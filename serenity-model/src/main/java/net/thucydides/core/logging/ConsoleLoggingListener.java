@@ -21,9 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static net.thucydides.core.logging.ConsoleEvent.*;
 

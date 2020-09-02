@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.guice.webdriver.WebDriverModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;

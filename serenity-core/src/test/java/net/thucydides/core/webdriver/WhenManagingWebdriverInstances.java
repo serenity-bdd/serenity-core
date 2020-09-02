@@ -1,17 +1,20 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.configuration.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import org.junit.*;
-import org.mockito.*;
-import org.openqa.selenium.firefox.*;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.WebDriverConfiguration;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.MockEnvironmentVariables;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.MockitoAnnotations;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
 
 public class WhenManagingWebdriverInstances {
 

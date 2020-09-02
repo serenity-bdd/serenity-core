@@ -1,10 +1,10 @@
 package net.serenitybdd.core.environment;
 
-import net.serenitybdd.core.di.*;
-import net.thucydides.core.configuration.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.*;
+import net.serenitybdd.core.di.WebDriverInjectors;
+import net.thucydides.core.configuration.WebDriverConfiguration;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.DriverConfiguration;
 
 public class WebDriverConfiguredEnvironment {
     private static final ThreadLocal<EnvironmentVariables> testEnvironmentVariables = new ThreadLocal<>();

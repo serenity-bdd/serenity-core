@@ -20,7 +20,7 @@ import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
-import net.serenitybdd.core.exceptions.NoSuchElementException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
@@ -1092,7 +1092,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        if (!withTimeoutOf(Duration.ofMillis(0)).isVisible()) {
+        if (!isCurrentlyVisible()) {
             return this;
         }
 

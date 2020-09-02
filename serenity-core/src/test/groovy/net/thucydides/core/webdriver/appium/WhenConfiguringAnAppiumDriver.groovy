@@ -5,7 +5,6 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
-import net.thucydides.core.webdriver.WebDriverFacade
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification

@@ -1,8 +1,6 @@
 package net.thucydides.core.steps.stepdata;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
@@ -10,7 +8,6 @@ import net.thucydides.core.steps.StepFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 
 /**

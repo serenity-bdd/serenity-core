@@ -5,7 +5,6 @@ import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Set;

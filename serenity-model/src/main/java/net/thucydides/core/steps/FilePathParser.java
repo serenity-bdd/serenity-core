@@ -1,11 +1,10 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
-import java.util.Optional;
 
 /**
  * Builds a file path by substituting environment variables.

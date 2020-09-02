@@ -1,8 +1,10 @@
 package net.thucydides.core.steps.di;
 
-import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.di.DependencyInjector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceLoader;
 
 public class ClasspathDependencyInjectorService implements DependencyInjectorService {
 

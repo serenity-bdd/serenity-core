@@ -1,5 +1,8 @@
 package net.thucydides.core.reflection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -7,8 +10,6 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Load classes from a given package.

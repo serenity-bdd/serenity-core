@@ -5,14 +5,12 @@ import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
@@ -24,7 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;

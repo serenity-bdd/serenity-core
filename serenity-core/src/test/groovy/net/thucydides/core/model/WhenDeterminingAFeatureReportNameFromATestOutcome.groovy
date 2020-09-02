@@ -1,7 +1,6 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.digest.Digest
-import net.thucydides.core.webdriver.SerenityWebdriverManager
 import spock.lang.Specification
 
 class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {

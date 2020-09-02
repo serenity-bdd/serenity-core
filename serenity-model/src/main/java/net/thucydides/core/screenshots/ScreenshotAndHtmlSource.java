@@ -2,10 +2,6 @@ package net.thucydides.core.screenshots;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalField;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.fixtureservices.FixtureProviderService;

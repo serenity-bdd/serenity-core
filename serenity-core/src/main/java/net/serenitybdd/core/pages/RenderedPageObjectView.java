@@ -4,7 +4,6 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;

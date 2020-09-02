@@ -1,10 +1,8 @@
 package net.thucydides.core.util;
 
-import static org.apache.commons.lang3.StringUtils.lowerCase;
-
-import org.apache.commons.lang3.StringUtils;
-
 import net.thucydides.core.reports.html.TagFilter;
+
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class TagInflector {
 

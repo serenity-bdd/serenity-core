@@ -1,11 +1,14 @@
 package net.thucydides.core.requirements;
 
-import java.io.*;
-import java.nio.file.*;
-import java.nio.file.attribute.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
-import static java.nio.file.FileVisitResult.*;
+import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class SearchForFilesOfType extends SimpleFileVisitor<Path> {
 

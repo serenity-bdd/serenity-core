@@ -1,20 +1,14 @@
 package net.thucydides.core.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-
+import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.tags.Taggable;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.tags.Taggable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * This is an INTERNAL helper class of serenity, it should not be used directly and may be subject to refactoring.

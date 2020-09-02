@@ -2,9 +2,7 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.nio.file.Path;

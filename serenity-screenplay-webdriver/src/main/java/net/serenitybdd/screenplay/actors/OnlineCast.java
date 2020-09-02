@@ -6,11 +6,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.openqa.selenium.WebDriver;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
-
-import static java.util.Arrays.asList;
 
 /**
  * Provide simple support for managing Screenplay actors in Cucumber-JVM or JBehave

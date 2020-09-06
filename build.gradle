@@ -130,7 +130,7 @@ subprojects {
             bintrayApiKey = ''
         }
 
-        chromeDriverBinary = project.file("../src/test/resources/drivers/${os}/chromedriver").absolutePath
+        chromeDriverBinary = project.file("../src/test/resources/drivers/${os}/chromedriver.exe").absolutePath
         geckoDriverBinary = project.file("../src/test/resources/drivers/${os}/geckodriver").absolutePath
     }
     group = 'net.serenity-bdd'

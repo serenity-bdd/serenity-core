@@ -50,6 +50,7 @@ public class WhenDanaBrowsesTheWeb {
         dana.can(BrowseTheWeb.with(firstBrowser));
         givenThat(dana).has(openedTheApplication);
 
+
         when(dana).attemptsTo(viewHerProfile);
         and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 

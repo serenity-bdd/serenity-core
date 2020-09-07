@@ -167,7 +167,7 @@ public class Formatter {
         Matcher matchingTag = SIMPLE_HTML_TAG.matcher(text);
         while (matchingTag.find()) {
             String tag = matchingTag.group(0);
-            String htmlCompatibleTag = "&lt;" + tag.substring(1, tag.length() - 2) + "&gt;";
+            String htmlCompatibleTag = "&lt;" + tag.substring(1, tag.length() - 1) + "&gt;";
             matchingTag.appendReplacement(renderedTitle, htmlCompatibleTag);
         }
         matchingTag.appendTail(renderedTitle);

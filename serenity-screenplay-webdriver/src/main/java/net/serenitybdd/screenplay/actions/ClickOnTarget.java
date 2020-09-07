@@ -1,16 +1,20 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.core.annotations.Step;
 
-public class ClickOnTarget implements Interaction {
+public class ClickOnTarget extends ClickOnClickable {
     private final Target target;
 
-    @Step("{0} clicks on #target")
-    public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).click();
+    @Override
+    public WebElementFacade resolveFor(Actor theUser) {
+        return target.resolveFor(theUser);
+    }
+
+    @Override
+    protected String getName() {
+        return target.getName();
     }
 
     public ClickOnTarget(Target target) {

@@ -470,8 +470,10 @@ public class WebElementFacadeStub implements WebElementFacade {
      * Wait for an element to be visible and enabled, and then click on it.
      */
     @Override
-    public void click() {
-    }
+    public void click() {}
+
+    @Override
+    public void click(ClickStrategy clickStrategy) {}
 
     @Override
     public void clear() {

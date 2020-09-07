@@ -130,6 +130,8 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
      */
     void click();
 
+    void click(ClickStrategy clickStrategy);
+
     void clear();
 
     String toString();

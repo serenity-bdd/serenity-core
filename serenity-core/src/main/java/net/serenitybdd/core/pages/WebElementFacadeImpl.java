@@ -963,6 +963,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         withTimeoutOf((int) waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS).waitUntilEnabled();
     }
 
+    protected void waitUntilElementPresent() {
+        if (driverIsDisabled()) {
+            return;
+        }
+        withTimeoutOf((int) waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS).waitUntilPresent();
+    }
+
     protected boolean driverIsDisabled() {
         return StepEventBus.getEventBus().webdriverCallsAreSuspended();
     }
@@ -1227,18 +1234,35 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     /**
-     * Wait for an element to be visible and enabled, and then click on it.
+     * Click on an element, with or without waiting for it to be visible and enabled
      */
     @Override
-    public void click() {
+    public void click(ClickStrategy clickStrategy) {
         if (driverIsDisabled()) {
             return;
         }
 
-        waitUntilElementAvailable();
+        switch (clickStrategy) {
+            case WAIT_UNTIL_ENABLED:
+                waitUntilElementAvailable();
+                break;
+            case WAIT_UNTIL_PRESENT:
+                waitUntilElementPresent();
+                break;
+            case IMMEDIATE:
+                break;
+        }
+
         logClick();
         getElement().click();
         notifyScreenChange();
+    }
+    /**
+     * Wait for an element to be visible and enabled, and then click on it.
+     */
+    @Override
+    public void click() {
+        click(ClickStrategy.WAIT_UNTIL_ENABLED);
     }
 
     private void logClick() {

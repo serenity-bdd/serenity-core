@@ -12,14 +12,14 @@ import java.util.List;
 
 import static net.serenitybdd.screenplay.targets.EnsureFieldVisible.ensureThat;
 
-public abstract class ByAction  implements Interaction {
+public abstract class ByAction implements Interaction, Resolvable {
     protected final List<By> locators;
 
     public ByAction(By... locators) {
         this.locators = NewList.copyOf(locators);
     }
 
-    protected WebElement resolveFor(Actor theActor) {
+    public WebElementFacade resolveFor(Actor theActor) {
         WebElementFacade element = null;
         for(By locator : locators) {
             element = (element == null) ? BrowseTheWeb.as(theActor).find(locator) : element.find(locator);

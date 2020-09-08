@@ -159,13 +159,15 @@ public class Formatter {
                 .replaceAll("\\t", "");
     }
 
-    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<[/|\\w]*>");
+//    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<[/|\\w]*>");
+    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<\\w*>");
 
     public String renderTitle(String text) {
         StringBuffer renderedTitle = new StringBuffer();
         Matcher matchingTag = SIMPLE_HTML_TAG.matcher(text);
         while (matchingTag.find()) {
             String tag = matchingTag.group(0);
+//            String htmlCompatibleTag = "&lt;" + tag.substring(1, tag.length() - 1) + "&gt;";
             String htmlCompatibleTag = "&lt;" + tag.substring(1, tag.length() - 1) + "&gt;";
             matchingTag.appendReplacement(renderedTitle, htmlCompatibleTag);
         }

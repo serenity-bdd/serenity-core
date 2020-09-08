@@ -266,8 +266,8 @@ public class WhenFormattingForHTML {
     public void formatter_should_convert_simple_html_tags_in_titles() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         Formatter formatter = new Formatter(environmentVariables);
-        String formatted = formatter.renderTitle("<h1>A heading</h1>");
-        assertThat(formatted, is("&lt;h1&gt;A heading&lt;/h1&gt;"));
+        String formatted = formatter.renderTitle("some <tag>");
+        assertThat(formatted, is("some &lt;tag&gt;"));
     }
 
 
@@ -275,8 +275,8 @@ public class WhenFormattingForHTML {
     public void formatter_should_convert_empty_html_tags_in_titles() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         Formatter formatter = new Formatter(environmentVariables);
-        String formatted = formatter.renderTitle("<p><></p>");
-        assertThat(formatted, is("&lt;p&gt;&lt;&gt;&lt;/p&gt;"));
+        String formatted = formatter.renderTitle("Some title including <> in it");
+        assertThat(formatted, is("Some title including &lt;&gt; in it"));
     }
 
     @Test

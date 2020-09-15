@@ -1738,7 +1738,7 @@ We have slated an internal implementation at some point in the future.
  * [9a654a517dd9561](https://github.com/serenity-bdd/serenity-core/commit/9a654a517dd9561) Added sample phantomjs binary
  * [aec742df768dbf1](https://github.com/serenity-bdd/serenity-core/commit/aec742df768dbf1) Serenity now downloads the webdriver binaries automatically if not present
 
-Added integration with WebDriverManager (https://github.com/bonigarcia/webdrivermanager), which allows the latest WebDriver binaries to be downloaded automatically if they are not present on the machine. You can disable this behaviour using the `automatic.driver.download` property.
+Added integration with WebDriverManager (https://github.com/bonigarcia/webdrivermanager), which allows the latest WebDriver binaries to be downloaded automatically if they are not present on the machine. You can disable this behaviour using the `webdriver.autodownload` property.
  * [1de7a5ce5e2bb9a](https://github.com/serenity-bdd/serenity-core/commit/1de7a5ce5e2bb9a) Minor refactoring
  * [79fc45b9da5c558](https://github.com/serenity-bdd/serenity-core/commit/79fc45b9da5c558) Added better support for web driver services.
  * [19f5eac2721b87e](https://github.com/serenity-bdd/serenity-core/commit/19f5eac2721b87e) Fixed a sporatic issue with shutting down ScreenPlay tests.

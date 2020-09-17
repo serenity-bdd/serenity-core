@@ -182,7 +182,8 @@ public class SerenityRest {
     }
 
     public static ObjectMapper objectMapper(final ObjectMapper objectMapper) {
-        config().objectMapperConfig(ObjectMapperConfig.objectMapperConfig().defaultObjectMapper(objectMapper));
+        RestAssured.config = config().objectMapperConfig(ObjectMapperConfig.objectMapperConfig()
+                .defaultObjectMapper(objectMapper));
         return config().getObjectMapperConfig().defaultObjectMapper();
     }
 

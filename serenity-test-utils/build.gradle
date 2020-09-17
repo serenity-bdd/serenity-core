@@ -10,5 +10,5 @@ dependencies {
     compile("org.hamcrest:hamcrest-core:1.3")
     compile("xmlunit:xmlunit:1.6")
     compile("org.slf4j:slf4j-api:${slf4jVersion}")
-    testCompile("junit:junit:4.12")
+    testCompile("junit:junit:${junitVersion}")
 }

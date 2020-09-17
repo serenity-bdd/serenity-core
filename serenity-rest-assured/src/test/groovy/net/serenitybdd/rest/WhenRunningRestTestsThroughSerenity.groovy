@@ -16,8 +16,21 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static net.serenitybdd.core.rest.RestMethod.*
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.delete
+import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.patch
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.put
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import static net.serenitybdd.core.rest.RestMethod.DELETE
+import static net.serenitybdd.core.rest.RestMethod.GET
+import static net.serenitybdd.core.rest.RestMethod.PATCH
+import static net.serenitybdd.core.rest.RestMethod.POST
+import static net.serenitybdd.core.rest.RestMethod.PUT
 import static net.serenitybdd.rest.SerenityRest.rest
 import static net.serenitybdd.rest.SerenityRest.then
 
@@ -142,7 +155,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).post(url).then()
+            def result = rest().given().contentType("application/json").body(body).post(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
@@ -174,7 +187,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).patch(url).then()
+            def result = rest().given().contentType("application/json").body(body).patch(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PATCH $url"
@@ -206,7 +219,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).put(url).then()
+            def result = rest().given().contentType("application/json").body(body).put(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PUT $url"

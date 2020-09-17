@@ -57,7 +57,7 @@ dependencies {
 
     compile 'org.slf4j:slf4j-simple:1.7.7'
     compile 'org.codehaus.groovy:groovy-all:2.4.11'
-    compile 'junit:junit:4.12'
+    compile "junit:junit:${junitVersion}"
     compile 'org.assertj:assertj-core:1.7.0'
     compile 'org.hamcrest:hamcrest-all:1.3'
 }

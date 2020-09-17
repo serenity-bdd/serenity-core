@@ -12,8 +12,12 @@ import org.junit.Rule
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static net.serenitybdd.rest.SerenityRest.rest
-import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 /**
  * User: YamStranger
@@ -52,7 +56,7 @@ class WhenExecutingWrappedMethods extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).log().all()
+            def result = rest().given().contentType("application/json").body(body).log().all()
                 .post(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
@@ -82,7 +86,7 @@ class WhenExecutingWrappedMethods extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).auth().none()
+            def result = rest().given().contentType("application/json").body(body).auth().none()
                 .post(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->

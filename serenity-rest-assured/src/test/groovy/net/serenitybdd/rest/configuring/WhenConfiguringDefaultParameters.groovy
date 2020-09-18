@@ -33,10 +33,32 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
-
-import static net.serenitybdd.rest.SerenityRest.*
+import static net.serenitybdd.rest.SerenityRest.filters
+import static net.serenitybdd.rest.SerenityRest.getDefaultAuthentication
+import static net.serenitybdd.rest.SerenityRest.getDefaultBasePath
+import static net.serenitybdd.rest.SerenityRest.getDefaultConfig
+import static net.serenitybdd.rest.SerenityRest.getDefaultParser
+import static net.serenitybdd.rest.SerenityRest.getDefaultPort
 import static net.serenitybdd.rest.SerenityRest.getDefaultProxy
-import static net.serenitybdd.rest.SerenityRest.setDefaultResponseSpecification;
+import static net.serenitybdd.rest.SerenityRest.getDefaultResponseSpecification
+import static net.serenitybdd.rest.SerenityRest.getDefaultRootPath
+import static net.serenitybdd.rest.SerenityRest.getDefaultSessionId
+import static net.serenitybdd.rest.SerenityRest.given
+import static net.serenitybdd.rest.SerenityRest.isUrlEncodingEnabled
+import static net.serenitybdd.rest.SerenityRest.objectMapper
+import static net.serenitybdd.rest.SerenityRest.replaceFiltersWith
+import static net.serenitybdd.rest.SerenityRest.reset
+import static net.serenitybdd.rest.SerenityRest.setDefaultAuthentication
+import static net.serenitybdd.rest.SerenityRest.setDefaultBasePath
+import static net.serenitybdd.rest.SerenityRest.setDefaultConfig
+import static net.serenitybdd.rest.SerenityRest.setDefaultParser
+import static net.serenitybdd.rest.SerenityRest.setDefaultPort
+import static net.serenitybdd.rest.SerenityRest.setDefaultProxy
+import static net.serenitybdd.rest.SerenityRest.setDefaultRequestSpecification
+import static net.serenitybdd.rest.SerenityRest.setDefaultResponseSpecification
+import static net.serenitybdd.rest.SerenityRest.setDefaultRootPath
+import static net.serenitybdd.rest.SerenityRest.setDefaultSessionId
+import static net.serenitybdd.rest.SerenityRest.setUrlEncodingEnabled
 
 /**
  * User: YamStranger
@@ -396,7 +418,7 @@ class WhenConfiguringDefaultParameters extends Specification {
     }
 
     def "should be possible set default object mapper for all rest requests"(
-        final def ObjectMapper mapper
+        final ObjectMapper mapper
     ) {
         given: "rest assured default config updated"
             objectMapper(mapper)

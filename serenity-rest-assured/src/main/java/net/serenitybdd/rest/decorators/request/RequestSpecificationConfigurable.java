@@ -3,7 +3,8 @@ package net.serenitybdd.rest.decorators.request;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SessionConfig;
 import io.restassured.internal.RequestSpecificationImpl;
-import io.restassured.specification.*;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,12 +76,6 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     @Override
     public RequestSpecification spec(final RequestSpecification requestSpecificationToMerge) {
         core.spec(requestSpecificationToMerge);
-        return this;
-    }
-
-    @Override
-    public RequestSpecification specification(final RequestSpecification requestSpecificationToMerge) {
-        core.specification(requestSpecificationToMerge);
         return this;
     }
 }

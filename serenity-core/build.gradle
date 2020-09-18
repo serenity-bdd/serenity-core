@@ -230,6 +230,7 @@ dependencies {
 
     compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:"org.jsoup", module:"jsoup"
+        exclude group:"junit", module:"junit"
     }
 
     compile("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}") {

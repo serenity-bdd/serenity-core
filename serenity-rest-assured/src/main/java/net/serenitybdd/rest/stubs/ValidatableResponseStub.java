@@ -1,6 +1,5 @@
 package net.serenitybdd.rest.stubs;
 
-import io.restassured.function.RestAssuredFunction;
 import io.restassured.http.ContentType;
 import io.restassured.internal.RestAssuredResponseOptionsImpl;
 import io.restassured.internal.ValidatableResponseImpl;
@@ -18,30 +17,12 @@ import org.hamcrest.Matcher;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * Created by john on 23/07/2015.
  */
 public class ValidatableResponseStub implements ValidatableResponse {
-    @Override
-    public ValidatableResponse content(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse content(List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse content(List<Argument> arguments, ResponseAwareMatcher<Response> responseAwareMatcher) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse content(String key, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
-        return this;
-    }
 
     @Override
     public ValidatableResponse body(String path, List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
@@ -99,7 +80,7 @@ public class ValidatableResponseStub implements ValidatableResponse {
     }
 
     @Override
-    public <V> ValidatableResponse header(String s, RestAssuredFunction<String, V> restAssuredFunction, Matcher<? super V> matcher) {
+    public <V> ValidatableResponse header(String s, Function<String, V> restAssuredFunction, Matcher<? super V> matcher) {
         return this;
     }
 
@@ -169,12 +150,27 @@ public class ValidatableResponseStub implements ValidatableResponse {
     }
 
     @Override
+    public ValidatableResponse appendRootPath(String pathToAppend) {
+        return this;
+    }
+
+    @Override
     public ValidatableResponse appendRoot(String pathToAppend) {
         return this;
     }
 
     @Override
+    public ValidatableResponse appendRootPath(String pathToAppend, List<Argument> arguments) {
+        return this;
+    }
+
+    @Override
     public ValidatableResponse appendRoot(String pathToAppend, List<Argument> arguments) {
+        return this;
+    }
+
+    @Override
+    public ValidatableResponse detachRootPath(String pathToDetach) {
         return this;
     }
 
@@ -219,21 +215,6 @@ public class ValidatableResponseStub implements ValidatableResponse {
     }
 
     @Override
-    public ValidatableResponse content(String path, List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse content(String path, List<Argument> arguments, ResponseAwareMatcher<Response> responseAwareMatcher) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse content(String path, ResponseAwareMatcher<Response> responseAwareMatcher) {
-        return this;
-    }
-
-    @Override
     public ValidatableResponse and() {
         return this;
     }
@@ -250,11 +231,6 @@ public class ValidatableResponseStub implements ValidatableResponse {
 
     @Override
     public ValidatableResponse spec(ResponseSpecification responseSpecificationToMerge) {
-        return this;
-    }
-
-    @Override
-    public ValidatableResponse specification(ResponseSpecification responseSpecificationToMerge) {
         return this;
     }
 

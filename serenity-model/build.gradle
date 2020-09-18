@@ -57,7 +57,9 @@ dependencies {
 
     compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:"org.jsoup", module:"jsoup"
+        exclude group:"junit", module:"junit"
     }
+    compile "junit:junit:${junitVersion}"
     compile 'es.nitaur.markdown:txtmark:0.16'
 
     compileOnly "org.junit.jupiter:junit-jupiter-api:${junit5_version}"

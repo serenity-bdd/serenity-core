@@ -1,6 +1,7 @@
 package net.serenitybdd.rest.decorators;
 
 import io.restassured.config.RestAssuredConfig;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.internal.ResponseParserRegistrar;
 import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.response.Response;
@@ -25,7 +26,7 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
 
     public ResponseSpecificationDecorated(final ResponseSpecificationImpl core) {
         this.core = core;
-        this.helper = new ReflectionHelper<ResponseSpecificationImpl>(core);
+        this.helper = new ReflectionHelper<>(core);
     }
 
     @Override
@@ -163,4 +164,13 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
         return core.getConfig();
     }
 
+    @Override
+    public LogDetail getLogDetail() {
+        return core.getLogDetail();
+    }
+
+    @Override
+    public ResponseSpecification statusCode(final int expectedStatusCode) {
+        return core.statusCode(expectedStatusCode);
+    }
 }

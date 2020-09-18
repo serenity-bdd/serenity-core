@@ -9,6 +9,8 @@ import net.serenitybdd.rest.utils.ReflectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+
 /**
  * User: YamStranger
  * Date: 3/16/16
@@ -25,6 +27,7 @@ abstract class RequestSpecificationLoggable extends RequestSpecificationRedirect
     @Override
     public RequestLogSpecification log() {
         final RequestLogSpecificationImpl specification = new RequestLogSpecificationImpl();
+        specification.setBlacklistedHeaders(Collections.emptySet());
         final ReflectionHelper<RequestLogSpecificationImpl> logHelper = new ReflectionHelper<>(specification);
         try {
             logHelper.setValueTo("requestSpecification", this);

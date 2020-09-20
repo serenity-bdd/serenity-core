@@ -63,7 +63,7 @@ public class LastElement {
     }
 
     private static List<String> elementsOf(String path) {
-        return Splitter.on(Pattern.compile("[\\.|/]")).splitToList(path);
+        return  Splitter.on(Pattern.compile("[\\|/]")).splitToList(path);
     }
 
 

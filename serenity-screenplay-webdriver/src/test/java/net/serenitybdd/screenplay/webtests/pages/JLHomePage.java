@@ -1,15 +1,21 @@
 package net.serenitybdd.screenplay.webtests.pages;
 
+import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isCurrentlyVisible;
+
+import java.time.Duration;
 
 public class JLHomePage extends PageObject {
     private static final String SITE = "#siteMenu";
     private static final String ADDSITE = "#createSiteMenu";
 
-    public static Target HRFSITE = Target.the("SiteHre").locatedBy(SITE);
+    public static Target HRFSITE = Target.the("SiteHref").locatedBy(SITE);
     public static Target MNUADDSITE = Target.the("AddSiteMenuItem").locatedBy(ADDSITE);
 
     @FindBy(id = "siteMenu")
@@ -29,10 +35,8 @@ public class JLHomePage extends PageObject {
             menuItem = addSite;
         }
 
-        //withTimeoutOf(Duration.ofSeconds(10)).waitForCondition().until(ExpectedConditions.elementToBeClickable(menu));
-        //element(menu).waitUntilClickable();
+
         menu.click();
-        //withTimeoutOf(Duration.ofSeconds(10)).waitForCondition().until(ExpectedConditions.elementToBeClickable(menuItem));
         menuItem.click();
     }
 }

@@ -4,7 +4,11 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.abilities.BrowsingTheWeb;
+import net.serenitybdd.screenplay.webtests.actions.NavigateToPage;
+import net.serenitybdd.screenplay.webtests.model.Category;
+import net.serenitybdd.screenplay.webtests.model.SubCategory;
 import net.serenitybdd.screenplay.webtests.pages.JLHomePage;
+
 import net.serenitybdd.screenplay.webtests.pages.JLSitesAddSitePage;
 import net.serenitybdd.screenplay.webtests.tasks.JLAddNewSite;
 import net.serenitybdd.screenplay.webtests.tasks.JLLoginWebApp;
@@ -15,9 +19,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
-import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
-import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import java.time.Duration;
+import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
+
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isCurrentlyVisible;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 
@@ -37,29 +46,24 @@ public class JLWhenDanaAddNewSite {
 
     @Test
     public void addNewSite(){
-        BrowsingTheWeb.as(dana).onPage(JLHomePage.class).navigateToPage("AddSite");
-        /*dana.should(
+        //BrowsingTheWeb.as(dana).onPage(JLHomePage.class).navigateToPage("AddSite");
+       /* Wait<WebDriver> wait = new FluentWait<WebDriver>(browser)
+                .withTimeout(Duration.ofSeconds(30))
+                .pollingEvery(Duration.ofSeconds(3))
+                .ignoring(NoSuchElementException.class);*/
+      //  System.out.print(Category.site + " " + SubCategory.ADDSITE);
+        //givenThat(dana).wasAbleTo(NavigateToPage.withMenu(Category.Sites).selectItem(SubCategory.ADDSITE));
+        //BrowsingTheWeb.as(dana).onPage(JLHomePage.class).navigateToPage("AddSite");
+      givenThat(dana).wasAbleTo(NavigateToPage.withMenu(Category.Sites).selectItem(SubCategory.ADDSITE));
+      /*  dana.should(
                 seeThat(the(JLSitesAddSitePage.DDCUSTOMER),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTSITE),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.DDTAGS),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTADDSTREET),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTADDAREA),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTADDCITY),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTADDCOUNTY),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTPOSTCODE),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTTEL),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.DDAREA),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTREFNO),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTCNTFIRSTNAME),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTCNTLASTNAME),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTCNTTEL),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTCNTEMAIL),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.TXTCNTJOBPOS),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.BTNCANCEL),isCurrentlyVisible()),
-                seeThat(the(JLSitesAddSitePage.BTNSAVE),isCurrentlyVisible())
+                seeThat(the(JLSitesAddSitePage.TXTSITE),isCurrentlyVisible())
         );*/
-        dana.wasAbleTo(jlAddNewSite);
-        //when(dana).attemptsTo(jlSitesAddSitePage.enterSiteInfo("Cust083001", "Site083001"));
+        //dana.wasAbleTo(jlAddNewSite);
+       /* when(dana).attemptsTo(JLAddNewSite
+                .withCustomer("Candy Crush")
+                .withSite("TESTSITE091420"));*/
+
     }
 
     @Steps
@@ -67,7 +71,4 @@ public class JLWhenDanaAddNewSite {
 
     @Steps
     JLLoginWebApp jlLoginJLWebApp;
-
-    @Steps
-    JLAddNewSite jlAddNewSite;
 }

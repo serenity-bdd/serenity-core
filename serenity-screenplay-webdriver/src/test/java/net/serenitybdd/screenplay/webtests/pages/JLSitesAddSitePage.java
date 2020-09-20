@@ -7,9 +7,9 @@ import net.thucydides.core.annotations.Step;
 
 public class JLSitesAddSitePage extends PageObject {
     //Job Logic - Site Page Selectors
-    private static final String CUSTOMER = "input[name='CustomerId_input']";
+    private static final String CUSTOMER = "//input[@name='CustomerId_input']";
     private static final String SITE = "#SiteName";
-    private static final String TAGS = "input[name='CustomerId_input']";
+    private static final String TAGS = "//input[@class='k-input k-readonly valid k-valid']";
     private static final String ADDSTREET = "#SiteAddress1";
     private static final String ADDAREA = "#SiteAddress2";
     private static final String ADDCITY = "SiteAddress3";
@@ -24,7 +24,7 @@ public class JLSitesAddSitePage extends PageObject {
     private static final String CNTEMAIL = "input[name='CustomerId_input']";
     private static final String CNTJOBPOSITION = "input[name='CustomerId_input']";
     private static final String CANCEL = "input[name='CustomerId_input']";
-    private static final String SAVE = "input[name='CustomerId_input']";
+    private static final String SAVE = "//button[@class='jl-button-green disableSubmitButton']";
 
     public static Target DDCUSTOMER = Target.the("CustomerName").locatedBy(CUSTOMER);
     public static Target TXTSITE = Target.the("SiteName").locatedBy(SITE);

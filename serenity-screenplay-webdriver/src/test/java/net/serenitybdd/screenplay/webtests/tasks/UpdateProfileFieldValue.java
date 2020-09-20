@@ -16,7 +16,9 @@ public class UpdateProfileFieldValue implements Settable {
     }
 
     public <T extends Actor> void performAs(T theUser) {
-        theUser.attemptsTo(Enter.theValue(newValue).into(field));
+
+        //theUser.attemptsTo(Enter.theValue(newValue).into(field));
+        theUser.attemptsTo(Enter.keyValues(newValue).into(field));
     }
 
     public Performable to(String newValue) {

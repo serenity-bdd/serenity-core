@@ -34,10 +34,10 @@ dependencies {
 
     // JUnit 5
     testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     )
     testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
+            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
     )
 }
 repositories {

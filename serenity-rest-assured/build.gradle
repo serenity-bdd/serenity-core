@@ -24,5 +24,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module:'httpclient'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
+    testCompile "org.opentest4j:opentest4j:${opentest4jVersion}"
     testCompile project(':serenity-test-utils')
 }

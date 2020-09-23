@@ -243,6 +243,7 @@ dependencies {
 
 
     testCompile "junit:junit:${junitVersion}"
+    testCompile "org.opentest4j:opentest4j:${opentest4jVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"
     testCompile "org.springframework:spring-context:${springVersion}"
     testCompile "org.springframework:spring-context-support:${springVersion}"

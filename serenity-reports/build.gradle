@@ -43,5 +43,6 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
+    testCompile "org.opentest4j:opentest4j:${opentest4jVersion}"
 }
 

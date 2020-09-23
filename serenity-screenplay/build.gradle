@@ -7,4 +7,5 @@ dependencies {
 //    compile 'uk.com.robust-it:cloning:1.9.10'
     compile project(':serenity-core')
     testCompile project(':serenity-junit')
+
 }

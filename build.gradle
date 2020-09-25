@@ -77,7 +77,6 @@ allprojects {
             force   "commons-collections:commons-collections:${commonsCollectionsVersion}",
                     "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                     "xml-apis:xml-apis:${xmlApisVersion}",
-                    "org.apache.commons:commons-text:${commonsText}",
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
                     "org.eclipse.jetty:jetty-http:${jettyVersion}",
                     "org.eclipse.jetty:jetty-util:${jettyVersion}",

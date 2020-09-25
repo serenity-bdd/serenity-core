@@ -363,6 +363,9 @@ public class Actor implements PerformsTasks, SkipNested {
         return new HashMap<>(notepad);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T forget(String key) { return (T) notepad.remove(key);}
+
     public <T> T sawAsThe(String key) {
         return recall(key);
     }

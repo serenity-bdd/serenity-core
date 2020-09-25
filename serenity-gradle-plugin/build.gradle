@@ -2,11 +2,38 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
-apply plugin: 'java-gradle-plugin'
+plugins {
+    id "com.gradle.plugin-publish" version "0.12.0"
+    id "java-gradle-plugin"
+}
 
 ext {
     bintrayPackage = 'serenity-gradle-plugin'
     projectDescription = 'Serenity Gradle Plugin'
+}
+
+// Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
+gradlePlugin {
+    plugins {
+        greetingsPlugin {
+            id = 'net.serenitybdd.plugins.gradle'
+            implementationClass = 'net.serenitybdd.plugins.gradle.SerenityPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'http://www.serenity-bdd.info/'
+    vcsUrl = 'https://github.com/serenity-bdd/serenity-core'
+    description = 'Serenity BDD Gradle Plugin'
+    tags = ['serenity', 'bdd', 'cucumber']
+
+    plugins {
+        greetingsPlugin {
+            // id is captured from java-gradle-plugin configuration
+            displayName = 'Serenity BDD Gradle plugin'
+        }
+    }
 }
 
 // Write the plugin's classpath to a file to share with the tests

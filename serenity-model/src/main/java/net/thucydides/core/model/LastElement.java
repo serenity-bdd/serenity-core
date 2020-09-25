@@ -18,10 +18,10 @@ public class LastElement {
     }
 
     private static LastElementStrategy forPathType(String path) {
-        if (path.toLowerCase().endsWith(".feature")) {
+        if (path != null && path.toLowerCase().endsWith(".feature")) {
             return forFeatureOrStoryFiles;
         }
-        if (path.toLowerCase().endsWith(".story")) {
+        if (path != null && path.toLowerCase().endsWith(".story")) {
             return forFeatureOrStoryFiles;
         }
         return forTestCases;
@@ -63,6 +63,9 @@ public class LastElement {
     }
 
     private static List<String> elementsOf(String path) {
+        if (path == null) {
+            return new ArrayList<>();
+        }
         return  Splitter.on(Pattern.compile("[\\|/]")).splitToList(path);
     }
 

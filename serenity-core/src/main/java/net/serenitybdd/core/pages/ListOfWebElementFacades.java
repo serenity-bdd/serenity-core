@@ -1,7 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ListOfWebElementFacades extends ArrayList<WebElementFacade> {
-    public ListOfWebElementFacades(@NotNull Collection<? extends WebElementFacade> c) {
+    public ListOfWebElementFacades(Collection<? extends WebElementFacade> c) {
         super(c);
     }
 

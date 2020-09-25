@@ -27,6 +27,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.lang.System.lineSeparator;
 
@@ -76,7 +78,7 @@ public class CucumberParser {
                 return Optional.empty();
             }
             GherkinDocument gherkinDocument = gherkinDocuments.get(0);
-            
+
             String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getCommentsList());
 
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
@@ -84,8 +86,8 @@ public class CucumberParser {
             }
             List<Scenario> scenarioList = gherkinDocument.getFeature().getChildrenList().stream().filter(Feature.FeatureChild::hasScenario).map(Feature.FeatureChild::getScenario).collect(Collectors.toList());
             return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature(),
-                                                    scenarioList,
-                                                    descriptionInComments));
+                    scenarioList,
+                    descriptionInComments));
         } catch (Exception ex) {
             ex.printStackTrace();
             return Optional.empty();
@@ -93,17 +95,22 @@ public class CucumberParser {
     }
 
     private List<GherkinDocument> loadCucumberFeatures(List<String> listOfFiles) {
-        for(String cucumberFile : listOfFiles) {
+        for (String cucumberFile : listOfFiles) {
             searchForCucumberSyntaxErrorsIn(cucumberFile);
         }
-        IdGenerator idGenerator = new IdGenerator.Incrementing();
         List<GherkinDocument> loadedFeatures = new ArrayList<>();
-        boolean includeSource = false;
-        boolean includeAst = true;
-        boolean includePickles = false;
-        List<Envelope> envelopes = Gherkin.fromPaths(listOfFiles, includeSource, includeAst, includePickles, idGenerator).collect(Collectors.toList());
-        List<GherkinDocument> gherkinDocuments = envelopes.stream().filter(Envelope::hasGherkinDocument).map(Envelope::getGherkinDocument).collect(Collectors.toList());
-        for(GherkinDocument gherkinDocument : gherkinDocuments) {
+        List<?> envelopes = getFeatures(listOfFiles)
+                .stream()
+                .flatMap(feature -> StreamSupport.stream(feature.getParseEvents().spliterator(), false))
+                .collect(Collectors.toList());
+
+        List<GherkinDocument> gherkinDocuments = envelopes
+                .stream()
+                .filter(o -> ((Envelope) o).hasGherkinDocument())
+                .map(o -> ((Envelope) o).getGherkinDocument())
+                .collect(Collectors.toList());
+
+        for (GherkinDocument gherkinDocument : gherkinDocuments) {
             if (gherkinDocument.hasFeature()) {
                 loadedFeatures.add(gherkinDocument);
                 LOGGER.debug("Added feature {}", gherkinDocument.getFeature().getName());
@@ -121,9 +128,21 @@ public class CucumberParser {
         Resource cucumberResource = new URIResource(cucumberFilePath);
         try {
             featureParser.parseResource(cucumberResource);
-        } catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             reportAnyCucumberSyntaxErrorsIn(throwable);
         }
+    }
+
+    private List<io.cucumber.core.gherkin.Feature> getFeatures(List<String> paths) {
+        FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
+        List<io.cucumber.core.gherkin.Feature> results = new ArrayList<>();
+        paths.forEach(path -> {
+            Path cucumberFilePath = new File(path).toPath();
+            Resource cucumberResource = new URIResource(cucumberFilePath);
+            Optional<io.cucumber.core.gherkin.Feature> maybeFeature = featureParser.parseResource(cucumberResource);
+            maybeFeature.ifPresent(results::add);
+        });
+        return results;
     }
 
     private void reportAnyCucumberSyntaxErrorsIn(Throwable gherkinError) {
@@ -196,7 +215,7 @@ public class CucumberParser {
     private Collection<TestTag> tagsFrom(Scenario scenarioDefinition) {
         if (scenarioDefinition.getExamplesCount() == 0) {
             return asSerenityTags(scenarioDefinition.getTagsList());
-        } else  {
+        } else {
             Set<TestTag> outlineTags = new HashSet<>(asSerenityTags(scenarioDefinition.getTagsList()));
             scenarioDefinition.getExamplesList().forEach(
                     examples -> outlineTags.addAll(asSerenityTags(examples.getTagsList()))
@@ -210,6 +229,7 @@ public class CucumberParser {
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
     }
+
     private String descriptionWithScenarioReferencesFrom(Feature feature) {
         if (feature.getDescription() == null) {
             return "";

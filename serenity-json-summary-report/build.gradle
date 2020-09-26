@@ -32,13 +32,6 @@ dependencies {
     testCompile project(':serenity-core')
     testCompile "org.jsoup:jsoup:1.10.3"
 
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
-    )
 }
 repositories {
     mavenCentral()

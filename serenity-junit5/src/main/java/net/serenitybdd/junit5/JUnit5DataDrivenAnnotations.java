@@ -6,8 +6,8 @@ import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

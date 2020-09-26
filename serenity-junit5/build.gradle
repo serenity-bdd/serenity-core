@@ -10,11 +10,18 @@ test {
 dependencies {
     compile project(':serenity-model')
     compile project(':serenity-core')
-    compile "junit:junit:${junitVersion}"
-    compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    compile "org.junit.jupiter:junit-jupiter:5.7.0"
+    compile "org.junit.jupiter:junit-jupiter-params:5.7.0"
+    compile "org.junit.jupiter:junit-jupiter-engine:5.7.0"
+    compile "org.junit.platform:junit-platform-runner:1.7.0"
 
 
-   // testCompile(platform("org.junit:junit-bom:5.7.0"))
+
+   compile(platform("org.junit:junit-bom:5.7.0@pom"))
+   {
+       exclude group: "org.apiguardian", module: 'apiguardian-api'
+   }
+
 
     //junit5
     /*compile "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"

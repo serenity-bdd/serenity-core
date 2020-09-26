@@ -29,7 +29,8 @@ public class ParameterizedTestsOutcomeAggregator {
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
 
             if (testOutcome.isManual()) {
-                scenarioOutcome = scenarioOutcome.asManualTest();
+                //scenarioOutcome = scenarioOutcome.asManualTest();
+                scenarioOutcome = scenarioOutcome.setToManual();
             }
 
             if (testOutcome.isDataDriven()) {
@@ -80,7 +81,8 @@ public class ParameterizedTestsOutcomeAggregator {
     private void updateResultsForAnyExternalFailures(TestOutcome testOutcome, TestOutcome scenarioOutcome) {
         if (rowResultsAreInconsistantWithOverallResult(testOutcome)) {
             testOutcome.getDataTable().getRows().get(0).updateResult(testOutcome.getResult());
-            scenarioOutcome.addFailingExternalStep(new AssertionError(testOutcome.getTestFailureMessage()));
+            //TODO
+            //scenarioOutcome.addFailingStepAsSibling(new AssertionError(testOutcome.getTestFailureMessage()));
         }
     }
 

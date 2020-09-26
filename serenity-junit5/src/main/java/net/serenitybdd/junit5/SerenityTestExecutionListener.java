@@ -1,9 +1,14 @@
 package net.serenitybdd.junit5;
 
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.DataTable;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.TestSourceType;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.reports.ReportService;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.junit.jupiter.api.Disabled;
+import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.TestSource;
@@ -13,21 +18,31 @@ import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import static net.thucydides.core.reports.ReportService.getDefaultReporters;
+import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
+    private ReportService reportService;
+
     private TestPlan currentTestPlan;
 
     private SerenityTestExecutionSummary summary;
+
+    private Pages pages;
 
     //key-> "ClassName.MethodName"
     //entries-> DataTable associated with method
@@ -35,19 +50,41 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private int parameterSetNumber = 0;
 
+    private BaseStepListener baseStepListener;
+
+    public SerenityTestExecutionListener() {
+        //initStepFactory();
+        File outputDirectory = getOutputDirectory();
+        baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
+        StepEventBus.getEventBus().registerListener(baseStepListener);
+    }
+
+    private File getOutputDirectory() {
+        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+        return systemPropertiesConfiguration.getOutputDirectory();
+    }
+
+    private BaseStepListener getBaseStepListener() {
+        return baseStepListener;
+    }
+
     @Override
-    public  void testPlanExecutionStarted(TestPlan testPlan) {
+    public void testPlanExecutionStarted(TestPlan testPlan) {
         this.currentTestPlan = testPlan;
         this.summary = new SerenityTestExecutionSummary(testPlan);
-        logger.debug("->TestPlanExecutionStarted " + testPlan);
+        logger.info("->TestPlanExecutionStarted " + testPlan);
         Set<TestIdentifier> roots = testPlan.getRoots();
         for(TestIdentifier root: roots) {
-            //System.out.println("XXRoot " + root.getUniqueId() + root.getDisplayName() + root.getSource());
+            logger.info("TestIdentifier Root " + root.getUniqueId() + root.getDisplayName() + root.getSource());
             Set<TestIdentifier> children = testPlan.getChildren(root.getUniqueId());
             for (TestIdentifier child : children) {
-                //System.out.println("XXChild " + child.getUniqueId() + child.getDisplayName() + child.getSource() + child.getType());
+                System.out.println("TestIdentifier Child " + child.getUniqueId() + child.getDisplayName() + child.getSource() + child.getType());
                 if(isClassSource(child))
                 {
+                    ClassSource classSource = (ClassSource)child.getSource().get();
+                    logger.info("Java Class " + classSource.getJavaClass());
+                    logger.info("Class " + classSource.getClass());
+                    //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
                 }
             }
@@ -56,7 +93,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        logger.debug("->TestPlanExecutionFinished " + testPlan);
+
+        logger.info("->TestPlanExecutionFinished " + testPlan);
+        notifyTestSuiteFinished();
+        generateReports();
     }
 
     @Override
@@ -117,13 +157,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void executionStarted(TestIdentifier testIdentifier) {
-        logger.debug("-->Execution started " + testIdentifier.getDisplayName() +"--" +testIdentifier.getType() + "--" +testIdentifier.getSource());
+        logger.info("-->Execution started " + testIdentifier.getDisplayName() +"--" +testIdentifier.getType() + "--" +testIdentifier.getSource());
         if(!testIdentifier.getSource().isPresent()) {
-            logger.debug("No action done at executionStarted because testIdentifier is null" );
+            logger.info("No action done at executionStarted because testIdentifier is null" );
             return;
         }
         if(isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
+            testStarted(methodSource);
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             DataTable dataTable = dataTables.get(sourceMethod);
             if(dataTable != null) {
@@ -139,13 +180,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        logger.debug("-->Execution finished " + testIdentifier.getDisplayName() + "--" +testIdentifier.getType() + "--" + testIdentifier.getSource() +" with result " + testExecutionResult.getStatus());
+        logger.info("-->Execution finished " + testIdentifier.getDisplayName() + "--" +testIdentifier.getType() + "--" + testIdentifier.getSource() +" with result " + testExecutionResult.getStatus());
         if(!testIdentifier.getSource().isPresent()) {
-            logger.debug("No action done at executionFinished because testIdentifier is null" );
+            logger.info("No action done at executionFinished because testIdentifier is null" );
             return;
         }
         if(testIdentifier.getType() == TestDescriptor.Type.TEST){
             if(isMethodSource(testIdentifier)) {
+                testFinished();
                 MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
                 DataTable dataTable = dataTables.get(sourceMethod);
@@ -155,7 +197,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 }
             }
         }
-        /*switch (testExecutionResult.getStatus()) {
+        switch (testExecutionResult.getStatus()) {
 
             case SUCCESSFUL: {
                 if (testIdentifier.isContainer()) {
@@ -190,16 +232,15 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                         throwable -> this.summary.addFailure(testIdentifier, throwable));
                 break;
             }
-
             default:
                 throw new PreconditionViolationException(
                         "Unsupported execution status:" + testExecutionResult.getStatus());
-        }*/
+        }
     }
 
     @Override
     public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {
-        logger.debug("-->ReportingEntryPublished " + testIdentifier.getDisplayName() + "--" +testIdentifier.getType() + "--" + testIdentifier.getSource());
+        logger.info("-->ReportingEntryPublished " + testIdentifier.getDisplayName() + "--" +testIdentifier.getType() + "--" + testIdentifier.getSource());
     }
 
     private boolean isClassSource(TestIdentifier testId){
@@ -209,4 +250,96 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private boolean isMethodSource(TestIdentifier testId){
         return testId.getSource().isPresent() && (testId.getSource().get() instanceof MethodSource);
     }
+
+
+
+    /**
+     * Called when a test starts. We also need to start the test suite the first
+     * time, as the testRunStarted() method is not invoked for some reason.
+     */
+    //@Override
+    private void testStarted(MethodSource methodSource/*final Description description*/) {
+        //if (testingThisTest(description)) {
+            startTestSuiteForFirstTest(methodSource);
+            StepEventBus.getEventBus().clear();
+            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
+            StepEventBus.getEventBus().testStarted(
+                    Optional.ofNullable(methodSource.getMethodName()).orElse("Initialisation"),
+                    methodSource.getJavaClass());
+            //startTest();
+        //}
+    }
+
+    private void startTestSuiteForFirstTest(MethodSource description) {
+        if (!getBaseStepListener().testSuiteRunning()) {
+            StepEventBus.getEventBus().testSuiteStarted(description.getJavaClass());
+        }
+    }
+
+    private void testFinished(/*final Description description*/)  {
+        //if (testingThisTest(description)) {
+            //TODO
+            //updateResultsUsingTestAnnotations(description);
+            StepEventBus.getEventBus().testFinished();
+            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
+            //endTest();
+        //}
+    }
+
+    private void notifyTestSuiteFinished() {
+        try {
+            //if (dataDrivenTest()) {
+            //    StepEventBus.getEventBus().exampleFinished();
+            //} else {
+                StepEventBus.getEventBus().testSuiteFinished();
+            //}
+        } catch (Throwable listenerException) {
+            // We report and ignore listener exceptions so as not to mess up the rest of the test mechanics.
+            logger.error("Test event bus error: " + listenerException.getMessage(), listenerException);
+        }
+    }
+
+
+    /**
+     * Find the current set of test outcomes produced by the test execution.
+     * @return the current list of test outcomes
+     */
+    public List<TestOutcome> getTestOutcomes() {
+        return baseStepListener.getTestOutcomes();
+    }
+
+
+    protected void generateReports() {
+        generateReportsFor(getTestOutcomes());
+    }
+
+    /**
+     * A test runner can generate reports via Reporter instances that subscribe
+     * to the test runner. The test runner tells the reporter what directory to
+     * place the reports in. Then, at the end of the test, the test runner
+     * notifies these reporters of the test outcomes. The reporter's job is to
+     * process each test run outcome and do whatever is appropriate.
+     *
+     * @param testOutcomeResults the test results from the previous test run.
+     */
+    private void generateReportsFor(final List<TestOutcome> testOutcomeResults) {
+        getReportService().generateReportsFor(testOutcomeResults);
+        getReportService().generateConfigurationsReport();
+    }
+
+    private ReportService getReportService() {
+        if (reportService == null) {
+            reportService = new ReportService(getOutputDirectory(), getDefaultReporters());
+        }
+        return reportService;
+    }
+
+    /**
+     * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
+     * @param testCase A Serenity-annotated test class
+     */
+    protected void injectAnnotatedPagesObjectInto(final Object testCase) {
+        StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages);
+    }
+
 }

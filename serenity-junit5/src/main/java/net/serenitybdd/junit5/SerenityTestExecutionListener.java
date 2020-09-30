@@ -84,6 +84,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     ClassSource classSource = (ClassSource)child.getSource().get();
                     logger.info("Java Class " + classSource.getJavaClass());
                     logger.info("Class " + classSource.getClass());
+                    startTestSuiteForFirstTest(classSource.getJavaClass());
                     //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
                 }
@@ -164,7 +165,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         if(isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
-            testStarted(methodSource);
+            testStarted(methodSource,testIdentifier);
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             DataTable dataTable = dataTables.get(sourceMethod);
             if(dataTable != null) {
@@ -187,7 +188,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         if(testIdentifier.getType() == TestDescriptor.Type.TEST){
             if(isMethodSource(testIdentifier)) {
-                testFinished();
+                testFinished(testIdentifier);
                 MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
                 DataTable dataTable = dataTables.get(sourceMethod);
@@ -258,25 +259,27 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      * time, as the testRunStarted() method is not invoked for some reason.
      */
     //@Override
-    private void testStarted(MethodSource methodSource/*final Description description*/) {
+    private void testStarted(MethodSource methodSource,TestIdentifier testIdentifier/*final Description description*/) {
         //if (testingThisTest(description)) {
-            startTestSuiteForFirstTest(methodSource);
+            System.out.println("XXXTest started " + testIdentifier);
+            String testDisplay = testIdentifier.getDisplayName();
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
             StepEventBus.getEventBus().testStarted(
-                    Optional.ofNullable(methodSource.getMethodName()).orElse("Initialisation"),
+                    Optional.ofNullable(testDisplay != null ? testDisplay : methodSource.getMethodName()).orElse("Initialisation"),
                     methodSource.getJavaClass());
             //startTest();
         //}
     }
 
-    private void startTestSuiteForFirstTest(MethodSource description) {
+    private void startTestSuiteForFirstTest(Class<?> javaClass) {
         if (!getBaseStepListener().testSuiteRunning()) {
-            StepEventBus.getEventBus().testSuiteStarted(description.getJavaClass());
+            StepEventBus.getEventBus().testSuiteStarted(javaClass);
         }
     }
 
-    private void testFinished(/*final Description description*/)  {
+    private void testFinished(TestIdentifier testIdentifier)  {
+        System.out.println("XXXTest finished " + testIdentifier);
         //if (testingThisTest(description)) {
             //TODO
             //updateResultsUsingTestAnnotations(description);

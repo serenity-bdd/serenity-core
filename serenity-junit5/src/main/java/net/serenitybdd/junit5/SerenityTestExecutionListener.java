@@ -84,7 +84,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     ClassSource classSource = (ClassSource)child.getSource().get();
                     logger.info("Java Class " + classSource.getJavaClass());
                     logger.info("Class " + classSource.getClass());
-                    startTestSuiteForFirstTest(classSource.getJavaClass());
+                    //StepEventBus.getEventBus().testSuiteStarted(classSource.getJavaClass());
+                    //startTestSuiteForFirstTest(classSource.getJavaClass());
                     //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
                 }
@@ -96,7 +97,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     public void testPlanExecutionFinished(TestPlan testPlan) {
 
         logger.info("->TestPlanExecutionFinished " + testPlan);
-        notifyTestSuiteFinished();
+       // notifyTestSuiteFinished();
         generateReports();
     }
 
@@ -163,6 +164,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.info("No action done at executionStarted because testIdentifier is null" );
             return;
         }
+        //TODO
+        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER) {
+            StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
+        }
+
         if(isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
             testStarted(methodSource,testIdentifier);
@@ -185,6 +191,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if(!testIdentifier.getSource().isPresent()) {
             logger.info("No action done at executionFinished because testIdentifier is null" );
             return;
+        }
+        //TODO
+        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER) {
+            StepEventBus.getEventBus().testSuiteFinished();
         }
         if(testIdentifier.getType() == TestDescriptor.Type.TEST){
             if(isMethodSource(testIdentifier)) {
@@ -261,7 +271,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     //@Override
     private void testStarted(MethodSource methodSource,TestIdentifier testIdentifier/*final Description description*/) {
         //if (testingThisTest(description)) {
-            System.out.println("XXXTest started " + testIdentifier);
+            System.out.println(Thread.currentThread() + " XXXTest started " + testIdentifier);
             String testDisplay = testIdentifier.getDisplayName();
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
@@ -272,11 +282,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         //}
     }
 
-    private void startTestSuiteForFirstTest(Class<?> javaClass) {
+    /*private void startTestSuiteForFirstTest(Class<?> javaClass) {
         if (!getBaseStepListener().testSuiteRunning()) {
             StepEventBus.getEventBus().testSuiteStarted(javaClass);
         }
-    }
+    }*/
 
     private void testFinished(TestIdentifier testIdentifier)  {
         System.out.println("XXXTest finished " + testIdentifier);

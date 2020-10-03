@@ -19,6 +19,7 @@ import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,6 +242,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 }
                 testExecutionResult.getThrowable().ifPresent(
                         throwable -> this.summary.addFailure(testIdentifier, throwable));
+                StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
                 break;
             }
             default:
@@ -248,6 +250,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                         "Unsupported execution status:" + testExecutionResult.getStatus());
         }
     }
+
+
+    /*public void testFailure(final Failure failure) throws Exception {
+        if (testingThisTest(failure.getDescription())) {
+            startTestIfNotYetStarted(failure.getDescription());
+            stepEventBus().testFailed(failure.getException());
+            updateFailureList(failure);
+            endTest();
+        }
+    }*/
 
     @Override
     public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {

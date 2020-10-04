@@ -166,7 +166,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             return;
         }
         //TODO
-        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER) {
+        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER && isClassSource(testIdentifier))  {
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
         }
 

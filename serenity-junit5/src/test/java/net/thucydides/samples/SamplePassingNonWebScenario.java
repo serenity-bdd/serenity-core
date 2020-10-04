@@ -1,26 +1,27 @@
 package net.thucydides.samples;
 
 import net.thucydides.core.annotations.Steps;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
-public class SampleNonWebScenarioWithError {
+public class SamplePassingNonWebScenario {
     
     @Steps
     public SampleNonWebSteps steps;
 
     @Test
-    public void happy_day_scenario() {
+    public void happy_day_scenario() throws Throwable {
         steps.stepThatSucceeds();
         steps.stepThatIsIgnored();
+        steps.stepThatIsPending();
         steps.anotherStepThatSucceeds();
-        throw new AssertionError("Oh bother!");
     }
 
     @Test
     public void edge_case_1() {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
     }
 
     @Test

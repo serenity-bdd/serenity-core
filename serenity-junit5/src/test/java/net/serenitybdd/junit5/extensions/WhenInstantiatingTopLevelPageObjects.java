@@ -12,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@Serenity
 public class WhenInstantiatingTopLevelPageObjects {
     
     @Managed(driver = "htmlunit")

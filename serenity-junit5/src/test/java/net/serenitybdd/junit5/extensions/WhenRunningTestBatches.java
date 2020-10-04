@@ -5,6 +5,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.samples.SamplePassingScenario;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -42,7 +43,7 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        runTestForClass(net.serenitybdd.junit5.samples.SamplePassingScenario.class);
+        runTestForClass(SamplePassingScenario.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(3));

@@ -167,31 +167,36 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             return;
         }
         //TODO
-        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER && isClassSource(testIdentifier))  {
+        if(isTestContainer(testIdentifier) && isClassSource(testIdentifier))  {
             logger.info("-->TestSuiteStarted " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
         }
 
         if(isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
-
+            if(isSimpleTest(testIdentifier)) {
+                testStarted(methodSource,testIdentifier);
+            }
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             logger.info("GetDataTable Formethod " + sourceMethod);
             DataTable dataTable = dataTables.get(sourceMethod);
             logger.info("FoundDataTable " + dataTable);
+
             if(dataTable != null) {
-                if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER){
+                if(isTestContainer(testIdentifier)){
                     StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     logger.info("-->EventBus.useExamplesFrom" + dataTable);
                     parameterSetNumber = 0;
-                } else if(testIdentifier.getType() == TestDescriptor.Type.TEST){
+                } else if(isSimpleTest(testIdentifier)){
                     logger.info("-->EventBus.exampleStarted " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
                 }
-            } else {
-                testStarted(methodSource,testIdentifier);
             }
         }
+    }
+
+    private boolean isTestContainer(TestIdentifier testIdentifier) {
+        return testIdentifier.getType() == TestDescriptor.Type.CONTAINER;
     }
 
     @Override
@@ -202,13 +207,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             return;
         }
         //TODO
-        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER && isClassSource(testIdentifier)) {
+        if(isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteFinished();
         }
-        if(testIdentifier.getType() == TestDescriptor.Type.TEST){
+        if(isSimpleTest(testIdentifier)){
             if(isMethodSource(testIdentifier)) {
-
+                testFinished(testIdentifier);
                 MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
                 DataTable dataTable = dataTables.get(sourceMethod);
@@ -216,8 +221,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     logger.info("-->EventBus.exampleFinished " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleFinished();
                     parameterSetNumber++;
-                }  else {
-                    testFinished(testIdentifier);
                 }
             }
         }
@@ -261,6 +264,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 throw new PreconditionViolationException(
                         "Unsupported execution status:" + testExecutionResult.getStatus());
         }
+    }
+
+    private boolean isSimpleTest(TestIdentifier testIdentifier) {
+        return testIdentifier.getType() == TestDescriptor.Type.TEST;
     }
 
 

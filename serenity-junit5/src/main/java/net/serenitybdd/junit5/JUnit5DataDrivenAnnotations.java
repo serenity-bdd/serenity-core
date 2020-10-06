@@ -8,6 +8,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -15,6 +17,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class JUnit5DataDrivenAnnotations {
+
+
+    private final Logger logger = LoggerFactory.getLogger(JUnit5DataDrivenAnnotations.class);
 
     private final EnvironmentVariables environmentVariables;
 
@@ -49,7 +54,9 @@ public class JUnit5DataDrivenAnnotations {
             for (List<Object> parameterList : parametersList) {
                 parametersAsListsOfObjects.add(parameterList);
             }
-            dataTables.put(testClass.getCanonicalName() + "." + testDataMethod.getName(),createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+            String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+            logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
+            dataTables.put(dataTableName,createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
         }
         return dataTables;
     }

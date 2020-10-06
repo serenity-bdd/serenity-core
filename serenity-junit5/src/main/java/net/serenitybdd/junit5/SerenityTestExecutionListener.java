@@ -89,6 +89,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     //startTestSuiteForFirstTest(classSource.getJavaClass());
                     //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
+
                 }
             }
         }
@@ -167,21 +168,28 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         //TODO
         if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER && isClassSource(testIdentifier))  {
+            logger.info("-->TestSuiteStarted " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
         }
 
         if(isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
-            testStarted(methodSource,testIdentifier);
+
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
+            logger.info("GetDataTable Formethod " + sourceMethod);
             DataTable dataTable = dataTables.get(sourceMethod);
+            logger.info("FoundDataTable " + dataTable);
             if(dataTable != null) {
                 if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER){
                     StepEventBus.getEventBus().useExamplesFrom(dataTable);
+                    logger.info("-->EventBus.useExamplesFrom" + dataTable);
                     parameterSetNumber = 0;
                 } else if(testIdentifier.getType() == TestDescriptor.Type.TEST){
+                    logger.info("-->EventBus.exampleStarted " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
                 }
+            } else {
+                testStarted(methodSource,testIdentifier);
             }
         }
     }
@@ -194,18 +202,22 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             return;
         }
         //TODO
-        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER) {
+        if(testIdentifier.getType() == TestDescriptor.Type.CONTAINER && isClassSource(testIdentifier)) {
+            logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteFinished();
         }
         if(testIdentifier.getType() == TestDescriptor.Type.TEST){
             if(isMethodSource(testIdentifier)) {
-                testFinished(testIdentifier);
+
                 MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if(dataTable != null) {
+                    logger.info("-->EventBus.exampleFinished " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleFinished();
                     parameterSetNumber++;
+                }  else {
+                    testFinished(testIdentifier);
                 }
             }
         }

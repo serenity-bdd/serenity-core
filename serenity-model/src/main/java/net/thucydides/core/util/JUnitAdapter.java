@@ -192,7 +192,8 @@ public class JUnitAdapter {
 
         @Override
         public boolean isTestMethod(final Method method) {
-            return (method.getAnnotation(org.junit.jupiter.api.Test.class) != null);
+            return (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) ||
+                    (method.getAnnotation(org.junit.jupiter.params.ParameterizedTest.class) != null);
         }
 
         @Override

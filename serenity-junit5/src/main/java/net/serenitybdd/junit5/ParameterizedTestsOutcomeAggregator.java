@@ -1,7 +1,9 @@
 package net.serenitybdd.junit5;
 
 import net.thucydides.core.model.*;
+import net.thucydides.core.steps.StepEventBus;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.runner.Runner;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -127,8 +129,9 @@ public class ParameterizedTestsOutcomeAggregator {
         }
     }
 
-    /*public List<TestOutcome> getTestOutcomesForAllParameterSets() {
-        List<TestOutcome> testOutcomes = new ArrayList<>();
+    public static List<TestOutcome> getTestOutcomesForAllParameterSets() {
+        return StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+        /*List<TestOutcome> testOutcomes = new ArrayList<>();
         for (Runner runner : serenityParameterizedRunner.getRunners()) {
             for (TestOutcome testOutcome : ((SerenityRunner) runner).getTestOutcomes()) {
                 if (!testOutcomes.contains(testOutcome)) {
@@ -136,6 +139,6 @@ public class ParameterizedTestsOutcomeAggregator {
                 }
             }
         }
-        return testOutcomes;
-    }*/
+        return testOutcomes;*/
+    }
 }

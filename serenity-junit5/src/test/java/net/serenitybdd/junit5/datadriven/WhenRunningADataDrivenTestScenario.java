@@ -1,11 +1,14 @@
 package net.serenitybdd.junit5.datadriven;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
+import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.samples.AddDifferentSortsOfTodos;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +24,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -66,12 +70,13 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         runTestForClass(SimpleDataDrivenTestScenario.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        assertThat(executedSteps.size(), is(4));
+        assertThat(executedSteps.size(), is(5));
 
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run #1 with [Hello]").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run #2 with [JUnit]").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run 1 with Hello").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run 2 with JUnit").getTestSteps().size(), is(2));
         assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[1] 1").getTestSteps().size(), is(2));
         assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[2] 2").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[3] 3").getTestSteps().size(), is(2));
     }
 
     private void runTestForClass(Class testClass){
@@ -81,35 +86,51 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         LauncherFactory.create().execute(request);
     }
 
-    /*@Test
+    @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
-
-
+        runTestForClass(SimpleDataDrivenTestScenario.class);
         List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
-        //assertThat(executedScenarios.size(), is(36));
-    }*/
+        assertThat(executedScenarios.size(), is(5));
+    }
 
-    /*@Test
+    @Test
     public void manual_data_driven_tests_should_be_allowed() throws Throwable {
 
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(AddDifferentSortsOfTodos.class);
-        runner.run(new RunNotifier());
+        runTestForClass(AddDifferentSortsOfTodos.class);
 
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
+        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(4));
     }
 
     @Test
     public void a_data_driven_test_driver_should_aggregate_test_outcomes() throws Throwable {
 
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
-        runner.run(new RunNotifier());
+        runTestForClass(SimpleDataDrivenTestScenario.class);
 
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(3));
-        assertThat(aggregatedScenarios.get(0).getStepCount(), is(12));
-        assertThat(aggregatedScenarios.get(1).getStepCount(), is(12));
+        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        assertThat(aggregatedScenarios.size(), is(5));
+        
+        List<TestStep> testSteps = aggregatedScenarios.get(0).getTestSteps();
+        assertThat(aggregatedScenarios.get(0).getStepCount(), is(2));
+        assertThat(aggregatedScenarios.get(1).getStepCount(), is(2));
     }
+
+    @Test //TODO
+    public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {
+
+        runTestForClass(SimpleDataDrivenTestScenario.class);
+
+        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters: <Parameter 1>, <Parameter 2>\n" +
+                "Step that succeeds\n" +
+                "Another step that succeeds"));
+    }
+
+
+    /*
+   
+
+
 
     @Test
     public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {

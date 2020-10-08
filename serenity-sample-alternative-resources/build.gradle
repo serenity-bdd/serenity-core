@@ -1,5 +1,5 @@
 dependencies {
-    compile("org.jbehave:jbehave-core:3.9.5") {
+    compile("org.jbehave:jbehave-core:${jbehaveVersion}") {
         exclude group: "org.hamcrest"
         exclude group: "org.freemarker"
         exclude group: "junit", module:"junit"

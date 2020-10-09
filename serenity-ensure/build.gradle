@@ -1,5 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.3.31'
+//    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.10'
     repositories {
         mavenCentral()
     }
@@ -33,10 +34,10 @@ dependencies {
 
     // JUnit 5
     testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     )
     testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
+            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
     )
 }
 repositories {

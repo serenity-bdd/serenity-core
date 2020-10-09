@@ -22,4 +22,5 @@ dependencies {
 	}
     compile("io.netty:netty-all:${nettyVersion}")
     compile("org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}")
+    testCompile("org.opentest4j:opentest4j:${opentest4jVersion}")
 }

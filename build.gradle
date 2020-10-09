@@ -48,7 +48,7 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
-    apply plugin:  'java-library'
+    apply plugin: 'java-library'
     apply plugin: 'com.github.ben-manes.versions'
 
     dependencyUpdates.resolutionStrategy = {
@@ -68,16 +68,15 @@ allprojects {
         resolutionStrategy {
             // fail fast on dependency convergence problems
 
-           failOnVersionConflict()
+         //   failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // whe//n updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for generated POM
-            force   "commons-collections:commons-collections:${commonsCollectionsVersion}",
+            force "commons-collections:commons-collections:${commonsCollectionsVersion}",
                     "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                     "xml-apis:xml-apis:${xmlApisVersion}",
-                    "org.apache.commons:commons-text:${commonsText}",
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
                     "org.eclipse.jetty:jetty-http:${jettyVersion}",
                     "org.eclipse.jetty:jetty-util:${jettyVersion}",
@@ -246,10 +245,10 @@ subprojects {
         compile "org.objenesis:objenesis:${objenesisVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile ("io.cucumber:cucumber-core:${cucumberVersion}") {
+        compile("io.cucumber:cucumber-core:${cucumberVersion}") {
             exclude group: "org.apiguardian", module: 'apiguardian-api'
         }
-        compile ("io.cucumber:cucumber-java:${cucumberVersion}") {
+        compile("io.cucumber:cucumber-java:${cucumberVersion}") {
             exclude group: "org.apiguardian", module: 'apiguardian-api'
         }
 
@@ -262,7 +261,7 @@ subprojects {
         /* Required for Java 9 and higher */
         compile "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
         compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
-        compile "com.sun.xml.bind:jaxb-impl:${jaxbCoreVersion}"
+        compile "com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}"
         compile "javax.activation:activation:${activationVersion}"
 
         testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
@@ -280,12 +279,14 @@ subprojects {
 
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
             exclude group: "org.junit.jupiter"
+            exclude group: "com.google.inject"
         }
         testCompile("org.spockframework:spock-core:${spockVersion}") {
-            exclude group: "junit"
             exclude group: "org.codehaus.groovy"
+            exclude group: "org.junit.platform"
 
         }
+        testCompile "org.jetbrains:annotations:19.0.0"
         testCompile "org.assertj:assertj-core:${assertjVersion}"
     }
 

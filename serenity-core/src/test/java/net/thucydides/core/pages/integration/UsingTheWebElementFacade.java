@@ -213,6 +213,11 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
     }
 
     @Test
+    public void should_return_false_if_element_is_not_present_when_asking_for_its_clickable_state() {
+        assertThat(page.fieldDoesNotExist.isClickable()).isFalse();
+    }
+
+    @Test
     public void should_pass_if_expected_element_is_present() {
         page.firstName.shouldBePresent();
     }

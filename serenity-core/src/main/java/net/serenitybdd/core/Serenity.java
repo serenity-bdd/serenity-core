@@ -111,7 +111,7 @@ public class Serenity {
     }
 
 
-    private static void initStepListener() {
+    public static void initStepListener() {
         Configuration configuration = ConfiguredEnvironment.getConfiguration();
         File outputDirectory = configuration.getOutputDirectory();
         StepListener listener  = new BaseStepListener(outputDirectory, getPages());

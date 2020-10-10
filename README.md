@@ -69,6 +69,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.3.5         | 2.3.5                 | 3.141.59          | 4.3.1                | 7.3.0                 |
 | 2.3.4         | 2.3.4                 | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.12        | 2.2.12                | 3.141.59          | 3.3.0                | 7.2.0                 |
 | 2.2.5         | 2.2.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |

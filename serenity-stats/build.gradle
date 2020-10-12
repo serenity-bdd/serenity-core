@@ -4,12 +4,13 @@ buildscript {
         mavenCentral()
     }
 
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+//    dependencies {
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//    }
 }
-apply plugin: 'kotlin'
-
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+}
 
 ext {
     bintrayPackage = 'serenity-stats'
@@ -24,8 +25,9 @@ test {
 
 dependencies {
     compile project(':serenity-model')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 //    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
 
     // JUnit 5
     testImplementation(

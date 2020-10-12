@@ -9,8 +9,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-apply plugin: 'kotlin'
-
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+}
 test {
     useJUnitPlatform {
         includeEngines 'junit-jupiter'

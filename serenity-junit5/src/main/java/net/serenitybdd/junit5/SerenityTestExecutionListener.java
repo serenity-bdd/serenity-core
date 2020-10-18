@@ -184,10 +184,12 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
             if(dataTable != null) {
                 if(isTestContainer(testIdentifier)){
-                    StepEventBus.getEventBus().useExamplesFrom(dataTable);
-                    logger.info("-->EventBus.useExamplesFrom" + dataTable);
+                    //StepEventBus.getEventBus().useExamplesFrom(dataTable);
+                    //logger.info("-->EventBus.useExamplesFrom" + dataTable);
                     parameterSetNumber = 0;
                 } else if(isSimpleTest(testIdentifier)){
+                    StepEventBus.getEventBus().useExamplesFrom(dataTable);
+                    logger.info("-->EventBus.useExamplesFrom" + dataTable);
                     logger.info("-->EventBus.exampleStarted " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
                 }

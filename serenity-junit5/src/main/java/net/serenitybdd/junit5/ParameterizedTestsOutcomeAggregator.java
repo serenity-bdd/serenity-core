@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ParameterizedTestsOutcomeAggregator {
 
 
-    /*public List<TestOutcome> aggregateTestOutcomesByTestMethods() {
+    public List<TestOutcome> aggregateTestOutcomesByTestMethods() {
         List<TestOutcome> allOutcomes = getTestOutcomesForAllParameterSets();
 
         if (allOutcomes.isEmpty()) {
@@ -19,7 +19,7 @@ public class ParameterizedTestsOutcomeAggregator {
         } else {
             return  aggregatedScenarioOutcomes(allOutcomes);
         }
-    }*/
+    }
 
     private List<TestOutcome> aggregatedScenarioOutcomes(List<TestOutcome> allOutcomes) {
         Map<String, TestOutcome> scenarioOutcomes = new HashMap();
@@ -121,7 +121,7 @@ public class ParameterizedTestsOutcomeAggregator {
 
     private String alternativeMethodName(TestOutcome testOutcome) {
         Optional<String> qualifier = testOutcome.getQualifier();
-        if (qualifier.isPresent()) {
+        if (qualifier != null && qualifier.isPresent()) {
             return testOutcome.getTitle(false) + " " +
                     testOutcome.getQualifier().get();
         } else {

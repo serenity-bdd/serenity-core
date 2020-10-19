@@ -25,6 +25,6 @@ class TestResultsByFeature(val featureName: String,
                 testOutcomes.map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome) }
 
         private fun issuesIn(testOutcomes: List<TestOutcome>): List<String> =
-                testOutcomes.flatMap { outcome -> outcome.issues }.distinct()
+                testOutcomes.map { outcome -> outcome.issues.toList() }.flatten().distinct()
     }
 }

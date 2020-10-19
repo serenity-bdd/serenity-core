@@ -31,11 +31,12 @@ public class WhenFindingTestDataInADataDrivenTest {
         assertThat(rows.get(1).getStringValues().get(0), is("JUnit"));
 
         DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.SimpleDataDrivenTestScenario.withValueSourceIntegers");
-        assertThat(dataTableIntegers.getRows().size(), is(2));
+        assertThat(dataTableIntegers.getRows().size(), is(3));
         assertThat(dataTableIntegers.getHeaders(),contains("arg0"));
         List<DataTableRow> integersRows = dataTableIntegers.getRows();
         assertThat(integersRows.get(0).getStringValues().get(0), is("1"));
         assertThat(integersRows.get(1).getStringValues().get(0), is("2"));
+        assertThat(integersRows.get(1).getStringValues().get(0), is("3"));
     }
 
 

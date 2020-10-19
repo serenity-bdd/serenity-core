@@ -100,7 +100,12 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
         logger.info("->TestPlanExecutionFinished " + testPlan);
        // notifyTestSuiteFinished();
-        generateReports();
+        if(dataTables == null) {
+            generateReports();
+        } else {
+            generateReportsForParameterizedTest();
+            dataTables = null;
+        }
     }
 
     @Override
@@ -355,9 +360,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
 
-    protected void generateReports() {
+    private void generateReports() {
         generateReportsFor(getTestOutcomes());
     }
+
+    private void generateReportsForParameterizedTest(){
+        ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = new ParameterizedTestsOutcomeAggregator();
+        generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
+    }
+
+
 
     /**
      * A test runner can generate reports via Reporter instances that subscribe

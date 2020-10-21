@@ -615,7 +615,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             // maybe it's an input element?
             text = element.getAttribute("value");
         }
-        return text.equals(value);
+        return value.equals(text);
     }
 
     /**

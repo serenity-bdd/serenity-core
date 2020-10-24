@@ -26,6 +26,7 @@ public class ParameterizedTestsOutcomeAggregator {
 
         for (TestOutcome testOutcome : allOutcomes) {
             final String normalizedMethodName = baseMethodName(testOutcome);
+            System.out.println("BBB:AddingTestOutcome--" + Thread.currentThread().getName() + "--" + testOutcome + " " + normalizedMethodName);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
@@ -37,8 +38,17 @@ public class ParameterizedTestsOutcomeAggregator {
 
             if (testOutcome.isDataDriven()) {
                 updateResultsForAnyExternalFailures(testOutcome, scenarioOutcomes.get(normalizedMethodName));
-                scenarioOutcome.addDataFrom(testOutcome.getDataTable());
-
+                if(scenarioOutcome.getDataTable() != null) {
+                    List<DataTableRow> scenarioRows = scenarioOutcome.getDataTable().getRows();
+                    List<DataTableRow> outcomeRows = testOutcome.getDataTable().getRows();
+                    for (DataTableRow row : outcomeRows) {
+                        if (!scenarioRows.contains(row)) {
+                            scenarioOutcome.addRow(row);
+                        }
+                    }
+                } else {
+                    scenarioOutcome.addDataFrom(testOutcome.getDataTable());
+                }
             }
         }
 
@@ -130,15 +140,15 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     public static List<TestOutcome> getTestOutcomesForAllParameterSets() {
-        return StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        /*List<TestOutcome> testOutcomes = new ArrayList<>();
-        for (Runner runner : serenityParameterizedRunner.getRunners()) {
-            for (TestOutcome testOutcome : ((SerenityRunner) runner).getTestOutcomes()) {
-                if (!testOutcomes.contains(testOutcome)) {
-                    testOutcomes.add(testOutcome);
-                }
+        List<TestOutcome> allTestOutcomes = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+        System.out.println("BBB:getTestOutcomesForAllParameterSets " + allTestOutcomes.size());
+        List<TestOutcome> testOutcomes = new ArrayList<>();
+        for (TestOutcome testOutcome : allTestOutcomes) {
+            if (!testOutcomes.contains(testOutcome)) {
+                testOutcomes.add(testOutcome);
+                System.out.println("BBB:addTestOutcome " + testOutcome);
             }
         }
-        return testOutcomes;*/
+        return testOutcomes;
     }
 }

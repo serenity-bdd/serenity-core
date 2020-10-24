@@ -53,6 +53,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private BaseStepListener baseStepListener;
 
+    private Class<?> testClass;
+
     public SerenityTestExecutionListener() {
         //initStepFactory();
         File outputDirectory = getOutputDirectory();
@@ -83,12 +85,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 if(isClassSource(child))
                 {
                     ClassSource classSource = (ClassSource)child.getSource().get();
+                    testClass = classSource.getJavaClass();
                     logger.info("Java Class " + classSource.getJavaClass());
                     logger.info("Class " + classSource.getClass());
                     //StepEventBus.getEventBus().testSuiteStarted(classSource.getJavaClass());
                     //startTestSuiteForFirstTest(classSource.getJavaClass());
                     //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
+                    System.out.println("AAA " + dataTables);
 
                 }
             }
@@ -213,7 +217,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.info("No action done at executionFinished because testIdentifier is null" );
             return;
         }
-        //TODO
+        //TODO - check this
+        /**
+         * logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
+         *             StepEventBus.getEventBus().testSuiteFinished();
+         */
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteFinished();
@@ -308,15 +316,46 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      */
     //@Override
     private void testStarted(MethodSource methodSource,TestIdentifier testIdentifier/*final Description description*/) {
-        //if (testingThisTest(description)) {
+        if (testingThisTest(testIdentifier)) {
+            startTestSuiteForFirstTest(testIdentifier);
             System.out.println(Thread.currentThread() + " XXXTest started " + testIdentifier);
             String testDisplay = testIdentifier.getDisplayName();
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
-            StepEventBus.getEventBus().testStarted(
-                    Optional.ofNullable(testDisplay != null ? testDisplay : methodSource.getMethodName()).orElse("Initialisation"),
+             StepEventBus.getEventBus().testStarted(
+                    Optional.ofNullable(methodSource.getMethodName() + "%" + testIdentifier.getDisplayName()).orElse("Initialisation"),
                     methodSource.getJavaClass());
+           /* StepEventBus.getEventBus().testStarted(
+                    Optional.ofNullable(testDisplay != null ? testDisplay : methodSource.getMethodName()).orElse("Initialisation"),
+                    methodSource.getJavaClass());*/
             //startTest();
+        }
+    }
+
+    private boolean testingThisTest(TestIdentifier testIdentifier) {
+        System.out.println("XXX testingThisTest" + isClassSource(testIdentifier) + " " + testIdentifier + " " + testIdentifier.getClass());
+        if(isMethodSource(testIdentifier))
+        {
+            MethodSource methodSource = (MethodSource)testIdentifier.getSource().get();
+            System.out.println("XXX testingThisTest" + methodSource.getJavaClass()  + " vs " + testClass);
+            if(testClass.equals(methodSource.getJavaClass())) {
+                System.out.println("XXX testingThisTest returns true");
+                return true;
+            }
+        }
+        System.out.println("XXX testingThisTest returns false");
+        return false;
+    }
+
+
+
+    private void startTestSuiteForFirstTest(TestIdentifier testIdentifier) {
+        //if (!getBaseStepListener().testSuiteRunning()) {
+            //TODO
+            if(isMethodSource(testIdentifier))  {
+                logger.info("-->TestSuiteStarted " + ((MethodSource)testIdentifier.getSource().get()).getJavaClass() );
+                StepEventBus.getEventBus().testSuiteStarted( ((MethodSource)testIdentifier.getSource().get()).getJavaClass());
+            }
         //}
     }
 

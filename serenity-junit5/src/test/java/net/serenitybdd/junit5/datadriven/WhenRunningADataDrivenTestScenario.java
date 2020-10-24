@@ -72,11 +72,9 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(5));
 
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run 1 with Hello").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("run 2 with JUnit").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[1] 1").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[2] 2").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("[3] 3").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSource").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSourceIntegers").getTestSteps().size(), is(2));
+
     }
 
     private void runTestForClass(Class testClass){

@@ -36,7 +36,7 @@ public class WhenFindingTestDataInADataDrivenTest {
         List<DataTableRow> integersRows = dataTableIntegers.getRows();
         assertThat(integersRows.get(0).getStringValues().get(0), is("1"));
         assertThat(integersRows.get(1).getStringValues().get(0), is("2"));
-        assertThat(integersRows.get(1).getStringValues().get(0), is("3"));
+        assertThat(integersRows.get(2).getStringValues().get(0), is("3"));
     }
 
 

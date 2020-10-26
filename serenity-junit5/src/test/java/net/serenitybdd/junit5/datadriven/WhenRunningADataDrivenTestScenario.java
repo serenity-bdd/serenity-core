@@ -3,12 +3,14 @@ package net.serenitybdd.junit5.datadriven;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
+import net.thucydides.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -113,25 +115,40 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(aggregatedScenarios.get(1).getStepCount(), is(2));
     }
 
-    @Test //TODO
+    @Test
     public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {
 
         runTestForClass(SimpleDataDrivenTestScenario.class);
-
-        //List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
-        //aggregateTestOutcomesByTestMethods
-        for(TestOutcome testOutcome : aggregatedScenarios) {
-            System.out.println("XX Test outcome YY " + testOutcome.getDataTable() + "-- " + testOutcome);
-        }
         assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString(
                 "Step that succeeds\n" +
                 "Another step that succeeds"));
-        //TODO qualifier
-        /*assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters: <Parameter 1>, <Parameter 2>\n" +
-                "Step that succeeds\n" +
-                "Another step that succeeds"));*/
     }
+
+    @Test
+    public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
+
+        runTestForClass(SimpleDataDrivenTestScenario.class);
+
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.size(), is(2));
+        assertThat(aggregatedScenarios.get(0).getStepCount(), is(3));
+        assertThat(aggregatedScenarios.get(1).getStepCount(), is(2));
+    }
+
+    @Test
+    public void a_data_driven_test_with_a_failing_assumption_should_be_ignored() throws Throwable {
+
+        runTestForClass(SampleSingleDataDrivenScenarioWithFailingAssumption.class);
+
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.size(), is(1));
+        assertThat(aggregatedScenarios.get(0).getStepCount(), is(5));
+        for (TestStep step : aggregatedScenarios.get(0).getTestSteps()) {
+            assertThat(step.getResult(), is(TestResult.IGNORED));
+        }
+    }
+
 
 
     /*

@@ -8,6 +8,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Assume;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Assumptions;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     @Step
     public void stepWithFailedAssumption() {
-        Assume.assumeTrue(false);
+        Assumptions.assumeTrue(false);
     }
 
     @Step

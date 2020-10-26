@@ -49,11 +49,8 @@ class GenerateReport(
   }
 
   override fun generateReport(): Path {
-    val userDir = EnvironmentSpecificConfiguration.from(environmentVariables)
-        .getProperty("user.dir")
     val tmpDir = Files.createTempDirectory("serenity")
-    val templateArchive: Path = findTemplateArchive(listOf(userDir, "$userDir/src/test/resources"))
-    extract(templateArchive, tmpDir)
+    extractArchive(tmpDir)
     fillTemplateAndWriteToReportDirectory(tmpDir)
     copyAllOtherNavigatorResources(tmpDir)
     if (!tmpDir.toFile().deleteRecursively()) {
@@ -114,12 +111,12 @@ class GenerateReport(
     writer.close()
   }
 
-  private fun extract(targGzArchive: Path, outputDir: Path) {
+  private fun extractArchive(outputDir: Path) {
     try {
       val i = TarArchiveInputStream(
           GzipCompressorInputStream(
               BufferedInputStream(
-                  FileInputStream(targGzArchive.toFile()))))
+                  this.javaClass.getResourceAsStream("serenity-report-navigator_v0.2.3.tar.gz"))))
 
       var entry: TarArchiveEntry? = null
 
@@ -149,25 +146,6 @@ class GenerateReport(
       throw RuntimeException(e)
     }
   }
-
-  private fun findTemplateArchive(searchDirs: List<String>): Path {
-    val templateArchive: Path
-
-    try {
-      val searchFiles = searchDirs
-          .map { Files.list(Paths.get(it)).toList() }
-          .flatten()
-
-      templateArchive = searchFiles
-          .filter { it.fileName.toString().startsWith("serenity-report-navigator_v") }
-          .first { it.fileName.toString().endsWith(".tar.gz") }
-
-    } catch (e: NoSuchElementException) {
-      throw FileNotFoundException("no 'serenity-report-navigator_vX.X.X.tar.gz' found in " + searchDirs.joinToString(", "))
-    }
-    return templateArchive
-  }
-
 
   companion object {
     val logging: Log = LogFactory.getLog(GenerateReport::class.java)

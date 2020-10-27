@@ -2,6 +2,9 @@ package net.serenitybdd.junit5.datadriven;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
+import net.serenitybdd.junit5.datadriven.samples.SampleDataDrivenIgnoredScenario;
+import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario;
+import net.serenitybdd.junit5.datadriven.samples.SimpleSuccessfulParameterizedTestSample;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
@@ -10,7 +13,7 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
-import net.thucydides.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
+import net.serenitybdd.junit5.datadriven.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -149,57 +152,12 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         }
     }
 
-
-
-    /*
-   
-
-
-
-    @Test
-    public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters: <Parameter 1>, <Parameter 2>\n" +
-                "Step that succeeds\n" +
-                "Another step that succeeds"));
-    }
-
-    @Test
-    public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(1));
-        assertThat(aggregatedScenarios.get(0).getStepCount(), is(15));
-    }
-
-    @Test
-    public void a_data_driven_test_with_a_failing_assumption_should_be_ignored() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenarioWithFailingAssumption.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(1));
-        assertThat(aggregatedScenarios.get(0).getStepCount(), is(15));
-        for (TestStep step : aggregatedScenarios.get(0).getTestSteps()) {
-            assertThat(step.getResult(), is(TestResult.IGNORED));
-        }
-    }
-
     @Test
     public void a_data_driven_test_driver_should_aggregate_test_outcomes_without_steps() throws Throwable {
 
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
-        runner.run(new RunNotifier());
+        runTestForClass(SimpleSuccessfulParameterizedTestSample.class);
 
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(2));
         assertThat(aggregatedScenarios.get(0).getStepCount(), is(3));
         assertThat(aggregatedScenarios.get(1).getStepCount(), is(3));
@@ -208,11 +166,9 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void data_driven_tests_should_pass_even_if_no_steps_are_called() throws Throwable {
 
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
-        runner.run(new RunNotifier());
+        runTestForClass(SimpleSuccessfulParameterizedTestSample.class);
 
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.SUCCESS));
         assertThat(aggregatedScenarios.get(1).getResult(), is(TestResult.SUCCESS));
     }
@@ -220,13 +176,20 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void an_ignored_data_driven_test_should_have_result_status_as_ignored() throws Throwable {
 
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenIgnoredScenario.class);
-        runner.run(new RunNotifier());
+        runTestForClass(SampleDataDrivenIgnoredScenario.class);
 
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(1));
         assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.IGNORED));
     }
+
+
+    /*
+   
+
+
+
+
 
     @Test
     public void an_ignored_data_driven_test_should_have_a_step_for_each_row() throws Throwable {

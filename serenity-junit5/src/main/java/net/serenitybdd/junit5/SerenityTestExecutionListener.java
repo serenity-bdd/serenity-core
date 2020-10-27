@@ -7,6 +7,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.util.SystemEnvironmentVariables;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
@@ -22,13 +23,12 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
@@ -127,9 +127,23 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             MethodSource methodTestSource = ((MethodSource)testIdentifier.getSource().get());
             String className =  methodTestSource.getClassName();
             String methodName = methodTestSource.getMethodName();
+            //method parameter types are class names as strings comma separated : java.langString,java.lang.Integer
             String methodParameterTypes = methodTestSource.getMethodParameterTypes();
+            List<Class> methodParameterClasses = null;
+
+            if(methodParameterTypes != null) {
+                methodParameterClasses = Arrays.asList(methodParameterTypes.split(",")).stream().map(parameterClassName -> {
+                    try {
+                        //ClassUtils handles also simple data type like int, char..
+                        return ClassUtils.forName(parameterClassName.trim(),this.getClass().getClassLoader());
+                    } catch (ClassNotFoundException e) {
+                        logger.error("Problem when getting parameter classes ",e);
+                        return null;
+                    }
+                }).collect(Collectors.toList());
+            }
             try {
-               if (isIgnored(Class.forName(className).getMethod(methodName))) {
+                if (isIgnored(getProcessedMethod(className, methodName,methodParameterClasses))) {
                    startTestAtEventBus(testIdentifier);
                    StepEventBus.getEventBus().testIgnored();
                    StepEventBus.getEventBus().testFinished();
@@ -137,6 +151,17 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             } catch(ClassNotFoundException | NoSuchMethodException exception) {
                 logger.error("Exception when processing method annotations", exception);
             }
+        }
+    }
+
+    @NotNull
+    private Method getProcessedMethod(String className, String methodName,  List<Class> methodParameterClasses ) throws NoSuchMethodException, ClassNotFoundException {
+        if (methodParameterClasses != null) {
+            Class[] classesArray =  new Class[methodParameterClasses.size()];
+            return Class.forName(className).getMethod(methodName, methodParameterClasses.toArray(classesArray));
+        }
+        else {
+            return Class.forName(className).getMethod(methodName);
         }
     }
 

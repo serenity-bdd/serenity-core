@@ -1,6 +1,7 @@
 package net.serenitybdd.junit5.datadriven;
 
 import net.serenitybdd.junit5.JUnit5DataDrivenAnnotations;
+import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.DataTableRow;
 import org.junit.jupiter.api.Test;

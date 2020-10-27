@@ -1,4 +1,4 @@
-package net.serenitybdd.junit5.datadriven;
+package net.serenitybdd.junit5.datadriven.samples;
 
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;

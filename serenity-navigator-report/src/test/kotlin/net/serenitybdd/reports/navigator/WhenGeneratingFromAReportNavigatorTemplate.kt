@@ -16,11 +16,6 @@ class WhenGeneratingFromAReportNavigatorTemplate {
 
     private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
 
-
-    init {
-        environmentVariables.setProperty("user.dir", File(ClassLoader.getSystemResource("exampleProject").file).absolutePath)
-    }
-
     @Nested
     inner class AllReports {
 

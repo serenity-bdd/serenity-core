@@ -2,9 +2,7 @@ package net.serenitybdd.junit5.datadriven;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
-import net.serenitybdd.junit5.datadriven.samples.SampleDataDrivenIgnoredScenario;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario;
-import net.serenitybdd.junit5.datadriven.samples.SimpleSuccessfulParameterizedTestSample;
+import net.serenitybdd.junit5.datadriven.samples.*;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
@@ -13,7 +11,6 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
-import net.serenitybdd.junit5.datadriven.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -183,6 +180,16 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.IGNORED));
     }
 
+    @Test
+    public void a_pending_data_driven_test_should_have_result_status_as_pending() throws Throwable {
+
+        runTestForClass(SampleDataDrivenPendingScenario.class);
+
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.size(), is(1));
+        assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.PENDING));
+    }
+
 
     /*
    
@@ -191,16 +198,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
 
 
-    @Test
-    public void an_ignored_data_driven_test_should_have_a_step_for_each_row() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenIgnoredScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(1));
-        assertThat(aggregatedScenarios.get(0).getTestSteps().size(), is(10));
-    }
 
     @Test
     public void a_pending_data_driven_test_should_have_result_status_as_pending() throws Throwable {

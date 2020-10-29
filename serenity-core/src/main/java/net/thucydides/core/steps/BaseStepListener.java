@@ -461,7 +461,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             newTestOutcome = newTestOutcome.withQualifier(qualifier);
         }
         this.currentTestOutcome.set(newTestOutcome);
-        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        recordNewTestOutcome(testMethodName, currentTestOutcome.get());
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }

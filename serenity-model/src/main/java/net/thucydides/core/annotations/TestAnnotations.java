@@ -36,7 +36,7 @@ public class TestAnnotations {
     }
 
     public boolean isPending(final String methodName) {
-        java.util.Optional<Method> method = getMethodCalled(methodName);
+        java.util.Optional<Method> method = getMethodByNameIgnoringNumberOfParameters(methodName);
         return method.isPresent() && isPending(method.get());
     }
 
@@ -65,7 +65,7 @@ public class TestAnnotations {
     }
 
     public boolean isIgnored(final String methodName) {
-        java.util.Optional<Method> method = getMethodCalled(methodName);
+        java.util.Optional<Method> method = getMethodByNameIgnoringNumberOfParameters(methodName);
         return method.isPresent() && isIgnored(method.get());
     }
 
@@ -100,6 +100,23 @@ public class TestAnnotations {
             return java.util.Optional.empty();
         }
     }
+
+    private java.util.Optional<Method> getMethodByNameIgnoringNumberOfParameters(final String methodName) {
+        if (testClass == null) {
+            return java.util.Optional.empty();
+        }
+        String baseMethodName = withNoArguments(methodName);
+        if (baseMethodName == null) {
+            return java.util.Optional.empty();
+        } else {
+            return getFirstMethodWithName(methodName);
+        }
+    }
+
+    private Optional<Method> getFirstMethodWithName(String methodName) {
+        return Arrays.stream(testClass.getMethods()).filter(method->method.getName().equals(methodName)).findFirst();
+    }
+
 
     /**
      * Return a list of the issues mentioned in the title annotation of this method.

@@ -190,36 +190,33 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.PENDING));
     }
 
+    @Test
+    public void a_pending_data_driven_test_should_have_a_test_step_for_each_row() throws Throwable {
+
+        runTestForClass(SampleDataDrivenPendingScenario.class);
+
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.size(), is(1));
+        assertThat(aggregatedScenarios.get(0).getTestSteps().size(), is(5));
+    }
+
+    @Test
+    public void a_data_driven_test_should_also_be_able_to_use_data_from_a_CSV_file() throws Throwable {
+
+        runTestForClass(SampleCSVDataDrivenScenario.class);
+
+        List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+
+        assertThat(aggregatedScenarios.size(), is(24));
+    }
+
+
 
     /*
    
 
 
 
-
-
-
-    @Test
-    public void a_pending_data_driven_test_should_have_result_status_as_pending() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenPendingScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(1));
-        assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.PENDING));
-    }
-
-    @Test
-    public void a_pending_data_driven_test_should_have_a_test_step_for_each_row() throws Throwable {
-
-        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenPendingScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(1));
-        assertThat(aggregatedScenarios.get(0).getTestSteps().size(), is(10));
-    }
 
     @Test
     public void a_data_driven_test_should_also_be_able_to_use_data_from_a_CSV_file() throws Throwable {

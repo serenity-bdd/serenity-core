@@ -39,24 +39,22 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     public Map<String,DataTable> getParameterTables() {
-        String columnNamesString;
-        List<List<Object>> parametersList;
+        //String columnNamesString;
+        //List<List<Object>> parametersList;
         List<Method> allMethods = findTestDataMethods();
         Map<String,DataTable> dataTables = new HashMap<>();
         for(Method testDataMethod : allMethods) {
-            try {
-                columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-                parametersList = listOfObjectsFrom(testDataMethod);
-            } catch (Exception e) {
-                throw new RuntimeException("Could not obtain test data from the test class", e);
+            if(isAValueSourceAnnotatedMethod(testDataMethod)) {
+                String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+                List<List<Object>> parametersList = listOfObjectsFrom(testDataMethod);
+                List<List<Object>> parametersAsListsOfObjects = new ArrayList<>();
+                for (List<Object> parameterList : parametersList) {
+                    parametersAsListsOfObjects.add(parameterList);
+                }
+                String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+                logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
+                dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
             }
-            List<List<Object>> parametersAsListsOfObjects = new ArrayList<>();
-            for (List<Object> parameterList : parametersList) {
-                parametersAsListsOfObjects.add(parameterList);
-            }
-            String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-            logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
-            dataTables.put(dataTableName,createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
         }
         return dataTables;
     }
@@ -137,6 +135,20 @@ public class JUnit5DataDrivenAnnotations {
 
     private boolean findParameterizedTests(Method method) {
         return method.getAnnotation(ParameterizedTest.class) != null &&
-                method.getAnnotation(ValueSource.class) != null;
+                (isAValueSourceAnnotatedMethod(method)
+                        || isACsvFileSourceAnnotatedMethod(method)
+                        || isACsvSourceAnnotatedMethod(method));
+    }
+
+    private boolean isAValueSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(ValueSource.class) != null;
+    }
+
+    private boolean isACsvFileSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(CsvFileSource.class) != null;
+    }
+
+    private boolean isACsvSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(CsvSource.class) != null;
     }
 }

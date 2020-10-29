@@ -19,8 +19,6 @@ import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
-import org.junit.runner.Description;
-import org.junit.runner.notification.Failure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ClassUtils;
@@ -81,19 +79,18 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.info("TestIdentifier Root " + root.getUniqueId() + root.getDisplayName() + root.getSource());
             Set<TestIdentifier> children = testPlan.getChildren(root.getUniqueId());
             for (TestIdentifier child : children) {
-                System.out.println("TestIdentifier Child " + child.getUniqueId() + child.getDisplayName() + child.getSource() + child.getType());
+                //System.out.println("TestIdentifier Child " + child.getUniqueId() + child.getDisplayName() + child.getSource() + child.getType());
                 if(isClassSource(child))
                 {
                     ClassSource classSource = (ClassSource)child.getSource().get();
                     testClass = classSource.getJavaClass();
-                    logger.info("Java Class " + classSource.getJavaClass());
-                    logger.info("Class " + classSource.getClass());
+                    //logger.info("Java Class " + classSource.getJavaClass());
+                    //logger.info("Class " + classSource.getClass());
                     //StepEventBus.getEventBus().testSuiteStarted(classSource.getJavaClass());
                     //startTestSuiteForFirstTest(classSource.getJavaClass());
                     //injectScenarioStepsInto(classSource.getJavaClass());
                     dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
-                    System.out.println("AAA " + dataTables);
-
+                    //System.out.println("AAA " + dataTables);
                 }
             }
         }
@@ -269,11 +266,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             case SUCCESSFUL: {
                 if (testIdentifier.isContainer()) {
                     this.summary.containersSucceeded.incrementAndGet();
-                    System.out.println("CoNTAINER OK");
+                    //System.out.println("CoNTAINER OK");
                 }
                 if (testIdentifier.isTest()) {
                     this.summary.testsSucceeded.incrementAndGet();
-                    System.out.println("TEST OK");
+                    //System.out.println("TEST OK");
                 }
                 break;
             }
@@ -343,7 +340,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private void testStarted(MethodSource methodSource,TestIdentifier testIdentifier/*final Description description*/) {
         if (testingThisTest(testIdentifier)) {
             startTestSuiteForFirstTest(testIdentifier);
-            System.out.println(Thread.currentThread() + " XXXTest started " + testIdentifier);
+            logger.info(Thread.currentThread() + " Test started " + testIdentifier);
             String testDisplay = testIdentifier.getDisplayName();
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
@@ -358,17 +355,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     private boolean testingThisTest(TestIdentifier testIdentifier) {
-        System.out.println("XXX testingThisTest" + isClassSource(testIdentifier) + " " + testIdentifier + " " + testIdentifier.getClass());
         if(isMethodSource(testIdentifier))
         {
             MethodSource methodSource = (MethodSource)testIdentifier.getSource().get();
-            System.out.println("XXX testingThisTest" + methodSource.getJavaClass()  + " vs " + testClass);
             if(testClass.equals(methodSource.getJavaClass())) {
-                System.out.println("XXX testingThisTest returns true");
                 return true;
             }
         }
-        System.out.println("XXX testingThisTest returns false");
         return false;
     }
 
@@ -391,7 +384,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }*/
 
     private void testFinished(TestIdentifier testIdentifier)  {
-        System.out.println("XXXTest finished " + testIdentifier);
+        logger.info("Test finished " + testIdentifier);
         //if (testingThisTest(description)) {
             //TODO
             //updateResultsUsingTestAnnotations(description);

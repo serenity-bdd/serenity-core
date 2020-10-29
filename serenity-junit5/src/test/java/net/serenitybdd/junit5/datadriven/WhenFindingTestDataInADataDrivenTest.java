@@ -24,14 +24,15 @@ public class WhenFindingTestDataInADataDrivenTest {
         System.out.println("TestDataTable " + testDataTable);
 
 
-        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.SimpleDataDrivenTestScenario.withValueSource");
+        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario.withValueSource");
+        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(2));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
         assertThat(rows.get(0).getStringValues().get(0), is("Hello"));
         assertThat(rows.get(1).getStringValues().get(0), is("JUnit"));
 
-        DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.SimpleDataDrivenTestScenario.withValueSourceIntegers");
+        DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario.withValueSourceIntegers");
         assertThat(dataTableIntegers.getRows().size(), is(3));
         assertThat(dataTableIntegers.getHeaders(),contains("arg0"));
         List<DataTableRow> integersRows = dataTableIntegers.getRows();

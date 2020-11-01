@@ -1,6 +1,8 @@
 package net.serenitybdd.junit5;
 
+import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
+import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -11,6 +13,7 @@ import org.junit.jupiter.params.provider.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -54,6 +57,30 @@ public class JUnit5DataDrivenAnnotations {
                 String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
                 logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
                 dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+            }
+            else if(isACsvFileSourceAnnotatedMethod(testDataMethod))
+            {
+                CsvFileSource annotation = testDataMethod.getAnnotation(CsvFileSource.class);
+                String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+                String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+                try {
+                    JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(annotation.resources()), CSVReader.DEFAULT_SEPARATOR);
+                    List<Map<String, String>> data = csvTestDataSource.getData();
+                    List<List<Object>> rows  = new ArrayList<>();
+                    for(Map<String,String> dataRowMap : data)
+                    {
+                        ArrayList<Object> dataRow = new ArrayList<>();
+                        for(String header : csvTestDataSource.getHeaders()) {
+                            dataRow.add(dataRowMap.get(header));
+                        }
+                        rows.add(dataRow);
+                    }
+                    System.out.println("XXX Data " + data );
+                    //logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
+                    dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return dataTables;

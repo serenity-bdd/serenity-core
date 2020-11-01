@@ -3,14 +3,22 @@ package net.serenitybdd.junit5.datadriven;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit5.datadriven.samples.*;
+import net.serenitybdd.junit5.samples.integration.WhenRunningANonWebTestScenario;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.util.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
+import org.apache.commons.io.FileUtils;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +31,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -207,69 +220,80 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
 
-        assertThat(aggregatedScenarios.size(), is(24));
+        assertThat(aggregatedScenarios.size(), is(2));
+        assertThat(aggregatedScenarios.get(0).getStepCount(), is(12));
+        assertThat(aggregatedScenarios.get(1).getStepCount(), is(12));
     }
-
-
-
-    /*
-   
-
-
-
-
-    @Test
-    public void a_data_driven_test_should_also_be_able_to_use_data_from_a_CSV_file() throws Throwable {
-
-        SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
-
-        assertThat(executedScenarios.size(), is(24));
-    }
-
 
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
-
-        SerenityParameterizedRunner runner = getTestRunnerUsing(SampleDataDrivenScenario.class);
-
-        runner.run(new RunNotifier());
-
-        File[] reports = reload(outputDirectory).listFiles(new JSONFileFilter());
-        assertThat(reports.length, is(3));
+        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+        runTestForClass(SimpleDataDrivenTestScenario.class);
+        File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
+        assertThat(reports.length, is(2));
     }
 
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
-
-        SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
-
-        runner.run(new RunNotifier());
-
+        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+        runTestForClass(SampleCSVDataDrivenScenario.class);
         File[] reports = reload(outputDirectory).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
+    }
+
+    private class HTMLFileFilter implements FilenameFilter {
+        public boolean accept(File directory, String filename) {
+            return filename.endsWith(".html") && !filename.endsWith("screenshots.html");
+        }
+    }
+
+    private class JSONFileFilter implements FilenameFilter {
+        public boolean accept(File directory, String filename) {
+            return filename.endsWith(".json") && !filename.startsWith("manifest");
+        }
+    }
+
+    private List<String> filenamesOf(File[] files) {
+        List filenames = new ArrayList<String>();
+        for (File file : files) {
+            filenames.add(file.getName());
+        }
+        return filenames;
+    }
+
+
+    private List<String> contentsOf(File[] files) throws IOException {
+        List<String> contents = new ArrayList<>();
+        for (File file : files) {
+            contents.add(stringContentsOf(file));
+        }
+        return contents;
+    }
+
+    private String stringContentsOf(File reportFile) throws IOException {
+        return FileUtils.readFileToString(reportFile);
+    }
+
+    private File reload(File old) {
+        return Paths.get(old.getAbsolutePath()).toFile();
     }
 
     @Test
     public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
-
-        SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
-
-        runner.run(new RunNotifier());
+        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+        runTestForClass(SampleCSVDataDrivenScenario.class);
 
         List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
 
@@ -301,6 +325,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     }
 
 
+
+    /*
     @Test
     public void when_test_data_is_provided_for_a_step_a_single_test_should_be_executed() throws Throwable {
 

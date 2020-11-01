@@ -54,7 +54,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private Class<?> testClass;
 
     public SerenityTestExecutionListener() {
-        //initStepFactory();
         File outputDirectory = getOutputDirectory();
         baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
         StepEventBus.getEventBus().registerListener(baseStepListener);
@@ -211,7 +210,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             logger.info("GetDataTable Formethod " + sourceMethod);
             DataTable dataTable = dataTables.get(sourceMethod);
-            logger.info("FoundDataTable " + dataTable);
+            logger.info("FoundDataTable " + dataTable + " " + dataTable.getRows());
 
             if(dataTable != null) {
                 if(isTestContainer(testIdentifier)){
@@ -341,16 +340,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (testingThisTest(testIdentifier)) {
             startTestSuiteForFirstTest(testIdentifier);
             logger.info(Thread.currentThread() + " Test started " + testIdentifier);
-            String testDisplay = testIdentifier.getDisplayName();
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
-             StepEventBus.getEventBus().testStarted(
-                    Optional.ofNullable(methodSource.getMethodName() + "%" + testIdentifier.getDisplayName()).orElse("Initialisation"),
+            StringBuffer testName = new StringBuffer(methodSource.getMethodName());
+            if(testIdentifier.getDisplayName() != null)
+            {
+                testName.append("%" + testIdentifier.getDisplayName());
+            }
+            StepEventBus.getEventBus().testStarted(
+                    Optional.ofNullable(testName.toString()).orElse("Initialisation"),
                     methodSource.getJavaClass());
-           /* StepEventBus.getEventBus().testStarted(
-                    Optional.ofNullable(testDisplay != null ? testDisplay : methodSource.getMethodName()).orElse("Initialisation"),
-                    methodSource.getJavaClass());*/
-            //startTest();
         }
     }
 

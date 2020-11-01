@@ -35,15 +35,16 @@ public class SampleCSVDataDrivenScenario {
     public SampleScenarioSteps steps;
 
 
-    @ParameterizedTest(name = "Csv File Data Test")
+    @ParameterizedTest(name = "Csv File Data Test {0}")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void data_driven_test(String name, int age,String address) {
         System.out.println("data_driven_test: "+ name + " " + age + " " + address);
     }
 
-    @ParameterizedTest(name = "Another Csv File Data Test")
-    @CsvFileSource(resources="/test-data/simple-data.csv")
-    public void another_data_driven_test() {
+    @ParameterizedTest(name = "Another Csv File Data Test {0} ")
+    @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
+    public void another_data_driven_test(String name, int age,String address) {
+        System.out.println("another data_driven_test: "+ name + " " + age + " " + address);
     }
 
 

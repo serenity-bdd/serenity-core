@@ -34,7 +34,7 @@ public class SampleCSVDataDrivenScenario {
     @Steps
     public SampleScenarioSteps steps;
 
-
+    //TODO - it must be a {} , otherwise the tests outcomes have the same name
     @ParameterizedTest(name = "Csv File Data Test {0}")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void data_driven_test(String name, int age,String address) {

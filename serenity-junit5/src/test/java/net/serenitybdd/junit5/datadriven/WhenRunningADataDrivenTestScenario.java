@@ -5,16 +5,21 @@ import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit5.datadriven.samples.*;
 import net.serenitybdd.junit5.samples.integration.WhenRunningANonWebTestScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.ManagedPages;
+import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
+import net.thucydides.samples.SampleScenarioSteps;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -29,6 +34,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
@@ -243,7 +249,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
-        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
         runTestForClass(SampleCSVDataDrivenScenario.class);
         File[] reports = reload(outputDirectory).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
@@ -292,7 +297,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
-        SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
         runTestForClass(SampleCSVDataDrivenScenario.class);
 
         List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
@@ -324,6 +328,25 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         }
     }
 
+    @Test
+    public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable {
+
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
+                outputDirectory.getAbsolutePath());
+        runTestForClass(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
+
+
+        List<TestOutcome> testOutcomes = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+
+        //List<TestOutcome> executedSteps = runner.getTestOutcomes();
+        assertThat(testOutcomes.size(), is(1));
+        TestOutcome testOutcome1 = testOutcomes.get(0);
+
+        List<TestStep> dataDrivenSteps = testOutcome1.getTestSteps();
+        assertThat(dataDrivenSteps.size(), is(12));
+
+    }
 
 
     /*
@@ -342,25 +365,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(reportContents.size(), is(1));
     }
 
-    @Test
-    public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable {
-
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
-
-        SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
-
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> executedSteps = runner.getTestOutcomes();
-        assertThat(executedSteps.size(), is(1));
-        TestOutcome testOutcome1 = executedSteps.get(0);
-
-        List<TestStep> dataDrivenSteps = testOutcome1.getTestSteps();
-        assertThat(dataDrivenSteps.size(), is(12));
-
-    }
 
     @Test
     public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable {

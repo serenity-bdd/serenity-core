@@ -81,6 +81,7 @@ public class FailureAnalysis {
     }
 
     public boolean reportAsFailure(Class<?> testFailureCause) {
+        System.out.println("XXXReportAsFailure " + testFailureCause);
         if (testFailureCause == null) {
             return false;
         }

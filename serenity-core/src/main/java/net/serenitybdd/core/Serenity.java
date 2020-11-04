@@ -186,7 +186,7 @@ public class Serenity {
         return null;
     }
 
-    protected static WebDriver getDriver() {
+    public static WebDriver getDriver() {
         return getWebdriverManager().getWebdriver();
     }
 

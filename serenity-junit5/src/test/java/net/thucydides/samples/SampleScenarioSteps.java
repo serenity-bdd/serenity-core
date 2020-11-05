@@ -214,12 +214,12 @@ public class SampleScenarioSteps extends ScenarioSteps {
     }
 
     @Step
-    public void data_driven_test_step_that_fails() {
+    public void data_driven_test_step_that_fails(String age) {
         assertThat(Integer.parseInt(age), is(lessThan(35)));
     }
 
     @Step
-    public void data_driven_test_step_that_breaks() {
+    public void data_driven_test_step_that_breaks(String age) {
         if (Integer.parseInt(age) > 35) {
             throw new ElementNotVisibleException("A webdriver issue");
         }

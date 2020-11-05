@@ -210,9 +210,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             logger.info("GetDataTable Formethod " + sourceMethod);
             DataTable dataTable = dataTables.get(sourceMethod);
-            logger.info("FoundDataTable " + dataTable + " " + dataTable.getRows());
+
 
             if(dataTable != null) {
+                logger.info("FoundDataTable " + dataTable + " " + dataTable.getRows());
                 if(isTestContainer(testIdentifier)){
                     //StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     //logger.info("-->EventBus.useExamplesFrom" + dataTable);

@@ -25,10 +25,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -930,6 +927,26 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public String getSelectedVisibleTextValue() {
         return dropdownSelect().visibleTextValue();
+    }
+
+    @Override
+    public String getFirstSelectedOptionVisibleText() {
+        return new Select(this).getFirstSelectedOption().getText();
+    }
+
+    @Override
+    public List<String> getSelectedVisibleTexts() {
+        return new Select(this).getAllSelectedOptions().stream().map(WebElement::getText).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getFirstSelectedOptionValue() {
+        return new Select(this).getFirstSelectedOption().getAttribute("value");
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return new Select(this).getAllSelectedOptions().stream().map(element -> element.getAttribute("value")).collect(Collectors.toList());
     }
 
     @Override

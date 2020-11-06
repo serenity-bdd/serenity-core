@@ -13,9 +13,11 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
@@ -270,6 +272,7 @@ public class StepEventBus {
         webdriverSuspensions.clear();
 
         Broadcaster.unregisterAllListeners();
+        dropClosableListeners();
     }
 
     private boolean clearSessionForEachTest() {
@@ -478,6 +481,10 @@ public class StepEventBus {
 
     public void dropListener(final StepListener stepListener) {
         registeredListeners.remove(stepListener);
+    }
+
+    private void dropClosableListeners() {
+        registeredListeners = registeredListeners.stream().filter( stepListener -> (!(stepListener instanceof Droppable))).collect(Collectors.toList());
     }
 
     public void dropAllListeners() {

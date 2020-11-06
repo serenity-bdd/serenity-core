@@ -460,9 +460,47 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(allDataDrivenSteps.size(), is(12));
 
         List<TestStep> dataDrivenSteps = testOutcome1.getTestSteps().get(0).getChildren();
+        //TODO check for correctness
+        assertThat(dataDrivenSteps.get(0).getChildren().size(), is(2));
 
-        //TODO
-        //assertThat(dataDrivenSteps.size(), is(2));
+    }
+
+    @Test
+    public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
+
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
+                outputDirectory.getAbsolutePath());
+        runTestForClass(ScenarioWithTestSpecificDataSample.class);
+
+        List<TestOutcome> testOutcomes = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
+
+        TestOutcome testOutcome1 = testOutcomes.get(0);
+        List<TestStep> dataDrivenSteps = testOutcome1.getTestSteps();
+
+        TestStep step1 = dataDrivenSteps.get(0);
+        TestStep setNameStep1 = step1.getFlattenedSteps().get(0).getChildren().get(0);
+        TestStep step2 = dataDrivenSteps.get(1);
+        TestStep setNameStep2 = step2.getFlattenedSteps().get(0).getChildren().get(0);
+
+        //TODO check for correctness
+        assertThat(setNameStep1.getDescription(), containsString("Joe Smith"));
+        assertThat(setNameStep2.getDescription(), containsString("Jack Black"));
+
+
+    }
+
+    @Test
+    public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable {
+
+        File outputDirectory = tempFolder.newFolder("serenity");
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
+                outputDirectory.getAbsolutePath());
+        runTestForClass(SimpleSuccessfulParameterizedTestSample.class);
+
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
+
+        assertThat(reportContents.size(), is(2));
 
     }
 
@@ -542,49 +580,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     }
 
-    @Test
-    public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
-
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
-
-        SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataSample.class);
-
-        runner.run(new RunNotifier());
-
-        List<TestOutcome> executedSteps = runner.getTestOutcomes();
-        TestOutcome testOutcome1 = executedSteps.get(0);
-        List<TestStep> dataDrivenSteps = testOutcome1.getTestSteps();
-
-        TestStep step1 = dataDrivenSteps.get(0);
-        TestStep setNameStep1 = step1.getFlattenedSteps().get(0);
-        TestStep step2 = dataDrivenSteps.get(1);
-        TestStep setNameStep2 = step2.getFlattenedSteps().get(0);
-
-        assertThat(setNameStep1.getDescription(), containsString("Joe Smith"));
-        assertThat(setNameStep2.getDescription(), containsString("Jack Black"));
-
-
-    }
-
-
-    @Test
-    public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable {
-
-        File outputDirectory = tempFolder.newFolder("thucydides");
-        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
-
-        SerenityParameterizedRunner runner = getTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
-
-        runner.run(new RunNotifier());
-
-        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
-
-        assertThat(reportContents.size(), is(2));
-
-    }
 
     @Test
     public void when_the_Concurrent_annotation_is_used_tests_should_be_run_in_parallel() throws Throwable {

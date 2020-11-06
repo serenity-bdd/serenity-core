@@ -112,9 +112,13 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     @Step("Nested group of steps")
     public void stepThatCallsNestedSteps() {
-        nestedSteps.stepThatSucceeds();
-        nestedSteps.anotherStepThatSucceeds();
+        //nestedSteps.stepThatSucceeds();
+        //nestedSteps.anotherStepThatSucceeds();
+        nestedSteps.step1();
+        nestedSteps.step2();
     }
+
+
 
     @Step("A pending step")
     @Pending
@@ -199,7 +203,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
     }
 
     @Step
-    public void data_driven_test_step() {
+    public void data_driven_test_step(String name, String age) {
         enter_name_and_age(name, age);
         enter_address(address);
         nestedSteps.stepThatSucceeds();

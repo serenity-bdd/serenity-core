@@ -27,6 +27,6 @@ public class ScenarioWithTestSpecificDataSample {
     @ParameterizedTest(name = "Csv File Data Test {0}")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void check_each_row(String name, String age,String address) throws Throwable {
-        steps.data_driven_test_step();
+        steps.data_driven_test_step(name, age);
     }
 }

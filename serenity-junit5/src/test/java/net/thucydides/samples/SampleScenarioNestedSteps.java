@@ -89,4 +89,13 @@ public class SampleScenarioNestedSteps extends ScenarioSteps {
         int thisShouldFail = nullString.length();
     }
 
+
+    @Step
+    public void step1() {
+    }
+
+    @Step
+    public void step2() {
+    }
+
 }

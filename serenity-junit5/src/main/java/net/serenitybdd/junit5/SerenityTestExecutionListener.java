@@ -53,6 +53,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private Class<?> testClass;
 
+    private boolean isDataDrivenTest = false;
+
     public SerenityTestExecutionListener() {
         File outputDirectory = getOutputDirectory();
         baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
@@ -78,18 +80,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.info("TestIdentifier Root " + root.getUniqueId() + root.getDisplayName() + root.getSource());
             Set<TestIdentifier> children = testPlan.getChildren(root.getUniqueId());
             for (TestIdentifier child : children) {
-                //System.out.println("TestIdentifier Child " + child.getUniqueId() + child.getDisplayName() + child.getSource() + child.getType());
                 if(isClassSource(child))
                 {
-                    ClassSource classSource = (ClassSource)child.getSource().get();
-                    testClass = classSource.getJavaClass();
-                    //logger.info("Java Class " + classSource.getJavaClass());
-                    //logger.info("Class " + classSource.getClass());
-                    //StepEventBus.getEventBus().testSuiteStarted(classSource.getJavaClass());
-                    //startTestSuiteForFirstTest(classSource.getJavaClass());
-                    //injectScenarioStepsInto(classSource.getJavaClass());
-                    dataTables = JUnit5DataDrivenAnnotations.forClass(((ClassSource)child.getSource().get()).getJavaClass()).getParameterTables();
-                    //System.out.println("AAA " + dataTables);
+                    Class<?> javaClass = ((ClassSource)child.getSource().get()).getJavaClass();
+                    Map<String, DataTable> parameterTablesForClass = JUnit5DataDrivenAnnotations.forClass(javaClass).getParameterTables();
+                    if(!parameterTablesForClass.isEmpty()) {
+                        if (dataTables == null) {
+                            dataTables = new HashMap<>();
+                        }
+                        dataTables.putAll(parameterTablesForClass);
+                    }
                 }
             }
         }
@@ -99,12 +99,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     public void testPlanExecutionFinished(TestPlan testPlan) {
 
         logger.info("->TestPlanExecutionFinished " + testPlan);
-       // notifyTestSuiteFinished();
-        if(dataTables == null) {
-            generateReports();
-        } else {
+        //generateReports();
+
+    }
+
+    private void generateReportsForTest() {
+        if(isDataDrivenTest) {
             generateReportsForParameterizedTest();
-            dataTables = null;
+            isDataDrivenTest = false;
+        } else {
+            generateReports();
         }
     }
 
@@ -199,6 +203,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         //TODO
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier))  {
             logger.info("-->TestSuiteStarted " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
+            testClass = ((ClassSource)testIdentifier.getSource().get()).getJavaClass();
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
         }
 
@@ -209,11 +214,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             }
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             logger.info("GetDataTable Formethod " + sourceMethod);
+            logger.info("DataTablekeys " + dataTables.keySet());
             DataTable dataTable = dataTables.get(sourceMethod);
-
-
             if(dataTable != null) {
                 logger.info("FoundDataTable " + dataTable + " " + dataTable.getRows());
+                isDataDrivenTest = true;
                 if(isTestContainer(testIdentifier)){
                     //StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     //logger.info("-->EventBus.useExamplesFrom" + dataTable);
@@ -247,6 +252,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteFinished();
+            generateReportsForTest();
         }
         if(isSimpleTest(testIdentifier)){
             if(isMethodSource(testIdentifier)) {

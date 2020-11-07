@@ -55,7 +55,7 @@ public class JUnit5DataDrivenAnnotations {
                     parametersAsListsOfObjects.add(parameterList);
                 }
                 String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-                logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
+                logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
                 dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
             }
             else if(isACsvFileSourceAnnotatedMethod(testDataMethod))
@@ -75,8 +75,7 @@ public class JUnit5DataDrivenAnnotations {
                         }
                         rows.add(dataRow);
                     }
-                    System.out.println("XXX Data " + data );
-                    //logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
+                    logger.info("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
                     dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
                 } catch (IOException e) {
                     e.printStackTrace();

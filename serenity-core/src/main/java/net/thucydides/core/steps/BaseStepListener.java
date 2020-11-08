@@ -1211,4 +1211,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 step -> step.recordRestQuery(restQuery)
         );
     }
+
+    public void clearTestOutcomes (){
+        testOutcomes.clear();
+    }
 }

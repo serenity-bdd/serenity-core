@@ -425,11 +425,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void generateReports() {
         generateReportsFor(getTestOutcomes());
+        baseStepListener.clearTestOutcomes();
     }
 
     private void generateReportsForParameterizedTest(){
         ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = new ParameterizedTestsOutcomeAggregator();
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
+        baseStepListener.clearTestOutcomes();
     }
 
 

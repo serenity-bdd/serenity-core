@@ -45,7 +45,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     //key-> "ClassName.MethodName"
     //entries-> DataTable associated with method
-    private Map<String,DataTable> dataTables;
+    private Map<String,DataTable> dataTables  = new HashMap<>();;
 
     private int parameterSetNumber = 0;
 
@@ -85,9 +85,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     Class<?> javaClass = ((ClassSource)child.getSource().get()).getJavaClass();
                     Map<String, DataTable> parameterTablesForClass = JUnit5DataDrivenAnnotations.forClass(javaClass).getParameterTables();
                     if(!parameterTablesForClass.isEmpty()) {
-                        if (dataTables == null) {
-                            dataTables = new HashMap<>();
-                        }
                         dataTables.putAll(parameterTablesForClass);
                     }
                 }
@@ -202,6 +199,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         //TODO
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier))  {
+            baseStepListener.clearTestOutcomes();
             logger.info("-->TestSuiteStarted " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             testClass = ((ClassSource)testIdentifier.getSource().get()).getJavaClass();
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
@@ -214,7 +212,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             }
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             logger.info("GetDataTable Formethod " + sourceMethod);
-            logger.info("DataTablekeys " + dataTables.keySet());
             DataTable dataTable = dataTables.get(sourceMethod);
             if(dataTable != null) {
                 logger.info("FoundDataTable " + dataTable + " " + dataTable.getRows());
@@ -425,13 +422,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void generateReports() {
         generateReportsFor(getTestOutcomes());
-        baseStepListener.clearTestOutcomes();
     }
 
     private void generateReportsForParameterizedTest(){
         ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = new ParameterizedTestsOutcomeAggregator();
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
-        baseStepListener.clearTestOutcomes();
     }
 
 

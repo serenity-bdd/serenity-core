@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
-public class SimpleDataDrivenTestScenario {
+public class SimpleDataDrivenTestScenarioWithValueSource {
 
     @Steps
     public SampleScenarioSteps steps;

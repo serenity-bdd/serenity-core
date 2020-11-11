@@ -3,23 +3,17 @@ package net.serenitybdd.junit5.datadriven;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit5.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit5.datadriven.samples.*;
-import net.serenitybdd.junit5.samples.integration.WhenRunningANonWebTestScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
-import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.AddDifferentSortsOfTodos;
-import net.thucydides.samples.SampleScenarioSteps;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -34,7 +28,6 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
@@ -88,7 +81,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(5));
@@ -107,7 +100,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
         List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(5));
     }
@@ -124,7 +117,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_aggregate_test_outcomes() throws Throwable {
 
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
 
         List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
         assertThat(aggregatedScenarios.size(), is(5));
@@ -137,7 +130,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {
 
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString(
                 "Step that succeeds\n" +
@@ -147,7 +140,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
 
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
 
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(2));
@@ -238,7 +231,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
-        runTestForClass(SimpleDataDrivenTestScenario.class);
+        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
         File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
     }

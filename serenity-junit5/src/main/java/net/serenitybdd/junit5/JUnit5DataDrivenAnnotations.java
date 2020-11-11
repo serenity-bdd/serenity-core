@@ -28,6 +28,8 @@ public class JUnit5DataDrivenAnnotations {
 
     private final Class testClass;
 
+    private final Map<String,DataTable> parameterTables;
+
     public static JUnit5DataDrivenAnnotations forClass(final Class testClass) {
         return new JUnit5DataDrivenAnnotations(testClass);
     }
@@ -39,66 +41,76 @@ public class JUnit5DataDrivenAnnotations {
     JUnit5DataDrivenAnnotations(final Class testClass, EnvironmentVariables environmentVariables) {
         this.testClass = testClass;
         this.environmentVariables = environmentVariables;
+        this.parameterTables = generateParameterTables();
     }
 
     public Map<String,DataTable> getParameterTables() {
-        //String columnNamesString;
-        //List<List<Object>> parametersList;
+        return parameterTables;
+    }
+
+    private Map<String,DataTable> generateParameterTables() {
         List<Method> allMethods = findTestDataMethods();
         Map<String,DataTable> dataTables = new HashMap<>();
         for(Method testDataMethod : allMethods) {
             if(isAValueSourceAnnotatedMethod(testDataMethod)) {
-                String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-                List<List<Object>> parametersList = listOfObjectsFrom(testDataMethod);
-                List<List<Object>> parametersAsListsOfObjects = new ArrayList<>();
-                for (List<Object> parameterList : parametersList) {
-                    parametersAsListsOfObjects.add(parameterList);
-                }
-                String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-                logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
-                dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+                fillDataTablesFromValueSource(dataTables, testDataMethod);
             }
             else if(isACsvFileSourceAnnotatedMethod(testDataMethod))
             {
-                CsvFileSource annotation = testDataMethod.getAnnotation(CsvFileSource.class);
-                String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-                String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-                try {
-                    JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(annotation.resources()), CSVReader.DEFAULT_SEPARATOR);
-                    List<Map<String, String>> data = csvTestDataSource.getData();
-                    List<List<Object>> rows  = new ArrayList<>();
-                    for(Map<String,String> dataRowMap : data)
-                    {
-                        ArrayList<Object> dataRow = new ArrayList<>();
-                        for(String header : csvTestDataSource.getHeaders()) {
-                            dataRow.add(dataRowMap.get(header));
-                        }
-                        rows.add(dataRow);
-                    }
-                    logger.info("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
-                    dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                fillDataTablesFromCsvFileSource(dataTables,testDataMethod);
+            }
+            else if (isAEnumSourceAnnotatedMethod(testDataMethod)) {
+                fillDataTablesFromEnumSource(dataTables,testDataMethod);
             }
         }
         return dataTables;
     }
 
-    private String createColumnNamesFromParameterNames(Method method) {
-        StringBuffer columnNames = new StringBuffer();
-        Parameter[] parameters = method.getParameters();
-        int count = 0;
-        for(Parameter parameter :  parameters) {
-            columnNames.append(parameter.getName());
-            if(count != (parameters.length - 1))
-                columnNames.append(",");
-            count++;
-        }
-        return columnNames.toString();
+    private void fillDataTablesFromEnumSource(Map<String, DataTable> dataTables, Method testDataMethod) {
     }
 
-    private List<List<Object>> listOfObjectsFrom(Method testDataMethod){
+
+
+    private void fillDataTablesFromValueSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+    }
+
+    private void fillDataTablesFromCsvFileSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        CsvFileSource annotation = testDataMethod.getAnnotation(CsvFileSource.class);
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        try {
+            JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(annotation.resources()), CSVReader.DEFAULT_SEPARATOR);
+            List<Map<String, String>> data = csvTestDataSource.getData();
+            List<List<Object>> rows  = new ArrayList<>();
+            for(Map<String,String> dataRowMap : data)
+            {
+                ArrayList<Object> dataRow = new ArrayList<>();
+                for(String header : csvTestDataSource.getHeaders()) {
+                    dataRow.add(dataRowMap.get(header));
+                }
+                rows.add(dataRow);
+            }
+            logger.info("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
+            dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    List<Method> findTestDataMethods() {
+        return Arrays.asList(testClass.getMethods()).stream().filter(this::findParameterizedTests).collect(Collectors.toList());
+    }
+
+    String createColumnNamesFromParameterNames(Method method) {
+        return Arrays.asList(method.getParameters()).stream().map(Parameter::getName).collect(Collectors.joining(","));
+    }
+
+    List<List<Object>> listOfObjectsFrom(Method testDataMethod){
         ValueSource annotation = testDataMethod.getAnnotation(ValueSource.class);
         if(annotation.strings() != null && annotation.strings().length > 0)
             return listOfObjectsFrom(annotation.strings());
@@ -110,10 +122,8 @@ public class JUnit5DataDrivenAnnotations {
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.doubles()));
         else if(annotation.floats() != null && annotation.floats().length > 0 )
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.floats()));
-        else if(annotation.ints() != null && annotation.ints().length > 0) {
-            System.out.println("Annotation.ints found");
+        else if(annotation.ints() != null && annotation.ints().length > 0)
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.ints()));
-        }
         else if(annotation.shorts() != null && annotation.shorts().length > 0)
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.shorts()));
         else if(annotation.classes() != null && annotation.classes().length > 0)
@@ -154,27 +164,29 @@ public class JUnit5DataDrivenAnnotations {
         return columnNames;
     }
 
-    private List<Method> findTestDataMethods() {
-        List<Method> methods = Arrays.asList(testClass.getMethods());
-        return methods.stream().filter(this::findParameterizedTests).collect(Collectors.toList());
-    }
+
 
     private boolean findParameterizedTests(Method method) {
         return method.getAnnotation(ParameterizedTest.class) != null &&
                 (isAValueSourceAnnotatedMethod(method)
                         || isACsvFileSourceAnnotatedMethod(method)
-                        || isACsvSourceAnnotatedMethod(method));
+                        || isACsvSourceAnnotatedMethod(method)
+                        || isAEnumSourceAnnotatedMethod(method));
     }
 
     private boolean isAValueSourceAnnotatedMethod(Method method){
         return method.getAnnotation(ValueSource.class) != null;
     }
 
-    private boolean isACsvFileSourceAnnotatedMethod(Method method){
-        return method.getAnnotation(CsvFileSource.class) != null;
+    private boolean isAEnumSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(EnumSource.class) != null;
     }
 
     private boolean isACsvSourceAnnotatedMethod(Method method){
         return method.getAnnotation(CsvSource.class) != null;
+    }
+
+    private boolean isACsvFileSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(CsvFileSource.class) != null;
     }
 }

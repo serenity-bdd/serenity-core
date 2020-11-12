@@ -34,6 +34,10 @@ public class StackTraceAnalyser {
 
                 if (stackTraceElement.getClassName().contains("$")) {
                     callingClass = callingClass.getSuperclass();
+                    if (callingClass == null) {
+                        logger.trace("Ignored class without superclass: " + stackTraceElement.getClassName());
+                        return null;
+                    }
                 }
                 return extractMethod(stackTraceElement, callingClass);
             }

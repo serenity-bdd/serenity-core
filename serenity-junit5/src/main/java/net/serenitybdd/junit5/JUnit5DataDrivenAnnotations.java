@@ -67,14 +67,19 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     private void fillDataTablesFromEnumSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        List<List<Object>> parametersAsListsOfObjects = listOfEnumSourceObjectsFrom(testDataMethod);
+        logger.info("GetParameterTablesEnumSource: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
 
 
     private void fillDataTablesFromValueSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
         logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
@@ -98,7 +103,7 @@ public class JUnit5DataDrivenAnnotations {
             logger.info("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
             dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Cannot load csv resource ",e);
         }
     }
 
@@ -112,34 +117,44 @@ public class JUnit5DataDrivenAnnotations {
 
     List<List<Object>> listOfObjectsFrom(Method testDataMethod){
         ValueSource annotation = testDataMethod.getAnnotation(ValueSource.class);
-        if(annotation.strings() != null && annotation.strings().length > 0)
+        if(ArrayUtils.isNotEmpty(annotation.strings()))
             return listOfObjectsFrom(annotation.strings());
-        else if(annotation.bytes() != null && annotation.bytes().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.bytes()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.bytes()));
-        else if(annotation.chars() != null && annotation.chars().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.chars()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.chars()));
-        else if(annotation.doubles() != null && annotation.doubles().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.doubles()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.doubles()));
-        else if(annotation.floats() != null && annotation.floats().length > 0 )
+        else if(ArrayUtils.isNotEmpty(annotation.floats()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.floats()));
-        else if(annotation.ints() != null && annotation.ints().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.ints()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.ints()));
-        else if(annotation.shorts() != null && annotation.shorts().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.shorts()))
             return listOfObjectsFrom(ArrayUtils.toObject(annotation.shorts()));
-        else if(annotation.classes() != null && annotation.classes().length > 0)
+        else if(ArrayUtils.isNotEmpty(annotation.classes()))
             return listOfObjectsFrom(annotation.classes());
         return null;
     }
 
     private List<List<Object>> listOfObjectsFrom(Object[] parameters) {
-        List<List<Object>> retList = new ArrayList<>();
-        for(Object parameter : parameters) {
-            ArrayList parameterList =  new ArrayList();
-            parameterList.add(parameter);
-            retList.add(parameterList);
-        }
-        return retList;
+        return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(parameter)).collect(Collectors.toList());
     }
+
+    List<List<Object>> listOfEnumSourceObjectsFrom(Method testDataMethod){
+        EnumSource annotation = testDataMethod.getAnnotation(EnumSource.class);
+        Class<? extends Enum<?>> enumValue = annotation.value();
+        if(annotation.value() != null) {
+            //TODO - handle different EnumSource.Mode. )
+            return listOfObjectsFromEnumValue(enumValue);
+        }
+        return null;
+    }
+
+    private List<List<Object>> listOfObjectsFromEnumValue(Class<? extends Enum<?>> enumValue) {
+        return listOfObjectsFrom(enumValue.getEnumConstants());
+    }
+
+
 
     private DataTable createParametersTableFrom(String columnNamesString, List<List<Object>> parametersList) {
         int numberOfColumns = parametersList.isEmpty() ? 0 : parametersList.get(0).size();

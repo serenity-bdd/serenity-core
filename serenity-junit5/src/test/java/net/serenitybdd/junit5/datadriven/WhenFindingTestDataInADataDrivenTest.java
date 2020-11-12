@@ -52,19 +52,12 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithEnumSource.withEnumSource");
         System.out.println("DataTableStrings " + dataTableStrings);
-        assertThat(dataTableStrings.getRows().size(), is(2));
+        assertThat(dataTableStrings.getRows().size(), is(3));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
-        assertThat(rows.get(0).getStringValues().get(0), is("Hello"));
-        assertThat(rows.get(1).getStringValues().get(0), is("JUnit"));
-
-        DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenario.withValueSourceIntegers");
-        assertThat(dataTableIntegers.getRows().size(), is(3));
-        assertThat(dataTableIntegers.getHeaders(),contains("arg0"));
-        List<DataTableRow> integersRows = dataTableIntegers.getRows();
-        assertThat(integersRows.get(0).getStringValues().get(0), is("1"));
-        assertThat(integersRows.get(1).getStringValues().get(0), is("2"));
-        assertThat(integersRows.get(2).getStringValues().get(0), is("3"));
+        assertThat(rows.get(0).getStringValues().get(0), is("BDD_IN_ACTION"));
+        assertThat(rows.get(1).getStringValues().get(0), is("JUNIT_IN_ACTION"));
+        assertThat(rows.get(2).getStringValues().get(0), is("SPRING_IN_ACTION"));
     }
 
 

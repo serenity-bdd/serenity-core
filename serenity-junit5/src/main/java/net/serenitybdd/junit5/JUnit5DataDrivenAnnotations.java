@@ -6,6 +6,7 @@ import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.collections.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.*;
@@ -74,8 +75,6 @@ public class JUnit5DataDrivenAnnotations {
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
-
-
     private void fillDataTablesFromValueSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
@@ -136,24 +135,36 @@ public class JUnit5DataDrivenAnnotations {
         return null;
     }
 
-    private List<List<Object>> listOfObjectsFrom(Object[] parameters) {
-        return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(parameter)).collect(Collectors.toList());
-    }
-
     List<List<Object>> listOfEnumSourceObjectsFrom(Method testDataMethod){
         EnumSource annotation = testDataMethod.getAnnotation(EnumSource.class);
         Class<? extends Enum<?>> enumValue = annotation.value();
         if(annotation.value() != null) {
-            //TODO - handle different EnumSource.Mode. )
-            return listOfObjectsFromEnumValue(enumValue);
+            Enum<?>[] enumConstants = enumValue.getEnumConstants();
+            EnumSource.Mode mode = annotation.mode();
+            String[] names = annotation.names();
+            if(ArrayUtils.isNotEmpty(names)) {
+                Set<String> namesSet = new HashSet(Arrays.asList(names));
+                Set<String> selectedNamesSet = new HashSet(Arrays.asList(enumConstants).stream().map(Enum::toString).collect(Collectors.toList()));
+                switch (mode) {
+                    case INCLUDE:
+                        selectedNamesSet = namesSet;
+                        break;
+                    case EXCLUDE:
+                        selectedNamesSet.removeAll(namesSet);
+                        break;
+                    default:
+                        break;
+                }
+                return listOfObjectsFrom(selectedNamesSet.toArray());
+            }
+            return listOfObjectsFrom(enumConstants);
         }
         return null;
     }
 
-    private List<List<Object>> listOfObjectsFromEnumValue(Class<? extends Enum<?>> enumValue) {
-        return listOfObjectsFrom(enumValue.getEnumConstants());
+    private List<List<Object>> listOfObjectsFrom(Object[] parameters) {
+        return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(parameter)).collect(Collectors.toList());
     }
-
 
 
     private DataTable createParametersTableFrom(String columnNamesString, List<List<Object>> parametersList) {

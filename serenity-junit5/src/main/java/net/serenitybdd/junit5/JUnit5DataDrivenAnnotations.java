@@ -53,6 +53,7 @@ public class JUnit5DataDrivenAnnotations {
         List<Method> allMethods = findTestDataMethods();
         Map<String,DataTable> dataTables = new HashMap<>();
         for(Method testDataMethod : allMethods) {
+            System.out.println("XXXCheck method " + testDataMethod);
             if(isAValueSourceAnnotatedMethod(testDataMethod)) {
                 fillDataTablesFromValueSource(dataTables, testDataMethod);
             }
@@ -62,6 +63,9 @@ public class JUnit5DataDrivenAnnotations {
             }
             else if (isAEnumSourceAnnotatedMethod(testDataMethod)) {
                 fillDataTablesFromEnumSource(dataTables,testDataMethod);
+            }
+            else if (isACsvSourceAnnotatedMethod(testDataMethod)) {
+                fillDataTablesFromCsvSource(dataTables,testDataMethod);
             }
         }
         return dataTables;
@@ -79,6 +83,14 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
+        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+    }
+
+    private void fillDataTablesFromCsvSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        List<List<Object>> parametersAsListsOfObjects = listOfCsvObjectsFrom(testDataMethod);
         logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
@@ -133,6 +145,23 @@ public class JUnit5DataDrivenAnnotations {
         else if(ArrayUtils.isNotEmpty(annotation.classes()))
             return listOfObjectsFrom(annotation.classes());
         return null;
+    }
+
+    List<List<Object>> listOfCsvObjectsFrom(Method testDataMethod){
+        CsvSource annotation = testDataMethod.getAnnotation(CsvSource.class);
+        String annotationDelimiter = annotation.delimiterString();
+        String delimiter = (annotationDelimiter != null && !annotationDelimiter.isEmpty()) ? annotationDelimiter : ",";
+        return listOfCsvObjectsFrom(annotation.value(), delimiter);
+    }
+
+    private List<List<Object>> listOfCsvObjectsFrom(Object[] parameters,String delimiter) {
+        List<List<Object>> ret = new ArrayList<>();
+        for(Object parameter : parameters) {
+            String[] split = ((String) parameter).split(delimiter);
+            ret.add(Arrays.asList(split));
+        }
+        return ret;
+        //return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(((String)parameter).split(","))).collect(Collectors.toList());
     }
 
     List<List<Object>> listOfEnumSourceObjectsFrom(Method testDataMethod){

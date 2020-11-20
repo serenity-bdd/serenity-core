@@ -116,7 +116,7 @@ class GenerateReport(
       val i = TarArchiveInputStream(
           GzipCompressorInputStream(
               BufferedInputStream(
-                  this.javaClass.getResourceAsStream("serenity-report-navigator_v0.2.7.tar.gz"))))
+                  this.javaClass.getResourceAsStream("serenity-report-navigator_v0.2.8.tar.gz"))))
 
       var entry: TarArchiveEntry? = null
 

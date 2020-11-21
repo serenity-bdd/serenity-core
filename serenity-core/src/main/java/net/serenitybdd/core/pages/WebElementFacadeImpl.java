@@ -1094,7 +1094,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
-    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = Arrays.asList("input", "button", "option");
+    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = Arrays.asList("input", "button", "option", "textarea");
 
     private boolean hasValueAttribute(WebElement element) {
         String tag = element.getTagName().toLowerCase();

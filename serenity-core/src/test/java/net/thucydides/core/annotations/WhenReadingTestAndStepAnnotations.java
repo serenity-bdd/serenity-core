@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WhenReadingTestAndStepAnnotations {
 
@@ -16,6 +16,9 @@ public class WhenReadingTestAndStepAnnotations {
 
         @Title("A title")
         public void normalTestWithTitle(){}
+
+        @Title("A title")
+        void nonPublicTestWithTitle() {}
 
         @Pending
         public void pendingTest(){}
@@ -42,6 +45,12 @@ public class WhenReadingTestAndStepAnnotations {
     public void shouldReadMethodTitles() {
         assertThat(TestAnnotations.forClass(SampleTestCase.class)
                                    .getAnnotatedTitleForMethod("normalTestWithTitle").get(), is("A title"));
+    }
+
+    @Test
+    public void shouldReadMethodTitlesFromNonPublicTestMethod() {
+        assertThat(TestAnnotations.forClass(SampleTestCase.class)
+                .getAnnotatedTitleForMethod("nonPublicTestWithTitle").get(), is("A title"));
     }
 
     @Test

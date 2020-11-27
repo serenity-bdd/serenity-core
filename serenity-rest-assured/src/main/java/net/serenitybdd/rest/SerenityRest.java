@@ -213,21 +213,35 @@ public class SerenityRest {
 
     /**
      * Create a new RestAssured query sequence
+     *
      * @return
      */
     public static RequestSpecification given() {
+        return fetchRequestSpecification();
+    }
+
+    public static RequestSpecification givenWithNoReporting() {
+        RequestSpecification requestSpecification = fetchRequestSpecification();
+        if (requestSpecification instanceof RequestSpecificationDecorated) {
+            ((RequestSpecificationDecorated) requestSpecification).disableReporting();
+        }
+        return requestSpecification;
+    }
+
+    private static RequestSpecification fetchRequestSpecification() {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
-        final ResponseSpecificationDecorated response =  RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
+        final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
     }
 
     /**
      * Add an additional clause to a RestAssured query
+     *
      * @return
      */
     public static RequestSender andGiven() {
-        if(currentRequestSpecification.get() != null) {
+        if (currentRequestSpecification.get() != null) {
             return currentRequestSpecification.get();
         }
         return given();
@@ -242,10 +256,11 @@ public class SerenityRest {
 
     /**
      * Add an action to a RestAssured query, building on previous given() statements if they were called.
+     *
      * @return
      */
     public static RequestSender when() {
-        if(currentRequestSpecification.get() != null) {
+        if (currentRequestSpecification.get() != null) {
             return currentRequestSpecification.get();
         }
         return given();
@@ -264,7 +279,7 @@ public class SerenityRest {
     public static RequestSpecification given(final RequestSpecification requestSpecification) {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
-        final ResponseSpecificationDecorated response =  RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
+        final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
     }
 

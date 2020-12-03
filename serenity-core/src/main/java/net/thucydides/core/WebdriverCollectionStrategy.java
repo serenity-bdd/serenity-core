@@ -11,7 +11,7 @@ public enum WebdriverCollectionStrategy {
 
     private static final Logger logger = LoggerFactory.getLogger(WebdriverCollectionStrategy.class);
 
-    private static final WebdriverCollectionStrategy DEFAULT_STRATEGY = Pessimistic;
+    private static final WebdriverCollectionStrategy DEFAULT_STRATEGY = Optimistic;
 
     public static WebdriverCollectionStrategy definedIn(EnvironmentVariables environmentVariables) {
         String configuredStrategy = ThucydidesSystemProperty.SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY.from(environmentVariables,"");

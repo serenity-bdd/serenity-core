@@ -167,8 +167,8 @@ public class TestOutcomeLoader {
 
     private AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
-            case XML:
-                return new XMLTestOutcomeReporter();
+//            case XML:
+//                return new XMLTestOutcomeReporter();
             case JSON:
                 return new JSONTestOutcomeReporter();
             default:

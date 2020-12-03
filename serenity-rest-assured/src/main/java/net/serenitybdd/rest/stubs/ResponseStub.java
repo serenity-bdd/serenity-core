@@ -125,6 +125,11 @@ public class ResponseStub implements Response {
     }
 
     @Override
+    public String asPrettyString() {
+        return null;
+    }
+
+    @Override
     public byte[] asByteArray() {
         return new byte[0];
     }

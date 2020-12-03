@@ -405,7 +405,9 @@ public class TestOutcome {
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
             environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-            this.context = contextFrom(environmentVariables);
+            if(this.context==null){
+                this.context = contextFrom(environmentVariables);
+            }
         }
         return environmentVariables;
     }

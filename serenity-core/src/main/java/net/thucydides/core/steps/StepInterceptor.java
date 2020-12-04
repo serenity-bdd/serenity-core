@@ -50,6 +50,15 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
     private final EnvironmentVariables environmentVariables;
+    private static ThreadLocal<Class> expectedExceptionType = new ThreadLocal<>();
+
+    public static void setExpectedExceptionType(Class expectedException) {
+        expectedExceptionType.set(expectedException);
+    }
+
+    public static void resetExpectedExceptionType() {
+        expectedExceptionType.remove();
+    }
 
     private List<StepInterceptionListener> listeners = new ArrayList<>();
 
@@ -70,7 +79,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             @SuperMethod Method zuper
     ) throws Throwable {
         Object result;
-        if (baseClassMethod(method, target)) {
+        if (baseClassMethod(method, target) || isAStepThatMayThrowAnException(method)) {
             result = runBaseObjectMethod(target, method, args, zuper);
         } else {
             result = testStepResult(target, method, args, zuper);
@@ -423,6 +432,10 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         return false;
     }
 
+    private boolean isAStepThatMayThrowAnException(final Method method) {
+        return expectedExceptionType.get() != null;
+    }
+
     private boolean isAThucydidesStep(Annotation annotation) {
         return (annotation instanceof Step) || (annotation instanceof StepGroup);
     }
@@ -462,7 +475,6 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
         notifyOfStepFailure(object, method, args, assertionError);
-
 
         LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
     }

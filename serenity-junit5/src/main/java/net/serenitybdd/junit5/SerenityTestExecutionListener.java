@@ -1,5 +1,9 @@
 package net.serenitybdd.junit5;
 
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.asm.Advice;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
@@ -8,6 +12,7 @@ import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
@@ -28,10 +33,21 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
+
+    private static List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
+
+    static {
+        ByteBuddyAgent.install();
+        new ByteBuddy()
+                .rebase(Assertions.class)
+                .visit(Advice.to(AssertThrowsAdvice.class).on(named("assertThrows")))
+                .make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
+    }
 
     private final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
@@ -64,10 +80,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private File getOutputDirectory() {
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
         return systemPropertiesConfiguration.getOutputDirectory();
-    }
-
-    private BaseStepListener getBaseStepListener() {
-        return baseStepListener;
     }
 
     @Override
@@ -247,9 +259,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         if(isSimpleTest(testIdentifier)){
             if(isMethodSource(testIdentifier)) {
-                testFinished(testIdentifier);
                 MethodSource methodSource = ((MethodSource)testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
+                testFinished(testIdentifier,methodSource);
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if(dataTable != null) {
                     logger.trace("-->EventBus.exampleFinished " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
@@ -258,46 +270,66 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 }
             }
         }
-        switch (testExecutionResult.getStatus()) {
+        try {
+            switch (testExecutionResult.getStatus()) {
 
-            case SUCCESSFUL: {
-                if (testIdentifier.isContainer()) {
-                    this.summary.containersSucceeded.incrementAndGet();
-                    //System.out.println("CoNTAINER OK");
+                case SUCCESSFUL: {
+                    if (testIdentifier.isContainer()) {
+                        this.summary.containersSucceeded.incrementAndGet();
+                        //System.out.println("CoNTAINER OK");
+                    }
+                    if (testIdentifier.isTest()) {
+                        this.summary.testsSucceeded.incrementAndGet();
+                        //System.out.println("TEST OK");
+                    }
+                    break;
                 }
-                if (testIdentifier.isTest()) {
-                    this.summary.testsSucceeded.incrementAndGet();
-                    //System.out.println("TEST OK");
-                }
-                break;
-            }
 
-            case ABORTED: {
-                if (testIdentifier.isContainer()) {
-                    this.summary.containersAborted.incrementAndGet();
+                case ABORTED: {
+                    if (testIdentifier.isContainer()) {
+                        this.summary.containersAborted.incrementAndGet();
+                    }
+                    if (testIdentifier.isTest()) {
+                        this.summary.testsAborted.incrementAndGet();
+                    }
+                    break;
                 }
-                if (testIdentifier.isTest()) {
-                    this.summary.testsAborted.incrementAndGet();
-                }
-                break;
-            }
 
-            case FAILED: {
-                if (testIdentifier.isContainer()) {
-                    this.summary.containersFailed.incrementAndGet();
+                case FAILED: {
+                    if (testIdentifier.isContainer()) {
+                        this.summary.containersFailed.incrementAndGet();
+                    }
+                    if (testIdentifier.isTest()) {
+                        this.summary.testsFailed.incrementAndGet();
+                    }
+                    testExecutionResult.getThrowable().ifPresent(
+                            throwable -> this.summary.addFailure(testIdentifier, throwable));
+                    StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
+                    break;
                 }
-                if (testIdentifier.isTest()) {
-                    this.summary.testsFailed.incrementAndGet();
-                }
-                testExecutionResult.getThrowable().ifPresent(
-                        throwable -> this.summary.addFailure(testIdentifier, throwable));
-                StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
-                break;
+                default:
+                    throw new PreconditionViolationException(
+                            "Unsupported execution status:" + testExecutionResult.getStatus());
             }
-            default:
-                throw new PreconditionViolationException(
-                        "Unsupported execution status:" + testExecutionResult.getStatus());
+        } finally {
+            expectedExceptions.clear();
         }
+    }
+
+    private void testFinished(TestIdentifier testIdentifier,MethodSource methodSource)  {
+        logger.trace("Test finished " + testIdentifier);
+        //if (testingThisTest(description)) {
+        updateResultsUsingTestAnnotations(methodSource);
+        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
+    }
+
+    private void updateResultsUsingTestAnnotations(MethodSource methodSource) {
+        expectedExceptions.stream().forEach(this::updateResultsForExpectedException);
+    }
+
+    private void updateResultsForExpectedException(Class<? extends Throwable> expected) {
+        StepEventBus.getEventBus().exceptionExpected(expected);
     }
 
     private boolean isSimpleTest(TestIdentifier testIdentifier) {
@@ -380,16 +412,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
     }*/
 
-    private void testFinished(TestIdentifier testIdentifier)  {
-        logger.trace("Test finished " + testIdentifier);
-        //if (testingThisTest(description)) {
-            //TODO
-            //updateResultsUsingTestAnnotations(description);
-            StepEventBus.getEventBus().testFinished();
-            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
-            //endTest();
-        //}
-    }
+
 
     /**
      * Find the current set of test outcomes produced by the test execution.
@@ -438,6 +461,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      */
     protected void injectAnnotatedPagesObjectInto(final Object testCase) {
         StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages);
+    }
+
+    public static void addExpectedException(Class exceptionClass){
+        expectedExceptions.add(exceptionClass);
     }
 
 }

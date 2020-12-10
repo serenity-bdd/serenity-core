@@ -18,8 +18,8 @@ class FrequentFailuresBuilder(val testOutcomes: TestOutcomes) {
 
     fun withMaxOf(maxEntries: Int): List<FrequentFailure> =
             testOutcomes.unsuccessfulTests.outcomes
-                    .map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome).results }
-                    .flatMap { it.toList() }
+                    .map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome).results.toList() }
+                    .flatten()
                     .filter { StringUtils.isNotEmpty(it.testFailureErrorType) }
                     .groupBy { it.testFailureErrorType }
                     .map { (error, outcomes) -> FrequentFailure(error, outcomes.size, testResultOf(outcomes)) }

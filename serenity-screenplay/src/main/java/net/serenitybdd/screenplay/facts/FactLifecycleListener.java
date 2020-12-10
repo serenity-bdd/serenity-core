@@ -4,13 +4,14 @@ import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.Droppable;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 
 import java.util.Map;
 
-public class FactLifecycleListener implements StepListener {
+public class FactLifecycleListener implements StepListener, Droppable {
     private final Actor actor;
     private final Fact fact;
 

@@ -25,10 +25,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -615,7 +612,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             // maybe it's an input element?
             text = element.getAttribute("value");
         }
-        return text.equals(value);
+        return value.equals(text);
     }
 
     /**
@@ -933,6 +930,26 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
+    public String getFirstSelectedOptionVisibleText() {
+        return new Select(this).getFirstSelectedOption().getText();
+    }
+
+    @Override
+    public List<String> getSelectedVisibleTexts() {
+        return new Select(this).getAllSelectedOptions().stream().map(WebElement::getText).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getFirstSelectedOptionValue() {
+        return new Select(this).getFirstSelectedOption().getAttribute("value");
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return new Select(this).getAllSelectedOptions().stream().map(element -> element.getAttribute("value")).collect(Collectors.toList());
+    }
+
+    @Override
     @Deprecated
     public WebElementFacade selectByValue(String value) {
         return dropdownSelect().byValue(value);
@@ -1077,12 +1094,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
-    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = Arrays.asList("input", "button", "option");
-
     private boolean hasValueAttribute(WebElement element) {
-        String tag = element.getTagName().toLowerCase();
-        return HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE.contains(tag);
-
+        return element.getAttribute("value") != null;
     }
 
     @Override

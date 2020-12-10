@@ -14,6 +14,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Keys;
 
@@ -145,12 +146,16 @@ public class Actor implements PerformsTasks, SkipNested {
         attemptsTo(todos);
     }
 
+    private List<FactLifecycleListener> factListeners = new ArrayList<>();
+
     public final void has(Fact... facts) {
         Arrays.stream(facts).forEach(
                 fact -> {
                     fact.setup(this);
                     eventBusInterface.assignFactToActor(this, fact.toString());
-                    StepEventBus.getEventBus().registerListener(new FactLifecycleListener(this, fact));
+                    FactLifecycleListener listener = new FactLifecycleListener(this, fact);
+                    factListeners.add(listener);
+                    StepEventBus.getEventBus().registerListener(listener);
                 }
         );
     }
@@ -420,5 +425,13 @@ public class Actor implements PerformsTasks, SkipNested {
     private boolean manualTaskInstrumentation() {
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         return (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false));
+    }
+
+    public void wrapUp() {
+        getTeardowns().forEach(HasTeardown::tearDown);
+        factListeners.forEach(
+                factLifecycleListener -> StepEventBus.getEventBus().dropListener(factLifecycleListener)
+        );
+
     }
 }

@@ -61,7 +61,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * Represents the results of a test (or "scenario") execution. This
  * includes the narrative steps taken during the test, screenshots at each step,
- * the results of each step, and the overall result. A test scenario
+ * the results of each step, and the overall result. A test getscenario
  * can be associated with a user story using the UserStory annotation.
  * <p/>
  * A TestOutcome is stored after a test is executed. When the aggregate reports
@@ -405,7 +405,9 @@ public class TestOutcome {
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
             environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-            this.context = contextFrom(environmentVariables);
+            if(this.context==null){
+                this.context = contextFrom(environmentVariables);
+            }
         }
         return environmentVariables;
     }

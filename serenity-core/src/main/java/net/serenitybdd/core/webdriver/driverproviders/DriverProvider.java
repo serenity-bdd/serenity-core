@@ -21,7 +21,6 @@ public interface DriverProvider {
     }
 
     default boolean isDriverAutomaticallyDownloaded(EnvironmentVariables environmentVariables) {
-        String webDriverAutodownload = ThucydidesSystemProperty.WEBDRIVER_AUTODOWNLOAD.from(environmentVariables);
-        return( webDriverAutodownload != null && webDriverAutodownload.toLowerCase().equals("true"));
+        return ThucydidesSystemProperty.WEBDRIVER_AUTODOWNLOAD.booleanFrom(environmentVariables, true);
     }
 }

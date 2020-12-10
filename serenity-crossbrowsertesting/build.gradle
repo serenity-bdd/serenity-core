@@ -1,0 +1,8 @@
+ext {
+    projectDescription = 'Serenity CrossBrowserTesting Integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+    compile group: 'com.konghq', name: 'unirest-java', version: '3.11.05'
+}

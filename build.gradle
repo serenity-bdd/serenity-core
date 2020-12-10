@@ -68,7 +68,7 @@ allprojects {
         resolutionStrategy {
             // fail fast on dependency convergence problems
 
-         //   failOnVersionConflict()
+            // failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // whe//n updating this list, update Serenity's declared deps if exists

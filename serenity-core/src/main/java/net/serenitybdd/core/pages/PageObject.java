@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
 import com.paulhammant.ngwebdriver.NgWebDriver;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -282,6 +283,9 @@ public abstract class PageObject {
     }
 
     public WebDriver getDriver() {
+        if (driver == null) {
+            driver = Serenity.getDriver();
+        }
         return driver;
     }
 

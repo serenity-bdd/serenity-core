@@ -2,6 +2,7 @@ package net.thucydides.core.annotations;
 
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
+import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.tags.TagConverters;
 import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
@@ -28,15 +29,15 @@ public class TestAnnotations {
         return new TestAnnotations(testClass);
     }
 
-    public java.util.Optional<String> getAnnotatedTitleForMethod(final String methodName) {
+    public Optional<String> getAnnotatedTitleForMethod(final String methodName) {
         if ((testClass != null) && (testClassHasMethodCalled(methodName))) {
             return getAnnotatedTitle(methodName);
         }
-        return java.util.Optional.empty();
+        return Optional.empty();
     }
 
     public boolean isPending(final String methodName) {
-        java.util.Optional<Method> method = getMethodCalled(methodName);
+        Optional<Method> method = getMethodCalled(methodName);
         return method.isPresent() && isPending(method.get());
     }
 
@@ -65,19 +66,19 @@ public class TestAnnotations {
     }
 
     public boolean isIgnored(final String methodName) {
-        java.util.Optional<Method> method = getMethodCalled(methodName);
+        Optional<Method> method = getMethodCalled(methodName);
         return method.isPresent() && isIgnored(method.get());
     }
 
-    private java.util.Optional<String> getAnnotatedTitle(String methodName) {
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+    private Optional<String> getAnnotatedTitle(String methodName) {
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
             Title titleAnnotation = testMethod.get().getAnnotation(Title.class);
             if (titleAnnotation != null) {
-                return java.util.Optional.of(titleAnnotation.value());
+                return Optional.of(titleAnnotation.value());
             }
         }
-        return java.util.Optional.empty();
+        return Optional.empty();
     }
 
     private boolean testClassHasMethodCalled(final String methodName) {
@@ -85,33 +86,30 @@ public class TestAnnotations {
 
     }
 
-    private java.util.Optional<Method> getMethodCalled(final String methodName) {
+    private Optional<Method> getMethodCalled(final String methodName) {
         if (testClass == null) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
         String baseMethodName = withNoArguments(methodName);
-        try {
-            if (baseMethodName == null) {
-                return java.util.Optional.empty();
-            } else {
-                return java.util.Optional.ofNullable(testClass.getMethod(baseMethodName));
-            }
-        } catch (NoSuchMethodException e) {
-            return java.util.Optional.empty();
+
+        if (baseMethodName == null) {
+            return Optional.empty();
         }
+        
+        return Optional.ofNullable(MethodFinder.inClass(testClass).getMethodNamed(baseMethodName));
     }
 
     /**
      * Return a list of the issues mentioned in the title annotation of this method.
      */
     List<String> getAnnotatedIssuesForMethodTitle(String methodName) {
-        java.util.Optional<String> title = getAnnotatedTitleForMethod(methodName);
+        Optional<String> title = getAnnotatedTitleForMethod(methodName);
         return title.map(ReportFormatter::issuesIn).orElseGet(() -> ReportFormatter.issuesIn(methodName));
     }
 
 
     private Optional<String> getAnnotatedIssue(String methodName) {
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Issue.class) != null)) {
             return Optional.of(testMethod.get().getAnnotation(Issue.class).value());
         }
@@ -119,7 +117,7 @@ public class TestAnnotations {
     }
 
     private Optional<String> getAnnotatedVersion(String methodName) {
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Version.class) != null)) {
             return Optional.of(testMethod.get().getAnnotation(Version.class).value());
         }
@@ -127,7 +125,7 @@ public class TestAnnotations {
     }
 
     private String[] getAnnotatedIssues(String methodName) {
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Issues.class) != null)) {
             return testMethod.get().getAnnotation(Issues.class).value();
         }
@@ -286,7 +284,7 @@ public class TestAnnotations {
     private List<TestTag> getTagsFor(String methodName) {
         List<TestTag> tags = new ArrayList<>();
 
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
             addTagValues(tags, testMethod.get().getAnnotation(WithTagValuesOf.class));
             addTags(tags, testMethod.get().getAnnotation(WithTags.class));

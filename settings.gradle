@@ -15,10 +15,13 @@ include 'serenity-test-utils',
         'serenity-screenplay-webdriver',
         'serenity-screenplay-rest',
         'serenity-single-page-report',
+        'serenity-navigator-report',
         'serenity-json-summary-report',
         'serenity-zalenium',
         'serenity-browserstack',
         'serenity-assertions',
         'serenity-ensure',
         'serenity-assertions',
-        'serenity-reports-configuration'
+        'serenity-reports-configuration',
+        'serenity-crossbrowsertesting'
+

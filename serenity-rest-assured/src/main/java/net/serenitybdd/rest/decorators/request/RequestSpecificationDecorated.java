@@ -41,15 +41,20 @@ public abstract class RequestSpecificationDecorated
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationDecorated.class);
     private Response lastResponse;
 
+    private boolean withReporting = true;
+
     public RequestSpecificationDecorated(RequestSpecificationImpl core) {
         super(core);
+    }
+
+    public void disableReporting() {
+        withReporting = false;
     }
 
     @Override
     public Response get() {
         return get("");
     }
-
 
 
     @Override
@@ -275,7 +280,8 @@ public abstract class RequestSpecificationDecorated
                 response = stubbed();
             }
         } else {
-            reportQuery(method, path, response, pathParams);
+            if (withReporting)
+                reportQuery(method, path, response, pathParams);
         }
         this.lastResponse = response;
         return response;
@@ -333,13 +339,14 @@ public abstract class RequestSpecificationDecorated
      * @return the decorated request specification
      */
     @Override
-    public RequestSpecification filter(Filter filter){
+    public RequestSpecification filter(Filter filter) {
         core.filter(filter);
         return this;
     }
 
     /**
      * Add list of filters that will be used in the request
+     *
      * @param filters Filter list to add
      * @return the decorated request specification
      */

@@ -227,6 +227,26 @@ public class WebElementFacadeStub implements WebElementFacade {
         return new ArrayList<>();
     }
 
+    @Override
+    public String getFirstSelectedOptionVisibleText() {
+        return null;
+    }
+
+    @Override
+    public List<String> getSelectedVisibleTexts() {
+        return null;
+    }
+
+    @Override
+    public String getFirstSelectedOptionValue() {
+        return null;
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return null;
+    }
+
     /**
      * Check that an element contains a text value
      *

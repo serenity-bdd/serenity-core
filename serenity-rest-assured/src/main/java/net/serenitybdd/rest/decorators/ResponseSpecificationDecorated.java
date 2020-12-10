@@ -7,6 +7,7 @@ import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.response.Response;
 import io.restassured.specification.FilterableResponseSpecification;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseLogSpecification;
 import io.restassured.specification.ResponseSpecification;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.ReflectionHelper;
@@ -172,5 +173,10 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
     @Override
     public ResponseSpecification statusCode(final int expectedStatusCode) {
         return core.statusCode(expectedStatusCode);
+    }
+
+    @Override
+    public ResponseLogSpecification log() {
+        return core.log();
     }
 }

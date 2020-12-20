@@ -2,6 +2,8 @@ package net.thucydides.core.webdriver.javascript;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -60,7 +62,7 @@ public class WhenWorkingWithJavascript {
     }
 
     @Test
-    public void javascript_support_can_be_checked_on_a_driver() {
+    public void javascript_support_can_be_checked_on_a_driver() throws Exception{
         assertThat(JavascriptSupport.javascriptIsSupportedIn(mockDriver.getClass()), is(false));
     }
 

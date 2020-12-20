@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
+ * By Selector that finds Shadow Dom elements.
+ *
  * Based on implementation from https://github.com/Georgegriff/query-selector-shadow-dom
  * QuerySelector that can pierce Shadow DOM roots without knowing the path through nested shadow roots.
  */
@@ -34,8 +36,12 @@ public class ShadowDom extends By {
         }
     }
 
-    public ShadowDom(final String selector) {
+    private ShadowDom(final String selector) {
         this.shadowDomSelector = selector;
+    }
+
+    public static ShadowDom of(String selector) {
+        return new ShadowDom(selector);
     }
 
     @Override
@@ -57,7 +63,7 @@ public class ShadowDom extends By {
         scriptData.append("');");
         WebElement element = (WebElement) ((JavascriptExecutor) context).executeScript(scriptData.toString());
         if (element == null) {
-            throw new NoSuchElementException("No element found matching JQuery selector " + shadowDomSelector);
+            throw new NoSuchElementException("No element found matching ShadowDom selector " + shadowDomSelector);
         } else {
             return element;
         }

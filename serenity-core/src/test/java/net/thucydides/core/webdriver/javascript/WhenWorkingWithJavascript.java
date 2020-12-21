@@ -62,7 +62,7 @@ public class WhenWorkingWithJavascript {
     }
 
     @Test
-    public void javascript_support_can_be_checked_on_a_driver() throws Exception{
+    public void javascript_support_can_be_checked_on_a_driver() {
         assertThat(JavascriptSupport.javascriptIsSupportedIn(mockDriver.getClass()), is(false));
     }
 

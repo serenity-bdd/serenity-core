@@ -56,12 +56,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
-    /**
-     * Provides a proxy of the ScenarioSteps object used to invoke the test steps.
-     * This proxy notifies the test runner about individual step outcomes.
-     */
-    private StepFactory stepFactory;
-    private Pages pages;
+    private ThreadLocal<Pages> pages = new ThreadLocal<>();
     private final WebdriverManager webdriverManager;
     private String requestedDriver;
     private ReportService reportService;
@@ -89,7 +84,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     private final Logger logger = LoggerFactory.getLogger(SerenityRunner.class);
 
     public Pages getPages() {
-        return pages;
+        return pages.get();
     }
 
     /**
@@ -346,7 +341,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             initStepFactoryUsing(getPages());
         } else {
             setStepListener(initListeners());
-            initStepFactory();
         }
     }
 
@@ -365,8 +359,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private void initPagesObjectUsing(final WebDriver driver) {
-        pages = new Pages(driver, getConfiguration());
-        dependencyInjector = new PageObjectDependencyInjector(pages);
+        pages.set(new Pages(driver, getConfiguration()));
+        dependencyInjector = new PageObjectDependencyInjector();
     }
 
     protected JUnitStepListener initListenersUsing(final Pages pageFactory) {
@@ -388,11 +382,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private void initStepFactoryUsing(final Pages pagesObject) {
-        stepFactory = StepFactory.getFactory().usingPages(pagesObject);
-    }
-
-    private void initStepFactory() {
-        stepFactory = StepFactory.getFactory();
+        StepFactory.getFactory().usingPages(pagesObject);
     }
 
     private ReportService getReportService() {
@@ -510,7 +500,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private void resetStepLibrariesIfRequired() {
         if (theTest.shouldResetStepLibraries()) {
-            stepFactory.reset();
+            StepFactory.getFactory().reset();
         }
     }
 
@@ -621,7 +611,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private void useStepFactoryForDataDrivenSteps() {
-        StepData.setDefaultStepFactory(stepFactory);
+        StepData.setDefaultStepFactory(StepFactory.getFactory());
     }
 
     /**
@@ -649,7 +639,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
      */
     protected void injectScenarioStepsInto(final Object testCase) {
-        StepAnnotations.injector().injectScenarioStepsInto(testCase, stepFactory);
+        StepAnnotations.injector().injectScenarioStepsInto(testCase, StepFactory.getFactory());
     }
 
     /**
@@ -657,7 +647,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
          */
     protected void injectAnnotatedPagesObjectInto(final Object testCase) {
-        StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages);
+        StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages.get());
     }
 
     protected void injectEnvironmentVariablesInto(final Object testCase) {

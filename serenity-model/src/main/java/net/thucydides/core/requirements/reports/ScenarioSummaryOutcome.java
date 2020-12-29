@@ -26,6 +26,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Boolean manual;
     private final Set<TestTag> tags;
     private final Map<String, Collection<TestTag>> exampleTags;
+    private String rule = RULE_NOT_SET;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -40,7 +41,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   String parentName,
                                   String parentReport,
                                   Set<TestTag> tags,
-                                  Map<String, Collection<TestTag>> exampleTags) {
+                                  Map<String, Collection<TestTag>> exampleTags,
+                                  String rule) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -56,6 +58,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.manual = isManual;
         this.tags = tags;
         this.exampleTags = exampleTags;
+        this.rule = rule;
     }
 
     public String toString() {
@@ -163,4 +166,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     public Map<String, Collection<TestTag>> getExampleTags() {
         return exampleTags;
     }
+
+    @Override
+    public String getRule() { return rule; }
 }

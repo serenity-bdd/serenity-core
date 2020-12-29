@@ -25,6 +25,7 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.remoteTesting.LinkGenerator;
+import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderService;
@@ -139,6 +140,8 @@ public class TestOutcome {
      * Identifies the project associated with this test.
      */
     private String project;
+
+    private String rule = ScenarioOutcome.RULE_NOT_SET;
 
     private FailureCause testFailureCause;
     private TestFailureCause flakyTestFailureCause;
@@ -1786,6 +1789,14 @@ public class TestOutcome {
     public TestOutcome forProject(String project) {
         this.project = project;
         return this;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 
     public String getProject() {

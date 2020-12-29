@@ -37,7 +37,7 @@ class GenerateReport(
   constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
 
   override fun getName(): String = "navigator"
-  override fun getDescription(): String = "report as single page js application"
+  override fun getDescription(): String = "Full Report As React Based Single Page Application"
 
 
   override fun setSourceDirectory(sourceDirectory: Path) {

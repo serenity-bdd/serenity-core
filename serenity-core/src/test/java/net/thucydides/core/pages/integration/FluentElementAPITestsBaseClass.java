@@ -2,6 +2,7 @@ package net.thucydides.core.pages.integration;
 
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.StaticTestSite;
@@ -9,8 +10,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class FluentElementAPITestsBaseClass {
 
     @BeforeClass
     public static void openBrowsers() throws IOException {
+        WebDriverManager.chromedriver().setup();
         chromeService = new ChromeServicePool();
         chromeService.start();
         StepEventBus.getEventBus().clear();
@@ -36,7 +38,9 @@ public class FluentElementAPITestsBaseClass {
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-        driver = new HtmlUnitDriver(BrowserVersion.CHROME, true);
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver(chromeOptions);
+
         staticSitePage = new StaticSitePage(driver, 1000);
         staticSitePage.open();
     }

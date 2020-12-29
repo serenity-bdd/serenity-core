@@ -97,11 +97,19 @@
         document.getElementById('focusmessage').textContent = 'focus left ' + field;
     }
 
+    customElements.define('show-hello', class extends HTMLElement {
+        connectedCallback() {
+            const shadow = this.attachShadow({mode: 'open'});
+            shadow.innerHTML = `  <input name="shadowinput" id="myid" value="shadowInputValue"/> myDiv</div><p>Hello, ${this.getAttribute('name')}</p>`;
+        }
+    });
+
 //-->
 </script>
 </head>
 <body onLoad="initFields()">
 <h2 id="visible">A visible title</h2>
+<show-hello name="John"></show-hello>
 <div style="display:none;">
     <h2 id="invisible">An invisible title</h2>
 </div>

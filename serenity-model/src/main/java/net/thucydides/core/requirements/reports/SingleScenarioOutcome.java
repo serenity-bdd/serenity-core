@@ -30,6 +30,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final String parentName;
     private final String parentReport;
     private final Set<TestTag> tags;
+    private String rule = RULE_NOT_SET;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -45,7 +46,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  int exampleCount,
                                  String parentName,
                                  String parentReport,
-                                 Set<TestTag> tags) {
+                                 Set<TestTag> tags,
+                                 String rule) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -62,6 +64,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.parentName = parentName;
         this.parentReport = parentReport;
         this.tags = tags;
+        this.rule = rule;
     }
 
     public String toString() {
@@ -174,4 +177,6 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     public Map<String, Collection<TestTag>> getExampleTags() {
         return EMPTY_MAP;
     }
+
+    public String getRule() { return rule;}
 }

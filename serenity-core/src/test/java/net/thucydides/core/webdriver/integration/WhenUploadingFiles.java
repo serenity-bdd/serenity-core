@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.integration;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
@@ -15,6 +16,8 @@ import org.junit.Test;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -67,8 +70,12 @@ public class WhenUploadingFiles {
     public static void open_local_static_site() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("headless.mode","true");
-//        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory(), environmentVariables);
-        driver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory(), environmentVariables);
+
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        driver = new ChromeDriver(options);
+
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
     }

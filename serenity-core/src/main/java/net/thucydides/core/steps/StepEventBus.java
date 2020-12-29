@@ -667,6 +667,10 @@ public class StepEventBus {
         getBaseStepListener().getCurrentTestOutcome().setBackgroundDescription(description);
     }
 
+    public void setRule(String rule) {
+        getBaseStepListener().getCurrentTestOutcome().setRule(rule);
+    }
+
     public void useExamplesFrom(DataTable table) {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.useExamplesFrom(table);

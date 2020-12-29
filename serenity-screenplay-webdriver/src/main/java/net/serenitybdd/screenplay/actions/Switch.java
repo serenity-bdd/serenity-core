@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
 import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.WebElement;
 
@@ -25,8 +26,16 @@ public class Switch {
         return new DriverTask(driver -> driver.switchTo().parentFrame());
     }
 
-    public static Performable toWindow(String windowTitle) {
-        return new DriverTask(driver -> driver.switchTo().window(windowTitle));
+    public static Performable toWindow(String nameOrHandle) {
+        return new DriverTask( driver -> driver.switchTo().window(nameOrHandle) );
+    }
+
+    public static Performable toNewWindow() {
+        return instrumented(SwitchToNewWindow.class);
+    }
+
+    public static Performable toWindowTitled(String title) {
+        return instrumented(SwitchToWindowTitle.class, title);
     }
 
     /**
@@ -58,5 +67,4 @@ public class Switch {
     public static Performable toActiveElement() {
         return new DriverTask(driver -> driver.switchTo().activeElement());
     }
-
 }

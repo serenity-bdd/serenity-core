@@ -1,16 +1,20 @@
 package net.thucydides.core.pages.integration;
 
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException;
+import net.thucydides.core.webdriver.javascript.ShadowDom;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 
 import java.time.temporal.ChronoUnit;
 
@@ -18,21 +22,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
-public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
+public class CheckingFieldContentWithTheFluentElementAPI  {
 
     static WebDriver localDriver;
     static StaticSitePage page;
 
     @BeforeClass
     public static void openStaticPage() {
-        localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        localDriver = new ChromeDriver(options);
+
         page = new StaticSitePage(localDriver);
         page.open();
     }
 
     @Before
     public void refreshPage() {
-        refresh(page);
+        page.getDriver().navigate().refresh();
         page.setWaitForTimeout(5000);
         page.setImplicitTimeout(2, ChronoUnit.SECONDS);
     }
@@ -253,6 +261,9 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
         assertThat(page.element(page.colors).getSelectedValue(), is("blue"));
     }
 
-
+    @Test
+    public void should_find_elements_in_shadow_dom() {
+        assertThat(page.find(ShadowDom.of("#myid")).getValue(), is("shadowInputValue"));
+    }
 
 }

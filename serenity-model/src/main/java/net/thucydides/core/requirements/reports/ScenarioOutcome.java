@@ -11,6 +11,8 @@ import java.util.Set;
 
 public interface ScenarioOutcome {
 
+    static String RULE_NOT_SET = "RULE_NOT_SET";
+
     String getName();
 
     String getSimplifiedName();
@@ -58,4 +60,6 @@ public interface ScenarioOutcome {
     Set<TestTag> getTags();
 
     Map<String, Collection<TestTag>> getExampleTags();
+
+    String getRule();
 }

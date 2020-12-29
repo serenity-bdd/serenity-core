@@ -78,7 +78,8 @@ public class ScenarioOutcomes {
                 testOutcome.getDataTableRowCount(),
                 userStoryName,
                 userStoryReportName,
-                testOutcome.getTags());
+                testOutcome.getTags(),
+                testOutcome.getRule());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

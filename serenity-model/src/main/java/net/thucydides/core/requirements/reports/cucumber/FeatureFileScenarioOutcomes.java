@@ -65,19 +65,36 @@ public class FeatureFileScenarioOutcomes {
             return Collections.emptyList();
         } else {
             List<ScenarioOutcome> scenarioOutcomes = new ArrayList<>();
-            feature.get().getFeature().getChildrenList().forEach(
-                    featureChildren -> scenarioOutcomes.add(
-                            scenarioOutcomeFrom(feature.get().getFeature(),
-                                    featureChildren.getScenario(),
-                                    requirementsOutcomes.getTestOutcomes()))
-            );
+            Feature currentFeature = feature.get().getFeature();
+            for(Feature.FeatureChild currentChild : currentFeature.getChildrenList()) {
+                if(currentChild.hasRule()) {
+                    Feature.FeatureChild.Rule currentRule = currentChild.getRule();
+                    currentRule.getChildrenList().forEach(
+                            ruleChildren -> scenarioOutcomes.add(
+                                            scenarioOutcomeFrom(currentFeature,
+                                                    ruleChildren.getScenario(),
+                                                    requirementsOutcomes.getTestOutcomes(),currentRule.getName())));
+                } else {
+                    scenarioOutcomes.add(
+                            scenarioOutcomeFrom(currentFeature,
+                                    currentChild.getScenario(),
+                                    requirementsOutcomes.getTestOutcomes()));
+                }
+            }
             return scenarioOutcomes;
         }
     }
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
-                                                Scenario scenario,
-                                                TestOutcomes testOutcomes) {
+                                            Scenario scenario,
+                                            TestOutcomes testOutcomes) {
+        return scenarioOutcomeFrom(feature,scenario,testOutcomes, ScenarioOutcome.RULE_NOT_SET);
+    }
+
+
+    private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
+                                            Scenario scenario,
+                                            TestOutcomes testOutcomes,String rule) {
 
         List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
 
@@ -144,7 +161,8 @@ public class FeatureFileScenarioOutcomes {
                 feature.getName(),
                 featureReport,
                 scenarioTags,
-                exampleTags);
+                exampleTags,
+                rule);
     }
 
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {

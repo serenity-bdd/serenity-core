@@ -1,15 +1,15 @@
 package net.thucydides.core.pages.integration;
 
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.pages.WebElementFacade;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,21 +21,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
-    static WebDriver localDirver;
+    static WebDriver driver;
     static StaticSitePageWithFacades page;
 
     @BeforeClass
     public static void openStaticPage() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        driver = new ChromeDriver(options);
 
-        localDirver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePageWithFacades(localDirver, 1);
+        page = new StaticSitePageWithFacades(driver, 1);
         page.setWaitForTimeout(750);
         page.open();
     }
 
     @AfterClass
     public static void shutdown() {
-        localDirver.quit();
+        driver.quit();
     }
 
     @Test

@@ -17,6 +17,11 @@ test {
     maxParallelForks = Integer.parseInt(System.getProperty("forks","8"))
 }
 
+integrationTests {
+    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
+}
+
+
 //integrationTests {
 //    beforeTest { desc, result ->
 //        println "Executing test ${desc.name} [${desc.className}]"

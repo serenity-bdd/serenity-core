@@ -1,14 +1,18 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
+import org.apache.groovy.json.internal.Chr;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,7 +24,10 @@ public class WhenUsingAProvidedDriver {
 
         @Override
         public WebDriver newDriver() {
-            return  new HtmlUnitDriver(BrowserVersion.CHROME, true);
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+            return new ChromeDriver(options);
         }
 
         @Override
@@ -55,7 +62,7 @@ public class WhenUsingAProvidedDriver {
     @Test
     public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_instantiated_driver() {
         facade.getProxiedDriver();
-        Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
+        Assert.assertEquals(facade.getDriverClass(), ChromeDriver.class);
     }
 
 }

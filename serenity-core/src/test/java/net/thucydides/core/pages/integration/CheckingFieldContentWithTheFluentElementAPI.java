@@ -1,6 +1,7 @@
 package net.thucydides.core.pages.integration;
 
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException;
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 
 import java.time.temporal.ChronoUnit;
@@ -27,7 +29,11 @@ public class CheckingFieldContentWithTheFluentElementAPI  {
 
     @BeforeClass
     public static void openStaticPage() {
-        localDriver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        localDriver = new ChromeDriver(options);
+
         page = new StaticSitePage(localDriver);
         page.open();
     }

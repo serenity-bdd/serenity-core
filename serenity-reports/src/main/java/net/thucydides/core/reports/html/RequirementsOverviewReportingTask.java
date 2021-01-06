@@ -3,6 +3,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.ScenarioOutcomeRuleWrapper;
@@ -146,9 +147,19 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         List<ScenarioOutcome> scenarios
                 = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(requirementsOutcomes));
-        Map<String, List<ScenarioOutcome>> scenarioOutcomeMap = scenarios.stream().collect(Collectors.groupingBy(ScenarioOutcome::getRule, LinkedHashMap::new,toList()));
+        Map<Rule, List<ScenarioOutcome>> scenarioOutcomeMap = Collections.synchronizedMap(new LinkedHashMap<>());
+        for(ScenarioOutcome currentScenarioOutcome :  scenarios) {
+            Rule rule = currentScenarioOutcome.getRule();
+            List<ScenarioOutcome> scenarioOutcomeList = scenarioOutcomeMap.get(rule);
+            if(scenarioOutcomeList == null) {
+                scenarioOutcomeList = new ArrayList<>();
+                scenarioOutcomeMap.put(rule,scenarioOutcomeList);
+            }
+            scenarioOutcomeList.add(currentScenarioOutcome);
+        }
+        //Map<Rule, List<ScenarioOutcome>> scenarioOutcomeMap = scenarios.stream().collect(Collectors.groupingBy(ScenarioOutcome::getRule, LinkedHashMap::new,toList()));
         List<ScenarioOutcomeRuleWrapper> scenarioOutcomeRuleWrapperList = new ArrayList<>();
-        for(String rule : scenarioOutcomeMap.keySet())
+        for(Rule rule : scenarioOutcomeMap.keySet())
         {
             scenarioOutcomeRuleWrapperList.add(new ScenarioOutcomeRuleWrapper(rule,scenarioOutcomeMap.get(rule)));
         }

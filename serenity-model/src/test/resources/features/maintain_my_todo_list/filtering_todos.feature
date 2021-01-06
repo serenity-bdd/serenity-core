@@ -17,6 +17,7 @@ Feature: Filtering things I need to do
     Given some stuff
 
   Rule: Only completed items must be seen when the list is accordingly filtered
+    Here follows the rule description...
 
   Scenario: View only completed items
     Given that Jane has a todo list containing Buy some milk, Walk the dog

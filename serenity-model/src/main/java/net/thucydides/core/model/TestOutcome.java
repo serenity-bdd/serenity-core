@@ -141,7 +141,7 @@ public class TestOutcome {
      */
     private String project;
 
-    private String rule = ScenarioOutcome.RULE_NOT_SET;
+    private Rule rule;
 
     private FailureCause testFailureCause;
     private TestFailureCause flakyTestFailureCause;
@@ -1791,11 +1791,11 @@ public class TestOutcome {
         return this;
     }
 
-    public String getRule() {
+    public Rule getRule() {
         return rule;
     }
 
-    public void setRule(String rule) {
+    public void setRule(Rule rule) {
         this.rule = rule;
     }
 

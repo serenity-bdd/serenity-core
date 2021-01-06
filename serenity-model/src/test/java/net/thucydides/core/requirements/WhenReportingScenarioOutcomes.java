@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class WhenReportingScenarioOutcomes {
 
     private static final String RULE_1 = "Only completed items must be seen when the list is accordingly filtered";
+    private static final String DESCRIPTION_1 = "Here follows the rule description...";
     private static final String RULE_2 = "Only completed items must be seen when the list is accordingly filtered with embedded tables";
 
     File featuresDirectory;
@@ -50,7 +51,7 @@ public class WhenReportingScenarioOutcomes {
 
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
-        assertThat(scenarioOutcomes.size(), equalTo(4));
+        assertThat(scenarioOutcomes.size(), equalTo(3));
 
     }
 
@@ -63,10 +64,11 @@ public class WhenReportingScenarioOutcomes {
 
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
-        assertThat(scenarioOutcomes.get(0).getRule(),equalTo(ScenarioOutcome.RULE_NOT_SET));
-        assertThat(scenarioOutcomes.get(1).getRule(),equalTo(RULE_1));
-        assertThat(scenarioOutcomes.get(2).getRule(),equalTo(RULE_1));
-        assertThat(scenarioOutcomes.get(3).getRule(),equalTo(RULE_2));
+
+        assertThat(scenarioOutcomes.get(0).getRule().getName(),equalTo(RULE_1));
+        assertThat(scenarioOutcomes.get(0).getRule().getDescription().trim(),equalTo(DESCRIPTION_1));
+        assertThat(scenarioOutcomes.get(1).getRule().getName(),equalTo(RULE_1));
+        assertThat(scenarioOutcomes.get(2).getRule().getName(),equalTo(RULE_2));
     }
 
 }

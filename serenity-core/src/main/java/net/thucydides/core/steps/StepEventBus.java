@@ -667,7 +667,7 @@ public class StepEventBus {
         getBaseStepListener().getCurrentTestOutcome().setBackgroundDescription(description);
     }
 
-    public void setRule(String rule) {
+    public void setRule(Rule rule) {
         getBaseStepListener().getCurrentTestOutcome().setRule(rule);
     }
 

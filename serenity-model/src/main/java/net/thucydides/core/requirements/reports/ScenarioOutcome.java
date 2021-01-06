@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
+import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
@@ -10,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ScenarioOutcome {
-
-    static String RULE_NOT_SET = "RULE_NOT_SET";
 
     String getName();
 
@@ -61,5 +60,5 @@ public interface ScenarioOutcome {
 
     Map<String, Collection<TestTag>> getExampleTags();
 
-    String getRule();
+    Rule getRule();
 }

@@ -7,10 +7,7 @@ import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestResultList;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -73,12 +70,14 @@ public class FeatureFileScenarioOutcomes {
                             ruleChildren -> scenarioOutcomes.add(
                                             scenarioOutcomeFrom(currentFeature,
                                                     ruleChildren.getScenario(),
-                                                    requirementsOutcomes.getTestOutcomes(),currentRule.getName())));
+                                                    requirementsOutcomes.getTestOutcomes(),new Rule(currentRule.getName(),currentRule.getDescription()))));
                 } else {
-                    scenarioOutcomes.add(
-                            scenarioOutcomeFrom(currentFeature,
-                                    currentChild.getScenario(),
-                                    requirementsOutcomes.getTestOutcomes()));
+                    if(currentChild.hasScenario()) {
+                        scenarioOutcomes.add(
+                                scenarioOutcomeFrom(currentFeature,
+                                        currentChild.getScenario(),
+                                        requirementsOutcomes.getTestOutcomes()));
+                    }
                 }
             }
             return scenarioOutcomes;
@@ -88,13 +87,13 @@ public class FeatureFileScenarioOutcomes {
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                             Scenario scenario,
                                             TestOutcomes testOutcomes) {
-        return scenarioOutcomeFrom(feature,scenario,testOutcomes, ScenarioOutcome.RULE_NOT_SET);
+        return scenarioOutcomeFrom(feature,scenario,testOutcomes, null);
     }
 
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
-                                            Scenario scenario,
-                                            TestOutcomes testOutcomes,String rule) {
+                                                Scenario scenario,
+                                                TestOutcomes testOutcomes, Rule rule) {
 
         List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
 

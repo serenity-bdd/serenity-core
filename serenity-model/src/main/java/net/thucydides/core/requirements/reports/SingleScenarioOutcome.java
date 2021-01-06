@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
+import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
@@ -30,7 +31,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final String parentName;
     private final String parentReport;
     private final Set<TestTag> tags;
-    private String rule = RULE_NOT_SET;
+    private Rule rule;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -47,7 +48,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  String parentName,
                                  String parentReport,
                                  Set<TestTag> tags,
-                                 String rule) {
+                                 Rule rule) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -178,5 +179,5 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return EMPTY_MAP;
     }
 
-    public String getRule() { return rule;}
+    public Rule getRule() { return rule;}
 }

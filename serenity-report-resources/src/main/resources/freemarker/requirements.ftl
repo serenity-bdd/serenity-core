@@ -278,8 +278,11 @@
                                         <#else>
 
                                          <#list scenariosWithRule as scenarioWithRule>
-                                            <#if scenarioWithRule.rule?has_content>
-                                                  <h2>Rule: ${scenarioWithRule.rule}</h2>
+                                            <#if scenarioWithRule.ruleName?has_content>
+                                                  <h2>Rule: ${scenarioWithRule.ruleName}</h2>
+                                            </#if>
+                                            <#if scenarioWithRule.ruleDescription?has_content>
+                                                   <h3>${scenarioWithRule.ruleDescription}</h3>
                                             </#if>
 
                                             <h3>Scenarios</h3>

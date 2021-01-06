@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
+import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
@@ -26,7 +27,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Boolean manual;
     private final Set<TestTag> tags;
     private final Map<String, Collection<TestTag>> exampleTags;
-    private String rule = RULE_NOT_SET;
+    private Rule rule;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -42,7 +43,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   String parentReport,
                                   Set<TestTag> tags,
                                   Map<String, Collection<TestTag>> exampleTags,
-                                  String rule) {
+                                  Rule rule) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -168,5 +169,5 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     @Override
-    public String getRule() { return rule; }
+    public Rule getRule() { return rule; }
 }

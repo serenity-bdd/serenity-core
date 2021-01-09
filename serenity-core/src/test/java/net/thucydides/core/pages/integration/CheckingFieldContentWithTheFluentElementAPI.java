@@ -31,7 +31,7 @@ public class CheckingFieldContentWithTheFluentElementAPI  {
     public static void openStaticPage() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        //options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         localDriver = new ChromeDriver(options);
 
         page = new StaticSitePage(localDriver);

@@ -51,7 +51,7 @@ public class WhenReportingScenarioOutcomes {
 
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
-        assertThat(scenarioOutcomes.size(), equalTo(3));
+        assertThat(scenarioOutcomes.size(), equalTo(4));
 
     }
 
@@ -65,10 +65,11 @@ public class WhenReportingScenarioOutcomes {
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
 
-        assertThat(scenarioOutcomes.get(0).getRule().getName(),equalTo(RULE_1));
-        assertThat(scenarioOutcomes.get(0).getRule().getDescription().trim(),equalTo(DESCRIPTION_1));
+        assertThat(scenarioOutcomes.get(0).getRule(),equalTo(null));
         assertThat(scenarioOutcomes.get(1).getRule().getName(),equalTo(RULE_1));
-        assertThat(scenarioOutcomes.get(2).getRule().getName(),equalTo(RULE_2));
+        assertThat(scenarioOutcomes.get(1).getRule().getDescription().trim(),equalTo(DESCRIPTION_1));
+        assertThat(scenarioOutcomes.get(2).getRule().getName(),equalTo(RULE_1));
+        assertThat(scenarioOutcomes.get(3).getRule().getName(),equalTo(RULE_2));
     }
 
 }

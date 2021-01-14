@@ -14,6 +14,9 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 
 import java.time.temporal.ChronoUnit;
@@ -31,9 +34,10 @@ public class CheckingFieldContentWithTheFluentElementAPI  {
     public static void openStaticPage() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-        localDriver = new ChromeDriver(options);
-
+        WebDriverManager.firefoxdriver();
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.setHeadless(true);
+        localDriver = new FirefoxDriver(firefoxOptions);
         page = new StaticSitePage(localDriver);
         page.open();
     }

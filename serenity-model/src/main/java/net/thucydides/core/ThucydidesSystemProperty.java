@@ -458,6 +458,10 @@ public enum ThucydidesSystemProperty {
      * Set to true to get WebDriver to maximise the Browser window before the tests are executed.
      */
     SERENITY_BROWSER_MAXIMIZED,
+    /**
+     * Set the browser o full screen mode before tests are executed
+     */
+    SERENITY_BROWSER_FULL_SCREEN,
 
     @Deprecated
     THUCYDIDES_RESIZED_IMAGE_WIDTH,

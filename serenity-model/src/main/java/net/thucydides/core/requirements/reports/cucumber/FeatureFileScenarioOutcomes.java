@@ -78,11 +78,18 @@ public class FeatureFileScenarioOutcomes {
                                         currentChild.getScenario(),
                                         requirementsOutcomes.getTestOutcomes()));
                     }
+                    if(currentChild.hasBackground()) {
+                        scenarioOutcomes.add(
+                                scenarioBackgroundFrom(currentFeature,
+                                        currentChild.getBackground(),
+                                        requirementsOutcomes.getTestOutcomes()));
+                    }
                 }
             }
             return scenarioOutcomes;
         }
     }
+
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                             Scenario scenario,
@@ -90,6 +97,43 @@ public class FeatureFileScenarioOutcomes {
         return scenarioOutcomeFrom(feature,scenario,testOutcomes, null);
     }
 
+
+    private ScenarioOutcome scenarioBackgroundFrom(Feature feature,
+                                                Feature.Background scenario,
+                                                TestOutcomes testOutcomes) {
+
+        List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
+
+        String scenarioTitle = scenario.getName();
+
+        TestResult result = (outcomes.isEmpty()) ? TestResult.UNDEFINED :
+                TestResultList.overallResultFrom(outcomes.stream().map(TestOutcome::getResult).collect(Collectors.toList()));
+
+        List<String> reportBadges = ReportBadges.from(outcomes, scenario.getName());
+
+        String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
+        Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
+
+        List<String> renderedSteps = scenario.getStepsList().stream()
+                .map(RenderCucumber::step)
+                .collect(Collectors.toList());
+
+        return new ScenarioSummaryOutcome(scenarioTitle,
+                scenario.getKeyword(),
+                result,
+                reportBadges,
+                scenarioReport.orElse(""),
+                scenario.getDescription(),
+                renderedSteps,
+                new ArrayList<>(),
+                0,
+                false,
+                feature.getName(),
+                featureReport,
+                new HashSet<>(),
+                new HashMap<>(),
+                null);
+    }
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                                 Scenario scenario,
@@ -111,10 +155,9 @@ public class FeatureFileScenarioOutcomes {
                 .map(RenderCucumber::step)
                 .collect(Collectors.toList());
 
-        List<GherkinDocument.Feature.Scenario.Examples> filteredExamples = new ArrayList<Examples>();
+        List<Examples> filteredExamples = new ArrayList<Examples>();
         Map<String, Collection<TestTag>> exampleTags = new HashMap<>();
 
-        //if((scenarioDefinition instanceof ScenarioOutline)) {
         if(scenarioContainsExamples(scenario)) {
             List<Examples> examples =  scenario.getExamplesList();
             examples.stream()
@@ -164,6 +207,8 @@ public class FeatureFileScenarioOutcomes {
                 rule);
     }
 
+
+
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {
         if (scenarioContainsExamples(scenario)) {
             return scenarioOutlineTagsIncludingExamplesIn(scenario);
@@ -175,6 +220,7 @@ public class FeatureFileScenarioOutcomes {
     private boolean scenarioContainsExamples(Scenario scenario) {
         return(scenario.getExamplesCount() > 0);
     }
+
 
     private Set<TestTag> scenarioOutlineTagsIn(Scenario scenarioOutline) {
         Set<TestTag> testTags = scenarioOutline.getTagsList().stream()

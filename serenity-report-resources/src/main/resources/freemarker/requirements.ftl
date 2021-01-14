@@ -282,7 +282,9 @@
                                                   <h2>Rule: ${scenarioWithRule.ruleName}</h2>
                                             </#if>
                                             <#if scenarioWithRule.ruleDescription?has_content>
-                                                   <h3>${scenarioWithRule.ruleDescription}</h3>
+                                                <div class="requirementNarrativeTitle">
+                                                       ${formatter.renderText(scenarioWithRule.ruleDescription)}
+                                                </div>
                                             </#if>
 
                                             <h3>Scenarios</h3>

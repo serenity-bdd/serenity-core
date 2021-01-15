@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
@@ -32,6 +33,10 @@ public class EdgeDriverProvider implements DriverProvider {
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
+        }
+
+        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+            WebDriverManager.edgedriver().setup();
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);

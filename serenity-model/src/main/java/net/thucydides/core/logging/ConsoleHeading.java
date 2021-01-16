@@ -15,7 +15,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_STARTED,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_STARTED.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_STARTED),
                         "\n _____ _____ ____ _____   ____ _____  _    ____ _____ _____ ____  \n" +
                                 "|_   _| ____/ ___|_   _| / ___|_   _|/ \\  |  _ \\_   _| ____|  _ \\ \n" +
                                 "  | | |  _| \\___ \\ | |   \\___ \\ | | / _ \\ | |_) || | |  _| | | | |\n" +
@@ -25,7 +25,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_PASSED,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_PASSED.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_PASSED),
                         "\n        __    _____ _____ ____ _____   ____   _    ____  ____  _____ ____  \n" +
                                 "  _     \\ \\  |_   _| ____/ ___|_   _| |  _ \\ / \\  / ___|/ ___|| ____|  _ \\ \n" +
                                 " (_)_____| |   | | |  _| \\___ \\ | |   | |_) / _ \\ \\___ \\\\___ \\|  _| | | | |\n" +
@@ -37,7 +37,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_FAILED,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_FAILED.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_FAILED),
                         "\n           __  _____ _____ ____ _____   _____ _    ___ _     _____ ____  \n" +
                                 "  _       / / |_   _| ____/ ___|_   _| |  ___/ \\  |_ _| |   | ____|  _ \\ \n" +
                                 " (_)_____| |    | | |  _| \\___ \\ | |   | |_ / _ \\  | || |   |  _| | | | |\n" +
@@ -49,7 +49,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_ERROR,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_ERROR.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_ERROR),
                         "\n         __  _____ _____ ____ _____   _____ ____  ____   ___  ____  \n" +
                                 " _      / / |_   _| ____/ ___|_   _| | ____|  _ \\|  _ \\ / _ \\|  _ \\ \n" +
                                 "(_)____| |    | | |  _| \\___ \\ | |   |  _| | |_) | |_) | | | | |_) |\n" +
@@ -61,7 +61,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_COMPROMISED,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_COMPROMISED.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_COMPROMISED),
                         "\n         __  _____ _____ ____ _____ \n" +
                                 " _      / / |_   _| ____/ ___|_   _|\n" +
                                 "(_)____| |    | | |  _| \\___ \\ | |  \n" +
@@ -79,7 +79,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_SKIPPED,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_COMPROMISED.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_COMPROMISED),
                         "\n            __  _____ _____ ____ _____   ____  _  _____ ____  ____  _____ ____  \n" +
                                 "  _        / / |_   _| ____/ ___|_   _| / ___|| |/ /_ _|  _ \\|  _ \\| ____|  _ \\ \n" +
                                 " (_)_____ / /    | | |  _| \\___ \\ | |   \\___ \\| ' / | || |_) | |_) |  _| | | | |\n" +
@@ -90,7 +90,7 @@ public class ConsoleHeading {
         HEADINGS.put(ConsoleEvent.TEST_PENDING,
                 NewList.of(
                         "",
-                        ConsoleEvent.TEST_PENDING.getTitle(),
+                        titleWithBorder(ConsoleEvent.TEST_PENDING),
                         "\n          __  _____ _____ ____ _____   ____  _____ _   _ ____ ___ _   _  ____ \n" +
                                 " _       / / |_   _| ____/ ___|_   _| |  _ \\| ____| \\ | |  _ \\_ _| \\ | |/ ___|\n" +
                                 "(_)____ / /    | | |  _| \\___ \\ | |   | |_) |  _| |  \\| | | | | ||  \\| | |  _ \n" +
@@ -98,6 +98,12 @@ public class ConsoleHeading {
                                 "(_)   /_/      |_| |_____|____/ |_|   |_|   |_____|_| \\_|____/___|_| \\_|\\____|\n")
         );
 
+    }
+
+    static String titleWithBorder(ConsoleEvent consoleEvent) {
+        String title = "- " + consoleEvent.getTitle().toUpperCase() + " -";
+        String border = StringUtils.repeat("-", title.length());
+        return border + "\n" + title + "\n" + border + "\n";
     }
 
     private final EnvironmentVariables environmentVariables;

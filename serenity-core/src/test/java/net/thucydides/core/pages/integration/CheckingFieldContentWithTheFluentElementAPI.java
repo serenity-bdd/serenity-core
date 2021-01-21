@@ -32,9 +32,7 @@ public class CheckingFieldContentWithTheFluentElementAPI  {
 
     @BeforeClass
     public static void openStaticPage() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        WebDriverManager.firefoxdriver();
+        WebDriverManager.firefoxdriver().setup();
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setHeadless(true);
         localDriver = new FirefoxDriver(firefoxOptions);

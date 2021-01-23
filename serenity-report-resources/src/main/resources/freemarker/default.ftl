@@ -407,6 +407,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4>Response</h4>
+                                    <#if restQuery.path?has_content>
+                                        <p>URL: ${restQuery.path}</p>
+                                    </#if>
                                     <#if restQuery.statusCode?has_content>
                                         <p>Status code: ${restQuery.statusCode}</p>
                                     </#if>

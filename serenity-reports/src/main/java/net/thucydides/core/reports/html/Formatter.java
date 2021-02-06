@@ -118,6 +118,9 @@ public class Formatter {
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
+        if (text == null) {
+            return "";
+        }
         if (startsWithParagraphTag(text) && endWithParagraphTag(text)) {
             text = trim(text).substring(3);
             text = text.substring(0, text.length() - 4);

@@ -1,8 +1,5 @@
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 
-import static ch.qos.logback.classic.Level.DEBUG
-import static ch.qos.logback.classic.Level.WARN
-
 def bySecond = timestamp("yyyyMMdd'T'HHmmss")
 
 appender("STDOUT", ConsoleAppender) {

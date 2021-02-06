@@ -206,6 +206,7 @@ public abstract class PageObject {
         this.pages = pages;
     }
 
+    @Deprecated
     public <T extends PageObject> T switchToPage(final Class<T> pageObjectClass) {
         if (pages.getDriver() == null) {
             pages.setDriver(driver);

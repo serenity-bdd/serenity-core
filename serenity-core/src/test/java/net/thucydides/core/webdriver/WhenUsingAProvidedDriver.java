@@ -22,10 +22,7 @@ public class WhenUsingAProvidedDriver {
 
         @Override
         public WebDriver newDriver() {
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-            return new ChromeDriver(options);
+            return new HtmlUnitDriver();
         }
 
         @Override
@@ -54,6 +51,12 @@ public class WhenUsingAProvidedDriver {
 
     @Test
     public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_uninstantiated_driver() {
+        Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
+    }
+
+    @Test
+    public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_instantiated_driver() {
+        facade.getProxiedDriver();
         Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
     }
 

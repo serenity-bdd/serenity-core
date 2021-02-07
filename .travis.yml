@@ -1,0 +1,11 @@
+language: java
+install: skip
+
+os: linux
+dist: xenial
+addons:
+  chrome: stable
+  firefox: latest
+
+script:
+  - ./gradlew build --scan -s

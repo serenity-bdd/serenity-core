@@ -1150,7 +1150,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
         currentExample++;
         if (newStepForEachExample()) {
-            String exampleTitle = (exampleName.isEmpty() ? exampleTitle(currentExample, data) : exampleTitle(currentExample,exampleName));
+            String exampleTitle = (exampleName.isEmpty() ? exampleTitle(currentExample, data) : exampleTitle(currentExample,exampleName, data));
             getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle));
         }
 
@@ -1161,8 +1161,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return String.format("Example %d: %s", exampleNumber, data);
     }
 
-    private String exampleTitle(int exampleNumber, String exampleName) {
-        return String.format("%d: %s", exampleNumber, exampleName);
+    private String exampleTitle(int exampleNumber, String exampleName, Map<String, String> data) {
+        return String.format("%d: %s (%s)", exampleNumber, exampleName, data);
     }
 
     public void exampleFinished() {

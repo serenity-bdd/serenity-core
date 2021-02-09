@@ -36,7 +36,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+//import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2139,21 +2139,6 @@ public class TestOutcome {
 
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    @Deprecated
-    public void setStartTime(DateTime startTime) {
-        ZonedDateTime time =
-                ZonedDateTime.of(startTime.year().get(),
-                        startTime.monthOfYear().get(),
-                        startTime.dayOfMonth().get(),
-                        startTime.hourOfDay().get(),
-                        startTime.minuteOfHour().get(),
-                        startTime.secondOfMinute().get(),
-                        startTime.millisOfSecond().get() * 1000,
-                        ZoneId.systemDefault());
-
-        this.startTime = time;
     }
 
     public void clearStartTime() {

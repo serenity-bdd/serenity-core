@@ -34,6 +34,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module:'httpclient'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
+    testCompile("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
     testCompile project(':serenity-test-utils')
     testCompile project(':serenity-sample-alternative-resources')
     testCompile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {

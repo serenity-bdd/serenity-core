@@ -10,7 +10,7 @@ import org.junit.runners.JUnit4
 import org.junit.runners.model.RunnerScheduler
 import spock.lang.Specification
 
-public class WhenLoadingClassesFromAPackage extends Specification {
+class WhenLoadingClassesFromAPackage extends Specification {
 
     def "should load all classes in a given package"() {
         when:

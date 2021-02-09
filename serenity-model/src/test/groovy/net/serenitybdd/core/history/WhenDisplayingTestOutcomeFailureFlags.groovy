@@ -20,20 +20,16 @@ class WhenDisplayingTestOutcomeFailureFlags extends Specification {
         given:
             def newFailureFlagProvider = Mock(FlagProvider)
             newFailureFlagProvider.getFlagsFor(_) >> [ NewFailure.FLAG ]
-            def slowFlagProvider = Mock(FlagProvider)
-            slowFlagProvider.getFlagsFor(_) >> [ SlowTest.FLAG ]
         when:
             def testOutcome1 = forTestInStory("my test 1", Story.called("my story")).withFlagProvider(newFailureFlagProvider)
             def testOutcome2 = forTestInStory("my test 2", Story.called("my story")).withFlagProvider(newFailureFlagProvider)
-            def testOutcome3 = forTestInStory("my test 3", Story.called("my story")).withFlagProvider(slowFlagProvider)
-            def testOutcome4 = forTestInStory("my test 4", Story.called("my story"))
+            def testOutcome3 = forTestInStory("my test 4", Story.called("my story"))
 
-            def testOutcomes = TestOutcomes.of([testOutcome1, testOutcome2, testOutcome3, testOutcome4])
+            def testOutcomes = TestOutcomes.of([testOutcome1, testOutcome2, testOutcome3])
         then:
             testOutcomes.haveFlags() == true
-            testOutcomes.flags.size() == 2
+            testOutcomes.flags.size() == 1
             testOutcomes.getFlagCounts().get(NewFailure.FLAG) == 2
-            testOutcomes.getFlagCounts().get(SlowTest.FLAG) == 1
 
 
     }

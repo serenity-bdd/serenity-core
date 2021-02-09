@@ -3,7 +3,6 @@ package net.thucydides.core.reports.json.gson
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.AScenarioHasNoNameException
-import net.thucydides.core.steps.samples.SomeTestScenario
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification

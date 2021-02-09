@@ -38,6 +38,8 @@
         <commons.net.version>3.6</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.29</freemarker.version>
+        <selenium.version>3.141.59</selenium.version>
+        <jsonassert.version>1.5.0</jsonassert.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -244,6 +246,17 @@
                 <version>${junit5.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.skyscreamer</groupId>
+                <artifactId>jsonassert</artifactId>
+                <version>${jsonassert.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
 
 
         </dependencies>
@@ -362,6 +375,8 @@
         <module>serenity-report-resources</module>
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
+        <module>serenity-reports</module>
+        <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
     </modules>
 </project>

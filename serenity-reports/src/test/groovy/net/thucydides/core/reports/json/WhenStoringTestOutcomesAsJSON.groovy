@@ -20,7 +20,6 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.ComparisonFailure
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import sample.steps.FailingStep
 import spock.lang.Specification
 import spock.lang.Unroll
 

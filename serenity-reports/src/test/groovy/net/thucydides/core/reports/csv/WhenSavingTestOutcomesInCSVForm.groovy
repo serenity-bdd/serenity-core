@@ -9,6 +9,10 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
+import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+
 /**
  * Test outcomes can be saved as CSV files, so they can be imported and manipulated in Excel.
  */
@@ -17,11 +21,9 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
     File temporaryDirectory
     def loader = new TestOutcomeLoader().forFormat(OutcomeFormat.XML)
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("serenity-tmp").toFile()
+        temporaryDirectory.deleteOnExit();
     }
 
     def environmentVariables = new MockEnvironmentVariables()

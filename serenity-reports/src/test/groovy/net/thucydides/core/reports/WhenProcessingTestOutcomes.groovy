@@ -7,6 +7,8 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
+import java.nio.file.Paths
+
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.withResult
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
@@ -253,7 +255,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should count the number of scenarios correctly"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/sample-full-json-report"));
+            def testOutcomes = jsonTestOutcomesIn("/sample-full-json-report");
         then:
             testOutcomes.totalTestScenarios == 11
         and:
@@ -262,6 +264,11 @@ class WhenProcessingTestOutcomes extends Specification {
             testOutcomes.totalTests.withResult(TestResult.SUCCESS) == 4
         and:
             testOutcomes.totalTests.withResult(TestResult.PENDING) == 19
+    }
+
+    def jsonTestOutcomesIn(directory) {
+        def outcomeDir = Paths.get(this.getClass().getResource(directory).toURI()).toFile()
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
     }
 
 }

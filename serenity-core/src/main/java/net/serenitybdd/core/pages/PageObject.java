@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
-import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
@@ -1336,7 +1335,7 @@ public abstract class PageObject {
 
     public void waitForAngularRequestsToFinish() {
         JavascriptCompatibleVersion.of(getDriver()).ifPresent(
-                driver -> new NgWebDriver(driver).waitForAngularRequestsToFinish()
+                driver -> WaitForAngular.withDriver(driver).untilAngularRequestsHaveFinished()
         );
     }
 

@@ -13,7 +13,7 @@
     <name>Serenity Reporting Domain Model</name>
     <properties>
         <kotlin.version>1.4.10</kotlin.version>
-<!--        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>-->
+        <!--        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>-->
     </properties>
 
     <dependencies>
@@ -107,6 +107,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>com.serenitybdd.serenitystats</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>

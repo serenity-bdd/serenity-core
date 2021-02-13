@@ -11,7 +11,6 @@ import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,14 +127,14 @@ public class Pages implements Serializable {
 
     private <T extends PageObject> void  openBrowserIfRequiredFor(T pageCandidate) {
         if (browserNotOpen()) {
-            openHeadlessDriverIfNotOpen();
+            openHtmlUnitDriverIfNotOpen();
             pageCandidate.open();
         }
     }
 
 
-    private void openHeadlessDriverIfNotOpen() {
-        if (browserIsHeadless()) {
+    private void openHtmlUnitDriverIfNotOpen() {
+        if (isHtmlUnitDriver()) {
             getDriver().get("about:blank");
         }
     }
@@ -148,11 +147,11 @@ public class Pages implements Serializable {
         }
     }
 
-    private boolean browserIsHeadless() {
+    private boolean isHtmlUnitDriver() {
         if (getDriver() instanceof WebDriverFacade) {
-            return (((WebDriverFacade) getDriver()).getProxiedDriver() instanceof HtmlUnitDriver);
+            return (((WebDriverFacade) getDriver()).getProxiedDriver().getClass().getSimpleName().contains("HtmlUnitDriver"));
         } else {
-            return (getDriver() instanceof HtmlUnitDriver);
+            return (getDriver().getClass().getSimpleName().contains("HtmlUnitDriver"));
         }
     }
     private <T extends PageObject> void checkUrlPatterns(Class<T> pageObjectClass, T pageCandidate) {

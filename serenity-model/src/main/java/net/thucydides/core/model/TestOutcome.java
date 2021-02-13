@@ -201,13 +201,6 @@ public class TestOutcome {
 
     private transient FlagProvider flagProvider;
 
-
-    /**
-     * Test statistics, read from the statistics database.
-     * This data is only loaded when required, and added to the TestOutcome using the corresponding setter.
-     */
-//    private TestStatistics statistics;
-
     /**
      * Returns a set of tag provider classes that are used to determine the tags to associate with a test outcome.
      */

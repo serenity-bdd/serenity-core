@@ -1,18 +1,16 @@
 package net.serenitybdd.screenplay;
+
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
-import org.hamcrest.Matcher;
+import org.assertj.core.api.Assertions;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static net.serenitybdd.screenplay.questions.QuestionHints.addHints;
-import static net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class PredicateConsequence<T> extends BaseConsequence<T> {

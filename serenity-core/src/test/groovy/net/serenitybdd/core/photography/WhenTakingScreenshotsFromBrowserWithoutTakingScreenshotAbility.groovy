@@ -7,14 +7,19 @@ import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 class WhenTakingScreenshotsFromBrowserWithoutTakingScreenshotAbility extends Specification {
 
     @Rule
     TemporaryFolder folder = new TemporaryFolder();
 
     Darkroom darkroom
+    Path darkroomFolder;
 
     def setup() {
+        darkroomFolder = Files.createTempDirectory("tmp")
         darkroom = new Darkroom()
     }
 
@@ -26,7 +31,7 @@ class WhenTakingScreenshotsFromBrowserWithoutTakingScreenshotAbility extends Spe
         given:
             def driver = Mock(WebDriver)
             driver.getTitle() >> "value";
-            def session = new PhotoSession(driver, darkroom, folder.newFolder().toPath(), BlurLevel.NONE, ScrollStrategy.VIEWPORT_ONLY)
+            def session = new PhotoSession(driver, darkroom, darkroomFolder, BlurLevel.NONE, ScrollStrategy.VIEWPORT_ONLY)
         when:
             def photo = session.takeScreenshot()
         then:

@@ -6,6 +6,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 class WhenConvertingNonFilebasedResultsToThucydidesReports extends Specification {
 
 
@@ -24,11 +26,9 @@ class WhenConvertingNonFilebasedResultsToThucydidesReports extends Specification
 
     File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
     }
 
     def "should convert non-file-based data to Thucydides TestOutcome xml files"() {

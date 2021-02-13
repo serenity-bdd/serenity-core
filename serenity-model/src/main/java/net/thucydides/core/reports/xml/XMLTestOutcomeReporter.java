@@ -23,6 +23,7 @@ import static net.thucydides.core.model.ReportType.XML;
 
 /**
  * Generates acceptance test results in XML form.
+ *
  * @deprecated XML outputs are no longer supported.
  */
 public class XMLTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
@@ -63,6 +64,21 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return Optional.of(OutcomeFormat.XML);
     }
 
+    private XStream xstreamInstance() {
+        XStream xstream = new XStream();
+        XStream.setupDefaultSecurity(xstream);
+//        xstream.addPermission(NONE);
+//        // allow some basics
+//        xstream.addPermission(NullPermission.NULL);
+//        xstream.addPermission(NoTypePermission.NONE);
+//        xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+        xstream.allowTypeHierarchy(Collection.class);
+        xstream.allowTypesByWildcard(new String[]{
+                "net.serenitybdd.**", "net.thucydides.**"
+        });
+        return xstream;
+    }
+
     /**
      * Generate an XML report for a given test run.
      */
@@ -70,7 +86,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     public File generateReportFor(final TestOutcome testOutcome) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
-        XStream xstream = new XStream();
+        XStream xstream = xstreamInstance();
         xstream.alias("acceptance-test-run", TestOutcome.class);
         xstream.registerConverter(usingXmlConverter());
 
@@ -83,12 +99,12 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         LOGGER.debug("Generating XML report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
 
-        try(
-           OutputStream outputStream = new FileOutputStream(temporary);
-           OutputStreamWriter writer = new OutputStreamWriter(outputStream, encoding)) {
-           xstream.toXML(storedTestOutcome, writer);
-           writer.flush();
-           LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
+        try (
+                OutputStream outputStream = new FileOutputStream(temporary);
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream, encoding)) {
+            xstream.toXML(storedTestOutcome, writer);
+            writer.flush();
+            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
 
         SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
@@ -111,11 +127,11 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
     @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        try(
+        try (
                 InputStream input = new FileInputStream(reportFile);
                 InputStreamReader reader = new InputStreamReader(input, encoding);
         ) {
-            XStream xstream = new XStream();
+            XStream xstream = xstreamInstance();
             xstream.alias("acceptance-test-run", TestOutcome.class);
             xstream.registerConverter(usingXmlConverter());
             return Optional.of((TestOutcome) xstream.fromXML(reader));

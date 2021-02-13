@@ -23,6 +23,7 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.nio.file.Files
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -37,13 +38,11 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
     TestOutcomes allTestOutcomes = Mock();
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     File outputDirectory
 
     def setup() {
-        outputDirectory = temporaryFolder.newFolder()
+        outputDirectory = Files.createTempDirectory("json-outcomes").toFile()
+        outputDirectory.deleteOnExit();
         reporter = new JSONTestOutcomeReporter();
         loader = new JSONTestOutcomeReporter();
         reporter.setOutputDirectory(outputDirectory);
@@ -481,20 +480,6 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.isError()
         reloadedOutcome.testSteps[0].errorMessage.contains "Oh nose!"
-    }
-
-
-    def "should include exception stack dump for failing test"() {
-        given:
-        def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        def step = TestStepFactory.failingTestStepCalled("step 1");
-        step.failedWith(new FailingStep().failsWithMessage("Oh nose!"));
-        testOutcome.recordStep(step);
-        when:
-        def jsonReport = reporter.generateReportFor(testOutcome);
-        then:
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
-        reloadedOutcome.testSteps[0].exception.stackTrace.size() > 0
     }
 
     def "should generate a qualified JSON report for an acceptance test run if the qualifier is specified"() {

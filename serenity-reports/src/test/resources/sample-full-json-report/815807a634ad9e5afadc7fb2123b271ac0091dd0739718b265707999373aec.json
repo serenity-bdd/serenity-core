@@ -1,0 +1,141 @@
+{
+  "name": "Updating customer authentication level using a security question",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given the following customers exist:\n| Name | Field 1 | Date of Birth | Field 2 | Mobile Phone |\n| Joe Blogs | 47164114 | 1982-04-01 | 00012063 | 0865432109 |",
+      "duration": 8,
+      "startTime": 1425438521073,
+      "result": "PENDING"
+    },
+    {
+      "number": 2,
+      "description": "And I am logged into the app",
+      "duration": 6,
+      "startTime": 1425438521082,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 3,
+          "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438521086,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "description": "Given I have displayed the customer details for Joe Blogs",
+      "duration": 5,
+      "startTime": 1425438521089,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 5,
+          "description": "View locate customer page",
+          "duration": 0,
+          "startTime": 1425438521090,
+          "result": "IGNORED"
+        },
+        {
+          "number": 6,
+          "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0865432109]\u003c/span\u003e",
+          "duration": 0,
+          "startTime": 1425438521091,
+          "result": "IGNORED"
+        },
+        {
+          "number": 7,
+          "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438521092,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "description": "When I trigger an action that requires customer level 1 authentication",
+      "duration": 3,
+      "startTime": 1425438521094,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 9,
+          "description": "Update customer details",
+          "duration": 0,
+          "startTime": 1425438521096,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "description": "When I choose to verify the customer identity by \u0027Security question required\u0027",
+      "duration": 2,
+      "startTime": 1425438521097,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 11,
+          "description": "Verify customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eSECURITY_QUESTION_REQUIRED\u003c/span\u003e",
+          "duration": 0,
+          "startTime": 1425438521098,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "description": "Then I should be presented with a Blind Key security question",
+      "duration": 1033,
+      "startTime": 1425438521099,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 13,
+          "description": "Presented with security question",
+          "duration": 1030,
+          "startTime": 1425438521101,
+          "result": "IGNORED"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "customer-authentication-levels",
+    "storyName": "Customer authentication levels",
+    "path": "customer_authentication_level.feature",
+    "narrative": "In order to ensure that the customer is correctly validated to standards and policy,\nAs an authorized staff member,\nI want to authenticate the customer to level 1",
+    "type": "feature"
+  },
+  "title": "Customer authentication progressing from level 0 to level 1 using a security question",
+  "description": "",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "pending",
+      "type": "tag"
+    },
+    {
+      "name": "Customer authentication levels",
+      "type": "feature"
+    },
+    {
+      "name": "Customer authentication level",
+      "type": "story"
+    },
+    {
+      "name": "PROJ-147",
+      "type": "issue"
+    }
+  ],
+  "startTime": 1425438521073,
+  "duration": 1059,
+  "annotatedResult": "PENDING",
+  "driver": "firefox",
+  "manual": false,
+  "result": "PENDING"
+}

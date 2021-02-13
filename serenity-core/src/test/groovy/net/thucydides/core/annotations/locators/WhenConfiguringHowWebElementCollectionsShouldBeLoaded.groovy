@@ -9,11 +9,11 @@ import static net.thucydides.core.WebdriverCollectionStrategy.*
 
 class WhenConfiguringHowWebElementCollectionsShouldBeLoaded extends Specification {
 
-    def "the default strategy should be Pessimistic for legacy reasons"() {
+    def "the default strategy should be Optimistic for legacy reasons"() {
         when:
         def environmentVariables = new MockEnvironmentVariables()
         then:
-        WebdriverCollectionStrategy.definedIn(environmentVariables) == Pessimistic
+        WebdriverCollectionStrategy.definedIn(environmentVariables) == Optimistic
     }
 
     def "the strategy can be defined in using the serenity.webdriver.collection_loading_strategy property"() {
@@ -30,7 +30,7 @@ class WhenConfiguringHowWebElementCollectionsShouldBeLoaded extends Specificatio
         "Paranoid"    | Paranoid
         "pessimistic" | Pessimistic
         "OPTIMISTIC"  | Optimistic
-        "Misspelt"    | Pessimistic
+        "Misspelt"    | Optimistic
     }
 
 

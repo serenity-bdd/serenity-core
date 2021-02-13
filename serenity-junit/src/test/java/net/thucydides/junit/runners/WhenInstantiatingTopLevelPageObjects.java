@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ThucydidesRunner.class)
 public class WhenInstantiatingTopLevelPageObjects {
     
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

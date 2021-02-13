@@ -18,6 +18,17 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
+    class SomeTestScenario {
+        public void a_simple_test_case() {
+        }
+
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
     def "should serialize TestOutcomes to JSON"() {
         given:
             GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)

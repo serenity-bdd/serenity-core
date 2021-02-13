@@ -8,7 +8,7 @@
     <version>2.3.14-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>serenity-parent-pom</name>
+    <name>Serenity BDD</name>
     <url>https://serenity-bdd.github.io/</url>
 
     <properties>
@@ -17,7 +17,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <junit.version>4.13.1</junit.version>
-        <groovy.version>3.0.6</groovy.version>
+        <groovy.version>3.0.7</groovy.version>
         <spock.version>2.0-M3-groovy-3.0</spock.version>
         <byte-buddy.version>1.10.10</byte-buddy.version>
         <guava.version>30.1-jre</guava.version>
@@ -40,6 +40,30 @@
         <freemarker.version>2.3.29</freemarker.version>
         <selenium.version>3.141.59</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
+        <jsoup.version>1.13.1</jsoup.version>
+        <joda-time.version>2.8.2</joda-time.version>
+        <xstream.version>1.4.13</xstream.version>
+        <opencsv.version>2.0</opencsv.version>
+        <typesafe.version>1.3.1</typesafe.version>
+        <imgscalr.version>4.2</imgscalr.version>
+        <awaitility.version>4.0.3</awaitility.version>
+        <freemarker.version>2.3.29</freemarker.version>
+        <asciidoctor.version>1.5.6</asciidoctor.version>
+        <appium.version>7.3.0</appium.version>
+        <fluentlenium.version>0.10.2</fluentlenium.version>
+        <phantomjs.version>1.4.4</phantomjs.version>
+        <webdrivermanager.version>4.3.1</webdrivermanager.version>
+        <filters.version>2.0.235</filters.version>
+        <shutterbug.version>0.9.3</shutterbug.version>
+        <ngwebdriver.version>1.1.6</ngwebdriver.version>
+        <htmlunit.version>2.47.1</htmlunit.version>
+        <spring.version>5.3.3</spring.version>
+        <jimfs.version>1.1</jimfs.version>
+        <jbehave.version>4.8.3</jbehave.version>
+        <opentest4j.version>1.2.0</opentest4j.version>
+        <ant.version>1.10.8</ant.version>
+        <restassured.version>4.3.3</restassured.version>
+        <wiremock.version>1.58</wiremock.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -70,27 +94,40 @@
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
+                <artifactId>groovy</artifactId>
                 <version>${groovy.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy</artifactId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-xml</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${restassured.version}</version>
+            </dependency>
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
@@ -113,7 +150,11 @@
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -254,13 +295,150 @@
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-server</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
                 <version>${selenium.version}</version>
             </dependency>
-
-
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-api</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-chrome-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-firefox-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-edge-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-ie-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-safari-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-opera-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.appium</groupId>
+                <artifactId>java-client</artifactId>
+                <version>${appium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>${opencsv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe</groupId>
+                <artifactId>config</artifactId>
+                <version>${typesafe.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.imgscalr</groupId>
+                <artifactId>imgscalr-lib</artifactId>
+                <version>${imgscalr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj</artifactId>
+                <version>${asciidoctor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fluentlenium</groupId>
+                <artifactId>fluentlenium-core</artifactId>
+                <version>${fluentlenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.codeborne</groupId>
+                <artifactId>phantomjsdriver</artifactId>
+                <version>${phantomjs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.bonigarcia</groupId>
+                <artifactId>webdrivermanager</artifactId>
+                <version>${webdrivermanager.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jhlabs</groupId>
+                <artifactId>filters</artifactId>
+                <version>${filters.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.paulhammant</groupId>
+                <artifactId>ngwebdriver</artifactId>
+                <version>${ngwebdriver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.htmlunit</groupId>
+                <artifactId>htmlunit</artifactId>
+                <version>${htmlunit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>htmlunit-driver</artifactId>
+                <version>${htmlunit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <optional>true</optional>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.jimfs</groupId>
+                <artifactId>jimfs</artifactId>
+                <version>${jimfs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock</artifactId>
+                <version>${wiremock.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
@@ -275,9 +453,35 @@
                     <version>3.0.2</version>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <groupId>org.codehaus.gmavenplus</groupId>
+                    <artifactId>gmavenplus-plugin</artifactId>
+                    <version>1.12.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>execute</goal>
+                                <goal>addSources</goal>
+                                <goal>addTestSources</goal>
+                                <goal>generateStubs</goal>
+                                <goal>compile</goal>
+                                <goal>generateTestStubs</goal>
+                                <goal>compileTests</goal>
+                                <goal>removeStubs</goal>
+                                <goal>removeTestStubs</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-all</artifactId>
+                            <version>${groovy.version}</version>
+                            <scope>runtime</scope>
+                            <type>pom</type>
+                        </dependency>
+                    </dependencies>
                 </plugin>
+
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
@@ -316,8 +520,9 @@
 
                 </plugin>
                 <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>3.2.0</version>
+                    <artifactId>maven-jar-plugin</artifactId>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -339,18 +544,18 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.12.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compileTests</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.codehaus.gmavenplus</groupId>-->
+            <!--                <artifactId>gmavenplus-plugin</artifactId>-->
+            <!--                <version>1.12.1</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <goals>-->
+            <!--                            <goal>compileTests</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -371,12 +576,26 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M4</version>
+            </plugin>
+        </plugins>
+    </reporting>
     <modules>
         <module>serenity-report-resources</module>
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
+        <module>serenity-core</module>
+        <module>serenity-rest-assured</module>
         <module>serenity-reports</module>
         <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
+        <module>serenity-junit</module>
+        <module>serenity-ant-task</module>
+        <module>serenity-screenplay</module>
     </modules>
 </project>

@@ -1,0 +1,124 @@
+
+
+
+
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter-DirectBanking","Funds Transfer between Own Accounts","N/A","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (3.1s)
+And the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+Given the BusinessPaymentProcess drop down list is populated
+-> done: PaymentGroupDetailsSteps.GivenDropDownListIsPopulated("BusinessPaymentPr...") (1.3s)
+And I am of Inputter-DirectBanking role
+-> done: PaymentGroupDetailsSteps.GivenIAmOfRole("Inputter-DirectBa...") (0.0s)
+When I select Funds Transfer between Own Accounts from BusinessPaymentProcess drop down list
+-> done: PaymentGroupDetailsSteps.WhenISelectFromDropDownList("Funds Transfer be...", "BusinessPaymentPr...") (1.5s)
+Then the BusinessTransactionType drop down list is populated with N/A
+-> done: PaymentGroupDetailsSteps.ThenDropDownListIsPopulated("BusinessTransacti...", "N/A") (0.7s)
+And the PaymentType drop down list is populated with Funds Transfer
+-> done: PaymentGroupDetailsSteps.ThenDropDownListIsPopulated("PaymentType", "Funds Transfer") (0.3s)
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter-DirectBanking","Credit Card Repayment","N/A","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (3.3s)
+And the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+Given the BusinessPaymentProcess drop down list is populated
+-> error: A exception with a null response was thrown sending an HTTP request to the remote WebDriver server for URL http://localhost:4436/session/cf6ace60815dd3f17bcfacd443a0aa83/elements. The status of the exception was SendFailure, and the message was: The underlying connection was closed: An unexpected error occurred on a send.
+And I am of Inputter-DirectBanking role
+-> skipped because of previous errors
+When I select Credit Card Repayment from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter","Credit Card Repayment","N/A","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> error: A exception with a null response was thrown sending an HTTP request to the remote WebDriver server for URL http://localhost:4683/session/49b33d2cdae7ea49a9e2a6a294e33768/element/:wdc:1372135744106/element. The status of the exception was SendFailure, and the message was: The underlying connection was closed: An unexpected error occurred on a send.
+And the Payment Group Details page is loaded
+-> skipped because of previous errors
+Given the BusinessPaymentProcess drop down list is populated
+-> skipped because of previous errors
+And I am of Inputter role
+-> skipped because of previous errors
+When I select Credit Card Repayment from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter","Without Passbook Withdrawal","N/A","Funds Transfer,Direct Credit",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (2.8s)
+And the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+Given the BusinessPaymentProcess drop down list is populated
+-> error: A exception with a null response was thrown sending an HTTP request to the remote WebDriver server for URL http://localhost:4881/session/4fadf22bf7d4bafdc492ef7e8ca197e5/elements. The status of the exception was SendFailure, and the message was: The underlying connection was closed: An unexpected error occurred on a send.
+And I am of Inputter role
+-> skipped because of previous errors
+When I select Without Passbook Withdrawal from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer,Direct Credit
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter-DirectBanking","Fee/Interest Transfer","N/A","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> error: A exception with a null response was thrown sending an HTTP request to the remote WebDriver server for URL http://localhost:1219/session/a29ea7477174d986b1fd7be778647ded/window. The status of the exception was SendFailure, and the message was: The underlying connection was closed: An unexpected error occurred on a send.
+And the Payment Group Details page is loaded
+-> skipped because of previous errors
+Given the BusinessPaymentProcess drop down list is populated
+-> skipped because of previous errors
+And I am of Inputter-DirectBanking role
+-> skipped because of previous errors
+When I select Fee/Interest Transfer from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter","Funds Transfer","N/A","Funds Transfer,Direct Credit",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> error: Object reference not set to an instance of an object.
+And the Payment Group Details page is loaded
+-> skipped because of previous errors
+Given the BusinessPaymentProcess drop down list is populated
+-> skipped because of previous errors
+And I am of Inputter role
+-> skipped because of previous errors
+When I select Funds Transfer from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer,Direct Credit
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter","Funds Transfer between Own Accounts","N/A","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> error: Object reference not set to an instance of an object.
+And the Payment Group Details page is loaded
+-> skipped because of previous errors
+Given the BusinessPaymentProcess drop down list is populated
+-> skipped because of previous errors
+And I am of Inputter role
+-> skipped because of previous errors
+When I select Funds Transfer between Own Accounts from BusinessPaymentProcess drop down list
+-> skipped because of previous errors
+Then the BusinessTransactionType drop down list is populated with N/A
+-> skipped because of previous errors
+And the PaymentType drop down list is populated with Funds Transfer
+-> skipped because of previous errors
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessTransactionAndPaymentTypeDropDownLists("Inputter","Loan Repayment","Loan Repayment","Funds Transfer",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (2.5s)
+And the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+Given the BusinessPaymentProcess drop down list is populated
+-> done: PaymentGroupDetailsSteps.GivenDropDownListIsPopulated("BusinessPaymentPr...") (1.2s)
+And I am of Inputter role
+-> done: PaymentGroupDetailsSteps.GivenIAmOfRole("Inputter") (0.0s)
+When I select Loan Repayment from BusinessPaymentProcess drop down list
+-> done: PaymentGroupDetailsSteps.WhenISelectFromDropDownList("Loan Repayment", "BusinessPaymentPr...") (2.0s)
+Then the BusinessTransactionType drop down list is populated with Loan Repayment
+-> done: PaymentGroupDetailsSteps.ThenDropDownListIsPopulated("BusinessTransacti...", "Loan Repayment") (0.7s)
+And the PaymentType drop down list is populated with Funds Transfer
+-> done: PaymentGroupDetailsSteps.ThenDropDownListIsPopulated("PaymentType", "Funds Transfer") (0.2s)

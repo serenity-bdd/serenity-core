@@ -14,14 +14,13 @@ import org.openqa.selenium.chrome.ChromeOptions
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
 class WhenGeneratingAggregateHtmlReports extends Specification {
 
     File temporaryDirectory
-
-    @Rule
-    TemporaryFolder temporaryFolder
 
     def issueTracking = Mock(IssueTracking)
     def mockSystemProperties = Mock(SerenitySystemProperties)
@@ -33,7 +32,9 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp");
+        temporaryDirectory.deleteOnExit();
+
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
         reporter.outputDirectory = outputDirectory;

@@ -1,0 +1,45 @@
+{
+  "name": "customAssertThrown",
+  "id": "com.foobar.tests.TestExamples:customAssertThrown",
+  "testCaseName": "com.foobar.tests.TestExamples",
+  "userStory": {
+    "id": "com.foobar.tests.TestExamples",
+    "storyName": "Test examples",
+    "storyClassName": "com.foobar.tests.TestExamples",
+    "path": "com.foobar.tests",
+    "type": "story"
+  },
+  "featureTag": {
+    "name": "Tests/Test examples",
+    "type": "story"
+  },
+  "title": "Custom assert thrown",
+  "tags": [
+    {
+      "name": "Tests/Test examples",
+      "type": "story"
+    }
+  ],
+  "startTime": 1500297334278,
+  "duration": 10,
+  "testFailureCause": {
+    "errorType": "com.foobar.CustomAssertError",
+    "message": "CustomAssertError thrown",
+    "stackTrace": [
+      {
+        "declaringClass": "com.foobar.tests.TestExamples",
+        "methodName": "customAssertThrown",
+        "fileName": "TestExamples.java",
+        "lineNumber": 34
+      }
+    ]
+  },
+  "testFailureClassname": "com.foobar.CustomAssertError",
+  "testFailureMessage": "CustomAssertError thrown",
+  "testFailureSummary": "FAILURE;com.foobar.CustomAssertError;CustomAssertError thrown;TestExamples.java",
+  "projectKey": "",
+  "annotatedResult": "FAILURE",
+  "manual": false,
+  "testSource": "JUnit",
+  "result": "FAILURE"
+}

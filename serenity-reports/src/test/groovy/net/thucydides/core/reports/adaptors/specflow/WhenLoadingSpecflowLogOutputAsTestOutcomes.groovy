@@ -6,6 +6,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.util.TestResources.fileInClasspathCalled
 
 /**
@@ -228,11 +230,9 @@ class WhenLoadingSpecflowLogOutputAsTestOutcomes extends Specification {
 
     File tmp
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        tmp = temporaryFolder.newFolder()
+        tmp = Files.createTempDirectory("serenity-tmp").toFile()
+        tmp.deleteOnExit();
     }
 
 

@@ -1,0 +1,45 @@
+{
+  "name": "softAssertionFailed",
+  "id": "com.foobar.tests.TestExamples:softAssertionFailed",
+  "testCaseName": "com.foobar.tests.TestExamples",
+  "userStory": {
+    "id": "com.foobar.tests.TestExamples",
+    "storyName": "Test examples",
+    "storyClassName": "com.foobar.tests.TestExamples",
+    "path": "com.foobar.tests",
+    "type": "story"
+  },
+  "featureTag": {
+    "name": "Tests/Test examples",
+    "type": "story"
+  },
+  "title": "Soft assertion failed",
+  "tags": [
+    {
+      "name": "Tests/Test examples",
+      "type": "story"
+    }
+  ],
+  "startTime": 1500297334296,
+  "duration": 355,
+  "testFailureCause": {
+    "errorType": "org.assertj.core.api.SoftAssertionError",
+    "message": "\nThe following assertion failed:\n1) [SoftAssertions failed] expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\nat TestExamples.softAssertionFailed(TestExamples.java:22) expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\n",
+    "stackTrace": [
+      {
+        "declaringClass": "com.foobar.tests.TestExamples",
+        "methodName": "softAssertionFailed",
+        "fileName": "TestExamples.java",
+        "lineNumber": 23
+      }
+    ]
+  },
+  "testFailureClassname": "org.assertj.core.api.SoftAssertionError",
+  "testFailureMessage": "\nThe following assertion failed:\n1) [SoftAssertions failed] expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\nat TestExamples.softAssertionFailed(TestExamples.java:22) expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\n",
+  "testFailureSummary": "FAILURE;org.assertj.core.api.SoftAssertionError;\nThe following assertion failed:\n1) [SoftAssertions failed] expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\nat TestExamples.softAssertionFailed(TestExamples.java:22) expected:\u003c[fals]e\u003e but was:\u003c[tru]e\u003e\n;TestExamples.java",
+  "projectKey": "",
+  "annotatedResult": "FAILURE",
+  "manual": false,
+  "testSource": "JUnit",
+  "result": "FAILURE"
+}

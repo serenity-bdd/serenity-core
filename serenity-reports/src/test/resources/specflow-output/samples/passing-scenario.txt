@@ -1,0 +1,9 @@
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.RegularPaymentGroupServiceCallsFeature.PopulateBusinessPaymentProcessDropDownList("Inputter","Credit Card Repayment,Fee/Interest Transfer,Funds Transfer,Funds Transfer between Own Accounts,Loan Repayment,Without Passbook Withdrawal",null)
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (2.3s)
+And the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+Given I am of Inputter role
+-> done: PaymentGroupDetailsSteps.GivenIAmOfRole("Inputter") (0.0s)
+Then the BusinessPaymentProcess drop down list is populated with Credit Card Repayment,Fee/Interest Transfer,Funds Transfer,Funds Transfer between Own Accounts,Loan Repayment,Without Passbook Withdrawal
+-> done: PaymentGroupDetailsSteps.ThenDropDownListIsPopulated("BusinessPaymentPr...", "Credit Card Repay...") (0.9s)

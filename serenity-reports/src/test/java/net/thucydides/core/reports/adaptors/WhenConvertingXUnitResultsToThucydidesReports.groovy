@@ -7,17 +7,17 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.util.TestResources.fileInClasspathCalled
 
 class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
 
    File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit();
     }
 
     def "should convert xUnit files to thucydides TestOutcome json files"() {

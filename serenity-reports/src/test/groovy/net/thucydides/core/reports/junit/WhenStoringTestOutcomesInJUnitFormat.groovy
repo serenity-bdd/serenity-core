@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -21,11 +22,8 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
 
     File outputDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        outputDirectory = temporaryFolder.newFolder()
+        outputDirectory = Files.createTempDirectory("junit").toFile()
         reporter = new JUnitXMLOutcomeReporter(outputDirectory);
     }
 
@@ -141,26 +139,5 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
 
         then:
         junitXMLReport.contains '''<skipped/>'''
-    }
-
-    def "JUnit XML report should handle flaky tests"() {
-        given:
-        def testOutcome1 = TestOutcome.forTest("should_do_this", SomeTestScenario.class)
-        testOutcome1.startTime = FIRST_OF_JANUARY
-        testOutcome1.description = "Some description"
-        testOutcome1.addTag(TestTag.withName("Retries: 1").andType("unstable test"));
-        testOutcome1.setFlakyTestFailureCause(TestFailureCause.from(new AssertionError("Flaky test assertion error")))
-        testOutcome1.recordStep(TestStepFactory.flakyTestStepCalled("UNSTABLE TEST:FailureHistory").startingAt(FIRST_OF_JANUARY))
-        testOutcome1.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
-
-        def testOutcomes = TestOutcomes.of([testOutcome1])
-
-        when:
-        reporter.generateReportsFor(testOutcomes)
-        def junitXMLReport = new File(outputDirectory.getAbsolutePath(), outputDirectory.list()[0]).text
-
-        then:
-        junitXMLReport.contains '''<flakyFailure message="Flaky test assertion error" type="java.lang.AssertionError">UNSTABLE TEST:FailureHistory<system-err>Flaky test assertion error'''
-        junitXMLReport.contains '''</system-err></flakyFailure>'''
     }
 }

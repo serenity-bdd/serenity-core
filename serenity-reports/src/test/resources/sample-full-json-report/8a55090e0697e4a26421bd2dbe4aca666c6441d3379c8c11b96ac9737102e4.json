@@ -1,0 +1,138 @@
+{
+  "name": "Blind-key checks for customers not registered or who do not have a Card",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given the following customers exist:\n| Name | Field 1 | Date Of  Birth | Field 2 | Mobile Phone |\n| Joe Blogs | 47164114 | 1982-04-01 | 00012063 | 0865432109 |\n| Bruce Wayne | 43935832 | 1982-01-17 | 00008414 | 0869876543 |\n| Tom Jones | 41715217 | 1952-05-10 | 00012269 | 0876543210 |\n| Will Smith | 42195952 | 1982-01-17 | 00008494 | 0859876541 |\n| George Clooney | 40562514 | 1952-04-10 | 00012097 | 0831234567 |\n| Selena Kyle |  | 1984-04-06 |  | 0871555555 |\n| Oswald Cobblepot |  | 1977-08-28 |  | 0876543210 |",
+      "duration": 7,
+      "startTime": 1425438520172,
+      "result": "PENDING"
+    },
+    {
+      "number": 2,
+      "description": "And I am logged into the app",
+      "duration": 5,
+      "startTime": 1425438520180,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 3,
+          "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438520183,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "description": "Given the following customers exist:\n| Name | Field 1 | Date Of  Birth | Field 2 | Mobile Phone |\n| Selena Kyle |  | 1984-04-06 |  | 0871555555 |",
+      "duration": 3,
+      "startTime": 1425438520185,
+      "result": "PENDING"
+    },
+    {
+      "number": 5,
+      "description": "And I have displayed customer Selena Kyle using Phone Number",
+      "duration": 5,
+      "startTime": 1425438520188,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 6,
+          "description": "View locate customer page",
+          "duration": 1,
+          "startTime": 1425438520189,
+          "result": "IGNORED"
+        },
+        {
+          "number": 7,
+          "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0871555555]\u003c/span\u003e",
+          "duration": 0,
+          "startTime": 1425438520190,
+          "result": "IGNORED"
+        },
+        {
+          "number": 8,
+          "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eSelena Kyle\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438520191,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "description": "And I trigger an action that requires customer level 1 authentication",
+      "duration": 2,
+      "startTime": 1425438520194,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 10,
+          "description": "Update customer details",
+          "duration": 1,
+          "startTime": 1425438520195,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "description": "Then I should not be asked to verify the customer identify by Field 1 or by Field 2.",
+      "duration": 4,
+      "startTime": 1425438520196,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 12,
+          "description": "Select blind key tab",
+          "duration": 1,
+          "startTime": 1425438520197,
+          "result": "IGNORED"
+        },
+        {
+          "number": 13,
+          "description": "Should not be asked to verify by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[FIELD_1, FIELD_2]\u003c/span\u003e",
+          "duration": 2,
+          "startTime": 1425438520198,
+          "result": "IGNORED"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "blind-key-authentication",
+    "storyName": "Blind key authentication",
+    "path": "blind_key.feature",
+    "type": "feature"
+  },
+  "title": "Blind-key checks for customers not registered for Internet Banking or who do not have a Card",
+  "description": "Blind-key checks should not be requested for values not held on the system",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "pending",
+      "type": "tag"
+    },
+    {
+      "name": "Blind key authentication",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-198",
+      "type": "issue"
+    },
+    {
+      "name": "Blind key",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438520171,
+  "duration": 29,
+  "annotatedResult": "PENDING",
+  "driver": "firefox",
+  "manual": false,
+  "result": "PENDING"
+}

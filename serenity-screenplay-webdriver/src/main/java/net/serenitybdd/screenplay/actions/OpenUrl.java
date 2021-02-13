@@ -7,8 +7,8 @@ import net.thucydides.core.annotations.Step;
 
 public class OpenUrl implements Interaction {
 
-    private final String url;
-
+    private String url;
+    public OpenUrl() {}
     public OpenUrl(String url) {
         this.url = url;
     }
@@ -17,6 +17,4 @@ public class OpenUrl implements Interaction {
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).openUrl(url);
     }
-
-
 }

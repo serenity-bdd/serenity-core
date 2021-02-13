@@ -2,15 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <artifactId>serenity-parent-pom</artifactId>
         <groupId>net.serenity-bdd</groupId>
         <version>2.3.14-SNAPSHOT</version>
     </parent>
-    <artifactId>serenity-screenplay-rest</artifactId>
+    <artifactId>serenity-zalenium</artifactId>
     <packaging>jar</packaging>
-    <name>Serenity Screenplay RestAssured Integration</name>
+    <name>Serenity Screenplay Zalenium Integration</name>
 
     <build>
         <plugins>
@@ -20,7 +19,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.serenitybdd.serenityscreenplayrest</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.serenitybdd.serenityzalenium</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -33,16 +32,7 @@
             <artifactId>serenity-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>serenity-rest-assured</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>serenity-screenplay</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Unit testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -54,8 +44,6 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Unit testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -66,6 +54,5 @@
             <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 </project>

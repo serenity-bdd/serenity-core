@@ -7,7 +7,9 @@ import net.thucydides.core.annotations.Step;
 
 public class OpenAt implements Interaction {
 
-    private final String url;
+    private String url;
+
+    public OpenAt(){}
 
     public OpenAt(String url) {
         this.url = url;

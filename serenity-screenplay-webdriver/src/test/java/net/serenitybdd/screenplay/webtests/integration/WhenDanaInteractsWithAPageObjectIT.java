@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaInteractsWithAPageObject {
+public class WhenDanaInteractsWithAPageObjectIT {
 
     @Managed(driver = "htmlunit")
     WebDriver herBrowser;

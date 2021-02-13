@@ -8,6 +8,8 @@ public class AnonymousTask extends AnonymousPerformable implements Task, CanBeSi
 
     private boolean isSilent = false;
 
+    public AnonymousTask(){}
+
     public AnonymousTask(String title, List<Performable> steps) {
         super(title, steps);
     }

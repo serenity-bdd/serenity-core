@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.exceptions;
+package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.exceptions.TestCompromisedException;
 

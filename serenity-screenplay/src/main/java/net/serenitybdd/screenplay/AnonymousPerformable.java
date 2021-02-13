@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AnonymousPerformable implements Performable, HasCustomFieldValues {
-    private final String title;
-    private final Map<String, Object> fieldValues = new HashMap();
-    private final List<Performable> steps;
+    private String title;
+    private Map<String, Object> fieldValues = new HashMap();
+    private List<Performable> steps;
+
+    public AnonymousPerformable() {}
 
     public AnonymousPerformable(String title, List<Performable> steps) {
         this.title = title;

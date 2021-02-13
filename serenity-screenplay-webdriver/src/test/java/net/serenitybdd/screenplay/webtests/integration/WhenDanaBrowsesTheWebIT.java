@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.webtests.integration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
@@ -33,7 +34,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaBrowsesTheWeb {
+public class WhenDanaBrowsesTheWebIT {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver firstBrowser;
@@ -51,19 +52,19 @@ public class WhenDanaBrowsesTheWeb {
     }
 
     @Test
-    public void danaCanUpdateHerProfile() {
+    public void dinaCanUpdateHerProfile() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
-        givenThat(dana).has(openedTheApplication);
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
+        then(dina).should(seeThat(profile, displays("name", equalTo("dina"))));
+        and(dina).should(seeThat(profile, displays("country", equalTo("France"))));
 
-        and(dana).should(
+        and(dina).should(
                 seeThat(
                         WebDriverQuestion.about("the country").answeredBy(
                                 browser -> browser.findBy("#country").getValue()
@@ -86,85 +87,85 @@ public class WhenDanaBrowsesTheWeb {
     }
 
     @Test
-    public void danaCanMakeAssertionsAboutWebElements() {
+    public void dinaCanMakeAssertionsAboutWebElements() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(the(ProfilePage.NAME), isVisible()));
+        then(dina).should(seeThat(the(ProfilePage.NAME), isVisible()));
 
-        then(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
-        and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
-        and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
-        and(dana).should(seeThat(TheProfileName.isDisplayed()));
+        then(dina).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
+        and(dina).should(seeThat(the(ProfilePage.NAME), isEnabled()));
+        and(dina).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
+        and(dina).should(seeThat(TheProfileName.isDisplayed()));
     }
 
 
     @Test
-    public void danaCanMakeAssertionsAboutTheContentsOfWebElements() {
+    public void dinaCanMakeAssertionsAboutTheContentsOfWebElements() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(the(ProfilePage.NAME), hasValue("Dana")));
+        then(dina).should(seeThat(the(ProfilePage.NAME), hasValue("dina")));
     }
 
     @Test
-    public void danaCanWaitForTheStateOfTheWebPage() {
+    public void dinaCanWaitForTheStateOfTheWebPage() {
 
         Target nameField = Target.the("nameField").locatedBy("#name");
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
+        when(dina).attemptsTo(viewHerProfile);
 
-        and(dana).attemptsTo(WaitUntil.the(nameField, isVisible()));
+        and(dina).attemptsTo(WaitUntil.the(nameField, isVisible()));
 
-        assertThat(the(nameField).answeredBy(dana), isVisible());
+        assertThat(the(nameField).answeredBy(dina), isVisible());
     }
 
 
     ProfilePage profilePage;
 
     @Test
-    public void danaCanMakeAssertionsAboutRawWebElements() {
+    public void dinaCanMakeAssertionsAboutRawWebElements() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
+        when(dina).attemptsTo(viewHerProfile);
 
         profilePage.setDriver(firstBrowser);
         assertThat(profilePage.dob, isVisible());
     }
 
     @Test
-    public void danaCanMakeAssertionsAboutWebElementsInTheSameAssertion() {
+    public void dinaCanMakeAssertionsAboutWebElementsInTheSameAssertion() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(the(ProfilePage.NAME),
+        then(dina).should(seeThat(the(ProfilePage.NAME),
                 isVisible(),
                 isCurrentlyVisible(),
                 isEnabled()));
@@ -193,21 +194,21 @@ public class WhenDanaBrowsesTheWeb {
 
  */
     @Test
-    public void itShouldBeEasyForDanaToEnterAccurateBankAccountDetails() {
+    public void itShouldBeEasyFordinaToEnterAccurateBankAccountDetails() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
+        when(dina).attemptsTo(viewHerProfile);
 
-        then(dana).should(
+        then(dina).should(
                 seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
                         whenAttemptingTo(EnterABankAccount.bsbValueOf("qwerty")).
                         because("BSB cannot have alphabetical characters")
         );
-        then(dana).should(
+        then(dina).should(
                 seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
                         whenAttemptingTo(EnterABankAccount.bsbValueOf("12345")).
                         because("BSB cannot have less than 6 digits")
@@ -215,52 +216,52 @@ public class WhenDanaBrowsesTheWeb {
     }
 
     @Test
-    public void danaShouldBeAbleToSeeHerBankBalancesEvenIfTheyAreInANestedIFrame() {
+    public void dinaShouldBeAbleToSeeHerBankBalancesEvenIfTheyAreInANestedIFrame() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
-        and(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
+        when(dina).attemptsTo(viewHerProfile);
+        then(dina).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
+        and(dina).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
     }
 
     @Test
-    public void danaShouldBeAbleToInteractWithTargetsInMultipleIFrames() {
+    public void dinaShouldBeAbleToInteractWithTargetsInMultipleIFrames() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
-        when(dana).attemptsTo(viewHerProfile,
+        givenThat(dina).has(openedTheApplication);
+        when(dina).attemptsTo(viewHerProfile,
                 Enter.theValue("HSBC").into(BankAccountEntry.ACCOUNT_NAME));
-        then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
-        and(dana).attemptsTo(Enter.theValue("Dana").into(ProfilePage.NAME));
-        then(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
+        then(dina).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
+        and(dina).attemptsTo(Enter.theValue("dina").into(ProfilePage.NAME));
+        then(dina).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
     }
 
     @Test
     public void multipleUsersCanUpdateTheirProfilesSimultaneously() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
         Actor jane = new Actor("Jane");
         jane.can(BrowseTheWeb.with(anotherBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
         andThat(jane).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
         and(jane).attemptsTo(viewHerProfile);
         and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
 
-        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
+        then(dina).should(seeThat(profile, displays("name", equalTo("dina"))));
+        and(dina).should(seeThat(profile, displays("country", equalTo("France"))));
 
         then(jane).should(seeThat(profile, displays("name", equalTo("Jane"))));
         and(jane).should(seeThat(profile, displays("country", equalTo("United Kingdom"))));
@@ -270,20 +271,20 @@ public class WhenDanaBrowsesTheWeb {
     @Test
     public void multipleUsersCanShareTheSameBrowser() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
         Actor jane = new Actor("Jane");
         jane.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
         andThat(jane).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
+        then(dina).should(seeThat(profile, displays("name", equalTo("dina"))));
+        and(dina).should(seeThat(profile, displays("country", equalTo("France"))));
 
         when(jane).attemptsTo(viewHerProfile);
         and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
@@ -296,21 +297,21 @@ public class WhenDanaBrowsesTheWeb {
     @Test
     public void shouldSeeCorrectClientDetails() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(
                 UpdateHerProfile
-                        .withName("Dana")
+                        .withName("dina")
                         .andCountryOfResidence("France")
                         .andDateOfBirth("10/10/1969")
                         .andFavoriteColor("Red"));
 
-        then(dana).should(
-                seeThat(Client.name(), is(equalTo("Dana"))),
+        then(dina).should(
+                seeThat(Client.name(), is(equalTo("dina"))),
                 seeThat(Client.color(), is(equalTo("Red"))),
                 seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))),
                 seeThat(Client.country(), is(equalTo("France"))));
@@ -320,21 +321,21 @@ public class WhenDanaBrowsesTheWeb {
     @Test
     public void shouldSeeCorrectLegacyClientDetails() {
 
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
 
-        givenThat(dana).has(openedTheApplication);
+        givenThat(dina).has(openedTheApplication);
 
-        when(dana).attemptsTo(viewHerOldProfile);
-        and(dana).attemptsTo(
+        when(dina).attemptsTo(viewHerOldProfile);
+        and(dina).attemptsTo(
                 UpdateHerProfile
-                        .withName("Dana")
+                        .withName("dina")
                         .andCountryOfResidence("France")
                         .andDateOfBirth("10/10/1969")
                         .andFavoriteColor("Red"));
 
-        then(dana).should(
-                seeThat(Client.name(), is(equalTo("Dana"))),
+        then(dina).should(
+                seeThat(Client.name(), is(equalTo("dina"))),
                 seeThat(Client.color(), is(equalTo("Red"))),
                 seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))),
                 seeThat(Client.country(), is(equalTo("France"))));

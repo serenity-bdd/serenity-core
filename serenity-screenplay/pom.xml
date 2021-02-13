@@ -45,18 +45,25 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
+
+        <!-- Unit testing -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-junit</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Unit testing -->
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>

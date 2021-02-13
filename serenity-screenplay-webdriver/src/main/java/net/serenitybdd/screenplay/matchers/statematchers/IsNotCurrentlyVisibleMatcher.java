@@ -4,7 +4,9 @@ import net.serenitybdd.core.pages.WebElementState;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-public class IsNotCurrentlyVisibleMatcher<T extends WebElementState> extends TypeSafeMatcher<T> implements CheckForAbsenceHint {
+public class IsNotCurrentlyVisibleMatcher<T extends WebElementState>
+        extends TypeSafeMatcher<T>
+        implements CheckForAbsenceHint {
 
     @Override
     protected boolean matchesSafely(T element) {

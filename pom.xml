@@ -433,11 +433,12 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- COMMON DEPENDENCIES -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.spockframework</groupId>-->
+        <!--            <artifactId>spock-core</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -507,6 +508,7 @@
                     <version>3.0.0-M5</version>
                     <configuration>
                         <includes>
+                            <include>**/integration/*IT</include>
                             <include>**/integration/When*</include>
                             <include>**/integration/*Test</include>
                             <include>**/integration/*TestSuite</include>
@@ -516,9 +518,20 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
+                        <parallel>all</parallel>
+                        <threadCount>4</threadCount>
+                        <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
-
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <version>3.2.0</version>
@@ -544,18 +557,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.gmavenplus</groupId>-->
-            <!--                <artifactId>gmavenplus-plugin</artifactId>-->
-            <!--                <version>1.12.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>compileTests</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -595,7 +596,11 @@
         <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
         <module>serenity-junit</module>
-        <module>serenity-ant-task</module>
         <module>serenity-screenplay</module>
+        <module>serenity-screenplay-rest</module>
+        <module>serenity-screenplay-webdriver</module>
+        <module>serenity-assertions</module>
+        <module>serenity-ant-task</module>
+        <module>serenity-zalenium</module>
     </modules>
 </project>

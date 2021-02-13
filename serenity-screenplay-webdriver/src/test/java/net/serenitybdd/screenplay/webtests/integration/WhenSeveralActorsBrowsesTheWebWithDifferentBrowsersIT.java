@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
-public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
+public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsersIT {
 
     @Managed(driver = "htmlunit")
     WebDriver firstBrowser;

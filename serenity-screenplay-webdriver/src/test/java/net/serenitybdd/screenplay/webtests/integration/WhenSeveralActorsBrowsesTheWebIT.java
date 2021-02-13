@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
-public class WhenSeveralActorsBrowsesTheWeb {
+public class WhenSeveralActorsBrowsesTheWebIT {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver firstBrowser;

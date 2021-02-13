@@ -20,7 +20,7 @@ import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaChecksTheStateOfWebElements {
+public class WhenDanaChecksTheStateOfWebElementsIT {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver browser;

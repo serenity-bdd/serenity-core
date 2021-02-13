@@ -1,11 +1,13 @@
 package net.serenitybdd.screenplay.questions;
 
-import io.vavr.collection.List;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Value extends TargetedUIState<String> {
 
@@ -30,7 +32,9 @@ public class Value extends TargetedUIState<String> {
     }
 
     public java.util.List<String> resolveAll() {
-        List<WebElementFacade> resolvedElements = List.ofAll(target.resolveAllFor(actor));
-        return resolvedElements.map(WebElementFacade::getValue).asJava();
+        List<WebElementFacade> resolvedElements = new ArrayList<>(target.resolveAllFor(actor));
+        return resolvedElements.stream()
+                .map(WebElementFacade::getValue)
+                .collect(Collectors.toList());
     }
 }

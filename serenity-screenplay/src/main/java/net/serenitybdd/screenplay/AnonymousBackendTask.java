@@ -7,6 +7,7 @@ import java.util.List;
 
 public class AnonymousBackendTask extends AnonymousTask implements DisableScreenshots {
 
+    public AnonymousBackendTask(){}
     public AnonymousBackendTask(String title, List<Performable> steps) {
         super(title, steps);
     }

@@ -932,7 +932,7 @@ public abstract class PageObject {
     private String environmentSpecificPageUrl(String pageName) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("pages." + pageName)
-                .orElseThrow(() -> new UnknownPageException("No page called " + pageName + " was specified in the serenity.conf file"));
+                .orElseThrow(() -> new NoSuchPageException("No page called " + pageName + " was specified in the serenity.conf file"));
     }
 
     public void clickOn(final WebElement webElement) {

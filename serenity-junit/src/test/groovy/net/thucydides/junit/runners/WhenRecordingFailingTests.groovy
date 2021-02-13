@@ -6,23 +6,27 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
+
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class WhenRecordingFailingTests extends Specification {
 
     def environmentVariables = new MockEnvironmentVariables()
     def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
-
-    @Rule
-    TemporaryFolder temporaryFolder
+    File rerunDir;
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
-        environmentVariables.setProperty("rerun.failures.directory", temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun")
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
+        rerunDir = Files.createTempDirectory("reruns").toFile();
+        rerunDir.deleteOnExit()
+
+        environmentVariables.setProperty("rerun.failures.directory", rerunDir.getCanonicalPath())
         environmentVariables.setProperty("record.failures","true")
     }
 
@@ -51,14 +55,16 @@ class WhenRecordingFailingTests extends Specification {
             runner.run(new RunNotifier())
         then:
             runner.testOutcomes.size() == 3
-            String fileContents = new File(temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun" +  File.separator + "net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods_rerun.xml").text.trim()
-            fileContents == '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+            def rerunFile = rerunDir.list()[0]
+            String fileContents = Paths.get(rerunDir.getCanonicalPath(), rerunFile).toFile().text
+        println fileContents
+            fileContents.trim() == '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rerunnableClass>
     <className>net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods</className>
     <methodName>testMethod2</methodName>
     <methodName>testMethod1</methodName>
-</rerunnableClass>
-'''.trim()
+</rerunnableClass>'''
     }
 
 

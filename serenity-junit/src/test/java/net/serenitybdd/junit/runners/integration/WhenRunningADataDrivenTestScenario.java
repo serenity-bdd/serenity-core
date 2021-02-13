@@ -33,7 +33,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
@@ -42,6 +41,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,9 +54,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 public class WhenRunningADataDrivenTestScenario {
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Rule
     public SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule();
@@ -227,7 +224,9 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
+
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -242,7 +241,8 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -257,7 +257,8 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -298,7 +299,8 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_test_data_is_provided_for_a_step_a_single_test_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -313,7 +315,8 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -333,7 +336,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -354,7 +357,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void browser_should_be_restarted_periodically_if_requested() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(), outputDirectory.getAbsolutePath());
         environmentVariables.setProperty("thucydides.restart.browser.frequency", "5");
 
@@ -367,7 +370,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -389,7 +392,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_a_parameterized_test_fails_outside_a_step_a_failure_should_be_recorded() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -407,7 +410,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_a_step_fails_with_an_error_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -544,7 +547,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_test_data_is_provided_for_a_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -564,7 +567,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_test_data_is_provided_for_a_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -584,7 +587,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_test_data_is_provided_for_a_deeply_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -604,7 +607,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -631,7 +634,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -648,7 +651,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void when_the_Concurrent_annotation_is_used_tests_should_be_run_in_parallel() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 
@@ -797,7 +800,7 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void a_separate_html_report_should_be_generated_from_each_scenario() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("thucydides");
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
 

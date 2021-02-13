@@ -32,7 +32,7 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp");
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
         temporaryDirectory.deleteOnExit();
 
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")

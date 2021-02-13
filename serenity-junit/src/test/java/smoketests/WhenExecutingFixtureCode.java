@@ -17,7 +17,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.MockitoAnnotations;
@@ -27,8 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();

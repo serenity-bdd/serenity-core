@@ -18,13 +18,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,9 +32,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();
@@ -402,7 +399,8 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void html_test_results_are_written_to_the_output_directory()  throws Exception {
 
-        File outputDirectory =  temporaryFolder.newFolder();
+        File outputDirectory =  Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
 
         SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,outputDirectory);
         runner.run(new RunNotifier());
@@ -414,7 +412,8 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void json_test_results_are_written_to_the_output_directory()  throws Exception {
 
-        File outputDirectory = temporaryFolder.newFolder();
+        File outputDirectory = Files.createTempDirectory("tmp").toFile();
+        outputDirectory.deleteOnExit();
 
         SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,
                 outputDirectory);

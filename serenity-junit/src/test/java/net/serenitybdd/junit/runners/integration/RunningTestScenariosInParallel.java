@@ -8,7 +8,6 @@ import net.thucydides.samples.SamplePassingScenarioUsingHtmlUnit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.MockitoAnnotations;
@@ -25,9 +24,6 @@ public class RunningTestScenariosInParallel extends AbstractTestStepRunnerTest {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Before
     public void clearEventBus() throws Exception {

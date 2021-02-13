@@ -26,7 +26,7 @@ public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specifica
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp");
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
         temporaryDirectory.deleteOnExit();
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()

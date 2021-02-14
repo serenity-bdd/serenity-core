@@ -1,4 +1,4 @@
-package net.serenitybdd.junit.spring.integration.testutils;
+package net.serenitybdd.junit.spring;
 
 public class StringHolder {
     private String value;

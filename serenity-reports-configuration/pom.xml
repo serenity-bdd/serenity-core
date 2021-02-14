@@ -12,18 +12,11 @@
     <packaging>jar</packaging>
     <name>Serenity Reports Configuration</name>
     <properties>
-        <kotlin.version>1.4.10</kotlin.version>
-<!--        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>-->
     </properties>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>serenity-reports</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

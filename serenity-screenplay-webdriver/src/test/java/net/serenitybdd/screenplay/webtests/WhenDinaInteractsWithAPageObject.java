@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.integration;
+package net.serenitybdd.screenplay.webtests;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaInteractsWithAPageObjectIT {
+public class WhenDinaInteractsWithAPageObject {
 
     @Managed(driver = "htmlunit")
     WebDriver herBrowser;

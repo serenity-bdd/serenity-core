@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.integration;
+package net.serenitybdd.screenplay.webtests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -20,7 +20,7 @@ import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaChecksTheStateOfWebElementsIT {
+public class WhenDinaChecksTheStateOfWebElements {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver browser;

@@ -1,4 +1,4 @@
-package net.serenitybdd.junit.spring.integration.testutils;
+package net.serenitybdd.junit.spring;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

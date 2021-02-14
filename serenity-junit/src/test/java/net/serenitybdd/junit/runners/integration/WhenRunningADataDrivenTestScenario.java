@@ -16,6 +16,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -502,7 +503,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         @Test
         public void happy_day_scenario() throws Throwable {
-            withTestDataFrom("test-data/simple-data.csv").run(steps).data_driven_test_step_that_fails();
+            StepData.withTestDataFrom("test-data/simple-data.csv").run(steps).data_driven_test_step_that_fails();
         }
     }
 

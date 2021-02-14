@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.integration;
+package net.serenitybdd.screenplay.webtests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaBrowsesTheWebIT {
+public class WhenDinaBrowsesTheWeb {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver firstBrowser;

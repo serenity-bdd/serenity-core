@@ -5,7 +5,6 @@ import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualAndExpe
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualNotNull
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNoNullElementsIn
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNotEmpty
-import net.serenitybdd.screenplay.targets.Target
 import org.assertj.core.internal.InputStreamsException
 import java.io.IOException
 import java.io.LineNumberReader

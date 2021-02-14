@@ -1,8 +1,10 @@
-package net.serenitybdd.junit.spring.integration;
+package net.serenitybdd.junit.spring;
 
 import javax.inject.Inject;
-import net.serenitybdd.junit.spring.integration.testutils.StackChecker;
-import net.serenitybdd.junit.spring.integration.testutils.StringHolder;
+
+import net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule;
+import net.serenitybdd.junit.spring.integration.SpringIntegrationMethodRule;
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.junit.spring.SpringIntegration;
 import org.assertj.core.api.Assertions;
 import org.junit.ClassRule;
@@ -18,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @ContextConfiguration("classpath:/spring/integration-rules-context.xml")
-public class SpringIntegrationSerenityRunnerTestShouldPlayWellWithExistingRules {
+public class WhenSerenityRunnerTestPlaysWellWithExistingRules {
     @Inject
     public StringHolder stringHolder;
 

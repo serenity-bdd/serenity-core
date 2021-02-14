@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.integration;
+package net.serenitybdd.screenplay.webtests;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItems;
 
 @RunWith(SerenityRunner.class)
-public class WhenDanaSelectsHerContactPreferencesIT {
+public class WhenDinaSelectsHerContactPreferences {
 
     @Managed(driver = "htmlunit")
     WebDriver firstBrowser;

@@ -48,13 +48,13 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         );
     }
 
-    @Test(expected = ACustomException.class)
+    @Test(expected = SomeCustomException.class)
     public void weCanThrowCustomExceptions() {
         Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
 
         aster.attemptsTo(
                 Open.browserOn(demoPage),
-                Ensure.that(ElementLocated.by("#notDisplayed")).isDisplayed().orElseThrow(new ACustomException("Oh crap")),
+                Ensure.that(ElementLocated.by("#notDisplayed")).isDisplayed().orElseThrow(new SomeCustomException("Oh crap")),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
         );

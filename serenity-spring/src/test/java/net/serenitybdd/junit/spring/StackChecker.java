@@ -1,4 +1,4 @@
-package net.serenitybdd.junit.spring.integration.testutils;
+package net.serenitybdd.junit.spring;
 
 import org.assertj.core.api.Assertions;
 import org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks;

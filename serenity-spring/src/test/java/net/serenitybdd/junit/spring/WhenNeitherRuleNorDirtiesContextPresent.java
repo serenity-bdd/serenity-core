@@ -1,9 +1,8 @@
-package net.serenitybdd.junit.spring.integration;
+package net.serenitybdd.junit.spring;
 
 import javax.inject.Inject;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.junit.spring.integration.testutils.PassFailureCountingRule;
-import net.serenitybdd.junit.spring.integration.testutils.StringHolder;
+import net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule;
 import net.thucydides.core.annotations.Title;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -19,7 +18,7 @@ import org.springframework.test.context.TestContextManager;
 @RunWith(SerenityRunner.class)
 @ContextConfiguration("classpath:/spring/integration-rules-context.xml")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class SpringIntegrationMethodRuleTestForWhenNeitherRuleNorDirtiesContextPresent {
+public class WhenNeitherRuleNorDirtiesContextPresent {
     @Inject
     public StringHolder stringHolder;
 

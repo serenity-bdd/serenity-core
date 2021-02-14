@@ -58,12 +58,20 @@
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
+        <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
         <jimfs.version>1.1</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <opentest4j.version>1.2.0</opentest4j.version>
         <ant.version>1.10.8</ant.version>
         <restassured.version>4.3.3</restassured.version>
         <wiremock.version>1.58</wiremock.version>
+        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
+        <javassist.version>3.21.0-GA</javassist.version>
+        <xchart.version>3.5.2</xchart.version>
+        <!-- Kotlin config -->
+        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -430,6 +438,22 @@
                 <version>${wiremock.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf</artifactId>
+                <version>${thymeleaf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.knowm.xchart</groupId>
+                <artifactId>xchart</artifactId>
+                <version>${xchart.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -499,7 +523,7 @@
                             <exclude>**/*Sample*</exclude>
                         </excludes>
                         <parallel>all</parallel>
-                        <threadCount>4</threadCount>
+                        <threadCount>8</threadCount>
                         <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                 </plugin>
@@ -600,7 +624,11 @@
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>
+        <module>serenity-ensure</module>
         <module>serenity-ant-task</module>
         <module>serenity-zalenium</module>
+        <module>serenity-single-page-report</module>
+        <module>serenity-json-summary-report</module>
+        <module>serenity-spring</module>
     </modules>
 </project>

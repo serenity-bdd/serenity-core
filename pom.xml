@@ -630,5 +630,7 @@
         <module>serenity-single-page-report</module>
         <module>serenity-json-summary-report</module>
         <module>serenity-spring</module>
+        <module>serenity-browsermob-plugin</module>
+        <module>serenity-browserstack</module>
     </modules>
 </project>

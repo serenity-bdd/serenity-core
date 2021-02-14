@@ -8,10 +8,12 @@
         <groupId>net.serenity-bdd</groupId>
         <version>2.3.14-SNAPSHOT</version>
     </parent>
-    <artifactId>serenity-junit</artifactId>
+    <artifactId>serenity-browsermob-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>Serenity JUnit Runner</name>
-
+    <name>Serenity Report Resources</name>
+    <properties>
+        <browsermob.version>2.1.5</browsermob.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -20,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.serenitybdd.serenityjunit</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.serenitybdd.serenitybrowsermobplugin</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -43,18 +45,47 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-core</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>compile</scope>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-model</artifactId>
+            <version>${project.version}</version>
         </dependency>
-        <!--
-            compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-    compile "org.opentest4j:opentest4j:${opentest4jVersion}"
+        <dependency>
+            <groupId>net.lightbody.bmp</groupId>
+            <artifactId>browsermob-core</artifactId>
+            <version>${browsermob.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.51.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.58</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opentest4j</groupId>
+            <artifactId>opentest4j</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
-        -->
         <!--- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -79,29 +110,5 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 </project>

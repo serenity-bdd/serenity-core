@@ -11,6 +11,30 @@
     <name>Serenity BDD</name>
     <url>https://serenity-bdd.github.io/</url>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/license/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>johnsmart</id>
+            <name>John Ferguson Smart</name>
+            <email>john.smart@wakaleo.com</email>
+        </developer>
+        <developer>
+            <id>cliviu</id>
+            <name>Liviu Carausu</name>
+            <email>liviu.carausu@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
+        <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
+        <url>https://github.com/serenity-bdd/serenity-core</url>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

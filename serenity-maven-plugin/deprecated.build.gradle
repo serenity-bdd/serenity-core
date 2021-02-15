@@ -1,0 +1,276 @@
+import org.ajoberstar.grgit.*
+import org.ajoberstar.gradle.git.release.opinion.Strategies
+
+/**
+ * Deprecated: back to using Maven to genereate the Maven plugin
+ */
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:1.4.0-rc.1'
+    }
+}
+
+apply plugin: 'org.ajoberstar.release-base'
+release {
+    grgit = Grgit.open()
+    versionStrategy Strategies.FINAL
+    versionStrategy Strategies.PRE_RELEASE
+    defaultVersionStrategy Strategies.SNAPSHOT
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven() {
+        url "http://dl.bintray.com/serenity/maven/"
+    }
+}
+
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+ext {
+    bintrayBaseUrl = 'https://api.bintray.com/maven'
+    bintrayRepository = 'maven'
+    bintrayPackage = 'serenity-core'
+    projectDescription = 'Serenity Maven Plugin'
+
+    if (!project.hasProperty("bintrayUsername")) {
+        bintrayUsername = 'wakaleo'
+    }
+    if (!project.hasProperty("bintrayApiKey")) {
+        bintrayApiKey = ''
+    }
+}
+
+group = 'net.serenity-bdd.maven.plugins'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "${gradleVersion}"
+}
+
+configurations.all {
+    resolutionStrategy {
+        // fail fast on dependency convergence problems
+        //failOnVersionConflict()
+        force "org.codehaus.plexus:plexus-classworlds:${plexusClasswordsVersion}",
+            "org.codehaus.plexus:plexus-utils:${plexusUtilsVersion}",
+            "org.slf4j:slf4j-api:${slf4jVersion}",
+            "commons-collections:commons-collections:${commonsCollectionsVersion}",
+                "xml-apis:xml-apis:${xmlApiVersion}"
+    }
+}
+
+dependencies {
+    compile "net.serenity-bdd:serenity-core:${serenityCoreVersion}"
+    compile ("org.apache.maven:maven-core:${mavenApiVersion}") {
+        exclude module:"guava"
+        exclude module:"guice"
+        exclude module:"commons-lang3"
+    }
+
+    compile ("org.apache.maven:maven-plugin-api:${mavenApiVersion}") {
+        exclude module:"commons-lang3"
+    }
+
+    compile "org.apache.maven.reporting:maven-reporting-api:${mavenReportingApiVersion}"
+    compile("org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginAnnotationsVersion}") {
+        exclude module: "maven-artifact"
+    }
+
+    testCompile "junit:junit:${junitVersion}"
+    testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    testCompile("org.mockito:mockito-all:${mockitoCoreVersion}") {
+        exclude group: "org.hamcrest", module:"hamcrest-all"
+    }
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
+
+}
+
+task pluginDescriptor(type: Exec) {
+    commandLine 'mvn', '-e', '-B', 'org.apache.maven.plugins:maven-plugin-plugin:3.5:descriptor', '-s', 'config/settings.xml'
+    doFirst {
+        final File pom = project.file('pom.xml')
+        install.repositories.mavenInstaller.pom.writeTo(pom)
+        assert pom.file, "[$pom.canonicalPath] was not created"
+
+        pom.text = pom.text.
+                replace('<groupId>unknown</groupId>', "<groupId>${project.group}</groupId>").
+                replace('<artifactId>empty-project</artifactId>', "<artifactId>${project.name}</artifactId>").
+                replace('<version>0</version>', """
+                                                              |<version>${version}</version>
+                                                              |  <packaging>maven-plugin</packaging>
+                                                              |  <build>
+                                                              |    <directory>\${project.basedir}/build</directory>
+                                                              |    <outputDirectory>\${project.build.directory}/classes/main</outputDirectory>
+                                                              |  </build>
+                                                              |""".stripMargin().trim())
+    }
+}
+
+project.pluginDescriptor.doLast {
+    final pluginDescriptor = new File((File) project.compileGroovy.destinationDir, 'META-INF/maven/plugin.xml')
+    assert pluginDescriptor.file, "[$pluginDescriptor.canonicalPath] was not created"
+    println "Plugin descriptor file:$pluginDescriptor.canonicalPath is created successfully"
+}
+
+
+project.compileJava.doLast { pluginDescriptor.execute() }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+jar {
+    println "Publishing $project.name:$project.group:$project.version"
+
+    manifest {
+        attributes("Implementation-Title": "Serenity Maven Plugin",
+                   "Implementation-Version": project.version.toString())
+    }
+}
+
+artifacts {
+    archives sourcesJar, javadocJar
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            println "Publishing $project.name:$project.group:$project.version"
+
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'serenity-maven-plugin'
+                    description 'Serenity Maven Plugin'
+
+                    url 'https://github.com/serenity-bdd/serenity-maven-plugin'
+                    scm {
+                        url 'scm:git:git@github.com:serenity-bdd/serenity-maven-plugin.git'
+                        connection 'scm:git:git@github.com:serenity-bdd/serenity-maven-plugin.git'
+                        developerConnection 'scm:git:git@github.com:serenity-bdd/serenity-maven-plugin.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'johnsmart'
+                            name 'John Ferguson Smart'
+                            email 'john.smart@wakaleo.com'
+                        }
+                    }
+                }
+                // Preserve compile-scope dependencies
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId = 'serenity-maven-plugin'
+            pom.project {
+                name = project.name
+                description = projectDescription
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                url 'https://github.com/serenity-bdd/$project.name'
+                scm {
+                    url 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                    connection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                    developerConnection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                }
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'johnsmart'
+                        name 'John Ferguson Smart'
+                        email 'john.smart@wakaleo.com'
+                    }
+                }
+            }
+            repository(url: bintrayBaseUrl + '/serenity/maven/serenity-core') {
+                authentication(userName: bintrayUsername, password: bintrayApiKey)
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:-options"
+}
+
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:-options"
+}
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+task copyDeps(type: Copy) {
+    from configurations.runtime + configurations.testCompile
+    into project.projectDir.path + "/lib"
+}

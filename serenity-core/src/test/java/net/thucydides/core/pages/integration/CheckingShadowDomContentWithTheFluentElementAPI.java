@@ -4,7 +4,7 @@ package net.thucydides.core.pages.integration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.ListOfWebElementFacades;
 
-import net.thucydides.core.webdriver.javascript.ShadowDom;
+import net.thucydides.core.webdriver.javascript.ByShadowDom;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,14 +42,14 @@ public class CheckingShadowDomContentWithTheFluentElementAPI {
 
     @Test
     public void should_find_slot_elements_in_shadow_dom() {
-        assertThat(page.findAll(ShadowDom.of("[slot=title]")).get(0).getText(), is("Tab 1"));
-        assertThat(page.findAll(ShadowDom.of("[slot=title]")).get(1).getText(), is("Tab 2"));
-        assertThat(page.findAll(ShadowDom.of("[slot=title]")).get(2).getText(), is("Tab 3"));
+        assertThat(page.findAll(ByShadowDom.of("[slot=title]")).get(0).getText(), is("Tab 1"));
+        assertThat(page.findAll(ByShadowDom.of("[slot=title]")).get(1).getText(), is("Tab 2"));
+        assertThat(page.findAll(ByShadowDom.of("[slot=title]")).get(2).getText(), is("Tab 3"));
     }
 
     @Test
     public void should_find_internal_elements_in_shadow_dom() {
-        ListOfWebElementFacades allTabPanels = page.findAll(ShadowDom.of("[role=tabpanel]"));
+        ListOfWebElementFacades allTabPanels = page.findAll(ByShadowDom.of("[role=tabpanel]"));
         assertThat(allTabPanels.get(0).getTextContent(), is("content panel 1"));
         assertThat(allTabPanels.get(1).getTextContent(), is("content panel 2"));
         assertThat(allTabPanels.get(2).getTextContent(), is("content panel 3"));

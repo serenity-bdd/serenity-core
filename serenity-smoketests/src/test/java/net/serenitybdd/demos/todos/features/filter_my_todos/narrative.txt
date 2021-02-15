@@ -1,2 +1,0 @@
-Filter todos
-I need to be able to filter my todos by their status

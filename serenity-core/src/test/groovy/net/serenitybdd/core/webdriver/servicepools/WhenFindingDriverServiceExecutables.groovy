@@ -11,9 +11,6 @@ import java.nio.file.Path
 
 class WhenFindingDriverServiceExecutables extends Specification {
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def "should find a binary on the system path if no other paths are specified"() {
         when:
         File gitExe = DriverServiceExecutable.called("git")

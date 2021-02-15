@@ -18,6 +18,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import static net.serenitybdd.core.rest.RestMethod.GET
@@ -43,8 +45,12 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
         Mock(BaseStepListener);
     }.call());
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    File temporaryDirectory
+
+    def setup() {
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit()
+    }
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();

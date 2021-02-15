@@ -12,6 +12,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import static net.serenitybdd.rest.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
@@ -35,15 +37,19 @@ class WhenRecordRequestsAsStepsWithSerenityRest extends Specification {
         Mock(BaseStepListener);
     }.call());
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    File temporaryDirectory
+
+    def setup() {
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit()
+    }
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
     def "should record REST queries as steps"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             def JsonObject json = new JsonObject()
             json.addProperty("Record", "John Lennon")

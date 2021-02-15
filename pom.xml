@@ -5,7 +5,7 @@
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-parent-pom</artifactId>
-    <version>2.3.14</version>
+    <version>2.3.15-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Serenity BDD</name>
@@ -667,7 +667,6 @@
         <module>serenity-browserstack</module>
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
-        <module>serenity-smoketests</module>
     </modules>
     <profiles>
         <profile>

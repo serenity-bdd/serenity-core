@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.serenitybdd.demos.todos</groupId>
     <parent>
         <artifactId>serenity-parent-pom</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>2.3.14-SNAPSHOT</version>
+        <version>2.3.14</version>
     </parent>
     <artifactId>serenity-smoketests</artifactId>
     <packaging>jar</packaging>
@@ -15,12 +14,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <parallel.tests>4</parallel.tests>
-        <browserstack.url></browserstack.url>
-        <browserstack.os></browserstack.os>
-        <browserstack.os_version></browserstack.os_version>
-        <browserstack.browserName></browserstack.browserName>
-        <browserstack.browser></browserstack.browser>
-        <browserstack.version></browserstack.version>
+        <browserstack.url />
+        <browserstack.os />
+        <browserstack.os_version />
+        <browserstack.browserName />
+        <browserstack.browser />
+        <browserstack.version />
     </properties>
 
     <dependencies>

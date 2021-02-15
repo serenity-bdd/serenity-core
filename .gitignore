@@ -18,3 +18,4 @@ out
 .project
 .classpath
 bin
+*.versionsBackup

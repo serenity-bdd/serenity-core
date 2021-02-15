@@ -5,7 +5,7 @@
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-parent-pom</artifactId>
-    <version>2.3.15-SNAPSHOT</version>
+    <version>2.3.15</version>
     <packaging>pom</packaging>
 
     <name>Serenity BDD</name>
@@ -629,7 +629,7 @@
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
                 </configuration>
             </plugin>
         </plugins>

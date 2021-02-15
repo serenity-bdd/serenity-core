@@ -9,7 +9,7 @@
     </parent>
     <artifactId>serenity-crossbrowsertesting</artifactId>
     <packaging>jar</packaging>
-    <name>Serenity CrossBrowser Integration</name>
+    <name>Serenity Browserstack Integration</name>
     <build>
         <plugins>
             <plugin>

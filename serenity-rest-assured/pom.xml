@@ -124,7 +124,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--- TEST DEPENDENCIES -->
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.opentest4j</groupId>
             <artifactId>opentest4j</artifactId>

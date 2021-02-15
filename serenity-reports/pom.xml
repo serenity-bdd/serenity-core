@@ -109,7 +109,7 @@
             </exclusions>
         </dependency>
 
-        <!--- SELENIUM -->
+        <!-- SELENIUM -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>

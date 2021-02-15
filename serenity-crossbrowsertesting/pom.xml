@@ -39,7 +39,7 @@
             <artifactId>unirest-java</artifactId>
             <version>3.11.11</version>
         </dependency>
-        <!--- TEST DEPENDENCIES -->
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

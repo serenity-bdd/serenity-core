@@ -55,7 +55,7 @@
     compile "org.opentest4j:opentest4j:${opentest4jVersion}"
 
         -->
-        <!--- TEST DEPENDENCIES -->
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

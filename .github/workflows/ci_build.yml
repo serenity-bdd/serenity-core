@@ -24,4 +24,4 @@ jobs:
     - name: Unit and Integration Tests
       run: mvn clean install
     - name: Smoke Tests
-      run: cd serenity-smoketests && mvn verify
+      run: mvn install -DskipTests && cd serenity-smoketests && mvn verify

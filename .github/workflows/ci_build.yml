@@ -22,4 +22,4 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Unit and Integration Tests
-      run: mvn clean install && cd serenity-smoketests && mvn verify
+      run: mvn clean verify

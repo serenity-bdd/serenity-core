@@ -22,6 +22,4 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Unit and Integration Tests
-      run: mvn clean install
-    - name: Smoke Tests
-      run: mvn install -DskipTests && cd serenity-smoketests && mvn verify
+      run: mvn clean install && cd serenity-smoketests && mvn verify

@@ -1,34 +1,29 @@
-name: Core Release
-on: [ workflow_dispatch ]
-env:
-  OSSRHUSERNAME: ${{ secrets.OSSRHUSERNAME }}
-  OSSRHPASSWORD: ${{ secrets.OSSRHPASSWORD }}
-  ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNING_KEYID }}
-  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_KEY }}
-  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-
+name: Publish package to the Maven Central Repository and GitHub Packages
+on:
+  release:
+    types: [created]
 jobs:
-  build:
-
+  publish:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up Java for publishing to Maven Central Repository
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build and test
-        run: ./gradlew clean build uploadArchives -PcoreRelease
-      - name: Upload to Nexus
-        run: ./gradlew uploadArchives -PcoreRelease
-      - name: Wait for Nexus to upload the binaries
-        run: sleep 30
-      - name: Close Nexus Repository
-        run: ./gradlew closeRepository
-      - name: Wait for Nexus to close the repository
-        run: sleep 30
-      - name: Release Nexus Repository
-        run: ./gradlew releaseRepository
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+      - name: Publish to the Maven Central Repository
+        run: mvn --batch-mode deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      - name: Set up Java for publishing to GitHub Packages
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

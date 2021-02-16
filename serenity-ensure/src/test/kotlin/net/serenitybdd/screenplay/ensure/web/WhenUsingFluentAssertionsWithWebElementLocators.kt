@@ -20,6 +20,8 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.phantomjs.PhantomJSDriver
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
@@ -39,10 +41,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        WebDriverManager.chromedriver().setup();
-        val options = ChromeOptions()
-        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200")
-        driver = ChromeDriver()
+        WebDriverManager.phantomjs().setup();
+        driver = PhantomJSDriver()
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)

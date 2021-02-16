@@ -14,7 +14,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Unit and Integration Tests
-      run: mvn verify
+      run: mvn install
 
     - name: Smoke Tests
       run: cd serenity-smoketests && mvn verify

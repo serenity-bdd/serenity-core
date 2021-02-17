@@ -667,7 +667,6 @@
         <module>serenity-browserstack</module>
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
-        <module>serenity-smoketests</module>
     </modules>
     <profiles>
         <profile>
@@ -764,6 +763,35 @@
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>smoke-tests</id>
+            <modules>
+                <module>serenity-report-resources</module>
+                <module>serenity-sample-alternative-resources</module>
+                <module>serenity-model</module>
+                <module>serenity-core</module>
+                <module>serenity-rest-assured</module>
+                <module>serenity-reports</module>
+                <module>serenity-reports-configuration</module>
+                <module>serenity-stats</module>
+                <module>serenity-junit</module>
+                <module>serenity-screenplay</module>
+                <module>serenity-screenplay-rest</module>
+                <module>serenity-screenplay-webdriver</module>
+                <module>serenity-assertions</module>
+                <module>serenity-ensure</module>
+                <module>serenity-ant-task</module>
+                <module>serenity-zalenium</module>
+                <module>serenity-single-page-report</module>
+                <module>serenity-json-summary-report</module>
+                <module>serenity-spring</module>
+                <module>serenity-browsermob-plugin</module>
+                <module>serenity-browserstack</module>
+                <module>serenity-crossbrowsertesting</module>
+                <module>serenity-maven-plugin</module>
+                <module>serenity-smoketests</module>
             </modules>
         </profile>
     </profiles>

@@ -3,6 +3,8 @@
 # ![Serenity BDD](docs/serenity-bdd-logo.png "Logo Title Text 1")
 
 [![Gitter](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+![Continuous Integration](https://github.com/actions/serenity-bdd/serenity-core/workflows/Continuous%20Integration/badge.svg)
+
 
 ### That feeling you get when you know you can trust your tests
 

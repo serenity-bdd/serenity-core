@@ -667,6 +667,7 @@
         <module>serenity-browserstack</module>
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
+        <module>serenity-cli</module>
     </modules>
     <profiles>
         <profile>
@@ -763,6 +764,7 @@
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
+                <module>serenity-cli</module>
             </modules>
         </profile>
         <profile>

@@ -64,7 +64,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * includes the narrative steps taken during the test, screenshots at each step,
  * the results of each step, and the overall result. A test getscenario
  * can be associated with a user story using the UserStory annotation.
- * <p/>
+ *
  * A TestOutcome is stored after a test is executed. When the aggregate reports
  * are generated, the test outcome files are loaded into memory and processed.
  *

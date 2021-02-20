@@ -39,7 +39,6 @@ public class RestExecutionHelper {
      * Using of this method allowed to enable DryClean mode for particular class.
      * During executing of methods restCallsAreDisabled and restCallsAreDisabled stacktrace will be
      * analysed to find out if this class included.
-     * <p/>
      * Be careful - until even for one class enabled dry clean - performance will be decreased.
      *
      * @param object some object where methods will be executed, basically it should be test

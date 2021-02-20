@@ -12,8 +12,7 @@ public class CurrentOS {
   /**
    * detect the operating system from the os.name System property and cache
    * the result
-   * 
-   * @returns - the operating system detected
+   * @return - the operating system detected
    */
   public static OSType getType() {
     if (detectedOS == null) {

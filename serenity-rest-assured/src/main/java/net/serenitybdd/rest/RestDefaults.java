@@ -20,7 +20,7 @@ import java.util.List;
  * User: YamStranger
  * Date: 4/5/16
  * Time: 8:27 PM
- * <p/>
+ *
  * This class directly calls some methods from SerenityRest related only to
  * setting default values and parameters, can be used for better readability of code.
  * There is no difference in behaving between this class or SerenityRest.

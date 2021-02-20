@@ -320,7 +320,7 @@ public abstract class PageObject {
     }
 
     /**
-     * @Deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
+     * @deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
      */
     @Deprecated
     public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {

@@ -641,6 +641,11 @@
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.0.0-M4</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
         </plugins>
     </reporting>
     <modules>
@@ -713,6 +718,7 @@
                                 </goals>
                                 <configuration>
                                     <doclint>none</doclint>
+                                    <additionalOptions>-Xdoclint:none</additionalOptions>
                                 </configuration>
                             </execution>
                         </executions>

@@ -23,4 +23,3 @@ jobs:
 
     - name: Unit and Integration Tests
       run: mvn clean install -Psmoke-tests -T4
-  SpringIntegrationSerenityRunner

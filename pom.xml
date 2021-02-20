@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-parent-pom</artifactId>
-    <version>2.3.17-SNAPSHOT</version>
+    <version>2.3.16-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
@@ -33,8 +34,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -612,7 +612,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
                             </rules>
                         </configuration>
                         <goals>

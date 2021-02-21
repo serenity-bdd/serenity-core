@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
-    <artifactId>serenity-bdd</artifactId>
+    <artifactId>serenity-parent-pom</artifactId>
     <version>2.3.23-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>

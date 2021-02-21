@@ -31,9 +31,6 @@ jobs:
           git tag v${{ github.event.inputs.versionNumber }}
           git push --tags
 
-      - name: Unit and Integration Tests
-        run: mvn clean verify -T4
-
       - name: Release Build
         uses: samuelmeuli/action-maven-publish@v1
         with:

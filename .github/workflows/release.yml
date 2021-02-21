@@ -46,5 +46,6 @@ jobs:
           mvn versions:set -DnewVersion=${{ github.event.inputs.nextSnapshopVersionNumber }} && mvn versions:commit
           git config --global user.email "john.smart@wakaleo.com"
           git config --global user.name "John Ferguson Smart (Github Actions)"
+          git pull
           git commit -a -m"Updated to snapshot version ${{ github.event.inputs.nextSnapshopVersionNumber }}"
           git push

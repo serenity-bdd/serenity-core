@@ -1,8 +1,9 @@
 name: Publish package to the Maven Central Repository and GitHub Packages
-workflow_dispatch:
-  inputs:
-    versionNumber:
-      description: 'Next version number'
+on:
+  workflow_dispatch:
+    inputs:
+      versionNumber:
+        description: 'Next version number'
 jobs:
   publish:
     runs-on: ubuntu-latest

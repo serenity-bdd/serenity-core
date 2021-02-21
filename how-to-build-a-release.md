@@ -7,4 +7,18 @@ It does not use the maven release plguin.
 
 ```mvn versions:set -DnewVersion=2.3.25```
 
-## Step 2 - 
+## Step 2 - Commit and tag this version
+
+```
+git commit -a -m"Updated to version 2.3.25"
+git tag v2.3.25
+git push
+```
+
+## Deploy to Nexus
+
+```
+mvn clean deploy -Prelease
+```
+
+

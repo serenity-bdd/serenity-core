@@ -45,16 +45,7 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <!--
-            compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-    compile "org.opentest4j:opentest4j:${opentest4jVersion}"
 
-        -->
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

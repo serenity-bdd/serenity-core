@@ -24,9 +24,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         run: git config --global user.email "john.smart@wakaleo.com" && git config --global user.name "John Ferguson Smart (Github Actions)" && git commit -a -m"Release version ${{ github.event.inputs.versionNumber }}" && git tag v${{ github.event.inputs.versionNumber }} && git push --tags
 
-#      - name: Release Build
-#        run: mvn clean install -Prelease -T4
-#
+      - name: Unit and Integration Tests
+        run: mvn clean verify -T4
+
       - name: Release Build
         uses: samuelmeuli/action-maven-publish@v1
         with:
@@ -34,9 +34,3 @@ jobs:
           gpg_passphrase: ${{ secrets.gpg_passphrase }}
           nexus_username: ${{ secrets.nexus_username }}
           nexus_password: ${{ secrets.nexus_password }}
-
-#      - name: Publish to the Maven Central Repository
-#        run: mvn --batch-mode deploy
-#        env:
-#          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-#          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

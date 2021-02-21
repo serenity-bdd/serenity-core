@@ -24,10 +24,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         run: git config --global user.email "john.smart@wakaleo.com" && git config --global user.name "John Ferguson Smart (Github Actions)" && git commit -a -m"Release version ${{ github.event.inputs.versionNumber }}" && git tag v${{ github.event.inputs.versionNumber }} && git push --tags
 
+#      - name: Release Build
+#        run: mvn clean install -Prelease -T4
+#
       - name: Release Build
-        run: mvn clean install -Prelease -T4
-
-      - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         with:
           gpg_private_key: ${{ secrets.gpg_private_key }}

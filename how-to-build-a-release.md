@@ -5,7 +5,10 @@ It does not use the maven release plguin.
 
 ## Step 1 - set the new version number
 
-```mvn versions:set -DnewVersion=2.3.25```
+```
+mvn versions:set -DnewVersion=2.3.25
+mvn versions:commit
+```
 
 ## Step 2 - Commit and tag this version
 
@@ -21,4 +24,10 @@ git push
 mvn clean deploy -Prelease
 ```
 
+## Update to next snapshot version
+
+```
+mvn versions:set -DnewVersion=2.3.26-SNAPSHOT
+mvn versions:commit
+```
 

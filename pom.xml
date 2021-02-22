@@ -79,7 +79,7 @@
         <webdrivermanager.version>4.3.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <shutterbug.version>0.9.3</shutterbug.version>
-        <ngwebdriver.version>1.1.6</ngwebdriver.version>
+        <ngwebdriver.version>1.1.5</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
         <spring.boot.version>2.1.0.RELEASE</spring.boot.version>

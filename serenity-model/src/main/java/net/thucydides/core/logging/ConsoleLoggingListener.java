@@ -28,7 +28,6 @@ public class ConsoleLoggingListener implements StepListener {
 
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[91m";
-    private static final String ANSI_WHITE = "\u001B[37m";
     private static final String ANSI_GREEN = "\u001B[92m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_PURPLE = "\u001B[95m";
@@ -60,15 +59,16 @@ public class ConsoleLoggingListener implements StepListener {
                     " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
                     "-------------------------------------------------------------------------------------\n";
 
+    public static final String SERENITY_NONE_BANNER = "Serenity BDD. Home page at http://www.serenity-bdd.info";
+
     // MAIN BANNERS
     private static final List<String> BANNER_HEADINGS = NewList.of(
-            SERENITY_SMALL_BANNER,
+            SERENITY_NONE_BANNER,
             SERENITY_SMALL_BANNER,
             SERENITY_BIG_BANNER);
 
     private final Logger logger;
     private final EnvironmentVariables environmentVariables;
-    private final ConsoleHeadingStyle headingStyle;
     private final ConsoleHeadingStyle bannerStyle;
     private final FailureAnalysis analysis;
     private final ConsoleHeading consoleHeading;
@@ -79,15 +79,12 @@ public class ConsoleLoggingListener implements StepListener {
 
     private Stack<String> nestedSteps = new Stack<>();
 
-    private enum HeadingStyle {MINIMAL, NORMAL, ASCII}
-
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables,
                                   Logger logger) {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
         this.analysis = new FailureAnalysis(environmentVariables);
         this.consoleHeading = new ConsoleHeading(environmentVariables);
-        this.headingStyle = ConsoleHeadingStyle.definedIn(environmentVariables);
         this.bannerStyle = ConsoleHeadingStyle.bannerStyleDefinedIn(environmentVariables);
 
         logBanner();

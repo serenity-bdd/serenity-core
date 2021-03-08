@@ -872,7 +872,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return false;
         }
 
-        if (screenshots.areDisabledForThisAction()) {
+        if (screenshots().areDisabledForThisAction()) {
             return false;
         }
 

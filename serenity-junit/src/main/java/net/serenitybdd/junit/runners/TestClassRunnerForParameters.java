@@ -63,7 +63,7 @@ class TestClassRunnerForParameters extends QualifiedTestsRunner {
             throw new Exception(String.format(
                     "%s.%s() must return a Collection of arrays.",
                     getTestClass().getName(),
-                    DataDrivenAnnotations.forClass(getTestClass()).getTestDataMethod().getName()),
+                    DataDrivenAnnotations.forClass(getTestClass().getJavaClass()).getTestDataMethod().getName()),
                     cause);
         }
     }

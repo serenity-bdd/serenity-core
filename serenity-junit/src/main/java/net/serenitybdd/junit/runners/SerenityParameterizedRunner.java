@@ -19,9 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Suite;
-import org.junit.runners.model.FrameworkMethod;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -162,7 +162,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
         return runners;
     }
 
-    private boolean shouldSkipTest(FrameworkMethod method) {
+    private boolean shouldSkipTest(Method method) {
         return !tagScanner.shouldRunMethod(getTestClass().getJavaClass(), method.getName());
     }
 
@@ -178,7 +178,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private DataDrivenAnnotations getTestAnnotations() {
-        return DataDrivenAnnotations.forClass(getTestClass());
+        return DataDrivenAnnotations.forClass(getTestClass().getJavaClass());
     }
 
     private String from(final Collection testData) {

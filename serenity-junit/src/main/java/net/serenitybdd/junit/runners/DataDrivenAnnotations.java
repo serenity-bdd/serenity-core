@@ -10,11 +10,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DataDrivenAnnotations {
 
@@ -33,26 +32,18 @@ public class DataDrivenAnnotations {
         return new DataDrivenAnnotations(testClass);
     }
 
-    public static DataDrivenAnnotations forClass(final TestClass testClass) {
-        return new DataDrivenAnnotations(testClass);
-    }
-
-    private final TestClass testClass;
+    private final Class testClass;
 
     DataDrivenAnnotations(final Class testClass) {
-        this(new TestClass(testClass));
-    }
-
-    DataDrivenAnnotations(final TestClass testClass) {
         this(testClass, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
-    DataDrivenAnnotations(final TestClass testClass, EnvironmentVariables environmentVariables) {
+    DataDrivenAnnotations(final Class testClass, EnvironmentVariables environmentVariables) {
         this.testClass = testClass;
         this.environmentVariables = environmentVariables;
     }
 
-    DataDrivenAnnotations usingEnvironmentVariables(EnvironmentVariables environmentVariables) {
+    public DataDrivenAnnotations usingEnvironmentVariables(EnvironmentVariables environmentVariables) {
         return new DataDrivenAnnotations(this.testClass, environmentVariables);
     }
 
@@ -65,8 +56,8 @@ public class DataDrivenAnnotations {
                 .build();
     }
 
-    public List<FrameworkMethod> getTestMethods() {
-        List<FrameworkMethod> methods = testClass.getAnnotatedMethods(Test.class);
+    public List<Method> getTestMethods() {
+        List<Method> methods = getAnnotatedMethods();
         if (methods.isEmpty()) {
             throw new IllegalStateException("Parameterized test should have at least one @Test method");
         }
@@ -79,7 +70,7 @@ public class DataDrivenAnnotations {
         List parametersList;
 
         try {
-            testDataMethod = getTestDataMethod().getMethod();
+            testDataMethod = getTestDataMethod();
             columnNamesString = testDataMethod.getAnnotation(TestData.class).columnNames();
             parametersList = (List) testDataMethod.invoke(null);
         } catch (Exception e) {
@@ -92,13 +83,9 @@ public class DataDrivenAnnotations {
         }
 
         return createParametersTableFrom(columnNamesString, parametersAsListsOfObjects);
-//        return createParametersTableFrom(columnNamesString, convert(parametersList, toListOfObjects()));
     }
 
-//    private Converter<Object[], List<Object>> toListOfObjects() {
-//        return parameters -> Arrays.asList(parameters);
-//    }
-//
+
     private List<Object> listOfObjectsFrom(Object[] parameters) { return Arrays.asList(parameters); }
 
     private DataTable createParametersTableFrom(String columnNamesString, List<List<Object>> parametersList) {
@@ -127,8 +114,8 @@ public class DataDrivenAnnotations {
         return columnNames;
     }
 
-    public FrameworkMethod getTestDataMethod() throws Exception {
-        FrameworkMethod method = findTestDataMethod();
+    public Method getTestDataMethod() throws Exception {
+        Method method = findTestDataMethod();
         if (method == null) {
             throw new IllegalArgumentException("No public static @FilePathParser method on class "
                     + testClass.getName());
@@ -136,10 +123,10 @@ public class DataDrivenAnnotations {
         return method;
     }
 
-    private FrameworkMethod findTestDataMethod() {
-        List<FrameworkMethod> methods = testClass.getAnnotatedMethods(TestData.class);
-        for (FrameworkMethod each : methods) {
-            int modifiers = each.getMethod().getModifiers();
+    private Method findTestDataMethod() {
+        List<Method> methods = getAnnotatedMethods(TestData.class);
+        for (Method each : methods) {
+            int modifiers = each.getModifiers();
             if (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
                 return each;
             }
@@ -168,7 +155,7 @@ public class DataDrivenAnnotations {
     }
 
     private UseTestDataFrom findUseTestDataFromAnnotation() {
-        return testClass.getJavaClass().getAnnotation(UseTestDataFrom.class);
+        return (UseTestDataFrom) testClass.getAnnotation(UseTestDataFrom.class);
     }
 
     public boolean hasTestDataDefined() {
@@ -193,5 +180,16 @@ public class DataDrivenAnnotations {
         return findUseTestDataFromAnnotation().separator();
     }
 
+    private List<Method> getAnnotatedMethods(){
+        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) ->{
+            return method.getDeclaredAnnotations() != null;
+        }).collect(Collectors.toList());
+    }
+
+    private List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationClass){
+        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) ->{
+            return method.getAnnotation(annotationClass) != null;
+        }).collect(Collectors.toList());
+    }
 
 }

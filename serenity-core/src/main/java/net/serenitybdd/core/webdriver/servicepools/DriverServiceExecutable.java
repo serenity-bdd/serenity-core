@@ -141,7 +141,7 @@ public class DriverServiceExecutable {
     private String configuredPath(String propertyName) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty(propertyName)
-                .orElse(null);
+                .orElse(System.getProperty(propertyName));
     }
 
     private String nullIfEmpty(String value) {

@@ -61,7 +61,7 @@ abstract class RemoteDriverBuilder {
                     break;
             }
 
-            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(),  CapabilitiesToPropertiesConverter.capabilitiesToProperties(driver.getCapabilities()));
+            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(),  CapabilitiesConverter.capabilitiesToProperties(driver.getCapabilities()));
             return driver;
 
         } catch (UnreachableBrowserException unreachableBrowser) {

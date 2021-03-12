@@ -1497,6 +1497,12 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS,
 
+    /**
+     * Use this property to pass options to Edge driver using the 'ms:edgeOptions' capability option.
+     * For example: """{"args": ["headless", "start-maximized", "disable-gpu"]}"""
+     */
+    EDGE_OPTIONS,
+
     IE_OPTIONS_ENABLE_NATIVE_EVENTS("ieOptions.EnableNativeEvents"),
     IE_OPTIONS_IGNORE_ZOOM_LEVEL("ieOptions.IgnoreZoomLevel"),
     IE_OPTIONS_REQUIRE_WINDOW_FOCUS("ieOptions.RequireWindowFocus"),

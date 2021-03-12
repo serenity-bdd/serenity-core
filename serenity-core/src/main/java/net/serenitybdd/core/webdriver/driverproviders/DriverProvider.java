@@ -17,7 +17,7 @@ public interface DriverProvider {
     WebDriver newInstance(String options, EnvironmentVariables environmentVariables) throws MalformedURLException ;
 
     default Properties capabilitiesToProperties(Capabilities capabilities) {
-        return CapabilitiesToPropertiesConverter.capabilitiesToProperties(capabilities);
+        return CapabilitiesConverter.capabilitiesToProperties(capabilities);
     }
 
     default boolean isDriverAutomaticallyDownloaded(EnvironmentVariables environmentVariables) {

@@ -1,8 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -19,8 +17,6 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
@@ -50,20 +46,10 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         capabilities.setCapability("firefox_profile", buildFirefoxProfile());
         capabilities.acceptInsecureCerts();
 
-        Map<String, Object> firefoxOptions = new HashMap<>();
-        String geckoOptions = (!options.isEmpty()) ? options : ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables,"");
-        if (!geckoOptions.isEmpty()) {
-            String firefoxOptionsInJsonFormat = geckoOptions
-                    .replace("\\\"", "\"")
-                    .replace("\\n", System.lineSeparator());
-
-            firefoxOptionsInJsonFormat = StringUtils.strip(firefoxOptionsInJsonFormat);
-
-            firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
-        }
         updateBinaryIfSpecified();
 
-        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
+        String geckoOptions = (!options.isEmpty()) ? options : ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables,"");
+        capabilities.setCapability("moz:firefoxOptions", CapabilitiesConverter.optionsToMap(geckoOptions));
 
         addProxyConfigurationTo(capabilities);
 

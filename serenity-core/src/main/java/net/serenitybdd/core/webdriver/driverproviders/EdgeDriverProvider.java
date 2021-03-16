@@ -7,13 +7,13 @@ import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class EdgeDriverProvider implements DriverProvider {
@@ -41,8 +41,8 @@ public class EdgeDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(
-            new DesiredCapabilities(new EdgeOptions()),
-            SupportedWebDriver.EDGE);
+                new EdgeDriverCapabilities(environmentVariables).getCapabilities(),
+                SupportedWebDriver.EDGE);
 
         driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
 

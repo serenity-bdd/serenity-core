@@ -73,7 +73,7 @@ public class DriverCapabilities {
         selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
         selectors.put(OPERA, DesiredCapabilities::operaBlink);
         selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
-        selectors.put(EDGE, () -> new DesiredCapabilities(new EdgeOptions()));
+        selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
         selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
         selectors.put(IPHONE, DesiredCapabilities::iphone);
         selectors.put(ANDROID, DesiredCapabilities::android);

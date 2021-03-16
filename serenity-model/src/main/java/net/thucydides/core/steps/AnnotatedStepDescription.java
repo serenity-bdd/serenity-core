@@ -115,7 +115,7 @@ public final class AnnotatedStepDescription {
     }
 
     private Method findMethodCalled(final ExecutedStepDescription method, final Class<?> testClass) {
-        return MethodFinder.inClass(testClass).getMethodNamed(withNoArguments(method.getName()), method.getArguments().size());
+        return MethodFinder.inClass(testClass).getMethodNamed(withNoArguments(method.getName()), method.getRawArguments());
     }
 
     public String getAnnotatedTitle() {

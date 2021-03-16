@@ -1,7 +1,6 @@
 package net.serenitybdd.junit.finder;
 
 import net.serenitybdd.junit.runners.DataDrivenAnnotations;
-import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class DataDrivenTestFinder extends TestFinder {
         int totalTestMethods = 0;
         for(Class testClass : getDataDrivenTestClasses()) {
             try {
-                totalTestMethods += DataDrivenAnnotations.forClass(new TestClass(testClass)).countDataEntries();
+                totalTestMethods += DataDrivenAnnotations.forClass(testClass).countDataEntries();
             } catch (IOException e) {
                 throw new IllegalArgumentException("Failed to read test data for " + testClass);
             }

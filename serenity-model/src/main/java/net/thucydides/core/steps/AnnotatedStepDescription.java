@@ -246,7 +246,7 @@ public final class AnnotatedStepDescription {
         }
 
         Optional<String> annotatedStepName = getAnnotatedStepName();
-        if (getAnnotatedStepName().isPresent() && (StringUtils.isNotEmpty(annotatedStepName.get()))) {
+        if (annotatedStepName.isPresent() && (StringUtils.isNotEmpty(annotatedStepName.get()))) {
             return annotatedStepNameWithParameters(annotatedStepName.get());
         }
 

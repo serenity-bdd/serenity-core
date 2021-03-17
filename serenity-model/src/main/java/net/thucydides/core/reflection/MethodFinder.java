@@ -4,6 +4,7 @@ package net.thucydides.core.reflection;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MethodFinder {
 
@@ -44,18 +45,24 @@ public class MethodFinder {
         return methodFound;
     }
 
-    public Method getMethodNamed(String methodName, int argumentCount) {
-        List<Method> methods = getAllMethods();
-        Method methodFound = null;
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                methodFound = method;
-                if (method.getParameterTypes().length == argumentCount){
-                    methodFound = method;
-                    break;
-                }
-            }
+    public Method getMethodNamed(String methodName, List<Object> arguments) {
+        List<Method> methodsFilteredByName = getAllMethods().stream()
+                .filter(m -> Objects.equals(methodName, m.getName()))
+                .collect(Collectors.toList());
+        if (methodsFilteredByName.isEmpty()) {
+            return null;
         }
-        return methodFound;
+        Class[] argumentTypes = arguments.stream().map(a -> a == null ? null : a.getClass()).toArray(Class[]::new);
+        Method foundMethod = methodsFilteredByName.stream()
+                .filter(m -> Arrays.equals(m.getParameterTypes(), argumentTypes))
+                .findFirst()
+                .orElse(null);
+        if (foundMethod == null) {
+            foundMethod = methodsFilteredByName.stream()
+                    .filter(m -> m.getParameterTypes().length == argumentTypes.length)
+                    .findFirst()
+                    .orElse(methodsFilteredByName.get(0));
+        }
+        return foundMethod;
     }
 }

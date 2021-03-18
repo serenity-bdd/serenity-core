@@ -4,17 +4,20 @@ import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.model.TestResult;
 import org.junit.Ignore;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.jupiter.api.Disabled;
+
+
+import java.lang.reflect.Method;
 
 public class TestMethodConfiguration {
 
-    private final FrameworkMethod method;
+    private final Method method;
 
-    public TestMethodConfiguration(FrameworkMethod method) {
+    public TestMethodConfiguration(Method method) {
         this.method = method;
     }
 
-    public static TestMethodConfiguration forMethod(FrameworkMethod method) {
+    public static TestMethodConfiguration forMethod(Method method) {
         return new TestMethodConfiguration(method);
     }
 
@@ -28,6 +31,10 @@ public class TestMethodConfiguration {
 
     public boolean isIgnored() {
         return method.getAnnotation(Ignore.class) != null;
+    }
+
+    public boolean isDisabled(){
+        return method.getAnnotation(Disabled.class) != null;
     }
 
     public boolean isPending() {

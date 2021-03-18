@@ -2,6 +2,7 @@ package net.serenitybdd.junit.runners;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
+import net.serenitybdd.junit.finder.QualifierFinder;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;

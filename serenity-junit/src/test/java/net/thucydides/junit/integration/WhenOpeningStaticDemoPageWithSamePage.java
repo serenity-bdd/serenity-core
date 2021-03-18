@@ -1,24 +1,24 @@
 package net.thucydides.junit.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.samples.DemoSiteSteps;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This is a very simple scenario of testing a single page.
  * @author johnsmart
  *
  */
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class WhenOpeningStaticDemoPageWithSamePage {
 
     @Managed(driver = "phantomjs", options = "--headless")
@@ -26,7 +26,7 @@ public class WhenOpeningStaticDemoPageWithSamePage {
 
     @ManagedPages
     public Pages pages;
-    
+
     @Steps
     public DemoSiteSteps steps;
 
@@ -40,8 +40,8 @@ public class WhenOpeningStaticDemoPageWithSamePage {
     public void the_user_opens_the_page() {
         steps.opensPage();
         steps.should_display("A visible title");
-    }    
-    
+    }
+
     @Test
     @Title("The user selects a value")
     public void the_user_selects_a_value() {
@@ -59,9 +59,9 @@ public class WhenOpeningStaticDemoPageWithSamePage {
         steps.onSamePage(DemoSiteSteps.class).should_have_selected_value("3");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_throw_correct_exception() {
         steps.opensPage();
-        steps.throw_exception();
+        assertThrows(IllegalArgumentException.class, ()-> steps.throw_exception());
     }
 }

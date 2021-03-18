@@ -1,4 +1,4 @@
-package net.serenitybdd.junit.runners;
+package net.serenitybdd.junit.finder;
 
 import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.junit.annotations.Qualifier;

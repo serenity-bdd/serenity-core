@@ -4,7 +4,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import net.thucydides.junit.runners.ThucydidesRunner;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Method;
@@ -50,7 +50,7 @@ public abstract class TestFinder {
     protected Set<Class<?>> getNormalTestClasses() {
         Set<Class<?>> normalTestClasses = new HashSet();
         for(Class<?> testClass : getAllTestClasses()) {
-            if (normalThucydidesTest(testClass)) {
+            if (normalSerenityTest(testClass)) {
                 normalTestClasses.add(testClass);
             }
         }
@@ -67,7 +67,7 @@ public abstract class TestFinder {
     }
 
     @SuppressWarnings("deprecation")
-    private boolean normalThucydidesTest(Class<?> testClass) {
+    private boolean normalSerenityTest(Class<?> testClass) {
         RunWith runWith = testClass.getAnnotation(RunWith.class);
         return ((runWith != null)
                 && ((runWith.value() == ThucydidesRunner.class) || (runWith.value() == SerenityRunner.class)));
@@ -89,7 +89,6 @@ public abstract class TestFinder {
 
     private Comparator<Method> byName() {
         return new Comparator<Method>() {
-
             public int compare(Method method, Method method1) {
                 return method.getName().compareTo(method1.getName());
             }

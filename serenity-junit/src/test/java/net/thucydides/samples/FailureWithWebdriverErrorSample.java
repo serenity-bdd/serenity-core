@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
  * @author johnsmart
  *
  */
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class FailureWithWebdriverErrorSample {
 
     @Managed(uniqueSession=true)
@@ -22,10 +22,10 @@ public class FailureWithWebdriverErrorSample {
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
-    
+
     @Steps
     public DemoSiteSteps steps;
-        
+
     @Test
     public void the_user_opens_the_page() {
     	try {
@@ -35,8 +35,8 @@ public class FailureWithWebdriverErrorSample {
     	} catch(Throwable e) {
     		e.printStackTrace();
     	}
-    }    
-    
+    }
+
     @Test
     public void the_user_opens_another_page() {
         steps.enter_values("Label 2", true);

@@ -37,7 +37,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to specify a different driver"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenarioUsingHtmlUnit, webDriverFactory)
+        def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -99,7 +99,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record the steps that are executed"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory)
+        def runner = new SerenityRunner(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes
@@ -119,7 +119,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record state between steps"() {
         given:
-        def runner = new ThucydidesRunner(SampleScenarioWithStateVariables, webDriverFactory)
+        def runner = new SerenityRunner(SampleScenarioWithStateVariables, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -134,7 +134,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should mark @manual tests as manual"() {
         given:
-            def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+            def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def outcomes = runner.testOutcomes;
@@ -146,7 +146,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should mark passing @manual tests as manual passing"() {
             given:
-        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def outcomes = runner.testOutcomes;
@@ -158,7 +158,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should mark failing @manual tests as manual failing"() {
         given:
-        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -172,7 +172,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "failing @manual tests can have a reason"() {
         given:
-        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        def runner = new SerenityRunner(SampleManualScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -195,7 +195,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "an error in a nested non-step method should cause the test to fail"() {
         given:
-        def runner = new ThucydidesRunner(SampleScenarioWithFailingNestedNonStepMethod, webDriverFactory)
+        def runner = new SerenityRunner(SampleScenarioWithFailingNestedNonStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -209,7 +209,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "a failure in a nested step method should cause the test to fail"() {
         given:
-        def runner = new ThucydidesRunner(SampleScenarioWithFailingNestedStepMethod, webDriverFactory)
+        def runner = new SerenityRunner(SampleScenarioWithFailingNestedStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -226,7 +226,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "an error in a non-step method should be displayed as a failing step"() {
         given:
-        def runner = new ThucydidesRunner(SampleScenarioWithFailingNonStepMethod, webDriverFactory)
+        def runner = new SerenityRunner(SampleScenarioWithFailingNonStepMethod, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -240,7 +240,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "pending tests should be reported as pending"() {
         given:
-        def runner = new ThucydidesRunner(SamplePendingScenario, webDriverFactory)
+        def runner = new SerenityRunner(SamplePendingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -251,7 +251,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "private annotated fields should be allowed"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenarioWithPrivateFields, webDriverFactory)
+        def runner = new SerenityRunner(SamplePassingScenarioWithPrivateFields, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -271,7 +271,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "annotated fields should be allowed in parent classes"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenarioWithFieldsInParent, webDriverFactory)
+        def runner = new SerenityRunner(SamplePassingScenarioWithFieldsInParent, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -313,7 +313,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "failing tests with no steps should still record the error"() {
         given:
-        def runner = new ThucydidesRunner(SampleEmptyTestFailing, webDriverFactory)
+        def runner = new SerenityRunner(SampleEmptyTestFailing, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcomes = runner.testOutcomes;
@@ -325,7 +325,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to add rows to a table dynamically"() {
         given:
-            def runner = new ThucydidesRunner(SampleDynamicTableScenario, webDriverFactory)
+            def runner = new SerenityRunner(SampleDynamicTableScenario, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def outcomes = runner.testOutcomes;
@@ -338,7 +338,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "failing tests with with failure outside a step should still record the error"() {
         given:
-            def runner = new ThucydidesRunner(SampleOutsideStepFailure, webDriverFactory)
+            def runner = new SerenityRunner(SampleOutsideStepFailure, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def outcomes = runner.testOutcomes;
@@ -350,7 +350,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should skip test steps after a failure"() {
         given:
-        def runner = new ThucydidesRunner(SingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -362,7 +362,7 @@ class WhenRunningTestScenarios extends Specification {
     def "should skip any ignored tests"() {
 
         given:
-        def runner = new ThucydidesRunner(TestIgnoredScenario, webDriverFactory)
+        def runner = new SerenityRunner(TestIgnoredScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -373,7 +373,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should skip test steps after an error"() {
         given:
-        def runner = new ThucydidesRunner(SampleNoSuchElementExceptionScenario, webDriverFactory)
+        def runner = new SerenityRunner(SampleNoSuchElementExceptionScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def results = resultsFrom(runner.testOutcomes)
@@ -385,7 +385,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record error message in the failing test step"() {
         given:
-        def runner = new ThucydidesRunner(SingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def steps = runner.testOutcomes[0].getTestSteps()
@@ -399,7 +399,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "when a test throws a runtime exception is should be recorded in the step"() {
         given:
-        def runner = new ThucydidesRunner(SingleTestScenarioWithRuntimeException, webDriverFactory)
+        def runner = new SerenityRunner(SingleTestScenarioWithRuntimeException, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def steps = runner.testOutcomes[0].getTestSteps()
@@ -410,7 +410,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record the name of the test scenario"() {
         given:
-        def runner = new ThucydidesRunner(SuccessfulSingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SuccessfulSingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -419,7 +419,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should execute tests in groups"() {
         given:
-        def runner = new ThucydidesRunner(TestScenarioWithGroups, webDriverFactory)
+        def runner = new SerenityRunner(TestScenarioWithGroups, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -430,7 +430,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record an acceptance test result for each test"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory)
+        def runner = new SerenityRunner(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -439,7 +439,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should derive the user story from the test case class"() {
         given:
-        def runner = new ThucydidesRunner(SuccessfulSingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SuccessfulSingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -449,7 +449,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record each step with a human-readable name"() {
         given:
-        def runner = new ThucydidesRunner(SuccessfulSingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SuccessfulSingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -460,7 +460,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to override default step names using the @Step annotation"() {
         given:
-        def runner = new ThucydidesRunner(SuccessfulSingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(SuccessfulSingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -471,7 +471,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "steps with a parameter should contain the parameter value in the description"() {
         given:
-        def runner = new ThucydidesRunner(TestScenarioWithParameterizedSteps, webDriverFactory)
+        def runner = new SerenityRunner(TestScenarioWithParameterizedSteps, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -482,7 +482,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "steps with multiple parameters should contain the parameter values in the description"() {
         given:
-        def runner = new ThucydidesRunner(TestScenarioWithParameterizedSteps, webDriverFactory)
+        def runner = new SerenityRunner(TestScenarioWithParameterizedSteps, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -493,7 +493,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to override scenario titles using the @Title annotation"() {
         given:
-        def runner = new ThucydidesRunner(AnnotatedSingleTestScenario, webDriverFactory)
+        def runner = new SerenityRunner(AnnotatedSingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
@@ -503,7 +503,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should not require a steps in a test"() {
         given:
-        def runner = new ThucydidesRunner(SampleScenarioWithoutSteps)
+        def runner = new SerenityRunner(SampleScenarioWithoutSteps)
         when:
         runner.run(new RunNotifier())
         then:
@@ -512,7 +512,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should not require a webdriver in a test"() {
         given:
-        def runner = new ThucydidesRunner(SimpleNonWebScenario)
+        def runner = new SerenityRunner(SimpleNonWebScenario)
         when:
         runner.run(new RunNotifier())
         then:
@@ -526,7 +526,7 @@ class WhenRunningTestScenarios extends Specification {
         manager.closeDriver()
     }
 
-    class ATestableThucydidesRunnerSample extends ThucydidesRunner {
+    class ATestableThucydidesRunnerSample extends SerenityRunner {
         ATestableThucydidesRunnerSample(Class<?> klass, WebDriverFactory webDriverFactory) throws Exception {
             super(klass, webDriverFactory)
         }
@@ -571,7 +571,7 @@ class WhenRunningTestScenarios extends Specification {
         given:
             environmentVariables.setProperty("tags",tag)
             def webDriverFactory = new WebDriverFactory(environmentVariables)
-            def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory, configuration)
+            def runner = new SerenityRunner(SamplePassingScenario, webDriverFactory, configuration)
         when:
             runner.run(new RunNotifier())
         then:
@@ -588,7 +588,7 @@ class WhenRunningTestScenarios extends Specification {
         given:
             environmentVariables.setProperty("tags",tag)
             def webDriverFactory = new WebDriverFactory(environmentVariables)
-            def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory, configuration)
+            def runner = new SerenityRunner(SamplePassingScenario, webDriverFactory, configuration)
         when:
             runner.run(new RunNotifier())
         then:

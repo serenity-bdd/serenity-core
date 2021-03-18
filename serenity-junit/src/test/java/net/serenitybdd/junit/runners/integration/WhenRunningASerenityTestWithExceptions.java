@@ -7,45 +7,49 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @RunWith(SerenityRunner.class)
 public class WhenRunningASerenityTestWithExceptions {
 
     @Steps
     MySteps mySteps;
 
-    @Test(expected = DefaultConstructorException.class)
-    public void shouldThrowDefaultConstructorExceptionInStep() throws DefaultConstructorException {
-        mySteps.throwDefaultConstructorException();
+    @Test
+    public void shouldThrowDefaultConstructorExceptionInStep() {
+        assertThrows(DefaultConstructorException.class, ()->mySteps.throwDefaultConstructorException());
     }
 
-    @Test(expected = EmptyConstructorException.class)
-    public void shouldThrowEmptyConstructorExceptionInStep() throws EmptyConstructorException {
-        mySteps.throwEmptyConstructorException();
+    @Test
+    public void shouldThrowEmptyConstructorExceptionInStep() {
+        assertThrows(EmptyConstructorException.class, ()->mySteps.throwEmptyConstructorException());
     }
 
-    @Test(expected = StringConstructorException.class)
-    public void shouldThrowStringConstructorExceptionInStep() throws StringConstructorException {
-        mySteps.throwStringConstructorException();
+    @Test
+    public void shouldThrowStringConstructorExceptionInStep() {
+        assertThrows(StringConstructorException.class, ()-> mySteps.throwStringConstructorException());
     }
 
-    @Test(expected = StringThrowableConstructorException.class)
-    public void shouldThrowStringThrowableConstructorExceptionInStep() throws StringThrowableConstructorException {
-        mySteps.throwStringThrowableConstructorException();
+    @Test
+    public void shouldThrowStringThrowableConstructorExceptionInStep(){
+        assertThrows(StringThrowableConstructorException.class, ()->mySteps.throwStringThrowableConstructorException());
     }
 
-    @Test(expected = ThrowableConstructorException.class)
-    public void shouldThrowThrowableConstructorExceptionInStep() throws ThrowableConstructorException {
-        mySteps.throwThrowableConstructorException();
+    @Test
+    public void shouldThrowThrowableConstructorExceptionInStep() {
+        assertThrows(ThrowableConstructorException.class, ()->mySteps.throwThrowableConstructorException());
     }
 
-    @Test(expected = UnrecognisedException.class)
-    public void shouldThrowUnsupportedConstructorExceptionInStep() throws UnsupportedConstructorException {
-        mySteps.throwUnsupportedConstructorException();
+    @Test
+    public void shouldThrowUnsupportedConstructorExceptionInStep() {
+        assertThrows(UnrecognisedException.class, ()->mySteps.throwUnsupportedConstructorException());
     }
 
-    @Test(expected = DefaultConstructorException.class)
-    public void shouldThrowExceptionInTest() throws DefaultConstructorException {
-        throw new DefaultConstructorException();
+    @Test
+    public void shouldThrowExceptionInTest() {
+        assertThrows(DefaultConstructorException.class, ()-> {
+            throw new DefaultConstructorException();
+        });
     }
 
     @Test

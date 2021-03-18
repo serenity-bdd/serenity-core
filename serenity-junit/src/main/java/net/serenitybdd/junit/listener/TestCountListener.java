@@ -1,4 +1,4 @@
-package net.thucydides.junit.listeners;
+package net.serenitybdd.junit.listener;
 
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;

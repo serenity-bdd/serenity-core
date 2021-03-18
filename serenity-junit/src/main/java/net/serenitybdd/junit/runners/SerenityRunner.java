@@ -408,7 +408,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     @Override
     protected void runChild(FrameworkMethod method, RunNotifier notifier) {
 
-        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
+        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method.getMethod());
 
         clearMetadataIfRequired();
         resetStepLibrariesIfRequired();
@@ -518,7 +518,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private Consumer<RunNotifier> markAsManual(FrameworkMethod method) {
-        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
+        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method.getMethod());
 
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
@@ -624,9 +624,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     protected WebDriver driverFor(final FrameworkMethod method) {
-        if (TestMethodAnnotations.forTest(method).isDriverSpecified()) {
-            String testSpecificDriver = TestMethodAnnotations.forTest(method).specifiedDriver();
-            String driverOptions = TestMethodAnnotations.forTest(method).driverOptions();
+        if (TestMethodAnnotations.forTest(method.getMethod()).isDriverSpecified()) {
+            String testSpecificDriver = TestMethodAnnotations.forTest(method.getMethod()).specifiedDriver();
+            String driverOptions = TestMethodAnnotations.forTest(method.getMethod()).driverOptions();
             return getDriver(testSpecificDriver, driverOptions);
         } else {
             return getDriver();

@@ -2,7 +2,7 @@ package net.thucydides.samples;
 
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.openqa.selenium.NoSuchElementException;
@@ -16,7 +16,7 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("serial")
 public class SampleNonWebSteps {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThucydidesRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerenityRunner.class);
 
     public SampleNonWebSteps() {
     }

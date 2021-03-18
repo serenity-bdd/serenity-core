@@ -3,7 +3,6 @@ package net.serenitybdd.junit.runners;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.webdriver.Configuration;
-import org.junit.runners.model.TestClass;
 
 public class TestConfiguration {
 
@@ -32,7 +31,7 @@ public class TestConfiguration {
     }
 
     public boolean shouldClearTheBrowserSession() {
-        return (isAWebTest() && TestCaseAnnotations.shouldClearCookiesBeforeEachTestIn(testClass().getJavaClass()));
+        return (isAWebTest() && TestCaseAnnotations.shouldClearCookiesBeforeEachTestIn(testClass));
     }
 
     public boolean shouldResetStepLibraries() {
@@ -52,12 +51,9 @@ public class TestConfiguration {
         }
     }
 
-    private TestClass testClass() {
-        return new TestClass(testClass);
-    }
 
     public boolean isAWebTest() {
-        return TestCaseAnnotations.isWebTest(testClass().getJavaClass());
+        return TestCaseAnnotations.isWebTest(testClass);
     }
 
 }

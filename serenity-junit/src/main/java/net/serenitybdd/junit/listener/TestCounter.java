@@ -1,4 +1,4 @@
-package net.thucydides.junit.listeners;
+package net.serenitybdd.junit.listener;
 
 import com.google.inject.BindingAnnotation;
 

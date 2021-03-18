@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.samples.DemoSiteSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
  * @author johnsmart
  *
  */
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class WhenOpeningStaticDemoPageWithNoManagedUrl {
 
     @Managed(driver = "htmlunit")
@@ -24,17 +24,17 @@ public class WhenOpeningStaticDemoPageWithNoManagedUrl {
 
     @ManagedPages
     public Pages pages;
-    
+
     @Steps
     public DemoSiteSteps steps;
-        
+
     @Test
     @Title("The user opens the index page")
     public void the_user_opens_the_page() {
         steps.opensPage();
         steps.should_display("A visible title");
-    }    
-    
+    }
+
     @Test
     @Title("The user selects a value")
     public void the_user_selects_a_value() {

@@ -6,6 +6,7 @@ import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.tags.TagConverters;
 import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -43,6 +44,14 @@ public class TestAnnotations {
 
     public static boolean isPending(final Method method) {
         return method != null && (method.getAnnotation(Pending.class) != null);
+    }
+
+    public boolean isDisabled(final String methodName) {
+        Optional<Method> method = getMethodCalled(methodName);
+        return method.isPresent() && isDisabled(method.get());
+    }
+    public static boolean isDisabled(final Method method){
+        return method != null && (method.getAnnotation(Disabled.class) != null);
     }
 
     public static boolean isIgnored(final Method method) {
@@ -95,7 +104,7 @@ public class TestAnnotations {
         if (baseMethodName == null) {
             return Optional.empty();
         }
-        
+
         return Optional.ofNullable(MethodFinder.inClass(testClass).getMethodNamed(baseMethodName));
     }
 
@@ -135,7 +144,7 @@ public class TestAnnotations {
     /**
      * Return a list of the issues mentioned in the Issue annotation of this method.
      * @param methodName the name of the test method in the Java test class, if applicable.
-     * returns 
+     * returns
      */
     public Optional<String> getAnnotatedIssueForMethod(String methodName) {
         return getAnnotatedIssue(methodName);

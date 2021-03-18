@@ -1,19 +1,20 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class SamplePassingScenarioWithEmptyTests {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplePassingScenarioWithEmptyTests.class);
 
     @Managed
@@ -21,7 +22,7 @@ public class SamplePassingScenarioWithEmptyTests {
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
-    
+
     @Steps
     public SampleScenarioSteps steps;
 

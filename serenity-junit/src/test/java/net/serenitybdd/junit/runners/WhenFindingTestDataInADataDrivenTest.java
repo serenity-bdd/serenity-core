@@ -1,5 +1,6 @@
 package net.serenitybdd.junit.runners;
 
+import net.serenitybdd.junit.finder.QualifierFinder;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WhenFindingTestDataInADataDrivenTest {
 
@@ -167,12 +169,12 @@ public class WhenFindingTestDataInADataDrivenTest {
             });
         }
     }
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void the_parameterized_data_method_must_be_public() throws Exception {
         Class testClass = DataDrivenTestScenarioWithPrivateTestData.class;
-        Method method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
 
-        assertThat(method.getName(), is("testData"));
+        assertThrows(IllegalArgumentException.class , ()->DataDrivenAnnotations
+                                            .forClass(testClass).getTestDataMethod());
 
     }
 
@@ -188,12 +190,12 @@ public class WhenFindingTestDataInADataDrivenTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void the_parameterized_data_method_must_be_static() throws Exception {
+    @Test
+    public void the_parameterized_data_method_must_be_static() {
         Class testClass = DataDrivenTestScenarioWithNonStaticTestData.class;
-        Method method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
 
-        assertThat(method.getName(), is("testData"));
+        assertThrows(IllegalArgumentException.class , ()->DataDrivenAnnotations
+                                                    .forClass(testClass).getTestDataMethod());
     }
 
 
@@ -260,10 +262,10 @@ public class WhenFindingTestDataInADataDrivenTest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void the_qualifier_method_must_not_be_static() {
         DataDrivenScenarioWithStaticQualifier testCase = new DataDrivenScenarioWithStaticQualifier();
-        QualifierFinder.forTestCase(testCase).getQualifier();
+        assertThrows(IllegalArgumentException.class, ()->QualifierFinder.forTestCase(testCase).getQualifier());
     }
 
 
@@ -275,10 +277,10 @@ public class WhenFindingTestDataInADataDrivenTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void the_qualifier_method_must_be_public() {
         DataDrivenScenarioWithNonPublicQualifier testCase = new DataDrivenScenarioWithNonPublicQualifier();
-        QualifierFinder.forTestCase(testCase).getQualifier();
+        assertThrows(IllegalArgumentException.class , ()->QualifierFinder.forTestCase(testCase).getQualifier());
     }
 
     public static class DataDrivenScenarioWithWronlyTypedQualifier {
@@ -289,10 +291,10 @@ public class WhenFindingTestDataInADataDrivenTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void the_qualifier_method_must_return_a_string() {
         DataDrivenScenarioWithWronlyTypedQualifier testCase = new DataDrivenScenarioWithWronlyTypedQualifier();
-        QualifierFinder.forTestCase(testCase).getQualifier();
+        assertThrows(IllegalArgumentException.class, ()->QualifierFinder.forTestCase(testCase).getQualifier());
     }
 
     @UseTestDataFrom(value="test-data/simple-semicolon-data.csv", separator=';')
@@ -390,14 +392,13 @@ public class WhenFindingTestDataInADataDrivenTest {
     @UseTestDataFrom(value="does-not-exist/simple-semicolon-data.csv,still-does-not-exist/simple-semicolon-data.csv", separator=';')
     final static class CSVDataDrivenTestScenarioFromSeveralPossibleSourcesWithNoValidSource{}
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_load_test_data_from_several_possible_sources_with_no_valid_source() throws IOException {
 
         Class testClass = CSVDataDrivenTestScenarioFromSeveralPossibleSourcesWithNoValidSource.class;
 
-        List<PersonTestScenario> testScenarios
-                = DataDrivenAnnotations.forClass(testClass)
-                .getDataAsInstancesOf(PersonTestScenario.class);
+        assertThrows(IllegalArgumentException.class, ()-> DataDrivenAnnotations.forClass(testClass)
+                .getDataAsInstancesOf(PersonTestScenario.class));
     }
 
 }

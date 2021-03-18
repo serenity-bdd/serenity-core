@@ -7,8 +7,8 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.junit.listeners.TestCountListener;
-import net.thucydides.junit.listeners.TestCounter;
+import net.serenitybdd.junit.listener.TestCountListener;
+import net.serenitybdd.junit.listener.TestCounter;
 
 public class ThucydidesJUnitModule extends AbstractModule {
 

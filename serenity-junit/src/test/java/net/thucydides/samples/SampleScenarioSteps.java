@@ -6,7 +6,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.openqa.selenium.ElementNotVisibleException;
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
 @SuppressWarnings("serial")
 public class SampleScenarioSteps extends ScenarioSteps {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThucydidesRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerenityRunner.class);
 
     public SampleScenarioSteps(Pages pages) {
         super(pages);

@@ -8,6 +8,7 @@ import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.Assume;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -151,6 +152,7 @@ public class WhenUsingStepsAsNamedPersonas {
 
     @Test
     public void shouldStopTestIfAnAssumptionFails() {
+//        Assumptions.assumeTrue(false); junit5
         Assume.assumeTrue(false);
     }
 

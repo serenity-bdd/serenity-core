@@ -1,6 +1,7 @@
 package net.thucydides.junit.listeners;
 
 import com.google.inject.Key;
+import net.serenitybdd.junit.listener.TestCounter;
 import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.pages.Pages;

@@ -23,7 +23,7 @@ public class JUnitStepListener extends RunListener {
 
     private BaseStepListener baseStepListener;
     private StepListener[] extraListeners;
-    private Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
+    private final Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
     private Class<?> testClass;
     private ThreadLocal<Boolean> testStarted;
 
@@ -33,7 +33,7 @@ public class JUnitStepListener extends RunListener {
 
     protected JUnitStepListener(Class<?> testClass, BaseStepListener baseStepListener, StepListener... listeners) {
         testStarted = new ThreadLocal<>();
-        testStarted.set(new Boolean(false));
+        testStarted.set(false);
         this.baseStepListener = baseStepListener;
         this.extraListeners = listeners;
         this.testClass = testClass;

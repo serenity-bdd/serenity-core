@@ -1,7 +1,6 @@
 package net.serenitybdd.junit.runners;
 
 import net.thucydides.core.annotations.TestCaseAnnotations;
-import org.junit.runners.model.TestClass;
 
 /**
  * Created by john on 4/02/2016.
@@ -9,10 +8,10 @@ import org.junit.runners.model.TestClass;
 public class TestClassAnnotations {
 
 
-    private final TestClass testClass;
+    private final Class testClass;
 
     public TestClassAnnotations(Class<?> testClass) {
-        this.testClass = new TestClass(testClass);
+        this.testClass = testClass;
     }
 
     public static TestClassAnnotations forTestClass(Class<?> testClass) {
@@ -20,6 +19,6 @@ public class TestClassAnnotations {
     }
 
     public boolean toUseAUniqueSession() {
-        return TestCaseAnnotations.isUniqueSession(testClass.getJavaClass());
+        return TestCaseAnnotations.isUniqueSession(testClass);
     }
 }

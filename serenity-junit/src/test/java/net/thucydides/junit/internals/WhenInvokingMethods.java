@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WhenInvokingMethods {
 
@@ -38,10 +39,10 @@ public class WhenInvokingMethods {
         assertThat(result, is("bar"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_throw_an_IllegalArgumentError_if_the_method_cannot_be_invoked() throws Exception {
         TestClassWithInvocationTargetException testClass = new TestClassWithInvocationTargetException();
         Method foo = testClass.getClass().getMethod("foo");
-        MethodInvoker.on(testClass).run(foo);
+        assertThrows(IllegalArgumentException.class,()-> MethodInvoker.on(testClass).run(foo));
     }
 }

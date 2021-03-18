@@ -19,9 +19,9 @@ import static org.mockito.Mockito.verify;
  * Managing the WebDriver instance during a test run The instance should be
  * created once at the start of the test run, and closed once at the end of the
  * tets.
- * 
+ *
  * @author johnsmart
- * 
+ *
  */
 public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
 
@@ -38,8 +38,8 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
 
     @Test
     public void a_test_reporter_can_subscribe_to_the_runner() throws Exception {
-        
-        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
+
+        SerenityRunner runner = new SerenityRunner(AnnotatedSingleTestScenario.class);
         runner.subscribeReporter(mockReporter);
 
         runner.run(new RunNotifier());

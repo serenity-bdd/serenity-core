@@ -6,12 +6,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @RunWith(SerenityRunner.class)
 public class NonWebTestScenarioWithParameterizedSteps {
-    
+
     @Steps
     public SampleNonWebSteps steps;
-        
+
     @Test
     public void happy_day_scenario() {
         steps.stepWithAParameter("proportionOf");
@@ -22,14 +24,14 @@ public class NonWebTestScenarioWithParameterizedSteps {
         steps.anotherStepThatSucceeds();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_throw_correct_exception() {
-        steps.throw_exception();
+        assertThrows(IllegalArgumentException.class,()->steps.throw_exception());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void should_throw_element_not_found() {
-        steps.throw_element_not_found_exception();
+        assertThrows(NoSuchElementException.class,()->steps.throw_element_not_found_exception());
     }
 
 

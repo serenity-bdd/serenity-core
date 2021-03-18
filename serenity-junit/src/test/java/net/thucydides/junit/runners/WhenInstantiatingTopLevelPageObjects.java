@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
@@ -14,15 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 ;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class WhenInstantiatingTopLevelPageObjects {
-    
+
     @Managed(driver = "chrome")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
-    
+
     @Steps
     public SampleScenarioSteps steps;
 

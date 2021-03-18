@@ -1,5 +1,6 @@
 package net.serenitybdd.junit.runners;
 
+import net.serenitybdd.junit.finder.QualifierFinder;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.pages.Pages;

@@ -4,23 +4,25 @@ ext {
 }
 
 test {
-    maxParallelForks = Integer.parseInt(System.getProperty("forks","8"))
+    maxParallelForks = Integer.parseInt(System.getProperty("forks","4"))
 }
 
-configurations {
-    compile {
-        exclude group: 'org.junit.jupiter'
-    }
-    testCompile {
-        exclude group: 'org.junit.jupiter'
-    }
-}
+//configurations {
+//    all.collect { configuration ->
+//        configuration.exclude group: "junit", module: "junit"
+//        configuration.exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+//    }
+//}
 
 dependencies {
     compile project(':serenity-model')
     compile project(':serenity-core')
-    compile "junit:junit:${junitVersion}"
-    compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:latest.release'
+    implementation 'org.junit.jupiter:junit-jupiter-api:latest.release'
+    implementation 'org.junit.platform:junit-platform-launcher:latest.release'
+    implementation "org.junit.jupiter:junit-jupiter-params:latest.release"
+
     compile "org.opentest4j:opentest4j:${opentest4jVersion}"
 
     testCompile project(':serenity-test-utils')

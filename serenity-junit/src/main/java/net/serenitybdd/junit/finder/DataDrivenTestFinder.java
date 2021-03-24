@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.finder;
 
-import net.serenitybdd.junit.runners.DataDrivenAnnotations;
+import net.serenitybdd.junit.annotationprocessor.DataDrivenAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.finder
 
-import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator
+import net.serenitybdd.junit.util.ParameterizedTestsOutcomeAggregator
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.batches.BatchManagerProvider
@@ -9,9 +9,9 @@ import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
 import net.thucydides.core.webdriver.WebDriverFactory
-import net.thucydides.junit.rules.QuietThucydidesLoggingRule
-import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule
-import net.thucydides.samples.SampleDataDrivenScenarioWithQualifier
+import net.serenitybdd.junit.rules.QuietThucydidesLoggingRule
+import net.serenitybdd.junit.rules.SaveWebdriverSystemPropertiesRule
+import net.serenitybdd.junit.samples.SampleDataDrivenScenarioWithQualifier
 import org.junit.Rule
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification

@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.samples.SampleParallelDataDrivenScenario;
+import net.serenitybdd.junit.util.ParameterizedRunnerScheduler;
+import net.serenitybdd.junit.samples.SampleParallelDataDrivenScenario;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

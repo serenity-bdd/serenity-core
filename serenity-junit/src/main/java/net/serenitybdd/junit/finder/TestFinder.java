@@ -2,8 +2,7 @@ package net.serenitybdd.junit.finder;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.reflection.ClassFinder;
-import net.thucydides.junit.annotations.UseTestDataFrom;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.annotations.UseTestDataFrom;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
@@ -11,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * The TestFinder class lets you find the Thucydides tests or test methods underneath a given package.
+ * The TestFinder class lets you find the Serenity tests or test methods underneath a given package.
  * <p>You instantiate a TestFinder by providing the top-level package where the tests live.</p>
  * <p>You can then find the list of Thucydides test classes using getNormalTestClasses(), getDataDrivenTestClasses(),
  * and getAllTestClasses() (which returns both normal and data-driven tests).</p>
@@ -70,7 +69,7 @@ public abstract class TestFinder {
     private boolean normalSerenityTest(Class<?> testClass) {
         RunWith runWith = testClass.getAnnotation(RunWith.class);
         return ((runWith != null)
-                && ((runWith.value() == ThucydidesRunner.class) || (runWith.value() == SerenityRunner.class)));
+                && ((runWith.value() == SerenityRunner.class)));
     }
 
     public List<Method> getAllTestMethods() {

@@ -4,7 +4,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.batches.SystemVariableBasedBatchManager;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.samples.SampleNonWebSteps;
+import net.serenitybdd.junit.samples.SampleNonWebSteps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

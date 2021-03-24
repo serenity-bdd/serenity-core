@@ -1,13 +1,13 @@
 package net.serenitybdd.junit.runners;
 
+import net.serenitybdd.junit.annotationprocessor.DataDrivenAnnotations;
 import net.serenitybdd.junit.finder.QualifierFinder;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.junit.annotations.Qualifier;
-import net.thucydides.junit.annotations.TestData;
-import net.thucydides.junit.annotations.UseTestDataFrom;
-import net.thucydides.junit.runners.PersonTestScenario;
+import net.serenitybdd.junit.annotations.Qualifier;
+import net.serenitybdd.junit.annotations.TestData;
+import net.serenitybdd.junit.annotations.UseTestDataFrom;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WhenFindingTestDataInADataDrivenTest {
 
-    final static class DataDrivenTestScenario {
+    public final static class DataDrivenTestScenario {
 
         @TestData
         public static Collection<Object[]> testData() {
@@ -35,7 +35,7 @@ public class WhenFindingTestDataInADataDrivenTest {
         }
     }
 
-    final static class DataDrivenTestScenarioWithParamNames {
+    public final static class DataDrivenTestScenarioWithParamNames {
 
         @TestData(columnNames = "param-A,param-B")
         public static Collection<Object[]> testData() {

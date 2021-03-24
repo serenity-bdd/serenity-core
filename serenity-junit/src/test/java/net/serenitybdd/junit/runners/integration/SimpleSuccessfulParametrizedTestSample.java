@@ -2,8 +2,8 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.junit.annotations.TestData;
-import net.thucydides.samples.SampleScenarioSteps;
+import net.serenitybdd.junit.annotations.TestData;
+import net.serenitybdd.junit.samples.SampleScenarioSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

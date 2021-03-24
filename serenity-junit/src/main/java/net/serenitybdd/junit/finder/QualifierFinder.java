@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.finder;
 
 import net.thucydides.core.reflection.MethodFinder;
-import net.thucydides.junit.annotations.Qualifier;
-import net.thucydides.junit.internals.MethodInvoker;
+import net.serenitybdd.junit.annotations.Qualifier;
+import net.serenitybdd.junit.internals.MethodInvoker;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

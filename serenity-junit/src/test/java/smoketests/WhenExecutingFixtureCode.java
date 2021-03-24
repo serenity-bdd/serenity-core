@@ -12,7 +12,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.guice.webdriver.WebDriverModule;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
+import net.serenitybdd.junit.rules.DisableThucydidesHistoryRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

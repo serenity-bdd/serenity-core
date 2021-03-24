@@ -1,8 +1,11 @@
 package net.serenitybdd.junit.runners.integration;
 
-import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
+import net.serenitybdd.junit.util.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.junit.annotations.Concurrent;
+import net.serenitybdd.junit.annotations.TestData;
+import net.serenitybdd.junit.samples.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
@@ -22,11 +25,8 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.junit.annotations.Concurrent;
-import net.thucydides.junit.annotations.TestData;
-import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
-import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.samples.*;
+import net.serenitybdd.junit.rules.QuietThucydidesLoggingRule;
+import net.serenitybdd.junit.rules.SaveWebdriverSystemPropertiesRule;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rerunnableClass>
-    <className>net.thucydides.junit.runners.WhenRerunningFailingTests.ATestWithMoreTestMethods</className>
+    <className>net.serenitybdd.junit.runners.WhenRerunningFailingTests.ATestWithMoreTestMethods</className>
     <methodName>testMethod1</methodName>
     <methodName>testMethod2</methodName>
 </rerunnableClass>

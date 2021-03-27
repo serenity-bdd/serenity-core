@@ -1,13 +1,29 @@
 package net.thucydides.core.model;
 
+import io.cucumber.messages.Messages;
+
 public class Rule {
 
     private String name;
     private String description;
+    private RuleBackground background;
 
-    public Rule(String name, String description) {
+    public Rule(String name, String description, RuleBackground background) {
         this.name = name;
         this.description = description;
+        this.background = background;
+    }
+
+    public static Rule from(Messages.GherkinDocument.Feature.FeatureChild.Rule cucumberRule) {
+        String name = cucumberRule.getName();
+        String description = cucumberRule.getDescription();
+        RuleBackground ruleBackground = cucumberRule.getChildrenList().stream()
+                .filter(ruleChild -> ruleChild.hasBackground())
+                .map(ruleChild -> ruleChild.getBackground())
+                .map(background -> RuleBackground.from(background))
+                .findFirst().orElse(null);
+
+        return new Rule(name, description, ruleBackground);
     }
 
     public String getName() {
@@ -24,6 +40,14 @@ public class Rule {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean hasBackground() {
+        return background != null;
+    }
+
+    public RuleBackground getBackground() {
+        return background;
     }
 
     @Override

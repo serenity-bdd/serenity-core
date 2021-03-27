@@ -43,10 +43,6 @@ public class CucumberParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberParser.class);
 
-    private final static String CUCUMBER_4_FEATURE_LOADER = "cucumber.runtime.model.FeatureLoader";
-    private final static String CUCUMBER_2_FEATURE_LOADER = "cucumber.runtime.model.CucumberFeature";
-
-
     public CucumberParser() {
         this(ConfiguredEnvironment.getEnvironmentVariables());
     }

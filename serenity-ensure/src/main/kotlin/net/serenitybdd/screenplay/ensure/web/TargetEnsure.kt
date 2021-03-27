@@ -225,7 +225,8 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
         private val IS_DISPLAYED = expectThatActualIs("displayed",
                 fun(actor: Actor?, element: Target?): Boolean {
                     if ((actor == null) || (element == null)) return false
-                    val actualValue = element.resolveFor(actor).isDisplayed
+                    val resolvedElements = element.resolveAllFor(actor)
+                    val actualValue = resolvedElements.size > 0 && resolvedElements[0].isCurrentlyVisible
                     BlackBox.logAssertionValues(isDisplayedOrNot(actualValue), "an element that is displayed")
                     return actualValue
                 }

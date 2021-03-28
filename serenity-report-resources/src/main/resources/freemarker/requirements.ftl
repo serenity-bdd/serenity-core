@@ -362,9 +362,14 @@
                                                             <div class="scenario-docs card">
                                                                 <div class="scenario-docs card-header"
                                                                      style="min-height:1.5em;">
-                                                        <span class="scenario-heading">
-                                                            Background: <#if scenarioGroup.backgroundTitle?has_content>${scenarioGroup.backgroundTitle}</#if></span>
-                                                                    </span>
+                                                                    <span class="scenario-heading">
+                                                                    Background: <#if scenarioGroup.backgroundTitle?has_content>${formatter.renderText(scenarioGroup.backgroundTitle)}</#if></span>
+                                                                     </span>
+                                                                    <#if scenarioGroup.backgroundDescription?has_content>
+                                                                    <div class="scenario-comments">
+                                                                        <i class="fas fa-info-circle"></i>${formatter.renderText(scenarioGroup.backgroundDescription)}
+                                                                    </div>
+                                                                    </#if>
                                                                 </div>
                                                                 <div class="scenario-docs card-body">
                                                                     <#list scenarioGroup.backgroundSteps as step>

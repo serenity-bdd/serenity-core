@@ -163,7 +163,12 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         }
         List<ScenarioOutcomeGroup> scenarioGroups = new ArrayList<>();
         if (!scenariosWithoutARule.isEmpty()) {
-            scenarioGroups.add(new ScenarioOutcomeGroup(scenariosWithoutARule));
+            ScenarioOutcomeGroup scenarioGroup = new ScenarioOutcomeGroup(scenariosWithoutARule);
+            if (requirements.get(0).getBackground() != null) {
+                scenarioGroup.setBackgroundTitle(requirements.get(0).getBackground().getTitle());
+                scenarioGroup.setBackgroundDescription(requirements.get(0).getBackground().getDescription());
+            }
+            scenarioGroups.add(scenarioGroup);
         }
         for (Rule rule : scenarioOutcomeMap.keySet()) {
             scenarioGroups.add(new ScenarioOutcomeGroup(rule, scenarioOutcomeMap.get(rule)));

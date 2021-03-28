@@ -95,6 +95,8 @@ td.tag-title {
 
 .scenario-comments {
     font-style: italic;
+    font-weight: normal;
+    margin-left: 2em;
     margin-bottom: 0.5em;
 }
 

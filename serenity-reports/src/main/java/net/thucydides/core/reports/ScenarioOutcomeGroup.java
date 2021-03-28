@@ -13,6 +13,8 @@ public class ScenarioOutcomeGroup {
 
     private String ruleName = "";
     private String ruleDescription = "";
+    private String backgroundTitle = "";
+    private String backgroundDescription = "";
     private String id;
     private RuleBackground background;
     private final List<ScenarioOutcome> scenarios;
@@ -23,6 +25,8 @@ public class ScenarioOutcomeGroup {
         this.ruleDescription = assureNotNull(rule.getDescription());
         if (rule.hasBackground()) {
             this.background = rule.getBackground();
+            this.backgroundTitle = rule.getBackground().getName();
+            this.backgroundDescription = rule.getBackground().getDescription();
         }
         this.id = UUID.randomUUID().toString();
     }
@@ -108,6 +112,17 @@ public class ScenarioOutcomeGroup {
 
     public String getId() {
         return id;
+    }
+
+    public String getBackgroundTitle() { return backgroundTitle; }
+    public String getBackgroundDescription() { return backgroundDescription; }
+
+    public void setBackgroundTitle(String backgroundTitle) {
+        this.backgroundTitle = backgroundTitle;
+    }
+
+    public void setBackgroundDescription(String backgroundDescription) {
+        this.backgroundDescription = backgroundDescription;
     }
 }
 

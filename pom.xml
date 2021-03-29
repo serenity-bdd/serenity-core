@@ -813,6 +813,7 @@
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-smoketests</module>
+                <module>serenity-screenplay-playwright</module>
             </modules>
         </profile>
     </profiles>

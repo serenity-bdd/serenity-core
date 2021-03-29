@@ -1,11 +1,12 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.thucydides.core.tags.OutcomeTagFilter;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.requirements.reports.ScenarioOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.tags.OutcomeTagFilter;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import serenitymodel.net.thucydides.core.requirements.reports.ScenarioOutcome;
+import serenitymodel.net.thucydides.core.requirements.reports.ScenarioOutcomes;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;

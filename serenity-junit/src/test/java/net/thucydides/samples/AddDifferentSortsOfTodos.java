@@ -1,9 +1,9 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.annotations.Steps;
+import serenitycore.net.thucydides.core.annotations.Managed;
+import serenitycore.net.thucydides.core.annotations.Manual;
+import serenitycore.net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Before;

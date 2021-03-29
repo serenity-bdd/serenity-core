@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.email
 
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAnEmailableReport {

@@ -1,6 +1,6 @@
 package net.serenitybdd.demos.todos.pages.components;
 
-import net.serenitybdd.screenplay.targets.Target;
+import serenityscreenplay.screenplay.targets.Target;
 
 public class FilterBar {
     public static final Target CLEAR_COMPLETED = Target.the("Clear completed button").locatedBy(".clear-completed");

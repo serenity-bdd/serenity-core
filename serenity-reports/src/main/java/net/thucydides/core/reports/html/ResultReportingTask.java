@@ -1,9 +1,10 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.model.TestTag;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;

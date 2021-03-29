@@ -1,14 +1,15 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.NumericalFormatter;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.formatters.ReportFormatter;
-import net.thucydides.core.requirements.reports.RenderMarkdown;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import serenitymodel.net.serenitybdd.core.collect.NewList;
+import serenitymodel.net.thucydides.core.issues.IssueTracking;
+import serenitymodel.net.thucydides.core.model.NumericalFormatter;
+import serenitymodel.net.thucydides.core.model.Story;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.formatters.ReportFormatter;
+import serenitymodel.net.thucydides.core.reports.html.DescriptionSplitter;
+import serenitymodel.net.thucydides.core.requirements.reports.RenderMarkdown;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

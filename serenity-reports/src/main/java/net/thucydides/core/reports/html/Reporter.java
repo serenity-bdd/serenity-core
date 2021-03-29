@@ -1,18 +1,18 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.*;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.configuration.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.reports.*;
-import net.thucydides.core.util.*;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
 import org.slf4j.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
+import serenitymodel.net.thucydides.core.configuration.TimeoutConfiguration;
+import serenitymodel.net.thucydides.core.configuration.TimeoutValue;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.reports.NumberOfThreads;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
 
 class Reporter {
 
@@ -49,7 +49,8 @@ class Reporter {
                     .map( partition -> new ReportExecutorFuture(executorPool.submit(partition), partition.getReportingTask()) )
                     .collect(Collectors.toList());
 
-            final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
+            final TimeoutValue timeout = TimeoutConfiguration
+                .from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
 
             for (ReportExecutorFuture executedTask : futures) {
                 try {

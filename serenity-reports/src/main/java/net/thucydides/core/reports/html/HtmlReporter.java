@@ -1,12 +1,12 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.ThucydidesReporter;
-import net.thucydides.core.reports.templates.TemplateManager;
-import net.thucydides.core.reports.util.CopyDirectory;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.reports.ThucydidesReporter;
+import serenitymodel.net.thucydides.core.reports.templates.TemplateManager;
+import serenitymodel.net.thucydides.core.reports.util.CopyDirectory;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

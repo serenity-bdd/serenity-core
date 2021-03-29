@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.email
 
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

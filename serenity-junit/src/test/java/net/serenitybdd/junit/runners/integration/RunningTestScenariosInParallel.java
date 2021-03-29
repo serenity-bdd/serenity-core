@@ -2,8 +2,8 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
 import net.thucydides.samples.SamplePassingScenarioUsingHtmlUnit;
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,0 +1,36 @@
+package serenitymodel.net.thucydides.core.annotations
+
+import serenitymodel.net.thucydides.core.annotations.Step
+import serenitymodel.net.thucydides.core.annotations.TestAnnotations
+import spock.lang.Specification
+
+class WhenAnnotatingSteps extends Specification {
+
+
+    def setup() {
+    }
+
+    class AnnotatedStepLibrary {
+        @Step
+        public void normalStep() {}
+
+        @Step(callNestedMethods = false)
+        public void noNestedCallsStep() {}
+
+    }
+
+    def "should not skip nested methods by default"() {
+        when:
+            def normalStepMethod = AnnotatedStepLibrary.getMethod("normalStep")
+        then:
+            !TestAnnotations.shouldSkipNested(normalStepMethod)
+    }
+
+    def "should skip nested methods if configured to do so"() {
+        when:
+            def normalStepMethod = AnnotatedStepLibrary.getMethod("noNestedCallsStep")
+        then:
+            TestAnnotations.shouldSkipNested(normalStepMethod)
+    }
+
+}

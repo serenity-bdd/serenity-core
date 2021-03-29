@@ -15,7 +15,7 @@ import net.serenitybdd.rest.SerenityRest
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
-import net.thucydides.core.steps.BaseStepListener
+import serenitycore.net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 

@@ -1,10 +1,10 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.core.steps.StepFactory;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitymodel.net.thucydides.core.annotations.Story;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.steps.ScenarioSteps;
+import serenitycore.net.thucydides.core.steps.StepFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;

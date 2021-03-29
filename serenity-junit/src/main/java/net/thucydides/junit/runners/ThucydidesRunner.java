@@ -2,10 +2,10 @@ package net.thucydides.junit.runners;
 
 import com.google.inject.Injector;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.webdriver.DriverConfiguration;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
+import serenitymodel.net.thucydides.core.batches.BatchManager;
+import serenitycore.net.thucydides.core.webdriver.DriverConfiguration;
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory;
+import serenitycore.net.thucydides.core.webdriver.WebdriverManager;
 import org.junit.runners.model.InitializationError;
 
 /**

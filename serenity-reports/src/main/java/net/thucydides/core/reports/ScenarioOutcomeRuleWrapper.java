@@ -1,7 +1,7 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
+import serenitymodel.net.thucydides.core.model.Rule;
+import serenitymodel.net.thucydides.core.requirements.reports.ScenarioOutcome;
 
 import java.util.List;
 

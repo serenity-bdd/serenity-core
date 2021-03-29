@@ -1,17 +1,17 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
+import serenitymodel.net.thucydides.core.model.ReportType;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.requirements.RequirementsService;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_GENERATE_CSV_REPORTS;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static serenitymodel.net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 public class AggregateReportingTask extends BaseReportingTask implements ReportingTask  {
 

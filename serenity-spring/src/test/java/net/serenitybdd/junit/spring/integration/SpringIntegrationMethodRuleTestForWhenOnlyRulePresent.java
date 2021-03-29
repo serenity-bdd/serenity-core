@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.junit.spring.integration.testutils.PassFailureCountingRule;
 import net.serenitybdd.junit.spring.integration.testutils.StringHolder;
-import net.thucydides.core.annotations.Title;
+import serenitymodel.net.thucydides.core.annotations.Title;
 import org.assertj.core.api.Assertions;
 import org.junit.ClassRule;
 import org.junit.Rule;

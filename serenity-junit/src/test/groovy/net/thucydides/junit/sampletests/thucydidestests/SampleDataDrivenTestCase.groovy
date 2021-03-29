@@ -1,6 +1,6 @@
 package net.thucydides.junit.sampletests.thucydidestests
 
-import net.thucydides.core.annotations.Steps
+import serenitycore.net.thucydides.core.annotations.Steps
 import net.thucydides.junit.annotations.UseTestDataFrom
 import net.thucydides.junit.runners.ThucydidesParameterizedRunner
 import org.junit.Test

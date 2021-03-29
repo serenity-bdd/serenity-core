@@ -1,15 +1,15 @@
 package net.thucydides.core.reports.integration
 
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.reports.FormatConfiguration
+import serenitymodel.net.thucydides.core.issues.IssueTracking
+import serenitymodel.net.thucydides.core.reports.FormatConfiguration
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static serenitycore.net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
 public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specification {
 

@@ -1,10 +1,10 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.reports.html.ResultIconFormatter
-import net.thucydides.core.util.NameConverter.humanize
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider
+import serenitymodel.net.thucydides.core.reports.html.ResultIconFormatter
+import serenitymodel.net.thucydides.core.util.NameConverter.humanize
 import org.apache.commons.lang3.StringUtils
 
 class FrequentFailures {

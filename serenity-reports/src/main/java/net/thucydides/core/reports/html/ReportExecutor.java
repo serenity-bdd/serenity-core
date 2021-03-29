@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

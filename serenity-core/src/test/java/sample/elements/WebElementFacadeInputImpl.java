@@ -1,6 +1,6 @@
 package sample.elements;
 
-import net.thucydides.core.pages.WebElementFacadeImpl;
+import serenitycore.net.thucydides.core.pages.WebElementFacadeImpl;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 

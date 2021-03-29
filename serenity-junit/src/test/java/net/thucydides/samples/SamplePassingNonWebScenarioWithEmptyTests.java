@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.annotations.Pending;
+import serenitycore.net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

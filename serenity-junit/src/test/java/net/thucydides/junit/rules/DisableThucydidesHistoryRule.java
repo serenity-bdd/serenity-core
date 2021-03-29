@@ -1,7 +1,7 @@
 package net.thucydides.junit.rules;
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

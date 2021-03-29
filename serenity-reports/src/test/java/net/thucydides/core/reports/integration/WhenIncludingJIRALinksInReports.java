@@ -1,11 +1,11 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.annotations.Title;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.issues.SystemPropertiesIssueTracking;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.annotations.Story;
+import serenitymodel.net.thucydides.core.annotations.Title;
+import serenitymodel.net.thucydides.core.issues.IssueTracking;
+import serenitymodel.net.thucydides.core.issues.SystemPropertiesIssueTracking;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,0 +1,45 @@
+package serenitycore.net.thucydides.core.tags
+
+import serenitymodel.net.thucydides.core.model.TestOutcome
+import serenitymodel.net.thucydides.core.model.TestTag
+import serenitymodel.net.thucydides.core.statistics.service.FeatureStoryTagProvider
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
+import spock.lang.Specification
+
+/**
+ * A description goes here.
+ * User: john
+ * Date: 26/03/2014
+ * Time: 8:55 AM
+ */
+class WhenFindingTestOutcomeTags extends Specification {
+
+    def environmentVariables = new MockEnvironmentVariables()
+
+    class SomeTest {
+        def aTest() {}
+    }
+
+    def "should get story tag from the test class by default"() {
+        given:
+            def tagProvider = new FeatureStoryTagProvider(environmentVariables)
+            def testOutcome = TestOutcome.forTest("aTest", SomeTest)
+        when:
+            def tags = tagProvider.getTagsFor(testOutcome)
+        then:
+            tags.contains(TestTag.withName("When finding test outcome tags/Some test").andType("story"))
+    }
+
+    def "should not get story tag from the test class if "() {
+        given:
+            environmentVariables.setProperty("use.test.case.for.story.tag","false")
+        and:
+            def tagProvider = new FeatureStoryTagProvider(environmentVariables)
+            def testOutcome = TestOutcome.forTest("aTest", SomeTest)
+        when:
+            def tags = tagProvider.getTagsFor(testOutcome)
+        then:
+            tags.isEmpty()
+    }
+
+}

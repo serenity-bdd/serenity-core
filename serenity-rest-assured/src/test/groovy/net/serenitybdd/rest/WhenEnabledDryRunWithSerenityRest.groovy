@@ -5,19 +5,19 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
+import serenitymodel.net.serenitybdd.core.rest.RestQuery
 import net.serenitybdd.rest.utils.RestExecutionHelper
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.StepFactory
+import serenitymodel.net.thucydides.core.annotations.Step
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitycore.net.thucydides.core.steps.BaseStepListener
+import serenitycore.net.thucydides.core.steps.StepFactory
 import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static net.serenitybdd.core.rest.RestMethod.GET
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.GET
 import static net.serenitybdd.rest.JsonConverter.formatted
 import static net.serenitybdd.rest.SerenityRest.get
 import static net.serenitybdd.rest.SerenityRest.given

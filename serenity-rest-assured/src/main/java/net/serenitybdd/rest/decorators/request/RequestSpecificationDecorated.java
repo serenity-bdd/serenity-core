@@ -7,8 +7,8 @@ import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.ProxySpecification;
 import io.restassured.specification.RequestSpecification;
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.rest.RestMethod;
+import serenitycore.net.serenitybdd.core.Serenity;
+import serenitymodel.net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.rest.stubs.ResponseStub;
 import net.serenitybdd.rest.utils.RestExecutionHelper;
 import org.apache.http.client.HttpClient;
@@ -20,14 +20,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static net.serenitybdd.core.rest.RestMethod.DELETE;
-import static net.serenitybdd.core.rest.RestMethod.GET;
-import static net.serenitybdd.core.rest.RestMethod.HEAD;
-import static net.serenitybdd.core.rest.RestMethod.OPTIONS;
-import static net.serenitybdd.core.rest.RestMethod.PATCH;
-import static net.serenitybdd.core.rest.RestMethod.POST;
-import static net.serenitybdd.core.rest.RestMethod.PUT;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.DELETE;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.GET;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.HEAD;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.OPTIONS;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.PATCH;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.POST;
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.PUT;
+import static serenitycore.net.thucydides.core.steps.StepEventBus.getEventBus;
 import static org.apache.http.util.Args.notNull;
 
 /**

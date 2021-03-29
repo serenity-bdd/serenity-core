@@ -1,6 +1,6 @@
 package net.thucydides.junit.rules;
 
-import net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

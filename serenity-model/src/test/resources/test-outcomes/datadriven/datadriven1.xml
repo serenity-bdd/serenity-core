@@ -259,48 +259,58 @@
       <description>Then the number of trips used for OTR calculations should be ?1456? on-time trips</description>
       <error>expected:&lt;145[0]&gt; but was:&lt;145[6]&gt;</error>
       <exception>net.thucydides.core.steps.StepFailureException: expected:&lt;145[0]&gt; but was:&lt;145[6]&gt;&#xd;
-	at net.thucydides.core.steps.BaseStepListener.recordFailureDetailsInFailingTestStep(BaseStepListener.java:438)&#xd;
-	at net.thucydides.core.steps.BaseStepListener.stepFailed(BaseStepListener.java:426)&#xd;
-	at net.thucydides.core.steps.StepEventBus.stepFailed(StepEventBus.java:293)&#xd;
-	at net.thucydides.jbehave.ThucydidesReporter.failed(ThucydidesReporter.java:509)&#xd;
-	at org.jbehave.core.reporters.DelegatingStoryReporter.failed(DelegatingStoryReporter.java:97)&#xd;
-	at org.jbehave.core.reporters.ConcurrentStoryReporter.failed(ConcurrentStoryReporter.java:260)&#xd;
-	at org.jbehave.core.steps.AbstractStepResult$Failed.describeTo(AbstractStepResult.java:57)&#xd;
-	at org.jbehave.core.embedder.StoryRunner$FineSoFar.run(StoryRunner.java:500)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.runStepsWhileKeepingState(StoryRunner.java:479)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.runScenarioSteps(StoryRunner.java:443)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.runScenariosParametrisedByExamples(StoryRunner.java:412)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.runCancellable(StoryRunner.java:301)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.run(StoryRunner.java:219)&#xd;
-	at org.jbehave.core.embedder.StoryRunner.run(StoryRunner.java:180)&#xd;
-	at org.jbehave.core.embedder.StoryManager$EnqueuedStory.call(StoryManager.java:229)&#xd;
-	at org.jbehave.core.embedder.StoryManager$EnqueuedStory.call(StoryManager.java:201)&#xd;
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)&#xd;
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138)&#xd;
-	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)&#xd;
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)&#xd;
-	at java.lang.Thread.run(Thread.java:662)&#xd;
-Caused by: org.junit.ComparisonFailure: expected:&lt;145[0]&gt; but was:&lt;145[6]&gt;&#xd;
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)&#xd;
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)&#xd;
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)&#xd;
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)&#xd;
-	at org.fest.assertions.ConstructorInvoker.newInstance(ConstructorInvoker.java:36)&#xd;
-	at org.fest.assertions.ComparisonFailureFactory.newComparisonFailure(ComparisonFailureFactory.java:60)&#xd;
-	at org.fest.assertions.ComparisonFailureFactory.comparisonFailure(ComparisonFailureFactory.java:46)&#xd;
-	at org.fest.assertions.Fail.comparisonFailed(Fail.java:83)&#xd;
-	at org.fest.assertions.Fail.failIfNotEqual(Fail.java:71)&#xd;
-	at org.fest.assertions.GenericAssert.isEqualTo(GenericAssert.java:217)&#xd;
-	at org.fest.assertions.IntAssert.isEqualTo(IntAssert.java:61)&#xd;
-	at au.gov.nsw.transport.odm.jbehave.OTRByTimePeriodSteps.thenNumberOfTripsShouldBe(OTRByTimePeriodSteps.java:51)&#xd;
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#xd;
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)&#xd;
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)&#xd;
-	at java.lang.reflect.Method.invoke(Method.java:597)&#xd;
-	at org.jbehave.core.steps.StepCreator$ParameterisedStep.perform(StepCreator.java:550)&#xd;
-	at org.jbehave.core.embedder.StoryRunner$FineSoFar.run(StoryRunner.java:499)&#xd;
-	... 13 more&#xd;
-</exception>
+          at
+          serenitycore.net.thucydides.core.steps.BaseStepListener.recordFailureDetailsInFailingTestStep(BaseStepListener.java:438)&#xd;
+          at
+          serenitycore.net.thucydides.core.steps.BaseStepListener.stepFailed(BaseStepListener.java:426)&#xd;
+          at serenitycore.net.thucydides.core.steps.StepEventBus.stepFailed(StepEventBus.java:293)&#xd;
+          at net.thucydides.jbehave.ThucydidesReporter.failed(ThucydidesReporter.java:509)&#xd;
+          at
+          org.jbehave.core.reporters.DelegatingStoryReporter.failed(DelegatingStoryReporter.java:97)&#xd;
+          at
+          org.jbehave.core.reporters.ConcurrentStoryReporter.failed(ConcurrentStoryReporter.java:260)&#xd;
+          at org.jbehave.core.steps.AbstractStepResult$Failed.describeTo(AbstractStepResult.java:57)&#xd;
+          at org.jbehave.core.embedder.StoryRunner$FineSoFar.run(StoryRunner.java:500)&#xd;
+          at org.jbehave.core.embedder.StoryRunner.runStepsWhileKeepingState(StoryRunner.java:479)&#xd;
+          at org.jbehave.core.embedder.StoryRunner.runScenarioSteps(StoryRunner.java:443)&#xd;
+          at
+          org.jbehave.core.embedder.StoryRunner.runScenariosParametrisedByExamples(StoryRunner.java:412)&#xd;
+          at org.jbehave.core.embedder.StoryRunner.runCancellable(StoryRunner.java:301)&#xd;
+          at org.jbehave.core.embedder.StoryRunner.run(StoryRunner.java:219)&#xd;
+          at org.jbehave.core.embedder.StoryRunner.run(StoryRunner.java:180)&#xd;
+          at org.jbehave.core.embedder.StoryManager$EnqueuedStory.call(StoryManager.java:229)&#xd;
+          at org.jbehave.core.embedder.StoryManager$EnqueuedStory.call(StoryManager.java:201)&#xd;
+          at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)&#xd;
+          at java.util.concurrent.FutureTask.run(FutureTask.java:138)&#xd;
+          at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)&#xd;
+          at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)&#xd;
+          at java.lang.Thread.run(Thread.java:662)&#xd;
+          Caused by: org.junit.ComparisonFailure: expected:&lt;145[0]&gt; but was:&lt;145[6]&gt;&#xd;
+          at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)&#xd;
+          at
+          sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)&#xd;
+          at
+          sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)&#xd;
+          at java.lang.reflect.Constructor.newInstance(Constructor.java:513)&#xd;
+          at org.fest.assertions.ConstructorInvoker.newInstance(ConstructorInvoker.java:36)&#xd;
+          at
+          org.fest.assertions.ComparisonFailureFactory.newComparisonFailure(ComparisonFailureFactory.java:60)&#xd;
+          at
+          org.fest.assertions.ComparisonFailureFactory.comparisonFailure(ComparisonFailureFactory.java:46)&#xd;
+          at org.fest.assertions.Fail.comparisonFailed(Fail.java:83)&#xd;
+          at org.fest.assertions.Fail.failIfNotEqual(Fail.java:71)&#xd;
+          at org.fest.assertions.GenericAssert.isEqualTo(GenericAssert.java:217)&#xd;
+          at org.fest.assertions.IntAssert.isEqualTo(IntAssert.java:61)&#xd;
+          at
+          au.gov.nsw.transport.odm.jbehave.OTRByTimePeriodSteps.thenNumberOfTripsShouldBe(OTRByTimePeriodSteps.java:51)&#xd;
+          at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#xd;
+          at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)&#xd;
+          at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)&#xd;
+          at java.lang.reflect.Method.invoke(Method.java:597)&#xd;
+          at org.jbehave.core.steps.StepCreator$ParameterisedStep.perform(StepCreator.java:550)&#xd;
+          at org.jbehave.core.embedder.StoryRunner$FineSoFar.run(StoryRunner.java:499)&#xd;
+          ... 13 more&#xd;
+      </exception>
     </test-step>
     <test-step result="SKIPPED" duration="0">
       <description>And the base number of trips ({1546}) is the departed trips ({1546}) less exceptional trips ({0})</description>

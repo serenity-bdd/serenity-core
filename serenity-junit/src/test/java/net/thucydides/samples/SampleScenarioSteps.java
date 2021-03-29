@@ -1,11 +1,11 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.core.Serenity;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
+import serenitycore.net.serenitybdd.core.Serenity;
+import serenitymodel.net.thucydides.core.annotations.Pending;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;

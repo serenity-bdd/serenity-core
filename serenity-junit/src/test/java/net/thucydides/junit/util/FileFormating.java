@@ -1,6 +1,6 @@
 package net.thucydides.junit.util;
 
-import net.thucydides.core.digest.Digest;
+import serenitymodel.net.thucydides.core.digest.Digest;
 
 public class FileFormating {
 

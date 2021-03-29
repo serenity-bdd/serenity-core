@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.steps.ScenarioSteps;
 
 public class MockDemoSiteSteps extends ScenarioSteps {
 

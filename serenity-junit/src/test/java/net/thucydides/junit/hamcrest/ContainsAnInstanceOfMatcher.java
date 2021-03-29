@@ -1,6 +1,6 @@
 package net.thucydides.junit.hamcrest;
 
-import net.thucydides.core.reports.AcceptanceTestReporter;
+import serenitymodel.net.thucydides.core.reports.AcceptanceTestReporter;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 

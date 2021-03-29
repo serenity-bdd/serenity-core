@@ -1,11 +1,16 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.reports.AcceptanceTestReporter;
+import serenitymodel.net.thucydides.core.reports.FormatConfiguration;
+import serenitymodel.net.thucydides.core.reports.OutcomeFormat;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.ThucydidesReporter;
+import serenitymodel.net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.reports.json.JSONTestOutcomeReporter;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;

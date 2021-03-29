@@ -297,8 +297,8 @@ actor.attemptsTo(
 ### No issue
  * [daa522123a98ba8](https://github.com/serenity-bdd/serenity-core/commit/daa522123a98ba8) Added the experimental question/task 'seeIf'
  * [3f7e87c13c2c1e1](https://github.com/serenity-bdd/serenity-core/commit/3f7e87c13c2c1e1) Named the response status question
- * [7157de8979735ce](https://github.com/serenity-bdd/serenity-core/commit/7157de8979735ce) Added the e net.serenitybdd.screenplay.rest.questions package which contains a number of new ways to create custom REST questions
- * [6231d1354d4ce73](https://github.com/serenity-bdd/serenity-core/commit/6231d1354d4ce73) Added the e net.serenitybdd.screenplay.rest.questions package which contains a number of new ways to create custom REST questions
+ * [7157de8979735ce](https://github.com/serenity-bdd/serenity-core/commit/7157de8979735ce) Added the e serenityscreenplay.screenplay.rest.questions package which contains a number of new ways to create custom REST questions
+ * [6231d1354d4ce73](https://github.com/serenity-bdd/serenity-core/commit/6231d1354d4ce73) Added the e serenityscreenplay.screenplay.rest.questions package which contains a number of new ways to create custom REST questions
  * [2ba090325cbe190](https://github.com/serenity-bdd/serenity-core/commit/2ba090325cbe190) Fixed a performance issue reading requirements hierarchies.
  * [50a3b1824001f19](https://github.com/serenity-bdd/serenity-core/commit/50a3b1824001f19) Added additional REST interactions
 ## v1.9.19

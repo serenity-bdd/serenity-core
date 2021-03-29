@@ -1,20 +1,25 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.SerenitySystemProperties;
-import net.serenitybdd.core.time.Stopwatch;
+import serenitymodel.net.serenitybdd.core.SerenitySystemProperties;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.FrequentFailure;
 import net.serenitybdd.reports.model.FrequentFailures;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestTag;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.issues.IssueTracking;
+import serenitymodel.net.thucydides.core.model.ReportType;
+import serenitymodel.net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.*;
-import net.thucydides.core.requirements.DefaultRequirements;
-import net.thucydides.core.requirements.Requirements;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.reports.FormatConfiguration;
+import serenitymodel.net.thucydides.core.reports.OutcomeFormat;
+import serenitymodel.net.thucydides.core.reports.TestOutcomeLoader;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.UserStoryTestReporter;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.requirements.DefaultRequirements;
+import serenitymodel.net.thucydides.core.requirements.Requirements;
+import serenitymodel.net.thucydides.core.requirements.model.RequirementsConfiguration;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +35,9 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
-import static net.thucydides.core.guice.Injectors.getInjector;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
+import static serenitymodel.net.thucydides.core.guice.Injectors.getInjector;
+import static serenitymodel.net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**

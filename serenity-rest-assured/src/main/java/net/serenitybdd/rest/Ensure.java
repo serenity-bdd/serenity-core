@@ -1,9 +1,9 @@
 package net.serenitybdd.rest;
 
 import io.restassured.response.ValidatableResponse;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import serenitymodel.net.thucydides.core.steps.ExecutedStepDescription;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.steps.StepFailure;
 
 import java.util.function.Consumer;
 

@@ -1,8 +1,8 @@
 package sample.page;
 
-import net.serenitybdd.core.annotations.findby.FindBy;
-import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.DefaultUrl;
+import serenitycore.net.serenitybdd.core.annotations.findby.FindBy;
+import serenitycore.net.serenitybdd.core.pages.PageObject;
+import serenitycore.net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.WebDriver;
 import sample.elements.WebElementFacadeInput;
 

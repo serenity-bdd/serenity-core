@@ -3,7 +3,7 @@ package net.serenitybdd.reports.email.templates
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import net.serenitybdd.reports.email.SerenitySinglePageReport
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import java.io.Writer
 
 

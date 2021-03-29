@@ -143,7 +143,7 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
 
-    compile("io.appium:java-client:${appiumJavaClientVersion}") {
+/*    compile("io.appium:java-client:${appiumJavaClientVersion}") {
         exclude group: 'org.seleniumhq.selenium'
         exclude group: 'cglib', module: 'cglib'
         exclude group: 'junit', module: 'junit'
@@ -157,7 +157,7 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
         exclude group: "org.springframework", module:"spring-context"
-    }
+    }*/
     compile "org.springframework:spring-context-support:${springVersion}"
 //    compile "org.glassfish.tyrus:tyrus-core:1.13.1"
 

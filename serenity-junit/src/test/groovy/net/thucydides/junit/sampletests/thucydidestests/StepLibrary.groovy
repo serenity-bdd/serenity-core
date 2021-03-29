@@ -1,8 +1,8 @@
 package net.thucydides.junit.sampletests.thucydidestests
 
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.pages.Pages
-import net.thucydides.core.steps.ScenarioSteps
+import serenitymodel.net.thucydides.core.annotations.Step
+import serenitycore.net.thucydides.core.pages.Pages
+import serenitycore.net.thucydides.core.steps.ScenarioSteps
 
 
 class StepLibrary extends ScenarioSteps {

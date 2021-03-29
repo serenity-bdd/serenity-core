@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 
 class ReportTags(val environmentVariables: EnvironmentVariables) {
 

@@ -1,11 +1,11 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.DriverConfiguration;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import serenitycore.net.thucydides.core.configuration.WebDriverConfiguration;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.TestResult;
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables;
+import serenitycore.net.thucydides.core.webdriver.DriverConfiguration;
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.Before;
 import org.junit.runners.model.InitializationError;
 

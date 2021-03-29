@@ -1,20 +1,20 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.logging.LoggingLevel;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.logging.LoggingLevel;
+import serenitymodel.net.thucydides.core.model.DataTable;
+import serenitymodel.net.thucydides.core.model.Story;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.statistics.TestCount;
+import serenitymodel.net.thucydides.core.steps.ExecutedStepDescription;
+import serenitymodel.net.thucydides.core.steps.StepFailure;
+import serenitymodel.net.thucydides.core.steps.StepListener;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
 
 public class TestCountListener implements StepListener {
 

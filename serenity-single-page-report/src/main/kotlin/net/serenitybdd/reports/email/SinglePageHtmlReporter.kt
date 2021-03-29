@@ -6,12 +6,11 @@ import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.model.averageDurationOf
 import net.serenitybdd.reports.model.formattedDuration
 import net.serenitybdd.reports.model.maxDurationOf
-import net.thucydides.core.guice.Injectors
-import net.thucydides.core.model.TestResult.*
+import serenitymodel.net.thucydides.core.guice.Injectors
+import serenitymodel.net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.ExtendedReport
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.util.EnvironmentVariables
-import org.slf4j.LoggerFactory
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration

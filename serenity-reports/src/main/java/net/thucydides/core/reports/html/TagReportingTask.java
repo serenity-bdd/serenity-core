@@ -2,13 +2,13 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.model.TestTag;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;

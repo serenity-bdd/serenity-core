@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.model.ReportData;
-import net.thucydides.core.model.ReportNamer;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.ReportData;
+import serenitymodel.net.thucydides.core.model.ReportNamer;
+import serenitymodel.net.thucydides.core.model.ReportType;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
 
 import java.util.ArrayList;
 import java.util.List;

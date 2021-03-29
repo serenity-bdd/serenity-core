@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.model.TestResult
 
 class BackgroundColor {
     companion object {

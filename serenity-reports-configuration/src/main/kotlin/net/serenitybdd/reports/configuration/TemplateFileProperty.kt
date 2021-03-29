@@ -1,8 +1,7 @@
 package net.serenitybdd.reports.configuration
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.util.EnvironmentVariables
-import java.io.File
+import serenitymodel.net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 
 
 class TemplateFileProperty(val defaultTemplate : String,

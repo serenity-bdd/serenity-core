@@ -1,9 +1,9 @@
 package net.thucydides.junit.runners;
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.samples.MultipleNonWebTestScenario;
 import net.thucydides.samples.SingleNonWebTestScenario;

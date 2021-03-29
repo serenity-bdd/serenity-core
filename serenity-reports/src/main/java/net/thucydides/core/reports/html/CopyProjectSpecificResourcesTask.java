@@ -1,14 +1,12 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.reports.ReportGenerationFailedError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import serenitymodel.net.thucydides.core.reports.ReportGenerationFailedError;
 
 import java.io.IOException;
 import java.nio.file.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_ASSETS_DIRECTORY;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.REPORT_ASSETS_DIRECTORY;
 
 /**
  * Copy image resources from a project directory into the target directory, in a directory called assets

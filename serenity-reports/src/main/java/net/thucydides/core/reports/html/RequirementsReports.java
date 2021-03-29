@@ -1,14 +1,15 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.releases.ReleaseManager;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirementOutcome;
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.releases.ReleaseManager;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.requirements.RequirementsService;
+import serenitymodel.net.thucydides.core.requirements.model.Requirement;
+import serenitymodel.net.thucydides.core.requirements.model.RequirementsConfiguration;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementOutcome;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;

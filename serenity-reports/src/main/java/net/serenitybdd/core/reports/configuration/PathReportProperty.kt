@@ -1,8 +1,7 @@
-package net.serenitybdd.reports.configuration
+package net.serenitybdd.core.reports.configuration
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import java.nio.file.Path
 import java.nio.file.Paths
 

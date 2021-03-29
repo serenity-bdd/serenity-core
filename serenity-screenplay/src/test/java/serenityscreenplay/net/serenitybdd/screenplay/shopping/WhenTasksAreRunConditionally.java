@@ -1,0 +1,124 @@
+package serenityscreenplay.screenplay.shopping;
+
+import net.serenitybdd.junit.runners.SerenityRunner;
+import serenityscreenplay.net.serenitybdd.screenplay.Actor;
+import serenityscreenplay.net.serenitybdd.screenplay.Question;
+import serenityscreenplay.net.serenitybdd.screenplay.conditions.Check;
+import serenityscreenplay.net.serenitybdd.screenplay.shopping.tasks.Purchase;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static serenityscreenplay.net.serenitybdd.screenplay.shopping.tasks.Purchase.purchase;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SerenityRunner.class)
+public class WhenTasksAreRunConditionally {
+
+    Actor dana = Actor.named("Dana");
+
+    @Test
+    public void shouldBeAbleToPerformATaskConditionally() {
+        int cost = 10;
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+
+        dana.attemptsTo(
+                Check.whether(cost>100)
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAPear.theItemWasPurchased).isFalse();
+        assertThat(purchaseAnApple.theItemWasPurchased).isTrue();
+    }
+
+    @Test
+    public void shouldBeAbleToPerformAnAlternativeTaskConditionally() {
+        int cost = 10;
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+
+        dana.attemptsTo(
+                Check.whether(cost<100)
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAPear.theItemWasPurchased).isTrue();
+        assertThat(purchaseAnApple.theItemWasPurchased).isFalse();
+    }
+
+    private class IsExpensive implements Question<Boolean> {
+
+        private final int cost;
+
+        public IsExpensive(int cost) {
+            this.cost = cost;
+        }
+
+        @Override
+        public Boolean answeredBy(Actor actor) {
+            return (cost > 10);
+        }
+    }
+
+    @Test
+    public void shouldBeAbleToPerformATaskConditionallyUsingAQuestion() {
+
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+
+        IsExpensive itIsTooExpensive = new IsExpensive(5);
+
+
+        dana.attemptsTo(
+                Check.whether(itIsTooExpensive)
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAnApple.theItemWasPurchased).isTrue();
+        assertThat(purchaseAPear.theItemWasPurchased).isFalse();
+    }
+
+    @Test
+    public void shouldBeAbleToPerformAnAlternativeTaskConditionallyUsingAQuestion() {
+
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+
+        IsExpensive itIsTooExpensive = new IsExpensive(15);
+
+
+        dana.attemptsTo(
+                Check.whether(itIsTooExpensive)
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAnApple.theItemWasPurchased).isFalse();
+        assertThat(purchaseAPear.theItemWasPurchased).isTrue();
+    }
+
+    @Test
+    public void shouldBeAbleToConditionallyWithExplicitMatchers() {
+
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+
+        IsExpensive itIsTooExpensive = new IsExpensive(15);
+
+        Question<Integer> theCost = actor -> 30;
+
+        dana.attemptsTo(
+                Check.whether(theCost, Matchers.is(30))
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAnApple.theItemWasPurchased).isFalse();
+        assertThat(purchaseAPear.theItemWasPurchased).isTrue();
+    }
+}
+

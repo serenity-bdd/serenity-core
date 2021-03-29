@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitycore.net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.Qualifier;
 import net.thucydides.junit.annotations.TestData;

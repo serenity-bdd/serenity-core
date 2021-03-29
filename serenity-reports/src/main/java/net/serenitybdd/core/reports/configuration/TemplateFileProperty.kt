@@ -1,6 +1,8 @@
-package net.serenitybdd.reports.configuration
+package net.serenitybdd.core.reports.configuration
 
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.core.reports.configuration.CustomReportTemplateProperty
+import net.serenitybdd.core.reports.configuration.ReportProperty
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import java.io.File
 
 

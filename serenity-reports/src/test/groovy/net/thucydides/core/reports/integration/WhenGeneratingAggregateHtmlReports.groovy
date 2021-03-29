@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.integration
 
-import net.serenitybdd.core.SerenitySystemProperties
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.issues.IssueTracking
+import serenitymodel.net.serenitybdd.core.SerenitySystemProperties
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.By
@@ -13,7 +13,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static serenitycore.net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
 public class WhenGeneratingAggregateHtmlReports extends Specification {
 

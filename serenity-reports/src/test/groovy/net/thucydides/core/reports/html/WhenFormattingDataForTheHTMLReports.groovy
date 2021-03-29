@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.html
 
 import com.google.common.collect.ImmutableList
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.issues.IssueTracking
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 

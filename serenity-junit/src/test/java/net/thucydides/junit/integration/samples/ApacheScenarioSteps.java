@@ -1,11 +1,11 @@
 package net.thucydides.junit.integration.samples;
 
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.TestsRequirement;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.pages.WrongPageError;
-import net.thucydides.core.steps.ScenarioSteps;
+import serenitymodel.net.thucydides.core.annotations.Pending;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitymodel.net.thucydides.core.annotations.TestsRequirement;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.pages.WrongPageError;
+import serenitycore.net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.junit.integration.pages.ApacheHomePage;
 import net.thucydides.junit.integration.pages.ApacheProjectPage;
 

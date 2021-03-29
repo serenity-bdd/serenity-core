@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
 
-import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.DefaultUrl;
+import serenitycore.net.serenitybdd.core.pages.PageObject;
+import serenitycore.net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.WebDriver;
 
 @DefaultUrl("http://www.wikipedia.org")

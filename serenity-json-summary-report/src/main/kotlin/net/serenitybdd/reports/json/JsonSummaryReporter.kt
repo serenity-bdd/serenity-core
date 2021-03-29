@@ -3,16 +3,14 @@ package net.serenitybdd.reports.json
 import net.serenitybdd.reports.model.*
 import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.model.averageDurationOf
-import net.serenitybdd.reports.model.formattedDuration
 import net.serenitybdd.reports.model.maxDurationOf
-import net.thucydides.core.guice.Injectors
+import serenitymodel.net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
-import net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.Merger
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
-import java.time.Duration
 import java.time.ZonedDateTime
 
 /**

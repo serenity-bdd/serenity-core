@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepPublisher;
+import serenitycore.net.thucydides.core.steps.BaseStepListener;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitycore.net.thucydides.core.steps.StepPublisher;
 import org.junit.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 

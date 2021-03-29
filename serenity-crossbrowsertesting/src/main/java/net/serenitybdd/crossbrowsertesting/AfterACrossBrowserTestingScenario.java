@@ -1,11 +1,11 @@
 package net.serenitybdd.crossbrowsertesting;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.webdriver.RemoteDriver;
-import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import serenitycore.net.serenitybdd.core.webdriver.RemoteDriver;
+import serenitycore.net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
+import serenitymodel.net.thucydides.core.model.ExternalLink;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 public class AfterACrossBrowserTestingScenario implements AfterAWebdriverScenario {

@@ -1,7 +1,7 @@
 package net.serenitybdd.demos.todos.model;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.screenplay.Actor;
+import serenityscreenplay.screenplay.Actor;
 
 public class Actors {
     public static Actor theActorNamed(String name) {

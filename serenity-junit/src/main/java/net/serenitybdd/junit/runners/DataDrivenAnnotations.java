@@ -1,12 +1,12 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.steps.FilePathParser;
-import net.thucydides.core.steps.stepdata.CSVTestDataSource;
-import net.thucydides.core.steps.stepdata.TestDataSource;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.model.DataTable;
+import serenitymodel.net.thucydides.core.steps.FilePathParser;
+import serenitycore.net.thucydides.core.steps.stepdata.CSVTestDataSource;
+import serenitycore.net.thucydides.core.steps.stepdata.TestDataSource;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import org.apache.commons.lang3.StringUtils;

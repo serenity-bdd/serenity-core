@@ -1,35 +1,37 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.ReportOptions;
+import serenitymodel.net.serenitybdd.core.time.Stopwatch;
+import serenitymodel.net.thucydides.core.model.ReportType;
+import serenitymodel.net.thucydides.core.model.Rule;
+import serenitymodel.net.thucydides.core.model.TestTag;
+import serenitymodel.net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.ScenarioOutcomeRuleWrapper;
-import net.thucydides.core.tags.OutcomeTagFilter;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.JSONRequirementsTree;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.reports.RequirementOutcome;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.requirements.reports.ScenarioOutcomes;
-import net.thucydides.core.tags.BreadcrumbTagFilter;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.reports.html.RequirementsFilter;
+import serenitymodel.net.thucydides.core.reports.html.ResultCounts;
+import serenitymodel.net.thucydides.core.tags.OutcomeTagFilter;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.requirements.JSONRequirementsTree;
+import serenitymodel.net.thucydides.core.requirements.RequirementsService;
+import serenitymodel.net.thucydides.core.requirements.model.Requirement;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementOutcome;
+import serenitymodel.net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import serenitymodel.net.thucydides.core.requirements.reports.ScenarioOutcome;
+import serenitymodel.net.thucydides.core.requirements.reports.ScenarioOutcomes;
+import serenitymodel.net.thucydides.core.tags.BreadcrumbTagFilter;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
-import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static serenitymodel.net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
+import static serenitymodel.net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 class RequirementsOverviewReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -45,7 +47,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     private final String relativeLink;
     private final String reportName;
     private boolean asParentRequirement;
-    private  RequirementsFilter requirementsFilter;
+    private RequirementsFilter requirementsFilter;
 
     public RequirementsOverviewReportingTask(FreemarkerContext freemarker,
                                              EnvironmentVariables environmentVariables,

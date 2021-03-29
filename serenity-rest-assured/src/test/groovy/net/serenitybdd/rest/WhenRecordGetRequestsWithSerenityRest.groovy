@@ -12,15 +12,15 @@ import io.restassured.response.Response
 import io.restassured.specification.FilterableRequestSpecification
 import io.restassured.specification.FilterableResponseSpecification
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.steps.BaseStepListener
+import serenitymodel.net.serenitybdd.core.rest.RestQuery
+import serenitycore.net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import static net.serenitybdd.core.rest.RestMethod.GET
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.GET
 import static net.serenitybdd.rest.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching

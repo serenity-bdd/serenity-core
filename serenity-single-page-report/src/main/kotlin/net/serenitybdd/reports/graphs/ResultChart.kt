@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.graphs
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestResult.*
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.model.TestResult.*
 import org.knowm.xchart.BitmapEncoder.BitmapFormat.PNG
 import org.knowm.xchart.BitmapEncoder.saveBitmap
 import org.knowm.xchart.PieChart

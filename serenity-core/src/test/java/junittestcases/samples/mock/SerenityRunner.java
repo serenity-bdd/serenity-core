@@ -1,6 +1,6 @@
 package junittestcases.samples.mock;
 
-import net.thucydides.core.tags.Taggable;
+import serenitymodel.net.thucydides.core.tags.Taggable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;

@@ -2,13 +2,13 @@ package net.serenitybdd.rest.instantiation
 
 import io.restassured.RestAssured
 import io.restassured.specification.FilterableRequestSpecification
-import net.serenitybdd.core.webdriver.driverproviders.ChromeDriverCapabilities
+import serenitycore.net.serenitybdd.core.webdriver.driverproviders.ChromeDriverCapabilities
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
 import spock.lang.Specification
 import spock.lang.Unroll

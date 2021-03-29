@@ -1,18 +1,16 @@
 package net.serenitybdd.browserstack;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
-import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
+import serenitymodel.net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import serenitycore.net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
+import serenitycore.net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitycore.net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

@@ -5,11 +5,10 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import io.restassured.http.ContentType
 import io.restassured.specification.FilterableRequestSpecification
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.rest.HeaderNames
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
-import net.thucydides.core.steps.BaseStepListener
+import serenitycore.net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 

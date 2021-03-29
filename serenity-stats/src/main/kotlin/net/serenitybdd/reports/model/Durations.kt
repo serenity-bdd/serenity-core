@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
+import serenitymodel.net.thucydides.core.model.TestOutcome
 import java.time.Duration
 import java.time.Duration.ofMillis
 import java.time.temporal.ChronoUnit

@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.SystemVariableBasedBatchManager;
-import net.thucydides.core.batches.TestCountBasedBatchManager;
-import net.thucydides.core.webdriver.DriverConfigurationError;
+import serenitymodel.net.thucydides.core.batches.SystemVariableBasedBatchManager;
+import serenitymodel.net.thucydides.core.batches.TestCountBasedBatchManager;
+import serenitycore.net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.samples.SuccessfulSingleTestScenario;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithABrowser;

@@ -1,11 +1,11 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitycore.net.thucydides.core.annotations.Steps;
 
 import java.io.IOException;
 
-import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
+import static serenitycore.net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 
 
 public class NestedDatadrivenSteps {

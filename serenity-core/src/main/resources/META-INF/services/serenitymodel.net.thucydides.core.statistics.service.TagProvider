@@ -1,0 +1,4 @@
+serenitymodel.net.thucydides.core.statistics.service.AnnotationBasedTagProvider
+serenitymodel.net.thucydides.core.statistics.service.FeatureStoryTagProvider
+serenitymodel.net.thucydides.core.requirements.FileSystemRequirementsTagProvider
+serenitymodel.net.thucydides.core.requirements.PackageAnnotationBasedTagProvider

@@ -1,8 +1,8 @@
 package net.serenitybdd.assertions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.questions.TheValue;
+import serenityscreenplay.net.serenitybdd.screenplay.Actor;
+import serenityscreenplay.net.serenitybdd.screenplay.questions.TheValue;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.serenitybdd.assertions.CollectionMatchers.*;
-import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import static serenityscreenplay.net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
 @RunWith(SerenityRunner.class)
 public class WhenUsingCollectionMatchersWithScreenplayWeCan {

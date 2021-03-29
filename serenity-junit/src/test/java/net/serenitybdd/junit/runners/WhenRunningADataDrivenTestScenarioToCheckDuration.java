@@ -1,15 +1,15 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.batches.BatchManagerProvider;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.DriverConfiguration;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import serenitymodel.net.thucydides.core.batches.BatchManager;
+import serenitymodel.net.thucydides.core.batches.BatchManagerProvider;
+import serenitymodel.net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import serenitycore.net.thucydides.core.configuration.WebDriverConfiguration;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.TestStep;
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables;
+import serenitymodel.net.thucydides.core.webdriver.Configuration;
+import serenitycore.net.thucydides.core.webdriver.DriverConfiguration;
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.samples.SampleCSVDataDrivenScenarioWithDelays;

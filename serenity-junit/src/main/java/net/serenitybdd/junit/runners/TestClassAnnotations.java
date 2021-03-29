@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.TestCaseAnnotations;
+import serenitycore.net.thucydides.core.annotations.TestCaseAnnotations;
 import org.junit.runners.model.TestClass;
 
 /**

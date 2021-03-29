@@ -1,11 +1,11 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.webdriver.DriverConfiguration;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import serenitymodel.net.thucydides.core.batches.BatchManager;
+import serenitymodel.net.thucydides.core.model.DataTable;
+import serenitymodel.net.thucydides.core.model.DataTableRow;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.webdriver.DriverConfiguration;
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.listeners.JUnitStepListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;

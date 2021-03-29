@@ -1,12 +1,12 @@
 package smoketests;
 
-import net.serenitybdd.core.steps.Instrumented;
-import net.serenitybdd.core.steps.ScenarioActor;
+import serenitycore.net.serenitybdd.core.steps.Instrumented;
+import serenitycore.net.serenitybdd.core.steps.ScenarioActor;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;

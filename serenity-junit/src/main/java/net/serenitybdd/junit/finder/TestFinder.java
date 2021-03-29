@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.finder;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.reflection.ClassFinder;
+import serenitymodel.net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;

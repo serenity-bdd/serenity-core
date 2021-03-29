@@ -6,11 +6,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.StepFactory
+import serenitymodel.net.serenitybdd.core.rest.RestQuery
+import serenitymodel.net.thucydides.core.annotations.Step
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitycore.net.thucydides.core.steps.BaseStepListener
+import serenitycore.net.thucydides.core.steps.StepFactory
 import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -26,11 +26,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import static net.serenitybdd.core.rest.RestMethod.DELETE
-import static net.serenitybdd.core.rest.RestMethod.GET
-import static net.serenitybdd.core.rest.RestMethod.PATCH
-import static net.serenitybdd.core.rest.RestMethod.POST
-import static net.serenitybdd.core.rest.RestMethod.PUT
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.DELETE
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.GET
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.PATCH
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.POST
+import static serenitymodel.net.serenitybdd.core.rest.RestMethod.PUT
 import static net.serenitybdd.rest.SerenityRest.rest
 import static net.serenitybdd.rest.SerenityRest.then
 

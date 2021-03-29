@@ -1,10 +1,9 @@
 package net.serenitybdd.reports.navigator
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.serenitybdd.reports.io.testOutcomesIn
-import net.thucydides.core.guice.Injectors
+import serenitymodel.net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
@@ -13,8 +12,6 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.io.FileWriter
 import java.io.IOException
 import java.nio.file.Files
@@ -29,9 +26,9 @@ import kotlin.streams.toList
  */
 class GenerateReport(
 
-    val environmentVariables: EnvironmentVariables,
-    private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
-    private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
+        val environmentVariables: EnvironmentVariables,
+        private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
+        private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
 
   constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())

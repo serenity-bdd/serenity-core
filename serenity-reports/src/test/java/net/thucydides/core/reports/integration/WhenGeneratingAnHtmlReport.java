@@ -1,13 +1,13 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.digest.Digest;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.FileSystemUtils;
+import serenitymodel.net.thucydides.core.digest.Digest;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.TestResult;
+import serenitymodel.net.thucydides.core.model.TestStep;
+import serenitymodel.net.thucydides.core.reports.TestOutcomes;
+import serenitymodel.net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import serenitycore.net.thucydides.core.util.ExtendedTemporaryFolder;
+import serenitycore.net.thucydides.core.util.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,7 +1,7 @@
 package net.thucydides.junit.integration.pages;
 
-import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.At;
+import serenitycore.net.serenitybdd.core.pages.PageObject;
+import serenitycore.net.thucydides.core.annotations.At;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 

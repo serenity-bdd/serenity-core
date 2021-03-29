@@ -1,13 +1,13 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.reports.ResultChecker;
+import serenitymodel.net.thucydides.core.issues.IssueTracking;
+import serenitymodel.net.thucydides.core.model.TestResult;
+import serenitymodel.net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
-import net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.ReportProperties;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -20,8 +20,8 @@ import org.mockito.MockitoAnnotations;
 import java.io.File;
 import java.io.IOException;
 
-import static net.thucydides.core.matchers.FileMatchers.exists;
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
+import static serenitymodel.net.thucydides.core.matchers.FileMatchers.exists;
+import static serenitycore.net.thucydides.core.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

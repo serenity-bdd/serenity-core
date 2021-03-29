@@ -1,0 +1,2 @@
+sample.listeners.SampleStepListener
+serenitycore.net.thucydides.core.ListenerInWrongPackage

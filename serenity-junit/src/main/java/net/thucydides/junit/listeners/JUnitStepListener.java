@@ -1,10 +1,10 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.model.stacktrace.FailureCause;
+import serenitycore.net.thucydides.core.steps.BaseStepListener;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.steps.StepListener;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -14,7 +14,7 @@ import org.junit.runner.notification.RunListener;
 import java.io.File;
 import java.util.*;
 
-import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
+import static serenitymodel.net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 /**
  * Intercepts JUnit events and reports them to Thucydides.

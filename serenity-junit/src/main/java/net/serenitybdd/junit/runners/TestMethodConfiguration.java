@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.model.TestResult;
+import serenitycore.net.thucydides.core.annotations.Manual;
+import serenitymodel.net.thucydides.core.annotations.Pending;
+import serenitymodel.net.thucydides.core.model.TestResult;
 import org.junit.Ignore;
 import org.junit.runners.model.FrameworkMethod;
 

@@ -1,3 +1,0 @@
-net.thucydides.core.reports.json.JSONTestOutcomeReporter
-net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
-

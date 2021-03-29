@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.reports.templates.TemplateManager;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.reports.templates.TemplateManager;
 
 import java.io.Writer;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import net.serenitybdd.core.collect.NewList;
+import serenitymodel.net.serenitybdd.core.collect.NewList;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 

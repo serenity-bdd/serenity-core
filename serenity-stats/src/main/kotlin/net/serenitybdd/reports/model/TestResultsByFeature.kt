@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.model.TestOutcome
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
 
 class TestResultsByFeature(val featureName: String,
                            val issues: List<String>,

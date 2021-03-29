@@ -1,7 +1,7 @@
 package net.serenity.test.utils.rules;
 
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.steps.StepListener;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

@@ -1,9 +1,9 @@
 package net.serenitybdd.demos.todos.tasks;
 
 import net.serenitybdd.demos.todos.pages.ApplicationHomePage;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.actions.Open;
+import serenityscreenplay.screenplay.Actor;
+import serenityscreenplay.screenplay.Performable;
+import serenityscreenplay.screenplay.actions.Open;
 import net.thucydides.core.annotations.Step;
 import static java.util.Arrays.asList;
 

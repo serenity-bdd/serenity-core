@@ -6,8 +6,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.steps.BaseStepListener
+import serenitymodel.net.serenitybdd.core.rest.RestQuery
+import serenitycore.net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Ignore
 import spock.lang.Specification

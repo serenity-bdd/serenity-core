@@ -1,6 +1,6 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Steps;
+import serenitycore.net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Ignore;
 import org.junit.Test;

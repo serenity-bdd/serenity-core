@@ -1,7 +1,10 @@
 package net.serenitybdd.reports.configuration
 
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.serenitybdd.core.reports.configuration.IntReportProperty
+import net.serenitybdd.core.reports.configuration.StringListReportProperty
+import net.serenitybdd.core.reports.configuration.StringReportProperty
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -103,7 +106,7 @@ class WhenConfiguringReportProperties {
 
             environmentVariables.setProperty("reports.templates.email", absoluteTemplateFile.absolutePath)
 
-            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+            assertThat(TemplateFileProperty("default-template.ftl", "reports.templates.email")
                        .configuredIn(environmentVariables)).isEqualTo(absoluteTemplateFile.absolutePath)
         }
 
@@ -112,14 +115,14 @@ class WhenConfiguringReportProperties {
 
             environmentVariables.setProperty("reports.templates.email", relativeTemplateFile)
 
-            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+            assertThat(TemplateFileProperty("default-template.ftl", "reports.templates.email")
                     .configuredIn(environmentVariables)).isEqualTo(relativeTemplateFile)
         }
 
         @Test
         fun `we can define template files using a default value path`() {
 
-            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+            assertThat(TemplateFileProperty("default-template.ftl", "reports.templates.email")
                     .configuredIn(environmentVariables)).isEqualTo("default-template.ftl")
         }
 

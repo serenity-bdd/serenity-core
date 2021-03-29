@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.integration.exceptions.*;
-import net.thucydides.core.annotations.Step;
+import serenitymodel.net.thucydides.core.annotations.Step;
 
 import java.math.BigDecimal;
 

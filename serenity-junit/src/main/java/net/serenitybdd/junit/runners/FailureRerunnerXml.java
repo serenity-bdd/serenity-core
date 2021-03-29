@@ -1,9 +1,9 @@
 package net.serenitybdd.junit.runners;
 
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +19,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.RECORD_FAILURES;
-import static net.thucydides.core.ThucydidesSystemProperty.REPLAY_FAILURES;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.RECORD_FAILURES;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.REPLAY_FAILURES;
 
 public class FailureRerunnerXml implements FailureRerunner {
 

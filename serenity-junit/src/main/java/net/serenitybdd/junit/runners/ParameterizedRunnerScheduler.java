@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.core.collect.NewList;
+import serenitymodel.net.serenitybdd.core.collect.NewList;
 import org.junit.runners.model.RunnerScheduler;
 
 import java.util.LinkedList;

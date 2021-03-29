@@ -6,6 +6,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.TestContextManager;
+import serenitymodel.net.serenitybdd.core.di.DependencyInjector;
 
 public class SpringDependencyInjector implements DependencyInjector {
 

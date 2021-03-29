@@ -1,11 +1,11 @@
 package sample.listeners;
 
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.steps.StepListener;
+import serenitymodel.net.thucydides.core.model.DataTable;
+import serenitymodel.net.thucydides.core.model.Story;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.steps.ExecutedStepDescription;
+import serenitymodel.net.thucydides.core.steps.StepFailure;
+import serenitymodel.net.thucydides.core.steps.StepListener;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

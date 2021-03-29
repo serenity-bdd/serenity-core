@@ -1,6 +1,6 @@
 package net.serenitybdd.assertions.assertj;
 
-import net.serenitybdd.core.pages.WebElementState;
+import serenitycore.net.serenitybdd.core.pages.WebElementState;
 import org.assertj.core.api.AbstractAssert;
 
 public class WebElementStateAssert extends AbstractAssert<WebElementStateAssert, WebElementState> {

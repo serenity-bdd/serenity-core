@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners
 
-import net.thucydides.core.model.TestOutcome
+import serenitymodel.net.thucydides.core.model.TestOutcome
 
 class TestOutcomeChecks {
 

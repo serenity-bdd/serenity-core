@@ -2,13 +2,13 @@ package net.serenitybdd.junit.finder
 
 import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.batches.BatchManagerProvider
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
-import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.webdriver.WebDriverFactory
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.batches.BatchManagerProvider
+import serenitymodel.net.thucydides.core.configuration.SystemPropertiesConfiguration
+import serenitycore.net.thucydides.core.configuration.WebDriverConfiguration
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.webdriver.Configuration
+import serenitycore.net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule
 import net.thucydides.samples.SampleDataDrivenScenarioWithQualifier

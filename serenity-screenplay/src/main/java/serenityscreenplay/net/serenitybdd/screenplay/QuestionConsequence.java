@@ -1,0 +1,70 @@
+package serenityscreenplay.net.serenitybdd.screenplay;
+import serenitycore.net.serenitybdd.core.Serenity;
+import serenitycore.net.serenitybdd.core.eventbus.Broadcaster;
+import serenityscreenplay.net.serenitybdd.screenplay.conditions.SilentPerformable;
+import serenityscreenplay.net.serenitybdd.screenplay.events.ActorAsksQuestion;
+import serenityscreenplay.net.serenitybdd.screenplay.formatting.StripRedundantTerms;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import org.hamcrest.Matcher;
+
+import java.util.Optional;
+
+import static serenityscreenplay.net.serenitybdd.screenplay.questions.QuestionHints.addHints;
+import static serenityscreenplay.net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+public class QuestionConsequence<T> extends BaseConsequence<T> {
+    protected final Question<T> question;
+    protected final Matcher<T> expected;
+    protected final String subject;
+
+    private final static SilentPerformable DO_NOTHING = new SilentPerformable();
+
+    public QuestionConsequence(Question<T> actual, Matcher<T> expected) {
+        this(null, actual, expected);
+    }
+
+    public QuestionConsequence(String subjectText, Question<T> actual, Matcher<T> expected) {
+        this.question = actual;
+        this.expected = expected;
+        this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
+        this.subjectText = Optional.ofNullable(subjectText);
+    }
+
+    @Override
+    public void evaluateFor(Actor actor) {
+        if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
+
+        Broadcaster.getEventBus().post(new ActorAsksQuestion(question, actor.getName()));
+
+        Serenity.injectScenarioStepsInto(question);
+
+        try {
+            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
+
+            addHints(fromAssertion(expected)).to(question);
+
+            assertThat(question.answeredBy(actor), expected);
+        } catch (Throwable actualError) {
+
+            throwComplaintTypeErrorIfSpecified(errorFrom(actualError));
+
+            throwDiagosticErrorIfProvided(errorFrom(actualError));
+
+            throw actualError;
+        }
+    }
+
+    private void throwDiagosticErrorIfProvided(Error actualError) {
+        if (question instanceof QuestionDiagnostics) {
+            throw Complaint.from(((QuestionDiagnostics) question).onError(), actualError);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String template = explanation.orElse("Then %s should be %s");
+        String expectedExpression =  StripRedundantTerms.from(expected.toString());
+        return addRecordedInputValuesTo(String.format(template, subjectText.orElse(subject), expectedExpression));
+    }
+}

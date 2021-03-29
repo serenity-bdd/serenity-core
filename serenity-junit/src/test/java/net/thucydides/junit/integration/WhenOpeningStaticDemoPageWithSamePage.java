@@ -1,14 +1,12 @@
 package net.thucydides.junit.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.Title;
-import net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.annotations.Managed;
+import serenitycore.net.thucydides.core.annotations.ManagedPages;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.annotations.Title;
+import serenitycore.net.thucydides.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.DemoSiteSteps;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;

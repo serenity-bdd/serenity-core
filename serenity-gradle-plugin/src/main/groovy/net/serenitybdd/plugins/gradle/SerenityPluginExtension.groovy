@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.gradle
 
-import net.thucydides.core.guice.Injectors
-import net.thucydides.core.webdriver.Configuration;
+import serenitymodel.net.thucydides.core.guice.Injectors
+import serenitymodel.net.thucydides.core.webdriver.Configuration;
 
 class SerenityPluginExtension {
     private final def configuration = Injectors.getInjector().getProvider(Configuration.class).get()

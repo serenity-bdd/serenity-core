@@ -1,12 +1,12 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.DataTableRow
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult.*
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.ParentRequirementProvider
-import net.thucydides.core.requirements.model.Requirement
+import serenitymodel.net.thucydides.core.model.DataTableRow
+import serenitymodel.net.thucydides.core.model.TestOutcome
+import serenitymodel.net.thucydides.core.model.TestResult.*
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider
+import serenitymodel.net.thucydides.core.requirements.ParentRequirementProvider
+import serenitymodel.net.thucydides.core.requirements.model.Requirement
 import java.util.*
 
 class UnstableFeatures{

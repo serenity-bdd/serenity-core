@@ -1,7 +1,43 @@
+/*
+plugins {
+    id 'org.javamodularity.moduleplugin' version '1.7.0'
+}
+*/
+
 ext {
     bintrayPackage = 'serenity-model'
     projectDescription = 'Serenity Model'
 }
+
+/*
+configurations {
+    all.collect { configuration ->
+        configuration.exclude   group: 'xml-apis', module: 'xml-apis'
+    }
+}
+
+def patchModules() {
+    modularity.patchModule("imgscalr.lib", "imgscalr-lib-4.2.jar")
+    modularity.patchModule("awaitility","awaitility-4.0.3.jar")
+    modularity.patchModule("commons.beanutils.core","commons.beanutils.core-1.8.3.jar")
+    modularity.patchModule("commons.collections","commons.collections-3.2.2.jar")
+    modularity.patchModule("jxl","jxl-2.6.12.jar")
+    modularity.patchModule("opencsv","opencsv-2.0.jar")
+    modularity.patchModule("asciidoctorj","asciidoctorj-1.5.6.jar")
+    modularity.patchModule("xstream","xstream-1.4.13.jar")
+    modularity.patchModule("javax.inject","javax.inject-1.jar")
+}
+
+compileJava {
+    doFirst {
+        patchModules()
+    }
+    moduleOptions {
+        addModules = ['imgscalr.lib','awaitility','commons.beanutils.core','commons.collections','jxl','opencsv','asciidoctorj','xstream','javax.inject']
+    }
+}
+*/
+
 
 dependencies {
 

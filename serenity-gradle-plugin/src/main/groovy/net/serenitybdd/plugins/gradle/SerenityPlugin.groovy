@@ -1,14 +1,14 @@
 package net.serenitybdd.plugins.gradle
 
-import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.guice.Injectors
+import serenitymodel.net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.ExtendedReports
-import net.thucydides.core.reports.ResultChecker
+import serenitymodel.net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import serenitymodel.net.thucydides.core.webdriver.Configuration
+import serenitymodel.net.thucydides.core.configuration.SystemPropertiesConfiguration
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.model.TestResult;
+import serenitycore.net.thucydides.core.annotations.Manual;
+import serenitymodel.net.thucydides.core.model.TestResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

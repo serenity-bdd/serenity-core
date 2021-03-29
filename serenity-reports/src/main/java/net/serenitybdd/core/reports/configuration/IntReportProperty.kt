@@ -1,8 +1,8 @@
-package net.serenitybdd.reports.configuration
+package net.serenitybdd.core.reports.configuration
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 
 class IntReportProperty(val property: String, val defaultValue: Int) : ReportProperty<Int> {
     constructor(property: ThucydidesSystemProperty, defaultValue: Int) : this(property.toString(), defaultValue)

@@ -1,6 +1,6 @@
 package sample.elements;
 
-import net.thucydides.core.pages.WebElementFacade;
+import serenitycore.net.thucydides.core.pages.WebElementFacade;
 
 public interface WebElementFacadeNotImplemented extends WebElementFacade{
 

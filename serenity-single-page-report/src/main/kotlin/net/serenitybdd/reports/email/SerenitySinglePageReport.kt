@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.email
 
-import net.serenitybdd.reports.configuration.*
-import net.thucydides.core.ThucydidesSystemProperty.*
+import net.serenitybdd.core.reports.configuration.*
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty.*
 import java.io.File
 import java.nio.file.Path
 

@@ -6,4 +6,4 @@
 )
 package annotatedstories.potatoes;
 
-import net.thucydides.core.annotations.Narrative;
+import serenitymodel.net.thucydides.core.annotations.Narrative;

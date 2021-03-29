@@ -3,10 +3,10 @@ package net.thucydides.junit.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.statistics.TestCount;
+import serenitymodel.net.thucydides.core.steps.StepListener;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.junit.listeners.TestCountListener;
 import net.thucydides.junit.listeners.TestCounter;
 

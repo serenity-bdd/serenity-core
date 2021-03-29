@@ -1,10 +1,10 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTagValuesOf;
+import serenitycore.net.thucydides.core.annotations.Managed;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitymodel.net.thucydides.core.annotations.WithTag;
+import serenitymodel.net.thucydides.core.annotations.WithTagValuesOf;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;

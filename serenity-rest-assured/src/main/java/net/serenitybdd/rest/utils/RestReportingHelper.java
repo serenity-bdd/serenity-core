@@ -6,22 +6,22 @@ import io.restassured.http.ContentType;
 import io.restassured.internal.support.Prettifier;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseOptions;
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.rest.RestMethod;
-import net.serenitybdd.core.rest.RestQuery;
+import serenitycore.net.serenitybdd.core.Serenity;
+import serenitymodel.net.serenitybdd.core.rest.RestMethod;
+import serenitymodel.net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.rest.RestStepListener;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.filters.FieldsRecordingFilter;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import serenitymodel.net.thucydides.core.steps.ExecutedStepDescription;
+import serenitycore.net.thucydides.core.steps.StepEventBus;
+import serenitymodel.net.thucydides.core.steps.StepFailure;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static serenitycore.net.thucydides.core.steps.StepEventBus.getEventBus;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 

@@ -4,8 +4,8 @@ import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringContextHierarc
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringDependencies
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationContextHierarchyDependencies
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationDependencies
-import net.thucydides.core.pages.Pages
-import net.thucydides.core.steps.di.ClasspathDependencyInjectorService
+import serenitycore.net.thucydides.core.pages.Pages
+import serenitymodel.net.thucydides.core.steps.di.ClasspathDependencyInjectorService
 import spock.lang.Specification
 
 class WhenInjectingSpringComponents extends Specification {

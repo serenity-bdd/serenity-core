@@ -1,15 +1,15 @@
 package net.serenitybdd.rest.utils;
 
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static serenitymodel.net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
+import static serenitycore.net.thucydides.core.steps.StepEventBus.getEventBus;
 
 
 /**

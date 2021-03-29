@@ -1,10 +1,15 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitycore.net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Ignore;
 import org.openqa.selenium.NoSuchElementException;
+import serenitymodel.net.thucydides.core.annotations.Pending;
+import serenitymodel.net.thucydides.core.annotations.Step;
+import serenitymodel.net.thucydides.core.annotations.StepGroup;
+import serenitymodel.net.thucydides.core.annotations.TestsRequirement;
+import serenitymodel.net.thucydides.core.annotations.TestsRequirements;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

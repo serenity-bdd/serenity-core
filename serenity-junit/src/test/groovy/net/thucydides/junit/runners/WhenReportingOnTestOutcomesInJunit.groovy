@@ -1,10 +1,10 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
-import net.thucydides.core.annotations.Pending
-import net.thucydides.core.annotations.Steps
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.util.MockEnvironmentVariables
+import serenitymodel.net.thucydides.core.annotations.Pending
+import serenitycore.net.thucydides.core.annotations.Steps
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.samples.SampleScenarioSteps
 import org.junit.Rule
 import org.junit.Test

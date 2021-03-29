@@ -1,13 +1,13 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.guice.Injectors.getInjector
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.reports.html.TagFilter
-import net.thucydides.core.requirements.RequirementsService
-import net.thucydides.core.util.EnvironmentVariables
+import serenitymodel.net.thucydides.core.guice.Injectors.getInjector
+import serenitymodel.net.thucydides.core.model.TestResult
+import serenitymodel.net.thucydides.core.model.TestTag
+import serenitymodel.net.thucydides.core.reports.TestOutcomes
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider
+import serenitymodel.net.thucydides.core.reports.html.TagFilter
+import serenitymodel.net.thucydides.core.requirements.RequirementsService
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables
 import org.apache.commons.lang3.StringUtils
 
 

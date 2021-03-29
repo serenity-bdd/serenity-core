@@ -1,11 +1,11 @@
 package net.serenitybdd.zalenium;
 
-import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
+import serenitycore.net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
+import serenitymodel.net.thucydides.core.model.Story;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.thucydides.core.util.MockEnvironmentVariables;
+import serenitycore.net.thucydides.core.webdriver.SupportedWebDriver;
 import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 

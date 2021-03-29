@@ -1,10 +1,10 @@
 package net.serenitybdd.zalenium;
 
-import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SupportedWebDriver;
+import serenitycore.net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
+import serenitycore.net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import serenitymodel.net.thucydides.core.model.TestOutcome;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import serenitycore.net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Properties;

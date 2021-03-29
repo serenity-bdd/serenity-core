@@ -1,6 +1,6 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.TestsRequirement;
+import serenitymodel.net.thucydides.core.annotations.TestsRequirement;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -4,7 +4,7 @@ import net.serenitybdd.reports.graphs.ResultChart
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import net.thucydides.core.model.TestResult.*
+import serenitymodel.net.thucydides.core.model.TestResult.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAChart {

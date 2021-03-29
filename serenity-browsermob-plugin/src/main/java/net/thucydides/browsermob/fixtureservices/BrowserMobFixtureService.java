@@ -4,12 +4,12 @@ import com.google.common.base.Splitter;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.fixtureservices.FixtureException;
-import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import serenitymodel.net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitycore.net.thucydides.core.fixtureservices.FixtureException;
+import serenitycore.net.thucydides.core.fixtureservices.FixtureService;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.thucydides.browsermob.fixtureservices.BrowserMobSystemProperties.BROWSER_MOB_PROXY;
-import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
+import static serenitycore.net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class BrowserMobFixtureService implements FixtureService {
 

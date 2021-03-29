@@ -1,0 +1,303 @@
+package serenitymodel.net.thucydides.core.model;
+
+import serenitymodel.net.serenitybdd.core.strings.FirstLine;
+import serenitymodel.net.thucydides.core.ThucydidesSystemProperty;
+import serenitymodel.net.thucydides.core.annotations.Feature;
+import serenitymodel.net.thucydides.core.guice.Injectors;
+import serenitymodel.net.thucydides.core.model.features.ApplicationFeature;
+import serenitymodel.net.thucydides.core.reports.html.ReportNameProvider;
+import serenitymodel.net.thucydides.core.requirements.RootDirectory;
+import serenitymodel.net.thucydides.core.requirements.model.FeatureType;
+import serenitymodel.net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
+
+import static serenitymodel.net.thucydides.core.util.NameConverter.humanize;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
+/**
+ * Represents a given user story or feature.
+ * Used to record test results and so on.
+ */
+public class Story {
+
+    private String id;
+    private String storyName;
+    private String storyClassName;
+    private String path;
+    private String narrative;
+    private ApplicationFeature feature;
+    private String type;
+
+    protected Story(final Class<?> userStoryClass) {
+        this.id = userStoryClass.getCanonicalName();
+        this.storyClassName = userStoryClass.getName();
+        this.storyName = humanize(userStoryClass.getSimpleName());
+        this.feature = findFeatureFrom(userStoryClass);
+        this.path = pathOf(userStoryClass);
+        this.type = FeatureType.STORY.toString();
+    }
+
+    private String pathOf(Class<?> userStoryClass) {
+        String canonicalName = userStoryClass.getCanonicalName();
+        String localPath = stripRootPathFrom(canonicalName);
+
+        int lastDot = localPath.lastIndexOf(".");
+
+        if (lastDot > 0) {
+            return localPath.substring(0, lastDot);
+        } else {
+            return "";
+        }
+    }
+
+    private String stripRootPathFrom(String testOutcomePath) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (testOutcomePath == null) {
+            return "";
+        }
+        String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables);
+        if (StringUtils.isNotEmpty(rootPath) && testOutcomePath.startsWith(rootPath) && (!testOutcomePath.equals(rootPath))) {
+            return testOutcomePath.substring(rootPath.length() + 1);
+        } else {
+            return testOutcomePath;
+        }
+    }
+
+    private ApplicationFeature findFeatureFrom(Class<?> userStoryClass) {
+        if (getFeatureClass(userStoryClass) != null) {
+            return ApplicationFeature.from(getFeatureClass(userStoryClass));
+        }
+        return null;
+    }
+
+    public Story(String id,
+                 final String storyName,
+                 final String storyClassName,
+                 final String path,
+                 final ApplicationFeature feature) {
+        this.id = id;
+        this.storyName = storyName;
+        this.storyClassName = storyClassName;
+        this.feature = feature;
+        this.path = path;
+        this.narrative = null;
+        this.type = FeatureType.STORY.toString();
+    }
+
+
+    public Story(String id,
+                 final String storyName,
+                 final String storyClassName,
+                 final String path,
+                 final ApplicationFeature feature,
+                 final String narrative) {
+        this(id, storyName, storyClassName, path, feature, narrative, FeatureType.STORY.toString());
+    }
+
+
+    public Story(String id,
+                 final String storyName,
+                 final String storyClassName,
+                 final String path,
+                 final ApplicationFeature feature,
+                 final String narrative,
+                 final String type) {
+        this.id = id;
+        this.storyName = storyName;
+        this.storyClassName = storyClassName;
+        this.feature = feature;
+        this.path = path;
+        this.narrative = narrative;
+        this.type = type;
+    }
+
+    protected Story(final String id,
+                    final String storyName,
+                    final ApplicationFeature feature,
+                    final String path) {
+        this.id = id;
+        this.storyName = storyName;
+        this.storyClassName = null;
+        this.feature = feature;
+        this.path = path;
+        this.type = FeatureType.STORY.toString();
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Obtain a story instance from a given story class.
+     * Story instances are used for recording and reporting test results.
+     */
+    public static Story from(final Class<?> userStoryClass) {
+        return new Story(userStoryClass);
+    }
+
+    /**
+     * Create a story using a full class name as an id.
+     * Note that the class may no longer exist, so the story needs to be able to exist beyond the life
+     * of the original story class. This is used to deserialize stories from XML files.
+     */
+    public static Story withId(final String storyId, final String storyName) {
+        return new Story(storyId, storyName, null, null, null);
+    }
+
+    public Story withNarrative(String narrative) {
+        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
+    }
+
+    public Story withType(String type) {
+        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
+    }
+
+    public static Story withIdAndPath(final String storyId, final String storyName, final String storyPath) {
+        return new Story(storyId, storyName, null, storyPath, null);
+    }
+
+    public static Story called(final String storyName) {
+        return new Story(storyName, storyName, null, null, null);
+    }
+
+    public static Story withId(final String storyId, final String storyName,
+                               final String featureClassName, final String featureName) {
+        return new Story(storyId, storyName, new ApplicationFeature(featureClassName, featureName), null);
+    }
+
+
+    public static Story withIdAndPathAndFeature(final String storyId, final String storyName, String storyPath,
+                                                final String featureClassName, final String featureName) {
+        return new Story(storyId, storyName, new ApplicationFeature(featureClassName, featureName), storyPath);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Story)) return false;
+
+        Story story = (Story) o;
+
+        if (!id.equals(story.id)) return false;
+        if (path != null ? !path.equals(story.path) : story.path != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (path != null ? path.hashCode() : 0);
+        return result;
+    }
+
+    /**
+     * What feature does this story belong to?
+     */
+    public static Class<?> getFeatureClass(Class<?> userStoryClass) {
+        if (userStoryClass != null) {
+            Class<?> enclosingClass = userStoryClass.getEnclosingClass();
+            if (isAFeature(enclosingClass)) {
+                return enclosingClass;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isAFeature(Class<?> enclosingClass) {
+        return (enclosingClass != null) && (enclosingClass.getAnnotation(Feature.class) != null);
+    }
+
+    /**
+     * Returns the class representing the story that is tested by a given test class
+     * This is indicated by the Story annotation.
+     */
+    public static Class<?> testedInTestCase(Class<?> testClass) {
+        serenitymodel.net.thucydides.core.annotations.Story story = testClass.getAnnotation(
+            serenitymodel.net.thucydides.core.annotations.Story.class);
+        if (story != null) {
+            return story.value();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Each story has a descriptive name.
+     * This name is usually a human-readable version of the class name, or the story name for an easyb story.
+     */
+    public String getName() {
+        return storyName;
+    }
+
+    public String getDisplayName() {
+        return storyName;
+    }
+
+    public String getStoryClassName() {
+        return storyClassName;
+    }
+
+    /**
+     * Find the name of the report for this story for the specified report type (XML, HTML,...).
+     */
+    public String getReportName(final ReportType type) {
+        return Stories.reportFor(this, type);
+    }
+
+    public String getReportName() {
+        return new ReportNameProvider().forRequirement(this.asTag());
+    }
+
+    public ApplicationFeature getFeature() {
+        return feature;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getStoryName() {
+        return storyName;
+    }
+
+    public String getNarrative() {
+        return narrative;
+    }
+
+    public String getNarrativeSummary() {
+        return FirstLine.of(narrative);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Story withPath(String path) {
+        return new Story(this.id, this.storyName, this.storyClassName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
+    }
+
+    public Story asFeature() {
+        return new Story(this.id, this.storyName, this.storyClassName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
+    }
+
+    public TestTag asTag() {
+        return asQualifiedTag();// TestTag.withName(storyName).andType(type.toString());
+    }
+
+    public TestTag asQualifiedTag() {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
+        String lastElementOfPath = LastElement.of(getPath());
+        String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
+        if(featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
+            parentName = null;
+        }
+        return (isNotEmpty(parentName)) ?
+                TestTag.withName(parentName + "/" + storyName).andType(type) :
+                TestTag.withName(storyName).andType(type);
+    }
+
+}

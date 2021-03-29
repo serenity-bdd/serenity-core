@@ -2,8 +2,8 @@ package net.serenitybdd.demos.todos.features.maintain_my_todo_list;
 
 import net.serenitybdd.demos.todos.tasks.*;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import serenityscreenplay.screenplay.Actor;
+import serenityscreenplay.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.WithDriver;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static serenityscreenplay.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 

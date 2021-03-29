@@ -1,13 +1,13 @@
 package net.serenitybdd.demos.todos.tasks;
 
 import net.serenitybdd.demos.todos.pages.components.ToDoList;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.actions.Enter;
-import net.serenitybdd.screenplay.actions.Hit;
+import serenityscreenplay.screenplay.Actor;
+import serenityscreenplay.screenplay.Performable;
+import serenityscreenplay.screenplay.actions.Enter;
+import serenityscreenplay.screenplay.actions.Hit;
 import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
+import static serenityscreenplay.screenplay.Tasks.instrumented;
 import static org.openqa.selenium.Keys.RETURN;
 
 public class AddATodoItem implements Performable {

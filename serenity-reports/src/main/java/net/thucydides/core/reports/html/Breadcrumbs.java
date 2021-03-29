@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.model.TestTag;
+import serenitymodel.net.thucydides.core.model.TestTag;
 
 import java.util.ArrayList;
 import java.util.List;

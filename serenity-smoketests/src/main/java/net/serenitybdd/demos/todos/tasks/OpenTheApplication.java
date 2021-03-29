@@ -1,11 +1,11 @@
 package net.serenitybdd.demos.todos.tasks;
 
 import net.serenitybdd.demos.todos.pages.ApplicationHomePage;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
+import serenityscreenplay.screenplay.Actor;
+import serenityscreenplay.screenplay.Performable;
 import net.thucydides.core.annotations.Step;
 
-import static net.serenitybdd.screenplay.abilities.BrowseTheWeb.as;
+import static serenityscreenplay.screenplay.abilities.BrowseTheWeb.as;
 
 public class OpenTheApplication implements Performable {
 

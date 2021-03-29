@@ -1,12 +1,17 @@
 package net.thucydides.junit.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.pages.Pages;
+import serenitycore.net.thucydides.core.annotations.DriverOptions;
+import serenitycore.net.thucydides.core.annotations.Managed;
+import serenitycore.net.thucydides.core.annotations.ManagedPages;
+import serenitycore.net.thucydides.core.annotations.Steps;
+import serenitycore.net.thucydides.core.annotations.WithDriver;
+import serenitycore.net.thucydides.core.pages.Pages;
 import net.thucydides.samples.DemoSiteSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import serenitymodel.net.thucydides.core.annotations.Title;
 
 /**
  * This is a very simple scenario of testing a single page.

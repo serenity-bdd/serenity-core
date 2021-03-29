@@ -16,15 +16,12 @@ public class PlaywrightQuestions {
     }
 
     /**
-     *
-     * @param element
-     * @return
+     * Return the inner text value of an element.
      */
     public static Question<String> textOf(Target element) {
         return Question.about("the text value of " + element)
                 .answeredBy(
                         actor -> BrowseTheWebWithPlaywright.as(actor).getCurrentPage().innerText(element.asSelector())
                 );
-
     }
 }

@@ -22,7 +22,7 @@ public class SimpleScreenplayPlaywrightTest {
 
     @Before
     public void prepareActor() {
-        daffy = Actor.named("Daffy").whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration().withHeadlessMode(false).withBrowserType("firefox"));
+        daffy = Actor.named("Daffy").whoCan(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration());
     }
 
     private static final Target SEARCH_FIELD = Target.the("Search field").locatedBy("#search_form_input_homepage");

@@ -686,6 +686,7 @@
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>
+        <module>serenity-screenplay-playwright</module>
     </modules>
     <profiles>
         <profile>
@@ -817,6 +818,9 @@
         </profile>
         <profile>
             <id>experimental</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <modules>
                 <module>serenity-report-resources</module>
                 <module>serenity-sample-alternative-resources</module>

@@ -38,8 +38,6 @@ public class Target {
 
     @Override
     public String toString() {
-        return "Target{" +
-                "label='" + label + '\'' +
-                '}';
+        return label;
     }
 }

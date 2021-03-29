@@ -38,7 +38,7 @@ public class InteractingWithFormElementsTest {
                 Open.url("http://the-internet.herokuapp.com/checkboxes"),
                 Ensure.that("#checkboxes input:nth-child(1)").isNotChecked(),
                 Click.on("#checkboxes input:nth-child(1)"),
-                Ensure.that("#checkboxes input:nth-child(1)").isNotChecked()
+                Ensure.that("#checkboxes input:nth-child(1)").isChecked()
         );
     }
 

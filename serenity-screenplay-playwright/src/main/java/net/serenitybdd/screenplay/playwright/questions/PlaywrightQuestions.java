@@ -19,9 +19,14 @@ public class PlaywrightQuestions {
      * Return the inner text value of an element.
      */
     public static Question<String> textOf(Target element) {
-        return Question.about("the text value of " + element)
+        return textOf(element.asSelector());
+    }
+
+    public static Question<String> textOf(String selector) {
+        return Question.about("the text value of " + selector)
                 .answeredBy(
-                        actor -> BrowseTheWebWithPlaywright.as(actor).getCurrentPage().innerText(element.asSelector())
+                        actor -> BrowseTheWebWithPlaywright.as(actor).getCurrentPage().innerText(selector)
                 );
     }
+
 }

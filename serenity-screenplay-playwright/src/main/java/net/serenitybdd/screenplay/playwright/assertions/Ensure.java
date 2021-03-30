@@ -27,6 +27,10 @@ public class Ensure {
         return new Ensure(Target.the(selector).locatedBy(selector), null);
     }
 
+    public static Ensure that(Target target) {
+        return new Ensure(target, null);
+    }
+
     public Ensure withTimeout(Double timeout) {
         return new Ensure(target, timeout);
     }

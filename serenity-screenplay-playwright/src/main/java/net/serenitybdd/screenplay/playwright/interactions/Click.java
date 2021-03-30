@@ -51,7 +51,6 @@ public class Click implements Performable {
     @Override
     @Step("{0} clicks on #target")
     public <T extends Actor> void performAs(T actor) {
-        System.out.println("Click on " + target);
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().click(target.asSelector(), options);
     }
 }

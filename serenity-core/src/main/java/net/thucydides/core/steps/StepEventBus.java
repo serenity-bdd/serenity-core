@@ -311,6 +311,7 @@ public class StepEventBus {
         }
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
+
         clear();
     }
 

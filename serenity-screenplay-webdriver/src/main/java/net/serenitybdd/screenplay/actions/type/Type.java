@@ -6,8 +6,6 @@ import org.openqa.selenium.By;
 
 import java.util.Arrays;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
 public class Type {
 
     private final CharSequence[] theText;
@@ -21,18 +19,18 @@ public class Type {
     }
 
     public TypeValue into(String cssOrXpathForElement) {
-        return instrumented(TypeValueIntoTarget.class, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement), theText);
+        return new TypeValueIntoTarget(Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement), theText);
     }
 
     public TypeValue into(Target target) {
-        return instrumented(TypeValueIntoTarget.class, target, theText);
+        return new TypeValueIntoTarget(target, theText);
     }
 
     public TypeValue into(WebElementFacade element) {
-        return instrumented(TypeValueIntoElement.class, element, theText);
+        return new TypeValueIntoElement(element, theText);
     }
 
     public TypeValue into(By... locators) {
-        return instrumented(TypeValueIntoBy.class, Arrays.asList(locators), theText);
+        return new TypeValueIntoBy(Arrays.asList(locators), theText);
     }
 }

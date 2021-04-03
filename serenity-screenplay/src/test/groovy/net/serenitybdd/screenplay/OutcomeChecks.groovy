@@ -11,11 +11,11 @@ class OutcomeChecks {
     static class TestOutcomeChecker {
         private final List<TestOutcome> testOutcomes;
 
-        public TestOutcomeChecker(List<TestOutcome> testOutcomes) {
+        TestOutcomeChecker(List<TestOutcome> testOutcomes) {
             this.testOutcomes = testOutcomes;
         }
 
-        public TestOutcome getAt(String methodName) {
+        TestOutcome getAt(String methodName) {
             def matchingOutcome = testOutcomes.find { it.name.equals(methodName) }
             if (!matchingOutcome) {
                 throw new AssertionError("No matching test method called $methodName")
@@ -23,7 +23,7 @@ class OutcomeChecks {
             return matchingOutcome
         }
 
-        public boolean isEmpty() {
+        boolean isEmpty() {
             return testOutcomes.isEmpty()
         }
     }

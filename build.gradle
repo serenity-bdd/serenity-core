@@ -1,5 +1,5 @@
-import org.ajoberstar.gradle.git.release.opinion.Strategies
-import org.ajoberstar.grgit.Grgit
+//import org.ajoberstar.gradle.git.release.opinion.Strategies
+//import org.ajoberstar.grgit.Grgit
 
 buildscript {
     repositories {
@@ -18,7 +18,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.ajoberstar.release-opinion' version '1.7.2'
+//    id 'org.ajoberstar.release-opinion' version '1.7.2'
     id 'project-report'
     id "org.sonarqube" version "2.6"
     id 'org.jetbrains.dokka' version '0.9.17'
@@ -51,18 +51,18 @@ allprojects {
     apply plugin: 'java-library'
     apply plugin: 'com.github.ben-manes.versions'
 
-    dependencyUpdates.resolutionStrategy = {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'atlassian'].any { qualifier ->
-                    selection.candidate.version.toLowerCase() ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-                }
-                if (rejected) {
-                    selection.reject('Release candidate')
-                }
-            }
-        }
-    }
+//    dependencyUpdates.resolutionStrategy = {
+//        componentSelection { rules ->
+//            rules.all { ComponentSelection selection ->
+//                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'atlassian'].any { qualifier ->
+//                    selection.candidate.version.toLowerCase() ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+//                }
+//                if (rejected) {
+//                    selection.reject('Release candidate')
+//                }
+//            }
+//        }
+//    }
 
     configurations.all {
         resolutionStrategy {
@@ -85,11 +85,11 @@ allprojects {
     }
 }
 
-release {
-    grgit = Grgit.open(file('.'))
-    defaultVersionStrategy Strategies.SNAPSHOT
-    versionStrategy Strategies.SNAPSHOT
-}
+//release {
+//    grgit = Grgit.open(file('.'))
+//    defaultVersionStrategy Strategies.SNAPSHOT
+//    versionStrategy Strategies.SNAPSHOT
+//}
 
 subprojects {
     apply plugin: 'java'
@@ -290,22 +290,22 @@ subprojects {
         testCompile "org.assertj:assertj-core:${assertjVersion}"
     }
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
-            }
-            if (details.requested.name == 'hamcrest-core') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
-            }
-            if (details.requested.name == 'hamcrest-all') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-all', version: "${hamcrestVersion}"
-            }
-            if (details.requested.name == 'hamcrest-library') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-library', version: "${hamcrestVersion}"
-            }
-        }
-    }
+//    configurations.all {
+//        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//            if (details.requested.name == 'mockito-all') {
+//                details.useTarget group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-core') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-all') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-all', version: "${hamcrestVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-library') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-library', version: "${hamcrestVersion}"
+//            }
+//        }
+//    }
 
     jar {
         inputs.property("moduleName", project.name)

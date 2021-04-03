@@ -1,12 +1,11 @@
 package net.thucydides.core.steps;
 
 import org.joda.time.DateTime;
-
 import java.lang.reflect.Method;
 import java.util.*;
 
 public class DefaultValue {
-    
+
     private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<Class<?>, Object>();
     static {
         DEFAULT_VALUES.put(String.class, "");

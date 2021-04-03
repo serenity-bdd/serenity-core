@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="aTestSuite" time="1.0" tests="1" errors="0" skipped="0" failures="0">
+    <properties>
+        <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    </properties>
+    <testcase name="should_do_several_somethings" classname="SomeTestClass" time="1.0"/>
+    <testcase name="should_do_several_something_elses" classname="SomeTestClass" time="1.0"/>
+</testsuite>

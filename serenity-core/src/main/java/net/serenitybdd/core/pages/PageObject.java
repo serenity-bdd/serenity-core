@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
-import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
@@ -206,6 +205,7 @@ public abstract class PageObject {
         this.pages = pages;
     }
 
+    @Deprecated
     public <T extends PageObject> T switchToPage(final Class<T> pageObjectClass) {
         if (pages.getDriver() == null) {
             pages.setDriver(driver);
@@ -320,7 +320,7 @@ public abstract class PageObject {
     }
 
     /**
-     * @Deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
+     * @deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
      */
     @Deprecated
     public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {
@@ -932,7 +932,7 @@ public abstract class PageObject {
     private String environmentSpecificPageUrl(String pageName) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("pages." + pageName)
-                .orElseThrow(() -> new UnknownPageException("No page called " + pageName + " was specified in the serenity.conf file"));
+                .orElseThrow(() -> new NoSuchPageException("No page called " + pageName + " was specified in the serenity.conf file"));
     }
 
     public void clickOn(final WebElement webElement) {
@@ -1335,7 +1335,7 @@ public abstract class PageObject {
 
     public void waitForAngularRequestsToFinish() {
         JavascriptCompatibleVersion.of(getDriver()).ifPresent(
-                driver -> new NgWebDriver(driver).waitForAngularRequestsToFinish()
+                driver -> WaitForAngular.withDriver(driver).untilAngularRequestsHaveFinished()
         );
     }
 

@@ -12,7 +12,7 @@ import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import org.joda.time.DateTime;
+//import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 
 import java.io.File;
@@ -183,24 +183,24 @@ public class TestStep implements Cloneable {
         this.level = 0;
     }
 
-    @Deprecated
-    public TestStep(final DateTime startTime, final String description) {
-        this();
-
-        ZonedDateTime time =
-                ZonedDateTime.of(startTime.year().get(),
-                        startTime.monthOfYear().get(),
-                        startTime.dayOfMonth().get(),
-                        startTime.hourOfDay().get(),
-                        startTime.minuteOfHour().get(),
-                        startTime.secondOfMinute().get(),
-                        startTime.millisOfSecond().get() * 1000,
-                        ZoneId.systemDefault());
-
-        this.startTime = time;
-        this.description = description;
-        this.level = 0;
-    }
+//    @Deprecated
+//    public TestStep(final DateTime startTime, final String description) {
+//        this();
+//
+//        ZonedDateTime time =
+//                ZonedDateTime.of(startTime.year().get(),
+//                        startTime.monthOfYear().get(),
+//                        startTime.dayOfMonth().get(),
+//                        startTime.hourOfDay().get(),
+//                        startTime.minuteOfHour().get(),
+//                        startTime.secondOfMinute().get(),
+//                        startTime.millisOfSecond().get() * 1000,
+//                        ZoneId.systemDefault());
+//
+//        this.startTime = time;
+//        this.description = description;
+//        this.level = 0;
+//    }
 
 
     public TestStep startingAt(ZonedDateTime time) {

@@ -8,10 +8,11 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.samples.SampleScenarioSteps
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -20,11 +21,9 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
     def environmentVariables = new MockEnvironmentVariables()
     File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
     }
 
 

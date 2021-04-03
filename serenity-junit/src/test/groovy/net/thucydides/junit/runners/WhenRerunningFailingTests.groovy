@@ -6,10 +6,11 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 class WhenRerunningFailingTests extends Specification {
 
@@ -17,11 +18,9 @@ class WhenRerunningFailingTests extends Specification {
     def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
         environmentVariables.setProperty("rerun.failures.directory",System.getProperty("user.dir") + File.separator + "src/test/resources/rerun")
         environmentVariables.setProperty("replay.failures","true")
     }

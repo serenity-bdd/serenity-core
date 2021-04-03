@@ -9,10 +9,9 @@ import net.thucydides.junit.annotations.UseTestDataFrom;
 import net.thucydides.junit.runners.PersonTestScenario;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -51,8 +50,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void the_parameterized_data_method_is_annotated_by_the_TestData_annotation() throws Exception {
-        TestClass testClass = new TestClass(DataDrivenTestScenario.class);
-        FrameworkMethod method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
+        Class testClass = DataDrivenTestScenario.class;
+        Method method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
 
         assertThat(method.getName(), is("testData"));
 
@@ -60,7 +59,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void the_parameterized_data_method_returns_the_set_of_test_data() throws Throwable {
-        TestClass testClass = new TestClass(DataDrivenTestScenario.class);
+        Class testClass = DataDrivenTestScenario.class;
         DataTable testDataTable = DataDrivenAnnotations.forClass(testClass).getParametersTableFromTestDataAnnotation();
 
         assertThat(testDataTable.getRows().size(), is(3));
@@ -69,7 +68,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void testData_without_parameter_names_defines_default_parameter_names() throws Throwable {
-        TestClass testClass = new TestClass(DataDrivenTestScenario.class);
+        Class testClass = DataDrivenTestScenario.class;
         DataTable testDataTable = DataDrivenAnnotations.forClass(testClass).getParametersTableFromTestDataAnnotation();
         List<String> parameterNames = testDataTable.getHeaders();
 
@@ -83,7 +82,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void testData_with_parameter_names_uses_defined_parameter_names() throws Throwable {
-        TestClass testClass = new TestClass(DataDrivenTestScenarioWithParamNames.class);
+        Class testClass = DataDrivenTestScenarioWithParamNames.class;
         DataTable testDataTable = DataDrivenAnnotations.forClass(testClass).getParametersTableFromTestDataAnnotation();
         List<String> parameterNames = testDataTable.getHeaders();
 
@@ -94,7 +93,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_be_able_to_count_the_number_of_data_entries() throws Throwable {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenario.class);
+        Class testClass = CSVDataDrivenTestScenario.class;
         int dataEntries = DataDrivenAnnotations.forClass(testClass).countDataEntries();
 
         assertThat(dataEntries, is(12));
@@ -102,7 +101,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_be_able_to_get_data_Table_from_csv() throws Throwable {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenario.class);
+        Class testClass = CSVDataDrivenTestScenario.class;
         DataTable testDataTable = DataDrivenAnnotations.forClass(testClass).getParametersTableFromTestDataSource();
 
         List<String> parameterNames = testDataTable.getHeaders();
@@ -122,7 +121,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_recognize_a_test_case_with_valid_test_data() {
-        TestClass testClass = new TestClass(DataDrivenTestScenario.class);
+        Class testClass = DataDrivenTestScenario.class;
         assertThat(DataDrivenAnnotations.forClass(testClass).hasTestDataDefined(), is(true));
     }
 
@@ -130,25 +129,25 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_recognize_a_test_case_without_valid_test_data() {
-        TestClass testClass = new TestClass(DataDrivenTestScenarioWithNoData.class);
+        Class testClass = DataDrivenTestScenarioWithNoData.class;
         assertThat(DataDrivenAnnotations.forClass(testClass).hasTestDataDefined(), is(false));
     }
 
     @Test
     public void should_recognize_a_test_case_with_a_valid_test_data_source() {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenario.class);
+        Class testClass = CSVDataDrivenTestScenario.class;
         assertThat(DataDrivenAnnotations.forClass(testClass).hasTestDataSourceDefined(), is(true));
     }
 
     @Test
     public void should_recognize_a_test_case_without_a_valid_test_data_source() {
-        TestClass testClass = new TestClass(DataDrivenTestScenarioWithNoData.class);
+        Class testClass = DataDrivenTestScenarioWithNoData.class;
         assertThat(DataDrivenAnnotations.forClass(testClass).hasTestDataSourceDefined(), is(false));
     }
 
     @Test
     public void should_load_test_class_instances_using_a_provided_test_data_source() throws IOException {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenario.class);
+        Class testClass = CSVDataDrivenTestScenario.class;
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
 
@@ -170,8 +169,8 @@ public class WhenFindingTestDataInADataDrivenTest {
     }
     @Test(expected = IllegalArgumentException.class)
     public void the_parameterized_data_method_must_be_public() throws Exception {
-        TestClass testClass = new TestClass(DataDrivenTestScenarioWithPrivateTestData.class);
-        FrameworkMethod method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
+        Class testClass = DataDrivenTestScenarioWithPrivateTestData.class;
+        Method method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
 
         assertThat(method.getName(), is("testData"));
 
@@ -191,8 +190,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void the_parameterized_data_method_must_be_static() throws Exception {
-        TestClass testClass = new TestClass(DataDrivenTestScenarioWithNonStaticTestData.class);
-        FrameworkMethod method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
+        Class testClass = DataDrivenTestScenarioWithNonStaticTestData.class;
+        Method method = DataDrivenAnnotations.forClass(testClass).getTestDataMethod();
 
         assertThat(method.getName(), is("testData"));
     }
@@ -301,7 +300,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_load_test_class_instances_using_semicolons() throws IOException {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioUsingSemiColons.class);
+        Class testClass = CSVDataDrivenTestScenarioUsingSemiColons.class;
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
 
@@ -317,7 +316,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_load_test_class_instances_from_several_sources_using_semicolons() throws IOException {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSeveralSourcesUsingSemiColons.class);
+        Class testClass = CSVDataDrivenTestScenarioFromSeveralSourcesUsingSemiColons.class;
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
 
@@ -334,7 +333,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     @Test
     public void should_be_able_to_get_data_Table_from_a_semicolon_delimited_csv() throws Throwable {
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioUsingSemiColons.class);
+        Class testClass = CSVDataDrivenTestScenarioUsingSemiColons.class;
         DataTable testDataTable = DataDrivenAnnotations.forClass(testClass).getParametersTableFromTestDataSource();
 
         List<String> parameterNames = testDataTable.getHeaders();
@@ -355,7 +354,7 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.data.dir","test-data");
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSpecifiedDataDirectory.class);
+        Class testClass = CSVDataDrivenTestScenarioFromSpecifiedDataDirectory.class;
 
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass)
@@ -375,7 +374,7 @@ public class WhenFindingTestDataInADataDrivenTest {
     @Test
     public void should_load_test_data_from_several_possible_sources() throws IOException {
 
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSeveralPossibleSources.class);
+        Class testClass = CSVDataDrivenTestScenarioFromSeveralPossibleSources.class;
 
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass)
@@ -394,7 +393,7 @@ public class WhenFindingTestDataInADataDrivenTest {
     @Test(expected = IllegalArgumentException.class)
     public void should_load_test_data_from_several_possible_sources_with_no_valid_source() throws IOException {
 
-        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSeveralPossibleSourcesWithNoValidSource.class);
+        Class testClass = CSVDataDrivenTestScenarioFromSeveralPossibleSourcesWithNoValidSource.class;
 
         List<PersonTestScenario> testScenarios
                 = DataDrivenAnnotations.forClass(testClass)

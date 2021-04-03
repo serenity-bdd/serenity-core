@@ -79,14 +79,14 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_print_small_header_banner_before_tests_if_console_headings_is_set_to_none() {
+    public void should_print_no_header_banner_before_tests_if_console_headings_is_set_to_none() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.console.banner", "none");
 
         new ConsoleLoggingListener(environmentVariables, logger);
 
-        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_SMALL_BANNER));
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_NONE_BANNER));
 
     }
 

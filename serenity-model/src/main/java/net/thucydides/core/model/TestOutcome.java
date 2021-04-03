@@ -36,7 +36,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+//import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * includes the narrative steps taken during the test, screenshots at each step,
  * the results of each step, and the overall result. A test getscenario
  * can be associated with a user story using the UserStory annotation.
- * <p/>
+ *
  * A TestOutcome is stored after a test is executed. When the aggregate reports
  * are generated, the test outcome files are loaded into memory and processed.
  *
@@ -200,13 +200,6 @@ public class TestOutcome {
     private transient LinkGenerator linkGenerator;
 
     private transient FlagProvider flagProvider;
-
-
-    /**
-     * Test statistics, read from the statistics database.
-     * This data is only loaded when required, and added to the TestOutcome using the corresponding setter.
-     */
-//    private TestStatistics statistics;
 
     /**
      * Returns a set of tag provider classes that are used to determine the tags to associate with a test outcome.
@@ -2139,21 +2132,6 @@ public class TestOutcome {
 
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    @Deprecated
-    public void setStartTime(DateTime startTime) {
-        ZonedDateTime time =
-                ZonedDateTime.of(startTime.year().get(),
-                        startTime.monthOfYear().get(),
-                        startTime.dayOfMonth().get(),
-                        startTime.hourOfDay().get(),
-                        startTime.minuteOfHour().get(),
-                        startTime.secondOfMinute().get(),
-                        startTime.millisOfSecond().get() * 1000,
-                        ZoneId.systemDefault());
-
-        this.startTime = time;
     }
 
     public void clearStartTime() {

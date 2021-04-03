@@ -8,6 +8,8 @@ public class TypeValueIntoElement extends TypeValue {
 
     private WebElementFacade element;
 
+    public TypeValueIntoElement(){}
+
     public TypeValueIntoElement(WebElementFacade element, CharSequence... theText) {
         super(theText);
         this.element = element;

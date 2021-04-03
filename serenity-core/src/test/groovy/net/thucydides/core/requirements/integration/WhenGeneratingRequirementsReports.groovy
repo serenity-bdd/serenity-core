@@ -17,6 +17,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 class WhenGeneratingRequirementsReports extends Specification {
 
     class MockedDateProvider implements DateProvider {
@@ -38,11 +40,9 @@ class WhenGeneratingRequirementsReports extends Specification {
 
     File outputDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        outputDirectory = temporaryFolder.newFolder()
+        outputDirectory = Files.createTempDirectory("testdata").toFile()
+        outputDirectory.deleteOnExit()
     }
 
     def "Should know the type of child requirements"() {

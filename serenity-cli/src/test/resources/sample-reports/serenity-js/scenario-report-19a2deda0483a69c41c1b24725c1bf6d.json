@@ -1,0 +1,189 @@
+{
+  "name": "Adding an item to a list with other items",
+  "title": "Adding an item to a list with other items",
+  "id": "add-to-dos;adding-an-item-to-a-list-with-other-items",
+  "manual": false,
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given James has a todo list containing:\n| item |\n| Buy some milk |\n| Walk the dog |",
+      "startTime": 1552324886340,
+      "children": [
+        {
+          "number": 2,
+          "description": "James navigates to '/examples/angularjs/#/'",
+          "startTime": 1552324886341,
+          "children": [],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 1194
+        },
+        {
+          "number": 3,
+          "description": "James executes a synchronous script",
+          "startTime": 1552324887535,
+          "children": [],
+          "screenshots": [],
+          "reportData": {
+            "id": "report-data-cjt4m5p110000pnonc3ecpzua",
+            "isEvidence": false,
+            "path": "",
+            "title": "Script source",
+            "contents": "console.log(\"hello world\")"
+          },
+          "result": "SUCCESS",
+          "duration": 6
+        },
+        {
+          "number": 4,
+          "description": "James adds an item called Buy some milk",
+          "startTime": 1552324887541,
+          "children": [
+            {
+              "number": 5,
+              "description": "James enters 'Buy some milk' into the new todo field",
+              "startTime": 1552324887541,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 305
+            },
+            {
+              "number": 6,
+              "description": "James presses Enter in the new todo field",
+              "startTime": 1552324887847,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 95
+            }
+          ],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 401
+        },
+        {
+          "number": 7,
+          "description": "James adds an item called Walk the dog",
+          "startTime": 1552324887942,
+          "children": [
+            {
+              "number": 8,
+              "description": "James enters 'Walk the dog' into the new todo field",
+              "startTime": 1552324887943,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 47
+            },
+            {
+              "number": 9,
+              "description": "James presses Enter in the new todo field",
+              "startTime": 1552324887990,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 29
+            }
+          ],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 78
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 1680
+    },
+    {
+      "number": 10,
+      "description": "When he adds 'Buy some cereal' to her list",
+      "startTime": 1552324888020,
+      "children": [
+        {
+          "number": 11,
+          "description": "James adds an item called Buy some cereal",
+          "startTime": 1552324888021,
+          "children": [
+            {
+              "number": 12,
+              "description": "James enters 'Buy some cereal' into the new todo field",
+              "startTime": 1552324888021,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 64
+            },
+            {
+              "number": 13,
+              "description": "James presses Enter in the new todo field",
+              "startTime": 1552324888085,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 27
+            }
+          ],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 92
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 93
+    },
+    {
+      "number": 14,
+      "description": "Then his todo list should contain:\n| item |\n| Buy some milk |\n| Walk the dog |\n| Buy some cereal |",
+      "startTime": 1552324888113,
+      "children": [
+        {
+          "number": 15,
+          "description": "James ensures that the text of the items does equal [ 'Buy some milk', 'Walk the dog', 'Buy some cereal' ]",
+          "startTime": 1552324888114,
+          "children": [],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 56
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 58
+    }
+  ],
+  "userStory": {
+    "id": "add-to-dos",
+    "storyName": "Add ToDos",
+    "path": "js-smoketest-features/record-keeping/add_todos.feature",
+    "type": "feature",
+    "narrative": "In order to avoid having to remember things that need doing\nAs a forgetful person\nI want to be able to record them as soon as I learn about them"
+  },
+  "startTime": 1552324886339,
+  "testSource": "Cucumber",
+  "tags": [
+    {
+      "name": "record keeping",
+      "type": "capability"
+    },
+    {
+      "name": "record keeping/Add ToDos",
+      "type": "feature"
+    },
+    {
+      "name": "@cucumber",
+      "type": "tag"
+    },
+    {
+      "name": "@protractor",
+      "type": "tag"
+    }
+  ],
+  "featureTag": {
+    "name": "Add ToDos",
+    "type": "feature"
+  },
+  "duration": 2580,
+  "result": "SUCCESS"
+}

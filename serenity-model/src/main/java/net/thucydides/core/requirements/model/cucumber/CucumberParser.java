@@ -3,9 +3,7 @@ package net.thucydides.core.requirements.model.cucumber;
 import com.google.common.base.Splitter;
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.gherkin.FeatureParserException;
-import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin;
 import io.cucumber.core.resource.Resource;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.Messages.Envelope;
 import io.cucumber.messages.Messages.GherkinDocument;
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
@@ -17,6 +15,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.CucumberTagConverter;
+import net.thucydides.core.requirements.model.FeatureBackgroundNarrative;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -42,10 +41,6 @@ public class CucumberParser {
     private final String encoding;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberParser.class);
-
-    private final static String CUCUMBER_4_FEATURE_LOADER = "cucumber.runtime.model.FeatureLoader";
-    private final static String CUCUMBER_2_FEATURE_LOADER = "cucumber.runtime.model.CucumberFeature";
-
 
     public CucumberParser() {
         this(ConfiguredEnvironment.getEnvironmentVariables());
@@ -200,6 +195,28 @@ public class CucumberParser {
         // Scenario Names
         List<String> scenarios = feature.getChildrenList().stream().filter(FeatureChild::hasScenario).map(FeatureChild::getScenario).map(Scenario::getName).collect(Collectors.toList());
 
+        FeatureBackgroundNarrative background = null;
+
+        if (backgroundChildIn(feature.getChildrenList()).isPresent()) {
+            background = backgroundElementFrom(backgroundChildIn(feature.getChildrenList()).get().getBackground());
+        }
+
+        // TODO: Find all the rules in the feature children and collect the backgrounds
+        Map<String, FeatureBackgroundNarrative> ruleBackgrounds = new HashMap<>();
+        rulesIn(feature.getChildrenList())
+                .forEach(
+                        rule -> {
+                            Optional<Feature.Background> ruleBackground = rule.getChildrenList()
+                                                                         .stream()
+                                                                         .filter(child -> child.hasBackground())
+                                                                         .map(child -> child.getBackground())
+                                                                         .findFirst();
+                            if (ruleBackground.isPresent()){
+                                ruleBackgrounds.put(rule.getName(),  backgroundElementFrom(ruleBackground.get()));
+                            }
+                        }
+                );
+
         return Optional.of(new Narrative(Optional.ofNullable(title),
                 Optional.ofNullable(id),
                 Optional.ofNullable(cardNumber),
@@ -208,8 +225,25 @@ public class CucumberParser {
                 text != null ? text : "",
                 new ArrayList<>(requirementTags),
                 scenarios,
-                scenarioTags));
+                scenarioTags)
+                .withBackground(background)
+                .withRuleBackgrounds(ruleBackgrounds));
+    }
 
+    private Stream<FeatureChild.Rule> rulesIn(List<FeatureChild> childrenList) {
+        return childrenList.stream()
+                .filter(child -> child.getRule() != null)
+                .map(FeatureChild::getRule);
+    }
+
+    private Optional<FeatureChild> backgroundChildIn(List<FeatureChild> featureChildren) {
+        return featureChildren.stream()
+                .filter(FeatureChild::hasBackground)
+                .findFirst();
+    }
+
+    private FeatureBackgroundNarrative backgroundElementFrom(Feature.Background background) {
+        return new FeatureBackgroundNarrative(background.getName(), background.getDescription());
     }
 
     private Collection<TestTag> tagsFrom(Scenario scenarioDefinition) {

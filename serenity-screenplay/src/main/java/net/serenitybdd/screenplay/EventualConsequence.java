@@ -41,7 +41,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     }
 
     public EventualConsequenceBuilder<T> waitingForNoLongerThan(long amount) {
-        return new EventualConsequenceBuilder<>(consequenceThatMightTakeSomeTime, amount);
+        return new EventualConsequenceBuilder(consequenceThatMightTakeSomeTime, amount);
     }
 
     @Override

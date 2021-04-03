@@ -1,0 +1,51 @@
+name: Release to Maven Central
+on:
+  workflow_dispatch:
+    inputs:
+      versionNumber:
+        description: 'Next version number'
+      nextSnapshopVersionNumber:
+        description: 'Next SNAPSHOT version number'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Set Version
+        run: mvn versions:set -DnewVersion=${{ github.event.inputs.versionNumber }} && mvn versions:commit
+
+      - name: Tag Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        run: |
+          git config --global user.email "john.smart@wakaleo.com"
+          git config --global user.name "John Ferguson Smart (Github Actions)"
+          git commit -a -m"Release version ${{ github.event.inputs.versionNumber }}"
+          git tag v${{ github.event.inputs.versionNumber }}
+          git push --tags
+
+      - name: Release Build
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          nexus_username: ${{ secrets.nexus_username }}
+          nexus_password: ${{ secrets.nexus_password }}
+
+      - name: Update to next Snapshot version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        run: |
+          mvn versions:set -DnewVersion=${{ github.event.inputs.nextSnapshopVersionNumber }} && mvn versions:commit
+          git config --global user.email "john.smart@wakaleo.com"
+          git config --global user.name "John Ferguson Smart (Github Actions)"
+          git pull
+          git commit -a -m"Updated to snapshot version ${{ github.event.inputs.nextSnapshopVersionNumber }}"
+          git push

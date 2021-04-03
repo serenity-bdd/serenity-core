@@ -872,7 +872,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return false;
         }
 
-        if (screenshots.areDisabledForThisAction()) {
+        if (screenshots().areDisabledForThisAction()) {
             return false;
         }
 
@@ -1137,6 +1137,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
     public void exampleStarted(Map<String, String> data) {
+        exampleStarted(data,"");
+    }
+
+    public void exampleStarted(Map<String, String> data, String exampleName) {
 
         clearForcedResult();
         if (getCurrentTestOutcome().isDataDriven()) {
@@ -1146,14 +1150,19 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
         currentExample++;
         if (newStepForEachExample()) {
-            getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle(currentExample, data)));
+            String exampleTitle = (exampleName.isEmpty() ? exampleTitle(currentExample, data) : exampleTitle(currentExample,exampleName, data));
+            getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle));
         }
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeExample.class, getCurrentTestOutcome());
     }
 
     private String exampleTitle(int exampleNumber, Map<String, String> data) {
-        return String.format("Example: %s", data);
+        return String.format("Example %d: %s", exampleNumber, data);
+    }
+
+    private String exampleTitle(int exampleNumber, String exampleName, Map<String, String> data) {
+        return String.format("%d: %s (%s)", exampleNumber, exampleName, data);
     }
 
     public void exampleFinished() {

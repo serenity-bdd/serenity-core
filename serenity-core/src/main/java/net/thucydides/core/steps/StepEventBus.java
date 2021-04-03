@@ -689,6 +689,12 @@ public class StepEventBus {
         }
     }
 
+    public void exampleStarted(Map<String, String> data, String exampleName) {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.exampleStarted(data, exampleName);
+        }
+    }
+
     public void exampleFinished() {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.exampleFinished();

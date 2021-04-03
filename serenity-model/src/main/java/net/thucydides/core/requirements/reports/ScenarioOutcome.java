@@ -61,4 +61,6 @@ public interface ScenarioOutcome {
     Map<String, Collection<TestTag>> getExampleTags();
 
     Rule getRule();
+
+    default boolean isBackground() { return "background".equalsIgnoreCase(getType());};
 }

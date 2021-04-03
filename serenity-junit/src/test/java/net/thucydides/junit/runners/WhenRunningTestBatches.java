@@ -10,7 +10,6 @@ import net.thucydides.samples.SamplePassingScenario;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
@@ -28,9 +27,6 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
     FirefoxDriver firefoxDriver;
 
     MockEnvironmentVariables environmentVariables;
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     public QuietThucydidesLoggingRule quietThucydidesLoggingRule = new QuietThucydidesLoggingRule();

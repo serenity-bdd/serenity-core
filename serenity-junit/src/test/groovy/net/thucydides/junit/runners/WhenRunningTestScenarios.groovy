@@ -9,12 +9,12 @@ import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.samples.*
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -28,11 +28,9 @@ class WhenRunningTestScenarios extends Specification {
     def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
     }
 
 
@@ -529,7 +527,7 @@ class WhenRunningTestScenarios extends Specification {
     }
 
     class ATestableThucydidesRunnerSample extends ThucydidesRunner {
-        ATestableThucydidesRunnerSample(Class<?> klass, WebDriverFactory webDriverFactory) {
+        ATestableThucydidesRunnerSample(Class<?> klass, WebDriverFactory webDriverFactory) throws Exception {
             super(klass, webDriverFactory)
         }
 

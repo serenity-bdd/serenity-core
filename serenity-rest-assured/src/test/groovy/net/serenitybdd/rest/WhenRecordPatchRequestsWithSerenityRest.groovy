@@ -40,9 +40,6 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
         Mock(BaseStepListener);
     }.call());
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 

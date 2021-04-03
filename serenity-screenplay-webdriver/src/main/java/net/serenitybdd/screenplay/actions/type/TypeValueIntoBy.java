@@ -11,11 +11,13 @@ import java.util.List;
 
 public class TypeValueIntoBy extends TypeValue {
 
-    private final List<By> locators;
+    private List<By> locators;
 
     protected WebElement resolveFor(Actor theUser) {
         return WebElementLocator.forLocators(locators).andActor(theUser);
     }
+
+    public TypeValueIntoBy() {}
 
     public TypeValueIntoBy(List<By> locators, CharSequence... theText) {
         super(theText);

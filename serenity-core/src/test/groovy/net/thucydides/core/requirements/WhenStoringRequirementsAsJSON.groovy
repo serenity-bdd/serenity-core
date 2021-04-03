@@ -2,19 +2,16 @@ package net.thucydides.core.requirements
 
 import com.google.common.collect.Maps
 import net.thucydides.core.requirements.model.Requirement
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 class WhenStoringRequirementsAsJSON extends Specification {
 
     File tempDirectory;
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        tempDirectory = temporaryFolder.newFolder()
+        tempDirectory = Files.createTempDirectory("tmp").toFile()
     }
 
 

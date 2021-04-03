@@ -1,0 +1,45 @@
+{
+  "name": "junitAssertionFailed",
+  "id": "com.foobar.tests.TestExamples:junitAssertionFailed",
+  "testCaseName": "com.foobar.tests.TestExamples",
+  "userStory": {
+    "id": "com.foobar.tests.TestExamples",
+    "storyName": "Test examples",
+    "storyClassName": "com.foobar.tests.TestExamples",
+    "path": "com.foobar.tests",
+    "type": "story"
+  },
+  "featureTag": {
+    "name": "Tests/Test examples",
+    "type": "story"
+  },
+  "title": "Junit assertion failed",
+  "tags": [
+    {
+      "name": "Tests/Test examples",
+      "type": "story"
+    }
+  ],
+  "startTime": 1500297334246,
+  "duration": 28,
+  "testFailureCause": {
+    "errorType": "java.lang.AssertionError",
+    "message": "junit Assert failed",
+    "stackTrace": [
+      {
+        "declaringClass": "com.foobar.tests.TestExamples",
+        "methodName": "junitAssertionFailed",
+        "fileName": "TestExamples.java",
+        "lineNumber": 16
+      }
+    ]
+  },
+  "testFailureClassname": "java.lang.AssertionError",
+  "testFailureMessage": "junit Assert failed",
+  "testFailureSummary": "FAILURE;java.lang.AssertionError;junit Assert failed;TestExamples.java",
+  "projectKey": "",
+  "annotatedResult": "FAILURE",
+  "manual": false,
+  "testSource": "JUnit",
+  "result": "FAILURE"
+}

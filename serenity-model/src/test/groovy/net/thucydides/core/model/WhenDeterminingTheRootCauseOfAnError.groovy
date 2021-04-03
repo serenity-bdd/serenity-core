@@ -4,7 +4,6 @@ import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer
 import net.thucydides.core.util.MockEnvironmentVariables
-import org.openqa.selenium.ElementNotVisibleException
 import sample.steps.FailingStep
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -24,11 +23,11 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
 
     def "Should report WebdriverAssertionError exceptions directly "() {
         given:
-            def exception = new ElementNotVisibleException("Oh crap")
+            def exception = new IllegalStateException("Oh crap")
         when:
             def rootCause = new RootCauseAnalyzer(exception).getRootCause()
         then:
-            rootCause.errorType == "org.openqa.selenium.ElementNotVisibleException"
+            rootCause.errorType == "java.lang.IllegalStateException"
     }
 
     static class AppCompromised extends Error implements CausesCompromisedTestFailure {

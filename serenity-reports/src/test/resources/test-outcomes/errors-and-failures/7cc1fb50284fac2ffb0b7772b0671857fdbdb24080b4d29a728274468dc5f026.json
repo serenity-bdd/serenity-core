@@ -1,0 +1,57 @@
+{
+  "name": "reflectionAssertWithError",
+  "id": "com.foobar.tests.TestExamples:reflectionAssertWithError",
+  "testCaseName": "com.foobar.tests.TestExamples",
+  "userStory": {
+    "id": "com.foobar.tests.TestExamples",
+    "storyName": "Test examples",
+    "storyClassName": "com.foobar.tests.TestExamples",
+    "path": "com.foobar.tests",
+    "type": "story"
+  },
+  "featureTag": {
+    "name": "Tests/Test examples",
+    "type": "story"
+  },
+  "title": "Reflection assert failed",
+  "tags": [
+    {
+      "name": "Tests/Test examples",
+      "type": "story"
+    }
+  ],
+  "startTime": 1500297333959,
+  "duration": 225,
+  "testFailureCause": {
+    "errorType": "junit.framework.NastyError",
+    "message": "ReflectionAssert failed\nExpected: true, actual: false\n\n--- Found following differences ---\nexpected: true, actual: false\n",
+    "stackTrace": [
+      {
+        "declaringClass": "junit.framework.Assert",
+        "methodName": "fail",
+        "fileName": "Assert.java",
+        "lineNumber": 57
+      },
+      {
+        "declaringClass": "org.unitils.reflectionassert.ReflectionAssert",
+        "methodName": "assertReflectionEquals",
+        "fileName": "ReflectionAssert.java",
+        "lineNumber": 139
+      },
+      {
+        "declaringClass": "com.foobar.tests.TestExamples",
+        "methodName": "reflectionAssertFailed",
+        "fileName": "TestExamples.java",
+        "lineNumber": 28
+      }
+    ]
+  },
+  "testFailureClassname": "junit.framework.NastyError",
+  "testFailureMessage": "NastyError failed\nExpected: true, actual: false\n\n--- Found following differences ---\nexpected: true, actual: false\n",
+  "testFailureSummary": "FAILURE;junit.framework.NastyError;ReflectionAssert failed\nExpected: true, actual: false\n\n--- Found following differences ---\nexpected: true, actual: false\n;Assert.java",
+  "projectKey": "",
+  "annotatedResult": "FAILURE",
+  "manual": false,
+  "testSource": "JUnit",
+  "result": "ERROR"
+}

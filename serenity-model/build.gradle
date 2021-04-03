@@ -16,6 +16,7 @@ dependencies {
         exclude group: 'junit', module: 'junit'
     }
 
+    compile 'org.xmlunit:xmlunit-core:2.8.2'
     compile "joda-time:joda-time:${jodaTimeVersion}"
     compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
     compile "commons-io:commons-io:${commonsIoVersion}"
@@ -64,7 +65,6 @@ dependencies {
 
     compileOnly "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
 
-    testCompile project(':serenity-test-utils')
     testCompile project(':serenity-sample-alternative-resources')
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude group: "junit"

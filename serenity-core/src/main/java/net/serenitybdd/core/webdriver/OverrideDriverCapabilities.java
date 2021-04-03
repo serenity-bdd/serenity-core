@@ -15,7 +15,6 @@ import static java.lang.Boolean.TRUE;
  *     <pre>
  *         <code>OverrideDriverCapabilities.withProperty("browser").setTo("Chrome");</code>
  *     </pre>
- * </p>
  */
 public class OverrideDriverCapabilities {
 

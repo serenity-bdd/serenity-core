@@ -1,0 +1,19 @@
+<acceptance-test-run title="Working scenario" name="working_scenario" steps="4" successful="3" failures="0" skipped="0" ignored="0" pending="1" result="PENDING">
+  <user-story id="net.serenitybdd.samples.Application.MakeWidgets.MakeSmallWidgets" name="Make small widgets">
+    <feature id="net.serenitybdd.samples.Application.MakeWidgets" name="Make widgets"/>
+  </user-story>
+  <test-group name="Another group of steps" result="PENDING">
+    <test-step result="SUCCESS">
+      <description>Step that succeeds</description>
+    </test-step>
+    <test-step result="SUCCESS">
+      <description>Another step that succeeds</description>
+    </test-step>
+    <test-step result="SUCCESS">
+      <description>Step that worked</description>
+    </test-step>
+  </test-group>
+  <test-step result="SUCCESS">
+    <description>Step that succeeds</description>
+  </test-step>
+</acceptance-test-run>

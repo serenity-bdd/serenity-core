@@ -8,6 +8,8 @@ public class TypeValueIntoTarget extends TypeValue {
 
     private Target target;
 
+    public TypeValueIntoTarget() {}
+
     public TypeValueIntoTarget(Target target, CharSequence... theText) {
         super(theText);
         this.target = target;

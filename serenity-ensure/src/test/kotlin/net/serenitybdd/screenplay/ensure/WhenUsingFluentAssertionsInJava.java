@@ -148,7 +148,7 @@ public class WhenUsingFluentAssertionsInJava {
         );
     }
 
-    enum Color {RED, GREEN, BLUE}
+    static enum Color {RED, GREEN, BLUE}
 
     @Test
     public void weCanCompareEnums() {

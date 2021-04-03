@@ -9,18 +9,18 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
-public class WhenGeneratingAggregateHtmlReports extends Specification {
+class WhenGeneratingAggregateHtmlReports extends Specification {
 
     File temporaryDirectory
-
-    @Rule
-    TemporaryFolder temporaryFolder
 
     def issueTracking = Mock(IssueTracking)
     def mockSystemProperties = Mock(SerenitySystemProperties)
@@ -32,7 +32,9 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
+
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
         reporter.outputDirectory = outputDirectory;
@@ -84,7 +86,9 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
 //        given: "We generate reports from a directory containing features and stories only"
 //            reporter.generateReportsForTestResultsFrom directory("/test-outcomes/containing-features-and-stories")
         when: "we view the report"
-            driver = new PhantomJSDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--headless");
+            driver = new ChromeDriver(chromeOptions)
             driver.get reportHomePageUrl();
         then: "we should see a Releases tab"
             def releasesLink = driver.findElement(By.linkText("Releases"))
@@ -99,7 +103,9 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
 //        given: "We generate reports from a directory containing features and stories only"
 //            reporter.generateReportsForTestResultsFrom directory("/test-outcomes/containing-features-and-stories")
         when: "we view the release report"
-            WebDriver driver = new PhantomJSDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--headless");
+            driver = new ChromeDriver(chromeOptions)
             driver.get reportHomePageUrl();
             def releasesLink = driver.findElement(By.linkText("Releases"))
             releasesLink.click();

@@ -106,14 +106,10 @@ public class ConsoleHeading {
         return border + "\n" + title + "\n" + border + "\n";
     }
 
-    private final EnvironmentVariables environmentVariables;
     private final ConsoleHeadingStyle headingStyle;
-    private final ConsoleHeadingStyle bannerStyle;
 
     public ConsoleHeading(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
         this.headingStyle = ConsoleHeadingStyle.definedIn(environmentVariables);
-        this.bannerStyle = ConsoleHeadingStyle.bannerStyleDefinedIn(environmentVariables);
     }
 
 

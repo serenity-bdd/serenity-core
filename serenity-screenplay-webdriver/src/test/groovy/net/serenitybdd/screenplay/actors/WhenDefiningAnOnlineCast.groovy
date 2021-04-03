@@ -9,7 +9,7 @@ class WhenDefiningAnOnlineCast extends Specification {
 
     def "An online cast should have the ability to browse the web"() {
         given:
-            Cast cast = new OnlineCast()
+        Cast cast = new OnlineCast()
         when:
             Actor joe = cast.actorNamed("Joe")
         then:

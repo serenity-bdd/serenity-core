@@ -1,0 +1,25 @@
+<acceptance-test-run title="Another happy day scenario" name="another_happy_day_scenario" steps="6" successful="6" failures="0" skipped="0" ignored="0" pending="0" result="SUCCESS">
+  <user-story id="net.serenitybdd.samples.Application.SellWidgets.SellWidgetsOnline" name="Sell widgets online">
+    <feature id="net.serenitybdd.samples.Application.SellWidgets" name="Sell widgets"/>
+  </user-story>
+  <test-step result="SUCCESS">
+    <description>Step that succeeds</description>
+  </test-step>
+  <test-step result="SUCCESS">
+    <description>Another step that succeeds</description>
+  </test-step>
+  <test-group name="Nested group of steps" result="SUCCESS">
+    <test-step result="SUCCESS">
+      <description>Step that succeeds</description>
+    </test-step>
+    <test-step result="SUCCESS">
+      <description>Another step that succeeds</description>
+    </test-step>
+  </test-group>
+  <test-step result="SUCCESS">
+    <description>Step three: &lt;span class=&apos;single-parameter&apos;&gt;a&lt;/span&gt;</description>
+  </test-step>
+  <test-step result="SUCCESS">
+    <description>Step four: &lt;span class=&apos;single-parameter&apos;&gt;c&lt;/span&gt;</description>
+  </test-step>
+</acceptance-test-run>

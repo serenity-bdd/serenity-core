@@ -20,35 +20,26 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AfterABrowserStackScenario.class);
 
-    private static final String BROWSERSTACK_URL_LINK = "https://api.browserstack.com/automate/builds/%s/sessions/%s.json";
-
-    private Gson gson = new Gson();
-
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
         if ((driver == null) || (!RemoteDriver.isARemoteDriver(driver))) {
             return;
         }
 
-        try {
-            String sessionId = RemoteDriver.of(driver).getSessionId().toString();
-            String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty("browserstack.user")
-                    .orElse(null);
+        String sessionId = RemoteDriver.of(driver).getSessionId().toString();
+        String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("browserstack.user")
+                .orElse(null);
 
-            String key = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty("browserstack.key")
-                    .orElse(null);
+        String key = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("browserstack.key")
+                .orElse(null);
 
-            BrowserStackTestSession browserStackTestSession = new BrowserStackTestSession(userName, key, sessionId);
-            browserStackTestSession.updateTestResultFor(testOutcome);
+        BrowserStackTestSession browserStackTestSession = new BrowserStackTestSession(userName, key, sessionId);
+        browserStackTestSession.updateTestResultFor(testOutcome);
 
-            String publicUrl = browserStackTestSession.getPublicUrl();
-            testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
-
-        } catch (URISyntaxException | IOException e) {
-            LOGGER.error("Failed to update BrowserStack",e);
-        }
+        String publicUrl = browserStackTestSession.getPublicUrl();
+        testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
     }
 
 }

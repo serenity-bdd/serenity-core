@@ -14,9 +14,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.Keys;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -202,6 +200,7 @@ public class Actor implements PerformsTasks, SkipNested {
         }
     }
 
+    @Override
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
         beginPerformance();
         ANSWER answer = question.answeredBy(this);

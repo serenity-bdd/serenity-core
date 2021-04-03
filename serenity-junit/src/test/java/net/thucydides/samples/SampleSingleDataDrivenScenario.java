@@ -1,15 +1,15 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.TestData;
-import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-@RunWith(ThucydidesParameterizedRunner.class)
+@RunWith(SerenityParameterizedRunner.class)
 public class SampleSingleDataDrivenScenario {
 
 

@@ -5,17 +5,16 @@ import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 import static net.serenitybdd.screenplay.Tasks.instrumented
 import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION
 
 class WhenInstrumentingTasks extends Specification {
 
-    @Rule
-    TemporaryFolder temporaryFolder
+
     File temporaryDirectory
     BaseStepListener listener = new BaseStepListener(temporaryDirectory)
     EnvironmentVariables environmentVariables;
@@ -24,7 +23,9 @@ class WhenInstrumentingTasks extends Specification {
     def setup() {
         environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         currentManualInstrumentationSetting = environmentVariables.getPropertyAsBoolean(MANUAL_TASK_INSTRUMENTATION, false);
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
+
         StepEventBus.eventBus.clear()
         StepEventBus.eventBus.registerListener(listener)
         StepEventBus.eventBus.testStarted("some test")

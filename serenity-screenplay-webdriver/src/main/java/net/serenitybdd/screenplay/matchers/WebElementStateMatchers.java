@@ -6,64 +6,64 @@ import org.hamcrest.Matcher;
 
 public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isVisible() {
-        return new IsVisibleMatcher();
+        return new IsVisibleMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> isNotVisible() {
-        return new IsNotVisibleMatcher();
+        return new IsNotVisibleMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isCurrentlyVisible() {
-        return new IsCurrentlyVisibleMatcher();
+        return new IsCurrentlyVisibleMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isNotCurrentlyVisible() {
-        return new IsNotCurrentlyVisibleMatcher();
+        return new IsNotCurrentlyVisibleMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isEnabled() {
-        return new IsEnabledMatcher();
+        return new IsEnabledMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> isNotEnabled() {
-        return new IsNotEnabledMatcher();
+        return new IsNotEnabledMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isCurrentlyEnabled() {
-        return new IsCurrentlyEnabledMatcher();
+        return new IsCurrentlyEnabledMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isNotCurrentlyEnabled() {
-        return new IsNotCurrentlyEnabledMatcher();
+        return new IsNotCurrentlyEnabledMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isPresent() {
-        return new IsPresentMatcher();
+        return new IsPresentMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> isNotPresent() {
-        return new IsNotPresentMatcher();
+        return new IsNotPresentMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isSelected() {
-        return new IsSelectedMatcher();
+        return new IsSelectedMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> isNotSelected() {
-        return new IsNotSelectedMatcher();
+        return new IsNotSelectedMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> isClickable() {
-        return new isClickableMatcher();
+        return new isClickableMatcher<T>();
     }
     public static <T extends WebElementState> Matcher<T> containsText(String expectedText) {
-        return new ContainsTextMatcher(expectedText);
+        return new ContainsTextMatcher<T>(expectedText);
     }
 
     public static <T extends WebElementState> Matcher<T> hasValue(String expectedText) {
-        return new HasValueMatcher<>(expectedText);
+        return new HasValueMatcher<T>(expectedText);
     }
 
     public static <T extends WebElementState> Matcher<T> containsOnlyText(String expectedText) {
-        return new ContainsOnlyTextMatcher(expectedText);
+        return new ContainsOnlyTextMatcher<T>(expectedText);
     }
 
     public static <T extends WebElementState> Matcher<T> containsSelectOption(String expectedText) {
-        return new ContainsSelectOptionMatcher(expectedText);
+        return new ContainsSelectOptionMatcher<T>(expectedText);
     }
 }

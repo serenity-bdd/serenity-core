@@ -10,7 +10,7 @@ public interface TagProviderService {
     List<TagProvider> getTagProviders();
 
     /**
-     * Return the <code>TagProvider<code/>s for a given testSource.
+     * Return the <code>TagProvider</code>s for a given testSource.
      */
     List<TagProvider> getTagProviders(String testSource);
 }

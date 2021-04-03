@@ -17,6 +17,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
 import java.util.function.Consumer
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
@@ -38,8 +39,12 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         Mock(BaseStepListener);
     }.call());
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    File temporaryDirectory
+
+    def setup() {
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit()
+    }
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
@@ -124,7 +129,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support failing assertions on response results"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -154,7 +159,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support failing assertions with Ensure.that() on response results"() {
         given:
-        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
         StepFactory factory = new StepFactory();
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -184,7 +189,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support passing assertions with chained Ensure.that() on response results"() {
         given:
-        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
         StepFactory factory = new StepFactory();
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -215,7 +220,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support failing assertions with chained Ensure.that() on response results"() {
         given:
-        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
         StepFactory factory = new StepFactory();
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -247,7 +252,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support assertions on response results"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             def JsonObject json = new JsonObject()
             json.addProperty("Sky", "Clear")
@@ -281,7 +286,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     def "should support sequences of operations in different steps"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)

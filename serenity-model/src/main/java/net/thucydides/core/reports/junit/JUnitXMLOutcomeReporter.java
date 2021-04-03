@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.junit;
 
-import io.vavr.collection.List;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -12,10 +11,10 @@ import org.slf4j.LoggerFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static io.vavr.API.List;
 
 public class JUnitXMLOutcomeReporter {
 
@@ -39,7 +38,7 @@ public class JUnitXMLOutcomeReporter {
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
             File report = new File(getOutputDirectory(), reportFilename);
             try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))) {
-                junitXMLConverter.write(testCase, testCaseOutcomes.asJava(), outputStream);
+                junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
                 outputStream.flush();
             } catch (ParserConfigurationException | TransformerException | IOException e) {
                 LOGGER.warn("Failed to generate JUnit XML report", e);
@@ -56,8 +55,9 @@ public class JUnitXMLOutcomeReporter {
         Map<String, List<TestOutcome>> groupedTestOutcomes = new HashMap<>();
         for (TestOutcome outcome : testOutcomes.getOutcomes()) {
             String testCaseName = StringUtils.isNotEmpty(outcome.getTestCaseName()) ? outcome.getTestCaseName() : outcome.getStoryTitle();
-            List<TestOutcome> currentOutcomes = groupedTestOutcomes.getOrDefault(testCaseName, List());
-            groupedTestOutcomes.put(testCaseName, currentOutcomes.append(outcome));
+            List<TestOutcome> currentOutcomes = new ArrayList<>(groupedTestOutcomes.getOrDefault(testCaseName, new ArrayList<>()));
+            currentOutcomes.add(outcome);
+            groupedTestOutcomes.put(testCaseName, currentOutcomes);
         }
         return groupedTestOutcomes;
     }

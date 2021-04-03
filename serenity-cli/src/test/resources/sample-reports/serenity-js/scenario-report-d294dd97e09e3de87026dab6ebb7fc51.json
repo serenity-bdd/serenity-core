@@ -1,0 +1,117 @@
+{
+  "name": "Adding an item to an empty list",
+  "title": "Adding an item to an empty list",
+  "id": "add-to-dos;adding-an-item-to-an-empty-list",
+  "manual": false,
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given James has an empty todo list",
+      "startTime": 1552324883867,
+      "children": [
+        {
+          "number": 2,
+          "description": "James navigates to '/examples/angularjs/#/'",
+          "startTime": 1552324883870,
+          "children": [],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 1285
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 1290
+    },
+    {
+      "number": 3,
+      "description": "When he adds 'Buy some milk' to his list",
+      "startTime": 1552324885158,
+      "children": [
+        {
+          "number": 4,
+          "description": "James adds an item called Buy some milk",
+          "startTime": 1552324885159,
+          "children": [
+            {
+              "number": 5,
+              "description": "James enters 'Buy some milk' into the new todo field",
+              "startTime": 1552324885159,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 307
+            },
+            {
+              "number": 6,
+              "description": "James presses Enter in the new todo field",
+              "startTime": 1552324885466,
+              "children": [],
+              "screenshots": [],
+              "result": "SUCCESS",
+              "duration": 92
+            }
+          ],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 399
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 400
+    },
+    {
+      "number": 7,
+      "description": "Then 'Buy some milk' should be recorded in his list",
+      "startTime": 1552324885559,
+      "children": [
+        {
+          "number": 8,
+          "description": "James ensures that the text of the items does contain 'Buy some milk'",
+          "startTime": 1552324885559,
+          "children": [],
+          "screenshots": [],
+          "result": "SUCCESS",
+          "duration": 25
+        }
+      ],
+      "screenshots": [],
+      "result": "SUCCESS",
+      "duration": 25
+    }
+  ],
+  "userStory": {
+    "id": "add-to-dos",
+    "storyName": "Add ToDos",
+    "path": "js-smoketest-features/record-keeping/add_todos.feature",
+    "type": "feature",
+    "narrative": "In order to avoid having to remember things that need doing\nAs a forgetful person\nI want to be able to record them as soon as I learn about them"
+  },
+  "startTime": 1552324883863,
+  "testSource": "Cucumber",
+  "tags": [
+    {
+      "name": "record keeping",
+      "type": "capability"
+    },
+    {
+      "name": "record keeping/Add ToDos",
+      "type": "feature"
+    },
+    {
+      "name": "@cucumber",
+      "type": "tag"
+    },
+    {
+      "name": "@protractor",
+      "type": "tag"
+    }
+  ],
+  "featureTag": {
+    "name": "Add ToDos",
+    "type": "feature"
+  },
+  "duration": 2474,
+  "result": "SUCCESS"
+}

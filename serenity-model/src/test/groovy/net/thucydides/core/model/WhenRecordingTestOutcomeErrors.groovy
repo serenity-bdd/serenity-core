@@ -1,7 +1,6 @@
 package net.thucydides.core.model
 
 import net.serenitybdd.core.model.FailureDetails
-import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
 import org.junit.ComparisonFailure
 import spock.lang.Specification
 
@@ -91,10 +90,10 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         def testOutcome = TestOutcome.forTestInStory("aTest", Story.called("a story"))
 
         when:
-        testOutcome.determineTestFailureCause(new ElementShouldBePresentException("oh crap!",new RuntimeException("crapity crap crap!")))
+        testOutcome.determineTestFailureCause(new AssertionError("oh crap!",new RuntimeException("crapity crap crap!")))
 
         then:
-        testOutcome.testFailureClassname == "net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException"
+        testOutcome.testFailureClassname == "java.lang.AssertionError"
         testOutcome.testFailureMessage.contains "oh crap!"
 
         testOutcome.result == TestResult.FAILURE

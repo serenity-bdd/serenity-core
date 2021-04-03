@@ -144,7 +144,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private Map<String, Object> cleanUpPathsIn(Map<String, Object> chromePreferences) {
         Map<String, Object> preferences = new HashMap<>();
         chromePreferences.forEach(
-                (key,value) -> preferences.put(key.toString(), SanitisedBrowserPreferenceValue.of(value))
+                (key,value) -> preferences.put(key, SanitisedBrowserPreferenceValue.of(value))
         );
         return preferences;
     }

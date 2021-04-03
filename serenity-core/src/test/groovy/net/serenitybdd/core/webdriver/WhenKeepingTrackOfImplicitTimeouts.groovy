@@ -7,6 +7,7 @@ import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Specification
 
 import java.time.Duration
@@ -128,7 +129,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to set the implicit timeout"() {
         given:
-            WebDriverFacade driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            WebDriverFacade driver = new WebDriverFacade(PhantomJSDriver, new WebDriverFactory());
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
             pageObject.open()
         when:

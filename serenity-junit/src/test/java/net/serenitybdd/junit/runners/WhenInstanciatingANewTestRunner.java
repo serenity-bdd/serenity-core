@@ -7,6 +7,7 @@ import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.samples.SuccessfulSingleTestScenario;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithABrowser;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithWrongBrowser;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -45,6 +46,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
 
     @Test
+    @Ignore
     public void system_should_complain_if_we_use_an_unsupported_driver()
             throws InitializationError {
 

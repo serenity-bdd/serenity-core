@@ -11,7 +11,6 @@ import java.util.List;
  * User: YamStranger
  * Date: 4/5/16
  * Time: 8:27 PM
- * <p/>
  * This class directly calls some methods from SerenityRest related only to
  * creating some predefined objects like arguments, configs, auth schemes and so on,
  * can be used for better readability of code.

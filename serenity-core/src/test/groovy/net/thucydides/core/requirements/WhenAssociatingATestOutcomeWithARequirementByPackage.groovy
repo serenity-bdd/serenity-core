@@ -178,7 +178,6 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         Optional<Requirement> requirement = capabilityProvider.getRequirementFor(growPotatoesTag)
         requirement.get().getName() == "Grow potatoes"
         requirement.get().getType() == "capability"
-        requirement.get().narrative.renderedText.contains "I want to grow potatoes"
     }
 
 

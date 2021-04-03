@@ -173,7 +173,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         batchManager.registerTestCase(klass);
         LifecycleRegister.register(theTest);
 
-
     }
 
 

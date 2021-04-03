@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<testsuite errors="0" failures="0" hostname="localhost" name="lettuce" tests="9" time="0"
+           timestamp="2013-06-06T08:21:06">
+    <testcase classname="Compute factorial [MYPROJ-123] : Calculate factorials" name="| 1 | 0 |" time="4.4e-05"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Calculate factorials" name="| 1 | 1 |" time="2.9e-05"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Calculate factorials" name="| 2 | 2 |" time="2.9e-05"/>
+</testsuite>

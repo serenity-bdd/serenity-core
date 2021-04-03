@@ -7,11 +7,9 @@ import net.serenitybdd.reports.model.averageDurationOf
 import net.serenitybdd.reports.model.formattedDuration
 import net.serenitybdd.reports.model.maxDurationOf
 import net.thucydides.core.guice.Injectors
-import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration
@@ -21,7 +19,7 @@ import java.time.ZonedDateTime
  * Generate an HTML summary report from a set of Serenity test outcomes in a given directory.
  */
 class SinglePageHtmlReporter(
-        val environmentVariables: EnvironmentVariables,
+        private val environmentVariables: EnvironmentVariables,
         private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
         private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
@@ -36,7 +34,7 @@ class SinglePageHtmlReporter(
     }
 
     override fun setOutputDirectory(outputDirectory: Path) {
-        this.outputDirectory = outputDirectory;
+        this.outputDirectory = outputDirectory
     }
 
     override fun generateReport(): Path {
@@ -48,11 +46,6 @@ class SinglePageHtmlReporter(
 
         // Write the report
         return writeHtmlReportTo(outputDirectory, fields)
-    }
-
-
-    companion object {
-        val DISPLAYED_TEST_RESULTS = listOf(SUCCESS, PENDING, IGNORED, FAILURE, ERROR, COMPROMISED)
     }
 
     private fun writeHtmlReportTo(outputDirectory: Path, fields: Map<String, Any>): Path {

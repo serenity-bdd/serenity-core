@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.Keys;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getFollowedByKeysDescriptionFor;
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getTextAsStringFor;
 
-public abstract class EnterValue implements Interaction {
+public abstract class EnterValue implements Performable {
 
     protected final CharSequence[] theText;
     protected final List<Keys> followedByKeys;

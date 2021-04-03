@@ -85,7 +85,7 @@ public class JUnitAdapterUnitTest {
     public static class Junit4Test {
 
         @BeforeClass
-        public void beforeClass() {
+        public static void beforeClass() {
         }
 
         @Before
@@ -105,12 +105,16 @@ public class JUnitAdapterUnitTest {
 
     @RunWith(InternalRunner.class)
     public static class TaggableJunit4Test {
-
+        @Test
+        public void shouldSucceed() {
+        }
     }
 
     @RunWith(SerenityRunner.class)
     public static class SerenityJunit4Test {
-
+        @Test
+        public void shouldSucceed() {
+        }
     }
 
     public static class InternalRunner extends BlockJUnit4ClassRunner implements Taggable {
@@ -130,7 +134,7 @@ public class JUnitAdapterUnitTest {
     static class Junit5Test {
 
         @BeforeAll
-        void beforeAll() {
+        static void beforeAll() {
 
         }
 

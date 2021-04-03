@@ -18,3 +18,5 @@ out
 .project
 .classpath
 bin
+*.versionsBackup
+serenity-cli/dependency-reduced-pom.xml

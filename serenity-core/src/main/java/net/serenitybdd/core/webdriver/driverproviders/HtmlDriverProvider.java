@@ -8,6 +8,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -33,7 +34,7 @@ public class HtmlDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
+        MutableCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
 
         HtmlUnitDriver driver = new HtmlUnitDriver(enhancedCapabilities);
         driverProperties.registerCapabilities("htmlunit", capabilitiesToProperties(enhancedCapabilities));

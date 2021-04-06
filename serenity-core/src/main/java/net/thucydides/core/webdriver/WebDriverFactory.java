@@ -119,7 +119,6 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HtmlDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.PHANTOMJS, new PhantomJSDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));

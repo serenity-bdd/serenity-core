@@ -11,6 +11,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -46,7 +47,7 @@ public class ChromeDriverProvider implements DriverProvider {
         } else {
             logger.info("Not using automatically driver download");
         }
-        DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
+        MutableCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 
         ChromeOptions chromeOptions = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).configuredOptions();
@@ -74,7 +75,7 @@ public class ChromeDriverProvider implements DriverProvider {
         return newDriver;
     }
 
-    private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
+    private MutableCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
         DesiredCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);

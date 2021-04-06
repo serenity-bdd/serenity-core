@@ -7,6 +7,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.junit.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +20,7 @@ public class WhenAddingCustomCapabilityEnhancers {
     public void customEnhancersCanAddExtraCapabilitiesWhenADriverIsCreated() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
         AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);

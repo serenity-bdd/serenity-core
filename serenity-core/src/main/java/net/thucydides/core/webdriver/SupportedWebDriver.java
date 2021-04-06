@@ -46,10 +46,6 @@ public enum SupportedWebDriver {
     HTMLUNIT(HtmlUnitDriver.class),
 
     /**
-     * Phantom-JS driver - headless javascript.
-     */
-    PHANTOMJS(PhantomJSDriver.class),
-    /**
      * Remote web driver
      */
     REMOTE(RemoteWebDriver.class),

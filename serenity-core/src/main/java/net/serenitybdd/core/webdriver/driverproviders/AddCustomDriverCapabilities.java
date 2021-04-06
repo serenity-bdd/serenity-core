@@ -6,6 +6,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class AddCustomDriverCapabilities {
         return new AddCustomDriverCapabilities(environmentVariables);
     }
 
-    public DesiredCapabilities to(DesiredCapabilities capabilities) {
+    public MutableCapabilities to(MutableCapabilities capabilities) {
 
         List<Class<?>> customCapabilityEnhancers
                 = ClassFinder.loadClasses()

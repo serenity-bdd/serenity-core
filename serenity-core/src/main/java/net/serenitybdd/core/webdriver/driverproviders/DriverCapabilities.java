@@ -7,9 +7,12 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +35,7 @@ public class DriverCapabilities {
         this.enhancer = enhancer;
     }
 
-    public DesiredCapabilities forDriver(String driverName, String options) {
+    public MutableCapabilities forDriver(String driverName, String options) {
         if (driverName == null || driverName.startsWith(":")) {
             driverName = REMOTE_DRIVER;
         }
@@ -69,18 +72,18 @@ public class DriverCapabilities {
         selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(SAFARI, DesiredCapabilities::safari);
+        selectors.put(SAFARI, new SafariDriverCapabilities());
         selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
-        selectors.put(OPERA, DesiredCapabilities::operaBlink);
-        selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
+        selectors.put(OPERA, new OperaDriverCapabilties());
+        selectors.put(IEXPLORER, new InternetExplorerDriverCapabilties());
         selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
-        selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
-        selectors.put(IPHONE, DesiredCapabilities::iphone);
-        selectors.put(ANDROID, DesiredCapabilities::android);
+        // TODO - clarify
+        //selectors.put(IPHONE, DesiredCapabilities::iphone);
+        //selectors.put(ANDROID, DesiredCapabilities::android);
         return selectors;
     }
 
-    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
+    public MutableCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
 
         return enhancer.enhanced(
                 driverCapabilitiesSelector(options)
@@ -94,9 +97,9 @@ public class DriverCapabilities {
         return (browser == null || browser.startsWith(":"));
     }
 
-    private DesiredCapabilities remoteCapabilities(String options) {
+    private MutableCapabilities remoteCapabilities(String options) {
 
-        DesiredCapabilities capabilities;
+        MutableCapabilities capabilities;
 
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (!isUndefined(remoteBrowser)) {

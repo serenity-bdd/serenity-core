@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class ProvideNewDriver {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProvideNewDriver.class);
 
     public static WebDriver withConfiguration(EnvironmentVariables environmentVariables,
-                                        DesiredCapabilities capabilities,
+            MutableCapabilities capabilities,
                                         DriverServicePool pool,
                                         InstantiateDriver servicePoolStrategy,
                                         InstantiateDriver defaultStrategy) {

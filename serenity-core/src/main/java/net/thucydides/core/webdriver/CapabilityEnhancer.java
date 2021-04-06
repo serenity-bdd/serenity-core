@@ -7,6 +7,7 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
@@ -26,11 +27,12 @@ public class CapabilityEnhancer {
         this.fixtureProviderService = fixtureProviderService;
     }
 
-    public DesiredCapabilities enhanced(DesiredCapabilities capabilities, SupportedWebDriver driver) {
+    public MutableCapabilities enhanced(MutableCapabilities capabilities, SupportedWebDriver driver) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         addExtraCapabilities(capabilities, capabilitySet);
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
-            capabilities.acceptInsecureCerts();
+            //TODO
+            //capabilities.acceptInsecureCerts();
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
 
@@ -51,16 +53,16 @@ public class CapabilityEnhancer {
         }
 
         return capabilities;
-}
+    }
 
-    private void addExtraCapabilities(DesiredCapabilities capabilities, CapabilitySet capabilitySet) {
+    private void addExtraCapabilities(MutableCapabilities capabilities, CapabilitySet capabilitySet) {
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
         for (String capabilityName : extraCapabilities.keySet()) {
             capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
     }
 
-    private void addCapabilitiesFromFixtureServicesTo(DesiredCapabilities capabilities) {
+    private void addCapabilitiesFromFixtureServicesTo(MutableCapabilities capabilities) {
         for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.addCapabilitiesTo(capabilities);
         }

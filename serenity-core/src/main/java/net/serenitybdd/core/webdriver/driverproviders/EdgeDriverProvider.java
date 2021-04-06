@@ -12,6 +12,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -40,7 +41,7 @@ public class EdgeDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(
+        MutableCapabilities desiredCapabilities = enhancer.enhanced(
                 new EdgeDriverCapabilities(environmentVariables).getCapabilities(),
                 SupportedWebDriver.EDGE);
 

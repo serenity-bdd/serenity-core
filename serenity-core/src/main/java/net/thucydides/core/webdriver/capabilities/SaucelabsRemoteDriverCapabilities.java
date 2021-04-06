@@ -33,7 +33,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
     @Override
-    public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
+    public MutableCapabilities getCapabilities(MutableCapabilities capabilities) {
 
 
         configureBrowserVersion(capabilities);
@@ -52,7 +52,8 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         configureTestName(sauceCaps);
 
         capabilities.setCapability("sauce:options", sauceCaps);
-        capabilities.setJavascriptEnabled(true);
+        //TODO
+        //capabilities.setJavascriptEnabled(true);
 
         return capabilities;
     }
@@ -72,13 +73,14 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         }
     }
 
-    private void configureTargetPlatform(DesiredCapabilities capabilities) {
+    private void configureTargetPlatform(MutableCapabilities capabilities) {
         SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
 
         String remotePlatform = REMOTE_PLATFORM.from(environmentVariables);
 
         if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+            //TODO
+            //capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
 
     }

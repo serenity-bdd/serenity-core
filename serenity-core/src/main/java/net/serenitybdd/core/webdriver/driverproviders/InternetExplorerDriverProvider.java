@@ -13,6 +13,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -61,7 +62,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         updateIEDriverBinaryIfSpecified();
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
+        MutableCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
         AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
@@ -76,7 +77,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         );
     }
 
-    private WebDriver retryCreateDriverOnNoSuchSession(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
+    private WebDriver retryCreateDriverOnNoSuchSession(DriverServicePool pool, MutableCapabilities desiredCapabilities) {
         return new TryAtMost(3).toStartNewDriverWith(pool, desiredCapabilities);
     }
 
@@ -87,7 +88,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             this.maxTries = maxTries;
         }
 
-        public WebDriver toStartNewDriverWith(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
+        public WebDriver toStartNewDriverWith(DriverServicePool pool, MutableCapabilities desiredCapabilities) {
             try {
                 return pool.newDriver(desiredCapabilities);
             } catch (NoSuchSessionException e) {
@@ -102,8 +103,8 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
     }
 
-    private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
-        DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
+    private InternetExplorerOptions recommendedDefaultInternetExplorerCapabilities() {
+        InternetExplorerOptions defaults = new InternetExplorerOptions();
 
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
                                IE_OPTIONS_IGNORE_ZOOM_LEVEL.booleanFrom(environmentVariables, true));
@@ -112,17 +113,13 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS,
                                IE_OPTIONS_REQUIRE_WINDOW_FOCUS.booleanFrom(environmentVariables, false));
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
-        defaults.setJavascriptEnabled(true);
+        //defaults.setJavascriptEnabled(true);
 
 
-        /*
-        IgnoreZoomLevel = true,
-EnableNativeEvents = true, RequireWindowFocus = true};
-         */
-        defaults = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
+        defaults = (InternetExplorerOptions)AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
 
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
-            defaults.acceptInsecureCerts();
+            defaults.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS,true);
         }
         return defaults;
     }

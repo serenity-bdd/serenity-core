@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -24,7 +25,7 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
     }
 
     @Override
-    public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
+    public MutableCapabilities getCapabilities(MutableCapabilities capabilities) {
         return capabilities;
 //        configureBrowserStackCapabilities(capabilities);
 //        return capabilities;

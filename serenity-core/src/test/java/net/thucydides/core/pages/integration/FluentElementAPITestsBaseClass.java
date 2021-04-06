@@ -33,7 +33,7 @@ public class FluentElementAPITestsBaseClass {
         chromeService.start();
         StepEventBus.getEventBus().clear();
 
-        final DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
+        final DesiredCapabilities desiredCapabilities = new DesiredCapabilities(new ChromeOptions());
         final ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);

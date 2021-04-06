@@ -50,8 +50,13 @@ public class WhenSettingScreenDimensions {
 
     @Test
     public void should_not_resize_browser_if_dimension_are_not_provided() {
+        environmentVariables.setProperty("chrome.switches","--headless");
+
         StubbedWebDriverFactory stubbedFactory = new StubbedWebDriverFactory(environmentVariables);
-        driver = stubbedFactory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        //driver = stubbedFactory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        //TODO
+        driver = stubbedFactory.newInstanceOf(SupportedWebDriver.CHROME);
+
         page = new StaticSitePage(driver, 1000);
         page.open();
         assertThat(stubbedFactory.screenWasResized, is(false));
@@ -62,7 +67,10 @@ public class WhenSettingScreenDimensions {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
         environmentVariables.setProperty("headless.mode","true");
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        environmentVariables.setProperty("chrome.switches","--headless");
+        //TODO
+        //driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
         page = new StaticSitePage(driver, 1024);
         page.open();
 
@@ -73,8 +81,10 @@ public class WhenSettingScreenDimensions {
         environmentVariables.setProperty("thucydides.browser.height", "500");
         environmentVariables.setProperty("thucydides.browser.width", "500");
         environmentVariables.setProperty("headless.mode", "true");
-
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        environmentVariables.setProperty("chrome.switches","--headless");
+        //TODO
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
+        //driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
         page = new StaticSitePage(driver, 1024);
 
         int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();

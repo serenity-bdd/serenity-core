@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.questions
 
-import com.beust.jcommander.internal.Lists
 import com.google.common.collect.Sets
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Question

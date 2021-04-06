@@ -11,6 +11,7 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -85,7 +86,7 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     @Override
-    public void addCapabilitiesTo(DesiredCapabilities capabilities) {
+    public void addCapabilitiesTo(MutableCapabilities capabilities) {
         if (!proxyServerRunning()) {
             setup();
         }

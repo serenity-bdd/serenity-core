@@ -10,6 +10,7 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
@@ -42,7 +43,7 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     @Test
     public void theBrowserNameShouldBeAddedDirectlyToTheCapability() {
 
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
@@ -67,7 +68,7 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)

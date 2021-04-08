@@ -37,7 +37,7 @@ public class WhenAddingCrossBrowserTestingCapabilities {
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getPlatform()).isEqualTo(Platform.ANDROID);
+        assertThat(capabilities.getPlatformName()).isEqualTo(Platform.ANDROID);
     }
 
     @Test

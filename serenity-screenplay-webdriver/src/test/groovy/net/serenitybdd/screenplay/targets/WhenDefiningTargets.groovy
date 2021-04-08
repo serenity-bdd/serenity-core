@@ -10,11 +10,14 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.mockito.Mockito.when
 import static org.mockito.MockitoAnnotations.initMocks
 
+@Ignore
+//TODO - Appium Driver not supported yet in Selenium 4
 class WhenDefiningTargets extends Specification {
 
     @Mock

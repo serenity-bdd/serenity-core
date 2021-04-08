@@ -10,7 +10,8 @@ import org.openqa.selenium.WebDriver;
 @RunWith(SerenityParameterizedRunner.class)
 @UseTestDataFrom(value = "test-data/simple-data.csv")
 public class SampleCSVDataDrivenScenarioWithDelays extends SampleCSVDataDrivenScenario {
-    @Managed
+
+    @Managed(driver = "chrome", options = "--headless")
     WebDriver driver;
 
     @Test

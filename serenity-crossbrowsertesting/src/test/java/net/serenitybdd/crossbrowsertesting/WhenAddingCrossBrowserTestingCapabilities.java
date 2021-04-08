@@ -43,7 +43,9 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     @Test
     public void theBrowserNameShouldBeAddedDirectlyToTheCapability() {
 
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
@@ -67,8 +69,10 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     @Test
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
 
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)

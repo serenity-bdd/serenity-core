@@ -1,7 +1,7 @@
 package net.thucydides.core.pages.integration;
 
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.thucydides.core.steps.StepEventBus;

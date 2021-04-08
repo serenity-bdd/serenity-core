@@ -1,6 +1,7 @@
 
 package net.serenitybdd.browserstack;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.thucydides.core.model.Story;
@@ -12,6 +13,7 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 //import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -32,7 +34,10 @@ public class WhenAddingBrowserStackCapabilities {
     @Test
     public void theBrowserNameShouldBeAddedDirectlyToTheCapability() {
 
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        DesiredCapabilities capabilities = new DesiredCapabilities(options);
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
@@ -112,8 +117,11 @@ public class WhenAddingBrowserStackCapabilities {
     @Test
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
 
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        DesiredCapabilities capabilities = new DesiredCapabilities(options);
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)

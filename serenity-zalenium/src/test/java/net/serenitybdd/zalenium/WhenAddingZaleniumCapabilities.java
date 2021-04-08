@@ -20,7 +20,9 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddTheNameOfTheTest() {
 
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
         AddCustomDriverCapabilities.from(environmentVariables)
@@ -34,7 +36,9 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddZaleniumPropertiesFromTheEnvironmentConfiguration() {
 
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.screenResolution","1280x720");
 
@@ -47,7 +51,9 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddZaleniumNumericalPropertiesFromTheEnvironmentConfiguration() {
 
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.idleTimeout","150");
 

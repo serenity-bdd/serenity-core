@@ -4,6 +4,7 @@ import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDri
 import net.serenitybdd.core.webdriver.driverproviders.CustomCapabilities
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
@@ -62,7 +63,7 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
         environmentVariables.setProperty("driver_capabilities.common.takesScreenshot", "true")
         environmentVariables.setProperty("driver_capabilities.iexplorer.ie.ensureCleanSession", "true")
         and:
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome()
+        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions())
         when:
         capabilities = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(capabilities)
         then:

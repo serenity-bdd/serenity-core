@@ -40,13 +40,16 @@ public class WhenRunningADataDrivenTestScenarioToCheckDuration {
 
     MockEnvironmentVariables environmentVariables;
 
-    Configuration configuration;
+    //Configuration configuration;
 
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        environmentVariables.setProperty("webdriver.driver","chrome");
+        environmentVariables.setProperty("chrome.switches","--headless");
+        environmentVariables.setProperty("headless.mode","true");
+        //configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 
     protected SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {

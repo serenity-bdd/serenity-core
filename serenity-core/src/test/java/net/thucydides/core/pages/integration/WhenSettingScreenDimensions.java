@@ -39,7 +39,7 @@ public class WhenSettingScreenDimensions {
 
     @Test
     public void should_remove_timeout_on_close() {
-        driver = factory.newInstanceOf(SupportedWebDriver.HTMLUNIT);
+        driver = factory.newInstanceOf(SupportedWebDriver.CHROME);
         Duration implicitTimeout = Duration.ofMillis(1000L);
         factory.setTimeouts(driver, implicitTimeout);
 

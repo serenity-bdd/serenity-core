@@ -92,6 +92,7 @@
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <javassist.version>3.21.0-GA</javassist.version>
         <xchart.version>3.5.2</xchart.version>
+        <httpclient.version>4.5.5</httpclient.version>
         <!-- Kotlin config -->
         <kotlin.version>1.4.10</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>

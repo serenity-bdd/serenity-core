@@ -11,9 +11,10 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(ThucydidesRunner.class)
-public class SampleFailingScenarioUsingHtmlUnit {
-    
-    @Managed(driver = "htmlunit")
+public class SampleFailingScenarioUsingChrome {
+
+
+    @Managed(driver = "chrome", options = "--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

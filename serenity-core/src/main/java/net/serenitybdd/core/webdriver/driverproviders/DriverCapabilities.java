@@ -73,7 +73,6 @@ public class DriverCapabilities {
         selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
         selectors.put(SAFARI, new SafariDriverCapabilities());
-        selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
         selectors.put(OPERA, new OperaDriverCapabilties());
         selectors.put(IEXPLORER, new InternetExplorerDriverCapabilties());
         selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));

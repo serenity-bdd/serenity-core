@@ -19,8 +19,10 @@ public class WhenAddingCustomCapabilityEnhancers {
     @Test
     public void customEnhancersCanAddExtraCapabilitiesWhenADriverIsCreated() {
 
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         // Given
-        DesiredCapabilities capabilities = new DesiredCapabilities(new ChromeOptions());
+        DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
         AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);

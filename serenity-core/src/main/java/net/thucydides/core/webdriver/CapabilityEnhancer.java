@@ -27,12 +27,12 @@ public class CapabilityEnhancer {
         this.fixtureProviderService = fixtureProviderService;
     }
 
-    public MutableCapabilities enhanced(MutableCapabilities capabilities, SupportedWebDriver driver) {
+    public DesiredCapabilities enhanced(DesiredCapabilities capabilities, SupportedWebDriver driver) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         addExtraCapabilities(capabilities, capabilitySet);
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             //TODO
-            //capabilities.acceptInsecureCerts();
+            capabilities.acceptInsecureCerts();
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
 

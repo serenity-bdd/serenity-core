@@ -32,7 +32,7 @@ public class SafariDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        SafariOptions safariOptions = SafariOptions.fromCapabilities(enhancer.enhanced(new SafariOptions(), SupportedWebDriver.SAFARI));
+        SafariOptions safariOptions = SafariOptions.fromCapabilities(enhancer.enhanced(new DesiredCapabilities(new SafariOptions()), SupportedWebDriver.SAFARI));
 
         boolean useCleanSession = ThucydidesSystemProperty.SAFARI_USE_CLEAN_SESSION.booleanFrom(environmentVariables, false);
 

@@ -62,7 +62,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         updateIEDriverBinaryIfSpecified();
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        MutableCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
+        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
         AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
@@ -103,7 +103,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
     }
 
-    private InternetExplorerOptions recommendedDefaultInternetExplorerCapabilities() {
+    private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
         InternetExplorerOptions defaults = new InternetExplorerOptions();
 
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
@@ -121,7 +121,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             defaults.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS,true);
         }
-        return defaults;
+        return new DesiredCapabilities(defaults);
     }
 
     private void updateIEDriverBinaryIfSpecified() {

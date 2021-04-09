@@ -7,12 +7,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +31,7 @@ public class DriverCapabilities {
         this.enhancer = enhancer;
     }
 
-    public MutableCapabilities forDriver(String driverName, String options) {
+    public DesiredCapabilities forDriver(String driverName, String options) {
         if (driverName == null || driverName.startsWith(":")) {
             driverName = REMOTE_DRIVER;
         }
@@ -74,7 +70,7 @@ public class DriverCapabilities {
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
         selectors.put(SAFARI, new SafariDriverCapabilities());
         selectors.put(OPERA, new OperaDriverCapabilties());
-        selectors.put(IEXPLORER, new InternetExplorerDriverCapabilties());
+        selectors.put(IEXPLORER, new InternetExplorerDriverCapabilities());
         selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
         // TODO - clarify
         //selectors.put(IPHONE, DesiredCapabilities::iphone);
@@ -82,7 +78,7 @@ public class DriverCapabilities {
         return selectors;
     }
 
-    public MutableCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
+    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
 
         return enhancer.enhanced(
                 driverCapabilitiesSelector(options)
@@ -96,9 +92,9 @@ public class DriverCapabilities {
         return (browser == null || browser.startsWith(":"));
     }
 
-    private MutableCapabilities remoteCapabilities(String options) {
+    private DesiredCapabilities remoteCapabilities(String options) {
 
-        MutableCapabilities capabilities;
+        DesiredCapabilities capabilities;
 
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (!isUndefined(remoteBrowser)) {

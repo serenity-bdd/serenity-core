@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.playwright.abilities;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.BrowserChannel;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +52,7 @@ class WhenAnActorWantsToUsePlaywright {
         @Test
         void usingADifferentBrowser() {
 
+            WebDriverManager.firefoxdriver().setup();
             william.can(BrowseTheWebWithPlaywright.usingTheDefaultConfiguration().withBrowserType("firefox"));
 
             Page page = BrowseTheWebWithPlaywright.as(william).getBrowser().newPage();

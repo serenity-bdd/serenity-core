@@ -7,6 +7,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.junit.Test;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -23,10 +25,11 @@ public class WhenAddingCustomCapabilityEnhancers {
         chromeOptions.addArguments("--headless");
         // Given
         DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
+        System.out.println("Original capabilities " + capabilities.hashCode());
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
-        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);
 
-        assertThat(capabilities.getCapability("name")).isEqualTo( "Sample story - Sample test");
+        assertThat(enhancedCapabilities.getCapability("name")).isEqualTo( "Sample story - Sample test");
     }
 }

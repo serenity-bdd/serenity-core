@@ -26,7 +26,7 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
             );
 
     @Override
-    public MutableCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, MutableCapabilities capabilities) {
+    public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }
@@ -36,8 +36,7 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
                 .orElse(null);
 
         if (isNotEmpty(remotePlatform)) {
-            //TODO
-            //capabilities.setPlatform(Platform.valueOf(remotePlatform.toUpperCase()));
+            capabilities.setPlatform(Platform.valueOf(remotePlatform.toUpperCase()));
         }
 
         Properties cbtProperties = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix(CROSS_BROWSER_TESTING);

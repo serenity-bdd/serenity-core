@@ -15,7 +15,7 @@ public class BeforeAZaleniumScenario implements BeforeAWebdriverScenario {
     public static final String ZALENIUM = "zalenium.";
 
     @Override
-    public MutableCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, MutableCapabilities capabilities) {
+    public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }

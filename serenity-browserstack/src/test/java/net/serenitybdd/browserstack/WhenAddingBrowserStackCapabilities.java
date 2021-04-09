@@ -9,11 +9,9 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-//import org.junit.Before;
-//import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -39,11 +37,11 @@ public class WhenAddingBrowserStackCapabilities {
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         DesiredCapabilities capabilities = new DesiredCapabilities(options);
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("chrome");
+        assertThat(enhancedCapabilities.getBrowserName()).isEqualTo("chrome");
     }
 
     @Test
@@ -51,11 +49,11 @@ public class WhenAddingBrowserStackCapabilities {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         environmentVariables.setProperty("browserstack.browserName","IE");
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("IE");
+        assertThat(enhancedCapabilities.getBrowserName()).isEqualTo("IE");
     }
 
     @Test
@@ -63,11 +61,11 @@ public class WhenAddingBrowserStackCapabilities {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         environmentVariables.setProperty("browserstack.browserVersion","11.0");
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getCapability("browserVersion")).isEqualTo("11.0");
+        assertThat(enhancedCapabilities.getCapability("browserVersion")).isEqualTo("11.0");
     }
 
     @Test
@@ -78,12 +76,12 @@ public class WhenAddingBrowserStackCapabilities {
         environmentVariables.setProperty("browserstack.browserVersion","11.0");
         OverrideDriverCapabilities.withProperty("browserstack.browserName").setTo("Chrome");
         OverrideDriverCapabilities.withProperty("browserstack.browserVersion").setTo("78");
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("Chrome");
-        assertThat(capabilities.getCapability("browserVersion")).isEqualTo("78");
+        assertThat(enhancedCapabilities.getBrowserName()).isEqualTo("Chrome");
+        assertThat(enhancedCapabilities.getCapability("browserVersion")).isEqualTo("78");
     }
 
 
@@ -92,11 +90,11 @@ public class WhenAddingBrowserStackCapabilities {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         environmentVariables.setProperty("browserstack.os","Windows");
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(bstackOptionsFrom(capabilities).get("os")).isEqualTo("Windows");
+        assertThat(bstackOptionsFrom(enhancedCapabilities).get("os")).isEqualTo("Windows");
     }
 
     @Test
@@ -106,11 +104,11 @@ public class WhenAddingBrowserStackCapabilities {
         environmentVariables.setProperty("browserstack.os","Windows");
         OverrideDriverCapabilities.withProperty("browserstack.os").setTo("OS X");
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities mutableCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(bstackOptionsFrom(capabilities).get("os")).isEqualTo("OS X");
+        assertThat(bstackOptionsFrom(mutableCapabilities).get("os")).isEqualTo("OS X");
     }
 
 
@@ -123,14 +121,14 @@ public class WhenAddingBrowserStackCapabilities {
         // Given
         DesiredCapabilities capabilities = new DesiredCapabilities(options);
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(bstackOptionsFrom(capabilities).get("sessionName")).isEqualTo("Sample story - Sample test");
+        assertThat(bstackOptionsFrom(enhancedCapabilities).get("sessionName")).isEqualTo("Sample story - Sample test");
     }
 
-    private Map<String,String> bstackOptionsFrom(DesiredCapabilities capabilities) {
+    private Map<String,String> bstackOptionsFrom(Capabilities capabilities) {
         return (Map<String, String>) capabilities.getCapability("bstack:options");
     }
 

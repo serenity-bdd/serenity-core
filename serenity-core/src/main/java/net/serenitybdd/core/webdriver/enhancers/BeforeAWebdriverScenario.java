@@ -7,8 +7,8 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public interface BeforeAWebdriverScenario {
-    MutableCapabilities apply(EnvironmentVariables environmentVariables,
+    DesiredCapabilities apply(EnvironmentVariables environmentVariables,
                               SupportedWebDriver driver,
                               TestOutcome testOutcome,
-                              MutableCapabilities capabilities);
+                              DesiredCapabilities capabilities);
 }

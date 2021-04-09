@@ -47,7 +47,7 @@ public class CapabilityEnhancer {
                 currentTestOutcome.ifPresent(
                         outcome -> AddCustomDriverCapabilities.from(environmentVariables)
                                 .withTestDetails(driver, outcome)
-                                .to(capabilities)
+                                .to(new DesiredCapabilities(capabilities))
                 );
             }
         }

@@ -9,6 +9,7 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -33,11 +34,11 @@ public class WhenAddingCrossBrowserTestingCapabilities {
 
         environmentVariables.setProperty("remote.platform","android");
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getPlatformName()).isEqualTo(Platform.ANDROID);
+        assertThat(enhancedCapabilities.getPlatformName()).isEqualTo(Platform.ANDROID);
     }
 
     @Test
@@ -47,11 +48,11 @@ public class WhenAddingCrossBrowserTestingCapabilities {
         chromeOptions.addArguments("--headless");
         DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("chrome");
+        assertThat(enhancedCapabilities.getBrowserName()).isEqualTo("chrome");
     }
 
     @Test
@@ -59,11 +60,11 @@ public class WhenAddingCrossBrowserTestingCapabilities {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         environmentVariables.setProperty("crossbrowsertesting.build","sample build");
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(cbtOptionsFrom(capabilities).get("build")).isEqualTo("sample build");
+        assertThat(cbtOptionsFrom(enhancedCapabilities).get("build")).isEqualTo("sample build");
     }
 
     @Test
@@ -74,11 +75,11 @@ public class WhenAddingCrossBrowserTestingCapabilities {
         // Given
         DesiredCapabilities capabilities = new DesiredCapabilities(chromeOptions);
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(cbtOptionsFrom(capabilities).get("name")).isEqualTo("Sample story - Sample test");
+        assertThat(cbtOptionsFrom(enhancedCapabilities).get("name")).isEqualTo("Sample story - Sample test");
     }
 
     @Test
@@ -88,14 +89,14 @@ public class WhenAddingCrossBrowserTestingCapabilities {
         environmentVariables.setProperty("crossbrowsertesting.build","sample build");
         OverrideDriverCapabilities.withProperty("crossbrowsertesting.build").setTo("overridden build");
 
-        AddCustomDriverCapabilities.from(environmentVariables)
+        Capabilities enhancedCapabilities = AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(cbtOptionsFrom(capabilities).get("build")).isEqualTo("overridden build");
+        assertThat(cbtOptionsFrom(enhancedCapabilities).get("build")).isEqualTo("overridden build");
     }
 
-    private Map<String,String> cbtOptionsFrom(DesiredCapabilities capabilities) {
+    private Map<String,String> cbtOptionsFrom(Capabilities capabilities) {
         return (Map<String, String>) capabilities.getCapability("cbt:options");
     }
 }

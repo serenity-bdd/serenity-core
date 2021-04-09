@@ -47,10 +47,10 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
     );
 
     @Override
-    public MutableCapabilities apply(EnvironmentVariables environmentVariables,
+    public DesiredCapabilities apply(EnvironmentVariables environmentVariables,
                                      SupportedWebDriver driver,
                                      TestOutcome testOutcome,
-                                     MutableCapabilities capabilities) {
+                                     DesiredCapabilities capabilities) {
 
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
@@ -60,8 +60,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
                 .getOptionalProperty("remote.platform")
                 .orElse(null);
         if (isNotEmpty(remotePlatform)) {
-            //TODO
-            //capabilities.setPlatform(Platform.valueOf(remotePlatform));
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
 
         Properties browserStackProperties = EnvironmentSpecificConfiguration

@@ -1,18 +1,14 @@
 package net.serenitybdd.screenplay.actors;
 
 import com.google.common.base.Splitter;
-import com.sun.tools.doclint.Env;
-import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.logging.PerformableLogger;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
-import java.util.Optional;
 
 public class OnStage {
 

@@ -245,22 +245,6 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_log_step_name_when_a_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
-
-        verify(logger).info(contains("  * some step"));
-    }
-
-    @Test
-    public void should_log_step_name_when_a_skipped_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some step"));
-
-        verify(logger).info(contains("  * some step"));
-    }
-
-    @Test
     public void should_log_skipped_step_if_in_verbose_mode() {
         environmentVariables.setProperty("thucydides.logging", "VERBOSE");
 

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -276,11 +277,24 @@ public class ConsoleLoggingListener implements StepListener {
         currentStep = description;
         nestedSteps.push(description.getName());
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            String indent = StringUtils.repeat("  ", nestedSteps.size());
-            getLogger().info(white(indent + " * " + description.getTitle()));
+            String indent = indentation(nestedSteps.size());// StringUtils.repeat("  ", nestedSteps.size());
+            System.out.println(withTimestamp(green(indent + description.getTitle())));
+//            getLogger().info(green(indent + description.getTitle()));
         }
     }
 
+    private String withTimestamp(String message) {
+        if (environmentVariables.getPropertyAsBoolean("serenity.console.timestamp", false)) {
+            String timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
+            return timeStamp + " " + message;
+        } else {
+            return message;
+        }
+    }
+
+    private String indentation(int level) {
+        return "|" + StringUtils.repeat("-", level * 2) + " ";
+    }
 
     public void skippedStepStarted(ExecutedStepDescription description) {
         stepStarted(description);

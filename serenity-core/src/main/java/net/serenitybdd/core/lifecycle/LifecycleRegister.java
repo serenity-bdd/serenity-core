@@ -24,9 +24,9 @@ public class LifecycleRegister {
             = ThreadLocal.withInitial(HashSet::new);
 
     public static void register(Object object) {
-        Optional<Object> existingObjectOfThisClass = registeredObjects.get().stream()
-                .filter(obj -> obj.getClass().equals(object.getClass()))
-                .findFirst();
+//        Optional<Object> existingObjectOfThisClass = registeredObjects.get().stream()
+//                .filter(obj -> obj.getClass().equals(object.getClass()))
+//                .findFirst();
         registeredObjects.get().add(object);
     }
 

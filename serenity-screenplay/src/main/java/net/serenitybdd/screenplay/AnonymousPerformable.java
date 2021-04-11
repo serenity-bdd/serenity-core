@@ -30,6 +30,10 @@ public class AnonymousPerformable implements Performable, HasCustomFieldValues {
         fieldValues.put(fieldName, fieldValue);
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
 
     @Override
     public Map<String, Object> getCustomFieldValues() {

@@ -280,12 +280,12 @@ public class Actor implements PerformsTasks, SkipNested {
         return e.getClass().getSimpleName().contains("Assumption");
     }
 
-    public final void can(Consequence... consequences) {
+    public final void can(Consequence<?>... consequences) {
         should(consequences);
     }
 
 
-    public final void should(String groupStepName, Consequence... consequences) {
+    public final void should(String groupStepName, Consequence<?>... consequences) {
 
         try {
             String groupTitle = injectActorInto(groupStepName);
@@ -303,15 +303,17 @@ public class Actor implements PerformsTasks, SkipNested {
         return groupStepName.replaceAll("\\{0\\}", this.toString());
     }
 
-    public final void should(Consequence... consequences) {
+    public final void should(List<Consequence<?>> consequences) {
+        should(consequences.toArray(new Consequence[]{}));
+    }
 
-        //if (StepEventBus.getEventBus().isDryRun()) { return; }
+    public final void should(Consequence<?>... consequences) {
 
         ErrorTally errorTally = new ErrorTally(eventBusInterface);
 
         startConsequenceCheck();
 
-        for (Consequence consequence : consequences) {
+        for (Consequence<?> consequence : consequences) {
             check(consequence, errorTally);
         }
 

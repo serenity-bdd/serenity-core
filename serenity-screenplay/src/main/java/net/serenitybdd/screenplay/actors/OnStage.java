@@ -19,17 +19,14 @@ public class OnStage {
     private final static String DEFAULT_PRONOUNS = "he,she,they,it";
     private final static String A_NEW_ACTOR = "An actor";
 
-    private static final ThreadLocal<Stage> stage = new ThreadLocal<>();
+    private static final ThreadLocal<Stage> STAGE = new ThreadLocal<>();
 
 
     /**
      * Set the stage before calling the actors
      */
     public static Stage setTheStage(Cast cast) {
-        stage.set(new Stage(cast));
-        if (verboseScreenplayLogging()) {
-            //Broadcaster.getEventBus().register(new PerformableLogger());
-        }
+        STAGE.set(new Stage(cast));
         return stage();
     }
 
@@ -78,8 +75,11 @@ public class OnStage {
     }
 
     private static Stage stage() {
-        return Optional.ofNullable(stage.get())
-                .orElseThrow(() -> new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one."));
+        if (STAGE.get() == null) {
+            throw new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one.");
+        } else {
+            return STAGE.get();
+        }
     }
 
     public static void drawTheCurtain() {

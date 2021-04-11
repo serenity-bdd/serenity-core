@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
  */
 public class SilentTask {
 
-    static Performable where(Consumer<Actor> performableOperation) {
+    static <T extends Performable> SilentPerformableFunction where(Consumer<Actor> performableOperation) {
         return Instrumented.instanceOf(SilentPerformableFunction.class).withProperties(performableOperation);
     }
 

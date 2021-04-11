@@ -24,7 +24,9 @@ public class SendKeysIntoBy extends EnterValue {
 
     @Step("{0} enters #theTextAsAString into #locatorNames")
     public <T extends Actor> void performAs(T theUser) {
-        resolveFor(theUser).sendKeys(theText);
+        textValue().ifPresent(
+                text -> resolveFor(theUser).sendKeys(theText)
+        );
         if (getFollowedByKeys().length > 0) {
             resolveFor(theUser).sendKeys(getFollowedByKeys());
         } 

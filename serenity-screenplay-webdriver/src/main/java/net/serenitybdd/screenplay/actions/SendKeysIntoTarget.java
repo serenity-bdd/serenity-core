@@ -15,7 +15,9 @@ public class SendKeysIntoTarget extends EnterValue {
 
     @Step("{0} enters #theTextAsAString into #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).sendKeys(theText);
+        textValue().ifPresent(
+                text -> target.resolveFor(theUser).sendKeys(theText)
+        );
         if (getFollowedByKeys().length > 0) {
             target.resolveFor(theUser).sendKeys(getFollowedByKeys());
         }

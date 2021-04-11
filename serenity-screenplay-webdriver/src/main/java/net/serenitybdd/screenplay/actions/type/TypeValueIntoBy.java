@@ -27,8 +27,9 @@ public class TypeValueIntoBy extends TypeValue {
     @Step("{0} enters #theTextAsAString into #locators")
     public <T extends Actor> void performAs(T theUser) {
         WebElement element = resolveFor(theUser);
-
-        element.sendKeys(theText);
+        textValue().ifPresent(
+                text -> element.sendKeys(text)
+        );
         if (getFollowedByKeys().length > 0) {
             element.sendKeys(getFollowedByKeys());
         }

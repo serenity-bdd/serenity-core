@@ -49,7 +49,6 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
      */
     open fun isNull() = PerformablePredicate(value, IS_NULL, isNegated(), expectedDescription)
 
-
     /**
      * Verifies that the actual value is not {@code null}.
      * <p>
@@ -64,7 +63,6 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
      * </code></pre>
      */
     fun isNotNull() = PerformablePredicate(value, IS_NOT_NULL, isNegated(), expectedDescription)
-
 
     /**
      * Verifies that the actual value is present in the given array of values.

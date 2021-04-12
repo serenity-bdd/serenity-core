@@ -15,10 +15,27 @@ open class PerformableExpectation<A, E>(private val actual: A?,
     @Step("{0} should see #description")
     override fun <T : Actor?> performAs(actor: T) {
         BlackBox.reset()
+
         val result = expectation.apply(actual, expected!!, actor)
 
         if (isAFailure(result, isNegated)) {
-            throw AssertionError(expectation.compareActualWithExpected(actual, expected, isNegated, expectedDescription))
+            if (BlackBox.isUsingSoftAssertions()) {
+                BlackBox.softlyAssert(expectation.compareActualWithExpected(
+                    actual,
+                    expected,
+                    isNegated,
+                    expectedDescription
+                ))
+            } else {
+                throw AssertionError(
+                    expectation.compareActualWithExpected(
+                        actual,
+                        expected,
+                        isNegated,
+                        expectedDescription
+                    )
+                )
+            }
         }
     }
 

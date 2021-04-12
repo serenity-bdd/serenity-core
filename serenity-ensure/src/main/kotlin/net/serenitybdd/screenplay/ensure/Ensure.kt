@@ -2,10 +2,7 @@
 
 package net.serenitybdd.screenplay.ensure
 
-import net.serenitybdd.core.pages.PageObject
-import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.Performable
-import net.serenitybdd.screenplay.Question
+import net.serenitybdd.screenplay.*
 import net.serenitybdd.screenplay.ensure.web.PageObjectEnsure
 import net.serenitybdd.screenplay.ensure.web.TargetEnsure
 import net.serenitybdd.screenplay.targets.Target
@@ -49,6 +46,9 @@ fun thatTheSetOf(value: Target) = CollectionEnsure(KnowableCollectionTarget(valu
 fun thatTheSetOf(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 fun thatAmongst(value: Target) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 fun thatAmongst(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+
+fun enableSoftAssertions() = BlackBox.startSoftAssertions()
+fun reportSoftAssertions() = BlackBox.reportAnySoftAssertions()
 
 ///**
 // * Ensure something

@@ -15,10 +15,17 @@ public class Iterate<T> {
     }
 
     public Performable forEach(BiConsumer<Actor, T> action) {
-        return Task.where("{0} iterates over " + collection,
+        return Task.where("{0} checks each entry in the collection:",
                 actor -> {
-                    collection.forEach(item -> action.accept(actor, item));
+                    collection.forEach(
+                            item -> actor.attemptsTo(processItem(item, action)));
                 }
+        );
+    }
+
+    private Performable processItem(T item, BiConsumer<Actor, T> action) {
+        return Task.where("For item " + item.toString(),
+                actor -> action.accept(actor, item)
         );
     }
 }

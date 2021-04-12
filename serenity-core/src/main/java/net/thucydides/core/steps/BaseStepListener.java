@@ -486,6 +486,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return new StepMutator(this);
     }
 
+    public void updateCurrentStepFailureCause(Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(failure);
+        }
+    }
+
     public class StepMutator {
 
         private final BaseStepListener baseStepListener;
@@ -753,6 +759,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
+    public void stepFailedWithException(Throwable failure) {
+        takeEndOfStepScreenshotFor(FAILURE);
+
+        TestFailureCause failureCause = TestFailureCause.from(failure);
+        getCurrentTestOutcome().appendTestFailure(failureCause);
+
+        recordFailureDetails(failure);
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
+
     public void lastStepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().lastStepFailedWith(failure);
@@ -763,6 +779,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private void recordFailureDetails(final StepFailure failure) {
         if (currentStepExists()) {
             getCurrentStep().failedWith(new StepFailureException(failure.getMessage(), failure.getException()));
+        }
+        if (shouldTagErrors()) {
+            addTagFor(getCurrentTestOutcome());
+        }
+        lastFailingExample = currentExample;
+    }
+
+    private void recordFailureDetails(final Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(new StepFailureException(failure.getMessage(), failure));
         }
         if (shouldTagErrors()) {
             addTagFor(getCurrentTestOutcome());
@@ -820,7 +846,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentStepExists()) {
             TestStep finishedStep = currentStepStack.get().pop();
             finishedStep.recordDuration();
-            if (result != null) {
+            if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
             if ((finishedStep == getCurrentGroup())) {

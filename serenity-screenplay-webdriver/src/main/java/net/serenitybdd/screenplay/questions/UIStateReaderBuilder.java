@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +89,14 @@ public class UIStateReaderBuilder<T>{
      * A convenience method to return a question about a target
      * e.g. Text.of(VetList.VET_NAME).asACollection()
      */
+    public Question<Collection<String>> asACollection() {
+        return Question.about(subject).answeredBy(actor -> ((TargetedUIState<String>) viewedBy(actor)).asList());
+    }
+
+    public <E> Question<Collection<E>> asACollectionOf(Class<E> type) {
+        return Question.about(subject).answeredBy(actor -> ((TargetedUIState<E>) viewedBy(actor)).asListOf(type));
+    }
+
     public Question<List<String>> asAList() {
         return Question.about(subject).answeredBy(actor -> ((TargetedUIState<String>) viewedBy(actor)).asList());
     }

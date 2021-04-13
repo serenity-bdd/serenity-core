@@ -105,7 +105,6 @@ public class ResultChecker {
 
         logger.info(white("SERENITY REPORTS"));
         logger.info("  - Full Report: " + index.toUri());
-
     }
 
     private String resultLine(String label, String value) {

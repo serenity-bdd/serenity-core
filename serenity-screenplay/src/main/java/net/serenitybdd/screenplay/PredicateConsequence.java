@@ -6,7 +6,6 @@ import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
-import org.assertj.core.api.Assertions;
 
 import java.util.Optional;
 import java.util.function.Predicate;

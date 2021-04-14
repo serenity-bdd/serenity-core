@@ -4,6 +4,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -48,7 +49,7 @@ class SaucelabsDriverBuilder extends RemoteDriverBuilder {
     private Capabilities findSaucelabsCapabilities(String options) {
 
         String driver = getSaucelabsDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
+        MutableCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
         SetProxyConfiguration.from(environmentVariables).in(capabilities);
         AddLoggingPreferences.from(environmentVariables).to(capabilities);

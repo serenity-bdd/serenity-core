@@ -6,6 +6,8 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Arrays;
@@ -31,8 +33,9 @@ public class AddCustomDriverCapabilities {
         return new AddCustomDriverCapabilities(environmentVariables);
     }
 
-    public DesiredCapabilities to(DesiredCapabilities capabilities) {
+    public Capabilities to(Capabilities capabilities) {
 
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities(capabilities);
         List<Class<?>> customCapabilityEnhancers
                 = ClassFinder.loadClasses()
                              .thatImplement(BeforeAWebdriverScenario.class)
@@ -48,16 +51,14 @@ public class AddCustomDriverCapabilities {
             );
         }
 
-        customCapabilityEnhancers.forEach(
-                enhancerType -> {
-                    try {
-                        ((BeforeAWebdriverScenario)enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, capabilities);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        for(Class enhancerType : customCapabilityEnhancers) {
+            try {
+                desiredCapabilities = ((BeforeAWebdriverScenario)enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, desiredCapabilities);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
 
-        return capabilities;
+        return desiredCapabilities;
     }
 }

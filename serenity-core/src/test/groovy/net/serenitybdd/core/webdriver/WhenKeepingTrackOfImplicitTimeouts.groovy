@@ -2,12 +2,13 @@ package net.serenitybdd.core.webdriver
 
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
+import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.TimeoutStack
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Specification
 
 import java.time.Duration
@@ -129,7 +130,10 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to set the implicit timeout"() {
         given:
-            WebDriverFacade driver = new WebDriverFacade(PhantomJSDriver, new WebDriverFactory());
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+            environmentVariables.setProperty("headless.mode","true");
+            environmentVariables.setProperty("chrome.switches","--headless");
+            WebDriverFacade driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory(),environmentVariables);
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
             pageObject.open()
         when:
@@ -140,7 +144,10 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to reset the implicit timeout"() {
         given:
-            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+            environmentVariables.setProperty("headless.mode","true");
+            environmentVariables.setProperty("chrome.switches","--headless");
+            def driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory(),environmentVariables);
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
             def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
         when:
@@ -153,7 +160,10 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to set and reset the implicit timeout using nested calls"() {
         given:
-            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+            environmentVariables.setProperty("headless.mode","true");
+            environmentVariables.setProperty("chrome.switches","--headless");
+            def driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory(),environmentVariables);
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
             def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
         when:

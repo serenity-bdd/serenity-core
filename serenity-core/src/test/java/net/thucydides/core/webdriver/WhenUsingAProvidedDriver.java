@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WhenUsingAProvidedDriver {
@@ -22,7 +21,10 @@ public class WhenUsingAProvidedDriver {
 
         @Override
         public WebDriver newDriver() {
-            return new HtmlUnitDriver();
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+            return new ChromeDriver(options);
         }
 
         @Override
@@ -30,7 +32,7 @@ public class WhenUsingAProvidedDriver {
             return false;
         }
 
-        public Class<? extends WebDriver> driverType() { return HtmlUnitDriver.class; }
+        public Class<? extends WebDriver> driverType() { return ChromeDriver.class; }
 
     }
 
@@ -51,13 +53,13 @@ public class WhenUsingAProvidedDriver {
 
     @Test
     public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_uninstantiated_driver() {
-        Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
+        Assert.assertEquals(facade.getDriverClass(), ChromeDriver.class);
     }
 
     @Test
     public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_instantiated_driver() {
         facade.getProxiedDriver();
-        Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
+        Assert.assertEquals(facade.getDriverClass(), ChromeDriver.class);
     }
 
 }

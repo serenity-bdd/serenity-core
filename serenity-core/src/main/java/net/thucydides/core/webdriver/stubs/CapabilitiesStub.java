@@ -28,11 +28,6 @@ public class CapabilitiesStub implements Capabilities {
     }
 
     @Override
-    public boolean isJavascriptEnabled() {
-        return false;
-    }
-
-    @Override
     public Map<String, Object> asMap() {
         return new HashMap<>();
     }

@@ -291,8 +291,8 @@ class WhenReadingUIValues extends Specification {
             TheLocation.of(target).viewedBy(actor).asList() == [new Point(10,10), new Point(20,20)]
     }
 
-    def coordinates1 = Mock(org.openqa.selenium.interactions.internal.Coordinates);
-    def coordinates2 = Mock(org.openqa.selenium.interactions.internal.Coordinates);
+    def coordinates1 = Mock(org.openqa.selenium.interactions.Coordinates);
+    def coordinates2 = Mock(org.openqa.selenium.interactions.Coordinates);
 
     def "should read coordinated value"() {
         when:

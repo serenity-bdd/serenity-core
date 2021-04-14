@@ -39,8 +39,10 @@ public class WhenResizingTheBrowser {
     public void should_resize_browser_automatically() {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
-
-        driver = factory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        environmentVariables.setProperty("chrome.switches","--headless");
+        //TODO
+        //driver = factory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        driver = factory.newInstanceOf(SupportedWebDriver.CHROME);
         page = new StaticSitePage(driver, 1000);
         page.open();
 

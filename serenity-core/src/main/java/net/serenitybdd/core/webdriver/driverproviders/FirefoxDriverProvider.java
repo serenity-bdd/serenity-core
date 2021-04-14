@@ -12,6 +12,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -66,7 +67,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         capabilities.setCapability("headless", ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false));
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
+        MutableCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
 
         return ProvideNewDriver.withConfiguration(environmentVariables,
                 enhancedCapabilities,

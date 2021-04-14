@@ -13,6 +13,7 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
         this.environmentVariables = environmentVariables;
     }
 
+    @Override
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities(new EdgeOptions());
 

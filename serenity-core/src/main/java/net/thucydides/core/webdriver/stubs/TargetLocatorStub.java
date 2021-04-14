@@ -1,9 +1,9 @@
 package net.thucydides.core.webdriver.stubs;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+
+
+
 
 public class TargetLocatorStub implements WebDriver.TargetLocator {
     
@@ -35,6 +35,11 @@ public class TargetLocatorStub implements WebDriver.TargetLocator {
 
     @Override
     public WebDriver window(String nameOrHandle) {
+        return webDriver;
+    }
+
+    @Override
+    public WebDriver newWindow(WindowType typeHint) {
         return webDriver;
     }
 

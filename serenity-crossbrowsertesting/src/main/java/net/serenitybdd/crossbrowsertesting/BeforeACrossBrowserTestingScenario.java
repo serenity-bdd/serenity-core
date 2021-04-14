@@ -6,6 +6,7 @@ import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -52,7 +53,7 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
         return capabilities;
     }
 
-    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties cbtProperties) {
+    private void setNonW3CCapabilities(MutableCapabilities capabilities, Properties cbtProperties) {
         cbtProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)

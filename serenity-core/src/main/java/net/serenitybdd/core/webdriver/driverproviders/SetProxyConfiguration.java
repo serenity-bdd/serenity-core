@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -16,7 +17,7 @@ public class SetProxyConfiguration {
         return new SetProxyConfiguration(environmentVariables);
     }
 
-    public void in(DesiredCapabilities capabilities) {
+    public void in(MutableCapabilities capabilities) {
         ConfiguredProxy.definedIn(environmentVariables).ifPresent(
                 proxy -> capabilities.setCapability(CapabilityType.PROXY, proxy)
         );

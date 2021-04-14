@@ -4,7 +4,6 @@ import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 class RedimensionConfiguration {
 
@@ -31,8 +30,7 @@ class RedimensionConfiguration {
     }
 
     public boolean supportsResizing(Class<? extends WebDriver> driverClass) {
-        return !( (AppiumDriver.class.isAssignableFrom(driverClass))
-                || (HtmlUnitDriver.class.isAssignableFrom(driverClass)));
+        return !( (AppiumDriver.class.isAssignableFrom(driverClass)));
     }
 
     private boolean isNotAMocked(WebDriver driver) {

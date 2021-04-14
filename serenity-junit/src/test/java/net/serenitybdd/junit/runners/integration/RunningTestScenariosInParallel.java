@@ -4,9 +4,8 @@ import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.samples.SamplePassingScenarioUsingHtmlUnit;
+import net.thucydides.samples.SamplePassingScenarioUsingChrome;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
@@ -37,7 +36,7 @@ public class RunningTestScenariosInParallel extends AbstractTestStepRunnerTest {
         SerenityRunner runner;
 
         public ScenarioThread()  throws InitializationError {
-            runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit.class);
+            runner = new SerenityRunner(SamplePassingScenarioUsingChrome.class);
         }
 
         public void run() {

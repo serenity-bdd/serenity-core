@@ -2,6 +2,7 @@ package net.thucydides.core.scheduling.fluent;
 
 import net.thucydides.core.scheduling.SerenityFluentWait;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public abstract class TimeSchedule<T> {
@@ -13,34 +14,36 @@ public abstract class TimeSchedule<T> {
         this.amount = amount;
     }
 
-    abstract protected SerenityFluentWait updateWaitBy(int amount, TimeUnit unit);
+    protected int getAmount() {
+        return amount;
+    }
+
+    abstract protected SerenityFluentWait updateWaitBy(Duration duration);
 
     public SerenityFluentWait milliseconds() {
-        return updateWaitBy(amount, TimeUnit.MILLISECONDS);
+        return updateWaitBy(Duration.ofMillis(amount));
     }
 
     public SerenityFluentWait second() {
-        return updateWaitBy(amount, TimeUnit.SECONDS);
+        return updateWaitBy(Duration.ofSeconds(amount));
     }
 
     public SerenityFluentWait seconds() {
-        return updateWaitBy(amount, TimeUnit.SECONDS);
+        return updateWaitBy(Duration.ofSeconds(amount));
     }
 
     public SerenityFluentWait minute() {
-        return updateWaitBy(amount, TimeUnit.MINUTES);
+        return updateWaitBy(Duration.ofMinutes(amount));
     }
 
-    public SerenityFluentWait minutes() {
-        return updateWaitBy(amount, TimeUnit.MINUTES);
-    }
+    public SerenityFluentWait minutes() { return updateWaitBy(Duration.ofMinutes(amount)); }
 
     public SerenityFluentWait hour() {
-        return updateWaitBy(amount, TimeUnit.HOURS);
+        return updateWaitBy(Duration.ofHours(amount));
     }
 
     public SerenityFluentWait hours() {
-        return updateWaitBy(amount, TimeUnit.HOURS);
+        return updateWaitBy(Duration.ofHours(amount));
     }
 
 }

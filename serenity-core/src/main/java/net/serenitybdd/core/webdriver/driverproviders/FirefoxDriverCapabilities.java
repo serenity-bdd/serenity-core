@@ -12,7 +12,7 @@ import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -116,9 +116,10 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     private FirefoxProfile buildFirefoxProfile() {
         String profileName = ThucydidesSystemProperty.WEBDRIVER_FIREFOX_PROFILE.from(environmentVariables);
         FilePathParser parser = new FilePathParser(environmentVariables);
-        DesiredCapabilities firefoxCapabilities = DesiredCapabilities.firefox();
+        FirefoxOptions firefoxCapabilities = new FirefoxOptions();
         if (StringUtils.isNotEmpty(profileName)) {
-            firefoxCapabilities.setCapability(FirefoxDriver.PROFILE, parser.getInstanciatedPath(profileName));
+            //firefoxCapabilities.setCapability(FirefoxDriver.PROFILE, parser.getInstanciatedPath(profileName));
+            firefoxCapabilities.setProfile(new FirefoxProfile(new File(parser.getInstanciatedPath(profileName))));
         }
 
         FirefoxProfile profile;

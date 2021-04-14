@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;

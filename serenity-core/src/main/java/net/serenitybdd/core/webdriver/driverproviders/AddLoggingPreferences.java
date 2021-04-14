@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,7 +25,7 @@ public class AddLoggingPreferences {
         return new AddLoggingPreferences(environmentVariables);
     }
 
-    public void to(DesiredCapabilities capabilities) {
+    public void to(MutableCapabilities capabilities) {
         LoggingPreferences logPrefs = new LoggingPreferences();
 
         Properties logPrefProperties = environmentVariables.getPropertiesWithPrefix("webdriver.logprefs");

@@ -8,7 +8,6 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.HashMap;
@@ -69,14 +68,13 @@ public class DriverCapabilities {
         selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(SAFARI, DesiredCapabilities::safari);
-        selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
-        selectors.put(OPERA, DesiredCapabilities::operaBlink);
-        selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
+        selectors.put(SAFARI, new SafariDriverCapabilities());
+        selectors.put(OPERA, new OperaDriverCapabilties());
+        selectors.put(IEXPLORER, new InternetExplorerDriverCapabilities());
         selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
-        selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
-        selectors.put(IPHONE, DesiredCapabilities::iphone);
-        selectors.put(ANDROID, DesiredCapabilities::android);
+        // TODO - clarify
+        //selectors.put(IPHONE, DesiredCapabilities::iphone);
+        //selectors.put(ANDROID, DesiredCapabilities::android);
         return selectors;
     }
 

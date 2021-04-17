@@ -56,5 +56,10 @@ class JUnit5NestedExampleTest {
         void sampleTestForMethodA() {
             System.out.println("Example test for method A");
         }
+
+        @Test
+        void sampleTestForMethodB() {
+            System.out.println("Example test for method B");
+        }
     }
 }

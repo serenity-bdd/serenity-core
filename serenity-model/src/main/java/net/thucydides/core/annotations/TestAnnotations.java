@@ -72,10 +72,7 @@ public class TestAnnotations {
     private java.util.Optional<String> getAnnotatedTitle(String methodName) {
         java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
-            Title titleAnnotation = testMethod.get().getAnnotation(Title.class);
-            if (titleAnnotation != null) {
-                return java.util.Optional.of(titleAnnotation.value());
-            }
+            return JUnitAdapter.getTitleAnnotation(testMethod.get());
         }
         return java.util.Optional.empty();
     }
@@ -94,7 +91,7 @@ public class TestAnnotations {
             if (baseMethodName == null) {
                 return java.util.Optional.empty();
             } else {
-                return java.util.Optional.ofNullable(testClass.getMethod(baseMethodName));
+                return java.util.Optional.ofNullable(testClass.getDeclaredMethod(baseMethodName));
             }
         } catch (NoSuchMethodException e) {
             return java.util.Optional.empty();

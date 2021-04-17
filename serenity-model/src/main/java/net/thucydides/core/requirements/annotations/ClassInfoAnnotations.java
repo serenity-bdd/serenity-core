@@ -53,6 +53,17 @@ public class ClassInfoAnnotations {
             allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
         } catch (java.lang.NoClassDefFoundError ignored) {}
 
+        Class<?>[] innerClasses = classInfo.load().getClasses();
+        for(Class innerClass : innerClasses) {
+            allMethods.addAll(Arrays.asList(innerClass.getMethods()));
+        }
+
+        Class<?>[] declaredInnerClasses = classInfo.load().getClasses();
+        for(Class innerClass : declaredInnerClasses) {
+            allMethods.addAll(Arrays.asList(innerClass.getDeclaredMethods()));
+        }
+
+
         return allMethods;
     }
 }

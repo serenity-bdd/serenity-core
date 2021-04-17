@@ -373,10 +373,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
             StringBuffer testName = new StringBuffer(methodSource.getMethodName());
-            if(testIdentifier.getDisplayName() != null)
+            /*if(testIdentifier.getDisplayName() != null)
             {
+                //qualifier not needed
                 testName.append("%" + testIdentifier.getDisplayName());
-            }
+            }*/
             StepEventBus.getEventBus().testStarted(
                     Optional.ofNullable(testName.toString()).orElse("Initialisation"),
                     methodSource.getJavaClass());

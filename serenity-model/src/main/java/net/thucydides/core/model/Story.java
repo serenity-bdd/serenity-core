@@ -9,6 +9,8 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -26,14 +28,24 @@ public class Story {
     private String narrative;
     private ApplicationFeature feature;
     private String type;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Story.class);
 
-    protected Story(final Class<?> userStoryClass) {
+
+    protected Story(Class<?> userStoryClass) {
+        LOGGER.trace("Create story from class " + userStoryClass);
+        if(userStoryClass.getEnclosingClass() != null) {
+            LOGGER.trace("Found inner story class " + userStoryClass + " " + userStoryClass.getEnclosingClass());
+            userStoryClass = userStoryClass.getEnclosingClass();
+        }
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
         this.storyName = humanize(userStoryClass.getSimpleName());
+
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
         this.type = FeatureType.STORY.toString();
+        LOGGER.trace("Initialize story with name " + storyName);
+        LOGGER.trace("Initialize story with " + storyClassName + " " + userStoryClass + " " + path + " feature: " + feature);
     }
 
     private String pathOf(Class<?> userStoryClass) {
@@ -77,6 +89,7 @@ public class Story {
                  final ApplicationFeature feature) {
         this.id = id;
         this.storyName = storyName;
+        LOGGER.trace("Initialize story with name " + storyName);
         this.storyClassName = storyClassName;
         this.feature = feature;
         this.path = path;
@@ -286,11 +299,14 @@ public class Story {
     }
 
     public TestTag asQualifiedTag() {
+        //TODO remove logging
         String parentName = (getPath() != null) ? humanize(LastElement.of(getPath())) : null;
-
-        return (isNotEmpty(parentName)) ?
+        LOGGER.trace("StoryAsQualifiedTag path " + getPath() + " parent name " + parentName);
+        TestTag returnTag = (isNotEmpty(parentName)) ?
                 TestTag.withName(parentName + "/" + storyName).andType(type) :
                 TestTag.withName(storyName).andType(type);
+        LOGGER.info("StoryAsQualifiedTag testTag " + returnTag);
+        return returnTag;
     }
 
 }

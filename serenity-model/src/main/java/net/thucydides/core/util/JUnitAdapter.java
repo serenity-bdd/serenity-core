@@ -1,9 +1,13 @@
 package net.thucydides.core.util;
 
 import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.annotations.Title;
 import net.thucydides.core.tags.Taggable;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -31,14 +35,24 @@ import java.util.function.Function;
  */
 public class JUnitAdapter {
 
+    private final static Logger logger = LoggerFactory.getLogger(JUnitAdapter.class);
+
     private static List<JUnitStrategy> strategies = new ArrayList<>();
+
+    private static Optional<JUnit4Strategy> jUnit4Strategy;
+
+    private static Optional<JUnit5Strategy> jUnit5Strategy;
 
     static {
         if (isClassPresent("org.junit.runner.RunWith")) {
-            strategies.add(new JUnit4Strategy());
+            JUnit4Strategy strategy = new JUnit4Strategy();
+            jUnit4Strategy = Optional.of(strategy);
+            strategies.add(strategy);
         }
         if (isClassPresent("org.junit.jupiter.api.Test")) {
-            strategies.add(new JUnit5Strategy());
+            JUnit5Strategy strategy = new JUnit5Strategy();
+            jUnit5Strategy = Optional.of(strategy);
+            strategies.add(strategy);
         }
     }
 
@@ -108,6 +122,20 @@ public class JUnitAdapter {
         }
     }
 
+    public static Optional<String> getTitleAnnotation(Method testMethod) {
+        if(jUnit4Strategy.isPresent()) {
+            Optional<String> junit4Title = jUnit4Strategy.flatMap(strategy -> strategy.getTitleAnnotation(testMethod));
+            if (junit4Title.isPresent()) {
+                return junit4Title;
+            }
+        }
+        if(jUnit5Strategy.isPresent()) {
+            return jUnit5Strategy.flatMap(strategy -> strategy.getTitleAnnotation(testMethod));
+        }
+        return Optional.empty();
+    }
+
+
     private interface JUnitStrategy {
 
         boolean isTestClass(final Class<?> testClass);
@@ -124,6 +152,7 @@ public class JUnitAdapter {
 
         boolean isIgnored(final Method method);
 
+        Optional<String> getTitleAnnotation(Method testMethod);
     }
 
     private static class JUnit4Strategy implements JUnitStrategy {
@@ -176,6 +205,15 @@ public class JUnitAdapter {
             );
         }
 
+        @Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            Title titleAnnotation = testMethod.getAnnotation(Title.class);
+            if (titleAnnotation != null) {
+                return java.util.Optional.of(titleAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }
+
     }
 
     private static class JUnit5Strategy implements JUnitStrategy {
@@ -184,6 +222,12 @@ public class JUnitAdapter {
         public boolean isTestClass(final Class<?> testClass) {
             for (final Method method : testClass.getDeclaredMethods()) {
                 if (isTestMethod(method)) {
+                    return true;
+                }
+            }
+            //JUnit5 nested tests
+            for(Class innerClass : testClass.getDeclaredClasses()) {
+                if(isTestClass(innerClass)){
                     return true;
                 }
             }
@@ -204,7 +248,9 @@ public class JUnitAdapter {
 
         @Override
         public boolean isSerenityTestCase(Class<?> testClass) {
-            return hasSerenityAnnotation(testClass, new HashSet<>());
+            //return hasSerenityAnnotation(testClass, new HashSet<>());
+            //no annotation is needed
+            return true;
         }
 
         @Override
@@ -246,6 +292,14 @@ public class JUnitAdapter {
             return false;
         }
 
+        @Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
+            if (displayNameAnnotation != null) {
+                return java.util.Optional.of(displayNameAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package net.serenitybdd.junit5;
 
 import com.google.common.base.Preconditions;
+import net.thucydides.core.annotations.DriverOptions;
 import net.thucydides.core.annotations.WithDriver;
 
 import java.lang.reflect.Method;
@@ -24,6 +25,11 @@ public class JUnit5TestMethodAnnotations {
     public String specifiedDriver() {
         Preconditions.checkArgument(isDriverSpecified() == true);
         return (method.getAnnotation(WithDriver.class).value());
+    }
+
+    public String driverOptions() {
+        Preconditions.checkArgument(isDriverSpecified() == true);
+        return (method.getAnnotation(DriverOptions.class).value());
     }
 
 }

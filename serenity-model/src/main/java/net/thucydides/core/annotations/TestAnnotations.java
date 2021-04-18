@@ -268,13 +268,13 @@ public class TestAnnotations {
         return tags;
     }
 
-    private void addTag(List<TestTag> tags, WithTag tagAnnotation) {
+    public static void addTag(List<TestTag> tags, WithTag tagAnnotation) {
         if (tagAnnotation != null) {
             tags.add(convertToTestTag(tagAnnotation));
         }
     }
 
-    private void addTags(List<TestTag> tags, WithTags tagSet) {
+    public static void addTags(List<TestTag> tags, WithTags tagSet) {
         if (tagSet != null) {
 
             Set<TestTag> newTags = Arrays.stream(tagSet.value())
@@ -285,7 +285,7 @@ public class TestAnnotations {
         }
     }
 
-    private void addTagValues(List<TestTag> tags, WithTagValuesOf tagSet) {
+    public static void addTagValues(List<TestTag> tags, WithTagValuesOf tagSet) {
         if (tagSet != null) {
 
             Set<TestTag> newTags = Arrays.stream(tagSet.value())
@@ -300,16 +300,15 @@ public class TestAnnotations {
     private List<TestTag> getTagsFor(String methodName) {
         List<TestTag> tags = new ArrayList<>();
 
-        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
+        Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
-            addTagValues(tags, testMethod.get().getAnnotation(WithTagValuesOf.class));
-            addTags(tags, testMethod.get().getAnnotation(WithTags.class));
-            addTag(tags, testMethod.get().getAnnotation(WithTag.class));
+            return JUnitAdapter.getTagsFor(testMethod.get());
         }
         return tags;
+
     }
 
-    private TestTag convertToTestTag(WithTag withTag) {
+    public static TestTag convertToTestTag(WithTag withTag) {
         if (StringUtils.isEmpty(withTag.value())) {
             return TestTag.withName(withTag.name()).andType(withTag.type());
         } else {

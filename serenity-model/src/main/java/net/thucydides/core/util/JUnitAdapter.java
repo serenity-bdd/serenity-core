@@ -1,10 +1,14 @@
 package net.thucydides.core.util;
 
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.annotations.Title;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.tags.TagConverters;
 import net.thucydides.core.tags.Taggable;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +17,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
+
+
+
 
 /**
  * This is an INTERNAL helper class of serenity, it should not be used directly and may be subject to refactoring.
@@ -39,9 +46,9 @@ public class JUnitAdapter {
 
     private static List<JUnitStrategy> strategies = new ArrayList<>();
 
-    private static Optional<JUnit4Strategy> jUnit4Strategy;
+    private static Optional<JUnit4Strategy> jUnit4Strategy = Optional.empty();
 
-    private static Optional<JUnit5Strategy> jUnit5Strategy;
+    private static Optional<JUnit5Strategy> jUnit5Strategy = Optional.empty();
 
     static {
         if (isClassPresent("org.junit.runner.RunWith")) {
@@ -135,6 +142,18 @@ public class JUnitAdapter {
         return Optional.empty();
     }
 
+    public static List<TestTag> getTagsFor(Method testMethod) {
+        List<TestTag> allTags = new ArrayList<>();
+        if(jUnit4Strategy.isPresent()) {
+           List<TestTag> testTagsJUnit4 = jUnit4Strategy.get().getTagsFor(testMethod);
+           allTags.addAll(testTagsJUnit4);
+        }
+        if(jUnit5Strategy.isPresent()) {
+            List<TestTag> testTagsJUnit5 = jUnit5Strategy.get().getTagsFor(testMethod);
+            allTags.addAll(testTagsJUnit5);
+        }
+        return allTags;
+    }
 
     private interface JUnitStrategy {
 
@@ -153,6 +172,8 @@ public class JUnitAdapter {
         boolean isIgnored(final Method method);
 
         Optional<String> getTitleAnnotation(Method testMethod);
+
+        List<TestTag> getTagsFor(Method testMethod);
     }
 
     private static class JUnit4Strategy implements JUnitStrategy {
@@ -212,6 +233,16 @@ public class JUnitAdapter {
                 return java.util.Optional.of(titleAnnotation.value());
             }
             return java.util.Optional.empty();
+        }
+
+
+        @Override
+        public List<TestTag> getTagsFor(Method testMethod) {
+            List<TestTag> tags = new ArrayList<>();
+            TestAnnotations.addTagValues(tags, testMethod.getAnnotation(WithTagValuesOf.class));
+            TestAnnotations.addTags(tags, testMethod.getAnnotation(WithTags.class));
+            TestAnnotations.addTag(tags, testMethod.getAnnotation(WithTag.class));
+            return tags;
         }
 
     }
@@ -289,8 +320,22 @@ public class JUnitAdapter {
         public boolean isATaggableClass(final Class<?> testClass) {
             // serenity tagging mechanism currently not supported for JUnit 5, since JUnit 5 has its own tagging
             // feature.
-            return false;
+            return true;
         }
+
+        /*@Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
+            if (displayNameAnnotation != null) {
+                String innerClassName = "";
+                Class<?> enclosingClass = testMethod.getDeclaringClass().getEnclosingClass();
+                if( enclosingClass != null) {
+                    innerClassName = testMethod.getDeclaringClass().getSimpleName();
+                }
+                return java.util.Optional.of("[" + innerClassName + "] " + displayNameAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }*/
 
         @Override
         public Optional<String> getTitleAnnotation(Method testMethod) {
@@ -299,6 +344,24 @@ public class JUnitAdapter {
                 return java.util.Optional.of(displayNameAnnotation.value());
             }
             return java.util.Optional.empty();
+        }
+
+
+        @Override public List<TestTag> getTagsFor(Method testMethod) {
+
+            List<TestTag> tags = new ArrayList<>();
+            for(Annotation currentAnnotation : testMethod.getDeclaredAnnotations()) {
+                if(currentAnnotation instanceof Tag) {
+                    tags.add(TestTag.withValue(((Tag)currentAnnotation).value()));
+                }
+                if(currentAnnotation instanceof Tags) {
+                    Tag[] allTags = ((Tags) currentAnnotation).value();
+                    Arrays.stream(allTags).forEach(tag->tags.add(TestTag.withValue(tag.value())));
+                }
+            }
+            Thread.dumpStack();
+            System.out.println("XXXGetTagsForcalled " + testMethod + " found  " + tags);
+            return tags;
         }
     }
 

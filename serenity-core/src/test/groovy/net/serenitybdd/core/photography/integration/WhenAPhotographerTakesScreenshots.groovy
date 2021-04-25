@@ -1,6 +1,6 @@
 package net.serenitybdd.core.photography.integration
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy
+import com.assertthat.selenium_shutterbug.core.Capture
 import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
 import net.serenitybdd.core.photography.ScreenshotPhoto
@@ -27,7 +27,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "when a photographer takes a screenshot the photographer returns the future path of the screenshot"() {
         given:
-            def photographer = new Photographer(darkroom,ScrollStrategy.VIEWPORT_ONLY)
+            def photographer = new Photographer(darkroom,Capture.VIEWPORT)
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
                                                 .with(driver)
@@ -39,7 +39,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "a screenshot of the whole page can also be taken."() {
         given:
-        def photographer = new Photographer(darkroom,ScrollStrategy.WHOLE_PAGE)
+        def photographer = new Photographer(darkroom,Capture.FULL)
         when:
         ScreenshotPhoto photo = photographer.takesAScreenshot()
                 .with(driver)
@@ -52,7 +52,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
     @Ignore("Unstable on SnapCI")
     def "when a photographer takes a screenshot the screenshot should be stored after processing"() {
         given:
-        def photographer = new Photographer(darkroom,ScrollStrategy.VIEWPORT_ONLY);
+        def photographer = new Photographer(darkroom, Capture.VIEWPORT);
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
                     .with(driver)
@@ -64,7 +64,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "a screenshot that has already been stored should not be stored again"() {
         given:
-        def photographer = new Photographer(darkroom,ScrollStrategy.VIEWPORT_ONLY);
+        def photographer = new Photographer(darkroom,Capture.VIEWPORT);
             ScreenshotPhoto previousPhoto = photographer.takesAScreenshot()
                                                          .with(driver)
                                                          .andSaveToDirectory(screenshotDirectory);
@@ -80,7 +80,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "a screenshot that is already the correct dimensions should not be resized"() {
         given:
-        def photographer = new Photographer(darkroom,ScrollStrategy.VIEWPORT_ONLY);
+        def photographer = new Photographer(darkroom,Captur.VIEWPORT);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
@@ -95,7 +95,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
     @BlurScreenshots(BlurLevel.HEAVY)
     def "blurred screenshots should be blurred"() {
         given:
-            def photographer = new Photographer(darkroom,ScrollStrategy.VIEWPORT_ONLY);
+            def photographer = new Photographer(darkroom,Capture.VIEWPORT);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
@@ -110,7 +110,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "unblurred screenshots should not be blurred"() {
         given:
-        def photographer = new Photographer(darkroom, ScrollStrategy.VIEWPORT_ONLY);
+        def photographer = new Photographer(darkroom, Capture.VIEWPORT);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:

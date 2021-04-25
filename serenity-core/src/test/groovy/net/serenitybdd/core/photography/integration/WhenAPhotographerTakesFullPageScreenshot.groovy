@@ -1,6 +1,6 @@
 package net.serenitybdd.core.photography.integration
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy
+import com.assertthat.selenium_shutterbug.core.Capture
 import com.google.common.collect.Lists
 import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
@@ -17,7 +17,7 @@ class WhenAPhotographerTakesFullPageScreenshot extends Specification {
 
     def "when a photographer takes full page screenshot"() {
         given:
-            def photographer = new Photographer(darkroom, ScrollStrategy.WHOLE_PAGE);
+            def photographer = new Photographer(darkroom, Capture.FULL);
         when:
             List<ScreenshotPhoto> photos = Lists.newArrayList();
             def driver

@@ -41,7 +41,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <junit.version>4.13.1</junit.version>
-        <groovy.version>3.0.7</groovy.version>
+        <groovy.version>3.0.8</groovy.version>
         <spock.version>2.0-M3-groovy-3.0</spock.version>
         <byte-buddy.version>1.10.10</byte-buddy.version>
         <guava.version>30.1-jre</guava.version>
@@ -76,10 +76,10 @@
         <appium.version>7.3.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <phantomjs.version>1.4.4</phantomjs.version>
-        <webdrivermanager.version>4.3.1</webdrivermanager.version>
+        <webdrivermanager.version>4.4.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
-        <shutterbug.version>0.9.3</shutterbug.version>
-        <ngwebdriver.version>1.1.5</ngwebdriver.version>
+        <shutterbug.version>1.4</shutterbug.version>
+        <ngwebdriver.version>1.1.6</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
         <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
@@ -93,7 +93,8 @@
         <javassist.version>3.21.0-GA</javassist.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.4.10</kotlin.version>
+<!--        <kotlin.version>1.4.32</kotlin.version>-->
+        <kotlin.version>1.4.32</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>

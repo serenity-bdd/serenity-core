@@ -1,6 +1,6 @@
 package net.serenitybdd.core.photography.integration
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy
+import com.assertthat.selenium_shutterbug.core.Capture
 import com.google.common.collect.Lists
 import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
@@ -22,7 +22,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
     def "when a photographer takes a series of screenshots they all should be stored"() {
         given:
-            def photographer = new Photographer(darkroom, ScrollStrategy.VIEWPORT_ONLY);
+            def photographer = new Photographer(darkroom, Capture.VIEWPORT);
         when:
             List<ScreenshotPhoto> photos = Lists.newArrayList();
             def driver
@@ -55,7 +55,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
     @Ignore("For exploratory and performance testing")
     def "should handle multiple screenshots in parallel"() {
         given:
-            def photographer = new Photographer(darkroom, ScrollStrategy.VIEWPORT_ONLY);
+            def photographer = new Photographer(darkroom, Capture.VIEWPORT);
             def List<Future<List<ScreenshotPhoto>>> processing = new ArrayList<>();
             def List<ScreenshotPhoto> screenshots = new ArrayList<>();
             def Integer threads = 10

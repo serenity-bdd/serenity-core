@@ -1,5 +1,6 @@
 package net.thucydides.core;
 
+import io.cucumber.java.hu.De;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -1138,7 +1139,18 @@ public enum ThucydidesSystemProperty {
     /**
      * If set, Serenity will use full page screenshot strategy.
      */
+    @Deprecated
     SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY,
+
+    /**
+     * Define the Shutterbug screen capture srategy:
+     *  - VIEWPORT: capture visible part of the viewport only
+     *  - FULL: full page screenshot using devtools
+     *  - FULL_SCROLL: full page screenshot using scroll & stitch method
+     *  - VERTICAL_SCROLL:vertical scroll page screenshot using scroll & stitch method
+     *  - HORIZONTAL_SCROLL: horizontal scroll page screenshot using scroll & stitch method
+     */
+    SERENITY_SCREENSHOT_STRATEGY,
 
     /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens

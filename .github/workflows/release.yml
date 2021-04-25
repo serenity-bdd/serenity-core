@@ -32,7 +32,7 @@ jobs:
           git push --tags
 
       - name: Release Build
-        uses: samuelmeuli/action-maven-publish@v1
+        uses: samuelmeuli/action-maven-publish@v1.4.0
         with:
           gpg_private_key: ${{ secrets.gpg_private_key }}
           gpg_passphrase: ${{ secrets.gpg_passphrase }}

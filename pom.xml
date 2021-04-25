@@ -5,7 +5,7 @@
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-bdd</artifactId>
-    <version>2.4.6-SNAPSHOT</version>
+    <version>2.4.8</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>

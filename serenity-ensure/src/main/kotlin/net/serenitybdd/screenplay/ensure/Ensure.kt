@@ -37,6 +37,11 @@ fun <A> thatTheAnswersTo(description: String, question: Question<Collection<A>>)
 
 fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.subject, question)
 
+fun <A> thatTheListOf(description: String, question: Question<List<A>>) =
+        CollectionEnsure(KnowableListAnswer(question, description), description)
+
+fun <A> thatTheListOf(question: Question<List<A>>) = thatTheListOf(question.subject, question)
+
 fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)

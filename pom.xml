@@ -704,6 +704,9 @@
     <profiles>
         <profile>
             <id>deploy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

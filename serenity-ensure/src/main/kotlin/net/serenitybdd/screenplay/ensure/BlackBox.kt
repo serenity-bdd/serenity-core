@@ -50,6 +50,7 @@ object BlackBox {
             softAssertions.forEachIndexed { index, error ->
                 renderedErrorMessages.append("- ERROR ${index + 1}) ${normaliseSpacingIn(error)} ${System.lineSeparator()}")
             }
+            endSoftAssertions();
             throw AssertionError(renderedErrorMessages)
         }
     }

@@ -220,19 +220,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                 .findFirst();
     }
 
-    private final String SERENITY_CONF_FILE = "(.*)[\\/\\\\]?src[\\/\\\\]test[\\/\\\\]resources[\\/\\\\]serenity.conf";
-
+    private final String SERENITY_CONF_FILE = "src" + File.separator + "test" + File.separator + "resources" + File.separator + "serenity.conf";
     private Optional<String> serenityConfFileInASensibleLocation() {
-//        try {
             Path configFileInCurrentDirectory = Paths.get(SERENITY_CONF_FILE);
             return configFileInCurrentDirectory.toFile().exists() ? Optional.of(configFileInCurrentDirectory.toAbsolutePath().toString()) : Optional.empty();
-//            return SearchForFilesWithName.matching(Paths.get("."), SERENITY_CONF_FILE).getMatchingFiles()
-//                    .stream()
-//                    .findFirst()
-//                    .map(path -> path.toAbsolutePath().toString());
-//        } catch (IOException e) {
-//            return Optional.empty();
-//        }
     }
 
     private String defaultPropertiesFileName() {

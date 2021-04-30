@@ -93,7 +93,7 @@
         <javassist.version>3.21.0-GA</javassist.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.version>1.4.31</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>

@@ -13,7 +13,7 @@ public class JUnitInjectors {
 
     public static Injector getInjector() {
         if (injector == null) {
-            injector = Guice.createInjector(new ThucydidesJUnitModule());
+            injector = Guice.createInjector(new SerenityJUnitModule());
         }
         return injector;
     }

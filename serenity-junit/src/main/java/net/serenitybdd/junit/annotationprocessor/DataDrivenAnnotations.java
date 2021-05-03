@@ -181,15 +181,11 @@ public class DataDrivenAnnotations {
     }
 
     private List<Method> getAnnotatedMethods(){
-        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) ->{
-            return method.getDeclaredAnnotations() != null;
-        }).collect(Collectors.toList());
+        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) -> method.getDeclaredAnnotations() != null).collect(Collectors.toList());
     }
 
     private List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationClass){
-        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) ->{
-            return method.getAnnotation(annotationClass) != null;
-        }).collect(Collectors.toList());
+        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) -> method.getAnnotation(annotationClass) != null).collect(Collectors.toList());
     }
 
 }

@@ -10,7 +10,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.serenitybdd.junit.listeners.TestCountListener;
 import net.serenitybdd.junit.listeners.TestCounter;
 
-public class ThucydidesJUnitModule extends AbstractModule {
+public class SerenityJUnitModule extends AbstractModule {
 
     @Override
     protected void configure() {

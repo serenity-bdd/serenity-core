@@ -678,12 +678,12 @@
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
         <module>serenity-core</module>
+        <module>serenity-screenplay</module>
         <module>serenity-rest-assured</module>
         <module>serenity-reports</module>
         <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
         <module>serenity-junit</module>
-        <module>serenity-screenplay</module>
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>

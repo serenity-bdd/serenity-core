@@ -678,7 +678,6 @@
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
         <module>serenity-core</module>
-        <module>serenity-screenplay</module>
         <module>serenity-rest-assured</module>
         <module>serenity-reports</module>
         <module>serenity-reports-configuration</module>
@@ -699,6 +698,8 @@
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>
         <module>serenity-screenplay-playwright</module>
+        <module>serenity-screenplay</module>
+
     </modules>
     <profiles>
         <profile>

@@ -748,6 +748,10 @@
                 </plugins>
             </build>
             <modules>
+                <module>serenity-report-resources</module>
+                <module>serenity-sample-alternative-resources</module>
+                <module>serenity-model</module>
+                <module>serenity-core</module>
                 <module>serenity-screenplay</module>
             </modules>
         </profile>

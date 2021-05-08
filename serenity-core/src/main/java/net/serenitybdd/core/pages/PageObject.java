@@ -631,10 +631,6 @@ public abstract class PageObject {
         }
     }
 
-    private long waitForTimeoutInSecondsWithAMinimumOfOneSecond() {
-        return (getWaitForTimeout().getSeconds() < 1) ? 1 : (getWaitForTimeout().getSeconds());
-    }
-
     public long waitForTimeoutInMilliseconds() {
         return getWaitForTimeout().toMillis();
     }
@@ -1007,6 +1003,22 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(By bySelector) {
         return element(bySelector);
     }
+
+    /**
+     * Return the text value of a given element
+     */
+    public String textOf(WithLocator locator) { return $(locator).getText(); }
+    public String textOf(WithByLocator locator) { return $(locator).getText(); }
+    public String textOf(String xpathOrCssSelector, Object... arguments) { return $(xpathOrCssSelector, arguments).getText(); }
+    public String textOf(By bySelector) { return $(bySelector).getText(); }
+
+    /**
+     * Return the text value of a given element
+     */
+    public String textContentOf(WithLocator locator) { return $(locator).getTextContent(); }
+    public String textContentOf(WithByLocator locator) { return $(locator).getTextContent(); }
+    public String textContentOf(String xpathOrCssSelector, Object... arguments) { return $(xpathOrCssSelector, arguments).getTextContent(); }
+    public String textContentOf(By bySelector) { return $(bySelector).getTextContent(); }
 
     public ListOfWebElementFacades $$(String xpathOrCssSelector, Object... arguments) {
         return findAll(xpathOrCssSelector, arguments);

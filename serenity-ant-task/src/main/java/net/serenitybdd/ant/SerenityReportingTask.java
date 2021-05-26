@@ -43,7 +43,7 @@ public class SerenityReportingTask extends Task {
 
     private static final String DEFAULT_SOURCE = "target/site/serenity";
 
-    private PathProcessor pathProcessor = new PathProcessor();
+    private final PathProcessor pathProcessor = new PathProcessor();
 
     public Path getSourceDirectoryFile() {
         return Paths.get(pathProcessor.normalize(getSourceDirectory()));

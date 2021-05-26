@@ -2,7 +2,6 @@
 
     <target name="define.tasks">
         <taskdef name="serenityreport" classname="net.serenitybdd.ant.SerenityReportingTask" />
-
     </target>
 
     <target name="serenity.reports" depends="define.tasks">

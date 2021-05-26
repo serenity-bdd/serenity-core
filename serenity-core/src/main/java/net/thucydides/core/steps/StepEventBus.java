@@ -315,6 +315,12 @@ public class StepEventBus {
         clear();
     }
 
+    public void finishTestRun() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testRunFinished();
+        }
+    }
+
     public void testFinished() {
         testFinished(false);
     }

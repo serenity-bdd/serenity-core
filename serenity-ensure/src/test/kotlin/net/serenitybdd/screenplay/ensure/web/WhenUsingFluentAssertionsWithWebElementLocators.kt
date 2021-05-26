@@ -41,8 +41,10 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        WebDriverManager.phantomjs().setup();
-        driver = PhantomJSDriver()
+        WebDriverManager.chromedriver().setup();
+        val options = ChromeOptions()
+        options.setHeadless(true)
+        driver = ChromeDriver(options)
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)

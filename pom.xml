@@ -4,7 +4,7 @@
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-bdd</artifactId>
-    <version>2.4.34</version>
+    <version>2.4.35-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
@@ -78,7 +78,7 @@
         <phantomjs.version>1.4.4</phantomjs.version>
         <webdrivermanager.version>4.4.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
-        <shutterbug.version>1.4</shutterbug.version>
+        <shutterbug.version>1.5</shutterbug.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>

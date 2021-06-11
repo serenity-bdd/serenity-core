@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
-import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
+import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 
@@ -177,7 +177,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private void startTestAtEventBus(TestIdentifier testIdentifier) {
-        StepEventBus.getEventBus().setTestSource(TestSourceType.TEST_SOURCE_JUNIT.getValue());
+        StepEventBus.getEventBus().setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
         String displayName = removeEndBracketsFromDisplayName(testIdentifier.getDisplayName());
         if( isMethodSource(testIdentifier) ) {
             String className = ((MethodSource) testIdentifier.getSource().get()).getClassName();
@@ -321,7 +321,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         //if (testingThisTest(description)) {
         updateResultsUsingTestAnnotations(methodSource);
         StepEventBus.getEventBus().testFinished();
-        StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
+        StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
     }
 
     private void updateResultsUsingTestAnnotations(MethodSource methodSource) {
@@ -371,7 +371,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             startTestSuiteForFirstTest(testIdentifier);
             logger.info(Thread.currentThread() + " Test started " + testIdentifier);
             StepEventBus.getEventBus().clear();
-            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
+            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
             StringBuffer testName = new StringBuffer(methodSource.getMethodName());
             /*if(testIdentifier.getDisplayName() != null)
             {

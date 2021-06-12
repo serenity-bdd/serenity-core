@@ -11,7 +11,8 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
 
     @Override
     public boolean canHandleTestSource(String testType) {
-        return TestSourceType.TEST_SOURCE_JUNIT.getValue().equals(testType);
+        return TestSourceType.TEST_SOURCE_JUNIT.getValue().equals(testType) ||
+                TestSourceType.TEST_SOURCE_JUNIT5.getValue().equals(testType);
     }
 
     @Override

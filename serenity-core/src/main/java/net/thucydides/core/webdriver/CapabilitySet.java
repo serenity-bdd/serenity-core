@@ -59,7 +59,10 @@ class CapabilitySet {
                     int lastColonIndex = capability.lastIndexOf(":", lastIndex);
                     if (lastColonIndex > 0) {
                         colonIndex = lastColonIndex;
-                        if ((capability.length() >= colonIndex + 1) && isFollowedByPathSeparator(capability, colonIndex)) {
+                        // Check if colon is part of file path or JSON object
+                        if ((capability.length() >= colonIndex + 1)
+                            && (isFollowedByPathSeparator(capability, colonIndex) || isWithinJsonObject(capability, colonIndex))) {
+
                             if (lastIndex == colonIndex - 1) {
                                 colonIndexFound = true;
                                 //been here before, only single colon followed by a path separator found
@@ -84,6 +87,16 @@ class CapabilitySet {
 
         private boolean isFollowedByPathSeparator(String capability, int colonIndex) {
             return (capability.charAt(colonIndex+1) =='\\') || (capability.charAt(colonIndex+1) =='/');
+        }
+
+        /**
+         * Check if colon is between opening and closing curly brackets
+         */
+        private boolean isWithinJsonObject(String capability, int colonIndex) {
+            int openingBracketIndex = capability.indexOf('{');
+            int closingBracketIndex = capability.indexOf('}');
+
+            return (openingBracketIndex > 0) && (openingBracketIndex < colonIndex) && (colonIndex < closingBracketIndex);
         }
 
         public String getName() {

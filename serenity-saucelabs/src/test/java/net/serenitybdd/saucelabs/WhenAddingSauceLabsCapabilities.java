@@ -115,7 +115,7 @@ public class WhenAddingSauceLabsCapabilities {
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
                 .to(capabilities);
 
-        assertThat(sauceOptionsFrom(capabilities).get("sessionName")).isEqualTo("Sample story - Sample test");
+        assertThat(sauceOptionsFrom(capabilities).get("name")).isEqualTo("Sample story - Sample test");
     }
 
     private Map<String,String> sauceOptionsFrom(DesiredCapabilities capabilities) {

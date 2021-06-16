@@ -1,5 +1,6 @@
 package net.serenitybdd.saucelabs;
 
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -34,7 +35,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
     }
 
     // ["server", "user", "key"]
-    private static List<String> NON_BSTACK_PROPERTIES
+    private static List<String> NON_SAUCE_PROPERTIES
             = Arrays.asList(
             "browserName",
             "browserVersion",
@@ -49,54 +50,48 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
                                      TestOutcome testOutcome,
                                      DesiredCapabilities capabilities) {
 
-        if (driver != SupportedWebDriver.REMOTE) {
+        // Skipp setting up capabilities if it's not SauceLabs execution
+        if (!ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables)) {
             return capabilities;
         }
 
-        String remotePlatform = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("remote.platform")
-                .orElse(null);
-        if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
-        }
-
-        Properties browserStackProperties = EnvironmentSpecificConfiguration
+        Properties sauceLabsProperties = EnvironmentSpecificConfiguration
                                                     .from(environmentVariables)
                                                     .getPropertiesWithPrefix(SAUCELABS);
 
-        Properties browserStackPropertiesWithOverrides = caterForOverridesIn(browserStackProperties);
+        Properties sauceLabsPropertiesWithOverrides = caterForOverridesIn(sauceLabsProperties);
         OverrideDriverCapabilities.getProperties()
-                .forEach((key, value) -> browserStackPropertiesWithOverrides.setProperty(key, value.toString()));
+                .forEach((key, value) -> sauceLabsPropertiesWithOverrides.setProperty(key, value.toString()));
 
-        setNonW3CCapabilities(capabilities, browserStackPropertiesWithOverrides);
+        setNonW3CCapabilities(capabilities, sauceLabsPropertiesWithOverrides);
 
-        Map<String, Object> saucelabsOptions = w3CPropertyMapFrom(browserStackPropertiesWithOverrides);
+        Map<String, Object> saucelabsOptions = w3CPropertyMapFrom(sauceLabsPropertiesWithOverrides);
         String testName = testOutcome.getStoryTitle() + " - " + testOutcome.getTitle();
-        saucelabsOptions.put("sessionName", testName);
+        saucelabsOptions.put("name", testName);
 
         capabilities.setCapability("sauce:options", saucelabsOptions);
         return capabilities;
     }
 
-    private Properties caterForOverridesIn(Properties browserStackProperties) {
+    private Properties caterForOverridesIn(Properties sauceLabsProperties) {
         Properties propertiesWithOverrides = new Properties();
-        browserStackProperties
+        sauceLabsProperties
                 .stringPropertyNames()
                 .stream()
                 .filter(this::shouldNotOveride)
                 .forEach(
-                        name -> propertiesWithOverrides.put(name, browserStackProperties.getProperty(name))
+                        name -> propertiesWithOverrides.put(name, sauceLabsProperties.getProperty(name))
                 );
 
         return propertiesWithOverrides;
     }
 
-    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties browserStackProperties) {
-        browserStackProperties.stringPropertyNames()
+    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties sauceLabsProperties) {
+        sauceLabsProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)
                 .forEach(
-                        key -> capabilities.setCapability(w3cKey(key), browserStackProperties.getProperty(key))
+                        key -> capabilities.setCapability(w3cKey(key), sauceLabsProperties.getProperty(key))
                 );
     }
 
@@ -133,8 +128,8 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
     }
 
     private boolean isNonW3CProperty(String key) {
-        return (NON_BSTACK_PROPERTIES.contains(w3cKey(unprefixed(key)))
-                || NON_BSTACK_PROPERTIES.contains(w3cKey(key)));
+        return (NON_SAUCE_PROPERTIES.contains(w3cKey(unprefixed(key)))
+                || NON_SAUCE_PROPERTIES.contains(w3cKey(key)));
     }
 
     private boolean isW3CProperty(String key) {

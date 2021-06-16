@@ -28,13 +28,12 @@ import java.util.ArrayList;
 public class SauceLabsTestSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SauceLabsTestSession.class);
-    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.eu-central-1.saucelabs.com/rest/v1/%s/jobs/%s";
-    private final String sauceLabsUsername;
-    private final String sauceLabsKey;
-    private final String sessionId;
+    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.%s/rest/v1/%s/jobs/%s";
+    private final String sauceLabsUsername, sauceLabsKey, sessionId, datacenter;
     private final Gson gson = new Gson();
 
-    public SauceLabsTestSession(String sauceLabsUsername, String sauceLabsKey, String sessionId) {
+    public SauceLabsTestSession(String datacenter, String sauceLabsUsername, String sauceLabsKey, String sessionId) {
+        this.datacenter = datacenter;
         this.sauceLabsUsername = sauceLabsUsername;
         this.sauceLabsKey = sauceLabsKey;
         this.sessionId = sessionId;
@@ -44,16 +43,15 @@ public class SauceLabsTestSession {
 
         try {
             HttpPut putRequest = new HttpPut(getSessionUri());
+            // TODO: change to JSON
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("status", saucelabsCompatibleResultOf(testOutcome)));
+            nameValuePairs.add(new BasicNameValuePair("passed", testPassed(testOutcome)));
             putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpClientBuilder.create().build().execute(putRequest);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.error("Failed to update SauceLabs results", e);
         }
-
     }
 
     public String getName() {
@@ -112,10 +110,6 @@ public class SauceLabsTestSession {
         return getSessionProperty("logs");
     }
 
-    public String getBrowserstackStatus() {
-        return getSessionProperty("browserstack_status");
-    }
-
     public String getCreatedAt() {
         return getSessionProperty("created_at");
     }
@@ -124,8 +118,8 @@ public class SauceLabsTestSession {
         return getSessionProperty("browser_url");
     }
 
-    public String getPublicUrl() {
-        return getSessionProperty("public_url");
+    public String getTestUrl() {
+        return String.format("https://%s/tests/%s", datacenter, sessionId);
     }
 
     public String getAppiumLogsUrl() {
@@ -171,30 +165,19 @@ public class SauceLabsTestSession {
         return automationSession.getAsJsonObject().get(propertyName).getAsString();
     }
 
-
     private Charset charsetOf(HttpEntity entity) {
         Header encodingHeader = entity.getContentEncoding();
         return encodingHeader == null ? StandardCharsets.UTF_8 : Charsets.toCharset(encodingHeader.getValue());
     }
 
-    private String saucelabsCompatibleResultOf(TestOutcome outcome) {
-        switch (latestResultOf(outcome)) {
-            case SUCCESS:
-                return "passed";
-            case FAILURE:
-            case ERROR:
-            case COMPROMISED:
-                return "failed";
-            default:
-                return "complete";
-        }
+    private String testPassed(TestOutcome outcome) {
+        return Boolean.toString(latestResultOf(outcome) == TestResult.SUCCESS);
     }
-
 
     private URI getSessionUri() {
         URI uri = null;
         try {
-            uri = new URI(String.format(BROWSER_SESSION_URL, sauceLabsUsername, sauceLabsKey, sauceLabsUsername, sessionId));
+            uri = new URI(String.format(BROWSER_SESSION_URL, sauceLabsUsername, sauceLabsKey, datacenter, sauceLabsUsername, sessionId));
         } catch (URISyntaxException e) {
             LOGGER.error("Failed to parse SauceLabs API url.", e);
         }

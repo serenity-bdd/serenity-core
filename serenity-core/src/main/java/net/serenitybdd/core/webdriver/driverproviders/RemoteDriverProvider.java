@@ -51,7 +51,7 @@ public class RemoteDriverProvider implements DriverProvider {
             return RemoteWebdriverStub.from(environmentVariables);
         }
 
-        WebDriver driver = driverBuildersFor(environmentVariables).get(remoteDriverType(environmentVariables)).buildWithOptions(options);
+        WebDriver driver = driverBuildersFor(environmentVariables).get(RemoteDriverType.DEFAULT).buildWithOptions(options);
 
         return new Augmenter().augment(driver);
     }

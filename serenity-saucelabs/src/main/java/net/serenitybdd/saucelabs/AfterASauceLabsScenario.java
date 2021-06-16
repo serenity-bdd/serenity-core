@@ -1,12 +1,10 @@
 package net.serenitybdd.saucelabs;
 
-import com.google.gson.Gson;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -24,18 +22,21 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
 
         String sessionId = RemoteDriver.of(driver).getSessionId().toString();
         String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.user")
+                .getOptionalProperty("saucelabs.user.id")
                 .orElse(null);
 
         String key = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.key")
+                .getOptionalProperty("saucelabs.access.key")
                 .orElse(null);
 
-        SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
+        String dataCenter = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("saucelabs.datacenter")
+                .orElse(null);
+
+        SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(dataCenter, userName, key, sessionId);
         sauceLabsTestSession.updateTestResultFor(testOutcome);
 
-        String publicUrl = sauceLabsTestSession.getPublicUrl();
+        String publicUrl = sauceLabsTestSession.getTestUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
     }
-
 }

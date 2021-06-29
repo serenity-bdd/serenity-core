@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public static final int A_SHORT_PERIOD_BETWEEN_TRIES = 100;
     private final Consequence<T> consequenceThatMightTakeSomeTime;
@@ -20,6 +22,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
+    private List<Performable> setupActions = new ArrayList<>();
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeoutInMilliseconds) {
         this(consequenceThatMightTakeSomeTime, timeoutInMilliseconds, false);
@@ -51,6 +54,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
         stopwatch.start();
         do {
             try {
+                performSetupActionsAs(actor);
                 consequenceThatMightTakeSomeTime.evaluateFor(actor);
                 return;
             } catch (AssertionError assertionError) {
@@ -145,4 +149,15 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
         }
     }
 
+
+    public Consequence<T> after(Performable... actions) {
+        this.setupActions.addAll(asList(actions));
+        return this;
+    }
+
+    protected void performSetupActionsAs(Actor actor) {
+        actor.attemptsTo(
+                setupActions.toArray(new Performable[]{})
+        );
+    }
 }

@@ -17,6 +17,8 @@ public class Narrative {
     private List<TestTag> tags;
     private List<String> scenarios = new ArrayList<>();
     private Map<String, Collection<TestTag>> scenarioTags = new HashMap<>();
+    private FeatureBackgroundNarrative background;
+    private Map<String, FeatureBackgroundNarrative> ruleBackgrounds = new HashMap<>();
 
     public Narrative(Optional<String> title, Optional<String> id, Optional<String> cardNumber, List<String> versionNumbers, String type, String text) {
         Preconditions.checkNotNull(type);
@@ -120,4 +122,23 @@ public class Narrative {
     public Map<String, Collection<TestTag>> getScenarioTags() {
         return scenarioTags;
     }
+
+    public Narrative withBackground(FeatureBackgroundNarrative background) {
+        this.background = background;
+        return this;
+    }
+
+    public Narrative withRuleBackgrounds(Map<String,FeatureBackgroundNarrative> ruleBackgrounds) {
+        this.ruleBackgrounds = ruleBackgrounds;
+        return this;
+    }
+
+    public Optional<FeatureBackgroundNarrative> background() {
+        return Optional.ofNullable(background);
+    }
+
+    public Optional<FeatureBackgroundNarrative> ruleBackgroundForRule(String ruleName) {
+        return Optional.ofNullable(ruleBackgrounds.get(ruleName));
+    }
+
 }

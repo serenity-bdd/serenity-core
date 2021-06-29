@@ -1,8 +1,8 @@
 package net.serenitybdd.core.photography;
 
+import com.assertthat.selenium_shutterbug.core.Capture;
 import com.assertthat.selenium_shutterbug.core.PageSnapshot;
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.screenshots.BlurLevel;
@@ -29,7 +29,7 @@ public class PhotoSession {
     private final Path outputDirectory;
     private final Darkroom darkroom;
     private BlurLevel blurLevel;
-    private ScrollStrategy scrollStrategy;
+    private Capture captureStrategy;
     private EnvironmentVariables environmentVariables;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -39,16 +39,31 @@ public class PhotoSession {
 
     private static final String BLANK_SCREEN = "c118a2e3019c996cb56584ec6f8cd0b2be4c056ce4ae6b83de3c32c2e364cc61.png";
 
-    public PhotoSession(WebDriver driver, Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel, ScrollStrategy scrollStrategy) {
+    public PhotoSession(WebDriver driver, Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
         this.driver = driver;
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
         this.darkroom = darkroom;
-        this.scrollStrategy = scrollStrategy;
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.captureStrategy = screenshotStrategyDefinedIn(environmentVariables);
 
         darkroom.isOpenForBusiness();
     }
+
+    private Capture screenshotStrategyDefinedIn(EnvironmentVariables environmentVariables) {
+        if (shouldUseFullPageScreenshotStrategy(environmentVariables)) {
+            return Capture.FULL_SCROLL;
+        } else {
+            return Capture.valueOf(
+                    ThucydidesSystemProperty.SERENITY_SCREENSHOT_STRATEGY.from(environmentVariables,"VIEWPORT")
+            );
+        }
+    }
+
+    private boolean shouldUseFullPageScreenshotStrategy(EnvironmentVariables environmentVariables) {
+        return ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(environmentVariables);
+    }
+
 
     public ScreenshotPhoto takeScreenshot() {
 
@@ -60,7 +75,7 @@ public class PhotoSession {
 
         if (WebDriverFactory.isAlive(driver) && unproxied(driver) instanceof TakesScreenshot) {
             try {
-                PageSnapshot snapshot = Shutterbug.shootPage(unproxied(driver), scrollStrategy, 500);
+                PageSnapshot snapshot = Shutterbug.shootPage(unproxied(driver), captureStrategy, 500);
                 screenshotData = asByteArray(snapshot.getImage());
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);

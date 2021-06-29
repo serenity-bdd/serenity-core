@@ -1,6 +1,5 @@
 package net.thucydides.core.steps;
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.annotations.events.AfterExample;
@@ -103,7 +102,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
-    private ScrollStrategy scrollStrategy;
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
@@ -205,12 +203,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public Photographer getPhotographer() {
         if (photographer == null) {
-            if (shouldUseFullPageScreenshotStrategy()){
-                scrollStrategy = ScrollStrategy.WHOLE_PAGE;
-            } else {
-                scrollStrategy = ScrollStrategy.VIEWPORT_ONLY;
-            }
-            photographer = new Photographer(getDarkroom(), scrollStrategy);
+            photographer = new Photographer(getDarkroom());
         }
         return photographer;
     }
@@ -486,6 +479,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return new StepMutator(this);
     }
 
+    public void updateCurrentStepFailureCause(Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(failure);
+        }
+    }
+
     public class StepMutator {
 
         private final BaseStepListener baseStepListener;
@@ -753,6 +752,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
+    public void stepFailedWithException(Throwable failure) {
+        takeEndOfStepScreenshotFor(FAILURE);
+
+        TestFailureCause failureCause = TestFailureCause.from(failure);
+        getCurrentTestOutcome().appendTestFailure(failureCause);
+
+        recordFailureDetails(failure);
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
+
     public void lastStepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().lastStepFailedWith(failure);
@@ -770,16 +779,22 @@ public class BaseStepListener implements StepListener, StepPublisher {
         lastFailingExample = currentExample;
     }
 
+    private void recordFailureDetails(final Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(new StepFailureException(failure.getMessage(), failure));
+        }
+        if (shouldTagErrors()) {
+            addTagFor(getCurrentTestOutcome());
+        }
+        lastFailingExample = currentExample;
+    }
+
     private void addTagFor(TestOutcome testOutcome) {
         testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error"));
     }
 
     private boolean shouldTagErrors() {
         return ThucydidesSystemProperty.SERENITY_TAG_FAILURES.booleanFrom(configuration.getEnvironmentVariables());
-    }
-
-    private boolean shouldUseFullPageScreenshotStrategy() {
-        return ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(configuration.getEnvironmentVariables());
     }
 
     public void stepIgnored() {
@@ -820,7 +835,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentStepExists()) {
             TestStep finishedStep = currentStepStack.get().pop();
             finishedStep.recordDuration();
-            if (result != null) {
+            if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
             if ((finishedStep == getCurrentGroup())) {

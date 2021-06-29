@@ -47,7 +47,7 @@ public abstract class TestFinder {
     }
 
     protected Set<Class<?>> getNormalTestClasses() {
-        Set<Class<?>> normalTestClasses = new HashSet();
+        Set<Class<?>> normalTestClasses = new HashSet<>();
         for(Class<?> testClass : getAllTestClasses()) {
             if (normalSerenityTest(testClass)) {
                 normalTestClasses.add(testClass);
@@ -61,7 +61,7 @@ public abstract class TestFinder {
     }
 
     protected List<Class<?>> sorted(List<Class<?>> classes) {
-        Collections.sort(classes, byClassName());
+        classes.sort(byClassName());
         return classes;
     }
 
@@ -82,16 +82,12 @@ public abstract class TestFinder {
         for (Class<?> testClass : testClasses) {
             addEachMatchingTestMethodFrom(testClass).to(methods);
         }
-        Collections.sort(methods, byName());
+        methods.sort(byName());
         return methods;
     }
 
     private Comparator<Method> byName() {
-        return new Comparator<Method>() {
-            public int compare(Method method, Method method1) {
-                return method.getName().compareTo(method1.getName());
-            }
-        };
+        return Comparator.comparing(Method::getName);
     }
 
     private static class TestMethodSearchBuilder {
@@ -116,12 +112,7 @@ public abstract class TestFinder {
     }
 
     private Comparator<Class<?>> byClassName() {
-        return new Comparator<Class<?>>() {
-
-            public int compare(Class<?> class1, Class<?> class2) {
-                return class1.getName().compareTo(class2.getName());
-            }
-        };
+        return Comparator.comparing(Class::getName);
     }
 
 

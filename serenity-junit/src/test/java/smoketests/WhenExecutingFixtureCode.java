@@ -128,24 +128,4 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
             stepLibary.recordTitle();
         }
     }
-
-    @Test
-    public void the_driver_can_be_manually_enabled_after_a_step_fails() throws InitializationError {
-
-        SerenityRunner runner = new SerenityRunner(ATestWithAFailingStepWhereWeReactivateTheDriver.class, injector);
-        runner.run(new RunNotifier());
-
-        assertThat(pageTitleInTheAfterMethod).isEqualTo("Thucydides Test Site");
-    }
-
-
-    @Test
-    public void the_driver_can_be_manually_enabled_via_a_step_method_after_a_step_fails() throws InitializationError {
-
-        SerenityRunner runner = new SerenityRunner(ATestWithAFailingStepWhereWeReactivateTheDriverAndUsingAStepMethod.class, injector);
-        runner.run(new RunNotifier());
-
-        assertThat(pageTitleInTheAfterMethod).isEqualTo("Thucydides Test Site");
-    }
-
 }

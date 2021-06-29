@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.chrome;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,6 @@ public class OptionsSplitter {
 
         return options.stream()
                 .map(option -> "--" + option)
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().collect(Collectors.toList());
     }
 }

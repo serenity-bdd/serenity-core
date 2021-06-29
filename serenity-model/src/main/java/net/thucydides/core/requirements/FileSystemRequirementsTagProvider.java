@@ -571,9 +571,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             Requirement requirement;
             if (narrative.isPresent()) {
                 requirement = leafRequirementWithNarrative(storyName,
-                        storyFile.getPath(),
-                        narrative.get()).withType(type.toString());
+                                                           storyFile.getPath(),
+                                                           narrative.get()).withType(type.toString());
 
+                if (narrative.get().background().isPresent()) {
+                    requirement = requirement.withBackground(narrative.get().background().get());
+                }
                 if (narrative.get().getScenarios().isEmpty()) {
                     requirement = requirement.withNoScenarios();
                 }

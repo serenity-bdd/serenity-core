@@ -2,10 +2,7 @@
 
 package net.serenitybdd.screenplay.ensure
 
-import net.serenitybdd.core.pages.PageObject
-import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.Performable
-import net.serenitybdd.screenplay.Question
+import net.serenitybdd.screenplay.*
 import net.serenitybdd.screenplay.ensure.web.PageObjectEnsure
 import net.serenitybdd.screenplay.ensure.web.TargetEnsure
 import net.serenitybdd.screenplay.targets.Target
@@ -40,6 +37,11 @@ fun <A> thatTheAnswersTo(description: String, question: Question<Collection<A>>)
 
 fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.subject, question)
 
+fun <A> thatTheListOf(description: String, question: Question<List<A>>) =
+        CollectionEnsure(KnowableListAnswer(question, description), description)
+
+fun <A> thatTheListOf(question: Question<List<A>>) = thatTheListOf(question.subject, question)
+
 fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)
@@ -49,6 +51,9 @@ fun thatTheSetOf(value: Target) = CollectionEnsure(KnowableCollectionTarget(valu
 fun thatTheSetOf(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 fun thatAmongst(value: Target) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 fun thatAmongst(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+
+fun enableSoftAssertions() = BlackBox.startSoftAssertions()
+fun reportSoftAssertions() = BlackBox.reportAnySoftAssertions()
 
 ///**
 // * Ensure something

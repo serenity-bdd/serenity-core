@@ -191,8 +191,8 @@ public class AppiumConfiguration {
     }
 
     private void ensureAppOrBrowserPathDefinedIn(Properties appiumProperties) {
-        if (!appiumProperties.containsKey("app") && !appiumProperties.containsKey("browserName")) {
-            throw new ThucydidesConfigurationException("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.");
+        if (!(appiumProperties.containsKey("app") || (appiumProperties.containsKey("appPackage") && appiumProperties.containsKey("appActivity"))  && !appiumProperties.containsKey("browserName"))) {
+            throw new ThucydidesConfigurationException("The browser under test or path to the app or (appPackage and appActivity) needs to be provided in the appium.app or appium.browserName property.");
         }
     }
 

@@ -311,7 +311,14 @@ public class StepEventBus {
         }
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
+
         clear();
+    }
+
+    public void finishTestRun() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testRunFinished();
+        }
     }
 
     public void testFinished() {

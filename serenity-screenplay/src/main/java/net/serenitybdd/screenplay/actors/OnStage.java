@@ -5,25 +5,30 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
-import java.util.Optional;
 
 public class OnStage {
 
     private final static String DEFAULT_PRONOUNS = "he,she,they,it";
     private final static String A_NEW_ACTOR = "An actor";
 
-    private static final ThreadLocal<Stage> stage = new ThreadLocal<>();
+    private static final ThreadLocal<Stage> STAGE = new ThreadLocal<>();
 
 
     /**
      * Set the stage before calling the actors
      */
     public static Stage setTheStage(Cast cast) {
-        stage.set(new Stage(cast));
+        STAGE.set(new Stage(cast));
         return stage();
+    }
+
+    private static boolean verboseScreenplayLogging() {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return LoggingLevel.definedIn(environmentVariables).isAtLeast(LoggingLevel.VERBOSE);
     }
 
     public static Actor theActorCalled(String requiredActor) {
@@ -66,8 +71,11 @@ public class OnStage {
     }
 
     private static Stage stage() {
-        return Optional.ofNullable(stage.get())
-                .orElseThrow(() -> new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one."));
+        if (STAGE.get() == null) {
+            throw new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one.");
+        } else {
+            return STAGE.get();
+        }
     }
 
     public static void drawTheCurtain() {

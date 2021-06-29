@@ -17,8 +17,15 @@ public class RequirementsFilter extends CucumberCompatibleFilter {
     }
 
     public boolean inDisplayOnlyTags(Requirement requirement) {
+        if (!tagsAreConfigured()) {
+            return true;
+        }
         Expression expectedTags = cucumberTagExpressionUsing(TAGS);
         return requirementMatchesAnyTagIn(requirement, expectedTags);
+    }
+
+    private boolean tagsAreConfigured() {
+        return !TAGS.from(environmentVariables,"").isEmpty();
     }
 
 

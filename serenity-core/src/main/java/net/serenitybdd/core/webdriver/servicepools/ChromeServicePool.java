@@ -21,9 +21,13 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
 
     @Override
     protected ChromeDriverService newDriverService() {
+        boolean silent = environmentVariables.getPropertyAsBoolean("chrome.silent", true);
+        boolean verbose = environmentVariables.getPropertyAsBoolean("chrome.verbose", false);
         ChromeDriverService newService = new ChromeDriverService.Builder()
                                                                 .usingDriverExecutable(chromeDriverExecutable())
                                                                 .usingAnyFreePort()
+                                                                .withSilent(silent)
+                                                                .withVerbose(verbose)
                                                                 .build();
 
         DriverPathConfiguration.updateSystemProperty(WEBDRIVER_CHROME_DRIVER.getPropertyName())

@@ -8,8 +8,17 @@ public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isVisible() {
         return new IsVisibleMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> isNotVisible() {
         return new IsNotVisibleMatcher<T>();
+    }
+
+    public static <T extends WebElementState> Matcher<T> isNotEmpty() {
+        return new IsNotEmptyMatcher<T>();
+    }
+
+    public static <T extends WebElementState> Matcher<T> isEmpty() {
+        return new IsEmptyMatcher<T>();
     }
 
     public static <T extends WebElementState> Matcher<T> isCurrentlyVisible() {
@@ -23,6 +32,7 @@ public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isEnabled() {
         return new IsEnabledMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> isNotEnabled() {
         return new IsNotEnabledMatcher<T>();
     }
@@ -38,6 +48,7 @@ public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isPresent() {
         return new IsPresentMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> isNotPresent() {
         return new IsNotPresentMatcher<T>();
     }
@@ -45,12 +56,15 @@ public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isSelected() {
         return new IsSelectedMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> isNotSelected() {
         return new IsNotSelectedMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> isClickable() {
         return new isClickableMatcher<T>();
     }
+
     public static <T extends WebElementState> Matcher<T> containsText(String expectedText) {
         return new ContainsTextMatcher<T>(expectedText);
     }

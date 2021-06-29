@@ -273,6 +273,14 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void formatter_should_respect_capitals_in_titles() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        Formatter formatter = new Formatter(environmentVariables);
+        String formatted = formatter.renderTitle("Some Title Including <> IN IT");
+        assertThat(formatted, is("Some Title Including &lt;&gt; IN IT"));
+    }
+
+    @Test
     public void should_identify_issues_in_a_text() {
         List<String> issues = ReportFormatter.shortenedIssuesIn("A scenario about issue #123");
 

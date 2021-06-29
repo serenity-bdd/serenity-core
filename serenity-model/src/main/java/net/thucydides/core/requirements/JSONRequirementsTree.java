@@ -52,7 +52,7 @@ public class JSONRequirementsTree {
                 .sorted()
                 .collect(Collectors.toList());
 
-        TestResult result = matchingOutcome(requirement, requirementsOutcomes);
+        TestResult result = matchingOutcome(requirement, requirementsOutcomes).orElse(TestResult.UNDEFINED);
 
         String label = new ResultIconFormatter().forResult(result, "#");
 
@@ -92,33 +92,38 @@ public class JSONRequirementsTree {
         return scenarioCount;
     }
 
-    private TestResult matchingOutcome(Requirement requirement,
-                                       RequirementsOutcomes requirementsOutcomes) {
+    private Optional<TestResult> matchingOutcome(Requirement requirement,
+                                                 RequirementsOutcomes requirementsOutcomes) {
 
         if (requirementsOutcomes == null) {
-            return TestResult.UNDEFINED;
+            return Optional.empty();
         }
 
         Optional<RequirementOutcome> matchingOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
 
         if (matchingOutcome.isPresent()) {
             if (matchingOutcome.get().getTestOutcomes().getTotal() == 0) {
-                return TestResult.PENDING;
+                return Optional.of(TestResult.PENDING);
             } else if (unimplementedFeaturesExistFor(matchingOutcome.get(), requirementsOutcomes)) {
-                return TestResultList.overallResultFrom(Arrays.asList(TestResult.PENDING, matchingOutcome.get().getTestOutcomes().getResult()));
+                return Optional.of(TestResultList.overallResultFrom(Arrays.asList(TestResult.PENDING, matchingOutcome.get().getTestOutcomes().getResult())));
             } else {
-
-                return (matchingOutcome.get().getTestOutcomes().getResult());
+                return Optional.of(matchingOutcome.get().getTestOutcomes().getResult());
             }
         }
-
-        return TestResult.UNDEFINED;
+        return Optional.empty();
     }
 
-    private Optional<RequirementOutcome> testOutcomeForRequirement(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
-        return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
-                .filter(outcome -> outcome.getRequirement().equals(requirement))
-                .findFirst();
+    private Optional<RequirementOutcome> testOutcomeForRequirement(Requirement requirement,
+                                                                   RequirementsOutcomes requirementsOutcomes) {
+        if (requirementsOutcomes.getParentRequirement().isPresent() && requirement.equals(requirementsOutcomes.getParentRequirement().get())) {
+            return Optional.of(requirementsOutcomes.requirementOutcomeFor(requirement));
+        } else if (requirementsOutcomes.getRequirements().contains(requirement)) {
+            return requirementsOutcomes.getOutcomeFor(requirement);
+        } else {
+            return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
+                    .filter(outcome -> outcome.getRequirement().equals(requirement))
+                    .findFirst();
+        }
     }
 
     private boolean unimplementedFeaturesExistFor(RequirementOutcome matchingOutcome, RequirementsOutcomes requirementsOutcomes) {

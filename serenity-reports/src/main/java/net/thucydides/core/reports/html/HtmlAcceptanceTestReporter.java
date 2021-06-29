@@ -3,13 +3,11 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.reports.AcceptanceTestReporter;
@@ -29,9 +27,11 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static net.thucydides.core.model.ReportType.HTML;
@@ -46,7 +46,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private static final String DEFAULT_ACCEPTANCE_TEST_SCREENSHOT = "freemarker/screenshots.ftl";
     private static final int MAXIMUM_SCREENSHOT_WIDTH = 1000;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAcceptanceTestReporter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("serenity.reporting");
 
     private String qualifier;
 
@@ -97,8 +97,6 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
      */
     public File generateReportFor(final TestOutcome testOutcome) throws IOException {
 
-        LOGGER.debug("GENERATE TEST OUTCOME REPORT FOR " + testOutcome.getName() + " in " + testOutcome.getReportName());
-
         Preconditions.checkNotNull(getOutputDirectory());
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
@@ -115,14 +113,41 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String reportFilename = reportFor(storedTestOutcome);
 
-        LOGGER.debug("GENERATING HTML REPORT FOR {} in {} in directory {}  ",
-                storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : ""),
-                reportFilename,
-                getOutputDirectory());
+        if(verboseReporting()) {
+            String testName = storedTestOutcome.getName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : "");
+            String storyName = storedTestOutcome.getStoryTitle();
+            String result =  coloredResult(testOutcome.getResult(), testOutcome.getResult().getAdjective());
+            URI htmlReport = getOutputDirectory().toPath().resolve(reportFilename).toUri();
+            String underline = underscores("| TEST NAME:   "  + testName);
+            String message = underline + System.lineSeparator()
+                            +"| TEST NAME:   " + colored.bold(testName) + System.lineSeparator()
+                            +"| RESULT:      " + result + System.lineSeparator()
+                            +"| REQUIREMENT: " + storyName + System.lineSeparator()
+                            +"| REPORT:      " + colored.cyan(htmlReport.toString()) + System.lineSeparator()
+                            + underline;
+
+            LOGGER.info(System.lineSeparator() + message);
+        }
 
         copyResourcesToOutputDirectory();
 
         return generateReportPage(context, DEFAULT_ACCEPTANCE_TEST_REPORT, reportFilename);
+    }
+
+    private String underscores(String message) {
+        return StringUtils.repeat("-", message.length());
+    }
+    private String coloredResult(TestResult result, String text) {
+        switch(result) {
+            case SUCCESS: return colored.green(text);
+            case PENDING: return colored.cyan(text);
+            case IGNORED:
+            case SKIPPED: return colored.grey(text);
+            case FAILURE:
+            case ERROR: return colored.red(text);
+            case COMPROMISED: return colored.purple(text);
+            default: return text;
+        }
     }
 
 

@@ -13,10 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 
@@ -105,7 +102,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
 
         if (StringUtils.isNotEmpty(chromeSwitches)) {
-            List<String> arguments = new OptionsSplitter().split(chromeSwitches);
+            List<String> arguments = new ArrayList<>(new OptionsSplitter().split(chromeSwitches));
             options.addArguments(arguments);
         }
 
@@ -122,7 +119,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         }
 
         if (StringUtils.isNotEmpty(driverOptions)) {
-            List<String> arguments = new OptionsSplitter().split(driverOptions);
+            List<String> arguments = new ArrayList<>(new OptionsSplitter().split(driverOptions));
             options.addArguments(arguments);
         }
 
@@ -144,7 +141,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private Map<String, Object> cleanUpPathsIn(Map<String, Object> chromePreferences) {
         Map<String, Object> preferences = new HashMap<>();
         chromePreferences.forEach(
-                (key,value) -> preferences.put(key.toString(), SanitisedBrowserPreferenceValue.of(value))
+                (key,value) -> preferences.put(key, SanitisedBrowserPreferenceValue.of(value))
         );
         return preferences;
     }
@@ -159,7 +156,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
                 key -> {
                     Object value = chromeExperimentalOptions.get(key);
                     if( LIST_BASED_EXPERIMENTAL_OPTIONS.contains(key) ) {
-                        List<String> arguments = new OptionsSplitter().split((String)value);
+                        List<String> arguments = new ArrayList<>(new OptionsSplitter().split((String)value));
                         options.setExperimentalOption(key, arguments);
                     }else {
                         options.setExperimentalOption(key, value);

@@ -535,7 +535,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
             final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
+                                                                     .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);

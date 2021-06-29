@@ -136,4 +136,14 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
         then:
         capabilitySet.capabilities == ["device":"iPhone 5S"]
     }
+
+    def "should add value-map capabilities"() {
+
+        given:
+        environmentVariables.setProperty("serenity.driver.capabilities","moon:options:{'enableVNC': true}")
+        when:
+        def capabilitySet = new CapabilitySet(environmentVariables)
+        then:
+        capabilitySet.capabilities == ["moon:options": ["enableVNC": true]]
+    }
 }

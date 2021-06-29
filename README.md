@@ -70,6 +70,8 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.4.34        | 2.4.34                | 3.141.59          | 4.3.3                | 7.5.1                 |
+| 2.4.24        | 2.4.24                | 3.141.59          | 4.3.3                | 7.5.1                 |
 | 2.3.12        | 2.3.12                | 3.141.59          | 4.3.2                | 7.3.0                 |
 | 2.3.5         | 2.3.5                 | 3.141.59          | 4.3.1                | 7.3.0                 |
 | 2.3.4         | 2.3.4                 | 3.141.59          | 3.3.0                | 7.2.0                 |
@@ -96,6 +98,8 @@ From version 2.3.x we will be supporting Cucumber 6 only.
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber6 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.4.34        | 2.4.34                |  2.4.34            | 6.10.4              |
+| 2.4.24        | 2.4.24                |  2.4.24            | 6.10.2              |
 | 2.3.12        | 2.3.12                |  2.3.12            | 6.9.1               |
 | 2.3.4         | 2.3.4                 |  2.3.4             | 6.6.0               |
 | 2.3.4         | 2.3.4                 |  2.3.4             | 6.6.0               |
@@ -233,10 +237,6 @@ It is easier for us to fix something we can see breaking. If someone has to volu
 ### Submit a Pull Request
 
 The fastest way to fix a defect is often to dig into the code and to submit a pull request.
-
-## Online Training
-
-The **[Serenity Dojo](http://serenitydojo.teachable.com)** provides a range of online courses to help you learn BDD and test automation with Serenity BDD.
 
 ## Need Commercial Support?
 

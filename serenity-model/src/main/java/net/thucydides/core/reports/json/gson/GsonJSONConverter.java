@@ -37,14 +37,16 @@ public class GsonJSONConverter implements JSONConverter {
     @Inject
     public GsonJSONConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
+        encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
 //                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
                 .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
-                .registerTypeAdapter(File.class, new FileSerializer())
+                .registerTypeAdapter(StackTraceElement.class, new StackTraceElementSerializer())
+                .registerTypeAdapter(StackTraceElement.class, new StackTraceElementDeserializer())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .registerTypeAdapter(File.class, new FileSerializer())
                 .registerTypeAdapter(File.class, new FileDeserializer())
                 .registerTypeAdapter(Class.class, new ClassTypeAdapter());
         this.gson = (usePrettyPrinting()) ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();

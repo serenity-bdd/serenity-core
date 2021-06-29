@@ -93,6 +93,17 @@ td.tag-title {
     padding-bottom: 1em;
 }
 
+.scenario-comments {
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 2em;
+    margin-bottom: 0.5em;
+}
+
+.scenario-comments i {
+    padding-right: 0.5em;
+}
+
 #bottomfooter
 {
     background-image:url(../images/bg_04.jpg); height:26px; background-repeat:repeat-x; margin:0 auto;
@@ -284,6 +295,16 @@ h3.discreet-story-header {
     width: 100%;
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+.rule-title {
+    color: #428bca;
+    font-family:euphemia, verdana, sans-serif;font-size: 1.3em; font-weight:normal; font-style: italic;
+    padding-bottom: 0.5em;
+}
+
+.rule-title i {
+    padding-right: 0.25em;
 }
 
 .discreet-requirement-narrative-title td, th {
@@ -1929,9 +1950,30 @@ h3 {
 .gwt-button {padding-left: 2.5em;}
 .scenario-details p { line-height: 0.8;}
 
+.scenario-background-section {
+    padding-top: 0.25em;
+}
+
 .scenario-docs p {
     padding-left: 2.5em;
     margin: 0px;
+}
+
+.rule-toc-entry {
+    font-weight: bold;
+}
+
+.scenario-toc-entry {
+    font-weight: normal;
+    padding-left: 1em;
+}
+
+.scenario-toc-entry i {
+    padding-right: 0.25em;
+}
+
+.orphan-scenario-toc-entry i {
+    padding-right: 0.25em;
 }
 
 .scenario-docs ul {
@@ -2142,8 +2184,8 @@ td.indented-error-category i {
 }
 
 .example-table {
-     overflow-x:auto;
- }
+    overflow-x:auto;
+}
 
 .example-table table {
     min-width: 80%;
@@ -2266,7 +2308,7 @@ td.indented-error-category i {
 }
 
 .context-icon {
-   padding-right: 1em;
+    padding-right: 1em;
 }
 
 .more-details-result-compromised { background-color: fuchsia; !important; }

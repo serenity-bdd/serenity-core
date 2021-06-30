@@ -1,6 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ListenerInWrongPackage;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
@@ -98,7 +99,7 @@ public class WhenRecordingStepExecutionResults {
     @Before
     public void createStepListenerAndFactory() throws IOException {
 
-        eventBus = new StepEventBus(environmentVariables);
+        eventBus = new StepEventBus(environmentVariables, ConfiguredEnvironment.getConfiguration());
 
         MockitoAnnotations.initMocks(this);
         

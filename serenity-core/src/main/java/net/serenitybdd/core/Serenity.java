@@ -282,6 +282,10 @@ public class Serenity {
         return new SessionVariableSetter(key);
     }
 
+    public static void clearSessionVariable(String key) {
+        getCurrentSession().remove(key);
+    }
+
     public static class SessionVariableSetter {
         final Object key;
 

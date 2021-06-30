@@ -6,19 +6,23 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.parallel.Agency;
+import net.serenitybdd.core.parallel.Agent;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.stream;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
 /**
@@ -47,15 +51,24 @@ public class StepEventBus {
     public static StepEventBus getEventBus() {
         if (stepEventBusThreadLocal.get() == null) {
             synchronized (stepEventBusThreadLocal) {
-                stepEventBusThreadLocal.set(new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
+                stepEventBusThreadLocal.set(new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables(),
+                        ConfiguredEnvironment.getConfiguration()));
             }
         }
         return stepEventBusThreadLocal.get();
     }
 
+    /**
+     * @param key
+     * @return
+     */
+
     public static StepEventBus eventBusFor(Object key) {
-        if (key == null) { return new SilentEventBus(ConfiguredEnvironment.getEnvironmentVariables()); }
-        STICKY_EVENT_BUSES.putIfAbsent(key, new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
+        if (key == null) {
+            return new SilentEventBus(ConfiguredEnvironment.getEnvironmentVariables());
+        }
+        STICKY_EVENT_BUSES.putIfAbsent(key, new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables(),
+                ConfiguredEnvironment.getConfiguration()));
         return STICKY_EVENT_BUSES.get(key);
     }
 
@@ -94,12 +107,13 @@ public class StepEventBus {
 
     private final EnvironmentVariables environmentVariables;
     private final CleanupMethodLocator cleanupMethodLocator;
+    private final File outputDirectory;
 
     @Inject
-    public StepEventBus(EnvironmentVariables environmentVariables) {
+    public StepEventBus(EnvironmentVariables environmentVariables, Configuration configuration) {
         this.environmentVariables = environmentVariables;
         this.cleanupMethodLocator = new CleanupMethodLocator();
-//        Darkroom.isOpenForBusiness();
+        this.outputDirectory = configuration.getOutputDirectory();
     }
 
     public EnvironmentVariables getEnvironmentVariables() {
@@ -129,15 +143,20 @@ public class StepEventBus {
     }
 
     public boolean isBaseStepListenerRegistered() {
-        return baseStepListener != null;
+        return currentBaseStepListener() != null;
     }
 
     public BaseStepListener getBaseStepListener() {
-        if (baseStepListener == null) {
-            LOGGER.error("No base step listener registered - this is generally a bad sign.");
-        }
-        Preconditions.checkNotNull(baseStepListener, "No BaseStepListener has been registered");
-        return baseStepListener;
+
+        BaseStepListener currentListener = currentBaseStepListener();
+
+        Preconditions.checkNotNull(currentListener, "No BaseStepListener has been registered - are you running your test using the Serenity runners?");
+
+        return currentListener;
+    }
+
+    private BaseStepListener currentBaseStepListener() {
+        return Agency.getInstance().currentAgentSpecificListener().orElse(baseStepListener);
     }
 
     public void testStarted(final String testName) {
@@ -189,9 +208,16 @@ public class StepEventBus {
     }
 
     protected List<StepListener> getAllListeners() {
-        List<StepListener> allListeners = new ArrayList(registeredListeners);
+        List<StepListener> allListeners = registeredListeners();
         allListeners.addAll(getCustomListeners());
         return NewList.copyOf(allListeners);
+    }
+
+    private List<StepListener> registeredListeners() {
+        List<StepListener> listeners = new ArrayList<>(registeredListeners);
+        listeners.remove(baseStepListener);
+        listeners.add(getBaseStepListener());
+        return listeners;
     }
 
     private Set<StepListener> getCustomListeners() {
@@ -201,8 +227,6 @@ public class StepEventBus {
 
             ServiceLoader<StepListener> stepListenerServiceLoader = ServiceLoader.load(StepListener.class);
             Iterator<StepListener> listenerImplementations = stepListenerServiceLoader.iterator();
-//            Iterator<?> listenerImplementations = Service.providers(StepListener.class);
-
             while (listenerImplementations.hasNext()) {
                 try {
                     StepListener listener = listenerImplementations.next();
@@ -378,7 +402,6 @@ public class StepEventBus {
      * Start the execution of a test step.
      */
     public void stepStarted(final ExecutedStepDescription stepDescription) {
-
         stepStarted(stepDescription, false);
     }
 
@@ -394,7 +417,7 @@ public class StepEventBus {
         }
 
         if (isPrecondition) {
-            baseStepListener.currentStepIsAPrecondition();
+            getBaseStepListener().currentStepIsAPrecondition();
         }
     }
 
@@ -491,7 +514,7 @@ public class StepEventBus {
     }
 
     private void dropClosableListeners() {
-        registeredListeners = registeredListeners.stream().filter( stepListener -> (!(stepListener instanceof Droppable))).collect(Collectors.toList());
+        registeredListeners = registeredListeners.stream().filter(stepListener -> (!(stepListener instanceof Droppable))).collect(Collectors.toList());
     }
 
     public void dropAllListeners() {
@@ -711,6 +734,7 @@ public class StepEventBus {
     public boolean currentTestOutcomeIsDataDriven() {
         return (getBaseStepListener().latestTestOutcome().isPresent() && getBaseStepListener().latestTestOutcome().get().isDataDriven());
     }
+
     /**
      * Forces Thucydides to take a screenshot now.
      */
@@ -726,21 +750,24 @@ public class StepEventBus {
         return assumptionViolatedMessage;
     }
 
-    public java.util.Optional<TestStep> getCurrentStep() {return getBaseStepListener().cloneCurrentStep(); }
+    public java.util.Optional<TestStep> getCurrentStep() {
+        return getBaseStepListener().cloneCurrentStep();
+    }
 
     /**
      * Set all steps in the current test outcome to a given result.
      * Used to set all steps to PENDING or SKIPPED, for example.
+     *
      * @param result
      */
     public void setAllStepsTo(TestResult result) {
-        baseStepListener.setAllStepsTo(result);
+        getBaseStepListener().setAllStepsTo(result);
     }
 
     private final Optional<TestResult> NO_FORCED_RESULT = Optional.empty();
 
     public java.util.Optional<TestResult> getForcedResult() {
-        return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
+        return (getBaseStepListener() != null) ? getBaseStepListener().getForcedResult() : NO_FORCED_RESULT;
     }
 
     public synchronized boolean isDryRun() {
@@ -760,6 +787,7 @@ public class StepEventBus {
     }
 
     java.util.Optional<TestResult> NO_RESULT_YET = java.util.Optional.empty();
+
     public java.util.Optional<TestResult> resultSoFar() {
 
         return (getBaseStepListener().latestTestOutcome().isPresent()) ?
@@ -767,18 +795,18 @@ public class StepEventBus {
     }
 
     public void mergePreviousStep() {
-        baseStepListener.mergeLast(2).steps();
+        getBaseStepListener().mergeLast(2).steps();
     }
 
     public void updateOverallResults() {
-        if (baseStepListener != null) {
-            baseStepListener.updateOverallResults();
+        if (getBaseStepListener() != null) {
+            getBaseStepListener().updateOverallResults();
         }
     }
 
     public void reset() {
-        if (baseStepListener != null) {
-            baseStepListener.testSuiteFinished();
+        if (isBaseStepListenerRegistered()) {
+            getBaseStepListener().testSuiteFinished();
         }
         stepEventBusThreadLocal.remove();
     }
@@ -806,11 +834,11 @@ public class StepEventBus {
     }
 
     public void cancelPreviousTest() {
-        baseStepListener.cancelPreviousTest();
+        getBaseStepListener().cancelPreviousTest();
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages,TestFailureCause testFailureCause) {
-        baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages,testFailureCause);
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages, TestFailureCause testFailureCause) {
+        getBaseStepListener().lastTestPassedAfterRetries(remainingTries, failureMessages, testFailureCause);
     }
 
     public static void overrideEventBusWith(StepEventBus stepEventBus) {
@@ -818,8 +846,8 @@ public class StepEventBus {
     }
 
     public void castActor(String name) {
-        if ((baseStepListener != null) && (baseStepListener.latestTestOutcome() != null)) {
-            baseStepListener.latestTestOutcome().ifPresent(
+        if ((getBaseStepListener() != null) && (getBaseStepListener().latestTestOutcome() != null)) {
+            getBaseStepListener().latestTestOutcome().ifPresent(
                     testOutcome -> testOutcome.castActor(name)
             );
         }
@@ -829,5 +857,44 @@ public class StepEventBus {
         if (clearSessionForEachTest()) {
             Serenity.clearCurrentSession();
         }
+    }
+
+    public void registerAgent(Agent agent) {
+        Agency.getInstance().registerAgent(agent);
+    }
+
+    public void registerAgents(Agent... agents) {
+        for (Agent agent : agents) {
+            Agency.getInstance().registerAgent(agent);
+        }
+    }
+
+    public void dropAgents(Agent... agents) {
+        for (Agent agent : agents) {
+            Agency.getInstance().dropAgent(agent);
+        }
+    }
+
+    public void dropAgent(Agent agent) {
+        Agency.getInstance().dropAgent(agent);
+    }
+
+    public void mergeActivitiesToDefaultStepListener(Agent... agents) {
+        stream(agents)
+                .map(agent -> Agency.getInstance().baseListenerFor(agent))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(BaseStepListener::getTestOutcomes)
+                .filter(testOutcomes -> !testOutcomes.isEmpty())    // There should always be exactly one test outcome
+                .map(testOutcomes -> testOutcomes.get(0))
+                .forEach(outcome -> recordOutcomeAsSteps(outcome, baseStepListener));               // Record the steps of this outcome in the main test outcome
+
+        stream(agents).forEach( agent -> Agency.getInstance().dropAgent(agent));
+    }
+
+    private void recordOutcomeAsSteps(TestOutcome testOutcome, BaseStepListener stepListener) {
+        stepListener.stepStarted(ExecutedStepDescription.withTitle(testOutcome.getName()));
+        stepListener.addChildStepsFrom(testOutcome.getTestSteps());
+        stepListener.stepFinished();
     }
 }

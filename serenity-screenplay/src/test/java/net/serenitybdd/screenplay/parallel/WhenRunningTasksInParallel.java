@@ -7,7 +7,6 @@ import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

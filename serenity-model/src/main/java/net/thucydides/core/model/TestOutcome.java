@@ -1377,6 +1377,15 @@ public class TestOutcome {
         return this;
     }
 
+    public TestOutcome recordChildSteps(final List<TestStep> steps) {
+        if (currentStep().isPresent()) {
+            steps.forEach(step -> currentStep().get().addChildStep(step));
+        } else {
+            steps.forEach(step -> recordStep(step));
+        }
+        return this;
+    }
+
     /**
      * Add a test step to this acceptance test.
      *
@@ -1395,8 +1404,6 @@ public class TestOutcome {
     }
 
     private void addStep(TestStep step) {
-//        testSteps.add(step);
-//        renumberTestSteps();
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.add(step);
         renumberTestSteps(updatedSteps);

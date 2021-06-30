@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
+import net.thucydides.core.steps.StepEventBus
 
 object CommonPreconditions {
 
@@ -26,14 +27,23 @@ object CommonPreconditions {
 
 
     fun ensureNotNull(message: String, value: Any?) {
-        if (value == null) throw AssertionError(message)
+        if (value == null) {
+            StepEventBus.getEventBus().takeScreenshot()
+            throw AssertionError(message)
+        }
     }
 
     fun ensureNotEmpty(message: String, list: Collection<Any>?) {
-        if ((list == null) || (list.isEmpty())) throw AssertionError(message)
+        if ((list == null) || (list.isEmpty())) {
+            StepEventBus.getEventBus().takeScreenshot()
+            throw AssertionError(message)
+        }
     }
 
     fun ensureNoNullElementsIn(message: String, list: Collection<Any>) {
-        if (list.any { it == null })  throw AssertionError(message)
+        if (list.any { it == null })  {
+            StepEventBus.getEventBus().takeScreenshot()
+            throw AssertionError(message)
+        }
     }
 }

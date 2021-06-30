@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.locators.SmartAjaxElementLocator;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
 import org.junit.Before;
@@ -15,7 +16,9 @@ import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.time.Duration;
 
 import static org.mockito.Matchers.any;
@@ -41,12 +44,13 @@ public class WhenLocatingWebElements {
     }
 
     @Before
-    public void initMocks() throws NoSuchFieldException {
+    public void initMocks() throws NoSuchFieldException, IOException {
         MockitoAnnotations.initMocks(this);
 
         field = SomePageObject.class.getField("someField");
 
         StepEventBus.getEventBus().reset();
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
 
         when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
         when(driver.getCurrentImplicitTimeout()).thenReturn(Duration.ofSeconds(0));
@@ -55,7 +59,9 @@ public class WhenLocatingWebElements {
     }
 
     @Test(timeout = 2000)
-    public void should_find_element_immediately_if_a_previous_step_has_failed() {
+    public void should_find_element_immediately_if_a_previous_step_has_failed() throws IOException {
+
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
 
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE);
         StepEventBus.getEventBus().stepFailed(failure);

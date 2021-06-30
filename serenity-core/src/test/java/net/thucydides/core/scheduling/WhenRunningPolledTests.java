@@ -2,6 +2,7 @@ package net.thucydides.core.scheduling;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
@@ -16,6 +17,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Sleeper;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Clock;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,8 +59,15 @@ public class WhenRunningPolledTests {
         public void someTest() {}
     }
 
+    BaseStepListener defaultStepListener;
+    File temporaryDirectory;
+
     @Before
-    public void initMocks() {
+    public void registerAStepEventBus() throws IOException {
+    }
+
+    @Before
+    public void initMocks() throws IOException {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
@@ -64,6 +75,7 @@ public class WhenRunningPolledTests {
         when(driver.navigate()).thenReturn(navigation);
 
         StepEventBus.getEventBus().reset();
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
         StepEventBus.getEventBus().testSuiteStarted(ATestClass.class);
         StepEventBus.getEventBus().testStarted("someTest");
     }

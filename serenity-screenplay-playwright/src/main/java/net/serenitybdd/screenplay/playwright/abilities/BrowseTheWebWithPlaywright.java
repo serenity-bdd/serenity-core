@@ -147,9 +147,9 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         if (options.args == null) {
             ARGS.asListOfStringsFrom(environmentVariables).ifPresent(options::setArgs);
         }
-        if (options.channel == null) {
-            BROWSER_CHANNEL.asBrowserChannelFrom(environmentVariables).ifPresent(options::setChannel);
-        }
+//        if (options.channel == null) {
+//            BROWSER_CHANNEL.asBrowserChannelFrom(environmentVariables).ifPresent(options::setChannel);
+//        }
         if (options.chromiumSandbox == null) {
             CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(options::setChromiumSandbox);
         }

@@ -30,9 +30,8 @@ open class PerformableExpectation<A, E>(private val actual: A?,
             if (BlackBox.isUsingSoftAssertions()) {
                 BlackBox.softlyAssert(exceptionMessage)
                 StepEventBus.getEventBus().baseStepListener.updateCurrentStepFailureCause(AssertionError(exceptionMessage))
-//                StepEventBus.getEventBus().baseStepListener.stepFailedWithException(AssertionError(exceptionMessage))
-//                StepEventBus.getEventBus().clearStepFailures()
             } else {
+                StepEventBus.getEventBus().takeScreenshot()
                 throw AssertionError(exceptionMessage)
             }
         }
@@ -66,6 +65,7 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
         val result = expectation.apply(actual, startRange, endRange, actor)
 
         if (isAFailure(result, isNegated)) {
+            StepEventBus.getEventBus().takeScreenshot()
             throw AssertionError(expectation.compareActualWithExpected(actual, startRange, endRange, isNegated, expectedDescription))
         }
     }
@@ -102,6 +102,7 @@ open class PerformablePredicate<A>(private val actual: A?,
             if (exception != null) {
                 throw exception
             } else {
+                StepEventBus.getEventBus().takeScreenshot()
                 throw AssertionError(expectation.compareActualWithExpected(actual, isNegated, expectedDescription))
             }
         }

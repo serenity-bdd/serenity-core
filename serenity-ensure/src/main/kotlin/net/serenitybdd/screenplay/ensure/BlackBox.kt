@@ -53,7 +53,7 @@ object BlackBox {
                 renderedErrorMessages.append("- ERROR ${index + 1}) ${normaliseSpacingIn(error)} ${System.lineSeparator()}")
             }
             endSoftAssertions()
-            StepEventBus.getEventBus().takeScreenshot()
+            takeScreenshot()
             throw AssertionError(renderedErrorMessages)
         }
     }

@@ -880,6 +880,10 @@ public class StepEventBus {
     }
 
     public void mergeActivitiesToDefaultStepListener(Agent... agents) {
+        mergeActivitiesToDefaultStepListener("{0}", agents);
+    }
+
+        public void mergeActivitiesToDefaultStepListener(String stepName, Agent... agents) {
         stream(agents)
                 .map(agent -> Agency.getInstance().baseListenerFor(agent))
                 .filter(Optional::isPresent)
@@ -887,14 +891,20 @@ public class StepEventBus {
                 .map(BaseStepListener::getTestOutcomes)
                 .filter(testOutcomes -> !testOutcomes.isEmpty())    // There should always be exactly one test outcome
                 .map(testOutcomes -> testOutcomes.get(0))
-                .forEach(outcome -> recordOutcomeAsSteps(outcome, baseStepListener));               // Record the steps of this outcome in the main test outcome
+                .forEach(outcome -> recordOutcomeAsSteps(stepName, outcome, baseStepListener));               // Record the steps of this outcome in the main test outcome
 
         stream(agents).forEach( agent -> Agency.getInstance().dropAgent(agent));
     }
 
-    private void recordOutcomeAsSteps(TestOutcome testOutcome, BaseStepListener stepListener) {
-        stepListener.stepStarted(ExecutedStepDescription.withTitle(testOutcome.getName()));
+    private void recordOutcomeAsSteps(String topLevelStepName, TestOutcome testOutcome, BaseStepListener stepListener) {
+        stepListener.stepStarted(ExecutedStepDescription.withTitle(formattedDescription(topLevelStepName, testOutcome.getName())));
         stepListener.addChildStepsFrom(testOutcome.getTestSteps());
         stepListener.stepFinished();
     }
+
+    private String formattedDescription(String topLevelStepName, String agent) {
+        return topLevelStepName.replace("{0}", agent);
+    }
+
+
 }

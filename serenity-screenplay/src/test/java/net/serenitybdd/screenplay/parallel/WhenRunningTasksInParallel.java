@@ -77,12 +77,11 @@ public class WhenRunningTasksInParallel {
 
         Actor actorA = Actor.named("Actor A");
 
-        InParallel.theActors(actorA).perform(
+        InParallel.theActors(actorA).perform("{0} performs",
                 () -> actorA.attemptsTo(doSomething())
         );
-
         assertThat(completedTasks).containsExactlyInAnyOrder("Do something");
-        assertThat(testSteps()).containsExactly("Actor A","Actor A does something");
+        assertThat(testSteps()).containsExactly("Actor A performs","Actor A does something");
     }
 
     @Test

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.parallel.Agent;
 import net.thucydides.core.steps.StepEventBus;
 
 import java.util.Collection;
@@ -46,11 +47,15 @@ public class InParallel {
     }
 
     public void perform(Runnable... tasks) {
+        perform("{0}", tasks);
+    }
+
+    public void perform(String stepName, Runnable... tasks) {
         try {
             StepEventBus.getEventBus().registerAgents(cast);
             asList(tasks).parallelStream().forEach(Runnable::run);
         } finally {
-            StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(cast);
+            StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(stepName, cast);
             StepEventBus.getEventBus().dropAgents(cast);
         }
     }

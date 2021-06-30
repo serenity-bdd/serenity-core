@@ -31,7 +31,7 @@ open class PerformableExpectation<A, E>(private val actual: A?,
                 BlackBox.softlyAssert(exceptionMessage)
                 StepEventBus.getEventBus().baseStepListener.updateCurrentStepFailureCause(AssertionError(exceptionMessage))
             } else {
-                StepEventBus.getEventBus().takeScreenshot()
+                takeScreenshot()
                 throw AssertionError(exceptionMessage)
             }
         }
@@ -65,7 +65,7 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
         val result = expectation.apply(actual, startRange, endRange, actor)
 
         if (isAFailure(result, isNegated)) {
-            StepEventBus.getEventBus().takeScreenshot()
+            takeScreenshot()
             throw AssertionError(expectation.compareActualWithExpected(actual, startRange, endRange, isNegated, expectedDescription))
         }
     }
@@ -82,6 +82,12 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
             null,
             false,
             "") {
+    }
+}
+
+fun takeScreenshot() {
+    if (StepEventBus.getEventBus().isBaseStepListenerRegistered) {
+        StepEventBus.getEventBus().takeScreenshot()
     }
 }
 
@@ -102,7 +108,7 @@ open class PerformablePredicate<A>(private val actual: A?,
             if (exception != null) {
                 throw exception
             } else {
-                StepEventBus.getEventBus().takeScreenshot()
+                takeScreenshot()
                 throw AssertionError(expectation.compareActualWithExpected(actual, isNegated, expectedDescription))
             }
         }

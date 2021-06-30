@@ -28,21 +28,21 @@ object CommonPreconditions {
 
     fun ensureNotNull(message: String, value: Any?) {
         if (value == null) {
-            StepEventBus.getEventBus().takeScreenshot()
+            takeScreenshot()
             throw AssertionError(message)
         }
     }
 
     fun ensureNotEmpty(message: String, list: Collection<Any>?) {
         if ((list == null) || (list.isEmpty())) {
-            StepEventBus.getEventBus().takeScreenshot()
+            takeScreenshot()
             throw AssertionError(message)
         }
     }
 
     fun ensureNoNullElementsIn(message: String, list: Collection<Any>) {
         if (list.any { it == null })  {
-            StepEventBus.getEventBus().takeScreenshot()
+            takeScreenshot()
             throw AssertionError(message)
         }
     }

@@ -11,6 +11,7 @@ import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
+import net.thucydides.core.requirements.reports.CompoundDuration;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 //import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
@@ -518,6 +519,10 @@ public class TestStep implements Cloneable {
 
     public double getDurationInSeconds() {
         return TestDuration.of(duration).inSeconds();
+    }
+
+    public String getFormattedDuration() {
+        return  (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
     }
 
     /**

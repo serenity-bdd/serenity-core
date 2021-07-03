@@ -154,7 +154,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedDuration() {
-        return  (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
+        return  (duration != 0L) ? CompoundDuration.of(duration) : "";
     }
 
     public String getParentName() {

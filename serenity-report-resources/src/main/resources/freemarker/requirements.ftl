@@ -739,7 +739,7 @@
                                                                 </#if>
                                                                 <th class="test-name-column">Scenario</th>
                                                                 <th>Steps</th>
-                                                                <th>Start Time</th>
+                                                                <th>Started</th>
                                                                 <th>Duration</th>
                                                                 <th>Result</th>
                                                             </tr>

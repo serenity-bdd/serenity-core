@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
@@ -33,8 +34,8 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -93,7 +94,7 @@
         <javassist.version>3.21.0-GA</javassist.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-<!--        <kotlin.version>1.4.10</kotlin.version>-->
+        <!--        <kotlin.version>1.4.10</kotlin.version>-->
         <kotlin.version>1.5.0</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
@@ -492,16 +493,16 @@
         </dependencies>
     </dependencyManagement>
     <distributionManagement>
-      <snapshotRepository>
-        <id>ossrh</id>
-<!--        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
-      <repository>
-        <id>ossrh</id>
-<!--        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-      </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <!--        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <!--        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -630,7 +631,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
                             </rules>
                         </configuration>
                         <goals>
@@ -656,7 +657,7 @@
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-<!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+                    <!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
@@ -717,7 +718,7 @@
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>
-<!--        <module>serenity-screenplay-playwright</module>-->
+        <!--        <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>
         <profile>
@@ -730,10 +731,11 @@
                         <version>3.0.0-M4</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <useReleaseProfile>false</useReleaseProfile>
                             <releaseProfiles>release</releaseProfiles>
                             <goals>deploy</goals>
                             <localCheckout>true</localCheckout>
+                            <scmCommentPrefix>[ci skip]</scmCommentPrefix>
+                            <tagNameFormat>@{project.version}</tagNameFormat>
                         </configuration>
                     </plugin>
                     <plugin>

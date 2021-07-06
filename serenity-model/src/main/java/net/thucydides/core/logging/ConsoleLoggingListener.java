@@ -272,17 +272,7 @@ public class ConsoleLoggingListener implements StepListener {
         nestedSteps.push(description.getName());
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String indent = indentation(nestedSteps.size());// StringUtils.repeat("  ", nestedSteps.size());
-            System.out.println(withTimestamp(colored.green(indent + description.getTitle())));
-//            getLogger().info(colored.green(indent + description.getTitle()));
-        }
-    }
-
-    private String withTimestamp(String message) {
-        if (environmentVariables.getPropertyAsBoolean("serenity.console.timestamp", false)) {
-            String timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
-            return timeStamp + " " + message;
-        } else {
-            return message;
+            getLogger().info(colored.green(indent + description.getTitle()));
         }
     }
 

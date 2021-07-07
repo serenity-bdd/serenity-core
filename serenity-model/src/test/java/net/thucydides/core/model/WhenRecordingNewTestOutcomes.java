@@ -158,6 +158,20 @@ public class WhenRecordingNewTestOutcomes {
         }
     }
 
+    class ATestScenarioWithNestedClass {
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+
+        class NestedClass{
+            public void should_do_something_else() {
+            }
+        }
+
+    }
+
     @Before
     public void prepareAcceptanceTestRun() {
         MockitoAnnotations.initMocks(this);
@@ -1141,6 +1155,16 @@ public class WhenRecordingNewTestOutcomes {
 
         assertThat(testOutcome.lastStep().getDescription(), is("Step 3"));
     }
+
+
+    @Test
+    public void should_be_able_to_record_nested_test_information() {
+        TestOutcome outcome = TestOutcome.forTest("should_do_something_else", ATestScenarioWithNestedClass.NestedClass.class);
+
+        assertThat(outcome.getNestedTestPath().size(),is(3) );
+
+    }
+
 
 //    @Test
 //    public void should_calculate_the_overall_success_rate_from_provided_statistics() {

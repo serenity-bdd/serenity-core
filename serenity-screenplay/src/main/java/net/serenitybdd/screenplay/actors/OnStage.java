@@ -17,12 +17,16 @@ public class OnStage {
 
     private static final ThreadLocal<Stage> STAGE = new ThreadLocal<>();
 
-
     /**
      * Set the stage before calling the actors
      */
     public static Stage setTheStage(Cast cast) {
         STAGE.set(new Stage(cast));
+        return stage();
+    }
+
+    public static Stage setTheStage(Stage stage) {
+        STAGE.set(stage);
         return stage();
     }
 
@@ -70,7 +74,12 @@ public class OnStage {
         theActorInTheSpotlight().attemptsTo(performTasks);
     }
 
-    private static Stage stage() {
+    /**
+     * Get the current stage. Rarely needed for non-internal use, except when running tasks in parallel.
+     * In that case, you will need to call OnStage.setTheStage(stage) in each parallel thread if you use
+     * OnStage methods such as theActorInTheSpotlight()
+     */
+    public static Stage stage() {
         if (STAGE.get() == null) {
             throw new NoStageException("No stage available - it looks like you haven't called the setTheStage() method before calling this one.");
         } else {

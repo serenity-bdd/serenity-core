@@ -52,7 +52,7 @@ public class PhotoSession {
 
     private Capture screenshotStrategyDefinedIn(EnvironmentVariables environmentVariables) {
         if (shouldUseFullPageScreenshotStrategy(environmentVariables)) {
-            return Capture.FULL_SCROLL;
+            return Capture.FULL;
         } else {
             return Capture.valueOf(
                     ThucydidesSystemProperty.SERENITY_SCREENSHOT_STRATEGY.from(environmentVariables,"VIEWPORT")

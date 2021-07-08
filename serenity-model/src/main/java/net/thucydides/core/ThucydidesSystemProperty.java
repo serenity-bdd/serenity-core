@@ -1143,7 +1143,7 @@ public enum ThucydidesSystemProperty {
     SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY,
 
     /**
-     * Define the Shutterbug screen capture srategy:
+     * Define the Shutterbug screen capture strategy:
      *  - VIEWPORT: capture visible part of the viewport only
      *  - FULL: full page screenshot using devtools
      *  - FULL_SCROLL: full page screenshot using scroll & stitch method

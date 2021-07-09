@@ -78,7 +78,6 @@
         <phantomjs.version>1.4.4</phantomjs.version>
         <webdrivermanager.version>4.4.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
-        <shutterbug.version>1.5</shutterbug.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
@@ -717,6 +716,8 @@
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>
+        <module>serenity-shutterbug</module>
+        <module>serenity-shutterbug1x</module>
         <!--        <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>
@@ -818,6 +819,8 @@
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-cli</module>
+                <module>serenity-shutterbug</module>
+                <module>serenity-shutterbug1x</module>
             </modules>
         </profile>
         <profile>
@@ -847,6 +850,8 @@
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-smoketests</module>
+                <module>serenity-shutterbug</module>
+                <module>serenity-shutterbug1x</module>
             </modules>
         </profile>
         <profile>
@@ -879,6 +884,8 @@
                 <module>serenity-crossbrowsertesting</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-smoketests</module>
+                <module>serenity-shutterbug</module>
+                <module>serenity-shutterbug1x</module>
                 <module>serenity-screenplay-playwright</module>
             </modules>
         </profile>

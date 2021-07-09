@@ -266,7 +266,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
 
                     val actualValue = resolveActual(actual, actor, expectedList) ?: return false
 
-                    return expectedList.all { expectedItem -> actualValue.toLowerCase().contains(expectedItem.toString().toLowerCase()) }
+                    return expectedList.all { expectedItem -> actualValue.lowercase().contains(expectedItem.toString().lowercase()) }
                 }
         )
 
@@ -281,7 +281,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
 
                     val actualValue = resolveActual(actual, actor, expected) ?: return expected.isEmpty()
 
-                    return actualValue.toLowerCase() == expected.toString().toLowerCase()
+                    return actualValue.lowercase() == expected.toString().lowercase()
                 }
         )
 
@@ -305,7 +305,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     BlackBox.logAssertion(actualValue,"a lowercase value")
                     if (actualValue == null) { return false }
 
-                    return actualValue.isNotEmpty() && actualValue.toLowerCase() == actualValue
+                    return actualValue.isNotEmpty() && actualValue.lowercase() == actualValue
                 }
         )
 

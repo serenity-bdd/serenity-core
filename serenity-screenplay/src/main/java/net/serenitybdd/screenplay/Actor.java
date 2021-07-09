@@ -47,6 +47,13 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         this.name = name;
     }
 
+    /**
+     * Add all the remembered items for the current actor to the other actor's memory
+     * @param otherActor
+     */
+    public void brief(Actor otherActor) {
+        otherActor.notepad.putAll(this.notepad);
+    }
 
     public String toString() {
         return getNameOrPronoun();

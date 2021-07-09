@@ -5,8 +5,12 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.HasTeardown
 import net.serenitybdd.screenplay.Performable
 import net.serenitybdd.screenplay.Task
+import net.thucydides.core.steps.BaseStepListener
+import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
+import java.nio.file.Files
 import java.util.function.Consumer
 
 class WhenRecruitingACast extends Specification {
@@ -109,6 +113,12 @@ class WhenRecruitingACast extends Specification {
         def playThePart = Task.where("the actor plays his part", actor -> partPlayedBy = actor.getName())
 
         given:
+            File outputDir = Files.createTempDirectory("out").toFile()
+
+            StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+            StepEventBus.getEventBus().testStarted("some test")
+            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
+
             OnStage.setTheStage(Cast.ofStandardActors())
             OnStage.theActorCalled("Kenneth");
         when:

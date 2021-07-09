@@ -9,10 +9,7 @@ import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
-import net.serenitybdd.core.photography.Darkroom;
-import net.serenitybdd.core.photography.Photographer;
-import net.serenitybdd.core.photography.ScreenshotPhoto;
-import net.serenitybdd.core.photography.SoundEngineer;
+import net.serenitybdd.core.photography.*;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
@@ -1046,15 +1043,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         return SerenityWebdriverManager.inThisTestThread().getCurrentDrivers().stream().map(
-                driver -> new ScreenshotAndHtmlSource(
-                        screenshotFrom(driver),
-                        sourceFrom(result, driver))
+                driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver),sourceFrom(result, driver))
         ).collect(Collectors.toList());
     }
 
     private File screenshotFrom(WebDriver driver) {
         Path screenshotPath = getPhotographer().takesAScreenshot()
-                .with(driver)
+                .with(new WebDriverPhotoLens(driver))
                 .andWithBlurring(AnnotatedBluring.blurLevel())
                 .andSaveToDirectory(pathOf(outputDirectory))
                 .getPathToScreenshot();
@@ -1066,27 +1061,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return soundEngineer.ifRequiredForResult(result)
                 .recordPageSourceUsing(driver)
                 .intoDirectory(pathOf(outputDirectory)).orElse(null);
-    }
-
-    private java.util.Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
-
-        ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
-        java.util.Optional<File> pageSource = java.util.Optional.empty();
-
-        if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-            newPhoto = getPhotographer().takesAScreenshot()
-                    .with(getDriver())
-                    .andWithBlurring(AnnotatedBluring.blurLevel())
-                    .andSaveToDirectory(pathOf(outputDirectory));
-
-            pageSource = soundEngineer.ifRequiredForResult(result)
-                    .recordPageSourceUsing(getDriver())
-                    .intoDirectory(pathOf(outputDirectory));
-
-        }
-        return (newPhoto == ScreenshotPhoto.None) ?
-                java.util.Optional.empty()
-                : java.util.Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orElse(null)));
     }
 
     private Path pathOf(File directory) {

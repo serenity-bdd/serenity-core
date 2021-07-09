@@ -85,7 +85,7 @@ class WhenGeneratingAnEmailableReport {
         }
 
         @Test
-        fun `should get display customisable environment variables from the report-summary-* properties`() {
+        fun `should get display customisable environment variables from the report-summary properties`() {
             val fieldValues = parsedReport.getElementsByClass("custom-value").map { element -> element.text() }
             assertThat(fieldValues).contains("NAV Automation INT5", "INT NAV 13.5.0", "localhost", "tim")
         }

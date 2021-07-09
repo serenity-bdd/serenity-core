@@ -18,6 +18,6 @@ public class WebDriverScreenShooter implements ScreenShooter {
 
     @Override
     public byte[] takeScreenshot() throws IOException {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        return (driver instanceof TakesScreenshot) ? ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES) : new byte[]{};
     }
 }

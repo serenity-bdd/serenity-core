@@ -37,7 +37,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDR
  */
 public class StepEventBus {
 
-    private static final ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
+    private static final ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<>();
 
     private static final ConcurrentMap<Object, StepEventBus> STICKY_EVENT_BUSES = new ConcurrentHashMap<>();
 

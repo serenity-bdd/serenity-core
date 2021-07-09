@@ -2,7 +2,6 @@ package net.serenitybdd.core.parallel;
 
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
@@ -157,46 +156,13 @@ public class WhenKeepingTrackOfActorsAndActivities {
         assertThat(allSteps).containsExactly("James","James does something", "James does something else","Max", "Max does something", "Max does something else");
     }
 
-
-    @Test
-    public void StepEventsAreLoggedSeparatelyForEachAgentDuringParallelExecution() {
-        Agent james = new SpecialAgent("James","007");
-        Agent max = new SpecialAgent("Max","87");
-        Agent johnny = new SpecialAgent("Johnny","English");
-
-        StepEventBus.getEventBus().testStarted("simple test");
-
-        StepEventBus.getEventBus().registerAgents(james,max, johnny);
-
-        asList(james, max, johnny)
-                .parallelStream()
-                .forEach(this::performTwoStepsFor);
-
-        StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(james, max, johnny);
-
-        StepEventBus.getEventBus().testFinished();
-
-        TestOutcome testOutcome = defaultStepListener.getTestOutcomes().get(0);
-
-        List<String> topLevelSteps = testOutcome.getTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList());
-        assertThat(topLevelSteps).containsExactly("James","Max", "Johnny");
-
-        List<String> allSteps = testOutcome.getFlattenedTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList());
-        assertThat(allSteps).containsExactly(
-                "James","James does something", "James does something else",
-                "Max", "Max does something", "Max does something else",
-                "Johnny", "Johnny does something", "Johnny does something else");
-    }
-
     private void performTwoStepsFor(Agent actor) {
-        System.out.println("Performing for " + actor.getName());
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(actor);
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something"));
         StepEventBus.getEventBus().stepFinished();
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something else"));
         StepEventBus.getEventBus().stepFinished();
         Serenity.clearSessionVariable(Agent.IN_THE_CURRENT_SESSION);
-        System.out.println("Performing done for " + actor.getName());
     }
 
 

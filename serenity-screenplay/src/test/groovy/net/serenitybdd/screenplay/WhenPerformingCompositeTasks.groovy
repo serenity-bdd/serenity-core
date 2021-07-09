@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay
 
+import net.serenitybdd.screenplay.actors.Cast
+import net.serenitybdd.screenplay.actors.OnStage
 import net.serenitybdd.screenplay.conditions.Check
 import net.serenitybdd.screenplay.shopping.BitesTheBanana
 import net.serenitybdd.screenplay.shopping.ChewsTheBanana
@@ -39,7 +41,6 @@ class WhenPerformingCompositeTasks extends Specification {
         testOutcomeContainsStep("Eddie bites the banana")
         testOutcomeContainsStep("Eddie chews the banana")
     }
-
 
     def testPassed() {
         listener.latestTestOutcome().get().result == TestResult.SUCCESS

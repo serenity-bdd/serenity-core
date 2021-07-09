@@ -27,6 +27,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 /**
  * An actor represents the person or system using the application under test.
  * Actors can have Abilities, which allows them to perform Tasks and Interactions.
+ * Actors can ask Questions about the state of the system.
  */
 public class Actor implements PerformsTasks, SkipNested, Agent {
 

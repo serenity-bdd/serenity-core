@@ -5,11 +5,28 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
 
+/**
+ * The stage is used to keep track of the actors taking part in a Screenplay test.
+ * It is useful if you don't keep track of the actors explicitly, but just refer to them by name, as is often done
+ * in Cucumber scenarios.
+ *
+ * Actors can be referred to by name (which must be unique for a given actor) or a pronoun.
+ * The default pronouns are "he","she","they" and "it", and they are used interchangeably - any pronoun will always
+ * refer to last named actor who performed some action.
+ * Pronouns can be configured using the screenplay.pronouns property, e.g.
+ * <pre>
+ *     <code>
+ *         screenplay.pronouns = il,elle
+ *     </code>
+ * </pre>
+ *
+ * The current stage is kept as a ThreadLocal object, so if you have multiple threads in the same Screenplay test,
+ * you need to propagate the stage to each new thread using the setTheStage() method.
+ */
 public class OnStage {
 
     private final static String DEFAULT_PRONOUNS = "he,she,they,it";
@@ -25,16 +42,19 @@ public class OnStage {
         return stage();
     }
 
+    /**
+     * Set the stage to a specific stage object.
+     * This is rarely needed but sometimes comes in handy when running tasks in parallel.
+     */
     public static Stage setTheStage(Stage stage) {
         STAGE.set(stage);
         return stage();
     }
 
-    private static boolean verboseScreenplayLogging() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        return LoggingLevel.definedIn(environmentVariables).isAtLeast(LoggingLevel.VERBOSE);
-    }
-
+    /**
+     * Returns an actor with a given name, creating a new actor if the actor is not already on stage.
+     * If a pronoun is used (e.g "she creates a new account") then the current actor in the spotlight will be used.
+     */
     public static Actor theActorCalled(String requiredActor) {
         if (pronouns().contains(requiredActor)) {
             return stage().theActorInTheSpotlight().usingPronoun(requiredActor);
@@ -51,10 +71,13 @@ public class OnStage {
         return stage().anActorIsOnStage();
     }
 
+    /**
+     * Create a new actor whose name is not yet known.
+     * The next time the theActorCalled() method is used, this name will be assigned to this actor.
+     */
     public static Actor aNewActor() {
         return stage().shineSpotlightOn(A_NEW_ACTOR);
     }
-
 
     /**
      * A shorter version of "theActorCalled()"
@@ -63,6 +86,9 @@ public class OnStage {
         return theActorCalled(actorName);
     }
 
+    /**
+     * The actor in the spotlight is the last actor on the stage who has performed any activity.
+     */
     public static Actor theActorInTheSpotlight() {
         return stage().theActorInTheSpotlight();
     }
@@ -87,8 +113,12 @@ public class OnStage {
         }
     }
 
+    /**
+     * Perform any cleanup actions on each actor on the stage.
+     * This calls the `wrapUp()` method if defined on each actor on the stage.
+     */
     public static void drawTheCurtain() {
-        if (stage() != null) {
+        if (STAGE.get() != null) {
             stage().drawTheCurtain();
         }
     }

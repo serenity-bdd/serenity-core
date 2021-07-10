@@ -216,10 +216,11 @@ public class StepEventBus {
     private List<StepListener> registeredListeners() {
         List<StepListener> listeners = new ArrayList<>(registeredListeners);
 
-        if (isBaseStepListenerRegistered() && (baseStepListener != null)) {
+        if (baseStepListener != null) {
             listeners.remove(baseStepListener);
+        }
+        if (getBaseStepListener() != null) {
             listeners.add(getBaseStepListener());
-
         }
         return listeners;
     }

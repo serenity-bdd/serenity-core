@@ -154,11 +154,11 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedStartTime() {
-        return (startTime != null) ? startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) : " ";
+        return (startTime != null) ? "" + startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) : "";
     }
 
     public String getFormattedDuration() {
-        return (duration != 0L) ? CompoundDuration.of(duration) : " ";
+        return  (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
     }
 
     public String getParentName() {

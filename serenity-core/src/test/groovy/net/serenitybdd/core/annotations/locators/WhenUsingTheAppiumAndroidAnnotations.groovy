@@ -28,10 +28,9 @@ class WhenUsingTheAppiumAndroidAnnotations extends Specification {
         then:
             by.class == expectedType
         where:
-            field                                                                         | expectedType
+            field                                                                   | expectedType
             AnnotatedAppiumAndroidPageSample.class.getField("byAccessibilityId")    | MobileBy.ByAccessibilityId
             AnnotatedAppiumAndroidPageSample.class.getField("byAndroidUIAutomator") | MobileBy.ByAndroidUIAutomator
-
     }
 
 }

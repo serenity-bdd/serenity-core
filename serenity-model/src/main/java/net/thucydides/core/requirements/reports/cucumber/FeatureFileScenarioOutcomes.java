@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -136,7 +137,23 @@ public class FeatureFileScenarioOutcomes {
                 featureReport,
                 new HashSet<>(),
                 new HashMap<>(),
-                null);
+                null,
+                startTimeOfFirstTestIn(outcomes),
+                totalDurationOf(outcomes));
+    }
+
+    private ZonedDateTime startTimeOfFirstTestIn(List<TestOutcome> outcomes) {
+        return outcomes.stream()
+                .map(TestOutcome::getStartTime)
+                .sorted()
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Long totalDurationOf(List<TestOutcome> outcomes) {
+        return outcomes.stream()
+                .mapToLong(TestOutcome::getDuration)
+                .sum();
     }
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
@@ -208,7 +225,9 @@ public class FeatureFileScenarioOutcomes {
                 featureReport,
                 scenarioTags,
                 exampleTags,
-                rule);
+                rule,
+                startTimeOfFirstTestIn(outcomes),
+                totalDurationOf(outcomes));
     }
 
 

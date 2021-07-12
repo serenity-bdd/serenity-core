@@ -1137,19 +1137,32 @@ public enum ThucydidesSystemProperty {
     SERENITY_COMPRESS_SCREENSHOTS,
 
     /**
+     * Specify the screenshot tool to be used to take screenshots.
+     * By default it will be WebDriver. Other values include:
+     * <ul>
+     *     <li>shutterbug (for Shutterbug 0.9.5 - add the serenity-shutterbug dependency to your project)</li>
+     *     <li>shutterbug1 (for Shutterbug 1.x - add the serenity-shutterbug1x dependency to your project)</li>
+     * </ul>
+     * You can also provide your own fully qualified class path that implements the ScreenShooter interface.
+     * This class MUST have a constructor that accepts a WebDriver parameter.
+     */
+    SERENITY_SCREENSHOOTER,
+
+    /**
      * If set, Serenity will use full page screenshot strategy.
      */
     @Deprecated
     SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY,
 
     /**
-     * Define the Shutterbug screen capture srategy:
+     * Define the Shutterbug screen capture strategy:
      *  - VIEWPORT: capture visible part of the viewport only
      *  - FULL: full page screenshot using devtools
      *  - FULL_SCROLL: full page screenshot using scroll & stitch method
      *  - VERTICAL_SCROLL:vertical scroll page screenshot using scroll & stitch method
      *  - HORIZONTAL_SCROLL: horizontal scroll page screenshot using scroll & stitch method
      */
+    @Deprecated
     SERENITY_SCREENSHOT_STRATEGY,
 
     /**

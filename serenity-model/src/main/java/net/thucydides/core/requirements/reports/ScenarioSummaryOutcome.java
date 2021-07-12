@@ -6,6 +6,7 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Set<TestTag> tags;
     private final Map<String, Collection<TestTag>> exampleTags;
     private Rule rule;
+    private Long duration;
+    private ZonedDateTime startTime;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -43,7 +46,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   String parentReport,
                                   Set<TestTag> tags,
                                   Map<String, Collection<TestTag>> exampleTags,
-                                  Rule rule) {
+                                  Rule rule,
+                                  ZonedDateTime startTime,
+                                  Long duration) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -60,6 +65,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.tags = tags;
         this.exampleTags = exampleTags;
         this.rule = rule;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public String toString() {
@@ -131,11 +138,11 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
 
     public ZonedDateTime getStartTime() {
-        return null;
+        return startTime;
     }
 
     public Long getDuration() {
-        return 0L;
+        return duration;
     }
 
     public Boolean isManual() {
@@ -143,11 +150,11 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedStartTime() {
-        return " ";
+        return (startTime != null) ? "" + startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) : "";
     }
 
     public String getFormattedDuration() {
-        return " ";
+        return  (duration != 0L) ? CompoundDuration.of(duration) : "";
     }
 
     public String getParentName() {

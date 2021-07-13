@@ -95,7 +95,7 @@ class CoverageByTagResult(val tagName: String,
                           val report: String,
                           val countByResult: Map<String, Int>,
                           val percentageByResult: Map<String, Double>) {
-    val resultClass = result.name.lowercase()
+    val resultClass = result.name.toLowerCase()
     val resultIcon = ResultIconFormatter().forResult(result)
 
     fun percentageForResult(result: TestResult): Double = if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
@@ -115,7 +115,7 @@ class CoverageByTag(val tagName: String,
                     val report: String,
                     val countByResult: Map<String, Int>,
                     val percentageByResult: Map<String, Double>) {
-    val resultClass = result.name.lowercase()
+    val resultClass = result.name.toLowerCase()
     val resultIcon = ResultIconFormatter().forResult(result)
 
     fun percentageForResult(result: TestResult): Double = if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
@@ -131,5 +131,5 @@ class CoverageByTag(val tagName: String,
 class CoverageSegment(val percentage: Double, val count: Int, val result: TestResult) {
     val color = BackgroundColor().forResult(result)
     val roundedPercentage = Math.round(percentage);
-    val title = "${roundedPercentage}% ${result.toString().lowercase()}"
+    val title = "${roundedPercentage}% ${result.toString().toLowerCase()}"
 }

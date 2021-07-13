@@ -44,7 +44,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     private final DriverConfiguration configuration;
     private ReportService reportService;
     private final ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = ParameterizedTestsOutcomeAggregator.from(this);
-    private TagScanner tagScanner;
+    private final TagScanner tagScanner;
 
     /**
      * Test runner used for testing purposes.
@@ -60,7 +60,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
                                        final WebDriverFactory webDriverFactory,
                                        final BatchManager batchManager
     ) throws Throwable {
-        super(klass, Collections.<Runner>emptyList());
+        super(klass, Collections.emptyList());
         this.configuration = configuration;
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
 
@@ -183,7 +183,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private String from(final Collection testData) {
-        StringBuffer testDataQualifier = new StringBuffer();
+        StringBuilder testDataQualifier = new StringBuilder();
         boolean firstEntry = true;
         for (Object testDataValue : testData) {
             if (!firstEntry) {

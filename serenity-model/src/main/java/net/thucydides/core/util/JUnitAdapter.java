@@ -2,15 +2,17 @@ package net.thucydides.core.util;
 
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.tags.Taggable;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 import static java.util.Arrays.stream;
+import static org.junit.platform.commons.support.AnnotationSupport.findRepeatableAnnotations;
+import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
 
 /**
  * This is an INTERNAL helper class of serenity, it should not be used directly and may be subject to refactoring.
@@ -203,69 +205,26 @@ public class JUnitAdapter {
 
         @Override
         public boolean isTestMethod(final Method method) {
-            return (method.getAnnotation(org.junit.jupiter.api.Test.class) != null);
+            return isAnnotated(method, org.junit.jupiter.api.Test.class);
         }
 
         @Override
         public boolean isTestSetupMethod(final Method method) {
-            return (method.getAnnotation(org.junit.jupiter.api.BeforeEach.class) != null)
-                    || (method.getAnnotation(org.junit.jupiter.api.BeforeAll.class) != null);
+            return isAnnotated(method, org.junit.jupiter.api.BeforeEach.class) || isAnnotated(method, org.junit.jupiter.api.BeforeAll.class);
         }
 
         @Override
         public boolean isSerenityTestCase(Class<?> testClass) {
-            return hasSerenityAnnotation(testClass, new HashSet<>());
+            return findRepeatableAnnotations(testClass, org.junit.jupiter.api.extension.ExtendWith.class).stream()
+                    .flatMap(annotation -> stream((annotation).value()))
+                    .anyMatch(extension -> extension.getSimpleName().matches("Serenity.*Extension"));
         }
 
         @Override
         public boolean isIgnored(final Method method) {
-            return stream(method.getAnnotations()).anyMatch(annotation -> annotation.annotationType().getName().contains("Disabled"));
-            //return (method.getAnnotation(Disabled.class) != null);
+            return isAnnotated(method, org.junit.jupiter.api.Disabled.class);
         }
 
-
-        private boolean hasSerenityAnnotation(final Class<?> clazz, final Set<Class<?>> checked) {
-            checked.add(clazz);
-            return stream(clazz.getAnnotations()).anyMatch(a -> carriesSerenityExtension(a, checked));
-        }
-
-        private boolean carriesSerenityExtension(final Annotation annotation, final Set<Class<?>> checked) {
-            if (annotation instanceof ExtendWith) {
-                return stream(((ExtendWith) annotation).value())
-                        .anyMatch(c -> c.getSimpleName().matches("Serenity.*Extension"));
-//            if (annotation.annotationType().getName().contains("ExtendsWith")) {
-//                if (hasValueMethod(annotation)) {
-//                    return (valueOf(annotation).matches("Serenity.*Extension"));
-//                }
-            }
-            Class<? extends Annotation> annotationType = annotation.annotationType();
-
-            if (annotationType.getPackage().getName().startsWith("java.lang") // performance optimization
-                    || checked.contains(annotation.annotationType()) // avoid endless loops
-            ) {
-                return false;
-            }
-
-            // find meta annotations
-            return hasSerenityAnnotation(annotation.annotationType(), checked);
-        }
-
-        private String valueOf(Annotation annotation) {
-
-            try {
-                Method value = annotation.getClass().getMethod("value");
-                return value.invoke(annotation).toString();
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                return "";
-            }
-        }
-        private boolean hasValueMethod(Annotation annotation) {
-            try {
-                return (annotation.getClass().getMethod("value") != null);
-            } catch (NoSuchMethodException e) {
-                return false;
-            }
-        }
         @Override
         public boolean isAssumptionViolatedException(final Throwable throwable) {
             return (throwable instanceof org.opentest4j.TestAbortedException);
@@ -273,11 +232,9 @@ public class JUnitAdapter {
 
         @Override
         public boolean isATaggableClass(final Class<?> testClass) {
-            // serenity tagging mechanism currently not supported for JUnit 5, since JUnit 5 has its own tagging
-            // feature.
-            return false;
+            return findRepeatableAnnotations(testClass, org.junit.jupiter.api.extension.ExtendWith.class).stream()
+                    .flatMap(annotation -> stream((annotation).value()))
+                    .anyMatch(Taggable.class::isAssignableFrom);
         }
-
     }
-
 }

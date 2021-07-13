@@ -15,7 +15,11 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -67,10 +71,23 @@ public class JUnitAdapterUnitTest {
         assertThat(JUnitAdapter.isATaggableClass(Junit5Test.class)).isFalse();
         assertThat(JUnitAdapter.isSerenityTestCase(Junit5Test.class)).isFalse();
         assertThat(JUnitAdapter.isSerenityTestCase(SerenityJunit5Test.class)).isTrue();
+        assertThat(JUnitAdapter.isATaggableClass(Junit5Test.class)).isFalse();
+        assertThat(JUnitAdapter.isATaggableClass(SerenityJunit5Test.class)).isTrue();
         assertThat(JUnitAdapter
                 .isAssumptionViolatedException(new org.opentest4j.TestAbortedException("Assumption violated!")))
                 .isTrue();
         assertThat(JUnitAdapter.isIgnored(Junit5Test.class.getDeclaredMethod("shouldBeIgnored"))).isTrue();
+    }
+
+    @Test
+    public void shouldDetectJunit5MetaAnnotations() throws NoSuchMethodException {
+        assertThat(JUnitAdapter.isTestClass(Junit5MetaAnnotationTest.class)).isTrue();
+        assertThat(JUnitAdapter.isTestMethod(Junit5MetaAnnotationTest.class.getDeclaredMethod("shouldSucceed"))).isTrue();
+        assertThat(JUnitAdapter.isTestSetupMethod(Junit5MetaAnnotationTest.class.getDeclaredMethod("beforeAll"))).isTrue();
+        assertThat(JUnitAdapter.isTestSetupMethod(Junit5MetaAnnotationTest.class.getDeclaredMethod("beforeEach"))).isTrue();
+        assertThat(JUnitAdapter.isSerenityTestCase(Junit5MetaAnnotationTest.class)).isTrue();
+        assertThat(JUnitAdapter.isATaggableClass(Junit5MetaAnnotationTest.class)).isTrue();
+        assertThat(JUnitAdapter.isIgnored(Junit5MetaAnnotationTest.class.getDeclaredMethod("shouldBeIgnored"))).isTrue();
     }
 
     public static class NoTestAtAll {
@@ -131,6 +148,7 @@ public class JUnitAdapterUnitTest {
         }
     }
 
+    @ExtendWith(SomeExtension.class)
     static class Junit5Test {
 
         @BeforeAll
@@ -155,7 +173,7 @@ public class JUnitAdapterUnitTest {
 
     }
 
-    @HigherLevelSerenityTestAnnotation
+    @ExtendWith(SerenityDummyExtension.class)
     static class SerenityJunit5Test {
 
         @org.junit.jupiter.api.Test
@@ -163,6 +181,29 @@ public class JUnitAdapterUnitTest {
 
         }
 
+    }
+
+    @HigherLevelSerenityTestAnnotation
+    static class Junit5MetaAnnotationTest {
+
+        @UnrealisticMetaMetaAnnotation
+        void beforeAll() {
+
+        }
+
+        @UnrealisticMetaMetaAnnotation
+        void beforeEach() {
+
+        }
+
+        @UnrealisticMetaMetaAnnotation
+        void shouldSucceed() {
+
+        }
+
+        @UnrealisticMetaMetaAnnotation
+        void shouldBeIgnored() {
+        }
     }
 
     @Target(ElementType.TYPE)
@@ -181,7 +222,30 @@ public class JUnitAdapterUnitTest {
 
     }
 
-    public static class SerenityDummyExtension implements Extension {
+    public static class SerenityDummyExtension implements Extension, Taggable {
+
+    }
+
+    public static class SomeExtension implements Extension {
+
+    }
+
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Inherited
+    @org.junit.jupiter.api.Test
+    @BeforeEach
+    @BeforeAll
+    @Disabled
+    public @interface UnrealisticMetaAnnotation {
+
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Inherited
+    @UnrealisticMetaAnnotation
+    public @interface UnrealisticMetaMetaAnnotation {
 
     }
 

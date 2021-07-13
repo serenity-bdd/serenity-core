@@ -25,10 +25,10 @@ public class WhenRunningANestedTest {
         TestLauncher.runTestForClass(JUnit5NestedExampleTest.class);
 
         List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        //assertThat(executedScenarios.size(), greaterThan(0))
-        assertThat(executedScenarios.size(), equalTo(2));
+        assertThat(executedScenarios.size(), equalTo(3));
         assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("sampleTestForMethodA").getTitle(), is("Example test for method A"));
         assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("sampleTestForMethodB").getTitle(), is("Sample test for method b"));
+        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("sampleTestForMethodAOuterClass").getTitle(), is("Example test for method A outerClass"));
 
     }
 

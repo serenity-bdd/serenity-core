@@ -31,11 +31,11 @@ class JUnit5NestedExampleTest {
         System.out.println("After all test methods");
     }
 
-    /*@Test
-    @DisplayName("Example test for method A")
-    void sampleTestForMethodA() {
+    @Test
+    @DisplayName("Example test for method A outerClass")
+    void sampleTestForMethodAOuterClass() {
         System.out.println("Example test for method A");
-    }*/
+    }
 
     @Nested
     @DisplayName("Tests for the method A")

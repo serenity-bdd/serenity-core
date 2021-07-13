@@ -14,6 +14,7 @@ import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
@@ -206,9 +207,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.trace("No action done at executionStarted because testIdentifier is null" );
             return;
         }
-        //TODO
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier))  {
-            baseStepListener.clearTestOutcomes();
+            if (hasToClearPreviousTestOutcomes(testIdentifier)) {
+                baseStepListener.clearTestOutcomes();
+            }
             logger.trace("-->TestSuiteStarted " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             testClass = ((ClassSource)testIdentifier.getSource().get()).getJavaClass();
             StepEventBus.getEventBus().testSuiteStarted( ((ClassSource)testIdentifier.getSource().get()).getJavaClass());
@@ -234,6 +236,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 }
             }
         }
+    }
+
+    private boolean hasToClearPreviousTestOutcomes(TestIdentifier testIdentifier) {
+         return (testIdentifier.getClass().getAnnotation(Nested.class) != null);
     }
 
     private boolean isTestContainer(TestIdentifier testIdentifier) {

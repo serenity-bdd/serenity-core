@@ -30,7 +30,7 @@ public abstract class AbstractTestStepRunnerTest {
         return new TestOutcomeChecker(testOutcomes);
     }
 
-    public class TestOutcomeChecker {
+    public static class TestOutcomeChecker {
         private final List<TestOutcome> testOutcomes;
 
         public TestOutcomeChecker(List<TestOutcome> testOutcomes) {

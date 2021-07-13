@@ -359,8 +359,6 @@ public class JUnitAdapter {
                     Arrays.stream(allTags).forEach(tag->tags.add(TestTag.withValue(tag.value())));
                 }
             }
-            Thread.dumpStack();
-            System.out.println("XXXGetTagsForcalled " + testMethod + " found  " + tags);
             return tags;
         }
     }

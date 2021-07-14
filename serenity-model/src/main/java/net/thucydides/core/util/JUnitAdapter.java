@@ -258,11 +258,15 @@ public class JUnitAdapter {
             }
             //JUnit5 nested tests
             for(Class innerClass : testClass.getDeclaredClasses()) {
-                if(isTestClass(innerClass)){
+                if(isTestClass(innerClass) && isNestedTestClass(innerClass)){
                     return true;
                 }
             }
             return false;
+        }
+
+        private boolean isNestedTestClass(Class testClass) {
+            return (testClass.getAnnotation(org.junit.jupiter.api.Nested.class) != null);
         }
 
         @Override

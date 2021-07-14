@@ -1,4 +1,4 @@
-package net.thucydides.junit.sampletests.thucydidestests
+package net.serenity.junit.sampletests.serenitytests
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.thucydides.core.annotations.Steps

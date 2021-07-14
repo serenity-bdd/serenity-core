@@ -17,7 +17,7 @@ import java.util.*;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 /**
- * Intercepts JUnit events and reports them to Thucydides.
+ * Intercepts JUnit events and reports them to Serenity.
  */
 public class JUnitStepListener extends RunListener {
 
@@ -38,11 +38,11 @@ public class JUnitStepListener extends RunListener {
         this.extraListeners = listeners;
         this.testClass = testClass;
 
-        registerThucydidesListeners();
+        registerSerenityListeners();
 
     }
 
-    public void registerThucydidesListeners() {
+    public void registerSerenityListeners() {
         StepEventBus.getEventBus().registerListener(baseStepListener);
 
         for(StepListener listener : extraListeners) {

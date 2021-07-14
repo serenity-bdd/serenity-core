@@ -1,4 +1,4 @@
-package net.thucydides.junit.sampletests.thucydidestests
+package net.serenity.junit.sampletests.serenitytests
 
 import org.junit.Test
 import org.junit.runner.RunWith

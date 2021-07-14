@@ -1,19 +1,19 @@
 package net.serenitybdd.junit.finder
 
-import net.thucydides.junit.sampletests.thucydidestests.SampleDataDrivenTestCase
-import net.thucydides.junit.sampletests.thucydidestests.SampleNonSerenityTestCase
-import net.thucydides.junit.sampletests.thucydidestests.SampleTestCase
+import net.serenity.junit.sampletests.serenitytests.SampleDataDrivenTestCase
+import net.serenity.junit.sampletests.serenitytests.SampleNonSerenityTestCase
+import net.serenity.junit.sampletests.serenitytests.SampleTestCase
 import spock.lang.Specification
 
 class WhenFindingTestClassesInThePath extends Specification {
 
     TestFinder testFinder
 
-    def "should be able to find all the test cases annotated with the ThucydidesRunner test runner"() {
+    def "should be able to find all the test cases annotated with the SerenityRunner test runner"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -25,11 +25,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to count the Thucydides tests"() {
+    def "should be able to count the Serenity tests"() {
 
         when:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         then:
 
@@ -40,7 +40,7 @@ class WhenFindingTestClassesInThePath extends Specification {
     def "should order the set of all test cases by name"() {
 
         given:
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         when:
             def testClasses = testFinder.getClasses()
@@ -53,7 +53,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-        testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+        testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -65,11 +65,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to find just the non-data-driven test cases annotated with the ThucydidesRunner test runner"() {
+    def "should be able to find just the non-data-driven test cases annotated with the SerenityRunner test runner"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -81,11 +81,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to find just non-data-driven test cases annotated with the ThucydidesRunner test runner"() {
+    def "should be able to find just non-data-driven test cases annotated with the SerenityRunner test runner"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -97,11 +97,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should skip test cases that are not annotated with the ThucydidesRunner test runner"() {
+    def "should skip test cases that are not annotated with the SerenityRunner test runner"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -113,11 +113,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to list all the test methods in all of the Thucydides test cases"() {
+    def "should be able to list all the test methods in all of the Serenity test cases"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -129,11 +129,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to list the test methods in just the normal Thucydides test cases"() {
+    def "should be able to list the test methods in just the normal Serenity test cases"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -145,11 +145,11 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    def "should be able to list the test methods in just the data-driven Thucydides test cases"() {
+    def "should be able to list the test methods in just the data-driven Serenity test cases"() {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -167,7 +167,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -185,7 +185,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 
@@ -203,7 +203,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.thucydides.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
 
         when:
 

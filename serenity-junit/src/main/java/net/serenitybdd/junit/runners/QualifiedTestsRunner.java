@@ -63,11 +63,6 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, WebdriverManager webDriverManager, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverManager, configuration, batchManager);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
 
     public QualifiedTestsRunner(final Class<?> type,
                          final DriverConfiguration configuration,

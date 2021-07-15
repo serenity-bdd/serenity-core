@@ -1,4 +1,4 @@
-package net.serenity.junit.sampletests.serenitytests
+package net.serenitybdd.junit.sampletests.serenitytests
 
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.pages.Pages

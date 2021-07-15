@@ -28,7 +28,6 @@ public class WhenSchedulingParallelTestJobs {
         ParameterizedRunnerScheduler scheduler
                 = new ParameterizedRunnerScheduler(SampleParallelDataDrivenScenario.class, 4);
 
-
         scheduler.schedule(testJob);
 
         assertThat(scheduler.getTaskQueue().size(), is(1));
@@ -38,7 +37,6 @@ public class WhenSchedulingParallelTestJobs {
     public void scheduled_parallel_tests_should_all_be_processed_when_the_run_is_finished() {
         ParameterizedRunnerScheduler scheduler
                 = new ParameterizedRunnerScheduler(SampleParallelDataDrivenScenario.class, 4);
-
 
         scheduler.schedule(testJob);
         scheduler.schedule(testJob2);

@@ -13,13 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ParameterizedRunnerScheduler implements RunnerScheduler {
 
-    private ExecutorService executorService;
-    private CompletionService<Void> completionService;
-    private Queue<Future<Void>> tasks;
+    private final ExecutorService executorService;
+    private final CompletionService<Void> completionService;
+    private final Queue<Future<Void>> tasks;
 
     public ParameterizedRunnerScheduler(final Class<?> klass, final int threadCount) {
-
-
         executorService = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory(klass.getSimpleName()));
         completionService = new ExecutorCompletionService<>(executorService);
         tasks = new LinkedList<>();
@@ -30,7 +28,6 @@ public class ParameterizedRunnerScheduler implements RunnerScheduler {
     }
 
     public void schedule(final Runnable childStatement) {
-
         tasks.offer(completionService.submit(childStatement, null));
     }
 

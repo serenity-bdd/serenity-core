@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * The TestFinder class lets you find the Serenity tests or test methods underneath a given package.
  * <p>You instantiate a TestFinder by providing the top-level package where the tests live.</p>
- * <p>You can then find the list of Thucydides test classes using getNormalTestClasses(), getDataDrivenTestClasses(),
+ * <p>You can then find the list of Serenity test classes using getNormalTestClasses(), getDataDrivenTestClasses(),
  * and getAllTestClasses() (which returns both normal and data-driven tests).</p>
  * <p>You may also need to retrieve the list of test methods for a particular category of class. You can do this using the
  * getTestMethodsFrom() method, e.g.
@@ -100,7 +100,7 @@ public abstract class TestFinder {
 
         public void to(List<Method> methods) {
             for(Method method : testClass.getMethods()) {
-                if (method.isAnnotationPresent(Test.class)) {
+                if (method.isAnnotationPresent(org.junit.Test.class) || method.isAnnotationPresent(Test.class)) {
                     methods.add(method);
                 }
             }

@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.finder
 
-import net.serenity.junit.sampletests.serenitytests.SampleDataDrivenTestCase
-import net.serenity.junit.sampletests.serenitytests.SampleNonSerenityTestCase
-import net.serenity.junit.sampletests.serenitytests.SampleTestCase
+import net.serenitybdd.junit.sampletests.serenitytests.SampleDataDrivenTestCase
+import net.serenitybdd.junit.sampletests.serenitytests.SampleNonSerenityTestCase
+import net.serenitybdd.junit.sampletests.serenitytests.SampleTestCase
 import spock.lang.Specification
 
 class WhenFindingTestClassesInThePath extends Specification {
@@ -13,7 +13,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -29,7 +29,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         when:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenitybdd.junit.sampletests")
 
         then:
 
@@ -40,7 +40,7 @@ class WhenFindingTestClassesInThePath extends Specification {
     def "should order the set of all test cases by name"() {
 
         given:
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
             def testClasses = testFinder.getClasses()
@@ -53,7 +53,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-        testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
+        testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -69,7 +69,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -85,7 +85,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -105,7 +105,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         when:
 
-            def testClasses = testFinder.getClasses();
+            def testClasses = testFinder.getClasses()
 
         then:
 
@@ -117,7 +117,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().allTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -133,7 +133,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -149,7 +149,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -167,8 +167,8 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
-
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenitybdd.junit.sampletests")
+            testFinder.findTestMethods().println()
         when:
 
             def matchingTestMethods = testFinder.findTestMethods().withNameContaining("SomethingElse")
@@ -185,7 +185,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().normalTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 
@@ -203,7 +203,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         given:
 
-            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenity.junit.sampletests")
+            testFinder = TestFinder.thatFinds().dataDrivenTests().inPackage("net.serenitybdd.junit.sampletests")
 
         when:
 

@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(SerenityParameterizedRunner.class)
-@Concurrent
+//@Concurrent 
 public class ExampleDataDriven {
 
     @Steps

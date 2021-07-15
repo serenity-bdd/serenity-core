@@ -15,14 +15,12 @@ test {
 //}
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-core')
+    implementation project(':serenity-model')
+    implementation project(':serenity-core')
 
+    implementation("org.opentest4j:opentest4j:${opentest4jVersion}")
     implementation(platform('org.junit:junit-bom:5.7.1'))
     implementation('org.junit.jupiter:junit-jupiter')
 
-    compile "org.opentest4j:opentest4j:${opentest4jVersion}"
-
-    testCompile project(':serenity-test-utils')
-
+    testImplementation project(':serenity-test-utils')
 }

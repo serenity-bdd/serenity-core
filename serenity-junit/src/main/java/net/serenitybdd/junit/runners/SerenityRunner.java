@@ -61,12 +61,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
-    private ThreadLocal<Pages> pages = new ThreadLocal<>();
+    private final ThreadLocal<Pages> pages = new ThreadLocal<>();
     private final WebdriverManager webdriverManager;
-    private String requestedDriver;
+    private final String requestedDriver;
     private ReportService reportService;
     private final TestConfiguration theTest;
-    private FailureRerunner failureRerunner;
+    private final FailureRerunner failureRerunner;
     /**
      * Special listener that keeps track of test step execution and results.
      */
@@ -74,17 +74,17 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private PageObjectDependencyInjector dependencyInjector;
 
-    private FailureDetectingStepListener failureDetectingStepListener;
+    private final FailureDetectingStepListener failureDetectingStepListener;
 
 
     /**
      * Retrieve the runner getConfiguration().from an external source.
      */
-    private DriverConfiguration configuration;
+    private final DriverConfiguration configuration;
 
-    private TagScanner tagScanner;
+    private final TagScanner tagScanner;
 
-    private BatchManager batchManager;
+    private final BatchManager batchManager;
 
     private final Logger logger = LoggerFactory.getLogger(SerenityRunner.class);
 
@@ -253,7 +253,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
             super.run(localNotifier);
-            fireNotificationsBasedOnTestResultsTo(notifier);
         } catch (Throwable someFailure) {
             someFailure.printStackTrace();
             throw someFailure;
@@ -274,12 +273,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             return Optional.empty();
         }
         return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0));
-    }
-
-    private void fireNotificationsBasedOnTestResultsTo(RunNotifier notifier) {
-        if (!latestOutcome().isPresent()) {
-            return;
-        }
     }
 
     private void notifyTestSuiteFinished() {

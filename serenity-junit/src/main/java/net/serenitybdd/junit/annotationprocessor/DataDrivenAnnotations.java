@@ -38,12 +38,12 @@ public class DataDrivenAnnotations {
         this(testClass, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
-    DataDrivenAnnotations(final Class testClass, EnvironmentVariables environmentVariables) {
+    DataDrivenAnnotations(final Class testClass, final EnvironmentVariables environmentVariables) {
         this.testClass = testClass;
         this.environmentVariables = environmentVariables;
     }
 
-    public DataDrivenAnnotations usingEnvironmentVariables(EnvironmentVariables environmentVariables) {
+    public DataDrivenAnnotations usingEnvironmentVariables(final EnvironmentVariables environmentVariables) {
         return new DataDrivenAnnotations(this.testClass, environmentVariables);
     }
 
@@ -114,7 +114,7 @@ public class DataDrivenAnnotations {
         return columnNames;
     }
 
-    public Method getTestDataMethod() throws Exception {
+    public Method getTestDataMethod() {
         Method method = findTestDataMethod();
         if (method == null) {
             throw new IllegalArgumentException("No public static @FilePathParser method on class "
@@ -181,10 +181,10 @@ public class DataDrivenAnnotations {
     }
 
     private List<Method> getAnnotatedMethods(){
-        return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) -> method.getDeclaredAnnotations() != null).collect(Collectors.toList());
+        return Arrays.stream(testClass.getDeclaredMethods()).collect(Collectors.toList());
     }
 
-    private List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationClass){
+    private List<Method> getAnnotatedMethods(final Class<? extends Annotation> annotationClass){
         return Arrays.stream(testClass.getDeclaredMethods()).filter((Method method) -> method.getAnnotation(annotationClass) != null).collect(Collectors.toList());
     }
 

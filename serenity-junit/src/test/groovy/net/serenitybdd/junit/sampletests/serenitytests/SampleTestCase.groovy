@@ -1,4 +1,4 @@
-package net.serenity.junit.sampletests.serenitytests
+package net.serenitybdd.junit.sampletests.serenitytests
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,12 +8,12 @@ import net.serenitybdd.junit.runners.SerenityRunner
 class SampleTestCase {
 
     @Test
-    public void testSomethingElse(){
+    void testSomethingElse(){
        println("testSomethingElse")
     }
 
     @Test
-    public void testSomething(){
+    void testSomething(){
         println("testSomething")
         assert 1 == 2
 

@@ -1,4 +1,4 @@
-package net.serenity.junit.sampletests.serenitytests
+package net.serenitybdd.junit.sampletests.serenitytests
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.thucydides.core.annotations.Steps
@@ -18,17 +18,17 @@ class SampleDataDrivenTestCase {
     String age
 
     @Steps
-    StepLibrary steps;
+    StepLibrary steps
 
     SampleDataDrivenTestCase() {
     }
 
     @Test
-    public void testSomethingWithData(){
+    void testSomethingWithData(){
         System.out.println("Processing " + name + "/" + age)
         assertThat(name, not(equalTo("Tim")))
         assertThat(name, not(equalTo("John")))
-        steps.step1();
+        steps.step1()
     }
 
 }

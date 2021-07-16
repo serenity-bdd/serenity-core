@@ -1,5 +1,5 @@
 <acceptance-test-run title="Happy day scenario" name="happy_day_scenario" steps="5" successful="4" failures="0" skipped="0" ignored="0" pending="1" result="PENDING">
-  <user-story id="net.thucydides.samples.SampleTestScenarioWithGroups" name="Sample test scenario with groups"/>
+  <user-story id="net.serenitybdd.junit.samples.SampleTestScenarioWithGroups" name="Sample test scenario with groups"/>
   <test-group name="Another group of steps" result="PENDING">
     <test-step result="SUCCESS">
       <description>Step that succeeds</description>

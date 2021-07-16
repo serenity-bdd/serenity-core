@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.inject.Injector;
+import net.serenitybdd.junit.finder.QualifierFinder;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.webdriver.DriverConfiguration;
@@ -62,11 +63,6 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, WebdriverManager webDriverManager, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverManager, configuration, batchManager);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
 
     public QualifiedTestsRunner(final Class<?> type,
                          final DriverConfiguration configuration,

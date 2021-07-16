@@ -41,7 +41,7 @@ public class Pages implements Serializable {
 
     private final Configuration configuration;
 
-    private WebdriverProxyFactory proxyFactory;
+    private final WebdriverProxyFactory proxyFactory;
 
     private transient boolean usePreviousPage = false;
 

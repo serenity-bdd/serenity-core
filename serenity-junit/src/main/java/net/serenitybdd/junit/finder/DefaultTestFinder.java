@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Returns all of the Thucydides classes under the specified package.
+ * Returns all of the Serenity classes under the specified package.
  */
 public class DefaultTestFinder extends TestFinder {
     public DefaultTestFinder(final String rootPackage) {

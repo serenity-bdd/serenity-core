@@ -5,6 +5,11 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
+import net.serenitybdd.junit.annotationprocessor.TestMethodAnnotations;
+import net.serenitybdd.junit.listeners.FailureDetectingStepListener;
+import net.serenitybdd.junit.util.SerenityStatement;
+import net.serenitybdd.junit.util.TestConfiguration;
+import net.serenitybdd.junit.util.TestMethodConfiguration;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.ManualTestMarkedAsError;
 import net.thucydides.core.annotations.ManualTestMarkedAsFailure;
@@ -25,7 +30,7 @@ import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.*;
-import net.thucydides.junit.listeners.JUnitStepListener;
+import net.serenitybdd.junit.listeners.JUnitStepListener;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -56,12 +61,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
-    private ThreadLocal<Pages> pages = new ThreadLocal<>();
+    private final ThreadLocal<Pages> pages = new ThreadLocal<>();
     private final WebdriverManager webdriverManager;
-    private String requestedDriver;
+    private final String requestedDriver;
     private ReportService reportService;
     private final TestConfiguration theTest;
-    private FailureRerunner failureRerunner;
+    private final FailureRerunner failureRerunner;
     /**
      * Special listener that keeps track of test step execution and results.
      */
@@ -69,17 +74,17 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private PageObjectDependencyInjector dependencyInjector;
 
-    private FailureDetectingStepListener failureDetectingStepListener;
+    private final FailureDetectingStepListener failureDetectingStepListener;
 
 
     /**
      * Retrieve the runner getConfiguration().from an external source.
      */
-    private DriverConfiguration configuration;
+    private final DriverConfiguration configuration;
 
-    private TagScanner tagScanner;
+    private final TagScanner tagScanner;
 
-    private BatchManager batchManager;
+    private final BatchManager batchManager;
 
     private final Logger logger = LoggerFactory.getLogger(SerenityRunner.class);
 
@@ -248,7 +253,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
             super.run(localNotifier);
-            fireNotificationsBasedOnTestResultsTo(notifier);
         } catch (Throwable someFailure) {
             someFailure.printStackTrace();
             throw someFailure;
@@ -269,12 +273,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             return Optional.empty();
         }
         return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0));
-    }
-
-    private void fireNotificationsBasedOnTestResultsTo(RunNotifier notifier) {
-        if (!latestOutcome().isPresent()) {
-            return;
-        }
     }
 
     private void notifyTestSuiteFinished() {
@@ -408,7 +406,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     @Override
     protected void runChild(FrameworkMethod method, RunNotifier notifier) {
 
-        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
+        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method.getMethod());
 
         clearMetadataIfRequired();
         resetStepLibrariesIfRequired();
@@ -518,7 +516,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private Consumer<RunNotifier> markAsManual(FrameworkMethod method) {
-        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
+        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method.getMethod());
 
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
@@ -624,9 +622,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     protected WebDriver driverFor(final FrameworkMethod method) {
-        if (TestMethodAnnotations.forTest(method).isDriverSpecified()) {
-            String testSpecificDriver = TestMethodAnnotations.forTest(method).specifiedDriver();
-            String driverOptions = TestMethodAnnotations.forTest(method).driverOptions();
+        if (TestMethodAnnotations.forTest(method.getMethod()).isDriverSpecified()) {
+            String testSpecificDriver = TestMethodAnnotations.forTest(method.getMethod()).specifiedDriver();
+            String driverOptions = TestMethodAnnotations.forTest(method.getMethod()).driverOptions();
             return getDriver(testSpecificDriver, driverOptions);
         } else {
             return getDriver();

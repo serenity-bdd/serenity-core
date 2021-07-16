@@ -1,0 +1,34 @@
+package net.serenitybdd.junit.sampletests.serenitytests
+
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
+import net.thucydides.core.annotations.Steps
+import net.serenitybdd.junit.annotations.UseTestDataFrom
+import org.junit.Test
+import org.junit.runner.RunWith
+
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.not
+
+@RunWith(SerenityParameterizedRunner.class)
+@UseTestDataFrom("data.csv")
+class SampleDataDrivenTestCase {
+
+    String name
+    String age
+
+    @Steps
+    StepLibrary steps
+
+    SampleDataDrivenTestCase() {
+    }
+
+    @Test
+    void testSomethingWithData(){
+        System.out.println("Processing " + name + "/" + age)
+        assertThat(name, not(equalTo("Tim")))
+        assertThat(name, not(equalTo("John")))
+        steps.step1()
+    }
+
+}

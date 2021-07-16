@@ -1,5 +1,5 @@
 <acceptance-test-run title="Happy day scenario" name="happy_day_scenario" steps="6" successful="6" failures="0" skipped="0" ignored="0" pending="0" result="SUCCESS">
-  <user-story id="net.thucydides.samples.SampleTestScenarioForAnotherUserStory" name="Sample test scenario for another user story"/>
+  <user-story id="net.serenitybdd.junit.samples.SampleTestScenarioForAnotherUserStory" name="Sample test scenario for another user story"/>
   <test-step result="SUCCESS">
     <description>Step that succeeds</description>
   </test-step>

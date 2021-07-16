@@ -2,7 +2,7 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Pending;
-import net.thucydides.junit.annotations.TestData;
+import net.serenitybdd.junit.annotations.TestData;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

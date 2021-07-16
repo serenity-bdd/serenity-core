@@ -1,13 +1,13 @@
 package net.serenitybdd.junit.finder;
 
-import net.serenitybdd.junit.runners.DataDrivenAnnotations;
+import net.serenitybdd.junit.annotationprocessor.DataDrivenAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Returns all of the Thucydides classes under the specified package.
+ * Returns all of the Serenity classes under the specified package.
  */
 public class DataDrivenTestFinder extends TestFinder {
     public DataDrivenTestFinder(final String rootPackage) {

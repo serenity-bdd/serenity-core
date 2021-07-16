@@ -2,18 +2,17 @@ package net.serenitybdd.junit.finder;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.reflection.ClassFinder;
-import net.thucydides.junit.annotations.UseTestDataFrom;
-import net.thucydides.junit.runners.ThucydidesRunner;
-import org.junit.Test;
+import net.serenitybdd.junit.annotations.UseTestDataFrom;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * The TestFinder class lets you find the Thucydides tests or test methods underneath a given package.
+ * The TestFinder class lets you find the Serenity tests or test methods underneath a given package.
  * <p>You instantiate a TestFinder by providing the top-level package where the tests live.</p>
- * <p>You can then find the list of Thucydides test classes using getNormalTestClasses(), getDataDrivenTestClasses(),
+ * <p>You can then find the list of Serenity test classes using getNormalTestClasses(), getDataDrivenTestClasses(),
  * and getAllTestClasses() (which returns both normal and data-driven tests).</p>
  * <p>You may also need to retrieve the list of test methods for a particular category of class. You can do this using the
  * getTestMethodsFrom() method, e.g.
@@ -50,7 +49,7 @@ public abstract class TestFinder {
     protected Set<Class<?>> getNormalTestClasses() {
         Set<Class<?>> normalTestClasses = new HashSet<>();
         for(Class<?> testClass : getAllTestClasses()) {
-            if (normalThucydidesTest(testClass)) {
+            if (normalSerenityTest(testClass)) {
                 normalTestClasses.add(testClass);
             }
         }
@@ -67,10 +66,10 @@ public abstract class TestFinder {
     }
 
     @SuppressWarnings("deprecation")
-    private boolean normalThucydidesTest(Class<?> testClass) {
+    private boolean normalSerenityTest(Class<?> testClass) {
         RunWith runWith = testClass.getAnnotation(RunWith.class);
         return ((runWith != null)
-                && ((runWith.value() == ThucydidesRunner.class) || (runWith.value() == SerenityRunner.class)));
+                && ((runWith.value() == SerenityRunner.class)));
     }
 
     public List<Method> getAllTestMethods() {
@@ -101,7 +100,7 @@ public abstract class TestFinder {
 
         public void to(List<Method> methods) {
             for(Method method : testClass.getMethods()) {
-                if (method.isAnnotationPresent(Test.class)) {
+                if (method.isAnnotationPresent(org.junit.Test.class) || method.isAnnotationPresent(Test.class)) {
                     methods.add(method);
                 }
             }

@@ -653,8 +653,10 @@ public class StepEventBus {
     }
 
     public void testSuiteFinished() {
-        for (StepListener stepListener : getAllListeners()) {
-            stepListener.testSuiteFinished();
+        if(isBaseStepListenerRegistered()) {
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.testSuiteFinished();
+            }
         }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteFinished());
         storyUnderTest = null;

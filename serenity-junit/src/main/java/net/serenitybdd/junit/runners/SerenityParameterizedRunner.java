@@ -2,6 +2,10 @@ package net.serenitybdd.junit.runners;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
+import net.serenitybdd.junit.annotationprocessor.DataDrivenAnnotations;
+import net.serenitybdd.junit.finder.QualifierFinder;
+import net.serenitybdd.junit.util.ParameterizedRunnerScheduler;
+import net.serenitybdd.junit.util.ParameterizedTestsOutcomeAggregator;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
@@ -13,8 +17,8 @@ import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.junit.ThucydidesJUnitSystemProperties;
-import net.thucydides.junit.annotations.Concurrent;
+import net.serenitybdd.junit.SerenityJUnitSystemProperties;
+import net.serenitybdd.junit.annotations.Concurrent;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
@@ -40,7 +44,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     private final DriverConfiguration configuration;
     private ReportService reportService;
     private final ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = ParameterizedTestsOutcomeAggregator.from(this);
-    private TagScanner tagScanner;
+    private final TagScanner tagScanner;
 
     /**
      * Test runner used for testing purposes.
@@ -56,7 +60,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
                                        final WebDriverFactory webDriverFactory,
                                        final BatchManager batchManager
     ) throws Throwable {
-        super(klass, Collections.<Runner>emptyList());
+        super(klass, Collections.emptyList());
         this.configuration = configuration;
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
 
@@ -96,11 +100,8 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private String getThreadParameter(Concurrent concurrent) {
-//        String systemPropertyThreadValue =
-//                configuration.getEnvironmentVariables().getProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName());
-//
         String systemPropertyThreadValue = EnvironmentSpecificConfiguration.from(configuration.getEnvironmentVariables())
-                .getOptionalProperty(ThucydidesJUnitSystemProperties.CONCURRENT_THREADS.getName())
+                .getOptionalProperty(SerenityJUnitSystemProperties.CONCURRENT_THREADS.getName())
                 .orElse(null);
 
         String annotatedThreadValue = concurrent.threads();
@@ -182,7 +183,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     }
 
     private String from(final Collection testData) {
-        StringBuffer testDataQualifier = new StringBuffer();
+        StringBuilder testDataQualifier = new StringBuilder();
         boolean firstEntry = true;
         for (Object testDataValue : testData) {
             if (!firstEntry) {

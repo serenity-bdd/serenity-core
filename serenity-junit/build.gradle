@@ -12,7 +12,7 @@ dependencies {
     implementation project(':serenity-core')
 
     implementation("org.opentest4j:opentest4j:${opentest4jVersion}")
-    implementation(platform('org.junit:junit-bom:5.7.1'))
+    implementation(platform("org.junit:junit-bom:${junit5Version}"))
     implementation('org.junit.jupiter:junit-jupiter')
 
     testImplementation project(':serenity-test-utils')

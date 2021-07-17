@@ -34,6 +34,7 @@ public class PackageBasedLeafRequirements {
     }
 
     private String typeFrom(String path) {
+        path = path.replaceAll("\\$",".");
         if ((rootPackage == null) || requirementTypesProvider.getActiveRequirementTypes().isEmpty()) {
             return FeatureType.STORY.toString();
         }

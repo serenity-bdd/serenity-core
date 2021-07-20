@@ -219,8 +219,9 @@ public class StepEventBus {
         if (baseStepListener != null) {
             listeners.remove(baseStepListener);
         }
-        if (getBaseStepListener() != null) {
-            listeners.add(getBaseStepListener());
+
+        if (currentBaseStepListener() != null) {
+            listeners.add(currentBaseStepListener());
         }
         return listeners;
     }

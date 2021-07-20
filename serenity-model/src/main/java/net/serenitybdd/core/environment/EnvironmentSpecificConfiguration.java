@@ -145,7 +145,8 @@ public class EnvironmentSpecificConfiguration {
         Matcher matcher = VARIABLE_EXPRESSION_PATTERN.matcher(propertyValue);
         while (matcher.find()) {
             String nestedProperty = matcher.group().substring(2,matcher.group().length() - 1);
-            String value = getPropertyValue(nestedProperty);
+            String value = Optional.ofNullable(getPropertyValue(nestedProperty))
+                                   .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty));
             if (value != null) {
                 propertyValue = matcher.replaceFirst(value);
                 matcher.reset(propertyValue);

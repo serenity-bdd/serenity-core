@@ -197,7 +197,7 @@
                                 </div>
                             </#if>
                         </td>
-                        <#if (testOutcome.externalLink)??>
+                        <#if (testOutcome.externalLink)?? && (testOutcome.externalLink.url)??>
                             <td valign="top">
                                 <a href="${testOutcome.externalLink.url}" class="tag"
                                    title="${testOutcome.externalLink.type}">

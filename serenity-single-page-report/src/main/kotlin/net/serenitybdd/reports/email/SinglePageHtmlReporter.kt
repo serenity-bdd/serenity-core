@@ -6,7 +6,6 @@ import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.model.averageDurationOf
 import net.serenitybdd.reports.model.formattedDuration
 import net.serenitybdd.reports.model.maxDurationOf
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
@@ -23,7 +22,7 @@ class SinglePageHtmlReporter(
         private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
         private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
-    constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
+//    constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
 
     override fun getName(): String = "single-page-html"
     override fun getDescription(): String = "Single Page HTML Summary"
@@ -104,7 +103,8 @@ class SinglePageHtmlReporter(
     }
 
     fun outputFileIn(outputDirectory: Path): File {
-        return outputDirectory.resolve("serenity-summary.html").toFile()
+        val reportName = SerenitySinglePageReport.reportFilename().configuredIn(environmentVariables)
+        return outputDirectory.resolve(reportName).toFile()
     }
 
     fun newOutputFileIn(outputDirectory: Path): File {

@@ -237,6 +237,28 @@ class WhenGeneratingAnEmailableReport {
                     "Pending scenarios")
         }
     }
+
+    @Nested
+    /**
+     * The default single page HTML report is called serenity-summary.html.
+     * This can be overridden by setting the serenity.summary.report.filename environment variable.
+     */
+    inner class ReportWithACustomName {
+
+        @Test
+        fun `should be written to serenity-summary_html`() {
+            val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.summary.report.filename","my-report.html")
+
+            val reporter = SinglePageHtmlReporter(environmentVariables)
+            reporter.setSourceDirectory(TEST_OUTCOMES_WITH_MULTIPLE_RESULTS)
+            val generatedReport = reporter.generateReport()
+
+            assertThat(generatedReport).exists()
+            assertThat(generatedReport.toFile().name).isEqualTo("my-report.html")
+        }
+
+    }
 }
 
 fun parse(html: String): Document = Jsoup.parse(html)

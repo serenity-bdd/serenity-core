@@ -120,6 +120,11 @@ public enum ThucydidesSystemProperty {
     SERENITY_SUMMARY_REPORT_TITLE,
 
     /**
+     * What file name should be used for the email summary report (defaults to serenity-summary.html)
+     */
+    SERENITY_SUMMARY_REPORT_FILENAME,
+
+    /**
      * A subtitle to appear in the Serenity HTML reports.
      * This can be useful to describe a qualified or filtered report.
      */

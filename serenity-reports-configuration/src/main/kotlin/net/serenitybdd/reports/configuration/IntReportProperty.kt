@@ -8,7 +8,6 @@ class IntReportProperty(val property: String, val defaultValue: Int) : ReportPro
     constructor(property: ThucydidesSystemProperty, defaultValue: Int) : this(property.toString(), defaultValue)
 
     override fun configuredIn(environmentVariables: EnvironmentVariables) : Int {
-        //return environmentVariables.getPropertyAsInteger(property, defaultValue)
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty(property)
                 .map { value -> value.toInt() }

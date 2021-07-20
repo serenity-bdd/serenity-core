@@ -29,18 +29,24 @@ class SetAppropriateSaucelabsPlatformVersion {
         OS_PLATFORM_NAMES.put("el capitan", "OS X 10.11");
         OS_PLATFORM_NAMES.put("sierra", "macOS 10.12");
         OS_PLATFORM_NAMES.put("high sierra", "macOS 10.13");
+        OS_PLATFORM_NAMES.put("mojave", "macOS 10.14");
+        OS_PLATFORM_NAMES.put("catalina", "macOS 10.15");
+        OS_PLATFORM_NAMES.put("big sur", "macOS 11");
     }
 
-    private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap();
-
-    static {
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("5", "OS X 10.6");
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("6", "OS X 10.8");
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("7", "OS X 10.9");
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("8", "OS X 10.10");
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("10", "OS X 10.11");
-        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("11", "macOS 10.13");
-    }
+//    private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap();
+//
+//    static {
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("5", "OS X 10.6");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("6", "OS X 10.8");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("7", "OS X 10.9");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("8", "OS X 10.10");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("10", "OS X 10.11");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("11", "macOS 10.13");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("12", "macOS 10.14");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("13", "macOS 10.15");
+//        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("14", "macOS 11");
+//    }
 
     public SetAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {
 
@@ -59,43 +65,39 @@ class SetAppropriateSaucelabsPlatformVersion {
         if (isEmpty(platformValue)) {
             return;
         }
-        if (OS_PLATFORM_NAMES.containsKey(platformValue)) {
-            capabilities.setCapability("platform", OS_PLATFORM_NAMES.get(platformValue));
-        } else {
-            capabilities.setCapability("platform", platformFrom(platformValue));
-        }
+        capabilities.setCapability("platform", OS_PLATFORM_NAMES.getOrDefault(platformValue, platformValue));
 
-        if (capabilities.getBrowserName().equals("safari")) {
-            setAppropriateSaucelabsPlatformVersionForSafariFrom(environmentVariables);
-        }
-
+//        if (capabilities.getBrowserName().equals("safari") && capabilities.getVersion() == null) {
+//            setAppropriateSaucelabsPlatformVersionForSafariFrom(environmentVariables);
+//        }
     }
 
-    private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables) {
-        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase("mac")) {
-            String browserVersion = ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables);
-            if (MAC_OS_VERSIONS_PER_SAFARI_VERSION.containsKey(browserVersion)) {
-                capabilities.setCapability("platform", MAC_OS_VERSIONS_PER_SAFARI_VERSION.get(browserVersion));
-            }
-        }
-    }
 
-    private Platform platformFrom(String platformValue) {
-        return Arrays.stream(Platform.values()).filter(
-                platform -> platform.name().equalsIgnoreCase(platformValue) ||
-                            platformNameIn(platformValue, platform.getPartOfOsName())
-        ).findFirst()
-         .orElseThrow(() -> new UnknownPlatformException(platformValue));
-    }
-
-    private boolean platformNameIn(String platformValue, String[] partOfOsName) {
-        return Arrays.stream(partOfOsName)
-                     .anyMatch( osName -> osName.equalsIgnoreCase(platformValue));
-    }
-
-    private static class UnknownPlatformException extends RuntimeException {
-        public UnknownPlatformException(String message) {
-            super(message);
-        }
-    }
+//    private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables) {
+//        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase("mac")) {
+//            String browserVersion = ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables);
+//            if (MAC_OS_VERSIONS_PER_SAFARI_VERSION.containsKey(browserVersion)) {
+//                capabilities.setCapability("platform", MAC_OS_VERSIONS_PER_SAFARI_VERSION.get(browserVersion));
+//            }
+//        }
+//    }
+//
+//    private Platform platformFrom(String platformValue) {
+//        return Arrays.stream(Platform.values()).filter(
+//                platform -> platform.name().equalsIgnoreCase(platformValue) ||
+//                        platformNameIn(platformValue, platform.getPartOfOsName())
+//        ).findFirst()
+//                .orElseThrow(() -> new UnknownPlatformException(platformValue));
+//    }
+//
+//    private boolean platformNameIn(String platformValue, String[] partOfOsName) {
+//        return Arrays.stream(partOfOsName)
+//                .anyMatch(osName -> osName.equalsIgnoreCase(platformValue));
+//    }
+//
+//    private static class UnknownPlatformException extends RuntimeException {
+//        public UnknownPlatformException(String message) {
+//            super(message);
+//        }
+//    }
 }

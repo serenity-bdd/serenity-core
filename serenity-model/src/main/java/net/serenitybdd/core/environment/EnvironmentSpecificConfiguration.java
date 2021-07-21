@@ -123,6 +123,10 @@ public class EnvironmentSpecificConfiguration {
         return getOptionalProperty(propertyName.getPropertyName(), propertyName.getLegacyPropertyName());
     }
 
+    public String getProperty(final ThucydidesSystemProperty propertyName) {
+        return getProperty(propertyName.getPropertyName());
+    }
+
     public Optional<String> getOptionalProperty(String... propertyNames) {
 
         String propertyValue =  null;

@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TakeScreenshots;
-import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 

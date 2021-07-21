@@ -4,13 +4,11 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityValue;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
+/**
+ * Read chrome preferences from a part of the serenity.conf file via the environment variables.
+ */
 public class ChromePreferences {
     private final String prefix;
 
@@ -23,46 +21,19 @@ public class ChromePreferences {
     }
 
     public Map<String, Object> from(EnvironmentVariables environmentVariables) {
-        List<String> propertiesWithPrefix =
-            environmentVariables.getKeys()
-                    .stream()
-                    .filter( key -> key.startsWith(prefix))
-                    .collect(Collectors.toList());
 
+        Properties chromePrefs = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix(prefix);
         Map<String, Object> preferences = new HashMap<>();
 
-        for(String propertyKey : propertiesWithPrefix) {
-            String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
-            String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty(propertyKey)
-                    .orElse(null);
-
-            if (isNotEmpty(propertyValue)) {
-                preferences.put(preparedPropertyKey, CapabilityValue.asObject(propertyValue));
-            }
+        for(String propertyName : chromePrefs.stringPropertyNames()) {
+            String unprefixedPropertyName = unprefixed(prefix,propertyName);
+            Object propertyValue = CapabilityValue.asObject(chromePrefs.getProperty(propertyName));
+            preferences.put(unprefixedPropertyName, propertyValue);
         }
-
         return preferences;
     }
 
-//    private Object asObject(String propertyValue) {
-//        try {
-//            return Integer.parseInt(propertyValue);
-//        } catch(NumberFormatException noBiggy) {}
-//
-//
-//        if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
-//            return Boolean.parseBoolean(propertyValue);
-//        }
-//
-//
-//
-//        return propertyValue;
-//    }
-
-    private String getPreparedPropertyKey(String propertyKey) {
-        return propertyKey.replace(prefix,"");
+    private String unprefixed(String prefix, String propertyName) {
+        return propertyName.replace(prefix,"");
     }
-
-
 }

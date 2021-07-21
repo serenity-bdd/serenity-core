@@ -52,7 +52,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     public ChromeOptions configuredOptions() {
         ChromeOptions options = new ChromeOptions();
-
         /*
          * This is the only way to set the Chrome _browser_ binary.
          */
@@ -115,7 +114,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addRuntimeOptionsTo(ChromeOptions options) {
 
-
         if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables, false)) {
             options.addArguments(AUTOMATION_OPTIONS);
         }
@@ -129,25 +127,18 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false));
     }
 
-    private void addPreferencesTo(ChromeOptions options) {
-
+    public static Map<String, Object> preferencesConfiguredIn(EnvironmentVariables environmentVariables) {
         Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
         chromePreferences.putAll(ChromePreferences.startingWith("chrome.preferences.").from(environmentVariables));
-        Map<String, Object> sanitizedChromePreferences = cleanUpPathsIn(chromePreferences);
+        return SanitisedBrowserPreferences.cleanUpPathsIn(chromePreferences);
+    }
 
+    private void addPreferencesTo(ChromeOptions options) {
+        Map<String, Object> chromePreferences = preferencesConfiguredIn(environmentVariables);
         if (!chromePreferences.isEmpty()) {
-            options.setExperimentalOption("prefs", sanitizedChromePreferences);
+            options.setExperimentalOption("prefs", chromePreferences);
         }
     }
-
-    private Map<String, Object> cleanUpPathsIn(Map<String, Object> chromePreferences) {
-        Map<String, Object> preferences = new HashMap<>();
-        chromePreferences.forEach(
-                (key,value) -> preferences.put(key, SanitisedBrowserPreferenceValue.of(value))
-        );
-        return preferences;
-    }
-
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
 

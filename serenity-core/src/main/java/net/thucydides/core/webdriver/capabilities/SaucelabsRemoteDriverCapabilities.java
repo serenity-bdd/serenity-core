@@ -40,10 +40,12 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
      */
     @Override
     public String getUrl() {
-        return environmentVariables.injectSystemPropertiesInto(
-                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_URL)
-                                                                           .orElseThrow(() -> new SaucelabsConfigurationException("The saucelabs.url variable needs to be defined to use Saucelabs"))
-        );
+        String saucelabsUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_URL).orElse(null);
+        if (saucelabsUrl == null) {
+            return null;
+        } else {
+            return environmentVariables.injectSystemPropertiesInto(saucelabsUrl);
+        }
     }
 
     /**

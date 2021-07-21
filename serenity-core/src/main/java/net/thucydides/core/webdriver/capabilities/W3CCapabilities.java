@@ -8,7 +8,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 public class W3CCapabilities {
 

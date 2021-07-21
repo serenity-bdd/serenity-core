@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.steps.FilePathParser;
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;

@@ -1,7 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 
 import java.util.Optional;
@@ -11,16 +13,17 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
 public class ConfiguredProxy {
 
     public static Optional<Proxy> definedIn(EnvironmentVariables environmentVariables) {
-        String httpProxy = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
-        String sslProxy = ThucydidesSystemProperty.SERENITY_PROXY_SSL.from(environmentVariables);
-        String ftpProxy = ThucydidesSystemProperty.SERENITY_PROXY_FTP.from(environmentVariables);
-        String noProxy = ThucydidesSystemProperty.SERENITY_PROXY_NOPROXY.from(environmentVariables);
-        String proxyType = SERENITY_PROXY_TYPE.from(environmentVariables);
-        String proxyAutoconfigUrl = ThucydidesSystemProperty.SERENITY_PROXY_AUTOCONFIG.from(environmentVariables);
-        String socksProxy = SERENITY_PROXY_SOCKS_PROXY.from(environmentVariables);
-        String socksProxyUsername = SERENITY_PROXY_SOCKS_USERNAME.from(environmentVariables);
-        String socksProxyPassword = SERENITY_PROXY_SOCKS_PASSWORD.from(environmentVariables);
-        Integer socksProxyVersion = SERENITY_PROXY_SOCKS_VERSION.integerFrom(environmentVariables);
+        String httpProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_HTTP);
+        String sslProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_SSL);
+        String ftpProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_FTP);
+        String noProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_NOPROXY);
+        String proxyType = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_TYPE);
+        String proxyAutoconfigUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_AUTOCONFIG);
+        String socksProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_SOCKS_PROXY);
+        String socksProxyUsername = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_SOCKS_USERNAME);
+        String socksProxyPassword = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_SOCKS_PASSWORD);
+        String socksProxyVersionValue = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(SERENITY_PROXY_SOCKS_VERSION);
+        Integer socksProxyVersion = (StringUtils.isNumeric(socksProxyVersionValue)) ? Integer.parseInt(socksProxyVersionValue) : null;
 
         Boolean autodetect = ThucydidesSystemProperty.SERENITY_PROXY_AUTODETECT.booleanFrom(environmentVariables, false);
 

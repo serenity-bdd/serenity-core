@@ -124,9 +124,16 @@ public class EnvironmentSpecificConfiguration {
     }
 
     public String getProperty(final ThucydidesSystemProperty propertyName) {
-        return getProperty(propertyName.getPropertyName());
+        return getOptionalProperty(propertyName).orElseThrow(
+                () -> new UndefinedEnvironmentVariableException("Environment '"
+                        + propertyName
+                        + "' property undefined for environment '"
+                        + getDefinedEnvironment(environmentVariables) + "'"));
     }
 
+    public Integer getIntegerProperty(final ThucydidesSystemProperty propertyName) {
+        return getIntegerProperty(propertyName);
+    }
     public Optional<String> getOptionalProperty(String... propertyNames) {
 
         String propertyValue =  null;

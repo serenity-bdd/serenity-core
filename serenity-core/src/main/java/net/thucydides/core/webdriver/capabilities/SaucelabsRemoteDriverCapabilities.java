@@ -12,8 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Optional;
 import java.util.Properties;
 
-import static net.thucydides.core.ThucydidesSystemProperty.REMOTE_PLATFORM;
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -41,7 +40,10 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
      */
     @Override
     public String getUrl() {
-        return environmentVariables.injectSystemPropertiesInto(ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables));
+        return environmentVariables.injectSystemPropertiesInto(
+                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_URL)
+                                                                           .orElseThrow(() -> new SaucelabsConfigurationException("The saucelabs.url variable needs to be defined to use Saucelabs"))
+        );
     }
 
     /**
@@ -56,10 +58,11 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     @Override
     public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
 
-        configureBrowserVersion(capabilities);
-        configureTargetPlatform(capabilities);
-
         MutableCapabilities saucelabsCapabilities = saucelabsCapabilitiesDefinedIn(environmentVariables);
+
+        MutableCapabilities w3cCapabilitiesInSaucelabsSection = W3CCapabilities.definedIn(environmentVariables).withPrefix("saucelabs");
+
+        configureBrowserAndPlatformIfDefinedInSaucelabsBlock(w3cCapabilitiesInSaucelabsSection, capabilities);
 
         addBuildNumberTo(saucelabsCapabilities);
         configureTestName(saucelabsCapabilities);
@@ -90,40 +93,16 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
 
-    private void configureBrowserVersion(MutableCapabilities capabilities) {
-        String browserVersion = ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables);
-        if (isNotEmpty(browserVersion)) {
-            capabilities.setCapability("browserVersion", browserVersion);
+    private void configureBrowserAndPlatformIfDefinedInSaucelabsBlock(MutableCapabilities sourceCapabilities, MutableCapabilities capabilities) {
+        if (sourceCapabilities.getBrowserName() != null) {
+            capabilities.setCapability("browserName", sourceCapabilities.getBrowserName());
         }
-    }
-
-    private void configureTargetPlatform(DesiredCapabilities capabilities) {
-        SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
-
-        String remotePlatform = REMOTE_PLATFORM.from(environmentVariables);
-
-        if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        if (sourceCapabilities.getVersion() != null) {
+            capabilities.setCapability("browserVersion", sourceCapabilities.getVersion());
         }
-
-    }
-
-    private Object typed(String value) {
-        if (isABoolean(value)) {
-            return Boolean.parseBoolean(value);
+        if (sourceCapabilities.getCapability("platformName") != null) {
+            capabilities.setCapability("platformName", sourceCapabilities.getCapability("platformName"));
         }
-        if (isAnInteger(value)) {
-            return Integer.parseInt(value);
-        }
-        return value;
-    }
-
-    private boolean isAnInteger(String value) {
-        return StringUtils.isNumeric(value);
-    }
-
-    private boolean isABoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false") ;
     }
 
     private String unprefixed(String propertyName) {
@@ -141,4 +120,5 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
             );
         }
     }
+
 }

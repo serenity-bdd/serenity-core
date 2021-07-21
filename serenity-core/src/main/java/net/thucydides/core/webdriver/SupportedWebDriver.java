@@ -174,4 +174,8 @@ public enum SupportedWebDriver {
     public boolean supportsJavascriptInjection() {
         return supportsJavascriptInjection;
     }
+
+    public boolean isW3CCompliant() {
+        return !(this == APPIUM || this == IPHONE || this == ANDROID);
+    }
 }

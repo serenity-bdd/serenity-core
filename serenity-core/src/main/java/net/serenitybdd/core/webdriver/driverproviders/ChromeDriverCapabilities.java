@@ -5,6 +5,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.ChromePreferences;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
@@ -37,6 +38,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     @Override
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
 
         String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
         capabilities.setCapability("chrome.switches", chromeSwitches);

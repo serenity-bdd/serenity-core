@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class ProvidedDriverCapabilities implements DriverCapabilitiesProvider {
@@ -15,6 +16,7 @@ public class ProvidedDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setJavascriptEnabled(true);
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
         return capabilities;
     }
 

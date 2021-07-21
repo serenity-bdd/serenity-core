@@ -140,7 +140,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to reset the implicit timeout"() {
         given:
-            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            def driver = new WebDriverFacade(PhantomJSDriver, new WebDriverFactory());
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
             def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
         when:

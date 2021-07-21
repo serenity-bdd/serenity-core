@@ -1,9 +1,12 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.core.reports.remoteTesting.ASaucelabsConfiguration;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
@@ -58,7 +61,7 @@ public class RemoteDriverProvider implements DriverProvider {
 
     private RemoteDriverType remoteDriverType(EnvironmentVariables environmentVariables) {
 
-        if (saucelabsUrlIsDefined(environmentVariables)) {
+        if (ASaucelabsConfiguration.isDefinedIn(environmentVariables)) {
             return RemoteDriverType.SAUCELABS;
 //        } else if (browserStackUrlIsDefined(environmentVariables)){
 //            return RemoteDriverType.BROWSERSTACK;
@@ -67,11 +70,7 @@ public class RemoteDriverProvider implements DriverProvider {
         }
     }
 
-    private boolean saucelabsUrlIsDefined(EnvironmentVariables environmentVariables) {
-        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
-    }
-
     private boolean browserStackUrlIsDefined(EnvironmentVariables environmentVariables) {
-        return StringUtils.isNotEmpty(BROWSERSTACK_URL.from(environmentVariables));
+        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(BROWSERSTACK_URL).isPresent();
     }
 }

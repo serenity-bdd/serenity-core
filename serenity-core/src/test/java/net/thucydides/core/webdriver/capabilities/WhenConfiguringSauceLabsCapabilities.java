@@ -72,13 +72,14 @@ public class WhenConfiguringSauceLabsCapabilities {
     public void platformAndBrowserVersionsCanBeDefinedInTheSaucelabsConf() {
         environmentVariables.setProperty("saucelabs.platformName","macOS 11");
         environmentVariables.setProperty("saucelabs.browserVersion","14");
+        environmentVariables.setProperty("saucelabs.browserName","Safari");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         DesiredCapabilities saucelabsCapabilities =  capabilities.getCapabilities(new DesiredCapabilities());
-        MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
-        assertThat(saucelabsOpts.getCapability("platformName")).isEqualTo("macOS 11");
-        assertThat(saucelabsOpts.getCapability("browserVersion")).isEqualTo("14");
+        assertThat(saucelabsCapabilities.getCapability("platformName")).isEqualTo("macOS 11");
+        assertThat(saucelabsCapabilities.getCapability("browserVersion")).isEqualTo("14");
+        assertThat(saucelabsCapabilities.getCapability("browserName")).isEqualTo("Safari");
     }
 
 

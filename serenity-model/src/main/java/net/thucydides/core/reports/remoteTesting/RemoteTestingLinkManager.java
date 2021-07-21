@@ -26,7 +26,7 @@ public class RemoteTestingLinkManager implements LinkGenerator {
             return testOutcome.getExternalLink().getUrl();
         }
 
-        if (sauceLabsIsConfigured()) {
+        if (ASaucelabsConfiguration.isDefinedIn(environmentVariables)) {
             SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
             return saucelabsLinkGenerator.linkFor(testOutcome);
         }

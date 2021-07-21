@@ -6,6 +6,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -123,6 +124,7 @@ public class DriverCapabilities {
                 .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
                 .to(capabilities);
 
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
         return capabilities;
     }
 

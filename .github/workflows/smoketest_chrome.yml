@@ -26,6 +26,4 @@ jobs:
         run: mvn clean install -T4 -DskipTests
 
       - name: Smoke Tests
-        run:
-          mvn install -DskipTests
-          cd smoke-tests && mvn verify -Denvironment=run_with_chrome
+        run: cd smoke-tests && mvn verify -Denvironment=run_with_chrome

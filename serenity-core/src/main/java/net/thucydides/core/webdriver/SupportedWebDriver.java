@@ -61,7 +61,7 @@ public enum SupportedWebDriver {
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE")),
+    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE","Internet Explorer","internet explorer","internet_explorer")),
 
     /**
      * Microsoft Edge
@@ -117,6 +117,10 @@ public enum SupportedWebDriver {
         throw new IllegalArgumentException("Unsupported driver type: " + driverName);
     }
 
+    public static boolean isSupported(String driver) {
+        return supportedDrivers().stream().anyMatch(driverName -> driverName.equalsIgnoreCase(driver));
+    }
+
     public Class<? extends WebDriver> getWebdriverClass() {
         return webdriverClass;
     }
@@ -126,6 +130,16 @@ public enum SupportedWebDriver {
         String enumValues = Joiner.on(", ").join(Arrays.stream(SupportedWebDriver.values()).map(Enum::toString).collect(Collectors.toList()));
 
         return Joiner.on(", ").join(getSynonymes(), enumValues);
+    }
+
+    public static List<String> supportedDrivers() {
+
+        List<String> drivers = new ArrayList<>();
+        drivers.addAll(Arrays.stream(SupportedWebDriver.values()).map(Enum::toString).collect(Collectors.toList()));
+        for(SupportedWebDriver supportedWebDriver : values()) {
+            drivers.addAll(supportedWebDriver.synonyms);
+        }
+        return drivers;
     }
 
     private static String getSynonymes() {

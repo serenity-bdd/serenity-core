@@ -10,16 +10,20 @@ import org.openqa.selenium.WebDriver;
 public class RemoteWebdriverStub {
 
     public static WebDriver from(EnvironmentVariables environmentVariables) {
-        switch (AppiumConfiguration.from(environmentVariables).getTargetPlatform()) {
-            case IOS:
-                return new IOSWebDriverStub();
+        if (AppiumConfiguration.from(environmentVariables).isDefined()) {
+            switch (AppiumConfiguration.from(environmentVariables).getTargetPlatform()) {
+                case IOS:
+                    return new IOSWebDriverStub();
 
-            case ANDROID:
-                return new AndroidWebDriverStub();
+                case ANDROID:
+                    return new AndroidWebDriverStub();
 
-            case NONE:
-            default:
-                return new WebDriverStub();
+                case NONE:
+                default:
+                    return new WebDriverStub();
+            }
+        } else  {
+            return new WebDriverStub();
         }
     }
 }

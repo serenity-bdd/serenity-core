@@ -54,13 +54,12 @@ public class DriverCapabilities {
 
 
     private SupportedWebDriver driverTypeFor(String driver) {
-        String normalizedDriverName = driverComponentof(driver).toUpperCase();
-        if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
-            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
+        if (!SupportedWebDriver.isSupported(driver)) {
+            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(driver);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
-        return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
+        return SupportedWebDriver.valueOrSynonymOf(driver);
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {

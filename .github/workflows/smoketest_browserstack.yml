@@ -1,4 +1,4 @@
-name: Smoke Tests (Firefox)
+name: Smoke Tests (BrowserStack)
 
 on: [push]
 

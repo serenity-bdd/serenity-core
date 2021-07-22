@@ -23,18 +23,3 @@ jobs:
 
     - name: Unit and Integration Tests
       run: mvn clean install -T4
-
-    - name: Smoke Tests (Chrome)
-      run:
-        mvn install -DskipTests
-        cd smoke-tests && mvn verify -Denvironment=run_with_chrome
-
-    - name: Smoke Tests (Firefox)
-      run:
-        mvn install -DskipTests
-        cd smoke-tests && mvn verify -Denvironment=run_with_firefox
-
-    - name: Smoke Tests (Browserstack)
-      run:
-        mvn install -DskipTests
-        cd smoke-tests && mvn verify -Denvironment=run_with_browserstack -Dbrowserstack.username=${{ secrets.BROWSERSTACK_USER }} -Dbrowserstack.key=${{ secrets.BROWSERSTACK_KEY }}

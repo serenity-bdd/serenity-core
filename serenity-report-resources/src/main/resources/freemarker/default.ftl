@@ -528,7 +528,7 @@
                                         </#list>
                                     </#if>
                                 </span>
-                                <#if (step.externalLink)??>
+                                <#if (step.externalLink)?? && (step.externalLink.url)??>
                                     <a href="${step.externalLink.url}" class="tag" title="${step.externalLink.type}">
                                         <i class="fa fa-video-camera fa-1x"></i>
                                     </a>

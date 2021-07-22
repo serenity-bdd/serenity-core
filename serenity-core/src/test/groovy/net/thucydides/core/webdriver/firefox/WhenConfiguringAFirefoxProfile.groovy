@@ -55,24 +55,4 @@ class WhenConfiguringAFirefoxProfile extends Specification {
             1 * profile.setPreference("general.useragent.override","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36")
     }
 
-
-
-    def "should add Firefox-specific options"() {
-        given:
-
-        def firefoxOptions = """
-        {"binary": "/Applications/Firefox-49.1.app/Contents/MacOS/firefox-bin","log":{"level":"debug"}}
-        """
-            environmentVariables.setProperty("gecko.firefox.options",firefoxOptions)
-            FirefoxDriverCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables)
-        when:
-            def desiredCapabilities = capabilities.getCapabilities()
-        then:
-            desiredCapabilities.getCapability("moz:firefoxOptions")["binary"] == "/Applications/Firefox-49.1.app/Contents/MacOS/firefox-bin"
-        and:
-            desiredCapabilities.getCapability("moz:firefoxOptions")["log"]["level"] == "debug"
-    }
-
-
-
 }

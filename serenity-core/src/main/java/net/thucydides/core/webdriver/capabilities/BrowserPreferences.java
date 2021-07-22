@@ -7,17 +7,17 @@ import net.thucydides.core.webdriver.CapabilityValue;
 import java.util.*;
 
 /**
- * Read chrome preferences from a part of the serenity.conf file via the environment variables.
+ * Read browser preferences from a part of the serenity.conf file via the environment variables.
  */
-public class ChromePreferences {
+public class BrowserPreferences {
     private final String prefix;
 
-    private ChromePreferences(String prefix) {
+    private BrowserPreferences(String prefix) {
         this.prefix = prefix;
     }
 
-    public static ChromePreferences startingWith(String prefix) {
-        return new ChromePreferences(prefix);
+    public static BrowserPreferences startingWith(String prefix) {
+        return new BrowserPreferences(prefix);
     }
 
     public Map<String, Object> from(EnvironmentVariables environmentVariables) {

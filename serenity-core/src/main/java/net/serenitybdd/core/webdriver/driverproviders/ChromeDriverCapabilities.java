@@ -4,7 +4,7 @@ import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
-import net.thucydides.core.webdriver.capabilities.ChromePreferences;
+import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
@@ -128,8 +128,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     public static Map<String, Object> preferencesConfiguredIn(EnvironmentVariables environmentVariables) {
-        Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
-        chromePreferences.putAll(ChromePreferences.startingWith("chrome.preferences.").from(environmentVariables));
+        Map<String, Object> chromePreferences = BrowserPreferences.startingWith("chrome_preferences.").from(environmentVariables);
+        chromePreferences.putAll(BrowserPreferences.startingWith("chrome.preferences.").from(environmentVariables));
         return SanitisedBrowserPreferences.cleanUpPathsIn(chromePreferences);
     }
 
@@ -142,7 +142,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
 
-        Map<String, Object> chromeExperimentalOptions = ChromePreferences.startingWith("chrome_experimental_options.")
+        Map<String, Object> chromeExperimentalOptions = BrowserPreferences.startingWith("chrome_experimental_options.")
                                                                          .from(environmentVariables);
 
         chromeExperimentalOptions.keySet().forEach(

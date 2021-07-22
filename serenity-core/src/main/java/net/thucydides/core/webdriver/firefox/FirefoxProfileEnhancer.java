@@ -5,9 +5,8 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.SanitisedBrowserPreferences;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.ChromePreferences;
+import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.util.List;
@@ -85,8 +84,8 @@ public class FirefoxProfileEnhancer {
     }
 
     public static Map<String, Object> preferencesConfiguredIn(EnvironmentVariables environmentVariables) {
-        Map<String, Object> preferences = ChromePreferences.startingWith("firefox.preferences.").from(environmentVariables);
-        preferences.putAll(ChromePreferences.startingWith("firefox.preferences.").from(environmentVariables));
+        Map<String, Object> preferences = BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables);
+        preferences.putAll(BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables));
         return SanitisedBrowserPreferences.cleanUpPathsIn(preferences);
     }
 

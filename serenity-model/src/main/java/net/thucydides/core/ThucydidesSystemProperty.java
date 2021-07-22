@@ -1342,6 +1342,11 @@ public enum ThucydidesSystemProperty {
     GECKO_FIREFOX_OPTIONS,
 
     /**
+     * An alternative to gecko.firefox.options
+     */
+    FIREFOX_OPTIONS,
+
+    /**
      * Use this property to specify the maximum number of times to rerun the failing tests.
      */
     TEST_RETRY_COUNT,

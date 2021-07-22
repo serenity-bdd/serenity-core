@@ -8,14 +8,12 @@ import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.capabilities.ChromePreferences;
+import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -69,7 +67,7 @@ public class EdgeDriverProvider implements DriverProvider {
     }
 
     public static Map<String, Object> optionsConfiguredIn(EnvironmentVariables environmentVariables) {
-        Map<String, Object> chromePreferences = ChromePreferences.startingWith("edge.options.").from(environmentVariables);
+        Map<String, Object> chromePreferences = BrowserPreferences.startingWith("edge.options.").from(environmentVariables);
         return SanitisedBrowserPreferences.cleanUpPathsIn(chromePreferences);
     }
 

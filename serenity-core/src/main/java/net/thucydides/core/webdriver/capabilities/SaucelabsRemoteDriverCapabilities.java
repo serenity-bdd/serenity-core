@@ -2,6 +2,8 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -116,7 +118,13 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         if (isNotEmpty(testName)) {
             capabilities.setCapability("name", testName);
         } else {
-            Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
+            Optional<String> guessedTestName;
+            Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
+            if (latestOutcome.isPresent()) {
+                guessedTestName = Optional.of(latestOutcome.get().getCompleteName());
+            } else {
+                guessedTestName = RemoteTestName.fromCurrentTest();
+            }
             guessedTestName.ifPresent(
                     name -> capabilities.setCapability("name", name)
             );

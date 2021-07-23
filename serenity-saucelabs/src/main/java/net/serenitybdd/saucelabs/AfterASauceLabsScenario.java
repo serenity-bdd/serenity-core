@@ -16,17 +16,17 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
 
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
-        if ((driver == null) || (!RemoteDriver.isARemoteDriver(driver))) {
+        if ((driver == null) || !RemoteDriver.isARemoteDriver(driver)) {
             return;
         }
 
         String sessionId = RemoteDriver.of(driver).getSessionId().toString();
         String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.user.id")
+                .getOptionalProperty("saucelabs.username")
                 .orElse(null);
 
         String key = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.access.key")
+                .getOptionalProperty("saucelabs.accessKey")
                 .orElse(null);
 
         String dataCenter = EnvironmentSpecificConfiguration.from(environmentVariables)

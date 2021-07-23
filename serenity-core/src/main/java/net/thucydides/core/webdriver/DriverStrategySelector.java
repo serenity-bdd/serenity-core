@@ -3,11 +3,11 @@ package net.thucydides.core.webdriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
-import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
 
 /**
  * Created by john on 25/06/2016.
@@ -15,13 +15,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class DriverStrategySelector {
 
     private final EnvironmentVariables environmentVariables;
-    private final SaucelabsRemoteDriverCapabilities sauceRemoteDriverCapabilities;
     private final BrowserStackRemoteDriverCapabilities browserStackRemoteDriverCapabilities;
 
     public DriverStrategySelector(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.browserStackRemoteDriverCapabilities = new BrowserStackRemoteDriverCapabilities(environmentVariables);
-        this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
     }
 
     public static DriverStrategySelector inEnvironment(EnvironmentVariables environmentVariables) {
@@ -31,7 +29,8 @@ public class DriverStrategySelector {
     public SupportedWebDriver forDriverClass(Class<? extends WebDriver> driverClass) {
 
         // Driver type defined as 'remote'
-        if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() || browserStackUrlIsDefined()) {
+        if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() ||
+            browserStackUrlIsDefined()) {
             return SupportedWebDriver.REMOTE;
         }
 
@@ -48,7 +47,7 @@ public class DriverStrategySelector {
     }
 
     public boolean saucelabsUrlIsDefined() {
-        return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
+        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
     }
 
     public boolean browserStackUrlIsDefined() {

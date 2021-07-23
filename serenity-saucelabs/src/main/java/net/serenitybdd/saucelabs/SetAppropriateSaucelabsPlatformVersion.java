@@ -1,4 +1,4 @@
-package net.thucydides.core.webdriver.capabilities;
+package net.serenitybdd.saucelabs;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -16,7 +16,7 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     private static String DEFAULT_PLATFORM = "Windows 10";
 
-    private static Map<String, String> OS_PLATFORM_NAMES = new HashMap();
+    private static final Map<String, String> OS_PLATFORM_NAMES = new HashMap();
 
     static {
         OS_PLATFORM_NAMES.put("snowleopard", "OS X 10.6");
@@ -31,7 +31,7 @@ class SetAppropriateSaucelabsPlatformVersion {
         OS_PLATFORM_NAMES.put("high sierra", "macOS 10.13");
     }
 
-    private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap();
+    private static final Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap<>();
 
     static {
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("5", "OS X 10.6");
@@ -68,7 +68,6 @@ class SetAppropriateSaucelabsPlatformVersion {
         if (capabilities.getBrowserName().equals("safari")) {
             setAppropriateSaucelabsPlatformVersionForSafariFrom(environmentVariables);
         }
-
     }
 
     private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables) {
@@ -84,13 +83,12 @@ class SetAppropriateSaucelabsPlatformVersion {
         return Arrays.stream(Platform.values()).filter(
                 platform -> platform.name().equalsIgnoreCase(platformValue) ||
                             platformNameIn(platformValue, platform.getPartOfOsName())
-        ).findFirst()
-         .orElseThrow(() -> new UnknownPlatformException(platformValue));
+        ).findFirst().orElseThrow(() -> new UnknownPlatformException(platformValue));
     }
 
     private boolean platformNameIn(String platformValue, String[] partOfOsName) {
         return Arrays.stream(partOfOsName)
-                     .anyMatch( osName -> osName.equalsIgnoreCase(platformValue));
+                .anyMatch(osName -> osName.equalsIgnoreCase(platformValue));
     }
 
     private static class UnknownPlatformException extends RuntimeException {

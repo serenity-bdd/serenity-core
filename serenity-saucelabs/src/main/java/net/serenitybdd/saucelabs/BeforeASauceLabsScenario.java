@@ -1,9 +1,9 @@
 package net.serenitybdd.saucelabs;
 
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -13,35 +13,20 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
+import static net.thucydides.core.ThucydidesSystemProperty.REMOTE_PLATFORM;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
 
     private static final String SAUCELABS = "saucelabs.";
-    private static final Map<String, String> LEGACY_TO_W3C = new HashMap<>();
-    private static final List<String> UNOVERRIDABLE_FIELDS  = Collections.singletonList("server");
 
-    static {
-        LEGACY_TO_W3C.put("user", "userName");
-        LEGACY_TO_W3C.put("key", "accessKey");
-        LEGACY_TO_W3C.put("os_version", "osVersion");
-        LEGACY_TO_W3C.put("browser", "browserName");
-        LEGACY_TO_W3C.put("browser_version", "browserVersion");
-        LEGACY_TO_W3C.put("project", "projectName");
-        LEGACY_TO_W3C.put("name", "sessionName");
-        LEGACY_TO_W3C.put("build", "buildName");
-        LEGACY_TO_W3C.put("device", "deviceName");
-        LEGACY_TO_W3C.put("appium_version", "appiumVersion");
-    }
-
-    // ["server", "user", "key"]
-    private static List<String> NON_SAUCE_PROPERTIES
-            = Arrays.asList(
+    private static final List<String> NON_SAUCE_PROPERTIES = Arrays.asList(
             "browserName",
             "browserVersion",
-            "server",
-            "user",
-            "key"
+            "platformName",
+            "platformVersion",
+            "datacenter",
+            "url"
     );
 
     @Override
@@ -56,8 +41,8 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         }
 
         Properties sauceLabsProperties = EnvironmentSpecificConfiguration
-                                                    .from(environmentVariables)
-                                                    .getPropertiesWithPrefix(SAUCELABS);
+                .from(environmentVariables)
+                .getPropertiesWithPrefix(SAUCELABS);
 
         Properties sauceLabsPropertiesWithOverrides = caterForOverridesIn(sauceLabsProperties);
         OverrideDriverCapabilities.getProperties()
@@ -66,10 +51,14 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         setNonW3CCapabilities(capabilities, sauceLabsPropertiesWithOverrides);
 
         Map<String, Object> saucelabsOptions = w3CPropertyMapFrom(sauceLabsPropertiesWithOverrides);
+
         String testName = testOutcome.getStoryTitle() + " - " + testOutcome.getTitle();
         saucelabsOptions.put("name", testName);
 
         capabilities.setCapability("sauce:options", saucelabsOptions);
+
+        configureTargetPlatform(capabilities, environmentVariables);
+
         return capabilities;
     }
 
@@ -78,7 +67,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         sauceLabsProperties
                 .stringPropertyNames()
                 .stream()
-                .filter(this::shouldNotOveride)
+                .filter(this::shouldNotOverride)
                 .forEach(
                         name -> propertiesWithOverrides.put(name, sauceLabsProperties.getProperty(name))
                 );
@@ -91,19 +80,17 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
                 .stream()
                 .filter(this::isNonW3CProperty)
                 .forEach(
-                        key -> capabilities.setCapability(w3cKey(key), sauceLabsProperties.getProperty(key))
+                        key -> capabilities.setCapability(this.unprefixed(key), sauceLabsProperties.getProperty(key))
                 );
     }
 
-    private boolean shouldNotOveride(String propertyName) {
-        return (!OverrideDriverCapabilities.shouldOverrideDefaults()
-                || UNOVERRIDABLE_FIELDS.contains(propertyName)
-                || UNOVERRIDABLE_FIELDS.contains(unprefixed(propertyName)));
+    private boolean shouldNotOverride(String propertyName) {
+        return !OverrideDriverCapabilities.shouldOverrideDefaults();
     }
 
     private Map<String, Object> w3CPropertyMapFrom(Properties properties) {
         Map<String, Object> w3cOptions = new HashMap<>();
-        Map<String,Map<String, Object>> nestedOptions = new HashMap<>();
+        Map<String, Map<String, Object>> nestedOptions = new HashMap<>();
 
         properties.stringPropertyNames()
                 .stream()
@@ -111,15 +98,14 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
                 .forEach(
                         key -> {
                             String unprefixedKey = unprefixed(key);
-                            String w3cKey = LEGACY_TO_W3C.getOrDefault(unprefixedKey, unprefixedKey);
-                            if (w3cKey.contains(".")) {
-                                String parentKey = StringUtils.split(w3cKey,".")[0];
-                                String childKey = StringUtils.split(w3cKey,".")[1];
+                            if (unprefixedKey.contains(".")) {
+                                String parentKey = StringUtils.split(unprefixedKey, ".")[0];
+                                String childKey = StringUtils.split(unprefixedKey, ".")[1];
                                 Map<String, Object> nestedProperties = nestedOptions.getOrDefault(parentKey, new HashMap<>());
                                 nestedProperties.put(childKey, properties.getProperty(key));
                                 nestedOptions.put(parentKey, nestedProperties);
                             } else {
-                                w3cOptions.put(w3cKey, properties.getProperty(key));
+                                w3cOptions.put(unprefixedKey, properties.getProperty(key));
                             }
                         }
                 );
@@ -128,20 +114,24 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
     }
 
     private boolean isNonW3CProperty(String key) {
-        return (NON_SAUCE_PROPERTIES.contains(w3cKey(unprefixed(key)))
-                || NON_SAUCE_PROPERTIES.contains(w3cKey(key)));
+        return (NON_SAUCE_PROPERTIES.contains(unprefixed(key)) || NON_SAUCE_PROPERTIES.contains(key));
     }
 
     private boolean isW3CProperty(String key) {
         return !isNonW3CProperty(key);
     }
 
-    private String w3cKey(String key) {
-        return LEGACY_TO_W3C.getOrDefault(unprefixed(key), unprefixed(key));
-    }
-
     private String unprefixed(String propertyName) {
         return propertyName.replace(SAUCELABS, "");
     }
 
+    private void configureTargetPlatform(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
+        SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
+
+        String remotePlatform = REMOTE_PLATFORM.from(environmentVariables);
+
+        if (isNotEmpty(remotePlatform)) {
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        }
+    }
 }

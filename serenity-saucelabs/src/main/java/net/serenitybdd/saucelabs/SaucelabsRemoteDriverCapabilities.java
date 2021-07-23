@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_BROWSERNAME;
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
@@ -108,7 +105,15 @@ public class SaucelabsRemoteDriverCapabilities {
         } else {
             Optional<String> guessedTestName;
             Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
-            guessedTestName = latestOutcome.map(testOutcome -> Optional.of(testOutcome.getCompleteName())).orElseGet(RemoteTestName::fromCurrentTest);
+
+            boolean sessionPerScenario = Arrays.asList("scenario", "example")
+                    .contains(ThucydidesSystemProperty.SERENITY_RESTART_BROWSER_FOR_EACH.from(environmentVariables));
+
+            guessedTestName = latestOutcome.map(testOutcome -> {
+                // Add scenario name to session name only if browser session is restarted for every scenario
+                return Optional.of(sessionPerScenario ? testOutcome.getCompleteName() : testOutcome.getStoryTitle());
+            }).orElseGet(RemoteTestName::fromCurrentTest);
+
             guessedTestName.ifPresent(
                     name -> capabilities.setCapability("name", name)
             );

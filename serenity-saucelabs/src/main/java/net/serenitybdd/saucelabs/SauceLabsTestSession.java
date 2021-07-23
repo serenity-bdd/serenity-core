@@ -15,7 +15,7 @@ import java.util.Map;
 public class SauceLabsTestSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SauceLabsTestSession.class);
-    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.%s/rest/v1/%s/jobs/%s";
+    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.%s.saucelabs.com/rest/v1/%s/jobs/%s";
     private final String sauceLabsUsername, sauceLabsKey, sessionId, datacenter;
     private final Gson gson = new Gson();
 
@@ -38,7 +38,7 @@ public class SauceLabsTestSession {
     }
 
     public String getTestUrl() {
-        return String.format("https://%s/tests/%s", datacenter, sessionId);
+        return String.format("https://%s.saucelabs.com/tests/%s", datacenter, sessionId);
     }
 
     private boolean testPassed(TestOutcome outcome) {

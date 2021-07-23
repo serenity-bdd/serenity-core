@@ -14,6 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REMOTE_PLATFORM;
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_BROWSERNAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
@@ -29,13 +30,18 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
             "url"
     );
 
+    private static final Map<String, String> SAUCELABS_BROWSER_NAMES = new HashMap<String, String>() {{
+        put("iexplorer", "internet explorer");
+        put("edge", "MicrosoftEdge");
+    }};
+
     @Override
     public DesiredCapabilities apply(EnvironmentVariables environmentVariables,
                                      SupportedWebDriver driver,
                                      TestOutcome testOutcome,
                                      DesiredCapabilities capabilities) {
 
-        // Skipp setting up capabilities if it's not SauceLabs execution
+        // Skip setting up capabilities if it's not SauceLabs execution
         if (!ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables)) {
             return capabilities;
         }
@@ -58,6 +64,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         capabilities.setCapability("sauce:options", saucelabsOptions);
 
         configureTargetPlatform(capabilities, environmentVariables);
+        configureTargetBrowser(capabilities, environmentVariables);
 
         return capabilities;
     }
@@ -132,6 +139,14 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
 
         if (isNotEmpty(remotePlatform)) {
             capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        }
+    }
+
+    private void configureTargetBrowser(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
+        String remoteBrowser = SAUCELABS_BROWSERNAME.from(environmentVariables);
+
+        if (isNotEmpty(remoteBrowser)) {
+            capabilities.setBrowserName(SAUCELABS_BROWSER_NAMES.getOrDefault(remoteBrowser, remoteBrowser));
         }
     }
 }

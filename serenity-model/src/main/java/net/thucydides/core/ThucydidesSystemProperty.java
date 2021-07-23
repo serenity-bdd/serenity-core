@@ -700,6 +700,13 @@ public enum ThucydidesSystemProperty {
      * SauceLabs URL if running the web tests on SauceLabs
      */
     SAUCELABS_URL,
+    /**
+     * SauceLabs datacenter used for interaction with SauceLabs API and adding link to Serenity report
+     * Examples:
+     * US: us-west-1
+     * Europe: eu-central-1
+     */
+    SAUCELABS_DATACENTER,
 
     /**
      * SauceLabs access key - if provided, Thucydides can generate links to the SauceLabs reports that don't require a login.

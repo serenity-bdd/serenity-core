@@ -6,11 +6,13 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>2.4.35-SNAPSHOT</version>
+        <version>2.4.52-SNAPSHOT</version>
     </parent>
+
     <artifactId>serenity-saucelabs</artifactId>
     <packaging>jar</packaging>
     <name>Serenity SauceLabs Integration</name>
+
     <build>
         <plugins>
             <plugin>
@@ -38,6 +40,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-rest-assured</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- TEST DEPENDENCIES -->

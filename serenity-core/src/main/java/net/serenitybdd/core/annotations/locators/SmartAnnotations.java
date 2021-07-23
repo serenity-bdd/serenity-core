@@ -490,13 +490,12 @@ public class SmartAnnotations extends Annotations {
         private static final long serialVersionUID = 1L;
 
         {
-            List<String> objectClassMethodNames = getMethodNames(Object.class
-                    .getDeclaredMethods());
+            List<String> objectClassMethodNames = getMethodNames(Object.class.getDeclaredMethods());
             addAll(objectClassMethodNames);
-            List<String> annotationClassMethodNames = getMethodNames(Annotation.class
-                    .getDeclaredMethods());
+            List<String> annotationClassMethodNames = getMethodNames(Annotation.class.getDeclaredMethods());
             annotationClassMethodNames.removeAll(objectClassMethodNames);
             addAll(annotationClassMethodNames);
+            add("proxyClassLookup");
         }
     };
 

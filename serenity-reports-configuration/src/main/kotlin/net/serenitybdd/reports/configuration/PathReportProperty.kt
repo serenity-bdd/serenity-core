@@ -8,6 +8,10 @@ import java.nio.file.Paths
 
 class PathReportProperty(val property: ThucydidesSystemProperty, val defaultValue: String) : ReportProperty<Path> {
     override fun configuredIn(environmentVariables: EnvironmentVariables) : Path {
-        return Paths.get(property.from(environmentVariables, defaultValue))
+        return Paths.get(
+            EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(property)
+                .orElse(defaultValue)
+        )
     }
 }

@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.thucydides.core.steps.StepEventBus
+
 object BlackBox {
     private val flightLog = ThreadLocal.withInitial { ArrayList<ResolvedAssertion>() }
     private var usingSoftAssertions = false
@@ -50,7 +52,8 @@ object BlackBox {
             softAssertions.forEachIndexed { index, error ->
                 renderedErrorMessages.append("- ERROR ${index + 1}) ${normaliseSpacingIn(error)} ${System.lineSeparator()}")
             }
-            endSoftAssertions();
+            endSoftAssertions()
+            takeScreenshot()
             throw AssertionError(renderedErrorMessages)
         }
     }

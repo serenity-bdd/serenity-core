@@ -104,7 +104,8 @@ class SinglePageHtmlReporter(
     }
 
     fun outputFileIn(outputDirectory: Path): File {
-        return outputDirectory.resolve("serenity-summary.html").toFile()
+        val reportName = SerenitySinglePageReport.reportFilename().configuredIn(environmentVariables)
+        return outputDirectory.resolve(reportName).toFile()
     }
 
     fun newOutputFileIn(outputDirectory: Path): File {

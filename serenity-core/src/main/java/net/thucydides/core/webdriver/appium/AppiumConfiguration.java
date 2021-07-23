@@ -14,6 +14,7 @@ import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.AcceptedW3CCapabilityKeys;
@@ -52,7 +53,7 @@ public class AppiumConfiguration {
     public MobilePlatform getTargetPlatform(WebDriver driver) {
         String PLATFORM_NAME = "platformName";
         try {
-            Capabilities caps = RemoteDriver.of(driver).getCapabilities();
+            Capabilities caps = (RemoteDriver.isStubbed(driver)) ? new DesiredCapabilities() : RemoteDriver.of(driver).getCapabilities();
             if (caps.getCapabilityNames().contains(PLATFORM_NAME)) {
                 return MobilePlatform.valueOf(
                         caps.getCapability(PLATFORM_NAME).toString().toUpperCase());
@@ -66,6 +67,18 @@ public class AppiumConfiguration {
         return getTargetPlatform();
     }
 
+    private Optional<MobilePlatform> currentlyConfiguredTargetPlatform() {
+        Optional<MobilePlatform> contextPlatform = Stream.of(definedContext())
+                .filter(platform -> platform.isDefined)
+                .findFirst();
+        if (contextPlatform.isPresent()) {
+            return contextPlatform;
+        }
+
+        return Stream.of(definedTargetPlatform())
+                .filter(platform -> platform.isDefined)
+                .findFirst();
+    }
     /**
      * Return the Appium platform defined in the system properties or the context. Must be either ios or android.
      */
@@ -205,7 +218,7 @@ public class AppiumConfiguration {
     }
 
     public boolean isDefined() {
-        return getTargetPlatform() != MobilePlatform.NONE;
+        return currentlyConfiguredTargetPlatform().isPresent() && currentlyConfiguredTargetPlatform().get() != MobilePlatform.NONE;
     }
 
     private static List<String> collectAppiumCapabilities() {

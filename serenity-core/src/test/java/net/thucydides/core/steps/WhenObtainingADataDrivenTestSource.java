@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Test;

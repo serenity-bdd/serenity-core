@@ -6,6 +6,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -53,13 +54,12 @@ public class DriverCapabilities {
 
 
     private SupportedWebDriver driverTypeFor(String driver) {
-        String normalizedDriverName = driverComponentof(driver).toUpperCase();
-        if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
-            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
+        if (!SupportedWebDriver.isSupported(driver)) {
+            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(driver);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
-        return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
+        return SupportedWebDriver.valueOrSynonymOf(driver);
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
@@ -123,6 +123,7 @@ public class DriverCapabilities {
                 .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
                 .to(capabilities);
 
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
         return capabilities;
     }
 

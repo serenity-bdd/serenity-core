@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.webdriver.driverproviders.*;
@@ -203,10 +204,11 @@ public class WebDriverFactory {
         List<String> RETRY_CAUSES = Splitter.on(";")
                 .trimResults()
                 .omitEmptyStrings()
-                .splitToList(WEBDRIVER_CREATION_RETRY_CAUSES.from(environmentVariables, "All parallel tests are currently in use"));
+                .splitToList(WEBDRIVER_CREATION_RETRY_CAUSES
+                        .from(environmentVariables, "All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
                 partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
-                                       && (cause.getMessage().contains(partialErrorMessage))
+                        && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 
@@ -245,11 +247,10 @@ public class WebDriverFactory {
     }
 
     public static String getSaucelabsDriverFrom(EnvironmentVariables environmentVariables) {
-        String driver = ThucydidesSystemProperty.SAUCELABS_BROWSERNAME.from(environmentVariables);
-        if (driver == null) {
-            driver = getDriverFrom(environmentVariables);
-        }
-        return driver;
+        return EnvironmentSpecificConfiguration
+                .from(environmentVariables)
+                .getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_BROWSERNAME)
+                .orElse(getDriverFrom(environmentVariables));
     }
 
     public void setupFixtureServices() throws FixtureException {

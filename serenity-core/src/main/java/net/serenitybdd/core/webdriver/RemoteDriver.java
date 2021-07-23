@@ -1,10 +1,15 @@
 package net.serenitybdd.core.webdriver;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class RemoteDriver {
+    public static boolean isStubbed(WebDriver driver) {
+        return (driver instanceof WebDriverStub);
+    }
+
     public static RemoteWebDriver of(WebDriver driver) {
         if (driver instanceof RemoteWebDriver) {
             return (RemoteWebDriver) driver;

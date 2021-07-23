@@ -1,18 +1,26 @@
-package net.thucydides.core.steps;
+package net.thucydides.core.configuration;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Builds a file path by substituting environment variables.
  * Supported environment variables include $HOME, $USERDIR and $DATADIR.
  * $DATADIR is provided by setting the serenity.data.dir environment property.
+ * $TEMPDIR is a dynamically generated temporary directory that will be deleted after the tests, and that is created once for each test
  */
 public class FilePathParser {
     private final EnvironmentVariables environmentVariables;
+
+    public static FilePathParser forEnvironmentVariables(EnvironmentVariables environmentVariables) {
+        return new FilePathParser(environmentVariables);
+    }
 
     public FilePathParser(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -30,20 +38,19 @@ public class FilePathParser {
         localizedPath = injectVariable(localizedPath, "user.dir", valueDefinedIn(environmentVariables,"user.dir"));
         localizedPath = injectVariable(localizedPath, "APPDATA", valueDefinedIn(environmentVariables,"APPDATA"));
         localizedPath = injectVariable(localizedPath, "DATADIR",valueDefinedIn(environmentVariables,"serenity.data.dir"));
-
+        if (localizedPath.contains("TEMPDIR")) {
+            localizedPath = injectVariable(localizedPath, "TEMPDIR", SessionLocalTempDirectory.asACanonicalPathForTheCurrentSession());
+        }
         return localizedPath;
     }
 
     private String valueDefinedIn(EnvironmentVariables environmentVariables, String propertyName) {
         return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(propertyName)
                 .orElse(environmentVariables.getValue(propertyName));
-//
-//        return (environmentVariables.getValue(propertyName) != null)
-//                ? environmentVariables.getValue(propertyName) : environmentVariables.getProperty(propertyName);
     }
 
-    private String operatingSystemLocalized(String testDataSource) {
-        return StringUtils.replace(testDataSource, getFileSeparatorToReplace(), getFileSeparator());
+    private String operatingSystemLocalized(String path) {
+        return StringUtils.replace(path, getFileSeparatorToReplace(), getFileSeparator());
     }
 
     private String injectVariable(String path, String variable, String directory) {

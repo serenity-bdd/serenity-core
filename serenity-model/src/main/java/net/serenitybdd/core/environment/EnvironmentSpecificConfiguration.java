@@ -123,6 +123,17 @@ public class EnvironmentSpecificConfiguration {
         return getOptionalProperty(propertyName.getPropertyName(), propertyName.getLegacyPropertyName());
     }
 
+    public String getProperty(final ThucydidesSystemProperty propertyName) {
+        return getOptionalProperty(propertyName).orElseThrow(
+                () -> new UndefinedEnvironmentVariableException("Environment '"
+                        + propertyName
+                        + "' property undefined for environment '"
+                        + getDefinedEnvironment(environmentVariables) + "'"));
+    }
+
+    public Integer getIntegerProperty(final ThucydidesSystemProperty propertyName) {
+        return getIntegerProperty(propertyName);
+    }
     public Optional<String> getOptionalProperty(String... propertyNames) {
 
         String propertyValue =  null;
@@ -145,7 +156,8 @@ public class EnvironmentSpecificConfiguration {
         Matcher matcher = VARIABLE_EXPRESSION_PATTERN.matcher(propertyValue);
         while (matcher.find()) {
             String nestedProperty = matcher.group().substring(2,matcher.group().length() - 1);
-            String value = getPropertyValue(nestedProperty);
+            String value = Optional.ofNullable(getPropertyValue(nestedProperty))
+                                   .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty));
             if (value != null) {
                 propertyValue = matcher.replaceFirst(value);
                 matcher.reset(propertyValue);

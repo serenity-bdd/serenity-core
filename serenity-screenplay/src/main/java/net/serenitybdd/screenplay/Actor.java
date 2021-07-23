@@ -4,6 +4,7 @@ import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.parallel.Agent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
@@ -26,11 +27,12 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 /**
  * An actor represents the person or system using the application under test.
  * Actors can have Abilities, which allows them to perform Tasks and Interactions.
+ * Actors can ask Questions about the state of the system.
  */
-public class Actor implements PerformsTasks, SkipNested {
+public class Actor implements PerformsTasks, SkipNested, Agent {
 
+    private String id;
     private String name;
-
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
     private EventBusInterface eventBusInterface = new EventBusInterface();
     private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
@@ -45,6 +47,13 @@ public class Actor implements PerformsTasks, SkipNested {
         this.name = name;
     }
 
+    /**
+     * Add all the remembered items for the current actor to the other actor's memory
+     * @param otherActor
+     */
+    public void brief(Actor otherActor) {
+        otherActor.notepad.putAll(this.notepad);
+    }
 
     public String toString() {
         return getNameOrPronoun();
@@ -381,6 +390,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private void beginPerformance() {
+        Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(this);
         Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
     }
 
@@ -434,5 +444,10 @@ public class Actor implements PerformsTasks, SkipNested {
                 factLifecycleListener -> StepEventBus.getEventBus().dropListener(factLifecycleListener)
         );
 
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 }

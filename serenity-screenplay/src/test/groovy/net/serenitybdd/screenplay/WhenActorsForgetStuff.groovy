@@ -2,9 +2,20 @@ package net.serenitybdd.screenplay
 
 import net.serenitybdd.screenplay.conditions.Check
 import net.serenitybdd.screenplay.questions.TheMemory
+import net.thucydides.core.steps.BaseStepListener
+import net.thucydides.core.steps.StepEventBus
+import org.junit.Before
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 class WhenActorsForgetStuff extends Specification {
+
+    def setup() {
+        File temporaryDirectory = Files.createTempDirectory("testdata").toFile();
+        def defaultStepListener = new BaseStepListener(temporaryDirectory);
+        StepEventBus.getEventBus().registerListener(defaultStepListener);
+    }
 
     def "actor can forget stuff"() {
         given:

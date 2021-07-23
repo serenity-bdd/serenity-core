@@ -1,6 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.core.reports.remoteTesting.ASaucelabsConfiguration;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;

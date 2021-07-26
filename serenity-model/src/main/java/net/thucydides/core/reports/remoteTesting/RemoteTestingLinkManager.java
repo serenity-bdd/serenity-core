@@ -26,11 +26,6 @@ public class RemoteTestingLinkManager implements LinkGenerator {
             return testOutcome.getExternalLink().getUrl();
         }
 
-        if (ASaucelabsConfiguration.isDefinedIn(environmentVariables)) {
-            SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
-            return saucelabsLinkGenerator.linkFor(testOutcome);
-        }
-
         return null;
     }
 
@@ -41,9 +36,4 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     private boolean browserStackIsConfigured() {
         return (ThucydidesSystemProperty.BROWSERSTACK_USER.from(environmentVariables) != null);
     }
-
-    private boolean sauceLabsIsConfigured() {
-        return (ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables) != null);
-    }
-
 }

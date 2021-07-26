@@ -1,4 +1,4 @@
-package net.thucydides.core.webdriver.capabilities;
+package net.serenitybdd.saucelabs;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -16,7 +16,7 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     private static String DEFAULT_PLATFORM = "Windows 10";
 
-    private static Map<String, String> OS_PLATFORM_NAMES = new HashMap();
+    private static final Map<String, String> OS_PLATFORM_NAMES = new HashMap();
 
     static {
         OS_PLATFORM_NAMES.put("snowleopard", "OS X 10.6");

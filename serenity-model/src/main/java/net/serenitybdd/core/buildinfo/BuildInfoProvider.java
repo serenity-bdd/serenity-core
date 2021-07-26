@@ -36,8 +36,9 @@ public class BuildInfoProvider {
 
     public BuildProperties getBuildProperties() {
         Map<String, String> generalProperties = new HashMap<>();
-        generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
-        generalProperties.put("Operating System",System.getProperty("os.name") + " version " + System.getProperty("os.version"));
+        generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables, "firefox"));
+        generalProperties.put("Operating System",
+                System.getProperty("os.name") + " version " + System.getProperty("os.version"));
         addRemoteDriverPropertiesTo(generalProperties);
         addSaucelabsPropertiesTo(generalProperties);
         addCustomPropertiesTo(generalProperties);
@@ -59,8 +60,8 @@ public class BuildInfoProvider {
     }
 
     private void addSaucelabsPropertiesTo(Map<String, String> buildProperties) {
-        if (ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables)) {
-            buildProperties.put("Saucelabs URL", maskAPIKey(ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables)));
+        if (ThucydidesSystemProperty.SAUCELABS_DATACENTER.isDefinedIn(environmentVariables)) {
+            buildProperties.put("Saucelabs URL", maskAPIKey(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables)));
             if (ThucydidesSystemProperty.SAUCELABS_USER_ID.from(environmentVariables) != null) {
                 buildProperties.put("Saucelabs user", ThucydidesSystemProperty.SAUCELABS_USER_ID.from(environmentVariables));
             }
@@ -79,16 +80,15 @@ public class BuildInfoProvider {
     private String maskAPIKey(String url) {
         int apiKeyStart = url.indexOf(":");
         int apiKeyEnd = url.indexOf("@");
-        return url.substring(0,apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
+        return url.substring(0, apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
     }
-
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
         List<String> sysInfoKeys = environmentVariables.getKeys().stream()
-                                                        .filter( key -> key.startsWith("sysinfo."))
-                                                        .collect(Collectors.toList());
-        for(String key : sysInfoKeys) {
+                .filter(key -> key.startsWith("sysinfo."))
+                .collect(Collectors.toList());
+        for (String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
 
             String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
@@ -107,12 +107,12 @@ public class BuildInfoProvider {
                 buildProperties.put(humanizedFormOf(simplifiedKey), value);
             }
         }
-
     }
 
     private String sectionKeyFrom(String simplifiedKey) {
         return Splitter.on(".").splitToList(simplifiedKey).get(0);
     }
+
     private String sectionLabelFrom(String simplifiedKey) {
         return Splitter.on(".").splitToList(simplifiedKey).get(1);
     }
@@ -127,11 +127,12 @@ public class BuildInfoProvider {
 
     private String humanizedFormOf(String simplifiedKey) {
         return StringUtils.strip(StringUtils.capitalize(
-                StringUtils.replace(simplifiedKey,"."," ")
-                           .replace("_"," ")),"\"");
+                StringUtils.replace(simplifiedKey, ".", " ")
+                        .replace("_", " ")), "\"");
     }
 
     private Binding binding;
+
     private Binding groovyBinding() {
         binding = new Binding();
         binding.setVariable("env", environmentVariables.asMap());
@@ -147,7 +148,7 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'",expression, key);
+            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'", expression, key);
             LOGGER.warn(error);
         }
         return (result != null) ? result.toString() : expression;

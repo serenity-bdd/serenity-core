@@ -730,6 +730,7 @@
         <module>serenity-cli</module>
         <module>serenity-shutterbug</module>
         <module>serenity-shutterbug1x</module>
+        <module>serenity-saucelabs</module>
         <!--        <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>
@@ -829,6 +830,7 @@
                 <module>serenity-browsermob-plugin</module>
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
+                <module>serenity-saucelabs</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-cli</module>
                 <module>serenity-shutterbug</module>
@@ -863,6 +865,7 @@
                 <module>serenity-browsermob-plugin</module>
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
+                <module>serenity-saucelabs</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-smoketests</module>
                 <module>serenity-shutterbug</module>

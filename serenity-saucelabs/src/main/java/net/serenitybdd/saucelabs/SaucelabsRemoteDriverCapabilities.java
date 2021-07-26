@@ -1,67 +1,44 @@
-package net.thucydides.core.webdriver.capabilities;
+package net.serenitybdd.saucelabs;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
+import net.thucydides.core.webdriver.capabilities.RemoteTestName;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
-import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-/**
- * Provide Sauce Labs specific capabilities
- */
-public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabilities {
+public class SaucelabsRemoteDriverCapabilities {
 
     private final EnvironmentVariables environmentVariables;
 
-    public SaucelabsRemoteDriverCapabilities(EnvironmentVariables environmentVariables){
+    private static final Map<String, String> SAUCELABS_BROWSER_NAMES = new HashMap<String, String>() {{
+        put("iexplorer", "internet explorer");
+        put("edge", "MicrosoftEdge");
+    }};
+
+    public SaucelabsRemoteDriverCapabilities(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-    }
-
-    public static String getSaucelabsDriverFrom(EnvironmentVariables environmentVariables) {
-        return EnvironmentSpecificConfiguration
-                .from(environmentVariables)
-                .getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_BROWSERNAME)
-                .orElse(getDriverFrom(environmentVariables));
-    }
-
-    /**
-     * The Saucelabs URL, specified in the `saucelabs.url` property.
-     * @return
-     */
-    @Override
-    public String getUrl() {
-        String saucelabsUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_URL).orElse(null);
-        if (saucelabsUrl == null) {
-            return null;
-        } else {
-            return environmentVariables.injectSystemPropertiesInto(saucelabsUrl);
-        }
     }
 
     /**
      * Saucelabs capabilities are defined in the saucelabs environment configuration variables, e.g.
      * saucelabs {
-     *     screenResolution = "800x600"
-     *     recordScreenshots = false
+     * screenResolution = "800x600"
+     * recordScreenshots = false
      * }
-     *
+     * <p>
      * These are added to the 'sauce:options' capability.
      */
-    @Override
     public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
-
         MutableCapabilities saucelabsCapabilities = saucelabsCapabilitiesDefinedIn(environmentVariables);
 
         MutableCapabilities w3cCapabilitiesInSaucelabsSection = W3CCapabilities.definedIn(environmentVariables).withPrefix("saucelabs");
@@ -82,7 +59,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         Properties saucelabsProperties = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix("saucelabs.");
         MutableCapabilities sauceCaps = new MutableCapabilities();
 
-        for(String propertyName : saucelabsProperties.stringPropertyNames()) {
+        for (String propertyName : saucelabsProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
             sauceCaps.setCapability(unprefixedPropertyName, saucelabsProperties.getProperty(propertyName));
         }
@@ -90,16 +67,15 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
     private void addBuildNumberTo(MutableCapabilities capabilities) {
-
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
     }
 
-
     private void configureBrowserAndPlatformIfDefinedInSaucelabsBlock(MutableCapabilities sourceCapabilities, MutableCapabilities capabilities) {
         if (sourceCapabilities.getBrowserName() != null) {
-            capabilities.setCapability("browserName", sourceCapabilities.getBrowserName());
+            String browserName = sourceCapabilities.getBrowserName();
+            capabilities.setCapability("browserName", SAUCELABS_BROWSER_NAMES.getOrDefault(browserName, browserName));
         }
         if (sourceCapabilities.getVersion() != null) {
             capabilities.setCapability("browserVersion", sourceCapabilities.getVersion());
@@ -109,10 +85,6 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         }
     }
 
-    private String unprefixed(String propertyName) {
-        return propertyName.replace("saucelabs.","");
-    }
-
     private void configureTestName(MutableCapabilities capabilities) {
         String testName = SAUCELABS_TEST_NAME.from(environmentVariables);
         if (isNotEmpty(testName)) {
@@ -120,15 +92,22 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         } else {
             Optional<String> guessedTestName;
             Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
-            if (latestOutcome.isPresent()) {
-                guessedTestName = Optional.of(latestOutcome.get().getCompleteName());
-            } else {
-                guessedTestName = RemoteTestName.fromCurrentTest();
-            }
+
+            boolean sessionPerScenario = Arrays.asList("scenario", "example")
+                    .contains(ThucydidesSystemProperty.SERENITY_RESTART_BROWSER_FOR_EACH.from(environmentVariables));
+
+            guessedTestName = latestOutcome.map(testOutcome -> {
+                // Add scenario name to session name only if browser session is restarted for every scenario
+                return Optional.of(sessionPerScenario ? testOutcome.getCompleteName() : testOutcome.getStoryTitle());
+            }).orElseGet(RemoteTestName::fromCurrentTest);
+
             guessedTestName.ifPresent(
                     name -> capabilities.setCapability("name", name)
             );
         }
     }
 
+    private String unprefixed(String propertyName) {
+        return propertyName.replace("saucelabs.", "");
+    }
 }

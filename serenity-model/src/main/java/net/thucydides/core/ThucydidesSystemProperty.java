@@ -1,6 +1,5 @@
 package net.thucydides.core;
 
-import io.cucumber.java.hu.De;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +16,6 @@ import java.util.Optional;
  * period-separated format. For example, WEBDRIVER_DRIVER is passed as -Dwebdriver.driver=firefox
  *
  * @author johnsmart
- *
  */
 public enum ThucydidesSystemProperty {
 
@@ -26,7 +24,9 @@ public enum ThucydidesSystemProperty {
      */
     WEBDRIVER_DRIVER,
 
-    /** A shortcut for 'webdriver.driver'. */
+    /**
+     * A shortcut for 'webdriver.driver'.
+     */
     DRIVER,
 
     /**
@@ -197,6 +197,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Should Thucydides only store screenshots for failing steps?
      * This can save disk space and speed up the tests somewhat. Useful for data-driven testing.
+     *
      * @deprecated This property is still supported, but thucydides.take.screenshots provides more fine-grained control.
      */
     @Deprecated
@@ -219,6 +220,7 @@ public enum ThucydidesSystemProperty {
      * on a WebElementFacade, i.e. any time you use an expression like element(...).click(),
      * findBy(...).click() and so on.
      * This will be overridden if the THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS option is set to true.
+     *
      * @deprecated This property is still supported, but thucydides.take.screenshots provides more fine-grained control.
      */
     @Deprecated
@@ -240,19 +242,18 @@ public enum ThucydidesSystemProperty {
      */
     SCREENPLAY_PRONOUNS,
 
-
     @Deprecated
     THUCYDIDES_TAKE_SCREENSHOTS,
 
     /**
-     *  Fine-grained control over when screenshots are to be taken.
-     *  This property accepts the following values:
-     *  <ul>
-     *      <li>FOR_EACH_ACTION</li>
-     *      <li>BEFORE_AND_AFTER_EACH_STEP</li>
-     *      <li>AFTER_EACH_STEP</li>
-     *      <li>FOR_FAILURES</li>
-     *  </ul>
+     * Fine-grained control over when screenshots are to be taken.
+     * This property accepts the following values:
+     * <ul>
+     *     <li>FOR_EACH_ACTION</li>
+     *     <li>BEFORE_AND_AFTER_EACH_STEP</li>
+     *     <li>AFTER_EACH_STEP</li>
+     *     <li>FOR_FAILURES</li>
+     * </ul>
      */
     SERENITY_TAKE_SCREENSHOTS,
 
@@ -322,7 +323,6 @@ public enum ThucydidesSystemProperty {
     /**
      * Indicate when a browser should be restarted during a test run.
      * Can be one of: example, scenario, story, feature, never
-     *
      */
     SERENITY_RESTART_BROWSER_FOR_EACH,
 
@@ -349,6 +349,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * How long should the driver wait for elements not immediately visible, in seconds.
+     *
      * @deprecated Use WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT instead.
      */
     SERENITY_TIMEOUT,
@@ -388,9 +389,9 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_ISSUE_TRACKER_URL,
 
     /**
-     *  Base URL for the issue tracking system to be referred to in the reports.
-     *  If defined, any issues quoted in the form #1234 will be linked to the relevant
-     *  issue in the issue tracking system. Works with JIRA, Trac etc.
+     * Base URL for the issue tracking system to be referred to in the reports.
+     * If defined, any issues quoted in the form #1234 will be linked to the relevant
+     * issue in the issue tracking system. Works with JIRA, Trac etc.
      */
     SERENITY_ISSUE_TRACKER_URL,
 
@@ -409,27 +410,27 @@ public enum ThucydidesSystemProperty {
     JIRA_URL,
 
     /**
-     *  If defined, the JIRA project id will be prepended to issue numbers.
+     * If defined, the JIRA project id will be prepended to issue numbers.
      */
     JIRA_PROJECT,
 
     /**
-     *  If defined, the JIRA username required to connect to JIRA.
+     * If defined, the JIRA username required to connect to JIRA.
      */
     JIRA_USERNAME,
 
     /**
-     *  If defined, the JIRA password required to connect to JIRA.
+     * If defined, the JIRA password required to connect to JIRA.
      */
     JIRA_PASSWORD,
 
     /**
-     *  The JIRA workflow is defined in this file.
+     * The JIRA workflow is defined in this file.
      */
     SERENITY_JIRA_WORKFLOW,
 
     /**
-     *  If set to true, JIRA Workflow is active.
+     * If set to true, JIRA Workflow is active.
      */
     SERENITY_JIRA_WORKFLOW_ACTIVE,
 
@@ -445,7 +446,7 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_BROWSER_HEIGHT,
 
     /**
-     *  Redimension the browser to enable larger screenshots.
+     * Redimension the browser to enable larger screenshots.
      */
     SERENITY_BROWSER_HEIGHT,
 
@@ -453,7 +454,7 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_BROWSER_WIDTH,
 
     /**
-     *  Redimension the browser to enable larger screenshots.
+     * Redimension the browser to enable larger screenshots.
      */
     SERENITY_BROWSER_WIDTH,
 
@@ -527,7 +528,7 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_BATCH_COUNT,
 
     /**
-     *  A deprecated property that is synonymous with thucydides.batch.size
+     * A deprecated property that is synonymous with thucydides.batch.size
      */
     SERENITY_BATCH_COUNT,
 
@@ -535,7 +536,7 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_BATCH_SIZE,
 
     /**
-     *  If batch testing is being used, this is the size of the batches being executed.
+     * If batch testing is being used, this is the size of the batches being executed.
      */
     SERENITY_BATCH_SIZE,
 
@@ -606,16 +607,14 @@ public enum ThucydidesSystemProperty {
     SERENITY_PROXY_SOCKS_PASSWORD,
     SERENITY_PROXY_SOCKS_VERSION,
 
-
     /**
      * Possible values are:none, eager or normal
      */
     SERENITY_DRIVER_PAGE_LOAD_STRATEGY,
     /**
-     *  Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
+     * Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
      */
     SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR,
-
 
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.
@@ -698,20 +697,23 @@ public enum ThucydidesSystemProperty {
 
     SAUCELABS_TEST_NAME,
     /**
-     * SauceLabs URL if running the web tests on SauceLabs
+     * SauceLabs datacenter used for interaction with SauceLabs API and adding link to Serenity report
+     * Examples:
+     * US: us-west-1
+     * Europe: eu-central-1
      */
-    SAUCELABS_URL,
+    SAUCELABS_DATACENTER,
 
     /**
      * SauceLabs access key - if provided, Thucydides can generate links to the SauceLabs reports that don't require a login.
      */
-    SAUCELABS_ACCESS_KEY,
+    SAUCELABS_ACCESS_KEY("saucelabs.accessKey"),
 
     /**
      * SauceLabs user id - if provided with the access key,
      * Thucydides can generate links to the SauceLabs reports that don't require a login.
      */
-    SAUCELABS_USER_ID,
+    SAUCELABS_USER_ID("saucelabs.username"),
 
     /**
      * Override the default implicit timeout value for the Saucelabs driver.
@@ -801,7 +803,7 @@ public enum ThucydidesSystemProperty {
     BROWSERSTACK_IE_DRIVER,
 
     /**
-     *  Enable the popup blocker in Internet Explorer on BrowserStack
+     * Enable the popup blocker in Internet Explorer on BrowserStack
      */
     BROWSERSTACK_IE_ENABLE_POPUPS,
 
@@ -823,10 +825,10 @@ public enum ThucydidesSystemProperty {
 
     /**
      * Four levels are supported: NONE, QUIET, NORMAL and VERBOSE
-     *   - NONE: Disable Serenity logging
-     *   - QUIET: Only report compromised tests, errors and failures.
-     *   - NORMAL: Log the start and end of each test, and the result of each test.
-     *   - VERBOSE: Log the start and end of each test, and the result of each test, and each test step.
+     * - NONE: Disable Serenity logging
+     * - QUIET: Only report compromised tests, errors and failures.
+     * - NORMAL: Log the start and end of each test, and the result of each test.
+     * - VERBOSE: Log the start and end of each test, and the result of each test, and each test step.
      */
     SERENITY_LOGGING,
 
@@ -970,17 +972,16 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_TEST_REQUIREMENTS_BASEDIR,
 
     /**
-     *  The base directory in which requirements are kept. It is assumed that this directory contains sub folders
-     *  src/test/resources. If this property is set, the requirements are read from src/test/resources under this folder
-     *  instead of the classpath or working directory. If you need to set an independent requirements directory that
-     *  does not follow the src/test/resources convention, use thucydides.requirements.dir instead
-     *
-     *  This property is used to support situations where your working directory
-     *  is different from the requirements base dir (for example when building a multi-module project from parent pom with
-     *  requirements stored inside a sub-module : See Jira #Thucydides-100)
+     * The base directory in which requirements are kept. It is assumed that this directory contains sub folders
+     * src/test/resources. If this property is set, the requirements are read from src/test/resources under this folder
+     * instead of the classpath or working directory. If you need to set an independent requirements directory that
+     * does not follow the src/test/resources convention, use thucydides.requirements.dir instead
+     * <p>
+     * This property is used to support situations where your working directory
+     * is different from the requirements base dir (for example when building a multi-module project from parent pom with
+     * requirements stored inside a sub-module : See Jira #Thucydides-100)
      */
     SERENITY_TEST_REQUIREMENTS_BASEDIR,
-
 
     /**
      * Set to true if you want the HTML source code to be recorded as well as the screenshots.
@@ -1004,7 +1005,6 @@ public enum ThucydidesSystemProperty {
      * For example, -Dtags="iteration:I1" or -Dtags="color:red,flavor:strawberry"
      */
     TAGS,
-
 
     /**
      * Display only test results and requirements containing any of the specified tags
@@ -1161,11 +1161,11 @@ public enum ThucydidesSystemProperty {
 
     /**
      * Define the Shutterbug screen capture strategy:
-     *  - VIEWPORT: capture visible part of the viewport only
-     *  - FULL: full page screenshot using devtools
-     *  - FULL_SCROLL: full page screenshot using scroll & stitch method
-     *  - VERTICAL_SCROLL:vertical scroll page screenshot using scroll & stitch method
-     *  - HORIZONTAL_SCROLL: horizontal scroll page screenshot using scroll & stitch method
+     * - VIEWPORT: capture visible part of the viewport only
+     * - FULL: full page screenshot using devtools
+     * - FULL_SCROLL: full page screenshot using scroll & stitch method
+     * - VERTICAL_SCROLL:vertical scroll page screenshot using scroll & stitch method
+     * - HORIZONTAL_SCROLL: horizontal scroll page screenshot using scroll & stitch method
      */
     @Deprecated
     SERENITY_SCREENSHOT_STRATEGY,
@@ -1254,7 +1254,6 @@ public enum ThucydidesSystemProperty {
      */
     DEEP_STEP_EXECUTION_AFTER_FAILURES,
 
-
     /**
      * What test result (success,ignored, or pending) should be shown for manual annotated tests in the reports?
      */
@@ -1295,12 +1294,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_FAIL_ON,
 
     /**
-     *  If batch testing is being used in a multithreaded environment, this is the number of forks that will be created.
+     * If batch testing is being used in a multithreaded environment, this is the number of forks that will be created.
      */
     SERENITY_FORK_COUNT,
 
     /**
-     *  If batch testing is being used in a multithreaded environment, this is the executing fork number.
+     * If batch testing is being used in a multithreaded environment, this is the executing fork number.
      */
     SERENITY_FORK_NUMBER,
 
@@ -1433,7 +1432,6 @@ public enum ThucydidesSystemProperty {
      */
     APPIUM_ADDITIONAL_CAPABILITIES("appium.additional.capabilities"),
 
-
     /**
      * Set to true to enable processing of desired capabilities, created from the provided 'appium:' properties.
      * If processing is enabled, only capabilities supported by w3c, Appium or mentioned in
@@ -1545,15 +1543,13 @@ public enum ThucydidesSystemProperty {
     /**
      * The title to appear in the tag type table in the email reports
      */
-    REPORT_TAGTYPE_TITLE
-    ;
+    REPORT_TAGTYPE_TITLE;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;
     public static final int DEFAULT_WIDTH = 960;
 
     public static final String DEFAULT_HISTORY_DIRECTORY = "history";
-
 
     private final Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
 
@@ -1562,7 +1558,7 @@ public enum ThucydidesSystemProperty {
     }
 
     ThucydidesSystemProperty() {
-        this.propertyName = name().replaceAll("_",".").toLowerCase();
+        this.propertyName = name().replaceAll("_", ".").toLowerCase();
     }
 
     public String getPropertyName() {
@@ -1593,7 +1589,7 @@ public enum ThucydidesSystemProperty {
     private Optional<String> legacyPropertyValueIfPresentIn(EnvironmentVariables environmentVariables) {
         String legacyValue = environmentVariables.getProperty(withLegacyPrefix(getPropertyName()));
         if (StringUtils.isNotEmpty(legacyValue)) {
-            logger.warn("Legacy property format detected for {}, please use the serenity.* format instead.",getPropertyName());
+            logger.warn("Legacy property format detected for {}, please use the serenity.* format instead.", getPropertyName());
         }
         return Optional.ofNullable(legacyValue);
     }
@@ -1606,11 +1602,11 @@ public enum ThucydidesSystemProperty {
         return propertyName.replaceAll("thucydides.", "serenity.");
     }
 
-    public String preferredName(){
+    public String preferredName() {
         return withSerenityPrefix(getPropertyName());
     }
 
-    public List<String> legacyNames(){
+    public List<String> legacyNames() {
         List<String> names = new ArrayList<>(1);
         names.add(withLegacyPrefix(getPropertyName()));
         return names;
@@ -1633,7 +1629,7 @@ public enum ThucydidesSystemProperty {
     }
 
     public int integerFrom(EnvironmentVariables environmentVariables) {
-        return integerFrom(environmentVariables,0);
+        return integerFrom(environmentVariables, 0);
     }
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
@@ -1653,7 +1649,9 @@ public enum ThucydidesSystemProperty {
     }
 
     public Boolean booleanFrom(EnvironmentVariables environmentVariables, Boolean defaultValue) {
-        if (environmentVariables == null) { return defaultValue; }
+        if (environmentVariables == null) {
+            return defaultValue;
+        }
 
         Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
 
@@ -1672,5 +1670,4 @@ public enum ThucydidesSystemProperty {
     public boolean isDefinedIn(EnvironmentVariables environmentVariables) {
         return StringUtils.isNotEmpty(from(environmentVariables));
     }
-
 }

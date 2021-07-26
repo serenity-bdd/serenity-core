@@ -1,30 +1,19 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.reports.remoteTesting.ASaucelabsConfiguration;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static net.thucydides.core.ThucydidesSystemProperty.BROWSERSTACK_URL;
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
 
 /**
- * A Remote Driver using Saucelabs or Browserstack (for remote web tesing), or Selenium Grid.
+ * A Remote Driver using SauceLabs or Browserstack (for remote web testing), or Selenium Grid.
  * This class should not be used for Appium testing, as Appium is already a remote driver.
  */
 public class RemoteDriverProvider implements DriverProvider {
-
-    enum RemoteDriverType { SAUCELABS, BROWSERSTACK, DEFAULT}
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -32,45 +21,16 @@ public class RemoteDriverProvider implements DriverProvider {
         this.fixtureProviderService = fixtureProviderService;
     }
 
-
-    private Map<RemoteDriverType,RemoteDriverBuilder> driverBuildersFor(EnvironmentVariables environmentVariables) {
-        Map<RemoteDriverType,RemoteDriverBuilder> driverBuilders = new HashMap();
-
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-
-        DriverCapabilities remoteDriverCapabilities = new DriverCapabilities(environmentVariables, enhancer);
-
-        driverBuilders.put(RemoteDriverType.SAUCELABS, new SaucelabsDriverBuilder(environmentVariables, remoteDriverCapabilities));
-        driverBuilders.put(RemoteDriverType.BROWSERSTACK, new BrowserStackDriverBuilder(environmentVariables, remoteDriverCapabilities));
-        driverBuilders.put(RemoteDriverType.DEFAULT, new DefaultRemoteDriver(environmentVariables, remoteDriverCapabilities));
-
-
-        return driverBuilders;
-    }
-
     @Override
-    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) throws MalformedURLException  {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) throws MalformedURLException {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return RemoteWebdriverStub.from(environmentVariables);
-        }
-
-        WebDriver driver = driverBuildersFor(environmentVariables).get(remoteDriverType(environmentVariables)).buildWithOptions(options);
-
-        return new Augmenter().augment(driver);
-    }
-
-    private RemoteDriverType remoteDriverType(EnvironmentVariables environmentVariables) {
-
-        if (ASaucelabsConfiguration.isDefinedIn(environmentVariables)) {
-            return RemoteDriverType.SAUCELABS;
-        } else if (browserStackUrlIsDefined(environmentVariables)){
-            return RemoteDriverType.BROWSERSTACK;
         } else {
-            return RemoteDriverType.DEFAULT;
-        }
-    }
+            CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+            DriverCapabilities remoteDriverCapabilities = new DriverCapabilities(environmentVariables, enhancer);
 
-    private boolean browserStackUrlIsDefined(EnvironmentVariables environmentVariables) {
-        return EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(BROWSERSTACK_URL).isPresent();
+            WebDriver driver = new DefaultRemoteDriver(environmentVariables, remoteDriverCapabilities).buildWithOptions(options);
+            return new Augmenter().augment(driver);
+        }
     }
 }

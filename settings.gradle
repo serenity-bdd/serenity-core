@@ -23,5 +23,6 @@ include 'serenity-test-utils',
         'serenity-ensure',
         'serenity-assertions',
         'serenity-reports-configuration',
-        'serenity-crossbrowsertesting'
+        'serenity-crossbrowsertesting',
+        'serenity-saucelabs'
 

@@ -3,7 +3,6 @@ package net.thucydides.core.webdriver;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.webdriver.driverproviders.*;
@@ -101,7 +100,7 @@ public class WebDriverFactory {
     }
 
     public boolean usesSauceLabs() {
-        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
+        return StringUtils.isNotEmpty(SAUCELABS_DATACENTER.from(environmentVariables));
     }
 
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {
@@ -208,7 +207,7 @@ public class WebDriverFactory {
                         .from(environmentVariables, "All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
                 partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
-                        && (cause.getMessage().contains(partialErrorMessage))
+                                       && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 
@@ -233,24 +232,6 @@ public class WebDriverFactory {
             driver = ThucydidesSystemProperty.DRIVER.from(environmentVariables);
         }
         return driver;
-    }
-
-    public static String getBrowserStackDriverFrom(EnvironmentVariables environmentVariables) {
-        String driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSER.from(environmentVariables);
-        if (driver == null) {
-            driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSERNAME.from(environmentVariables);
-        }
-        if (driver == null) {
-            driver = getDriverFrom(environmentVariables);
-        }
-        return driver;
-    }
-
-    public static String getSaucelabsDriverFrom(EnvironmentVariables environmentVariables) {
-        return EnvironmentSpecificConfiguration
-                .from(environmentVariables)
-                .getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_BROWSERNAME)
-                .orElse(getDriverFrom(environmentVariables));
     }
 
     public void setupFixtureServices() throws FixtureException {

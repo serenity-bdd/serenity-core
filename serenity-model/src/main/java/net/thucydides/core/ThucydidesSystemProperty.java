@@ -697,10 +697,6 @@ public enum ThucydidesSystemProperty {
 
     SAUCELABS_TEST_NAME,
     /**
-     * SauceLabs URL if running the web tests on SauceLabs
-     */
-    SAUCELABS_URL,
-    /**
      * SauceLabs datacenter used for interaction with SauceLabs API and adding link to Serenity report
      * Examples:
      * US: us-west-1

@@ -31,12 +31,12 @@ public enum SupportedWebDriver {
     FIREFOX(FirefoxDriver.class),
 
     /**
-     * Chrome  WebDriver driver.
+     * Chrome WebDriver driver.
      */
     CHROME(ChromeDriver.class),
 
     /**
-     * Opera - use it with SauceLabs
+     * Opera
      */
     OPERA(OperaDriver.class),
 
@@ -61,7 +61,7 @@ public enum SupportedWebDriver {
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE","Internet Explorer","internet explorer","internet_explorer")),
+    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE", "Internet Explorer", "internet explorer", "internet_explorer")),
 
     /**
      * Microsoft Edge
@@ -90,8 +90,8 @@ public enum SupportedWebDriver {
     private final List<String> synonyms;
 
     SupportedWebDriver(Class<? extends WebDriver> webdriverClass,
-                               boolean supportsJavascriptInjection,
-                               List<String> synonyms) {
+                       boolean supportsJavascriptInjection,
+                       List<String> synonyms) {
         this.webdriverClass = webdriverClass;
         this.supportsJavascriptInjection = supportsJavascriptInjection;
         this.synonyms = NewList.copyOf(synonyms);
@@ -106,7 +106,7 @@ public enum SupportedWebDriver {
     }
 
     public static SupportedWebDriver valueOrSynonymOf(String driverName) {
-        for(SupportedWebDriver supportedWebDriver : values()) {
+        for (SupportedWebDriver supportedWebDriver : values()) {
             if (driverName.trim().equalsIgnoreCase(supportedWebDriver.name())) {
                 return supportedWebDriver;
             }
@@ -136,7 +136,7 @@ public enum SupportedWebDriver {
 
         List<String> drivers = new ArrayList<>();
         drivers.addAll(Arrays.stream(SupportedWebDriver.values()).map(Enum::toString).collect(Collectors.toList()));
-        for(SupportedWebDriver supportedWebDriver : values()) {
+        for (SupportedWebDriver supportedWebDriver : values()) {
             drivers.addAll(supportedWebDriver.synonyms);
         }
         return drivers;
@@ -144,7 +144,7 @@ public enum SupportedWebDriver {
 
     private static String getSynonymes() {
         List<String> synonymeValues = new ArrayList<>();
-        for(SupportedWebDriver supportedWebDriver : values()) {
+        for (SupportedWebDriver supportedWebDriver : values()) {
             synonymeValues.addAll(supportedWebDriver.synonyms);
         }
         return Joiner.on(", ").join(synonymeValues);
@@ -169,10 +169,9 @@ public enum SupportedWebDriver {
         } catch (IllegalArgumentException e) {
             SupportedWebDriver closestMatchingDriver = getClosestDriverValueTo(value);
             throw new DriverConfigurationError("Unsupported browser type: " + value
-                    + ". Did you mean " + closestMatchingDriver.toString().toLowerCase()
-                    + "?", e);
+                                               + ". Did you mean " + closestMatchingDriver.toString().toLowerCase()
+                                               + "?", e);
         }
-
     }
 
     public static SupportedWebDriver forClass(Class<?> driverClass) {

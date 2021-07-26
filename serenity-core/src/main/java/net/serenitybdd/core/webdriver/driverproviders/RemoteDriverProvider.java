@@ -1,8 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.reports.remoteTesting.ASaucelabsConfiguration;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -12,7 +10,7 @@ import org.openqa.selenium.remote.Augmenter;
 import java.net.MalformedURLException;
 
 /**
- * A Remote Driver using Saucelabs or Browserstack (for remote web tesing), or Selenium Grid.
+ * A Remote Driver using SauceLabs or Browserstack (for remote web testing), or Selenium Grid.
  * This class should not be used for Appium testing, as Appium is already a remote driver.
  */
 public class RemoteDriverProvider implements DriverProvider {

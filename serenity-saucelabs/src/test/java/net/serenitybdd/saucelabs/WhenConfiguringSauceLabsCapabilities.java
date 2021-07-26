@@ -22,29 +22,6 @@ public class WhenConfiguringSauceLabsCapabilities {
     }
 
     @Test
-    public void theSaucelabsUrlCanBeDefinedInTheEnvironmentVariables() {
-        final String SAUCELABS_URL = "http://myID:MY_AP_KEY@ondemand.saucelabs.com:80/wd/hub";
-
-        environmentVariables.setProperty("saucelabs.url", SAUCELABS_URL);
-        SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-
-        assertThat(capabilities.getUrl()).isEqualTo(SAUCELABS_URL);
-    }
-
-    @Test
-    public void weCanInjectTheAPIKeyAndIDAsVariablesUsingTheHashNotation() {
-        final String SAUCELABS_URL_TEMPLATE = "http://#{saucelabs.user.id}:#{saucelabs.access.key}@ondemand.saucelabs.com:80/wd/hub";
-        final String SAUCELABS_URL = "http://MY_ID:MY_API_KEY@ondemand.saucelabs.com:80/wd/hub";
-
-        environmentVariables.setProperty("saucelabs.url", SAUCELABS_URL_TEMPLATE);
-        environmentVariables.setProperty("saucelabs.user.id", "MY_ID");
-        environmentVariables.setProperty("saucelabs.access.key", "MY_API_KEY");
-        SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-
-        assertThat(capabilities.getUrl()).isEqualTo(SAUCELABS_URL);
-    }
-
-    @Test
     public void theSaucelabsBrowserCanBeDefinedInTheSaucelabsVariables() {
         environmentVariables.setProperty("saucelabs.browserName", "edge");
 

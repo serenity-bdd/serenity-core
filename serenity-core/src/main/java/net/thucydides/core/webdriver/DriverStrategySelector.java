@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_DATACENTER;
 
 /**
  * Created by john on 25/06/2016.
@@ -27,10 +27,8 @@ public class DriverStrategySelector {
     }
 
     public SupportedWebDriver forDriverClass(Class<? extends WebDriver> driverClass) {
-
         // Driver type defined as 'remote'
-        if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() ||
-            browserStackUrlIsDefined()) {
+        if (isARemoteDriver(driverClass) || shouldUseARemoteDriver()) {
             return SupportedWebDriver.REMOTE;
         }
 
@@ -46,8 +44,8 @@ public class DriverStrategySelector {
         return ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
     }
 
-    public boolean saucelabsUrlIsDefined() {
-        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
+    public boolean sauceLabsIsUsed() {
+        return StringUtils.isNotEmpty(SAUCELABS_DATACENTER.from(environmentVariables));
     }
 
     public boolean browserStackUrlIsDefined() {

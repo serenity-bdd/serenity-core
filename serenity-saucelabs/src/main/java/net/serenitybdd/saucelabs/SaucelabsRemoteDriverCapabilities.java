@@ -13,7 +13,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_BROWSERNAME;
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -67,18 +66,6 @@ public class SaucelabsRemoteDriverCapabilities {
         return sauceCaps;
     }
 
-    /**
-     * The Saucelabs URL, specified in the `saucelabs.url` property.
-     */
-    public String getUrl() {
-        String saucelabsUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.SAUCELABS_URL).orElse(null);
-        if (saucelabsUrl == null) {
-            return null;
-        } else {
-            return environmentVariables.injectSystemPropertiesInto(saucelabsUrl);
-        }
-    }
-
     private void addBuildNumberTo(MutableCapabilities capabilities) {
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
@@ -117,14 +104,6 @@ public class SaucelabsRemoteDriverCapabilities {
             guessedTestName.ifPresent(
                     name -> capabilities.setCapability("name", name)
             );
-        }
-    }
-
-    private void configureTargetBrowser(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
-        String remoteBrowser = SAUCELABS_BROWSERNAME.from(environmentVariables);
-
-        if (isNotEmpty(remoteBrowser)) {
-            capabilities.setBrowserName(SAUCELABS_BROWSER_NAMES.getOrDefault(remoteBrowser, remoteBrowser));
         }
     }
 

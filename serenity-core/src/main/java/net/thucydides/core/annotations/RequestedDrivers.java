@@ -27,7 +27,6 @@ class RequestedDrivers {
 
         SAUCELABS_BROWSER_NAMES.put("iexplorer", "internet explorer");
         SAUCELABS_BROWSER_NAMES.put("edge", "MicrosoftEdge");
-
     }
 
     private RequestedDrivers(EnvironmentVariables environmentVariables) {
@@ -49,7 +48,7 @@ class RequestedDrivers {
                     .withProperty(ThucydidesSystemProperty.BROWSERSTACK_BROWSER.getPropertyName(),
                             BROWSERSTACK_BROWSER_NAMES.getOrDefault(driverName, driverName))
                     .getWebdriverByName(fieldName, "remote");
-        } else if (DriverStrategySelector.inEnvironment(environmentVariables).saucelabsUrlIsDefined()) {
+        } else if (DriverStrategySelector.inEnvironment(environmentVariables).sauceLabsIsUsed()) {
             return webdriverManager.withOptions(driverOptions)
                     .withProperty(ThucydidesSystemProperty.SAUCELABS_BROWSERNAME.getPropertyName(),
                             SAUCELABS_BROWSER_NAMES.getOrDefault(driverName, driverName))

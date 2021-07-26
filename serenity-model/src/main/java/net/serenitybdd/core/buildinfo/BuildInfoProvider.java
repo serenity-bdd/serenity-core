@@ -77,10 +77,17 @@ public class BuildInfoProvider {
         }
     }
 
+    /**
+     * Mask API key in URL if present
+     */
     private String maskAPIKey(String url) {
-        int apiKeyStart = url.indexOf(":");
-        int apiKeyEnd = url.indexOf("@");
-        return url.substring(0, apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
+        if (url.contains("@")) {
+            int apiKeyStart = url.indexOf(":");
+            int apiKeyEnd = url.indexOf("@");
+            return url.substring(0, apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
+        } else {
+            return url;
+        }
     }
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {

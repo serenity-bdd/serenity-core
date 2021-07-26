@@ -15,7 +15,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,11 +91,7 @@ public class WebDriverFactory {
     }
 
     public Class<? extends WebDriver> getClassFor(final SupportedWebDriver driverType) {
-        if (usesSauceLabs() && (driverType != SupportedWebDriver.HTMLUNIT)) {
-            return RemoteWebDriver.class;
-        } else {
-            return driverType.getWebdriverClass();
-        }
+        return driverType.getWebdriverClass();
     }
 
     public boolean usesSauceLabs() {

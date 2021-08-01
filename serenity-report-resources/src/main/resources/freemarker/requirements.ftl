@@ -286,7 +286,7 @@
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
                                                             <td style="width:95%;" class="toc-title">
-                                                                <a href="#${scenario.id}" title="View scenario details" >${scenario.simplifiedName}</a>
+                                                                 <a href="#${scenario.id}" title="View scenario details" >${formatter.humanReadableFormOf(formatter.renderHeaders(scenario.simplifiedName))}</a>
                                                                  <#if scenario.hasExamples() >
                                                                      (${scenario.numberOfExamples})</#if>
 

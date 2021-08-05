@@ -99,11 +99,18 @@ public class RenderedPageObjectView {
     public WebElementFacade waitFor(final By byElementCriteria) {
         if (!driverIsDisabled()) {
             waitForCondition().until(elementDisplayed(byElementCriteria));
-            return find(byElementCriteria);
+            return pageObject.find(byElementCriteria);
         } else {
             return new WebElementFacadeStub();
         }
     }
+    /*
+        public void waitFor(final By byElementCriteria) {
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementDisplayed(byElementCriteria));
+        }
+    }
+     */
 
     public <T> T waitFor(final ExpectedCondition<T> expectedCondition) {
         return doWait().until(expectedCondition);

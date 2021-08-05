@@ -100,4 +100,10 @@ public class WhenConfiguringSauceLabsCapabilities {
                              Thread.currentThread().getStackTrace()[1].getMethodName();
         assertThat(saucelabsOpts.getCapability("name")).isEqualTo(sessionName);
     }
+
+    @Test
+    public void shouldBeAbleToObtainLinkToSauceLabsSessionVideo() {
+        SauceLabsTestSession testSession = new SauceLabsTestSession("eu-central-1", "user", "key", "1234");
+        assertThat(testSession.getTestLink()).isEqualTo("https://eu-central-1.saucelabs.com/tests/1234?auth=fd3cb52fbcc6d14b40f64c978a06c18b");
+    }
 }

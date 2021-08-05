@@ -126,6 +126,8 @@ public interface WebElementState {
 
     String getText();
 
+    String getAttribute(String name);
+
     WebElementState expect(String errorMessage);
 
     boolean isClickable();

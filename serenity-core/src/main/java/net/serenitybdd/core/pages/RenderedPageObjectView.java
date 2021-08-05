@@ -4,6 +4,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 
 /**
@@ -94,23 +96,25 @@ public class RenderedPageObjectView {
     /**
      * This method will wait until an element is present and visible on the screen.
      */
-    public void waitFor(final By byElementCriteria) {
+    public WebElementFacade waitFor(final By byElementCriteria) {
         if (!driverIsDisabled()) {
             waitForCondition().until(elementDisplayed(byElementCriteria));
+            return find(byElementCriteria);
+        } else {
+            return new WebElementFacadeStub();
         }
     }
 
-    public void waitFor(final ExpectedCondition expectedCondition) {
-        doWait().until(expectedCondition);
+    public <T> T waitFor(final ExpectedCondition<T> expectedCondition) {
+        return doWait().until(expectedCondition);
+    }
+//
+    public <T> T waitFor(String message, final ExpectedCondition<T> expectedCondition) {
+        return doWait().until(new WaitForWithMessage<>(message, expectedCondition));
     }
 
-    public void waitFor(String message, final ExpectedCondition<WebDriver> expectedCondition) {
-        doWait().until(new WaitForWithMessage<>(message, expectedCondition));
-    }
-
-
-    public void waitFor(String xpathOrCssSelector) {
-        waitFor(xpathOrCssSelector(xpathOrCssSelector));
+    public WebElementFacade waitFor(String xpathOrCssSelector) {
+        return waitFor(xpathOrCssSelector(xpathOrCssSelector));
     }
 
 
@@ -188,9 +192,9 @@ public class RenderedPageObjectView {
     /**
      * This method will wait until an element is present on the screen, though not necessarily visible.
      */
-    public void waitForPresenceOf(final By byElementCriteria) {
+    public WebElement waitForPresenceOf(final By byElementCriteria) {
         WebDriverWait wait = new WebDriverWait(driver, waitForTimeout.getSeconds());
-        wait.until(ExpectedConditions.presenceOfElementLocated(byElementCriteria));
+        return wait.until(presenceOfElementLocated(byElementCriteria));
     }
 
     public boolean elementIsPresent(final By byElementCriteria) {

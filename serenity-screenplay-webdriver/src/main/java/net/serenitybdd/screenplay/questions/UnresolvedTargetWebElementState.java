@@ -166,6 +166,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
+    public String getAttribute(String name) {
+        return null;
+    }
+
+    @Override
     public WebElementState expect(String errorMessage) {
         return null;
     }

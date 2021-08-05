@@ -40,10 +40,12 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldNotBeVisible() {}
+    public void shouldNotBeVisible() {
+    }
 
     @Override
-    public void shouldNotBeCurrentlyVisible() {}
+    public void shouldNotBeCurrentlyVisible() {
+    }
 
     @Override
     public boolean hasFocus() {
@@ -89,7 +91,8 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldNotContainText(String textValue) {}
+    public void shouldNotContainText(String textValue) {
+    }
 
     @Override
     public void shouldBeEnabled() {
@@ -107,7 +110,8 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldNotBeEnabled() { }
+    public void shouldNotBeEnabled() {
+    }
 
     @Override
     public String getSelectedVisibleTextValue() {
@@ -155,6 +159,11 @@ public class MissingWebElement implements WebElementState {
 
     @Override
     public String getText() {
+        return "";
+    }
+
+    @Override
+    public String getAttribute(String name) {
         return "";
     }
 

@@ -6,27 +6,31 @@ import java.time.Duration.ofMillis
 import java.time.temporal.ChronoUnit
 
 fun maxDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> maxDurationOf(outcome) }.max()!!
+//        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> maxDurationOf(outcome) }.maxOrNull()!!
+        if (outcomes.isEmpty()) 0 else outcomes.maxOf { outcome -> maxDurationOf(outcome)!! }
 );
 
 fun minDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> minDurationOf(outcome) }.min()!!
+//        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> minDurationOf(outcome) }.minOrNull()!!
+    if (outcomes.isEmpty()) 0 else outcomes.minOf { outcome -> minDurationOf(outcome)!! }
 );
 
 fun totalDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.sum()
+        if (outcomes.isEmpty()) 0 else outcomes.sumOf { outcome -> outcome.duration }
 )
 
 fun maxDurationOf(outcome: TestOutcome) =
         if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
-            outcome.testSteps.map { step -> step.duration }.max()!!
+            outcome.testSteps.maxOfOrNull { step -> step.duration }
+//            outcome.testSteps.map { step -> step.duration }.maxOrNull()!!
         } else {
             outcome.duration
         }
 
 fun minDurationOf(outcome: TestOutcome) =
         if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
-            outcome.testSteps.map { step -> step.duration }.min()!!
+            outcome.testSteps.minOfOrNull { step -> step.duration }
+//            outcome.testSteps.map { step -> step.duration }.minOrNull()!!
         } else {
             outcome.duration
         }
@@ -41,12 +45,14 @@ fun clockDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
 
 private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
     val minStartTime = outcomes.filter { outcome -> outcome.startTime != null }
-            .map { outcome -> outcome.startTime }
-            .min()
+        .minOfOrNull { outcome -> outcome.startTime }
+//            .map { outcome -> outcome.startTime }
+//            .minOrNull()
 
     val maxEndTime = outcomes.filter { outcome -> outcome.startTime != null }
-            .map { outcome -> outcome.endTime }
-            .max();
+        .maxOfOrNull { outcome -> outcome.startTime }
+//            .map { outcome -> outcome.endTime }
+//            .maxOrNull();
 
     return if ((minStartTime != null) && (maxEndTime != null))
         ChronoUnit.MILLIS.between(minStartTime, maxEndTime)

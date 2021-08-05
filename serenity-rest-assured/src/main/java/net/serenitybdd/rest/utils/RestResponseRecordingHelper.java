@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: YamStranger
@@ -19,8 +24,10 @@ import java.util.*;
 public class RestResponseRecordingHelper {
     private final List<LogDetail> logDetail;
     private final boolean shouldPrettyPrint;
+    private Set<String> blackListedHeaders;
 
-    public RestResponseRecordingHelper(final boolean shouldPrettyPrint, final LogDetail... details) {
+    public RestResponseRecordingHelper(final boolean shouldPrettyPrint, final Set<String> blackListedHeaders, final LogDetail... details) {
+        this.blackListedHeaders = blackListedHeaders;
         this.logDetail = new LinkedList<>();
         this.logDetail.addAll(Arrays.asList(details));
         this.shouldPrettyPrint = shouldPrettyPrint;
@@ -33,7 +40,7 @@ public class RestResponseRecordingHelper {
                  PrintStream recordingStream = new PrintStream(output, true, StandardCharsets.UTF_8.toString())) {
                 for (final LogDetail detail : logDetail) {
                     try {
-                        ResponsePrinter.print(response, response.getBody(), recordingStream, detail, shouldPrettyPrint);
+                        ResponsePrinter.print(response, response.getBody(), recordingStream, detail, shouldPrettyPrint, blackListedHeaders);
                     } catch (NullPointerException e) {
                         //can be thrown if some field like cookies or headers are empty
                     }

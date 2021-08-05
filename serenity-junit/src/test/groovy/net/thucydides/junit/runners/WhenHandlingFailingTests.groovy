@@ -7,10 +7,11 @@ import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 //import org.openqa.selenium.firefox.FirefoxDriver
 //import org.openqa.selenium.htmlunit.HtmlUnitDriver
@@ -22,11 +23,9 @@ class WhenHandlingFailingTests extends Specification {
     def environmentVariables = new MockEnvironmentVariables()
     File temporaryDirectory
 
-    @Rule
-    TemporaryFolder temporaryFolder
-
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
     }
 
 

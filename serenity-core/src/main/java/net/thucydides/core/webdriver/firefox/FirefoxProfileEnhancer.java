@@ -1,12 +1,16 @@
 package net.thucydides.core.webdriver.firefox;
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.core.webdriver.driverproviders.SanitisedBrowserPreferences;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,7 +26,6 @@ public class FirefoxProfileEnhancer {
     }
 
     public void configureJavaSupport(FirefoxProfile profile) {
-//        boolean enableJava = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SECURITY_ENABLE_JAVA, false);
         boolean enableJava = ThucydidesSystemProperty.SECURITY_ENABLE_JAVA.booleanFrom(environmentVariables, false);
         profile.setPreference("security.enable_java", enableJava);
     }
@@ -58,12 +61,34 @@ public class FirefoxProfileEnhancer {
     }
 
     public void addPreferences(FirefoxProfile profile) {
-        String preferences = ThucydidesSystemProperty.FIREFOX_PREFERENCES.from(environmentVariables);
-        String driverOptions = ThucydidesSystemProperty.DRIVER_OPTIONS.from(environmentVariables);
+        Optional<String> preferences = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
+        Optional<String> driverOptions
+                = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(ThucydidesSystemProperty.DRIVER_OPTIONS);
 
-        applyPreferences(profile, preferences);
-        applyPreferences(profile, driverOptions);
+        preferences.ifPresent(
+                prefs -> applyPreferences(profile, prefs)
+        );
+        driverOptions.ifPresent(
+                options -> applyPreferences(profile, options)
+        );
+        addStructuredPreferencesTo(profile);
     }
+
+    private void addStructuredPreferencesTo(FirefoxProfile profile) {
+        Map<String, Object> preferences = preferencesConfiguredIn(environmentVariables);
+        preferences.forEach(
+                (key,value) -> new PreferenceValue(key, value).applyTo(profile)
+        );
+    }
+
+    public static Map<String, Object> preferencesConfiguredIn(EnvironmentVariables environmentVariables) {
+        Map<String, Object> preferences = BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables);
+        preferences.putAll(BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables));
+        return SanitisedBrowserPreferences.cleanUpPathsIn(preferences);
+    }
+
 
     private void applyPreferences(FirefoxProfile profile, String preferences) {
         getPreferenceValuesFrom(preferences).forEach(
@@ -103,7 +128,7 @@ public class FirefoxProfileEnhancer {
     private Object argumentValueOf(String value) {
         if (NumberUtils.isDigits(value)) {
             return Integer.parseInt(value);
-        } else if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+        } else if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
             return Boolean.valueOf(value);
         } else {
             return value;

@@ -4,22 +4,23 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.exceptions.UnknownPageException;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
 public class OpenPageWithName implements Interaction {
 
-    private final String pageName;
-    private final EnvironmentVariables environmentVariables;
+    private String pageName;
+    private EnvironmentVariables environmentVariables;
+
+    public OpenPageWithName() {}
 
     public OpenPageWithName(String pageName) {
         this.pageName = pageName;
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
-    @Step("{0} opens the #pageName")
+    @Step("{0} opens the #pageName page")
     public <T extends Actor> void performAs(T theUser) {
         String pageUrl = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty(pageName)

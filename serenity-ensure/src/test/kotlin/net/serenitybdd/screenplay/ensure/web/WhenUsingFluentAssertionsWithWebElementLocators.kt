@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.ensure.web
 
+import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
@@ -40,7 +41,10 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        driver = PhantomJSDriver() // ChromeDriver(options)
+        WebDriverManager.chromedriver().setup();
+        val options = ChromeOptions()
+        options.setHeadless(true)
+        driver = ChromeDriver(options)
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)

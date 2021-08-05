@@ -6,7 +6,8 @@ import org.openqa.selenium.WebDriver;
 enum RedimensionStrategy {
     DoNotRedimension,
     RedimensionToSpecifiedSize,
-    Maximize;
+    Maximize,
+    FullScreen;
 
     public static RedimensionStrategy strategyFor(WebDriver driver, EnvironmentVariables environmentVariables) {
 
@@ -22,6 +23,10 @@ enum RedimensionStrategy {
 
         if (redimensionConfiguration.isBrowserMaximised()) {
             return Maximize;
+        }
+
+        if (redimensionConfiguration.isBrowserFullScreen()) {
+            return FullScreen;
         }
 
         return DoNotRedimension;

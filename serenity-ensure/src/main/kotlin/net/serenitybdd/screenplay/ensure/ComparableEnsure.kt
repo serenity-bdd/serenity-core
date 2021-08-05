@@ -173,7 +173,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                         return if (comparator != null)
                             comparator.compare(resolvedValue as A, startRange as A) >= 0 && comparator.compare(resolvedValue as A, endRange as A) <= 0
                         else
-                            (resolvedValue!! >= startRange as A && resolvedValue!! <= endRange as A)
+                            (resolvedValue!! >= startRange as A && resolvedValue <= endRange as A)
                     })
 
     private val IS_STRICTLY_BETWEEN =

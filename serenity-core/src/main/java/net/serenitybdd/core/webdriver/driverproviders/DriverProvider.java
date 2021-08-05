@@ -17,11 +17,10 @@ public interface DriverProvider {
     WebDriver newInstance(String options, EnvironmentVariables environmentVariables) throws MalformedURLException ;
 
     default Properties capabilitiesToProperties(Capabilities capabilities) {
-        return CapabilitiesToPropertiesConverter.capabilitiesToProperties(capabilities);
+        return CapabilitiesConverter.capabilitiesToProperties(capabilities);
     }
 
     default boolean isDriverAutomaticallyDownloaded(EnvironmentVariables environmentVariables) {
-        String webDriverAutodownload = ThucydidesSystemProperty.WEBDRIVER_AUTODOWNLOAD.from(environmentVariables);
-        return( webDriverAutodownload != null && webDriverAutodownload.toLowerCase().equals("true"));
+        return ThucydidesSystemProperty.WEBDRIVER_AUTODOWNLOAD.booleanFrom(environmentVariables, true);
     }
 }

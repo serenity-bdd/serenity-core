@@ -4,8 +4,9 @@ import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static io.vavr.API.List;
+import static java.util.Arrays.stream;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 
@@ -20,6 +21,7 @@ public class ExecutedStepDescription implements Cloneable {
     private final List<Object> argumentsList;
     private final List<String> convertedArgumentsList;
     private final Map<String, Object> displayedFields;
+//    private final Object subject;
     private boolean isAGroup;
 
     private final static Map<String,Object> NO_FIELDS = new HashMap();
@@ -101,7 +103,7 @@ public class ExecutedStepDescription implements Cloneable {
     }
 
     private static List<String> convertArguments(Object[] arguments) {
-        return List(arguments).map(StepArgumentWriter::readableFormOf).asJava();
+        return stream(arguments).map(StepArgumentWriter::readableFormOf).collect(Collectors.toList());
     }
 
     public static ExecutedStepDescription withTitle(final String name) {

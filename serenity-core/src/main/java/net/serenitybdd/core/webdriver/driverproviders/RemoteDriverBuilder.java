@@ -61,7 +61,7 @@ abstract class RemoteDriverBuilder {
                     break;
             }
 
-            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(),  CapabilitiesToPropertiesConverter.capabilitiesToProperties(driver.getCapabilities()));
+            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(),  CapabilitiesConverter.capabilitiesToProperties(driver.getCapabilities()));
             return driver;
 
         } catch (UnreachableBrowserException unreachableBrowser) {
@@ -76,8 +76,9 @@ abstract class RemoteDriverBuilder {
         try {
             hostShouldBeAvailableAt(remoteUrl);
         } catch (IOException hostUnavailable) {
-            theRemoteServerIsUnavailable(remoteUrl.getHost() + " could not be reached: "
-                                         + hostUnavailable.getLocalizedMessage());
+            theRemoteServerIsUnavailable("The remote URL at " + remoteUrl.getRef() + " could not be reached."
+                                         + System.lineSeparator()
+                                         + "(Possible cause: " + hostUnavailable.getLocalizedMessage() + ")");
         }
     }
 

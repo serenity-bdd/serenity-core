@@ -1,3 +1,4 @@
+
 package net.serenitybdd.browserstack;
 
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
@@ -7,8 +8,10 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.junit.Before;
-import org.junit.Test;
+//import org.junit.Before;
+//import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
@@ -17,103 +20,70 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenAddingBrowserStackCapabilities {
 
-    EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+    EnvironmentVariables environmentVariables;
 
     private static final TestOutcome SAMPLE_TEST_OUTCOME = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
-    @Before
+    BeforeABrowserStackScenario beforeABrowserStackScenario;
+    DesiredCapabilities capabilities;
+    @BeforeEach
     public void prepareSession() {
         OverrideDriverCapabilities.clear();
+        beforeABrowserStackScenario = new BeforeABrowserStackScenario();
+        capabilities = new DesiredCapabilities();
+        environmentVariables = new MockEnvironmentVariables();
     }
+
+
     @Test
     public void theBrowserNameShouldBeAddedDirectlyToTheCapability() {
 
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        environmentVariables.setProperty("webdriver.remote.url","https://hub-cloud.browserstack.com/wd/hub");
+        environmentVariables.setProperty("browserstack.browser","Edge");
 
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
+        beforeABrowserStackScenario.apply(environmentVariables, SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME, capabilities);
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("chrome");
+        assertThat(capabilities.getBrowserName()).isEqualTo("Edge");
     }
 
     @Test
-    public void theBrowserNameCanBeSpecifiedInTheBrowserStackConfiguration() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+    public void theRemoteUrlMustContainBrowserstack() {
 
-        environmentVariables.setProperty("browserstack.browserName","IE");
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
+        environmentVariables.setProperty("webdriver.remote.url","https://hub-cloud.saucelabs.com/wd/hub");
+        environmentVariables.setProperty("browserstack.browser","Edge");
 
-        assertThat(capabilities.getBrowserName()).isEqualTo("IE");
+        beforeABrowserStackScenario.apply(environmentVariables, SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME, capabilities);
+
+        assertThat(capabilities.getBrowserName()).isEqualTo("");
     }
 
     @Test
     public void theBrowserVersionCanBeSpecifiedInTheBrowserStackConfiguration() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        environmentVariables.setProperty("browserstack.browserVersion","11.0");
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
+        environmentVariables.setProperty("webdriver.remote.url","https://hub-cloud.browserstack.com/wd/hub");
+        environmentVariables.setProperty("browserstack.browser_version","11.0");
+
+        beforeABrowserStackScenario.apply(environmentVariables, SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME, capabilities);
 
         assertThat(capabilities.getCapability("browserVersion")).isEqualTo("11.0");
     }
 
     @Test
-    public void theBrowserNameAndVersionCanBeOverridenAtRunTime() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        environmentVariables.setProperty("browserstack.browserName","IE");
-        environmentVariables.setProperty("browserstack.browserVersion","11.0");
-        OverrideDriverCapabilities.withProperty("browserstack.browserName").setTo("Chrome");
-        OverrideDriverCapabilities.withProperty("browserstack.browserVersion").setTo("78");
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
-
-        assertThat(capabilities.getBrowserName()).isEqualTo("Chrome");
-        assertThat(capabilities.getCapability("browserVersion")).isEqualTo("78");
-    }
-
-
-    @Test
     public void osNameIsAssignedToBrowserStackSection() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
+        environmentVariables.setProperty("webdriver.remote.url","https://hub-cloud.browserstack.com/wd/hub");
         environmentVariables.setProperty("browserstack.os","Windows");
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
+
+        beforeABrowserStackScenario.apply(environmentVariables, SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME, capabilities);
 
         assertThat(bstackOptionsFrom(capabilities).get("os")).isEqualTo("Windows");
     }
 
     @Test
-    public void osNameCanBeOverridenAtRuntime() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        environmentVariables.setProperty("browserstack.os","Windows");
-        OverrideDriverCapabilities.withProperty("browserstack.os").setTo("OS X");
-
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
-
-        assertThat(bstackOptionsFrom(capabilities).get("os")).isEqualTo("OS X");
-    }
-
-
-    @Test
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
+        environmentVariables.setProperty("webdriver.remote.url","https://hub-cloud.browserstack.com/wd/hub");
+        environmentVariables.setProperty("browserstack.os","Windows");
 
-        // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
+        beforeABrowserStackScenario.apply(environmentVariables, SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME, capabilities);
 
         assertThat(bstackOptionsFrom(capabilities).get("sessionName")).isEqualTo("Sample story - Sample test");
     }

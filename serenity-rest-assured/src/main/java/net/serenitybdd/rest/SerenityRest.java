@@ -2,8 +2,13 @@ package net.serenitybdd.rest;
 
 import com.google.common.base.Preconditions;
 import io.restassured.RestAssured;
-import io.restassured.authentication.*;
+import io.restassured.authentication.AuthenticationScheme;
+import io.restassured.authentication.CertificateAuthSettings;
+import io.restassured.authentication.FormAuthConfig;
+import io.restassured.authentication.OAuthSignature;
+import io.restassured.authentication.PreemptiveAuthProvider;
 import io.restassured.config.LogConfig;
+import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.filter.Filter;
@@ -16,18 +21,17 @@ import io.restassured.mapper.ObjectMapper;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import io.restassured.specification.*;
+import io.restassured.specification.Argument;
+import io.restassured.specification.ProxySpecification;
+import io.restassured.specification.RequestSender;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.RestDecorationHelper;
 import net.serenitybdd.rest.utils.RestSpecificationFactory;
-import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,7 +39,6 @@ import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static io.restassured.specification.ProxySpecification.host;
 
@@ -179,7 +182,8 @@ public class SerenityRest {
     }
 
     public static ObjectMapper objectMapper(final ObjectMapper objectMapper) {
-        RestAssured.objectMapper(objectMapper);
+        RestAssured.config = config().objectMapperConfig(ObjectMapperConfig.objectMapperConfig()
+                .defaultObjectMapper(objectMapper));
         return config().getObjectMapperConfig().defaultObjectMapper();
     }
 
@@ -192,11 +196,11 @@ public class SerenityRest {
     }
 
     public static List<Argument> withArguments(final Object firstArgument, final Object... additionalArguments) {
-        return RestAssured.withArguments(firstArgument, additionalArguments);
+        return RestAssured.withArgs(firstArgument, additionalArguments);
     }
 
     public static List<Argument> withNoArguments() {
-        return RestAssured.withNoArguments();
+        return RestAssured.withNoArgs();
     }
 
     public static List<Argument> withArgs(final Object firstArgument, final Object... additionalArguments) {
@@ -209,21 +213,35 @@ public class SerenityRest {
 
     /**
      * Create a new RestAssured query sequence
+     *
      * @return
      */
     public static RequestSpecification given() {
+        return fetchRequestSpecification();
+    }
+
+    public static RequestSpecification givenWithNoReporting() {
+        RequestSpecification requestSpecification = fetchRequestSpecification();
+        if (requestSpecification instanceof RequestSpecificationDecorated) {
+            ((RequestSpecificationDecorated) requestSpecification).disableReporting();
+        }
+        return requestSpecification;
+    }
+
+    private static RequestSpecification fetchRequestSpecification() {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
-        final ResponseSpecificationDecorated response =  RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
+        final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
     }
 
     /**
      * Add an additional clause to a RestAssured query
+     *
      * @return
      */
     public static RequestSender andGiven() {
-        if(currentRequestSpecification.get() != null) {
+        if (currentRequestSpecification.get() != null) {
             return currentRequestSpecification.get();
         }
         return given();
@@ -238,10 +256,11 @@ public class SerenityRest {
 
     /**
      * Add an action to a RestAssured query, building on previous given() statements if they were called.
+     *
      * @return
      */
     public static RequestSender when() {
-        if(currentRequestSpecification.get() != null) {
+        if (currentRequestSpecification.get() != null) {
             return currentRequestSpecification.get();
         }
         return given();
@@ -260,7 +279,7 @@ public class SerenityRest {
     public static RequestSpecification given(final RequestSpecification requestSpecification) {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
-        final ResponseSpecificationDecorated response =  RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
+        final ResponseSpecificationDecorated response = RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
     }
 

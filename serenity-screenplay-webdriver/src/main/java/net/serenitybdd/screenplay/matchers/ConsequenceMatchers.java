@@ -15,7 +15,7 @@ import java.util.Set;
 public class ConsequenceMatchers {
 
     public static <T> Matcher<T> displays(String propertyName, Matcher<?> valueMatcher) {
-        return new AnswerMatcher(propertyName, valueMatcher);
+        return new AnswerMatcher<>(propertyName, valueMatcher);
     }
 
     public static class AnswerMatcher<T> extends TypeSafeMatcher<T> {
@@ -47,7 +47,7 @@ public class ConsequenceMatchers {
         }
 
         private String nonStaticFieldsOf(T domainObject) {
-            ArrayList<String> fieldNames = new ArrayList();
+            ArrayList<String> fieldNames = new ArrayList<>();
             Set<Field> fields = Fields.of(domainObject.getClass()).nonStaticFields();
             for (Field field : fields) {
                 fieldNames.add("'" + field.getName() + "'");

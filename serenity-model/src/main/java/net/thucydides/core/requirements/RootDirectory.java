@@ -254,7 +254,10 @@ public class RootDirectory {
             return Optional.of(Paths.get(ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.from(environmentVariables)));
         }
         List<File> resourceDirectories = getResourceDirectories(Paths.get(relativeRoot), environmentVariables);
-        for (File resourceDir : resourceDirectories) {
+        List<File> resourceDirectoriesByIncreasingDepth = resourceDirectories.stream()
+                .sorted(Comparator.comparingInt(dir -> dir.getAbsolutePath().length()))
+                .collect(Collectors.toList());
+        for (File resourceDir : resourceDirectoriesByIncreasingDepth) {
             for (String candidateDirectoryName : requirementsDirectoryNames) {
                 if (new File(resourceDir, candidateDirectoryName).exists()) {
                     return Optional.of(resourceDir.toPath().resolve(candidateDirectoryName));

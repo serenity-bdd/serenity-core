@@ -14,8 +14,8 @@ import java.util.function.Function;
 /**
  * A REST query that sends a GET request to an endpoint and returns a result of a given type.
  * Sample usage:
- * public static Question<Float> cashBalanceFor(Client client) {
- *         return new RestQuestionBuilder<Float>().about("Cash account balance")
+ * public static Question&lt;Float&gt; cashBalanceFor(Client client) {
+ *         return new RestQuestionBuilder&lt;Float&gt;().about("Cash account balance")
  *                                                .to("/client/{clientId}/portfolio")
  *                                                .withParameters(request -> request.pathParam("clientId", client.getId()))
  *                                                .returning(response -> response.path("cash"));

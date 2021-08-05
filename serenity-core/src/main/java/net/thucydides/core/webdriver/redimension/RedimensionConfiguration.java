@@ -26,6 +26,10 @@ class RedimensionConfiguration {
         return ThucydidesSystemProperty.SERENITY_BROWSER_MAXIMIZED.booleanFrom(environmentVariables, false);
     }
 
+    public boolean isBrowserFullScreen() {
+        return ThucydidesSystemProperty.SERENITY_BROWSER_FULL_SCREEN.booleanFrom(environmentVariables, false);
+    }
+
     public boolean supportsResizing(Class<? extends WebDriver> driverClass) {
         return !( (AppiumDriver.class.isAssignableFrom(driverClass))
                 || (HtmlUnitDriver.class.isAssignableFrom(driverClass)));

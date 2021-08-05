@@ -3,12 +3,10 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Interaction;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
 public class Open {
 
     public static OpenPage browserOn(PageObject targetPage) {
-        return instrumented(OpenPage.class, targetPage);
+        return new OpenPage(targetPage);
     }
 
     public static Open browserOn() {
@@ -16,23 +14,23 @@ public class Open {
     }
 
     public static OpenUrl url(String targetUrl) {
-        return instrumented(OpenUrl.class, targetUrl);
+        return new OpenUrl(targetUrl);
     }
 
     public static OpenAt relativeUrl(String targetUrl) {
-        return instrumented(OpenAt.class, targetUrl);
+        return new OpenAt(targetUrl);
     }
 
     public Interaction the(PageObject targetPage) {
-        return instrumented(OpenPage.class, targetPage);
+        return new OpenPage(targetPage);
     }
 
     public Interaction thePageNamed(String pageName) {
-        return instrumented(OpenPageWithName.class, pageName);
+        return new OpenPageWithName(pageName);
     }
 
     public Interaction the(Class<? extends PageObject> targetPageClass) {
-        return instrumented(OpenPageFromClass.class, targetPageClass);
+        return new OpenPageFromClass(targetPageClass);
     }
 
 }

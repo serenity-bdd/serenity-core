@@ -19,20 +19,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.BiConsumer;
 
 import static net.thucydides.core.logging.ConsoleEvent.*;
 
 public class ConsoleLoggingListener implements StepListener {
-
-    private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_RED = "\u001B[91m";
-    private static final String ANSI_WHITE = "\u001B[37m";
-    private static final String ANSI_GREEN = "\u001B[92m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_PURPLE = "\u001B[95m";
-    private static final String ANSI_CYAN = "\u001B[96m";
 
     public static final String SERENITY_BIG_BANNER =
             "\n\n-------------------------------------------------------------------------------------\n" +
@@ -60,26 +53,26 @@ public class ConsoleLoggingListener implements StepListener {
                     " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
                     "-------------------------------------------------------------------------------------\n";
 
+    public static final String SERENITY_NONE_BANNER = "Serenity BDD. Home page at http://www.serenity-bdd.info";
+
     // MAIN BANNERS
     private static final List<String> BANNER_HEADINGS = NewList.of(
-            SERENITY_SMALL_BANNER,
+            SERENITY_NONE_BANNER,
             SERENITY_SMALL_BANNER,
             SERENITY_BIG_BANNER);
 
     private final Logger logger;
     private final EnvironmentVariables environmentVariables;
-    private final ConsoleHeadingStyle headingStyle;
     private final ConsoleHeadingStyle bannerStyle;
     private final FailureAnalysis analysis;
     private final ConsoleHeading consoleHeading;
-
+    private final ConsoleColors colored;
+    
     private ExecutedStepDescription currentStep;
     private Set<ExecutedStepDescription> flaggedSteps = new HashSet<>();
     private Set<TestOutcome> reportedOutcomes = new HashSet<>();
 
     private Stack<String> nestedSteps = new Stack<>();
-
-    private enum HeadingStyle {MINIMAL, NORMAL, ASCII}
 
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables,
                                   Logger logger) {
@@ -87,9 +80,8 @@ public class ConsoleLoggingListener implements StepListener {
         this.environmentVariables = environmentVariables;
         this.analysis = new FailureAnalysis(environmentVariables);
         this.consoleHeading = new ConsoleHeading(environmentVariables);
-        this.headingStyle = ConsoleHeadingStyle.definedIn(environmentVariables);
         this.bannerStyle = ConsoleHeadingStyle.bannerStyleDefinedIn(environmentVariables);
-
+        this.colored = new ConsoleColors(environmentVariables);
         logBanner();
     }
 
@@ -109,7 +101,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private String bannerHeading() {
-        return cyan(BANNER_HEADINGS.get(bannerStyle.getLevel()));
+        return colored.cyan(BANNER_HEADINGS.get(bannerStyle.getLevel()));
     }
 
     private boolean loggingLevelIsAtLeast(LoggingLevel minimumLoggingLevel) {
@@ -192,13 +184,13 @@ public class ConsoleLoggingListener implements StepListener {
 
     private Map<TestResult, BiConsumer<Logger, String>> coloredLogs() {
         Map<TestResult, BiConsumer<Logger, String>> coloredLogs = new HashMap<>();
-        coloredLogs.put(TestResult.SUCCESS, (log, msg) -> log.info(green(msg)));
-        coloredLogs.put(TestResult.FAILURE, (log, msg) -> log.error(red(msg)));
-        coloredLogs.put(TestResult.ERROR, (log, msg) -> log.error(red(msg)));
-        coloredLogs.put(TestResult.PENDING, (log, msg) -> log.info(cyan(msg)));
-        coloredLogs.put(TestResult.SKIPPED, (log, msg) -> log.info(yellow(msg)));
-        coloredLogs.put(TestResult.IGNORED, (log, msg) -> log.info(yellow(msg)));
-        coloredLogs.put(TestResult.COMPROMISED, (log, msg) -> log.error(purple(msg)));
+        coloredLogs.put(TestResult.SUCCESS, (log, msg) -> log.info(colored.green(msg)));
+        coloredLogs.put(TestResult.FAILURE, (log, msg) -> log.error(colored.red(msg)));
+        coloredLogs.put(TestResult.ERROR, (log, msg) -> log.error(colored.red(msg)));
+        coloredLogs.put(TestResult.PENDING, (log, msg) -> log.info(colored.cyan(msg)));
+        coloredLogs.put(TestResult.SKIPPED, (log, msg) -> log.info(colored.yellow(msg)));
+        coloredLogs.put(TestResult.IGNORED, (log, msg) -> log.info(colored.yellow(msg)));
+        coloredLogs.put(TestResult.COMPROMISED, (log, msg) -> log.error(colored.purple(msg)));
         coloredLogs.put(TestResult.UNDEFINED, (log, msg) -> log.info(msg));
 
         return coloredLogs;
@@ -218,7 +210,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logFailure(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(red(consoleHeading.bannerFor(TEST_FAILED, result.getTitle())));
+            getLogger().error(colored.red(consoleHeading.bannerFor(TEST_FAILED, result.getTitle())));
             logRelatedIssues(result);
             logFailureCause(result);
         }
@@ -226,7 +218,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logError(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(red(consoleHeading.bannerFor(TEST_ERROR, result.getTitle())));
+            getLogger().error(colored.red(consoleHeading.bannerFor(TEST_ERROR, result.getTitle())));
             logRelatedIssues(result);
             logFailureCause(result);
 
@@ -235,7 +227,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logCompromised(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(red(consoleHeading.bannerFor(TEST_COMPROMISED, result.getTitle())));
+            getLogger().error(colored.red(consoleHeading.bannerFor(TEST_COMPROMISED, result.getTitle())));
             logRelatedIssues(result);
             logFailureCause(result);
         }
@@ -251,27 +243,27 @@ public class ConsoleLoggingListener implements StepListener {
         if (result.getNestedTestFailureCause() != null) {
             if (result.getFailingStep().isPresent()) {
                 String failingStep = result.getFailingStep().get().unrendered().getDescription();
-                getLogger().error(red("    Test failed at step: " + failingStep));
+                getLogger().error(colored.red("    Test failed at step: " + failingStep));
             }
-            getLogger().error(red("    " + result.getNestedTestFailureCause().getShortenedMessage()));
+            getLogger().error(colored.red("    " + result.getNestedTestFailureCause().getShortenedMessage()));
         }
     }
 
     private void logPending(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.SUMMARY)) {
-            getLogger().info(cyan(consoleHeading.bannerFor(TEST_PENDING, result.getTitle())));
+            getLogger().info(colored.cyan(consoleHeading.bannerFor(TEST_PENDING, result.getTitle())));
         }
     }
 
     private void logSkipped(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.SUMMARY)) {
-            getLogger().info(yellow(consoleHeading.bannerFor(TEST_SKIPPED, result.getTitle())));
+            getLogger().info(colored.yellow(consoleHeading.bannerFor(TEST_SKIPPED, result.getTitle())));
         }
     }
 
     private void logSuccess(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.SUMMARY)) {
-            getLogger().info(green(consoleHeading.bannerFor(TEST_PASSED, result.getTitle())));
+            getLogger().info(colored.green(consoleHeading.bannerFor(TEST_PASSED, result.getTitle())));
         }
     }
 
@@ -279,11 +271,24 @@ public class ConsoleLoggingListener implements StepListener {
         currentStep = description;
         nestedSteps.push(description.getName());
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            String indent = StringUtils.repeat("  ", nestedSteps.size());
-            getLogger().info(white(indent + " * " + description.getTitle()));
+            String indent = indentation(nestedSteps.size());// StringUtils.repeat("  ", nestedSteps.size());
+            System.out.println(withTimestamp(colored.green(indent + description.getTitle())));
+//            getLogger().info(colored.green(indent + description.getTitle()));
         }
     }
 
+    private String withTimestamp(String message) {
+        if (environmentVariables.getPropertyAsBoolean("serenity.console.timestamp", false)) {
+            String timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
+            return timeStamp + " " + message;
+        } else {
+            return message;
+        }
+    }
+
+    private String indentation(int level) {
+        return "|" + StringUtils.repeat("-", level * 2) + " ";
+    }
 
     public void skippedStepStarted(ExecutedStepDescription description) {
         stepStarted(description);
@@ -298,7 +303,7 @@ public class ConsoleLoggingListener implements StepListener {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();
-            getLogger().info(red("STEP {}: {}"), failureType, errorMessage);
+            getLogger().info(colored.red("STEP {}: {}"), failureType, errorMessage);
         }
     }
 
@@ -316,7 +321,7 @@ public class ConsoleLoggingListener implements StepListener {
     public void stepIgnored() {
         stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
-            getLogger().info(yellow("      -> STEP IGNORED"));
+            getLogger().info(colored.yellow("      -> STEP IGNORED"));
             flaggedSteps.add(currentStep);
         }
     }
@@ -324,7 +329,7 @@ public class ConsoleLoggingListener implements StepListener {
     public void stepPending() {
         stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
-            getLogger().info(cyan("      -> STEP IS PENDING"));
+            getLogger().info(colored.cyan("      -> STEP IS PENDING"));
             flaggedSteps.add(currentStep);
         }
     }
@@ -333,7 +338,7 @@ public class ConsoleLoggingListener implements StepListener {
     public void stepPending(String message) {
         stepOut();
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE) && (!flaggedSteps.contains(currentStep))) {
-            getLogger().info(cyan("      -> PENDING STEP ({})"), message);
+            getLogger().info(colored.cyan("      -> PENDING STEP ({})"), message);
             flaggedSteps.add(currentStep);
         }
     }
@@ -345,14 +350,14 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void testIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(yellow("      -> TEST IGNORED"));
+            getLogger().info(colored.yellow("      -> TEST IGNORED"));
         }
     }
 
     @Override
     public void testSkipped() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(yellow("      -> TEST SKIPPED"));
+            getLogger().info(colored.yellow("      -> TEST SKIPPED"));
         }
     }
 
@@ -385,7 +390,7 @@ public class ConsoleLoggingListener implements StepListener {
     @Override
     public void assumptionViolated(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(red("      -> ASSUMPTION VIOLATED: " + message));
+            getLogger().error(colored.red("      -> ASSUMPTION VIOLATED: " + message));
         }
     }
 
@@ -395,38 +400,5 @@ public class ConsoleLoggingListener implements StepListener {
             getLogger().info("FINISHING TEST RUN");
         }
     }
-
-    private boolean showColoredOutput() {
-        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables, false);
-    }
-
-    private String red(String text) {
-        return (showColoredOutput()) ? ANSI_RED + text + ANSI_RESET : text;
-    }
-
-    private String grey(String text) {
-        return (showColoredOutput()) ? ANSI_RED + text + ANSI_RESET : text;
-    }
-
-    private String green(String text) {
-        return (showColoredOutput()) ? ANSI_GREEN + text + ANSI_RESET : text;
-    }
-
-    private String yellow(String text) {
-        return (showColoredOutput()) ? ANSI_YELLOW + text + ANSI_RESET : text;
-    }
-
-    private String cyan(String text) {
-        return (showColoredOutput()) ? ANSI_CYAN + text + ANSI_RESET : text;
-    }
-
-    private String purple(String text) {
-        return (showColoredOutput()) ? ANSI_PURPLE + text + ANSI_RESET : text;
-    }
-
-    private String white(String text) {
-        return text;
-    }
-
 
 }

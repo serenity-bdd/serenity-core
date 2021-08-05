@@ -17,20 +17,8 @@ public class ConsequenceGroup<T> extends BaseConsequence<T> {
 
     @Override
     public void evaluateFor(Actor actor) {
+        performSetupActionsAs(actor);
         questionGroup.answeredBy(actor);
-//        try {
-//            String groupTitle = "consequence group";
-//
-//            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
-//
-//            questionGroup.answeredBy(actor);
-//
-//        } catch (Throwable error) {
-//            throw error;
-//        } finally {
-//            StepEventBus.getEventBus().stepFinished();
-//        }
-
     }
 
     @Override

@@ -1,5 +1,5 @@
-import org.ajoberstar.gradle.git.release.opinion.Strategies
-import org.ajoberstar.grgit.Grgit
+//import org.ajoberstar.gradle.git.release.opinion.Strategies
+//import org.ajoberstar.grgit.Grgit
 
 buildscript {
     repositories {
@@ -18,7 +18,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.ajoberstar.release-opinion' version '1.7.2'
+//    id 'org.ajoberstar.release-opinion' version '1.7.2'
     id 'project-report'
     id "org.sonarqube" version "2.6"
     id 'org.jetbrains.dokka' version '0.9.17'
@@ -48,36 +48,35 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
-    apply plugin:  'java-library'
+    apply plugin: 'java-library'
     apply plugin: 'com.github.ben-manes.versions'
 
-    dependencyUpdates.resolutionStrategy = {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'atlassian'].any { qualifier ->
-                    selection.candidate.version.toLowerCase() ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-                }
-                if (rejected) {
-                    selection.reject('Release candidate')
-                }
-            }
-        }
-    }
+//    dependencyUpdates.resolutionStrategy = {
+//        componentSelection { rules ->
+//            rules.all { ComponentSelection selection ->
+//                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'atlassian'].any { qualifier ->
+//                    selection.candidate.version.toLowerCase() ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+//                }
+//                if (rejected) {
+//                    selection.reject('Release candidate')
+//                }
+//            }
+//        }
+//    }
 
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
 
-           failOnVersionConflict()
+            // failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // whe//n updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for generated POM
-            force   "commons-collections:commons-collections:${commonsCollectionsVersion}",
+            force "commons-collections:commons-collections:${commonsCollectionsVersion}",
                     "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                     "xml-apis:xml-apis:${xmlApisVersion}",
-                    "org.apache.commons:commons-text:${commonsText}",
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
                     "org.eclipse.jetty:jetty-http:${jettyVersion}",
                     "org.eclipse.jetty:jetty-util:${jettyVersion}",
@@ -87,11 +86,11 @@ allprojects {
     }
 }
 
-release {
-    grgit = Grgit.open(file('.'))
-    defaultVersionStrategy Strategies.SNAPSHOT
-    versionStrategy Strategies.SNAPSHOT
-}
+//release {
+//    grgit = Grgit.open(file('.'))
+//    defaultVersionStrategy Strategies.SNAPSHOT
+//    versionStrategy Strategies.SNAPSHOT
+//}
 
 subprojects {
     apply plugin: 'java'
@@ -247,10 +246,10 @@ subprojects {
         compile "org.objenesis:objenesis:${objenesisVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile ("io.cucumber:cucumber-core:${cucumberVersion}") {
+        compile("io.cucumber:cucumber-core:${cucumberVersion}") {
             exclude group: "org.apiguardian", module: 'apiguardian-api'
         }
-        compile ("io.cucumber:cucumber-java:${cucumberVersion}") {
+        compile("io.cucumber:cucumber-java:${cucumberVersion}") {
             exclude group: "org.apiguardian", module: 'apiguardian-api'
         }
 
@@ -263,7 +262,7 @@ subprojects {
         /* Required for Java 9 and higher */
         compile "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
         compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
-        compile "com.sun.xml.bind:jaxb-impl:${jaxbCoreVersion}"
+        compile "com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}"
         compile "javax.activation:activation:${activationVersion}"
 
         testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
@@ -282,32 +281,34 @@ subprojects {
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
             exclude group: "org.junit"
             exclude group: "org.junit.jupiter"
+            exclude group: "com.google.inject"
             exclude group: "org.junit.platform"
         }
         testCompile("org.spockframework:spock-core:${spockVersion}") {
-            exclude group: "junit"
             exclude group: "org.codehaus.groovy"
+            exclude group: "org.junit.platform"
 
         }
+        testCompile "org.jetbrains:annotations:19.0.0"
         testCompile "org.assertj:assertj-core:${assertjVersion}"
     }
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
-            }
-            if (details.requested.name == 'hamcrest-core') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
-            }
-            if (details.requested.name == 'hamcrest-all') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-all', version: "${hamcrestVersion}"
-            }
-            if (details.requested.name == 'hamcrest-library') {
-                details.useTarget group: 'org.hamcrest', name: 'hamcrest-library', version: "${hamcrestVersion}"
-            }
-        }
-    }
+//    configurations.all {
+//        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//            if (details.requested.name == 'mockito-all') {
+//                details.useTarget group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-core') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-all') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-all', version: "${hamcrestVersion}"
+//            }
+//            if (details.requested.name == 'hamcrest-library') {
+//                details.useTarget group: 'org.hamcrest', name: 'hamcrest-library', version: "${hamcrestVersion}"
+//            }
+//        }
+//    }
 
     jar {
         inputs.property("moduleName", project.name)

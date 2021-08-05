@@ -26,7 +26,7 @@ public class AsciidocMarkupRenderer implements MarkupRenderer {
     public String render(String text) {
         String textToRender = Optional.ofNullable(text).orElse("");
         return Optional.ofNullable(
-                getAsciidoctor().render(addAsciidocLineBreaks(textToRender), getOptions())
+                getAsciidoctor().convert(addAsciidocLineBreaks(textToRender), getOptions())
         ).orElse("");
     }
 
@@ -39,17 +39,10 @@ public class AsciidocMarkupRenderer implements MarkupRenderer {
 
 
     private Options getOptions() {
-        Options options = new Options();
-        options.setCompact(true);
-        options.setDocType("inline");
-
-        Attributes attributes = new Attributes();
-        attributes.setExperimental(true);
-        attributes.setDataUri(true);
-
-        options.setAttributes(attributes);
-
-        return options;
-
+        return Options.builder()
+                .compact(true)
+                .docType("inline")
+                .attributes(Attributes.builder().experimental(true).dataUri(true).build())
+                .build();
     }
 }

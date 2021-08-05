@@ -14,12 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 
-
-
+import static java.util.Arrays.stream;
 
 /**
  * This is an INTERNAL helper class of serenity, it should not be used directly and may be subject to refactoring.
@@ -183,18 +183,24 @@ public class JUnitAdapter {
 
         @Override
         public boolean isTestClass(final Class<?> testClass) {
-            return (testClass.getAnnotation(org.junit.runner.RunWith.class) != null);
+            return containsAnnotationCalled(testClass.getAnnotations(), "RunWith");
+//            return (testClass.getAnnotation(org.junit.runner.RunWith.class) != null);
         }
+
 
         @Override
         public boolean isTestMethod(final Method method) {
-            return (method.getAnnotation(org.junit.Test.class) != null);
+            return containsAnnotationCalled(method.getAnnotations(), "Test");
+//            return (method.getAnnotation(org.junit.Test.class) != null);
         }
 
         @Override
         public boolean isTestSetupMethod(final Method method) {
-            return (method.getAnnotation(org.junit.Before.class) != null)
-                    || (method.getAnnotation(org.junit.BeforeClass.class) != null);
+            return containsAnnotationCalled(method.getAnnotations(), "Before")
+                    || containsAnnotationCalled(method.getAnnotations(), "BeforeClass");
+
+//            return (method.getAnnotation(org.junit.Before.class) != null)
+//                    || (method.getAnnotation(org.junit.BeforeClass.class) != null);
         }
 
         @Override
@@ -221,7 +227,7 @@ public class JUnitAdapter {
         public boolean isIgnored(final Method method) {
             // intentionally left at previous implementation based on annotation name to change as little as possible
             Annotation[] annotations = method.getAnnotations();
-            return Arrays.stream(annotations).anyMatch(
+            return stream(annotations).anyMatch(
                     annotation -> annotation.annotationType().getSimpleName().equals("Ignore")
             );
         }
@@ -271,8 +277,11 @@ public class JUnitAdapter {
 
         @Override
         public boolean isTestMethod(final Method method) {
-            return (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) ||
+
+            boolean testMethod =  (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) ||
+                       // containsAnnotationCalled(method.getAnnotations(), "ParameterizedTest");
                     (method.getAnnotation(org.junit.jupiter.params.ParameterizedTest.class) != null);
+            return testMethod;
         }
 
         @Override
@@ -283,25 +292,29 @@ public class JUnitAdapter {
 
         @Override
         public boolean isSerenityTestCase(Class<?> testClass) {
-            //return hasSerenityAnnotation(testClass, new HashSet<>());
-            //no annotation is needed
-            return true;
+            return stream(testClass.getDeclaredMethods()).anyMatch(this::isTestMethod);
         }
 
         @Override
         public boolean isIgnored(final Method method) {
-            return (method.getAnnotation(Disabled.class) != null);
+            return stream(method.getAnnotations()).anyMatch(annotation -> annotation.annotationType().getName().contains("Disabled"));
+            //return (method.getAnnotation(Disabled.class) != null);
         }
+
 
         private boolean hasSerenityAnnotation(final Class<?> clazz, final Set<Class<?>> checked) {
             checked.add(clazz);
-            return Arrays.stream(clazz.getAnnotations()).anyMatch(a -> carriesSerenityExtension(a, checked));
+            return stream(clazz.getAnnotations()).anyMatch(a -> carriesSerenityExtension(a, checked));
         }
 
         private boolean carriesSerenityExtension(final Annotation annotation, final Set<Class<?>> checked) {
             if (annotation instanceof ExtendWith) {
-                return Arrays.stream(((ExtendWith) annotation).value())
+                return stream(((ExtendWith) annotation).value())
                         .anyMatch(c -> c.getSimpleName().matches("Serenity.*Extension"));
+//            if (annotation.annotationType().getName().contains("ExtendsWith")) {
+//                if (hasValueMethod(annotation)) {
+//                    return (valueOf(annotation).matches("Serenity.*Extension"));
+//                }
             }
             Class<? extends Annotation> annotationType = annotation.annotationType();
 
@@ -315,6 +328,22 @@ public class JUnitAdapter {
             return hasSerenityAnnotation(annotation.annotationType(), checked);
         }
 
+        private String valueOf(Annotation annotation) {
+
+            try {
+                Method value = annotation.getClass().getMethod("value");
+                return value.invoke(annotation).toString();
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                return "";
+            }
+        }
+        private boolean hasValueMethod(Annotation annotation) {
+            try {
+                return (annotation.getClass().getMethod("value") != null);
+            } catch (NoSuchMethodException e) {
+                return false;
+            }
+        }
         @Override
         public boolean isAssumptionViolatedException(final Throwable throwable) {
             return (throwable instanceof org.opentest4j.TestAbortedException);
@@ -324,7 +353,7 @@ public class JUnitAdapter {
         public boolean isATaggableClass(final Class<?> testClass) {
             // serenity tagging mechanism currently not supported for JUnit 5, since JUnit 5 has its own tagging
             // feature.
-            return true;
+            return false;
         }
 
         /*@Override
@@ -366,5 +395,10 @@ public class JUnitAdapter {
             return tags;
         }
     }
+
+    private static  boolean containsAnnotationCalled(Annotation[] annotations, String annotationName) {
+            return stream(annotations).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals(annotationName));
+    }
+
 
 }

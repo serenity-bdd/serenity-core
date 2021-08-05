@@ -1,0 +1,22 @@
+<acceptance-test-run title="Happy day scenario" name="happy_day_scenario" steps="5" successful="4" failures="0" skipped="0" ignored="0" pending="1" result="PENDING">
+  <user-story id="net.serenitybdd.samples.Application.MakeWidgets.MakeSmallWidgets" name="Make small widgets">
+    <feature id="net.serenitybdd.samples.Application.MakeWidgets" name="Make widgets"/>
+  </user-story>
+  <test-group name="Another group of steps" result="PENDING">
+    <test-step result="SUCCESS">
+      <description>Step that succeeds</description>
+    </test-step>
+    <test-step result="SUCCESS">
+      <description>Another step that succeeds</description>
+    </test-step>
+    <test-step result="PENDING">
+      <description>Step that is pending</description>
+    </test-step>
+  </test-group>
+  <test-step result="SUCCESS">
+    <description>Step three: &lt;span class=&apos;single-parameter&apos;&gt;e&lt;/span&gt;</description>
+  </test-step>
+  <test-step result="SUCCESS">
+    <description>Step four: &lt;span class=&apos;single-parameter&apos;&gt;f&lt;/span&gt;</description>
+  </test-step>
+</acceptance-test-run>

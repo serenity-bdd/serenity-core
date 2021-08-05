@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay
 
+import net.serenitybdd.screenplay.actors.Cast
+import net.serenitybdd.screenplay.actors.OnStage
 import net.serenitybdd.screenplay.conditions.Check
 import net.serenitybdd.screenplay.shopping.BitesTheBanana
 import net.serenitybdd.screenplay.shopping.ChewsTheBanana
@@ -7,20 +9,20 @@ import net.serenitybdd.screenplay.shopping.PeelABanana
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+
+import java.nio.file.Files
 
 
 class WhenPerformingCompositeTasks extends Specification {
 
-    @Rule
-    TemporaryFolder temporaryFolder
     File temporaryDirectory
     BaseStepListener listener = new BaseStepListener(temporaryDirectory)
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
+
         StepEventBus.eventBus.clear()
         StepEventBus.eventBus.registerListener(listener)
         StepEventBus.eventBus.testStarted("some test")
@@ -39,7 +41,6 @@ class WhenPerformingCompositeTasks extends Specification {
         testOutcomeContainsStep("Eddie bites the banana")
         testOutcomeContainsStep("Eddie chews the banana")
     }
-
 
     def testPassed() {
         listener.latestTestOutcome().get().result == TestResult.SUCCESS

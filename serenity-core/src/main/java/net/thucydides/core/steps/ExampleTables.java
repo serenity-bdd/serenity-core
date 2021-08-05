@@ -60,7 +60,6 @@ public class ExampleTables {
     public void start() {
         DataTable table = DataTable.withHeaders(this.headers)
                 .andTitle(this.title).build();
-        System.out.println("EXAMPLE TABLES: START - " + table);
         StepEventBus.getEventBus().useExamplesFrom(table);
         StepEventBus.getEventBus().enableSoftAsserts();
 

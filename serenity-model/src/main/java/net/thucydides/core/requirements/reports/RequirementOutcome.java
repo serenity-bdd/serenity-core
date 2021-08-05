@@ -345,7 +345,7 @@ public class RequirementOutcome {
     public RequirementOutcome filteredByDisplayTag() {
 
         List<Requirement> childRequirementsWithMatchingTag = getRequirement().getChildren().stream()
-                .filter(this::isFilteredByDisplayTag)
+                .filter(this::isAllowedByDisplayTagConfiguration)
                 .collect(Collectors.toList());
 
         Requirement filteredRequirement = getRequirement().withChildren(childRequirementsWithMatchingTag);
@@ -363,9 +363,9 @@ public class RequirementOutcome {
         return !testOutcomes.forRequirement(childRequirement).getOutcomes().isEmpty();
     }
 
-    private boolean isFilteredByDisplayTag(Requirement childRequirement) {
+    private boolean isAllowedByDisplayTagConfiguration(Requirement childRequirement) {
         RequirementsFilter requirementsFilter = new RequirementsFilter(environmentVariables);
-        return !requirementsFilter.inDisplayOnlyTags(childRequirement);
+        return requirementsFilter.inDisplayOnlyTags(childRequirement);
     }
 
     public class OutcomeCounter extends TestOutcomeCounter {

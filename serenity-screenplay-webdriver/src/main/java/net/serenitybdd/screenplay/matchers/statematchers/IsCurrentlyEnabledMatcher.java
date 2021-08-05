@@ -5,9 +5,8 @@ import org.hamcrest.Description;
 
 public class IsCurrentlyEnabledMatcher<T extends WebElementState> extends BaseWebElementStateMatcher<T> {
 
-    @Override
     protected boolean matchesSafely(T element) {
-        return existing(element).isCurrentlyEnabled();
+        return super.existing(element).isCurrentlyEnabled();
     }
 
     @Override

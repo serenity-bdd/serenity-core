@@ -104,7 +104,15 @@ class KnowableComparableAnswer<A>(val question: Question<A>, val description: St
 }
 
 class KnowableCollectionAnswer<A>(val question: Question<Collection<A>>, val description: String) : KnowableValue<Collection<A>>, HasSubject {
+
     override fun invoke(actor: Actor): Collection<A> = question.answeredBy(actor)
+    override fun toString() = description
+    override fun subject() = question.subject
+}
+
+class KnowableListAnswer<A>(val question: Question<List<A>>, val description: String) : KnowableValue<List<A>>, HasSubject {
+
+    override fun invoke(actor: Actor): List<A> = question.answeredBy(actor)
     override fun toString() = description
     override fun subject() = question.subject
 }

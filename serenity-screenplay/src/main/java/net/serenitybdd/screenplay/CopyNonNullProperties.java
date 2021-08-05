@@ -1,7 +1,11 @@
 package net.serenitybdd.screenplay;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class CopyNonNullProperties {
     private Object source;
@@ -15,26 +19,39 @@ class CopyNonNullProperties {
     }
 
     public void to(Object target) {
-        Arrays.stream(source.getClass().getDeclaredFields()).filter(field -> !field.isSynthetic()).forEach(
-                field -> copyFieldValue(field, source, target)
-        );
-        Arrays.stream(source.getClass().getFields()).filter(field -> !field.isSynthetic()).forEach(
-                field -> copyFieldValue(field, source, target)
-        );
+        getFields(source.getClass())
+                .stream()
+                .filter(field -> !field.isSynthetic())
+                .forEach(
+                        field -> copyFieldValue(field, source, target)
+                );
+//        Arrays.stream(source.getClass().getDeclaredFields()).filter(field -> !field.isSynthetic()).forEach(
+//                field -> copyFieldValue(field, source, target)
+//        );
+//        Arrays.stream(source.getClass().getFields()).filter(field -> !field.isSynthetic()).forEach(
+//                field -> copyFieldValue(field, source, target)
+//        );
+    }
+
+    @NotNull
+    public static List<Field> getFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        Class<?> classToInspect = clazz;
+        while (classToInspect != null) {
+            fields.addAll(Arrays.asList(classToInspect.getDeclaredFields()));
+            classToInspect = classToInspect.getSuperclass();
+        }
+        return fields;
     }
 
     private void copyFieldValue(Field field, Object source, Object target) {
         try {
             field.setAccessible(true);
             Object sourceValue = field.get(source);
-            if (sourceValue == null) { return; }
-
-            Field targetField = null;
-            targetField = targetField(target, field.getName());
-
-            targetField.setAccessible(true);
-            targetField.set(target, sourceValue);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            if (sourceValue != null) {
+                field.set(target, sourceValue);
+            }
+        } catch (IllegalAccessException e) {
             throw new IllegalArgumentException(e);
         }
     }

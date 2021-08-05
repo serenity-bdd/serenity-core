@@ -25,10 +25,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,10 +223,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driverIsDisabled()) {
             return new WebElementFacadeStub();
         }
-        return getResolvedELement();
+        return getResolvedElement();
     }
 
-    private WebElement getResolvedELement() {
+    private WebElement getResolvedElement() {
         if (resolvedELement == null) {
             resolvedELement = getElementResolver().resolveForDriver(driver);
         }
@@ -606,16 +603,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         WebElement element = getElement();
 
-	if (element == null)
-	    return false;
+        if (element == null)
+            return false;
 
-	String text = element.getText();
-	if (text.isEmpty()) {
-	    // https://github.com/serenity-bdd/serenity-core/issues/2134
-	    // maybe it's an input element?
-	    text = element.getAttribute("value");
-	}
-	return text.equals(value);
+        String text = element.getText();
+        if (text.isEmpty()) {
+            // https://github.com/serenity-bdd/serenity-core/issues/2134
+            // maybe it's an input element?
+            text = element.getAttribute("value");
+        }
+        return value.equals(text);
     }
 
     /**
@@ -799,7 +796,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 return true;
             }
         } catch (TimeoutException timeout) {
-            throw new ElementShouldBeEnabledException("Expected enabled element was not clickable", timeout);
+            return false;
         }
         return false;
     }
@@ -930,6 +927,26 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public String getSelectedVisibleTextValue() {
         return dropdownSelect().visibleTextValue();
+    }
+
+    @Override
+    public String getFirstSelectedOptionVisibleText() {
+        return new Select(this).getFirstSelectedOption().getText();
+    }
+
+    @Override
+    public List<String> getSelectedVisibleTexts() {
+        return new Select(this).getAllSelectedOptions().stream().map(WebElement::getText).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getFirstSelectedOptionValue() {
+        return new Select(this).getFirstSelectedOption().getAttribute("value");
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return new Select(this).getAllSelectedOptions().stream().map(element -> element.getAttribute("value")).collect(Collectors.toList());
     }
 
     @Override
@@ -1077,19 +1094,15 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
-    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = Arrays.asList("input", "button", "option");
-
     private boolean hasValueAttribute(WebElement element) {
-        String tag = element.getTagName().toLowerCase();
-        return HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE.contains(tag);
-
+        return element.getAttribute("value") != null;
     }
 
     @Override
     public Wait<WebDriver> waitForCondition() {
         return new FluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS)
-                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
+                .withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds))
+                .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
@@ -1257,6 +1270,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         getElement().click();
         notifyScreenChange();
     }
+
     /**
      * Wait for an element to be visible and enabled, and then click on it.
      */
@@ -1439,6 +1453,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElement getWrappedElement() {
-        return getResolvedELement();
+        return getResolvedElement();
     }
 }

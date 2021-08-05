@@ -2,8 +2,10 @@ package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.Serenity;
 
-import static io.vavr.API.List;
-import io.vavr.collection.List;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.lang.String.join;
 
 class ErrorTally {
@@ -14,11 +16,11 @@ class ErrorTally {
 
     ErrorTally(EventBusInterface eventBusInterface) {
         this.eventBusInterface = eventBusInterface;
-        this.errors = List();
+        this.errors = new ArrayList<>();
     }
 
     void recordError(Consequence<?> consequence, Throwable cause) {
-        errors = errors.append(new FailedConsequence(consequence, cause));
+        errors.add(new FailedConsequence(consequence, cause));
         eventBusInterface.reportStepFailureFor(consequence, cause);
     }
 
@@ -37,10 +39,16 @@ class ErrorTally {
     }
 
     private List<Throwable> errorCausesIn(List<FailedConsequence> failedConsequences) {
-        return failedConsequences.map(FailedConsequence::getCause);
+//        return failedConsequences.map(FailedConsequence::getCause);
+        return failedConsequences.stream()
+                .map(failedConsequence -> failedConsequence.getCause())
+                .collect(Collectors.toList());
     }
 
     private List<String> errorMessagesIn(List<Throwable> errorCauses) {
-        return errorCauses.map(Throwable::getMessage);
+        return errorCauses.stream()
+                .map(Throwable::getMessage)
+                .collect(Collectors.toList());
+//        return errorCauses.map(Throwable::getMessage);
     }
 }

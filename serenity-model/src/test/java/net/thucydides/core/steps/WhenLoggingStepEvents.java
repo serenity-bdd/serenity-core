@@ -79,14 +79,14 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_print_small_header_banner_before_tests_if_console_headings_is_set_to_none() {
+    public void should_print_no_header_banner_before_tests_if_console_headings_is_set_to_none() {
 
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.console.banner", "none");
 
         new ConsoleLoggingListener(environmentVariables, logger);
 
-        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_SMALL_BANNER));
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_NONE_BANNER));
 
     }
 
@@ -242,22 +242,6 @@ public class WhenLoggingStepEvents {
 
         String expectedMessage = consoleHeading.bannerFor(ConsoleEvent.TEST_STARTED, "some_test");
         verify(logger).info(contains(expectedMessage));
-    }
-
-    @Test
-    public void should_log_step_name_when_a_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
-
-        verify(logger).info(contains("  * some step"));
-    }
-
-    @Test
-    public void should_log_step_name_when_a_skipped_step_starts_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some step"));
-
-        verify(logger).info(contains("  * some step"));
     }
 
     @Test

@@ -64,7 +64,7 @@ class SpringIntegrationRuleBase {
      * Wraps a before and after statement around the supplied statement, possibly preparing the test instance first.
      * @param next The next statement.
      * @param testClass The class being tested.
-     * @param testInstance The instance of the class being tested. This can be <tt>null</tt>, but that will mean the call to {@link org.springframework.test.context.TestContextManager#prepareTestInstance(java.lang.Object)} in {@link #apply(org.junit.runners.model.Statement, java.lang.Class, java.lang.Object, java.util.function.BiFunction, java.util.function.BiFunction) } will not be run.
+     * @param testInstance The instance of the class being tested.
      * @param beforeWrapper The before wrapper.
      * @param afterWrapper The after wrapper.
      * @return The new, wrapped statement.

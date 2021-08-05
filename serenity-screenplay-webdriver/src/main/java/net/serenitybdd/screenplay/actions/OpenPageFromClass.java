@@ -11,12 +11,16 @@ import net.thucydides.core.util.NameConverter;
 public class OpenPageFromClass implements Interaction {
 
     private String targetPageName;
+    private Class<? extends PageObject> targetPageClass;
 
-    private final Class<PageObject> targetPageClass;
-
-    public OpenPageFromClass(Class<PageObject> targetPageClass) {
+    public OpenPageFromClass() {}
+    public OpenPageFromClass(Class<? extends PageObject> targetPageClass) {
         this.targetPageClass = targetPageClass;
         this.targetPageName = NameConverter.humanize(targetPageClass.getSimpleName());
+    }
+
+    public OpenPageFromClassWithParameters withParameters(String... parameters) {
+        return new OpenPageFromClassWithParameters(targetPageClass, targetPageName, parameters);
     }
 
     @Step("{0} opens the #targetPageName")
@@ -25,5 +29,4 @@ public class OpenPageFromClass implements Interaction {
         targetPage.setDriver(BrowseTheWeb.as(theUser).getDriver());
         targetPage.open();
     }
-
 }

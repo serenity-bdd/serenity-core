@@ -4,6 +4,7 @@ import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.parallel.Agent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
@@ -15,7 +16,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.Keys;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -27,11 +27,12 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 /**
  * An actor represents the person or system using the application under test.
  * Actors can have Abilities, which allows them to perform Tasks and Interactions.
+ * Actors can ask Questions about the state of the system.
  */
-public class Actor implements PerformsTasks, SkipNested {
+public class Actor implements PerformsTasks, SkipNested, Agent {
 
+    private String id;
     private String name;
-
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
     private EventBusInterface eventBusInterface = new EventBusInterface();
     private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
@@ -46,6 +47,13 @@ public class Actor implements PerformsTasks, SkipNested {
         this.name = name;
     }
 
+    /**
+     * Add all the remembered items for the current actor to the other actor's memory
+     * @param otherActor
+     */
+    public void brief(Actor otherActor) {
+        otherActor.notepad.putAll(this.notepad);
+    }
 
     public String toString() {
         return getNameOrPronoun();
@@ -145,12 +153,16 @@ public class Actor implements PerformsTasks, SkipNested {
         attemptsTo(todos);
     }
 
+    private List<FactLifecycleListener> factListeners = new ArrayList<>();
+
     public final void has(Fact... facts) {
         Arrays.stream(facts).forEach(
                 fact -> {
                     fact.setup(this);
                     eventBusInterface.assignFactToActor(this, fact.toString());
-                    StepEventBus.getEventBus().registerListener(new FactLifecycleListener(this, fact));
+                    FactLifecycleListener listener = new FactLifecycleListener(this, fact);
+                    factListeners.add(listener);
+                    StepEventBus.getEventBus().registerListener(listener);
                 }
         );
     }
@@ -197,6 +209,7 @@ public class Actor implements PerformsTasks, SkipNested {
         }
     }
 
+    @Override
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
         beginPerformance();
         ANSWER answer = question.answeredBy(this);
@@ -276,12 +289,12 @@ public class Actor implements PerformsTasks, SkipNested {
         return e.getClass().getSimpleName().contains("Assumption");
     }
 
-    public final void can(Consequence... consequences) {
+    public final void can(Consequence<?>... consequences) {
         should(consequences);
     }
 
 
-    public final void should(String groupStepName, Consequence... consequences) {
+    public final void should(String groupStepName, Consequence<?>... consequences) {
 
         try {
             String groupTitle = injectActorInto(groupStepName);
@@ -299,15 +312,17 @@ public class Actor implements PerformsTasks, SkipNested {
         return groupStepName.replaceAll("\\{0\\}", this.toString());
     }
 
-    public final void should(Consequence... consequences) {
+    public final void should(List<Consequence<?>> consequences) {
+        should(consequences.toArray(new Consequence[]{}));
+    }
 
-        //if (StepEventBus.getEventBus().isDryRun()) { return; }
+    public final void should(Consequence<?>... consequences) {
 
         ErrorTally errorTally = new ErrorTally(eventBusInterface);
 
         startConsequenceCheck();
 
-        for (Consequence consequence : consequences) {
+        for (Consequence<?> consequence : consequences) {
             check(consequence, errorTally);
         }
 
@@ -363,6 +378,9 @@ public class Actor implements PerformsTasks, SkipNested {
         return new HashMap<>(notepad);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T forget(String key) { return (T) notepad.remove(key);}
+
     public <T> T sawAsThe(String key) {
         return recall(key);
     }
@@ -372,6 +390,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private void beginPerformance() {
+        Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(this);
         Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
     }
 
@@ -417,5 +436,18 @@ public class Actor implements PerformsTasks, SkipNested {
     private boolean manualTaskInstrumentation() {
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         return (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false));
+    }
+
+    public void wrapUp() {
+        getTeardowns().forEach(HasTeardown::tearDown);
+        factListeners.forEach(
+                factLifecycleListener -> StepEventBus.getEventBus().dropListener(factLifecycleListener)
+        );
+
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 }

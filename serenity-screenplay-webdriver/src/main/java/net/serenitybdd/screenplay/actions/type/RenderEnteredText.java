@@ -34,6 +34,8 @@ public class RenderEnteredText {
 
 
     public static String getTextAsStringFor(CharSequence... theText) {
+        
+        if ((theText == null) || (theText.length == 0) || (theText[0] == null)) { return ""; }
 
         return stream(theText).map(
                 textValue -> (textValue instanceof Keys) ? ((Keys) textValue).name() : "'" + textValue.toString() + "'"

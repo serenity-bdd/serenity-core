@@ -1,16 +1,12 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
 
-import io.cucumber.messages.Messages.GherkinDocument;
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestResultList;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -28,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,19 +62,50 @@ public class FeatureFileScenarioOutcomes {
             return Collections.emptyList();
         } else {
             List<ScenarioOutcome> scenarioOutcomes = new ArrayList<>();
-            feature.get().getFeature().getChildrenList().forEach(
-                    featureChildren -> scenarioOutcomes.add(
-                            scenarioOutcomeFrom(feature.get().getFeature(),
-                                    featureChildren.getScenario(),
-                                    requirementsOutcomes.getTestOutcomes()))
-            );
+            Feature currentFeature = feature.get().getFeature();
+            for (Feature.FeatureChild currentChild : currentFeature.getChildrenList()) {
+                if (currentChild.hasRule()) {
+                    Feature.FeatureChild.Rule currentRule = currentChild.getRule();
+                    currentRule.getChildrenList().forEach(
+                            ruleChild -> {
+                                scenarioOutcomes.add(
+                                        scenarioOutcomeFrom(currentFeature,
+                                                ruleChild.getScenario(),
+                                                requirementsOutcomes.getTestOutcomes(),
+                                                Rule.from(currentRule)));
+                            }
+                    );
+
+                } else {
+                    if (currentChild.hasScenario()) {
+                        scenarioOutcomes.add(
+                                scenarioOutcomeFrom(currentFeature,
+                                        currentChild.getScenario(),
+                                        requirementsOutcomes.getTestOutcomes()));
+                    }
+                    if (currentChild.hasBackground()) {
+                        scenarioOutcomes.add(
+                                scenarioBackgroundFrom(currentFeature,
+                                        currentChild.getBackground(),
+                                        requirementsOutcomes.getTestOutcomes()));
+                    }
+                }
+            }
             return scenarioOutcomes;
         }
     }
 
+
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                                 Scenario scenario,
                                                 TestOutcomes testOutcomes) {
+        return scenarioOutcomeFrom(feature, scenario, testOutcomes, null);
+    }
+
+
+    private ScenarioOutcome scenarioBackgroundFrom(Feature feature,
+                                                   Feature.Background scenario,
+                                                   TestOutcomes testOutcomes) {
 
         List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
 
@@ -88,19 +116,71 @@ public class FeatureFileScenarioOutcomes {
 
         List<String> reportBadges = ReportBadges.from(outcomes, scenario.getName());
 
-        String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
+        String featureReport = new ReportNameProvider().forRequirement(feature.getName(), "feature");
         Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
 
         List<String> renderedSteps = scenario.getStepsList().stream()
                 .map(RenderCucumber::step)
                 .collect(Collectors.toList());
 
-        List<GherkinDocument.Feature.Scenario.Examples> filteredExamples = new ArrayList<Examples>();
+        return new ScenarioSummaryOutcome(scenarioTitle,
+                scenario.getKeyword(),
+                result,
+                reportBadges,
+                scenarioReport.orElse(""),
+                scenario.getDescription(),
+                renderedSteps,
+                new ArrayList<>(),
+                0,
+                false,
+                feature.getName(),
+                featureReport,
+                new HashSet<>(),
+                new HashMap<>(),
+                null,
+                startTimeOfFirstTestIn(outcomes),
+                totalDurationOf(outcomes));
+    }
+
+    private ZonedDateTime startTimeOfFirstTestIn(List<TestOutcome> outcomes) {
+        return outcomes.stream()
+                .map(TestOutcome::getStartTime)
+                .sorted()
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Long totalDurationOf(List<TestOutcome> outcomes) {
+        return outcomes.stream()
+                .mapToLong(TestOutcome::getDuration)
+                .sum();
+    }
+
+    private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
+                                                Scenario scenario,
+                                                TestOutcomes testOutcomes, Rule rule) {
+
+        List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
+
+        String scenarioTitle = scenario.getName();
+
+        TestResult result = (outcomes.isEmpty()) ? TestResult.UNDEFINED :
+                TestResultList.overallResultFrom(outcomes.stream().map(TestOutcome::getResult).collect(Collectors.toList()));
+
+        List<String> reportBadges = ReportBadges.from(outcomes, scenario.getName());
+
+        String featureReport = new ReportNameProvider().forRequirement(feature.getName(), "feature");
+        Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
+
+        List<String> renderedSteps = scenario.getStepsList().stream()
+                .map(RenderCucumber::step)
+                .collect(Collectors.toList());
+
+        List<Examples> filteredExamples = new ArrayList<Examples>();
         Map<String, Collection<TestTag>> exampleTags = new HashMap<>();
 
-        //if((scenarioDefinition instanceof ScenarioOutline)) {
-        if(scenarioContainsExamples(scenario)) {
-            List<Examples> examples =  scenario.getExamplesList();
+        if (scenarioContainsExamples(scenario)) {
+            List<Examples> examples = scenario.getExamplesList();
             examples.stream()
                     .filter(example -> example.getTagsList().isEmpty() || tagScanner.shouldRunForTags(fromGherkinTags(example.getTagsList())))
                     .forEach(filteredExamples::add);
@@ -126,8 +206,8 @@ public class FeatureFileScenarioOutcomes {
         Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTagsList());
 
         Set<TestTag> scenarioTags = outcomes.stream()
-                                        .flatMap(outcome -> outcome.getTags().stream())
-                                        .collect(Collectors.toSet());
+                .flatMap(outcome -> outcome.getTags().stream())
+                .collect(Collectors.toSet());
 
         scenarioTags.addAll(scenarioTagsDefinedIn(scenario));
 
@@ -144,20 +224,25 @@ public class FeatureFileScenarioOutcomes {
                 feature.getName(),
                 featureReport,
                 scenarioTags,
-                exampleTags);
+                exampleTags,
+                rule,
+                startTimeOfFirstTestIn(outcomes),
+                totalDurationOf(outcomes));
     }
+
 
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {
         if (scenarioContainsExamples(scenario)) {
             return scenarioOutlineTagsIncludingExamplesIn(scenario);
-        } else  {
+        } else {
             return scenarioTagsIn(scenario);
         }
     }
 
     private boolean scenarioContainsExamples(Scenario scenario) {
-        return(scenario.getExamplesCount() > 0);
+        return (scenario.getExamplesCount() > 0);
     }
+
 
     private Set<TestTag> scenarioOutlineTagsIn(Scenario scenarioOutline) {
         Set<TestTag> testTags = scenarioOutline.getTagsList().stream()

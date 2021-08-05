@@ -33,7 +33,7 @@ public class HtmlDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
+        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.HTMLUNIT);
 
         HtmlUnitDriver driver = new HtmlUnitDriver(enhancedCapabilities);
         driverProperties.registerCapabilities("htmlunit", capabilitiesToProperties(enhancedCapabilities));

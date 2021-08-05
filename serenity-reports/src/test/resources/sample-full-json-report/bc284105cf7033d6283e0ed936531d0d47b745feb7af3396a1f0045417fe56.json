@@ -1,0 +1,563 @@
+{
+  "name": "Increasing the customer authentication level by verifying her ID",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "[1] {blind-key-value\u003d00012063, blind-key-field\u003dField 2, search-criteria\u003dName, Date of Birth, customer\u003dJoe Blogs}",
+      "duration": 84,
+      "startTime": 1425438508270,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 2,
+          "description": "Given the following customers exist",
+          "duration": 19,
+          "startTime": 1425438508272,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "And I am logged into the app",
+          "duration": 21,
+          "startTime": 1425438508291,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 4,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508308,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "description": "Given I have displayed customer Joe Blogs using Name, Date of Birth",
+          "duration": 10,
+          "startTime": 1425438508313,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 6,
+              "description": "View locate customer page",
+              "duration": 1,
+              "startTime": 1425438508315,
+              "result": "IGNORED"
+            },
+            {
+              "number": 7,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dNAME_AND_DATE_OF_BIRTH,name\u003dJoe Blogs,dateOfBirth\u003d1982-04-01]\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508317,
+              "result": "IGNORED"
+            },
+            {
+              "number": 8,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 2,
+              "startTime": 1425438508319,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 9,
+          "description": "When I trigger an action that requires customer level 1 authentication",
+          "duration": 5,
+          "startTime": 1425438508323,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 10,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438508326,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "description": "And I verify the customer\u0027s identity by entering 00012063 into field Field 2",
+          "duration": 7,
+          "startTime": 1425438508329,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 12,
+              "description": "Select blind key tab",
+              "duration": 0,
+              "startTime": 1425438508331,
+              "result": "IGNORED"
+            },
+            {
+              "number": 13,
+              "description": "Verify identity by entering blind key values: \u003cspan class\u003d\u0027step-parameter\u0027\u003e{FIELD_2\u003d00012063}\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508333,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 14,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 17,
+          "startTime": 1425438508336,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 15,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 12,
+              "startTime": 1425438508339,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "description": "[1] {blind-key-value\u003d17/01/1982, blind-key-field\u003dDate of Birth, search-criteria\u003dField 1, customer\u003dJoe Blogs}",
+      "duration": 64,
+      "startTime": 1425438508355,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 17,
+          "description": "Given the following customers exist:\n| Name | Field 1 | Date Of  Birth | Field 2 | Mobile Phone |\n| Joe Blogs | 47164114 | 1982-04-01 | 00012063 | 0865432109 |\n| Bruce Wayne | 43935832 | 1982-01-17 | 00008414 | 0869876543 |\n| Tom Jones | 41715217 | 1952-05-10 | 00012269 | 0876543210 |\n| Will Smith | 42195952 | 1982-01-17 | 00008494 | 0859876541 |\n| George Clooney | 40562514 | 1952-04-10 | 00012097 | 0831234567 |\n| Selena Kyle |  | 1984-04-06 |  | 0871555555 |\n| Oswald Cobblepot |  | 1977-08-28 |  | 0876543210 |",
+          "duration": 14,
+          "startTime": 1425438508357,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 18,
+          "description": "And I am logged into the app",
+          "duration": 14,
+          "startTime": 1425438508372,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 19,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438508382,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 20,
+          "description": "Given I have displayed customer Joe Blogs using Field 1",
+          "duration": 11,
+          "startTime": 1425438508386,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 21,
+              "description": "View locate customer page",
+              "duration": 1,
+              "startTime": 1425438508389,
+              "result": "IGNORED"
+            },
+            {
+              "number": 22,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dFIELD_1,regNumber\u003d47164114]\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438508391,
+              "result": "IGNORED"
+            },
+            {
+              "number": 23,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508393,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 24,
+          "description": "When I trigger an action that requires customer level 1 authentication",
+          "duration": 5,
+          "startTime": 1425438508397,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 25,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438508400,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 26,
+          "description": "And I verify the customer\u0027s identity by entering 17/01/1982 into field Date of Birth",
+          "duration": 7,
+          "startTime": 1425438508403,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 27,
+              "description": "Select blind key tab",
+              "duration": 0,
+              "startTime": 1425438508406,
+              "result": "IGNORED"
+            },
+            {
+              "number": 28,
+              "description": "Verify identity by entering blind key values: \u003cspan class\u003d\u0027step-parameter\u0027\u003e{DATE_OF_BIRTH\u003d17/01/1982}\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508407,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 29,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 6,
+          "startTime": 1425438508411,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 30,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 2,
+              "startTime": 1425438508413,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "description": "[1] {blind-key-value\u003d10/05/1952, blind-key-field\u003dDate of Birth, search-criteria\u003dField 2, customer\u003dJoe Blogs}",
+      "duration": 59,
+      "startTime": 1425438508420,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 32,
+          "description": "Given the following customers exist",
+          "duration": 15,
+          "startTime": 1425438508422,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 33,
+          "description": "And I am logged into the app",
+          "duration": 13,
+          "startTime": 1425438508438,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 34,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438508447,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 35,
+          "description": "Given I have displayed customer Joe Blogs using Field 2",
+          "duration": 9,
+          "startTime": 1425438508451,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 36,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438508454,
+              "result": "IGNORED"
+            },
+            {
+              "number": 37,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dFIELD_2,field2\u003d00012063]\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508455,
+              "result": "IGNORED"
+            },
+            {
+              "number": 38,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508457,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 39,
+          "description": "When I trigger an action that requires customer level 1 authentication",
+          "duration": 5,
+          "startTime": 1425438508460,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 40,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438508463,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 41,
+          "description": "And I verify the customer\u0027s identity by entering 10/05/1952 into field Date of Birth",
+          "duration": 7,
+          "startTime": 1425438508465,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 42,
+              "description": "Select blind key tab",
+              "duration": 1,
+              "startTime": 1425438508468,
+              "result": "IGNORED"
+            },
+            {
+              "number": 43,
+              "description": "Verify identity by entering blind key values: \u003cspan class\u003d\u0027step-parameter\u0027\u003e{DATE_OF_BIRTH\u003d10/05/1952}\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508469,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 44,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 5,
+          "startTime": 1425438508473,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 45,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508475,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "description": "[1] {blind-key-value\u003d17/01/1982, blind-key-field\u003dDate of Birth, search-criteria\u003dPhone Number, customer\u003dJoe Blogs}",
+      "duration": 59,
+      "startTime": 1425438508480,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 47,
+          "description": "Given the following customers exist",
+          "duration": 14,
+          "startTime": 1425438508483,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 48,
+          "description": "And I am logged into the app",
+          "duration": 15,
+          "startTime": 1425438508497,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 49,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508508,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 50,
+          "description": "Given I have displayed customer Joe Blogs using Phone Number",
+          "duration": 8,
+          "startTime": 1425438508513,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 51,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438508515,
+              "result": "IGNORED"
+            },
+            {
+              "number": 52,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0865432109]\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508516,
+              "result": "IGNORED"
+            },
+            {
+              "number": 53,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508518,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 54,
+          "description": "When I trigger an action that requires customer level 1 authentication",
+          "duration": 5,
+          "startTime": 1425438508521,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 55,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438508524,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 56,
+          "description": "And I verify the customer\u0027s identity by entering 17/01/1982 into field Date of Birth",
+          "duration": 7,
+          "startTime": 1425438508526,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 57,
+              "description": "Select blind key tab",
+              "duration": 0,
+              "startTime": 1425438508529,
+              "result": "IGNORED"
+            },
+            {
+              "number": 58,
+              "description": "Verify identity by entering blind key values: \u003cspan class\u003d\u0027step-parameter\u0027\u003e{DATE_OF_BIRTH\u003d17/01/1982}\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508530,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 59,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 5,
+          "startTime": 1425438508533,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 60,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438508535,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "blind-key-authentication",
+    "storyName": "Blind key authentication",
+    "path": "blind_key.feature",
+    "type": "feature"
+  },
+  "title": "Increasing the customer authentication level by verifying her identity",
+  "description": "",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "pending",
+      "type": "tag"
+    },
+    {
+      "name": "Blind key authentication",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-198",
+      "type": "issue"
+    },
+    {
+      "name": "Blind key",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438508269,
+  "duration": 271,
+  "annotatedResult": "PENDING",
+  "driver": "firefox",
+  "dataTable": {
+    "headers": [
+      "customer",
+      "search-criteria",
+      "blind-key-field",
+      "blind-key-value"
+    ],
+    "rows": [
+      {
+        "values": [
+          "Joe Blogs",
+          "Name, Date of Birth",
+          "Field 2",
+          "00012063"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "Joe Blogs",
+          "Field 1",
+          "Date of Birth",
+          "17/01/1982"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "Joe Blogs",
+          "Field 2",
+          "Date of Birth",
+          "10/05/1952"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "Joe Blogs",
+          "Phone Number",
+          "Date of Birth",
+          "17/01/1982"
+        ],
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": true,
+    "currentRow": {"value": 3},
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0,
+        "name": "",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "result": "PENDING"
+}

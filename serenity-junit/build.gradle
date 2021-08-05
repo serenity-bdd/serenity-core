@@ -21,10 +21,10 @@ dependencies {
     compile project(':serenity-core')
     compile "junit:junit:${junitVersion}"
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    compile "org.opentest4j:opentest4j:${opentest4jVersion}"
 
     testCompile project(':serenity-test-utils')
     testCompile "commons-dbcp:commons-dbcp:1.3"
-//    testCompile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitDriverVersion}")
     testCompile "org.springframework:spring-jdbc:${springVersion}"
     testCompile "org.springframework:spring-aop:${springVersion}"
     testCompile "org.springframework:spring-orm:${springVersion}"

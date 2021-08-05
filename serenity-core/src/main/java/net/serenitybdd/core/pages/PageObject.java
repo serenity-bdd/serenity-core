@@ -1,7 +1,7 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
-import com.paulhammant.ngwebdriver.NgWebDriver;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -66,7 +66,6 @@ import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascr
  * @author johnsmart
  */
 public abstract class PageObject {
-
 
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 250;
 
@@ -205,6 +204,7 @@ public abstract class PageObject {
         this.pages = pages;
     }
 
+    @Deprecated
     public <T extends PageObject> T switchToPage(final Class<T> pageObjectClass) {
         if (pages.getDriver() == null) {
             pages.setDriver(driver);
@@ -235,9 +235,8 @@ public abstract class PageObject {
 
     private boolean isDefinedRemoteUrl() {
         boolean isRemoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
-        boolean isSaucelabsUrl = ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables);
         boolean isBrowserStack = ThucydidesSystemProperty.BROWSERSTACK_URL.isDefinedIn(environmentVariables);
-        return isRemoteUrl || isSaucelabsUrl || isBrowserStack;
+        return isRemoteUrl || isBrowserStack;
     }
 
     private PageUrls getPageUrls() {
@@ -282,13 +281,15 @@ public abstract class PageObject {
     }
 
     public WebDriver getDriver() {
+        if (driver == null) {
+            driver = Serenity.getDriver();
+        }
         return driver;
     }
 
     public String getTitle() {
         return driver.getTitle();
     }
-
 
     public boolean matchesAnyUrl() {
         return thereAreNoPatternsDefined();
@@ -316,7 +317,7 @@ public abstract class PageObject {
     }
 
     /**
-     * @Deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
+     * @deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
      */
     @Deprecated
     public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {
@@ -354,7 +355,6 @@ public abstract class PageObject {
     public PageObject waitForPresenceOf(String xpathOrCssSelector, Object... arguments) {
         return waitForRenderedElementsToBePresent(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
-
 
     public PageObject waitForRenderedElementsToDisappear(final By byElementCriteria) {
         getRenderedView().waitForElementsToDisappear(byElementCriteria);
@@ -410,7 +410,6 @@ public abstract class PageObject {
         }
         return this;
     }
-
 
     private ExpectedCondition<Boolean> elementDoesNotContain(final WebElement element, final String expectedText) {
         return new ExpectedCondition<Boolean>() {
@@ -562,7 +561,6 @@ public abstract class PageObject {
         notifyScreenChange();
     }
 
-
     public Set<String> getSelectedOptionLabelsFrom(final WebElement dropdown) {
         return Dropdown.forWebElement(dropdown).getSelectedOptionLabels();
     }
@@ -625,10 +623,6 @@ public abstract class PageObject {
         if (!matchingElements.isEmpty()) {
             waitOnPage().until(ExpectedConditions.invisibilityOfElementLocated(byCriteria));
         }
-    }
-
-    private long waitForTimeoutInSecondsWithAMinimumOfOneSecond() {
-        return (getWaitForTimeout().getSeconds() < 1) ? 1 : (getWaitForTimeout().getSeconds());
     }
 
     public long waitForTimeoutInMilliseconds() {
@@ -843,8 +837,8 @@ public abstract class PageObject {
     private void thisIsNotThePageYourLookingFor() {
 
         String errorDetails = "This is not the page you're looking for: "
-                + "I was looking for a page compatible with " + this.getClass() + " but "
-                + "I was at the URL " + getDriver().getCurrentUrl();
+                              + "I was looking for a page compatible with " + this.getClass() + " but "
+                              + "I was at the URL " + getDriver().getCurrentUrl();
 
         throw new WrongPageError(errorDetails);
     }
@@ -880,7 +874,7 @@ public abstract class PageObject {
                     throw (AssertionError) e;
                 } else {
                     throw new UnableToInvokeWhenPageOpensMethods("Could not execute @WhenPageOpens annotated method: "
-                            + e.getMessage(), e);
+                                                                 + e.getMessage(), e);
                 }
             }
         }
@@ -894,7 +888,9 @@ public abstract class PageObject {
                 if (method.getParameterTypes().length == 0) {
                     annotatedMethods.add(method);
                 } else {
-                    throw new UnableToInvokeWhenPageOpensMethods("Could not execute @WhenPageOpens annotated method: WhenPageOpens method cannot have parameters: " + method);
+                    throw new UnableToInvokeWhenPageOpensMethods(
+                            "Could not execute @WhenPageOpens annotated method: WhenPageOpens method cannot have parameters: " +
+                            method);
                 }
             }
         }
@@ -928,7 +924,8 @@ public abstract class PageObject {
     private String environmentSpecificPageUrl(String pageName) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("pages." + pageName)
-                .orElseThrow(() -> new UnknownPageException("No page called " + pageName + " was specified in the serenity.conf file"));
+                .orElseThrow(() -> new NoSuchPageException(
+                        "No page called " + pageName + " was specified in the serenity.conf file"));
     }
 
     public void clickOn(final WebElement webElement) {
@@ -1004,6 +1001,44 @@ public abstract class PageObject {
         return element(bySelector);
     }
 
+    /**
+     * Return the text value of a given element
+     */
+    public String textOf(WithLocator locator) {
+        return $(locator).getText();
+    }
+
+    public String textOf(WithByLocator locator) {
+        return $(locator).getText();
+    }
+
+    public String textOf(String xpathOrCssSelector, Object... arguments) {
+        return $(xpathOrCssSelector, arguments).getText();
+    }
+
+    public String textOf(By bySelector) {
+        return $(bySelector).getText();
+    }
+
+    /**
+     * Return the text value of a given element
+     */
+    public String textContentOf(WithLocator locator) {
+        return $(locator).getTextContent();
+    }
+
+    public String textContentOf(WithByLocator locator) {
+        return $(locator).getTextContent();
+    }
+
+    public String textContentOf(String xpathOrCssSelector, Object... arguments) {
+        return $(xpathOrCssSelector, arguments).getTextContent();
+    }
+
+    public String textContentOf(By bySelector) {
+        return $(bySelector).getTextContent();
+    }
+
     public ListOfWebElementFacades $$(String xpathOrCssSelector, Object... arguments) {
         return findAll(xpathOrCssSelector, arguments);
     }
@@ -1011,7 +1046,6 @@ public abstract class PageObject {
     public ListOfWebElementFacades $$(By bySelector) {
         return findAll(bySelector);
     }
-
 
     /**
      * Provides a fluent API for querying web elements.
@@ -1027,9 +1061,11 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
     }
+
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithByLocator selector) {
         return element(selector.getLocator());
     }
+
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithLocator selector) {
         return element(selector.getLocator());
     }
@@ -1101,6 +1137,7 @@ public abstract class PageObject {
     /**
      * FindEach will return a stream of WebElementFacades matching the described nested structure.
      * Only the last selector will return a list; the initial selectors will be used to locate the list of elements.
+     *
      * @param bySelectors
      * @return
      */
@@ -1109,7 +1146,7 @@ public abstract class PageObject {
             return findEach(bySelectors[0]);
         }
         return find(allButLastIn(bySelectors))
-               .thenFindAll(lastIn(bySelectors)).stream();
+                .thenFindAll(lastIn(bySelectors)).stream();
     }
 
     public Stream<WebElementFacade> findEach(String... xpathOrCssSelectors) {
@@ -1128,14 +1165,14 @@ public abstract class PageObject {
                 .thenFindAll(lastIn(xpathOrCssSelectors));
     }
 
-
     private <T> List<T> allButLastIn(T[] selectors) {
         List<T> subList = new ArrayList<>();
-        for(int i = 0; i < selectors.length - 1; i++) {
+        for (int i = 0; i < selectors.length - 1; i++) {
             subList.add(selectors[i]);
         }
         return subList;
     }
+
     private <T> T lastIn(T[] selectors) {
         return selectors[selectors.length - 1];
     }
@@ -1164,15 +1201,16 @@ public abstract class PageObject {
     public ListOfWebElementFacades findAll(WithByLocator bySelector) {
         return findAll(bySelector.getLocator());
     }
-        /**
-         * Provides a fluent API for querying web elements.
-         */
+
+    /**
+     * Provides a fluent API for querying web elements.
+     */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector, Object... arguments) {
-        return element(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
+        return element(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
-        return element(withArguments(xpathOrCssSelector,arguments));
+        return element(withArguments(xpathOrCssSelector, arguments));
     }
 
     public Optional<WebElementFacade> findFirst(String xpathOrCssSelector, Object... arguments) {
@@ -1180,7 +1218,7 @@ public abstract class PageObject {
     }
 
     public ListOfWebElementFacades findAll(String xpathOrCssSelector, Object... arguments) {
-        return findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
+        return findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
     public boolean containsElements(By bySelector) {
@@ -1190,7 +1228,6 @@ public abstract class PageObject {
     public boolean containsElements(String xpathOrCssSelector, Object... arguments) {
         return !findAll(xpathOrCssSelector, arguments).isEmpty();
     }
-
 
     public Object evaluateJavascript(final String script) {
         addJQuerySupport();
@@ -1302,6 +1339,7 @@ public abstract class PageObject {
             WebElement field = getDriver().findElement(bySelector);
             into(field);
         }
+
         public void into(String selector) {
             $(selector).type(keysToSend);
         }
@@ -1331,10 +1369,9 @@ public abstract class PageObject {
 
     public void waitForAngularRequestsToFinish() {
         JavascriptCompatibleVersion.of(getDriver()).ifPresent(
-                driver -> new NgWebDriver(driver).waitForAngularRequestsToFinish()
+                driver -> WaitForAngular.withDriver(driver).untilAngularRequestsHaveFinished()
         );
     }
-
 
     Inflector inflection = Inflector.getInstance();
 

@@ -7,7 +7,7 @@ public class IsNotCurrentlyEnabledMatcher<T extends WebElementState> extends Bas
 
     @Override
     protected boolean matchesSafely(T element) {
-        return !existing(element).isCurrentlyEnabled();
+        return !super.existing(element).isCurrentlyEnabled();
     }
 
     @Override

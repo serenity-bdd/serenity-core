@@ -1,0 +1,20 @@
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.CaptureCustomerDebitForFundsTransferFeature.DebitAccountOwnerSelection
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> error: Object reference not set to an instance of an object.
+And the Payment Details page is loaded
+-> No matching step definition found for the step. Use the following code to create one:
+        [Given(@"the Payment Details page is loaded")]
+        public void GivenThePaymentDetailsPageIsLoaded()
+        {
+            ScenarioContext.Current.Pending();
+        }
+ 
+When I select Customer from DebitAccountOwner drop down list
+-> skipped because of previous errors
+Then the fields for customer debit is loaded
+-> No matching step definition found for the step. Use the following code to create one:
+        [Then(@"the fields for customer debit is loaded")]
+        public void ThenTheFieldsForCustomerDebitIsLoaded()
+        {
+            ScenarioContext.Current.Pending();
+        }

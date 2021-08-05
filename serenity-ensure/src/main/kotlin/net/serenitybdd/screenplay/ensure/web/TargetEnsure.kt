@@ -75,6 +75,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun hasTextContent(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text content").isEqualTo(expectedValue)
 
     /**
+     * Verifies the trimmed text content (excluding surrounding spaces) of the specified element is equal to the expected value
+     */
+    fun hasTrimmedTextContent(expectedValue: String) = StringEnsure(trimmedTextValueOf(value), "$targetDescription with trimmed text content").isEqualTo(expectedValue)
+
+    /**
      * Verifies the text content of the specified element
      */
     fun textContentValues(): CollectionEnsure<String> = CollectionEnsure(textContentsOf(value), "$targetDescription with text contents")
@@ -141,6 +146,12 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
                 if (actor == null) return ""
                 return target.resolveFor(actor).text
             }
+
+    private fun trimmedTextValueOf(target: Target): KnowableValue<String> =
+        fun(actor: Actor?): String {
+            if (actor == null) return ""
+            return target.resolveFor(actor).text.trim()
+        }
 
     private fun textContentOf(target: Target): KnowableValue<String> =
             fun(actor: Actor?): String {
@@ -225,7 +236,8 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
         private val IS_DISPLAYED = expectThatActualIs("displayed",
                 fun(actor: Actor?, element: Target?): Boolean {
                     if ((actor == null) || (element == null)) return false
-                    val actualValue = element.resolveFor(actor).isDisplayed
+                    val resolvedElements = element.resolveAllFor(actor)
+                    val actualValue = resolvedElements.size > 0 && resolvedElements[0].isCurrentlyVisible
                     BlackBox.logAssertionValues(isDisplayedOrNot(actualValue), "an element that is displayed")
                     return actualValue
                 }

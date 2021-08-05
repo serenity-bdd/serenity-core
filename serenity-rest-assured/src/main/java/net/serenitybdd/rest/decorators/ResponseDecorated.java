@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.decorators;
 
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.Cookie;
@@ -17,6 +18,7 @@ import io.restassured.path.xml.XmlPath;
 import io.restassured.path.xml.config.XmlPathConfig;
 import io.restassured.response.*;
 
+import java.lang.reflect.Type;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +75,26 @@ public class ResponseDecorated extends RestAssuredResponseOptionsImpl<Response> 
         return core.as(cls, mapper);
     }
 
+    @Override
+    public <T> T as(final TypeRef<T> typeRef) {
+        return core.as(typeRef);
+    }
+
+    @Override
+    public <T> T as(final Type cls) {
+        return core.as(cls);
+    }
+
+    @Override
+    public <T> T as(final Type cls, final ObjectMapperType mapperType) {
+        return core.as(cls, mapperType);
+    }
+
+    @Override
+    public <T> T as(final Type cls, final ObjectMapper mapper) {
+        return core.as(cls, mapper);
+    }
+    
     @Override
     public JsonPath jsonPath() {
         return core.jsonPath();

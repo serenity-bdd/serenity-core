@@ -11,11 +11,13 @@ import java.util.List;
 
 public class TypeValueIntoBy extends TypeValue {
 
-    private final List<By> locators;
+    private List<By> locators;
 
     protected WebElement resolveFor(Actor theUser) {
         return WebElementLocator.forLocators(locators).andActor(theUser);
     }
+
+    public TypeValueIntoBy() {}
 
     public TypeValueIntoBy(List<By> locators, CharSequence... theText) {
         super(theText);
@@ -25,8 +27,9 @@ public class TypeValueIntoBy extends TypeValue {
     @Step("{0} enters #theTextAsAString into #locators")
     public <T extends Actor> void performAs(T theUser) {
         WebElement element = resolveFor(theUser);
-
-        element.sendKeys(theText);
+        textValue().ifPresent(
+                text -> element.sendKeys(text)
+        );
         if (getFollowedByKeys().length > 0) {
             element.sendKeys(getFollowedByKeys());
         }

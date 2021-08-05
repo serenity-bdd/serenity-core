@@ -16,8 +16,23 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static net.serenitybdd.core.rest.RestMethod.*
+import java.nio.file.Files
+
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.delete
+import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.patch
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.put
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import static net.serenitybdd.core.rest.RestMethod.DELETE
+import static net.serenitybdd.core.rest.RestMethod.GET
+import static net.serenitybdd.core.rest.RestMethod.PATCH
+import static net.serenitybdd.core.rest.RestMethod.POST
+import static net.serenitybdd.core.rest.RestMethod.PUT
 import static net.serenitybdd.rest.SerenityRest.rest
 import static net.serenitybdd.rest.SerenityRest.then
 
@@ -33,8 +48,12 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    File temporaryDirectory
+
+    def setup() {
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit()
+    }
 
     def "Should record RestAssured get() method calls"() {
         given:
@@ -142,7 +161,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).post(url).then()
+            def result = rest().given().contentType("application/json").body(body).post(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
@@ -174,7 +193,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).patch(url).then()
+            def result = rest().given().contentType("application/json").body(body).patch(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PATCH $url"
@@ -206,7 +225,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).put(url).then()
+            def result = rest().given().contentType("application/json").body(body).put(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PUT $url"
@@ -252,7 +271,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     def "should record REST queries as steps"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             def JsonObject json = new JsonObject()
             json.addProperty("Record", "John Lennon")
@@ -283,7 +302,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     def "should support assertions on response results"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             def JsonObject json = new JsonObject()
             json.addProperty("Sky", "Clear")
@@ -344,7 +363,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     def "should support failing assertions on response results"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -373,7 +392,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     def "should support sequences of operations in different steps"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -403,7 +422,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     def "should report failures in subsequent steps"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)

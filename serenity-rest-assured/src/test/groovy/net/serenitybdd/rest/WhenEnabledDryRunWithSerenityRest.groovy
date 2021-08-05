@@ -17,6 +17,8 @@ import org.junit.rules.ExternalResource
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.serenitybdd.core.rest.RestMethod.GET
 import static net.serenitybdd.rest.JsonConverter.formatted
 import static net.serenitybdd.rest.SerenityRest.get
@@ -33,8 +35,12 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
         Mock(BaseStepListener);
     }.call());
 
-    @Rule
-    TemporaryFolder temporaryFolder
+    File temporaryDirectory
+
+    def setup() {
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit()
+    }
 
     @Rule
     ExternalResource resource = new ExternalResource() {
@@ -143,7 +149,7 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
 
     def "should support failing assertions on response results when enabled dry run and return SUCCESS"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             StepFactory factory = new StepFactory();
             def restSteps = factory.getSharedStepLibraryFor(RestSteps)
@@ -163,7 +169,7 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
 
     def "should support assertions on response results when enabled dry run"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
             def JsonObject json = new JsonObject()
             json.addProperty("Sky", "Clear")

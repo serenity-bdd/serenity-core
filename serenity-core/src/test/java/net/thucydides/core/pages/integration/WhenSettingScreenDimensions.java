@@ -61,8 +61,8 @@ public class WhenSettingScreenDimensions {
     public void should_not_resize_htmlunit_automatically() {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
-
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.HTMLUNIT);
+        environmentVariables.setProperty("headless.mode","true");
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
         page = new StaticSitePage(driver, 1024);
         page.open();
 
@@ -74,7 +74,7 @@ public class WhenSettingScreenDimensions {
         environmentVariables.setProperty("thucydides.browser.width", "500");
         environmentVariables.setProperty("headless.mode", "true");
 
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
         page = new StaticSitePage(driver, 1024);
 
         int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();

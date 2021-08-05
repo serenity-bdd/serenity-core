@@ -1,0 +1,12 @@
+***** ESD.Epp.RegularPaymentCapture.SpecFlow.Features.PaymentGroupDetailsFeature.TestToFail
+Given ESD Epp.RegularPaymentCapture app is loaded with CommSee.v1 theme
+-> done: PaymentGroupDetailsSteps.GivenESDEpp_RegularPaymentCaptureAppIsLoadedWithCommSee_VTheme(1) (2.2s)
+Given the Payment Group Details page is loaded
+-> done: PaymentGroupDetailsSteps.GivenThePaymentGroupDetailsPageIsLoaded() (0.0s)
+And I fill in all the initial regular payment required details
+-> done: PaymentGroupDetailsSteps.GivenIFillInAllTheInitialRequiredDetails() (2.7s)
+When I click the Next button
+-> done: PaymentGroupDetailsSteps.WhenIClickButton("Next") (1.0s)
+Then the Test buttons are on the page
+-> error:   Expected: True
+  But was:  False

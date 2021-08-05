@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<testsuite errors="0" failures="1" hostname="localhost" name="lettuce" tests="9" time="0"
+           timestamp="2013-06-05T07:57:25">
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 0" name="Given I have the number 0"
+              time="0.005295"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 0" name="When I compute its factorial"
+              time="0.000619"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 0" name="Then I see the number 1"
+              time="0.000616"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 1" name="Given I have the number 1"
+              time="0.000608"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 1" name="When I compute its factorial"
+              time="0.000601"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 1" name="Then I see the number 1"
+              time="0.000606"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 2" name="Given I have the number 2"
+              time="0.000611"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 2" name="When I compute its factorial"
+              time="0.000602"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Factorial of 2" name="Then I see the number 2"
+              time="0.001101"/>
+    <testcase classname="Compute factorial [MYPROJ-123] : Display factorials"
+              name="Given I want to display a factorial value" time="0.0">
+        <skipped type="UndefinedStep(Given I want to display a factorial value)"/>
+    </testcase>
+    <testcase classname="Compute factorial [MYPROJ-123] : Display factorials" name="When I choose a number" time="0.0">
+        <skipped type="UndefinedStep(When I choose a number)"/>
+    </testcase>
+    <testcase classname="Compute factorial [MYPROJ-123] : Display factorials"
+              name="Then I should see the factorial result" time="0.0">
+        <skipped type="UndefinedStep(Then I should see the factorial result)"/>
+    </testcase>
+</testsuite>

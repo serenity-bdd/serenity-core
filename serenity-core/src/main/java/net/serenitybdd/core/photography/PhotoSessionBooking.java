@@ -1,28 +1,22 @@
 package net.serenitybdd.core.photography;
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.common.base.Preconditions;
 import net.thucydides.core.screenshots.BlurLevel;
-import org.openqa.selenium.WebDriver;
-
 import java.nio.file.Path;
 
 public class PhotoSessionBooking {
 
     private final Darkroom darkroom;
-    private WebDriver driver;
+    private PhotoLens lens;
     private Path outputDirectory;
     private BlurLevel blurLevel;
-    private ScrollStrategy scrollStrategy;
 
-    public PhotoSessionBooking(Darkroom darkroom, ScrollStrategy scrollStrategy) {
-        this.scrollStrategy = scrollStrategy;
+    public PhotoSessionBooking(Darkroom darkroom) {
         this.darkroom = darkroom;
-
     }
 
-    public PhotoSessionBooking with(WebDriver driver) {
-        this.driver = driver;
+    public PhotoSessionBooking with(PhotoLens lens) {
+        this.lens = lens;
         return this;
     }
 
@@ -32,7 +26,7 @@ public class PhotoSessionBooking {
     }
 
     public ScreenshotPhoto andSaveToDirectory(Path outputDirectory) {
-        Preconditions.checkNotNull(driver);
+        Preconditions.checkNotNull(lens);
         Preconditions.checkNotNull(outputDirectory);
 
         this.outputDirectory = outputDirectory;
@@ -41,6 +35,7 @@ public class PhotoSessionBooking {
     }
 
     private PhotoSession inPhotoSession() {
-        return new PhotoSession(driver, darkroom, outputDirectory, blurLevel, scrollStrategy);
+        return new PhotoSession(lens, darkroom, outputDirectory, blurLevel);
     }
+
 }

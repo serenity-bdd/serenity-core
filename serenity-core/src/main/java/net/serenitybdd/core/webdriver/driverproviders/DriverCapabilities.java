@@ -6,9 +6,9 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.HashMap;
@@ -51,15 +51,13 @@ public class DriverCapabilities {
         return driverName.contains(":") ? driverName.split(":")[0] : driverName;
     }
 
-
     private SupportedWebDriver driverTypeFor(String driver) {
-        String normalizedDriverName = driverComponentof(driver).toUpperCase();
-        if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
-            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
+        if (!SupportedWebDriver.isSupported(driver)) {
+            SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(driver);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
-                    + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
+                                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
-        return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
+        return SupportedWebDriver.valueOrSynonymOf(driver);
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
@@ -73,7 +71,7 @@ public class DriverCapabilities {
         selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
         selectors.put(OPERA, DesiredCapabilities::operaBlink);
         selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
-        selectors.put(EDGE, () -> new DesiredCapabilities(new EdgeOptions()));
+        selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
         selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
         selectors.put(IPHONE, DesiredCapabilities::iphone);
         selectors.put(ANDROID, DesiredCapabilities::android);
@@ -100,16 +98,12 @@ public class DriverCapabilities {
 
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (!isUndefined(remoteBrowser)) {
-            capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);;
+            capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
         } else {
             capabilities = new DesiredCapabilities();
         }
 
         capabilities.setCapability("idle-timeout", EXTRA_TIME_TO_TAKE_SCREENSHOTS);
-
-        Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);
-        capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
-
 
         if (WEBDRIVER_REMOTE_OS.from(environmentVariables) != null) {
             capabilities.setCapability("platform", Platform.valueOf(WEBDRIVER_REMOTE_OS.from(environmentVariables)));
@@ -123,12 +117,11 @@ public class DriverCapabilities {
                 .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
                 .to(capabilities);
 
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
         return capabilities;
     }
-
 
     private boolean shouldUseARemoteDriver() {
         return StringUtils.isNotEmpty(WEBDRIVER_REMOTE_URL.from(environmentVariables));
     }
-
 }

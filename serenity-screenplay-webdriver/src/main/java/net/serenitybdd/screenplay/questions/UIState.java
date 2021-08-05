@@ -17,7 +17,7 @@ public abstract class UIState<T> {
 
     protected final Actor actor;
 
-    protected Map<Class<?>, Converter> DEFAULT_CONVERTERS = new HashMap();
+    protected Map<Class<?>, Converter<?>> DEFAULT_CONVERTERS = new HashMap<>();
     {
         DEFAULT_CONVERTERS.put(String.class, new StringConverter());
         DEFAULT_CONVERTERS.put(Boolean.class, new BooleanConverter());
@@ -94,7 +94,7 @@ public abstract class UIState<T> {
         return EnumValues.forType(enumType).getValuesOf(values);
     }
 
-    protected Converter converterFor(Class<?> type) {
+    protected Converter<?> converterFor(Class<?> type) {
         Preconditions.checkState(DEFAULT_CONVERTERS.containsKey(type),"No converter found for " + type);
         return DEFAULT_CONVERTERS.get(type);
     }

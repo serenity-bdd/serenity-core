@@ -6,13 +6,10 @@ import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.reports.html.ReportNameProvider;
+import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -30,30 +27,14 @@ public class Story {
     private String narrative;
     private ApplicationFeature feature;
     private String type;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Story.class);
-    private Story parentStory;
 
-
-    private List<Story> innerStories;
-
-
-    protected Story(Class<?> userStoryClass) {
-        LOGGER.info("Create story from class " + userStoryClass);
-        userStoryClass.getDeclaredClasses();
-        if(userStoryClass.getEnclosingClass() != null) {
-            LOGGER.info("Found inner story class " + userStoryClass + " " + userStoryClass.getEnclosingClass());
-            //Thread.dumpStack();
-            //userStoryClass = userStoryClass.getEnclosingClass();
-        }
+    protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
         this.storyName = humanize(userStoryClass.getSimpleName());
-
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
         this.type = FeatureType.STORY.toString();
-        LOGGER.info("Initialize story with name " + storyName);
-        LOGGER.info("Initialize story with " + storyClassName + " " + userStoryClass + " " + path + " feature: " + feature);
     }
 
     private String pathOf(Class<?> userStoryClass) {
@@ -97,7 +78,6 @@ public class Story {
                  final ApplicationFeature feature) {
         this.id = id;
         this.storyName = storyName;
-        LOGGER.trace("Initialize story with name " + storyName + " and story class name " + storyClassName);
         this.storyClassName = storyClassName;
         this.feature = feature;
         this.path = path;
@@ -112,7 +92,7 @@ public class Story {
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName, storyClassName, path, feature, narrative, FeatureType.STORY.toString(),null);
+        this(id, storyName, storyClassName, path, feature, narrative, FeatureType.STORY.toString());
     }
 
 
@@ -122,8 +102,7 @@ public class Story {
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative,
-                 final String type,
-                 final Story parentStory) {
+                 final String type) {
         this.id = id;
         this.storyName = storyName;
         this.storyClassName = storyClassName;
@@ -131,7 +110,6 @@ public class Story {
         this.path = path;
         this.narrative = narrative;
         this.type = type;
-        this.parentStory = parentStory;
     }
 
     protected Story(final String id,
@@ -169,11 +147,11 @@ public class Story {
     }
 
     public Story withNarrative(String narrative) {
-        return new Story(id, storyName, storyClassName, path, feature, narrative, type,null);
+        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
     }
 
     public Story withType(String type) {
-        return new Story(id, storyName, storyClassName, path, feature, narrative, type, null);
+        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
     }
 
     public static Story withIdAndPath(final String storyId, final String storyName, final String storyPath) {
@@ -297,11 +275,11 @@ public class Story {
     }
 
     public Story withPath(String path) {
-        return new Story(this.id, this.storyName, this.storyClassName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString(),null);
+        return new Story(this.id, this.storyName, this.storyClassName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
     }
 
     public Story asFeature() {
-        return new Story(this.id, this.storyName, this.storyClassName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString(),null);
+        return new Story(this.id, this.storyName, this.storyClassName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
     }
 
     public TestTag asTag() {
@@ -309,14 +287,16 @@ public class Story {
     }
 
     public TestTag asQualifiedTag() {
-        //TODO remove logging
-        String parentName = (getPath() != null) ? humanize(LastElement.of(getPath())) : null;
-        LOGGER.trace("StoryAsQualifiedTag path " + getPath() + " parent name " + parentName);
-        TestTag returnTag = (isNotEmpty(parentName)) ?
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
+        String lastElementOfPath = LastElement.of(getPath());
+        String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
+        if(featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
+            parentName = null;
+        }
+        return (isNotEmpty(parentName)) ?
                 TestTag.withName(parentName + "/" + storyName).andType(type) :
                 TestTag.withName(storyName).andType(type);
-        LOGGER.info("StoryAsQualifiedTag testTag " + returnTag);
-        return returnTag;
     }
 
 }

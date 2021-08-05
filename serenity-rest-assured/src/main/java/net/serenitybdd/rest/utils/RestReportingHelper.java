@@ -19,6 +19,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
@@ -65,7 +66,8 @@ public class RestReportingHelper {
                              final RequestSpecificationDecorated spec,
                              final String path, final Object... params) {
         RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);
-        final RestResponseRecordingHelper helper = new RestResponseRecordingHelper(true,
+        Set<String> blackListedHeaders = spec.getConfig().getLogConfig().blacklistedHeaders();
+        final RestResponseRecordingHelper helper = new RestResponseRecordingHelper(true, blackListedHeaders,
                 LogDetail.HEADERS, LogDetail.COOKIES);
         final Map<LogDetail, String> values = helper.print(response);
         if (shouldRecordResponseBodyFor(response)) {

@@ -23,7 +23,7 @@ public abstract class TargetedUIState<T> extends UIState<T>{
     }
 
     public <T> List<T> asListOf(Class<T> type) {
-        return convertToEnums(type, asList());
+        return super.convertToEnums(type, asList());
     }
 
     protected Stream<WebElementFacade> resolvedElements() {

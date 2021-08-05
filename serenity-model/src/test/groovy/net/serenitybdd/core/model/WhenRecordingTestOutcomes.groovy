@@ -1,6 +1,7 @@
 package net.serenitybdd.core.model
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.util.MockEnvironmentVariables
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class WhenRecordingTestOutcomes extends Specification{
@@ -9,6 +10,7 @@ class WhenRecordingTestOutcomes extends Specification{
 
     }
 
+    @Ignore
     def "should be able to obtain a link to the saucelabs video"() {
 
         given:

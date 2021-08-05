@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.rest.interactions;
 
 import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.DisableScreenshots;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
@@ -15,7 +16,8 @@ import java.util.function.Function;
 /**
  * A base class for all Screenplay REST interactions, which gives direct access to the RestAssured API.
  */
-public abstract class RestInteraction implements Interaction, DisableScreenshots {
+public abstract class RestInteraction implements Interaction, DisableScreenshots, CanBeSilent {
+    private boolean withReporting = true;
 
     List<Function<RequestSpecification, RequestSpecification>> restConfigurations = new ArrayList<>();
 
@@ -23,8 +25,8 @@ public abstract class RestInteraction implements Interaction, DisableScreenshots
         this.restConfigurations.add(restConfiguration);
         return this;
     }
-    
-     // Alias methods for Groovy
+
+    // Alias methods for Groovy
     public RestInteraction withRequest(RestQueryFunction restConfiguration) {
         return with(restConfiguration);
     }
@@ -33,17 +35,33 @@ public abstract class RestInteraction implements Interaction, DisableScreenshots
         this.restConfigurations.addAll(restConfigurations);
         return this;
     }
-    
+
     // Alias methods for Groovy
     public RestInteraction withRequest(List<RestQueryFunction> restConfigurations) {
         return with(restConfigurations);
     }
 
     protected RequestSpecification rest() {
-        RequestSpecification requestSpecification = SerenityRest.given();
-        for(Function<RequestSpecification, RequestSpecification> restConfiguration : restConfigurations) {
+        RequestSpecification requestSpecification;
+        if (withReporting) {
+            requestSpecification = SerenityRest.given();
+
+        } else {
+            requestSpecification = SerenityRest.givenWithNoReporting();
+        }
+        for (Function<RequestSpecification, RequestSpecification> restConfiguration : restConfigurations) {
             requestSpecification = restConfiguration.apply(requestSpecification);
         }
         return requestSpecification;
+    }
+
+    @Override
+    public boolean isSilent() {
+        return !withReporting;
+    }
+
+    public RestInteraction withNoReporting() {
+        withReporting = false;
+        return this;
     }
 }

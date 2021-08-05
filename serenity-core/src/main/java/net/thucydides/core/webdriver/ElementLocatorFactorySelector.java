@@ -24,7 +24,7 @@ public class ElementLocatorFactorySelector {
     public ElementLocatorFactorySelector(int timeoutInSeconds, EnvironmentVariables environmentVariables) {
         this.timeoutInSeconds = timeoutInSeconds;
         this.environmentVariables = environmentVariables.copy();
-        appiumConfiguration = AppiumConfiguration.from(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        appiumConfiguration = AppiumConfiguration.from(environmentVariables);
     }
 
     public ElementLocatorFactory getLocatorFor(WebDriver driver) {

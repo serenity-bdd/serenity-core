@@ -1,8 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.DataTableRow
 import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.requirements.ParentRequirementProvider
@@ -27,7 +25,7 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
 
     fun withMaxOf(maxEntries: Int): List<UnstableFeature> {
         return testOutcomes.unsuccessfulTests.outcomes
-                .groupBy { outcome -> defaultStoryNameOr(outcome.userStory?.displayName) }
+                .groupBy { outcome -> defaultStoryNameOr(outcome.userStory.displayName) }
                 .map { (userStoryName, outcomes) ->
                     UnstableFeature(userStoryName,
                             outcomes.size,
@@ -39,20 +37,7 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
                 .take(maxEntries)
     }
 
-    private fun defaultStoryNameOr(displayName: String?): String = if (displayName != null) displayName else "Undefined Story"
-
-    private fun unsuccessfulOutcomesIn(testOutcomes: TestOutcomes) : Int {
-        return testOutcomes.outcomes.map { unsuccessfulOutcomesIn(it) }.sum()
-    }
-
-    private fun unsuccessfulOutcomesIn(outcome : TestOutcome) : Int {
-        if (outcome.isDataDriven) {
-            return outcome.dataTable.rows.count(this::isUnsuccessful)
-        }
-        return if (outcome.isError || outcome.isCompromised || outcome.isFailure) 1 else 0
-    }
-
-    private fun isUnsuccessful(row: DataTableRow) = row.result == FAILURE || row.result == ERROR || row.result == COMPROMISED
+    private fun defaultStoryNameOr(displayName: String?): String = displayName ?: "Undefined Story"
 
     private fun percentageFailures(failingScenarios: Int, userStoryName: String, testOutcomes: TestOutcomes): Int {
         val totalScenarios = TestOutcomes.of(testOutcomes.outcomes.filter {

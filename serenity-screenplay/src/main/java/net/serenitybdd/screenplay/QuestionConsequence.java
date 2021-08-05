@@ -9,6 +9,7 @@ import org.hamcrest.Matcher;
 
 import java.util.Optional;
 
+
 import static net.serenitybdd.screenplay.questions.QuestionHints.addHints;
 import static net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,7 +41,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         Serenity.injectScenarioStepsInto(question);
 
         try {
-            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
+            performSetupActionsAs(actor);
 
             addHints(fromAssertion(expected)).to(question);
 

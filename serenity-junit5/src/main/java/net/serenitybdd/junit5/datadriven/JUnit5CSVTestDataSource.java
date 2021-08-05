@@ -7,7 +7,7 @@ import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.FilePathParser;
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.steps.StepFactory;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;

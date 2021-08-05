@@ -164,7 +164,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         Set<ReportingTask> reportingTasks = new CopyOnWriteArraySet<>();
 
-        LOGGER.debug("Generating test outcome reports: " + generateTestOutcomeReports);
         if (generateTestOutcomeReports) {
             reportingTasks.addAll(HtmlTestOutcomeReportingTask.testOutcomeReportsFor(testOutcomes).using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
         }

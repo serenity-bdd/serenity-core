@@ -144,10 +144,10 @@ public class ParameterizedTestsOutcomeAggregator {
         System.out.println("BBB:getTestOutcomesForAllParameterSets " + allTestOutcomes.size());
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
-            if (!testOutcomes.contains(testOutcome)) {
+            //if (!testOutcomes.contains(testOutcome)) {
                 testOutcomes.add(testOutcome);
                 System.out.println("BBB:addTestOutcome " + testOutcome);
-            }
+            //}
         }
         return testOutcomes;
     }

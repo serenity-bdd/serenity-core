@@ -39,6 +39,5 @@ class ReportExecutor implements Callable<Void> {
 
     private Boolean verboseReporting() {
         return ThucydidesSystemProperty.VERBOSE_REPORTING.booleanFrom(environmentVariables, false);
-//        return environmentVariables.getPropertyAsBoolean("verbose.reporting", false);
     }
 }

@@ -13,6 +13,9 @@ import java.util.List;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_SCREENSHOTS;
 
+/**
+ * A darkroom processes and saves screenshots that were taken during the tests.
+ */
 public class Darkroom {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);

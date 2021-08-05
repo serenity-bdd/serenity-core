@@ -9,7 +9,7 @@ import java.util.Arrays;
  * rather than a business task.
  */
 @SuppressWarnings("deprecation")
-public interface Interaction extends Action {
+public interface Interaction extends Performable {
     static AnonymousInteraction where(String title, Performable... steps) {
         return Instrumented.instanceOf(AnonymousInteraction.class).withProperties(title, Arrays.asList(steps));
     }

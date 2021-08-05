@@ -14,9 +14,9 @@ import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 public class WaitUntilBuilder {
     private final Target target;
     private final Matcher<WebElementState> expectedState;
-    private int amount;
+    private long amount;
 
-    public WaitUntilBuilder(int amount, Target target, Matcher<WebElementState> expectedState) {
+    public WaitUntilBuilder(long amount, Target target, Matcher<WebElementState> expectedState) {
         this.amount = amount;
         this.target = target;
         this.expectedState = expectedState;

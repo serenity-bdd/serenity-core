@@ -1,6 +1,7 @@
 package net.thucydides.core.pages.integration;
 
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.assertj.core.api.Assertions;
@@ -10,7 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -22,12 +24,17 @@ public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBase
 
     @BeforeClass
     public static void openDriver() {
-        localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        localDriver = new ChromeDriver(options);
     }
 
     @AfterClass
     public static void closeDriver() {
-        localDriver.quit();
+        if (localDriver != null) {
+            localDriver.quit();
+        }
     }
 
     @Before

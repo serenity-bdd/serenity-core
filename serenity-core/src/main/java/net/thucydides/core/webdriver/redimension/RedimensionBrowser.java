@@ -23,7 +23,8 @@ public class RedimensionBrowser {
         return NewMap.of(
                 DoNotRedimension, new NoopRedimensioner(),
                 RedimensionToSpecifiedSize, new ResizeRedimensioner(environmentVariables),
-                Maximize, new MaximizeRedimensioner()
+                Maximize, new MaximizeRedimensioner(),
+                FullScreen, new FullScreenRedimensioner()
         );
     }
 

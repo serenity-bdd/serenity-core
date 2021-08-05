@@ -13,14 +13,13 @@ import net.thucydides.junit.rules.QuietThucydidesLoggingRule
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule
 import net.thucydides.samples.SampleDataDrivenScenarioWithQualifier
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
 
-    @Rule
-    def TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Rule
     def SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule();
@@ -39,7 +38,9 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
 
     def "when test contains method to determine Qualifier it should be used for step names"() {
         given:
-            def outputDirectory = tempFolder.newFolder("serenitybdd")
+            def outputDirectory = Files.createTempDirectory("tmp").toFile();
+            outputDirectory.deleteOnExit()
+
             environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath())
 

@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.serenitybdd.assertions.CollectionMatchers.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
 @RunWith(SerenityRunner.class)
@@ -25,7 +24,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
         List<String> favoriteColors = Arrays.asList("red", "blue");
 
         collette.should(
-                seeThat(TheValue.of(allColors), containsAll(favoriteColors))
+                seeThat(TheValue.of(allColors), CollectionMatchers.containsAll(favoriteColors))
         );
     }
 
@@ -35,7 +34,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
         collette.should(
-                seeThat(TheValue.of(allColors), allMatch(color -> color.startsWith("color:")))
+                seeThat(TheValue.of(allColors), CollectionMatchers.allMatch(color -> color.startsWith("color:")))
         );
     }
 
@@ -45,7 +44,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
         collette.should(
-                seeThat(TheValue.of(allColors), anyMatch(color -> color.endsWith(":red")))
+                seeThat(TheValue.of(allColors), CollectionMatchers.anyMatch(color -> color.endsWith(":red")))
         );
     }
 
@@ -55,7 +54,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
         collette.should(
-                seeThat(TheValue.of(allColors), allSatisfy(color -> Assertions.assertThat(color).startsWith("color:")))
+                seeThat(TheValue.of(allColors), CollectionMatchers.allSatisfy(color -> Assertions.assertThat(color).startsWith("color:")))
         );
     }
 

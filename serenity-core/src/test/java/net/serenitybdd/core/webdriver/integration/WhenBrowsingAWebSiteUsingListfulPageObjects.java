@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
@@ -10,11 +10,13 @@ import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.io.File;
@@ -118,9 +120,17 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 
     Configuration configuration;
 
+    @BeforeClass
+	public static void setupWebDriver() {
+		WebDriverManager.chromedriver().setup();
+	}
+
     @Before
     public void openLocalStaticSite() {
-        driver =  new HtmlUnitDriver(BrowserVersion.CHROME, true);
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+		driver = new ChromeDriver(options);
+
         openStaticTestSite();
         indexPage = new TablesPage(driver, 1000);
         indexPage.setWaitForTimeout(100);

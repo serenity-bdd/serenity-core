@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
+          xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+    <servers>
+        <server>
+            <id>bintray</id>
+            <username>${bintray.user}</username>
+            <password>${bintray.api.key}</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>http://repo.maven.apache.org/maven2</url>
+                </repository>
+                <repository>
+                    <id>bintray</id>
+                    <name>bintray</name>
+                    <url>https://jcenter.bintray.com</url>
+                </repository>
+                <repository>
+                    <id>serenity</id>
+                    <name>serenity</name>
+                    <url>https://dl.bintray.com/serenity/maven</url>
+                </repository>
+                <repository>
+                    <id>central</id>
+                    <name>bintray</name>
+                    <url>https://dl.bintray.com/serenity/maven</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>http://repo.maven.apache.org/maven2</url>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>bintray-plugins</name>
+                    <url>https://jcenter.bintray.com</url>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>serenity</id>
+                    <name>serenity-plugins</name>
+                    <url>https://dl.bintray.com/serenity/maven</url>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>bintray</id>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>bintray</activeProfile>
+    </activeProfiles>
+</settings>

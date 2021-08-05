@@ -8,6 +8,8 @@ public class TypeValueIntoElement extends TypeValue {
 
     private WebElementFacade element;
 
+    public TypeValueIntoElement(){}
+
     public TypeValueIntoElement(WebElementFacade element, CharSequence... theText) {
         super(theText);
         this.element = element;
@@ -15,7 +17,9 @@ public class TypeValueIntoElement extends TypeValue {
 
     @Step("{0} enters #theTextAsAString into #element")
     public <T extends Actor> void performAs(T theUser) {
-        element.sendKeys(theText);
+        textValue().ifPresent(
+                text -> element.sendKeys(text)
+        );
         if (getFollowedByKeys().length > 0) {
             element.sendKeys(getFollowedByKeys());
         }

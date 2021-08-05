@@ -17,7 +17,6 @@ import net.thucydides.samples.SampleDataDrivenScenarioWithDelays;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 
@@ -32,9 +31,6 @@ import static org.hamcrest.Matchers.is;
  * Time: 10:10 PM
  */
 public class WhenRunningADataDrivenTestScenarioToCheckDuration {
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Rule
     public SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule();

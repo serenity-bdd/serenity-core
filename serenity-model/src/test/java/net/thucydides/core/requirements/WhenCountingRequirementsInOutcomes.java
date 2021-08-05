@@ -74,9 +74,6 @@ public class WhenCountingRequirementsInOutcomes {
     @Test
     public void should_find_correct_requirement_outcome_count_for_requirements_without_tests_in_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
 
-//        featuresDirectory = Paths.get(Resources.getResource("serenity-cucumber/features").toURI().getPath()).toFile();
-//        outcomeDirectory = Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
-
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
@@ -87,18 +84,14 @@ public class WhenCountingRequirementsInOutcomes {
     }
 
     @Test
-    @Ignore
-    public void should_find_correct_requirement_outcome_count_for_top_level_requirements_in_cucumber_js_outcomes() throws URISyntaxException, IOException {
-
-//        featuresDirectory = Paths.get(Resources.getResource("serenity-js/features").toURI().getPath()).toFile();
-//        outcomeDirectory = Paths.get(Resources.getResource("serenity-js-outcomes").toURI().getPath()).toFile();
+    public void should_find_correct_requirement_outcome_count_for_top_level_requirements_in_cucumber_js_outcomes() throws IOException {
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
 
         for(RequirementOutcome requirementsOutcome : outcomes.getRequirementOutcomes()) {
-            assertThat(requirementsOutcome.getRequirementsWithoutTestsCount(), equalTo(0));
+            assertThat(requirementsOutcome.getRequirementsWithoutTestsCount(), equalTo(0L));
         }
     }
 }

@@ -1,5 +1,6 @@
 package net.thucydides.junit.integration;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
@@ -7,6 +8,7 @@ import net.thucydides.core.annotations.Title;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.DemoSiteSteps;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +21,7 @@ import org.openqa.selenium.WebDriver;
 @RunWith(ThucydidesRunner.class)
 public class WhenOpeningStaticDemoPageWithSamePage {
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "phantomjs", options = "--headless")
     public WebDriver webdriver;
 
     @ManagedPages
@@ -27,7 +29,12 @@ public class WhenOpeningStaticDemoPageWithSamePage {
     
     @Steps
     public DemoSiteSteps steps;
-        
+
+//    @BeforeClass
+//    public static void setupChrome() {
+//        WebDriverManager.firefoxdriver().setup();
+//    }
+
     @Test
     @Title("The user opens the index page")
     public void the_user_opens_the_page() {

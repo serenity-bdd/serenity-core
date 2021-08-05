@@ -241,7 +241,7 @@ public class ReportService {
     private void generateReportFor(final TestOutcome testOutcome,
                                    final AcceptanceTestReporter reporter) {
         try {
-            LOGGER.debug(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
+            LOGGER.info(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
             reporter.setOutputDirectory(outputDirectory);
             reporter.generateReportFor(testOutcome);
         } catch (Exception e) {

@@ -42,7 +42,19 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
 
         aster.attemptsTo(
                 Open.browserOn(demoPage),
-                Ensure.that(ElementLocated.by("#firstName")).isDisplayed(),
+                Ensure.that(ElementLocated.by("#firstName")).isDisplayed().orElseThrow(new Exception()),
+                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
+                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
+        );
+    }
+
+    @Test(expected = SomeCustomException.class)
+    public void weCanThrowCustomExceptions() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementLocated.by("#notDisplayed")).isDisplayed().orElseThrow(new SomeCustomException("Oh crap")),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
                 Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
         );

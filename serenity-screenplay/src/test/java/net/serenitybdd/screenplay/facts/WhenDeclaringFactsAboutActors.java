@@ -104,6 +104,19 @@ public class WhenDeclaringFactsAboutActors {
         assertThat(existingSavingsAccounts).doesNotContain("Savings-123456");
     }
 
+    @Test
+    public void fact_setup_and_teardown_methods_are_only_called_once_per_test() {
+
+        Actor tim = Actor.named("Tim");
+
+        tim.has(ASavingsAccount.numbered("Savings-123456"));
+
+        StepEventBus.getEventBus().testFinished();
+
+        assertThat(knownAccounts).contains("Savings-123456");
+        assertThat(existingSavingsAccounts).doesNotContain("Savings-123456");
+    }
+
     @Test(expected = TestCompromisedException.class)
     public void facts_can_throw_exceptions() {
         Actor tim = Actor.named("Tim");

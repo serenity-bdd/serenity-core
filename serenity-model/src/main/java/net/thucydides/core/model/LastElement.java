@@ -18,10 +18,10 @@ public class LastElement {
     }
 
     private static LastElementStrategy forPathType(String path) {
-        if (path.toLowerCase().endsWith(".feature")) {
+        if (path != null && path.toLowerCase().endsWith(".feature")) {
             return forFeatureOrStoryFiles;
         }
-        if (path.toLowerCase().endsWith(".story")) {
+        if (path != null && path.toLowerCase().endsWith(".story")) {
             return forFeatureOrStoryFiles;
         }
         return forTestCases;
@@ -41,11 +41,11 @@ public class LastElement {
         LAST_ELEMENT_FINDER.put(forFeatureOrStoryFiles, new LastElementOfAFeatureOrStoryFile());
     }
 
-    private static class LastElementOfAFeatureOrStoryFile implements LastElementFinder {
+    static class LastElementOfAFeatureOrStoryFile implements LastElementFinder {
 
         @Override
         public String lastElementIn(String path) {
-            List<String> pathElements = new ArrayList<>(elementsOf(withoutFeatureFileSuffixes(path)));
+            List<String> pathElements = new ArrayList<>(elementsOfFeatureOrStory(withoutFeatureFileSuffixes(path)));
             if (pathElements.isEmpty()) { return ""; }
 
             pathElements.remove(pathElements.size() - 1);
@@ -53,17 +53,27 @@ public class LastElement {
         }
     }
 
-    private static class LastElementOfATestCase implements LastElementFinder {
+    static class LastElementOfATestCase implements LastElementFinder {
 
         @Override
         public String lastElementIn(String path) {
-            List<String> pathElements = elementsOf(path);
+            List<String> pathElements = elementsOfTestCase(path);
             return (pathElements.isEmpty()) ? "" :  pathElements.get(pathElements.size() - 1);
         }
     }
 
-    private static List<String> elementsOf(String path) {
-        return Splitter.on(Pattern.compile("[\\.|/]")).splitToList(path);
+    private static List<String> elementsOfTestCase(String path) {
+        if (path == null) {
+            return new ArrayList<>();
+        }
+        return  Splitter.on(Pattern.compile("\\.")).splitToList(path);
+    }
+
+    private static List<String> elementsOfFeatureOrStory(String path) {
+        if (path == null) {
+            return new ArrayList<>();
+        }
+        return  Splitter.on(Pattern.compile("/")).splitToList(path);
     }
 
 

@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
+import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 
@@ -58,4 +59,8 @@ public interface ScenarioOutcome {
     Set<TestTag> getTags();
 
     Map<String, Collection<TestTag>> getExampleTags();
+
+    Rule getRule();
+
+    default boolean isBackground() { return "background".equalsIgnoreCase(getType());};
 }

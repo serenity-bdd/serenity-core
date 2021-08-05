@@ -1,0 +1,409 @@
+{
+  "name": "Customer authentication progression",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "[1] {new-authentication-level\u003d1, verification-type\u003dCustomer known to staff members}",
+      "duration": 31,
+      "startTime": 1425438520585,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 2,
+          "description": "Given the following customers exist",
+          "duration": 6,
+          "startTime": 1425438520586,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "And I am logged into the app",
+          "duration": 9,
+          "startTime": 1425438520592,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 4,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520599,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "description": "Given I have displayed the customer details for Joe Blogs",
+          "duration": 8,
+          "startTime": 1425438520601,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 6,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438520606,
+              "result": "IGNORED"
+            },
+            {
+              "number": 7,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0865432109]\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520606,
+              "result": "IGNORED"
+            },
+            {
+              "number": 8,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520607,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 9,
+          "description": "When I have triggered an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438520609,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 10,
+              "description": "Update customer details",
+              "duration": 1,
+              "startTime": 1425438520610,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "description": "When I choose to verify the customer identity by \u0027Customer known to staff members\u0027",
+          "duration": 2,
+          "startTime": 1425438520612,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 12,
+              "description": "Verify customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eCUSTOMER_KNOWN_TO_STAFF_MEMBERS\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520613,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 13,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 2,
+          "startTime": 1425438520614,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 14,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520615,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "description": "[1] {new-authentication-level\u003d1, verification-type\u003dID Presented}",
+      "duration": 27,
+      "startTime": 1425438520617,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 16,
+          "description": "Given the following customers exist",
+          "duration": 4,
+          "startTime": 1425438520618,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 17,
+          "description": "And I am logged into the app",
+          "duration": 7,
+          "startTime": 1425438520622,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 18,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520626,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 19,
+          "description": "Given I have displayed the customer details for Joe Blogs",
+          "duration": 4,
+          "startTime": 1425438520629,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 20,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438520630,
+              "result": "IGNORED"
+            },
+            {
+              "number": 21,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0865432109]\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520631,
+              "result": "IGNORED"
+            },
+            {
+              "number": 22,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520631,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 23,
+          "description": "When I have triggered an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438520634,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 24,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438520635,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 25,
+          "description": "When I choose to verify the customer identity by \u0027ID Presented\u0027",
+          "duration": 3,
+          "startTime": 1425438520637,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 26,
+              "description": "Verify customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eID_PRESENTED\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520638,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 27,
+          "description": "Then the customer authentication level should be 1",
+          "duration": 4,
+          "startTime": 1425438520640,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 28,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520642,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "description": "[1] {new-authentication-level\u003d0, verification-type\u003dUnable to verify customer}",
+      "duration": 29,
+      "startTime": 1425438520645,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 30,
+          "description": "Given the following customers exist:\n| Name | Field 1 | Date of Birth | Field 2 | Mobile Phone |\n| Joe Blogs | 47164114 | 1982-04-01 | 00012063 | 0865432109 |",
+          "duration": 6,
+          "startTime": 1425438520646,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 31,
+          "description": "And I am logged into the app",
+          "duration": 8,
+          "startTime": 1425438520652,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 32,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520658,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 33,
+          "description": "Given I have displayed the customer details for Joe Blogs",
+          "duration": 4,
+          "startTime": 1425438520661,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 34,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438520662,
+              "result": "IGNORED"
+            },
+            {
+              "number": 35,
+              "description": "Find customer by: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[type\u003dPHONE_NUMBER,phoneNumber\u003d0865432109]\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520663,
+              "result": "IGNORED"
+            },
+            {
+              "number": 36,
+              "description": "Select customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eJoe Blogs\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438520663,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 37,
+          "description": "When I have triggered an action that requires customer level 1 authentication",
+          "duration": 2,
+          "startTime": 1425438520666,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 38,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438520667,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 39,
+          "description": "When I choose to verify the customer identity by \u0027Unable to verify customer\u0027",
+          "duration": 2,
+          "startTime": 1425438520668,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 40,
+              "description": "Verify customer: \u003cspan class\u003d\u0027step-parameter\u0027\u003eUNABLE_TO_VERIFY_CUSTOMER\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520669,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 41,
+          "description": "Then the customer authentication level should be 0",
+          "duration": 4,
+          "startTime": 1425438520670,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 42,
+              "description": "Authentication level should be: \u003cspan class\u003d\u0027step-parameter\u0027\u003e0\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438520672,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "customer-authentication-levels",
+    "storyName": "Customer authentication levels",
+    "path": "customer_authentication_level.feature",
+    "narrative": "In order to ensure that the customer is correctly validated to standards and policy,\nAs an authorized staff member,\nI want to authenticate the customer to level 1",
+    "type": "feature"
+  },
+  "title": "Customer authentication progressing from level 0 to level 1",
+  "description": "",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "pending",
+      "type": "tag"
+    },
+    {
+      "name": "Customer authentication levels",
+      "type": "feature"
+    },
+    {
+      "name": "Customer authentication level",
+      "type": "story"
+    },
+    {
+      "name": "PROJ-147",
+      "type": "issue"
+    }
+  ],
+  "startTime": 1425438520585,
+  "duration": 89,
+  "annotatedResult": "PENDING",
+  "driver": "firefox",
+  "dataTable": {
+    "headers": [
+      "verification-type",
+      "new-authentication-level"
+    ],
+    "rows": [
+      {
+        "values": [
+          "Customer known to staff members",
+          "1"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "ID Presented",
+          "1"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "Unable to verify customer",
+          "0"
+        ],
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": true,
+    "currentRow": {"value": 2},
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0,
+        "name": "",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "result": "PENDING"
+}

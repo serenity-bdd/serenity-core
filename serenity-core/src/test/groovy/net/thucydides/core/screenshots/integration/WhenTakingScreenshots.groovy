@@ -19,12 +19,11 @@ import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.webdriver.StaticTestSite.fileInClasspathCalled
 
 class WhenTakingScreenshots extends Specification {
-    @Rule
-    TemporaryFolder temporaryFolder
-    File temporaryDirectory
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
@@ -49,9 +48,12 @@ class WhenTakingScreenshots extends Specification {
     }
 
     String staticSite;
+    File temporaryDirectory;
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
+
         StepEventBus.eventBus.clear()
 
         def desiredCapabilities = DesiredCapabilities.chrome();

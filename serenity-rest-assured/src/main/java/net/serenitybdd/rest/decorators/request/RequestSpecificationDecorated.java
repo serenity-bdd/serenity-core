@@ -41,15 +41,20 @@ public abstract class RequestSpecificationDecorated
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationDecorated.class);
     private Response lastResponse;
 
+    private boolean withReporting = true;
+
     public RequestSpecificationDecorated(RequestSpecificationImpl core) {
         super(core);
+    }
+
+    public void disableReporting() {
+        withReporting = false;
     }
 
     @Override
     public Response get() {
         return get("");
     }
-
 
 
     @Override
@@ -91,7 +96,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response get(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return get(path);
     }
 
@@ -117,7 +122,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response post(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return post(path);
     }
 
@@ -148,7 +153,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response put(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return put(path);
     }
 
@@ -174,7 +179,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response delete(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return delete(path);
     }
 
@@ -200,7 +205,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response head(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return head(path);
     }
 
@@ -226,7 +231,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response patch(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return patch(path);
     }
 
@@ -242,7 +247,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public Response options(String path, Map<String, ?> pathParams) {
-        pathParameters(pathParams);
+        pathParams(pathParams);
         return options(path);
     }
 
@@ -275,7 +280,8 @@ public abstract class RequestSpecificationDecorated
                 response = stubbed();
             }
         } else {
-            reportQuery(method, path, response, pathParams);
+            if (withReporting)
+                reportQuery(method, path, response, pathParams);
         }
         this.lastResponse = response;
         return response;
@@ -333,13 +339,14 @@ public abstract class RequestSpecificationDecorated
      * @return the decorated request specification
      */
     @Override
-    public RequestSpecification filter(Filter filter){
+    public RequestSpecification filter(Filter filter) {
         core.filter(filter);
         return this;
     }
 
     /**
      * Add list of filters that will be used in the request
+     *
      * @param filters Filter list to add
      * @return the decorated request specification
      */
@@ -441,7 +448,7 @@ public abstract class RequestSpecificationDecorated
 
     @Override
     public <T> T getBody() {
-        return core.getBody();
+        return (T) core.getBody();
     }
 
     @Override

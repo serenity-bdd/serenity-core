@@ -26,9 +26,7 @@ public class AddEnvironmentSpecifiedDriverCapabilities {
 
     public DesiredCapabilities to(DesiredCapabilities capabilities) {
         Map<String, ?> customCapabilities = CustomCapabilities.forDriver(driver).from(environmentVariables);
-        customCapabilities.forEach(
-                capabilities::setCapability
-        );
+        customCapabilities.forEach(capabilities::setCapability);
         return capabilities;
     }
 }

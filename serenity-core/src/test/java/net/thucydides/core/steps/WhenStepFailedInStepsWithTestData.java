@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static net.thucydides.core.steps.stepdata.StepData.setDefaultStepFactory;
 import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
@@ -34,11 +35,12 @@ public class WhenStepFailedInStepsWithTestData {
     private StepFactory factory;
 
     @Before
-    public void initMocks() {
+    public void initMocks() throws IOException {
         MockitoAnnotations.initMocks(this);
         factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
         StepEventBus.getEventBus().reset();
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
         StepEventBus.getEventBus().registerListener(listener);
         setDefaultStepFactory(null);
     }

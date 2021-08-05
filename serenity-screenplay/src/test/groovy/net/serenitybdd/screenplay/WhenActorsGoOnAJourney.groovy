@@ -2,23 +2,24 @@ package net.serenitybdd.screenplay
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
-import net.serenitybdd.screenplay.shopping.tasks.ATaskWithParameters
 import net.thucydides.core.model.TestResult
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
 import static OutcomeChecks.resultsFrom
-import static net.serenitybdd.screenplay.Tasks.instrumented
 import static net.thucydides.core.model.TestResult.*
 
 class WhenActorsGoOnAJourney extends Specification{
 
+    def danaGoesShoppingSample
+
+    def setup() {
+        danaGoesShoppingSample = new SerenityRunner(DanaGoesShoppingSample)
+    }
     def "should produce a normal test outcome"() {
-        given:
-            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-            runner.run(new RunNotifier())
-            def results = resultsFrom(runner.testOutcomes)
+            danaGoesShoppingSample.run(new RunNotifier())
+            def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
             !results.empty
         and:
@@ -28,11 +29,9 @@ class WhenActorsGoOnAJourney extends Specification{
     }
 
     def "should produce a step for each task call"() {
-        given:
-            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-            runner.run(new RunNotifier())
-            def results = resultsFrom(runner.testOutcomes)
+            danaGoesShoppingSample.run(new RunNotifier())
+            def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
             def outcome = results["shouldBeAbleToPurchaseSomeItems"]
             outcome.testSteps.collect { it.unrendered().description } == ["Given Dana has purchased an apple for 10 dollars",
@@ -41,11 +40,9 @@ class WhenActorsGoOnAJourney extends Specification{
     }
 
     def "should produce a failed step when an assumption fails"() {
-        given:
-            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-            runner.run(new RunNotifier())
-            def results = resultsFrom(runner.testOutcomes)
+            danaGoesShoppingSample.run(new RunNotifier())
+            def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
             def outcome = results["shouldBeAbleToPurchaseAnItemForFree"]
             outcome.result == FAILURE
@@ -56,11 +53,9 @@ class WhenActorsGoOnAJourney extends Specification{
     }
 
     def "should produce a step with an error when a step breaks"() {
-        given:
-            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-            runner.run(new RunNotifier())
-            def results = resultsFrom(runner.testOutcomes)
+            danaGoesShoppingSample.run(new RunNotifier())
+            def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
             def outcome = results["shouldBeAbleToPurchaseAnItemWithANegativeAmount"]
             outcome.result == ERROR
@@ -68,11 +63,9 @@ class WhenActorsGoOnAJourney extends Specification{
     }
 
     def "should document tasks as far as possible when errors occur"() {
-        given:
-            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-            runner.run(new RunNotifier())
-            def results = resultsFrom(runner.testOutcomes)
+            danaGoesShoppingSample.run(new RunNotifier())
+            def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
             def outcome = results["shouldBeAbleToPurchaseAnItemWithANegativeAmount"]
             outcome.testSteps.collect { it.unrendered().description } == ["Given Dana has purchased an apple for -10 dollars",
@@ -80,15 +73,12 @@ class WhenActorsGoOnAJourney extends Specification{
     }
 
     def "should not evaluate consequences after a failed step"() {
-        given:
-        def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
-        runner.run(new RunNotifier())
-        def results = resultsFrom(runner.testOutcomes)
+        danaGoesShoppingSample.run(new RunNotifier())
+        def results = resultsFrom(danaGoesShoppingSample.testOutcomes)
         then:
         def outcome = results["shouldBeAbleToPurchaseAnItemForFree"]
         outcome.result == FAILURE
         outcome.testSteps.collect { it.result } == [FAILURE, SKIPPED, SKIPPED]
     }
-
 }

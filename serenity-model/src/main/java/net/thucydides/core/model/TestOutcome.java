@@ -25,6 +25,7 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.remoteTesting.LinkGenerator;
+import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderService;
@@ -35,7 +36,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+//import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,9 +62,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * Represents the results of a test (or "scenario") execution. This
  * includes the narrative steps taken during the test, screenshots at each step,
- * the results of each step, and the overall result. A test scenario
+ * the results of each step, and the overall result. A test getscenario
  * can be associated with a user story using the UserStory annotation.
- * <p/>
+ *
  * A TestOutcome is stored after a test is executed. When the aggregate reports
  * are generated, the test outcome files are loaded into memory and processed.
  *
@@ -140,6 +141,8 @@ public class TestOutcome {
      */
     private String project;
 
+    private Rule rule;
+
     private FailureCause testFailureCause;
     private TestFailureCause flakyTestFailureCause;
     private String testFailureClassname;
@@ -197,13 +200,6 @@ public class TestOutcome {
     private transient LinkGenerator linkGenerator;
 
     private transient FlagProvider flagProvider;
-
-
-    /**
-     * Test statistics, read from the statistics database.
-     * This data is only loaded when required, and added to the TestOutcome using the corresponding setter.
-     */
-//    private TestStatistics statistics;
 
     /**
      * Returns a set of tag provider classes that are used to determine the tags to associate with a test outcome.
@@ -409,7 +405,9 @@ public class TestOutcome {
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
             environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-            this.context = contextFrom(environmentVariables);
+            if(this.context==null){
+                this.context = contextFrom(environmentVariables);
+            }
         }
         return environmentVariables;
     }
@@ -1397,6 +1395,15 @@ public class TestOutcome {
         return this;
     }
 
+    public TestOutcome recordChildSteps(final List<TestStep> steps) {
+        if (currentStep().isPresent()) {
+            steps.forEach(step -> currentStep().get().addChildStep(step));
+        } else {
+            steps.forEach(step -> recordStep(step));
+        }
+        return this;
+    }
+
     /**
      * Add a test step to this acceptance test.
      *
@@ -1415,8 +1422,6 @@ public class TestOutcome {
     }
 
     private void addStep(TestStep step) {
-//        testSteps.add(step);
-//        renumberTestSteps();
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.add(step);
         renumberTestSteps(updatedSteps);
@@ -1805,6 +1810,14 @@ public class TestOutcome {
         return this;
     }
 
+    public Rule getRule() {
+        return rule;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
     public String getProject() {
         return project;
     }
@@ -2145,21 +2158,6 @@ public class TestOutcome {
 
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    @Deprecated
-    public void setStartTime(DateTime startTime) {
-        ZonedDateTime time =
-                ZonedDateTime.of(startTime.year().get(),
-                        startTime.monthOfYear().get(),
-                        startTime.dayOfMonth().get(),
-                        startTime.hourOfDay().get(),
-                        startTime.minuteOfHour().get(),
-                        startTime.secondOfMinute().get(),
-                        startTime.millisOfSecond().get() * 1000,
-                        ZoneId.systemDefault());
-
-        this.startTime = time;
     }
 
     public void clearStartTime() {

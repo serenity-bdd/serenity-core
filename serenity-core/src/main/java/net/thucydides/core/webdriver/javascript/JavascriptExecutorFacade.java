@@ -163,7 +163,7 @@ public class JavascriptExecutorFacade {
     }
 
     /**
-     * Executes the JavaScript code and deserializes the resulting object as a List of <T>.
+     * Executes the JavaScript code and deserializes the resulting object as a List.
      * 
      * @param script that returns JavaScript Object
      * @return deserialized as List of classOfT

@@ -7,6 +7,7 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
@@ -41,15 +42,17 @@ public class CapabilityEnhancer {
                     .getBaseStepListener()
                     .latestTestOutcome();
             // Technically not required but needed for some test scenarios
-            if (currentTestOutcome != null) {
-                currentTestOutcome.ifPresent(
-                        outcome -> AddCustomDriverCapabilities.from(environmentVariables)
-                                .withTestDetails(driver, outcome)
-                                .to(capabilities)
-                );
+            if ((currentTestOutcome != null) && (currentTestOutcome.isPresent())) {
+                AddCustomDriverCapabilities.from(environmentVariables)
+                                .withTestDetails(driver, currentTestOutcome.get())
+                                .to(capabilities);
             }
         }
 
+        // Add W3C capabilities defined in the "webdriver" section of the serenity.conf file for non-Appium drivers
+        if (driver.isW3CCompliant()) {
+            capabilities = capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        }
         return capabilities;
 }
 

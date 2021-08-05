@@ -1,0 +1,7 @@
+ext {
+    projectDescription = 'Serenity SauceLabs Integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+}

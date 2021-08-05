@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.serenitybdd.demos.todos</groupId>
-    <artifactId>todo-demo</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <parent>
+        <artifactId>serenity-bdd</artifactId>
+        <groupId>net.serenity-bdd</groupId>
+        <version>2.4.51-SNAPSHOT</version>
+    </parent>
+    <artifactId>serenity-smoketests</artifactId>
     <packaging>jar</packaging>
-
-    <name>Sample Serenity project using Cucumber and WebDriver</name>
+    <name>Serenity BDD Smoke Tests</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>2.0.21-SNAPSHOT</serenity.version>
-        <serenity.maven.version>2.0.20</serenity.maven.version>
         <parallel.tests>4</parallel.tests>
         <browserstack.url></browserstack.url>
         <browserstack.os></browserstack.os>
@@ -22,68 +22,52 @@
         <browserstack.version></browserstack.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>bintray</name>
-            <url>https://jcenter.bintray.com</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>bintray-plugins</name>
-            <url>https://jcenter.bintray.com</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
-            <version>${serenity.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-junit</artifactId>
-            <version>${serenity.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-screenplay</artifactId>
-            <version>${serenity.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-screenplay-webdriver</artifactId>
-            <version>${serenity.version}</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-browserstack</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.30</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>1.7.0</version>
+            <version>3.18.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version>1.3</version>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
         </dependency>
     </dependencies>
     <build>
@@ -91,22 +75,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>3.0.0-M5</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/features/**/*.java</include>
+                        <include>**/*.*</include>
                     </includes>
                     <argLine>-Xmx512m</argLine>
-                    <!--<parallel>classes</parallel>-->
-                    <!--<threadCount>${parallel.tests}</threadCount>-->
-                    <!--<forkCount>${parallel.tests}</forkCount>-->
+                    <parallel>classes</parallel>
+                    <threadCount>${parallel.tests}</threadCount>
+                    <forkCount>${parallel.tests}</forkCount>
                     <!--<systemPropertyVariables>-->
                         <!--<browserstack.url>${browserstack.url}</browserstack.url>-->
                         <!--<browserstack.os>${browserstack.os}</browserstack.os>-->
@@ -138,19 +122,7 @@
             <plugin>
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
                 <artifactId>serenity-maven-plugin</artifactId>
-                <version>${serenity.maven.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.serenity-bdd</groupId>
-                        <artifactId>serenity-core</artifactId>
-                        <version>${serenity.version}</version>
-                    </dependency>
-                    <!--<dependency>-->
-                    <!--<groupId>net.serenitybdd.demos.todos</groupId>-->
-                    <!--<artifactId>todo-demo</artifactId>-->
-                    <!--<version>${project.version}</version>-->
-                    <!--</dependency>-->
-                </dependencies>
+                <version>${project.version}</version>
                 <executions>
                     <execution>
                         <id>serenity-reports</id>

@@ -9,14 +9,13 @@ import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
+import java.nio.file.Files
+
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
 public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specification {
 
     File temporaryDirectory
-
-    @Rule
-    TemporaryFolder temporaryFolder
 
     def issueTracking = Mock(IssueTracking)
     def environmentVariables = new MockEnvironmentVariables()
@@ -27,7 +26,8 @@ public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specifica
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = temporaryFolder.newFolder()
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory.deleteOnExit();
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
         reporter.outputDirectory = outputDirectory;

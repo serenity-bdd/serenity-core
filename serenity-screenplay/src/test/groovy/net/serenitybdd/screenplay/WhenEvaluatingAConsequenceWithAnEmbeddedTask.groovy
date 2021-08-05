@@ -1,8 +1,12 @@
 package net.serenitybdd.screenplay
 
+import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import org.hamcrest.Matchers
 import spock.lang.Specification
+
+import java.nio.file.Files
+
 /**
  * Created by john on 8/06/2016.
  */
@@ -25,6 +29,8 @@ class WhenEvaluatingAConsequenceWithAnEmbeddedTask extends Specification {
 
     def setup() {
         StepEventBus.eventBus.reset()
+        def temporaryDirectory = Files.createTempDirectory("testdata").toFile();
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(temporaryDirectory));
     }
 
     def "you can ask to perform a task before asking the question in a consequence"() {

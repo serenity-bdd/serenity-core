@@ -3,7 +3,6 @@ package net.thucydides.core.reports.html;
 import com.github.rjeschke.txtmark.Configuration;
 import com.google.common.base.Splitter;
 import com.google.inject.Inject;
-import com.google.inject.Key;
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
@@ -13,12 +12,11 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.renderer.Asciidoc;
+import net.thucydides.core.reports.renderer.AsciidocMarkupRenderer;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflection;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
@@ -78,7 +76,7 @@ public class Formatter {
     @Inject
     public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
+        this.asciidocRenderer = new AsciidocMarkupRenderer(); //Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
 
         String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables, "UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
@@ -118,6 +116,9 @@ public class Formatter {
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
+        if (text == null) {
+            return "";
+        }
         if (startsWithParagraphTag(text) && endWithParagraphTag(text)) {
             text = trim(text).substring(3);
             text = text.substring(0, text.length() - 4);

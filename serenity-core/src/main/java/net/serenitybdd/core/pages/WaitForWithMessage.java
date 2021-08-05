@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
@@ -31,9 +30,8 @@ class WaitForWithMessage<T> implements ExpectedCondition<T> {
             return message;
         }
 
-        @NullableDecl
         @Override
-        public T apply(@NullableDecl WebDriver input) {
+        public T apply(WebDriver input) {
             return expectedCondition.apply(input);
         }
     }

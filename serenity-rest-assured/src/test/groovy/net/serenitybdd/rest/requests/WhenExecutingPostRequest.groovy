@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.restassured.RestAssured
-import io.restassured.internal.filter.FormAuthFilter
 import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
 import io.restassured.specification.ResponseSpecification
@@ -20,13 +19,15 @@ import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.post
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import static net.serenitybdd.rest.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
+import static net.serenitybdd.rest.SerenityRest.given
+import static net.serenitybdd.rest.SerenityRest.reset
+import static net.serenitybdd.rest.SerenityRest.when
 
 /**
  * User: YamStranger
@@ -232,7 +233,7 @@ class WhenExecutingPostRequest extends Specification {
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = given().contentType("application/json").content(body).post(url)
+            def result = given().contentType("application/json").body(body).post(url)
         then: "created response should be decorated"
             result instanceof ResponseDecorated
         and: "returned status should be correct"

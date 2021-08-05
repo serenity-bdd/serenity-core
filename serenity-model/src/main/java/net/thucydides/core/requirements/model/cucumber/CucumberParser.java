@@ -3,9 +3,7 @@ package net.thucydides.core.requirements.model.cucumber;
 import com.google.common.base.Splitter;
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.gherkin.FeatureParserException;
-import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin;
 import io.cucumber.core.resource.Resource;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.Messages.Envelope;
 import io.cucumber.messages.Messages.GherkinDocument;
 import io.cucumber.messages.Messages.GherkinDocument.Feature;
@@ -17,6 +15,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.CucumberTagConverter;
+import net.thucydides.core.requirements.model.FeatureBackgroundNarrative;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -27,6 +26,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.lang.System.lineSeparator;
 
@@ -40,10 +41,6 @@ public class CucumberParser {
     private final String encoding;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberParser.class);
-
-    private final static String CUCUMBER_4_FEATURE_LOADER = "cucumber.runtime.model.FeatureLoader";
-    private final static String CUCUMBER_2_FEATURE_LOADER = "cucumber.runtime.model.CucumberFeature";
-
 
     public CucumberParser() {
         this(ConfiguredEnvironment.getEnvironmentVariables());
@@ -76,7 +73,7 @@ public class CucumberParser {
                 return Optional.empty();
             }
             GherkinDocument gherkinDocument = gherkinDocuments.get(0);
-            
+
             String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getCommentsList());
 
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
@@ -84,8 +81,8 @@ public class CucumberParser {
             }
             List<Scenario> scenarioList = gherkinDocument.getFeature().getChildrenList().stream().filter(Feature.FeatureChild::hasScenario).map(Feature.FeatureChild::getScenario).collect(Collectors.toList());
             return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature(),
-                                                    scenarioList,
-                                                    descriptionInComments));
+                    scenarioList,
+                    descriptionInComments));
         } catch (Exception ex) {
             ex.printStackTrace();
             return Optional.empty();
@@ -93,17 +90,22 @@ public class CucumberParser {
     }
 
     private List<GherkinDocument> loadCucumberFeatures(List<String> listOfFiles) {
-        for(String cucumberFile : listOfFiles) {
+        for (String cucumberFile : listOfFiles) {
             searchForCucumberSyntaxErrorsIn(cucumberFile);
         }
-        IdGenerator idGenerator = new IdGenerator.Incrementing();
         List<GherkinDocument> loadedFeatures = new ArrayList<>();
-        boolean includeSource = false;
-        boolean includeAst = true;
-        boolean includePickles = false;
-        List<Envelope> envelopes = Gherkin.fromPaths(listOfFiles, includeSource, includeAst, includePickles, idGenerator).collect(Collectors.toList());
-        List<GherkinDocument> gherkinDocuments = envelopes.stream().filter(Envelope::hasGherkinDocument).map(Envelope::getGherkinDocument).collect(Collectors.toList());
-        for(GherkinDocument gherkinDocument : gherkinDocuments) {
+        List<?> envelopes = getFeatures(listOfFiles)
+                .stream()
+                .flatMap(feature -> StreamSupport.stream(feature.getParseEvents().spliterator(), false))
+                .collect(Collectors.toList());
+
+        List<GherkinDocument> gherkinDocuments = envelopes
+                .stream()
+                .filter(o -> ((Envelope) o).hasGherkinDocument())
+                .map(o -> ((Envelope) o).getGherkinDocument())
+                .collect(Collectors.toList());
+
+        for (GherkinDocument gherkinDocument : gherkinDocuments) {
             if (gherkinDocument.hasFeature()) {
                 loadedFeatures.add(gherkinDocument);
                 LOGGER.debug("Added feature {}", gherkinDocument.getFeature().getName());
@@ -121,9 +123,21 @@ public class CucumberParser {
         Resource cucumberResource = new URIResource(cucumberFilePath);
         try {
             featureParser.parseResource(cucumberResource);
-        } catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             reportAnyCucumberSyntaxErrorsIn(throwable);
         }
+    }
+
+    private List<io.cucumber.core.gherkin.Feature> getFeatures(List<String> paths) {
+        FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
+        List<io.cucumber.core.gherkin.Feature> results = new ArrayList<>();
+        paths.forEach(path -> {
+            Path cucumberFilePath = new File(path).toPath();
+            Resource cucumberResource = new URIResource(cucumberFilePath);
+            Optional<io.cucumber.core.gherkin.Feature> maybeFeature = featureParser.parseResource(cucumberResource);
+            maybeFeature.ifPresent(results::add);
+        });
+        return results;
     }
 
     private void reportAnyCucumberSyntaxErrorsIn(Throwable gherkinError) {
@@ -181,6 +195,28 @@ public class CucumberParser {
         // Scenario Names
         List<String> scenarios = feature.getChildrenList().stream().filter(FeatureChild::hasScenario).map(FeatureChild::getScenario).map(Scenario::getName).collect(Collectors.toList());
 
+        FeatureBackgroundNarrative background = null;
+
+        if (backgroundChildIn(feature.getChildrenList()).isPresent()) {
+            background = backgroundElementFrom(backgroundChildIn(feature.getChildrenList()).get().getBackground());
+        }
+
+        // TODO: Find all the rules in the feature children and collect the backgrounds
+        Map<String, FeatureBackgroundNarrative> ruleBackgrounds = new HashMap<>();
+        rulesIn(feature.getChildrenList())
+                .forEach(
+                        rule -> {
+                            Optional<Feature.Background> ruleBackground = rule.getChildrenList()
+                                                                         .stream()
+                                                                         .filter(child -> child.hasBackground())
+                                                                         .map(child -> child.getBackground())
+                                                                         .findFirst();
+                            if (ruleBackground.isPresent()){
+                                ruleBackgrounds.put(rule.getName(),  backgroundElementFrom(ruleBackground.get()));
+                            }
+                        }
+                );
+
         return Optional.of(new Narrative(Optional.ofNullable(title),
                 Optional.ofNullable(id),
                 Optional.ofNullable(cardNumber),
@@ -189,14 +225,31 @@ public class CucumberParser {
                 text != null ? text : "",
                 new ArrayList<>(requirementTags),
                 scenarios,
-                scenarioTags));
+                scenarioTags)
+                .withBackground(background)
+                .withRuleBackgrounds(ruleBackgrounds));
+    }
 
+    private Stream<FeatureChild.Rule> rulesIn(List<FeatureChild> childrenList) {
+        return childrenList.stream()
+                .filter(child -> child.getRule() != null)
+                .map(FeatureChild::getRule);
+    }
+
+    private Optional<FeatureChild> backgroundChildIn(List<FeatureChild> featureChildren) {
+        return featureChildren.stream()
+                .filter(FeatureChild::hasBackground)
+                .findFirst();
+    }
+
+    private FeatureBackgroundNarrative backgroundElementFrom(Feature.Background background) {
+        return new FeatureBackgroundNarrative(background.getName(), background.getDescription());
     }
 
     private Collection<TestTag> tagsFrom(Scenario scenarioDefinition) {
         if (scenarioDefinition.getExamplesCount() == 0) {
             return asSerenityTags(scenarioDefinition.getTagsList());
-        } else  {
+        } else {
             Set<TestTag> outlineTags = new HashSet<>(asSerenityTags(scenarioDefinition.getTagsList()));
             scenarioDefinition.getExamplesList().forEach(
                     examples -> outlineTags.addAll(asSerenityTags(examples.getTagsList()))
@@ -210,6 +263,7 @@ public class CucumberParser {
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
     }
+
     private String descriptionWithScenarioReferencesFrom(Feature feature) {
         if (feature.getDescription() == null) {
             return "";

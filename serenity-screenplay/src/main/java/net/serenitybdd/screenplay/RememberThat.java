@@ -5,15 +5,13 @@ import net.serenitybdd.markers.IsSilent;
 
 /**
  * A convenience method to allow an actor to remember things when performing tasks.
- * <p></p>
- * <p>An actor can remember values, e.g.
+ * An actor can remember values, e.g.
  * <pre>
  *     <code>
  *         actor.attemptsTo(RememberThat.theValueOf("favorite color").is("blue"))"
  *     </code>
  * </pre>
- * </p>
- * <p>
+ *
  * An actor can also remember the answers to questions, e.g.
  * <pre>
  *     <code>

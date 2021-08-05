@@ -26,7 +26,6 @@ public class ParameterizedTestsOutcomeAggregator {
 
         for (TestOutcome testOutcome : allOutcomes) {
             final String normalizedMethodName = baseMethodName(testOutcome);
-            System.out.println("BBB:AddingTestOutcome--" + Thread.currentThread().getName() + "--" + testOutcome + " " + normalizedMethodName);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
@@ -141,12 +140,10 @@ public class ParameterizedTestsOutcomeAggregator {
 
     public static List<TestOutcome> getTestOutcomesForAllParameterSets() {
         List<TestOutcome> allTestOutcomes = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        System.out.println("BBB:getTestOutcomesForAllParameterSets " + allTestOutcomes.size());
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
             //if (!testOutcomes.contains(testOutcome)) {
                 testOutcomes.add(testOutcome);
-                System.out.println("BBB:addTestOutcome " + testOutcome);
             //}
         }
         return testOutcomes;

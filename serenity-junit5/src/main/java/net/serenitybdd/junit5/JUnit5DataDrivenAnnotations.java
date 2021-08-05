@@ -53,7 +53,6 @@ public class JUnit5DataDrivenAnnotations {
         List<Method> allMethods = findTestDataMethods();
         Map<String,DataTable> dataTables = new HashMap<>();
         for(Method testDataMethod : allMethods) {
-            System.out.println("XXXCheck method " + testDataMethod);
             if(isAValueSourceAnnotatedMethod(testDataMethod)) {
                 fillDataTablesFromValueSource(dataTables, testDataMethod);
             }

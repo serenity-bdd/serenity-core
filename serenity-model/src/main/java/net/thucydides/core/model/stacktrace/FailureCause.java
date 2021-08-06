@@ -257,4 +257,8 @@ public class FailureCause {
         }
         return false;
     }
+
+    public Throwable asException() {
+        return getOriginalCause();
+    }
 }

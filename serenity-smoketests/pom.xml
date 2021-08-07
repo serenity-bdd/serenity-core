@@ -49,6 +49,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-saucelabs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>
@@ -91,15 +96,6 @@
                     <parallel>classes</parallel>
                     <threadCount>${parallel.tests}</threadCount>
                     <forkCount>${parallel.tests}</forkCount>
-                    <!--<systemPropertyVariables>-->
-                        <!--<browserstack.url>${browserstack.url}</browserstack.url>-->
-                        <!--<browserstack.os>${browserstack.os}</browserstack.os>-->
-                        <!--<browserstack.os_version>${browserstack.os_version}</browserstack.os_version>-->
-                        <!--<browserstack.browser>${browserstack.browserName}</browserstack.browser>-->
-                        <!--<browserstack.browserName>${browserstack.browserName}</browserstack.browserName>-->
-                        <!--<browserstack.version>${browserstack.version}</browserstack.version>-->
-                        <!--<webdriver.driver>${webdriver.driver}</webdriver.driver>-->
-                    <!--</systemPropertyVariables>-->
                 </configuration>
                 <executions>
                     <execution>

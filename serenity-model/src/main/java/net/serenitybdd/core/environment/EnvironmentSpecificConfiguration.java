@@ -1,5 +1,6 @@
 package net.serenitybdd.core.environment;
 
+import com.google.common.base.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -24,18 +25,30 @@ public class EnvironmentSpecificConfiguration {
 
         Properties propertiesWithPrefix = new Properties();
         propertyNames.forEach(
-                propertyName -> {
-                    getOptionalProperty(propertyName).ifPresent(
-                            propertyValue -> propertiesWithPrefix.setProperty(stripEnvironmentPrefixFrom(propertyName), propertyValue)
-                    );
-                }
+                propertyName ->
+                        getOptionalProperty(propertyName).ifPresent(
+                                propertyValue -> propertiesWithPrefix.setProperty(stripEnvironmentPrefixFrom(propertyName), propertyValue)
+                        )
         );
         return propertiesWithPrefix;
     }
 
     private boolean propertyMatchesEnvironment(String key) {
-        String environment = environmentVariables.getProperty("environment");
-        return (key.startsWith("environments." + environment + ".") || !isEnvironmentSpecific(key));
+        return activeEnvironments().stream()
+                .anyMatch(
+                        environment -> (key.startsWith("environments." + environment + ".") || !isEnvironmentSpecific(key))
+                );
+    }
+
+    private List<String> activeEnvironments() {
+        return activeEnvironmentsIn(environmentVariables);
+    }
+
+    private static List<String> activeEnvironmentsIn(EnvironmentVariables environmentVariables) {
+        return Splitter.on(",")
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(environmentVariables.getProperty("environment",""));
     }
 
     private boolean isEnvironmentSpecific(String key) {
@@ -49,7 +62,7 @@ public class EnvironmentSpecificConfiguration {
     }
 
     private boolean propertyHasPrefix(String key, String prefix) {
-        String regexPrefix = prefix.replaceAll("\\.","\\\\.");
+        String regexPrefix = prefix.replaceAll("\\.", "\\\\.");
         Pattern propertyWithPrefix = Pattern.compile("environments\\.([^.]*)\\." + regexPrefix + "(.*)");
         return key.startsWith(prefix) || propertyWithPrefix.matcher(key).matches();
     }
@@ -82,7 +95,12 @@ public class EnvironmentSpecificConfiguration {
     }
 
     private Function<String, String> propertyForADefinedEnvironment = property -> {
-        String environmentProperty = environmentVariables.getProperty("environments." + getDefinedEnvironment(environmentVariables) + "." + property);
+        String environmentProperty = null;
+
+        for(String environment : activeEnvironments()) {
+            environmentProperty = override(environmentProperty, environmentVariables.getProperty("environments." + environment + "." + property));
+        }
+
         if (environmentProperty == null) {
             environmentProperty = propertyForAllEnvironments(property);
         }
@@ -90,17 +108,20 @@ public class EnvironmentSpecificConfiguration {
         return (environmentProperty == null) ? defaultProperty.apply(property) : environmentProperty;
     };
 
+    private String override(String currentValue, String newValue) {
+        if ((newValue != null) && (!newValue.isEmpty())) {
+            return newValue;
+        } else {
+            return currentValue;
+        }
+    }
+
     private String propertyForAllEnvironments(String propertyName) {
         return environmentVariables.getProperty("environments.all." + propertyName);
     }
 
     private String propertyForDefaultEnvironment(String propertyName) {
         return environmentVariables.getProperty("environments.default." + propertyName);
-    }
-
-
-    private static String getDefinedEnvironment(EnvironmentVariables environmentVariables) {
-        return environmentVariables.getProperty("environment");
     }
 
     public EnvironmentSpecificConfiguration(EnvironmentVariables environmentVariables) {
@@ -112,11 +133,11 @@ public class EnvironmentSpecificConfiguration {
 
         return getOptionalProperty(propertyName)
                 .orElseThrow(
-                () -> new UndefinedEnvironmentVariableException("Environment '"
+                        () -> new UndefinedEnvironmentVariableException("Environment '"
                                 + propertyName
                                 + "' property undefined for environment '"
-                                + getDefinedEnvironment(environmentVariables) + "'")
-        );
+                                + activeEnvironmentsIn(environmentVariables) + "'")
+                );
     }
 
     public Optional<String> getOptionalProperty(final ThucydidesSystemProperty propertyName) {
@@ -128,18 +149,21 @@ public class EnvironmentSpecificConfiguration {
                 () -> new UndefinedEnvironmentVariableException("Environment '"
                         + propertyName
                         + "' property undefined for environment '"
-                        + getDefinedEnvironment(environmentVariables) + "'"));
+                        + activeEnvironmentsIn(environmentVariables) + "'"));
     }
 
     public Integer getIntegerProperty(final ThucydidesSystemProperty propertyName) {
-        return getIntegerProperty(propertyName);
+        return Integer.parseInt(getProperty(propertyName));
     }
+
     public Optional<String> getOptionalProperty(String... propertyNames) {
 
-        String propertyValue =  null;
-        for(String propertyName : propertyNames) {
+        String propertyValue = null;
+        for (String propertyName : propertyNames) {
             propertyValue = getPropertyValue(propertyName);
-            if (propertyValue !=  null) { break; }
+            if (propertyValue != null) {
+                break;
+            }
         }
 
         if (propertyValue == null) {
@@ -151,13 +175,15 @@ public class EnvironmentSpecificConfiguration {
     private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
 
     private String substituteProperties(String propertyValue) {
-        if (propertyValue == null) { return propertyValue; }
+        if (propertyValue == null) {
+            return propertyValue;
+        }
 
         Matcher matcher = VARIABLE_EXPRESSION_PATTERN.matcher(propertyValue);
         while (matcher.find()) {
-            String nestedProperty = matcher.group().substring(2,matcher.group().length() - 1);
+            String nestedProperty = matcher.group().substring(2, matcher.group().length() - 1);
             String value = Optional.ofNullable(getPropertyValue(nestedProperty))
-                                   .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty));
+                    .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty));
             if (value != null) {
                 propertyValue = matcher.replaceFirst(value);
                 matcher.reset(propertyValue);
@@ -213,7 +239,10 @@ public class EnvironmentSpecificConfiguration {
     }
 
     private static boolean specifiedEnvironmentNotConfiguredIn(EnvironmentVariables environmentVariables) {
-        String environment = getDefinedEnvironment(environmentVariables);
-        return ((environment != null) && (environmentVariables.getPropertiesWithPrefix("environments." + environment + ".")).isEmpty());
+        List<String> activeEnvironments = activeEnvironmentsIn(environmentVariables);
+        return activeEnvironments.stream().allMatch(
+                environment -> environmentVariables.getPropertiesWithPrefix("environments." + environment + ".").isEmpty()
+
+        );
     }
 }

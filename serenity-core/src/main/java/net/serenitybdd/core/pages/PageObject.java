@@ -363,6 +363,10 @@ public abstract class PageObject {
         return waitForRenderedElementsToDisappear(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
+    public PageObject waitForAbsenceOf(By byLocator) {
+        return waitForRenderedElementsToDisappear(byLocator);
+    }
+
     /**
      * Waits for a given text to appear anywhere on the page.
      */

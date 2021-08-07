@@ -61,11 +61,12 @@ public class FirefoxProfileEnhancer {
     }
 
     public void addPreferences(FirefoxProfile profile) {
-        Optional<String> preferences = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
+        Optional<String> preferences
+                = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                  .getOptionalProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
         Optional<String> driverOptions
                 = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty(ThucydidesSystemProperty.DRIVER_OPTIONS);
+                                                  .getOptionalProperty(ThucydidesSystemProperty.DRIVER_OPTIONS);
 
         preferences.ifPresent(
                 prefs -> applyPreferences(profile, prefs)

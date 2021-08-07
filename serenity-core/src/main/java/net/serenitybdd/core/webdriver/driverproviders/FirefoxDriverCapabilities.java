@@ -3,7 +3,6 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.FilePathParser;
@@ -66,7 +65,8 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         firefoxPreferences.forEach(
                 (key, value) -> {
                     if (value instanceof String) {
-                        firefoxOptions.addPreference(key, (String) value);
+                        String instantiatedValue = FilePathParser.forEnvironmentVariables(environmentVariables).getInstanciatedPath(value.toString());
+                        firefoxOptions.addPreference(key, instantiatedValue);
                     } else if (value instanceof Boolean) {
                         firefoxOptions.addPreference(key, (Boolean) value);
                     } else if (value instanceof Integer) {
@@ -114,27 +114,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         }
 
         return new DesiredCapabilities(firefoxOptions);
-
-//        options
-//        DesiredCapabilities capabilities = new DesiredCapabilities(new FirefoxOptions());
-//
-//        capabilities.setCapability("firefox_profile", buildFirefoxProfile());
-//        capabilities.acceptInsecureCerts();
-//
-//        updateBinaryIfSpecified();
-//
-//        String   = (!options.isEmpty()) ? options : ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables,"");
-//        if (!firefoxOptions.isEmpty()) {
-//            capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
-//        } else if (!geckoOptions.isEmpty()) {
-//            capabilities.setCapability("moz:firefoxOptions", CapabilitiesConverter.optionsToMap(geckoOptions));
-//        }
-//
-//        addProxyConfigurationTo(capabilities);
-//
-//        addUnhandledPromptBehaviourTo(capabilities);
-//
-//        return capabilities;
     }
 
     private List<String> listOfArgumentsIn(String argumentsValue) {
@@ -142,61 +121,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             argumentsValue = argumentsValue.substring(1, argumentsValue.lastIndexOf("]"));
         }
         return Splitter.on(",").trimResults().splitToList(argumentsValue);
-    }
-
-
-    private void addUnhandledPromptBehaviourTo(DesiredCapabilities capabilities) {
-        String unexpectedAlertBehavior = SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR.from(environmentVariables);
-
-        if (unexpectedAlertBehavior != null) {
-            capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
-                                       UnexpectedAlertBehaviour.fromString(unexpectedAlertBehavior));
-        }
-    }
-
-    private void updateBinaryIfSpecified() {
-
-        File executable = DriverServiceExecutable.called("geckodriver")
-                .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
-                .usingEnvironmentVariables(environmentVariables)
-                .reportMissingBinary()
-                .downloadableFrom("https://github.com/mozilla/geckodriver/releases")
-                .asAFile();
-
-        if (executable != null && executable.exists()) {
-            System.setProperty("webdriver.gecko.driver", executable.getAbsolutePath());
-        }
-    }
-
-
-    private void addProxyConfigurationTo(DesiredCapabilities capabilities) {
-
-        String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
-        String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
-        String sslProxy = ThucydidesSystemProperty.SERENITY_PROXY_SSL.from(environmentVariables, proxyUrl);
-        String sslProxyPort = ThucydidesSystemProperty.SERENITY_PROXY_SSL_PORT.from(environmentVariables);
-        String proxyType = ThucydidesSystemProperty.SERENITY_PROXY_TYPE.from(environmentVariables, "MANUAL");
-
-        if ((proxyUrl  != null) && (!proxyUrl.isEmpty())) {
-            JsonObject json = new JsonObject();
-            if (StringUtils.isNotEmpty(proxyType)) {
-                json.addProperty("proxyType", proxyType);
-            }
-            if (StringUtils.isNotEmpty(proxyUrl)) {
-                json.addProperty("httpProxy", proxyUrl);
-            }
-            if (StringUtils.isNotEmpty(proxyPort)) {
-                json.addProperty("httpProxyPort", proxyPort);
-            }
-            if (StringUtils.isNotEmpty(sslProxy)) {
-                json.addProperty("sslProxy", sslProxy);
-            }
-            if (StringUtils.isNotEmpty(sslProxyPort)) {
-                json.addProperty("sslProxyPort", sslProxyPort);
-            }
-            capabilities.setCapability("proxy", json);
-        }
-
     }
 
     private FirefoxProfile buildFirefoxProfile() {

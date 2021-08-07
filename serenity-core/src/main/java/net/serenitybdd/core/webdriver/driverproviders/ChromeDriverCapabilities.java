@@ -1,7 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
@@ -55,9 +57,15 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         /*
          * This is the only way to set the Chrome _browser_ binary.
          */
-        if (WEBDRIVER_CHROME_BINARY.isDefinedIn(environmentVariables)) {
-            options.setBinary(WEBDRIVER_CHROME_BINARY.from(environmentVariables));
+        String chromeBinary =
+                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(CHROME_BINARY)
+                .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(WEBDRIVER_CHROME_BINARY).orElse(null));
+
+        if (chromeBinary != null) {
+            String instantiatedBinaryPath = FilePathParser.forEnvironmentVariables(environmentVariables).getInstanciatedPath(chromeBinary);
+            options.setBinary(instantiatedBinaryPath);
         }
+
         addEnvironmentSwitchesTo(options);
         addRuntimeOptionsTo(options);
         addPreferencesTo(options);

@@ -94,9 +94,14 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_CHROME_DRIVER,
 
     /**
-     * Path to the Chrome binary, if it is not on the system path.
+     * Old property for chrome.binary
      */
     WEBDRIVER_CHROME_BINARY,
+
+    /**
+     * Path to the Chrome binary, if it is not on the system path.
+     */
+    CHROME_BINARY,
 
     @Deprecated
     THUCYDIDES_PROJECT_KEY,

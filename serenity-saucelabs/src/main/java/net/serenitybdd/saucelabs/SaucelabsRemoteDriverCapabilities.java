@@ -93,13 +93,9 @@ public class SaucelabsRemoteDriverCapabilities {
             Optional<String> guessedTestName;
             Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
 
-            boolean sessionPerScenario = Arrays.asList("scenario", "example")
-                    .contains(ThucydidesSystemProperty.SERENITY_RESTART_BROWSER_FOR_EACH.from(environmentVariables));
-
-            guessedTestName = latestOutcome.map(testOutcome -> {
-                // Add scenario name to session name only if browser session is restarted for every scenario
-                return Optional.of(sessionPerScenario ? testOutcome.getCompleteName() : testOutcome.getStoryTitle());
-            }).orElseGet(RemoteTestName::fromCurrentTest);
+            guessedTestName = latestOutcome.map(
+                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+            ).orElseGet(RemoteTestName::fromCurrentTest);
 
             guessedTestName.ifPresent(
                     name -> capabilities.setCapability("name", name)

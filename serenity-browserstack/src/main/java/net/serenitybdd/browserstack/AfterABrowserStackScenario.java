@@ -41,4 +41,9 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
     }
 
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return !EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getPropertiesWithPrefix("browserstack").isEmpty();
+    }
+
 }

@@ -39,4 +39,11 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
         String publicUrl = sauceLabsTestSession.getTestLink();
         testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
     }
+
+    @Override
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("saucelabs.platformName")
+                .isPresent();
+    }
 }

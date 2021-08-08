@@ -34,10 +34,12 @@ public class EnvironmentSpecificConfiguration {
     }
 
     private boolean propertyMatchesEnvironment(String key) {
-        return activeEnvironments().stream()
-                .anyMatch(
-                        environment -> (key.startsWith("environments." + environment + ".") || !isEnvironmentSpecific(key))
-                );
+        if (!isEnvironmentSpecific(key)) {
+            return true;
+        }
+        return activeEnvironments().stream().anyMatch(
+                environment -> (key.startsWith("environments." + environment + "."))
+        );
     }
 
     private List<String> activeEnvironments() {

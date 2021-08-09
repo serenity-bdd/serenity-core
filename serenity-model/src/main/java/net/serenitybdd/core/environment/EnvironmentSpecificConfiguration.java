@@ -174,6 +174,10 @@ public class EnvironmentSpecificConfiguration {
         return Optional.ofNullable(substituteProperties(propertyValue));
     }
 
+    public boolean propertyGroupIsDefinedFor(String propertyGroupName) {
+        return !this.getPropertiesWithPrefix(propertyGroupName).isEmpty();
+    }
+
     private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
 
     private String substituteProperties(String propertyValue) {

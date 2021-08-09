@@ -18,14 +18,14 @@ import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runners.model.InitializationError;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -33,6 +33,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,47 +50,33 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     MockEnvironmentVariables environmentVariables;
 
-
     WebDriverFactory webDriverFactory;
 
-    @Before
+    @BeforeEach
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
     }
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
 
-    /*@Rule
-    public SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule();
-
-    @Rule
-    public QuietThucydidesLoggingRule quietThucydidesLoggingRule = new QuietThucydidesLoggingRule();*/
-
+    @TempDir
+    Path anotherTempDir;
 
     Configuration configuration;
 
-    /*@Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
-        environmentVariables = new MockEnvironmentVariables();
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
-    }*/
-
-   /* @Test //TODO clarify
-    public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
+    @Test
+    public void the_test_runner_records_the_steps_as_they_are_executed() {
 
         runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(5));
 
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSource").getTestSteps().size(), is(2));
-        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSourceIntegers").getTestSteps().size(), is(2));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSource").getTestSteps().size(), is(1));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("withValueSourceIntegers").getTestSteps().size(), is(1));
 
-    }*/
+    }
 
     private void runTestForClass(Class testClass){
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
@@ -114,14 +101,14 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertThat(executedScenarios.size(), is(4));
     }
 
-    /*@Test //TODO clarify
+    /*@Test
     public void a_data_driven_test_driver_should_aggregate_test_outcomes() throws Throwable {
 
         runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
 
         List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
         assertThat(aggregatedScenarios.size(), is(5));
-        
+
         List<TestStep> testSteps = aggregatedScenarios.get(0).getTestSteps();
         assertThat(aggregatedScenarios.get(0).getStepCount(), is(2));
         assertThat(aggregatedScenarios.get(1).getStepCount(), is(2));
@@ -227,7 +214,11 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+
+        //File outputDirectory = anotherTempDir.newFolder("serenity");
+        //File letters = new File(anotherTempDir, "letters.txt");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
@@ -239,7 +230,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        //File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SampleCSVDataDrivenScenario.class);
@@ -287,7 +279,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        //File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SampleCSVDataDrivenScenario.class);
@@ -324,7 +317,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
@@ -341,8 +335,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     @Test
     public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable {
-
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndASkippedTestSample.class);
@@ -360,7 +354,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
@@ -380,7 +375,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void when_a_parameterized_test_fails_outside_a_step_a_failure_should_be_recorded() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SampleDataDrivenScenarioWithExternalFailure.class);
@@ -401,7 +397,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void when_a_step_fails_with_an_error_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndABreakingTestSample.class);
@@ -420,7 +417,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void when_test_data_is_provided_for_a_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataSample.class);
@@ -461,7 +459,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataSample.class);
@@ -486,7 +485,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable {
 
-        File outputDirectory = tempFolder.newFolder("serenity");
+        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SimpleSuccessfulParameterizedTestSample.class);

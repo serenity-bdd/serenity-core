@@ -20,15 +20,13 @@ import java.util.Map;
 public class SauceLabsTestSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SauceLabsTestSession.class);
-    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.%s.saucelabs.com/rest/v1/%s/jobs/%s";
     private static final String REST_API_URL = "https://%s:%s@saucelabs.com/rest/v1/USERNAME/jobs/%s";
-    private static final String TEST_LINK_TEMPLATE = "https://%s.saucelabs.com/tests/%s";
     private static final String APP_TEST_LINK_TEMPLATE = "https://app.saucelabs.com/tests/%s";
-                                                       // https://app.saucelabs.com/tests/b684d7e97b684b268d827752f0ca0200#11
-    private final String sauceLabsUsername, sauceLabsKey, sessionId, datacenter;
+    private final String sauceLabsUsername;
+    private final String sauceLabsKey;
+    private final String sessionId;
 
-    public SauceLabsTestSession(String datacenter, String sauceLabsUsername, String sauceLabsKey, String sessionId) {
-        this.datacenter = datacenter;
+    public SauceLabsTestSession(String sauceLabsUsername, String sauceLabsKey, String sessionId) {
         this.sauceLabsUsername = sauceLabsUsername;
         this.sauceLabsKey = sauceLabsKey;
         this.sessionId = sessionId;
@@ -50,23 +48,12 @@ public class SauceLabsTestSession {
         if (sauceLabsKey != null) {
             return noLoginLink();
         } else {
-            return String.format(APP_TEST_LINK_TEMPLATE, datacenter, sessionId);
+            return String.format(APP_TEST_LINK_TEMPLATE, sessionId);
         }
     }
 
     private boolean testPassed(TestOutcome outcome) {
         return latestResultOf(outcome) == TestResult.SUCCESS;
-    }
-
-    private URI getSessionUri() {
-        URI uri = null;
-        try {
-            uri = new URI(String.format(BROWSER_SESSION_URL, sauceLabsUsername, sauceLabsKey, datacenter, sauceLabsUsername, sessionId));
-        } catch (URISyntaxException e) {
-            LOGGER.error("Failed to parse SauceLabs API url.", e);
-        }
-
-        return uri;
     }
 
     private URI getRESTAPIUri() {
@@ -90,7 +77,6 @@ public class SauceLabsTestSession {
 
     private String noLoginLink() {
         String authCode = generateHMACFor(sauceLabsUsername + ":" + sauceLabsKey, sessionId);
-//        return String.format(TEST_LINK_TEMPLATE, datacenter, sessionId) + "?auth=" + authCode;
         return String.format(APP_TEST_LINK_TEMPLATE, sessionId) + "?auth=" + authCode;
     }
 

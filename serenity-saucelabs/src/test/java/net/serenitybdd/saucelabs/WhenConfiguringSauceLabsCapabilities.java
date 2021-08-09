@@ -96,13 +96,12 @@ public class WhenConfiguringSauceLabsCapabilities {
         MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
         // Session name will be constructed from class name and method name, separated by a colon
-        assertThat(saucelabsOpts.getCapability("name")).isEqualTo("When configuring sauce labs capabilities:The session name should be taken from the name of the test");
+        assertThat(saucelabsOpts.getCapability("name")).isEqualTo("When configuring sauce labs capabilities: The session name should be taken from the name of the test");
     }
 
     @Test
     public void shouldBeAbleToObtainLinkToSauceLabsSessionVideo() {
-        SauceLabsTestSession testSession = new SauceLabsTestSession("eu-central-1", "user", "key", "1234");
-//        assertThat(testSession.getTestLink()).isEqualTo("https://eu-central-1.saucelabs.com/tests/1234?auth=fd3cb52fbcc6d14b40f64c978a06c18b");
+        SauceLabsTestSession testSession = new SauceLabsTestSession("user", "key", "1234");
         assertThat(testSession.getTestLink()).isEqualTo("https://app.saucelabs.com/tests/1234?auth=fd3cb52fbcc6d14b40f64c978a06c18b");
     }
 }

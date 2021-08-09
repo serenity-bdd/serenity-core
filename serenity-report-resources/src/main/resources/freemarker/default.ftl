@@ -4,7 +4,6 @@
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
     <#include "libraries/favicon.ftl">
-
     <#include "libraries/common.ftl">
     <#include "libraries/jquery-ui.ftl">
     <#include "libraries/datatables.ftl">
@@ -197,13 +196,6 @@
                                 </div>
                             </#if>
                         </td>
-                        <#if (testOutcome.videoLink)??>
-                        <td valign="top">
-                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
-                                                                                    src="images/video.png" width="25"
-                                                                                    height="25" alt="Video"/></a>
-                        </td>
-                        </#if>
                         <#if (testOutcome.externalLink)?? && (testOutcome.externalLink.url)??>
                             <td valign="top">
                                 <a href="${testOutcome.externalLink.url}" class="tag"

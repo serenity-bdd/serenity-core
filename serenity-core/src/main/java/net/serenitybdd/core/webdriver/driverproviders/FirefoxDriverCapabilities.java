@@ -1,9 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
-import com.google.gson.JsonObject;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -11,27 +9,20 @@ import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_UNEXPECTED_ALERT_BEHAVIOUR;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 /**
  * Firefox profile preferences are configured in firefox.preferences.* variables
- *
  */
 public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
@@ -40,13 +31,13 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     private final String options;
     private ProfilesIni allProfiles;
 
-    public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables){
+    public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.firefoxProfileEnhancer = new FirefoxProfileEnhancer(environmentVariables);
         this.options = "";
     }
 
-    public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables, String options){
+    public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables, String options) {
         this.environmentVariables = environmentVariables;
         this.firefoxProfileEnhancer = new FirefoxProfileEnhancer(environmentVariables);
         this.options = options;
@@ -61,7 +52,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         // Add preferences from firefox.preferences (but don't add them to the overall capabilities
         //
         firefoxCapabilities.remove("preferences");
-        Map<String, Object> firefoxPreferences =  BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables);
+        Map<String, Object> firefoxPreferences = BrowserPreferences.startingWith("firefox.preferences.").from(environmentVariables);
         firefoxPreferences.forEach(
                 (key, value) -> {
                     if (value instanceof String) {
@@ -80,7 +71,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         //
         Object firefoxArguments = firefoxCapabilities.remove("arguments");
         if (firefoxArguments instanceof List) {
-            List<String> argValues = ((List<?>) firefoxArguments).stream().map(value -> value.toString()).collect(Collectors.toList());
+            List<String> argValues = ((List<?>) firefoxArguments).stream().map(Object::toString).collect(Collectors.toList());
             firefoxOptions.addArguments(argValues);
         } else if (firefoxArguments != null) {
             firefoxOptions.addArguments(listOfArgumentsIn(firefoxArguments.toString()));
@@ -88,9 +79,9 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
         firefoxCapabilities.forEach(
                 (key, value) -> {
-                  if (!key.startsWith("preferences.")) {
-                      firefoxOptions.setCapability(key, value);
-                  }
+                    if (!key.startsWith("preferences.")) {
+                        firefoxOptions.setCapability(key, value);
+                    }
                 }
         );
 
@@ -195,7 +186,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             profile = Serenity.getFirefoxProfile();
         } else {
             profile = new FirefoxProfile();
-            profile.setPreference("network.proxy.socks_port",9999);
+            profile.setPreference("network.proxy.socks_port", 9999);
             profile.setAlwaysLoadNoFocusLib(true);
         }
         return profile;

@@ -42,8 +42,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
 
-        String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
-        capabilities.setCapability("chrome.switches", chromeSwitches);
+//        String switches = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(CHROME_SWITCHES);
+//        capabilities.setCapability("chrome.switches", switches);
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);
         AddLoggingPreferences.from(environmentVariables).to(capabilities);
@@ -108,14 +108,14 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addEnvironmentSwitchesTo(ChromeOptions options) {
 
-        String chromeSwitches = ThucydidesSystemProperty.CHROME_SWITCHES.from(environmentVariables);
+        List<String> arguments = DriverArgs.fromProperty(ThucydidesSystemProperty.CHROME_SWITCHES).configuredIn(environmentVariables);
 
-        if (StringUtils.isNotEmpty(chromeSwitches)) {
-            List<String> arguments = new ArrayList<>(new OptionsSplitter().split(chromeSwitches));
+        if (!arguments.isEmpty()) {
             options.addArguments(arguments);
         }
 
-        if (HEADLESS_MODE.isDefinedIn(environmentVariables) && HEADLESS_MODE.booleanFrom(environmentVariables, false)) {
+        Optional<String> headless = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(HEADLESS_MODE);
+        if (headless.isPresent() && Boolean.parseBoolean(headless.get())) {
             options.addArguments("--headless");
         }
     }
@@ -153,6 +153,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         Map<String, Object> chromeExperimentalOptions = BrowserPreferences.startingWith("chrome_experimental_options.")
                                                                          .from(environmentVariables);
 
+        chromeExperimentalOptions.putAll(BrowserPreferences.startingWith("chrome.experimental_options.")
+                                                           .from(environmentVariables));
         chromeExperimentalOptions.keySet().forEach(
                 key -> {
                     Object value = chromeExperimentalOptions.get(key);

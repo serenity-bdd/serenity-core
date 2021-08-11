@@ -54,9 +54,13 @@ public class FeatureFileScenarioOutcomes {
         return new FeatureFileScenarioOutcomes(requirement);
     }
 
+    private String normalizedFormOf(String path) {
+        return path.replace("\\","/");
+    }
     public List<ScenarioOutcome> forOutcomesIn(RequirementsOutcomes requirementsOutcomes) {
         CucumberParser parser = new CucumberParser();
-        Optional<AnnotatedFeature> feature = parser.loadFeature(pathFromResourceOnClasspath(requirement.getPath()));
+        Optional<AnnotatedFeature> feature
+                = parser.loadFeature(pathFromResourceOnClasspath(normalizedFormOf(requirement.getPath())));
 
         if (!feature.isPresent()) {
             return Collections.emptyList();

@@ -25,10 +25,10 @@ class WhenPrintingARequirementTree extends Specification {
         when:
             def printedRequirements = RequirementTree.withRequirements(requirements).toString()
         then:
-        printedRequirements == """REQUIREMENTS:
+        normalized(printedRequirements) == normalized("""REQUIREMENTS:
     - capability : fruit {id: fruit, displayName: 'fruit', path: , parent: 'null'}
     - capability : veges {id: veges, displayName: 'veges', path: , parent: 'null'}
-"""
+""")
     }
 
     def "a nested  list of requirements"() {
@@ -43,14 +43,16 @@ class WhenPrintingARequirementTree extends Specification {
         when:
         def printedRequirements = RequirementTree.withRequirements(requirements).toString()
         then:
-        printedRequirements == """REQUIREMENTS:
+        normalized(printedRequirements) == normalized("""REQUIREMENTS:
     - capability : fruit {id: fruit, displayName: 'fruit', path: , parent: 'null'}
         - feature : apple {id: apple, displayName: 'apple', path: , parent: 'null'}
         - feature : pear {id: pear, displayName: 'pear', path: , parent: 'null'}
     - capability : veges {id: veges, displayName: 'veges', path: , parent: 'null'}
         - feature : cucumber {id: cucumber, displayName: 'cucumber', path: , parent: 'null'}
-"""
+""")
     }
-
+    def normalized(String text) {
+        return text.replaceAll("\\n","").replaceAll("\\r","")
+    }
 }
 

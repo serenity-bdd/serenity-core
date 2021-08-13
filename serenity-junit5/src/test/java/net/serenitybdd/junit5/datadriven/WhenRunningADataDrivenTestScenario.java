@@ -334,9 +334,9 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     }
 
     @Test
-    public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable {
+    public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() {
+
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndASkippedTestSample.class);
@@ -352,10 +352,9 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
 
     @Test
-    public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() throws Throwable {
+    public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
@@ -376,7 +375,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void when_a_parameterized_test_fails_outside_a_step_a_failure_should_be_recorded() throws Throwable {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SampleDataDrivenScenarioWithExternalFailure.class);
@@ -398,7 +396,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void when_a_step_fails_with_an_error_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataAndABreakingTestSample.class);

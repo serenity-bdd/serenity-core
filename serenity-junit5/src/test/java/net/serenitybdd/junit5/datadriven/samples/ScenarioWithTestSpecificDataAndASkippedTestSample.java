@@ -1,15 +1,18 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
 
+import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.samples.SampleScenarioSteps;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
 
+@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
 public class ScenarioWithTestSpecificDataAndASkippedTestSample {
 
     @Managed(driver = "htmlunit")

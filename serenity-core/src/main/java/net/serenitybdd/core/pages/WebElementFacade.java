@@ -148,9 +148,9 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
 
     boolean containsElements(String xpathOrCssSelector);
 
-    void shouldContainElements(By selector);
+    WebElementState shouldContainElements(By selector);
 
-    void shouldContainElements(String xpathOrCssSelector);
+    WebElementState shouldContainElements(String xpathOrCssSelector);
 
     boolean hasClass(String cssClassName);
 

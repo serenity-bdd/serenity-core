@@ -29,25 +29,25 @@ public interface WebElementState {
      * Checks whether a web element is visible.
      * Throws an AssertionError if the element is not rendered.
      */
-    void shouldBeVisible();
+    WebElementState shouldBeVisible();
 
     /**
      * Checks whether a web element is visible.
      * Throws an AssertionError if the element is not rendered.
      */
-    void shouldBeCurrentlyVisible();
+    WebElementState shouldBeCurrentlyVisible();
 
     /**
      * Checks whether a web element is not visible.
      * Throws an AssertionError if the element is not rendered.
      */
-    void shouldNotBeVisible();
+    WebElementState shouldNotBeVisible();
 
     /**
      * Checks whether a web element is not visible straight away.
      * Throws an AssertionError if the element is not rendered.
      */
-    void shouldNotBeCurrentlyVisible();
+    WebElementState shouldNotBeCurrentlyVisible();
 
 
     /**
@@ -80,31 +80,31 @@ public interface WebElementState {
      *
      * @param textValue
      */
-    void shouldContainText(String textValue);
+    WebElementState shouldContainText(String textValue);
 
     /**
      * Check that an element exactly matches a text value
      *
      * @param textValue
      */
-    void shouldContainOnlyText(String textValue);
+    WebElementState shouldContainOnlyText(String textValue);
 
-    void shouldContainSelectedOption(String textValue);
+    WebElementState shouldContainSelectedOption(String textValue);
 
     /**
      * Check that an element does not contain a text value
      *
      * @param textValue
      */
-    void shouldNotContainText(String textValue);
+    WebElementState shouldNotContainText(String textValue);
 
-    void shouldBeEnabled();
+    WebElementState shouldBeEnabled();
 
     boolean isEnabled();
 
     boolean isDisabled();
 
-    void shouldNotBeEnabled();
+    WebElementState shouldNotBeEnabled();
 
     String getSelectedVisibleTextValue();
 
@@ -114,9 +114,9 @@ public interface WebElementState {
 
     boolean isPresent();
 
-    void shouldBePresent();
+    WebElementState shouldBePresent();
 
-    void shouldNotBePresent();
+    WebElementState shouldNotBePresent();
 
     boolean isSelected();
 

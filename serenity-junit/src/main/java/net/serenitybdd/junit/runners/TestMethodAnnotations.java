@@ -28,13 +28,17 @@ public final class TestMethodAnnotations {
     }
 
     public String specifiedDriver() {
-        Preconditions.checkArgument(isDriverSpecified() == true);
+        Preconditions.checkArgument(isDriverSpecified());
         return (method.getMethod().getAnnotation(WithDriver.class).value());
     }
 
     public String driverOptions() {
-        Preconditions.checkArgument(isDriverSpecified() == true);
-        return (method.getMethod().getAnnotation(DriverOptions.class).value());
+        Preconditions.checkArgument(isDriverSpecified());
+        if (this.method.getMethod().getAnnotation(DriverOptions.class) != null) {
+            return (method.getMethod().getAnnotation(DriverOptions.class).value());
+        } else {
+            return "";
+        }
     }
 
 }

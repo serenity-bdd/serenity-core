@@ -708,6 +708,10 @@ public enum ThucydidesSystemProperty {
      * Europe: eu-central-1
      */
     SAUCELABS_DATACENTER,
+    /**
+     * Saucelabs URL, including username and api key
+     */
+    SAUCELABS_URL,
 
     /**
      * SauceLabs access key - if provided, Thucydides can generate links to the SauceLabs reports that don't require a login.

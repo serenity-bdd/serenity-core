@@ -515,10 +515,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldBeVisible() {
+    public WebElementState shouldBeVisible() {
         if (!isVisible()) {
             failWithMessage("Element should be visible");
         }
+        return this;
     }
 
     /**
@@ -526,10 +527,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldBeCurrentlyVisible() {
+    public WebElementState shouldBeCurrentlyVisible() {
         if (!isCurrentlyVisible()) {
             failWithMessage("Element should be visible");
         }
+        return this;
     }
 
     /**
@@ -537,10 +539,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldNotBeVisible() {
+    public WebElementState shouldNotBeVisible() {
         if (isCurrentlyVisible()) {
             failWithMessage("Element should not be visible");
         }
+        return this;
     }
 
     /**
@@ -548,10 +551,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldNotBeCurrentlyVisible() {
+    public WebElementState shouldNotBeCurrentlyVisible() {
         if (isCurrentlyVisible()) {
             failWithMessage("Element should not be visible");
         }
+        return this;
     }
 
     /**
@@ -701,12 +705,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @param textValue
      */
     @Override
-    public void shouldContainText(String textValue) {
+    public WebElementState shouldContainText(String textValue) {
         if (!containsText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' was not found in the web element. Element text '%s'.", textValue, getElement().getText());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     /**
@@ -715,21 +720,23 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @param textValue
      */
     @Override
-    public void shouldContainOnlyText(String textValue) {
+    public WebElementState shouldContainOnlyText(String textValue) {
         if (!containsOnlyText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' does not match the elements text '%s'.", textValue, getElement().getText());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     @Override
-    public void shouldContainSelectedOption(String textValue) {
+    public WebElementState shouldContainSelectedOption(String textValue) {
         if (!containsSelectOption(textValue)) {
             String errorMessage = String.format(
                     "The list element '%s' was not found in the web element", textValue);
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     /**
@@ -738,21 +745,23 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @param textValue
      */
     @Override
-    public void shouldNotContainText(String textValue) {
+    public WebElementState shouldNotContainText(String textValue) {
         if (containsText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' was found in the web element when it should not have. Element text '%s'.", textValue, getElement().getText());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     @Override
-    public void shouldBeEnabled() {
+    public WebElementState shouldBeEnabled() {
         if (!isCurrentlyEnabled()) {
             String errorMessage = String.format(
                     "Field '%s' should be enabled", toString());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     @Override
@@ -777,13 +786,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
 
     @Override
-    public void shouldNotBeEnabled() {
+    public WebElementState shouldNotBeEnabled() {
 
         if (isCurrentlyEnabled()) {
             String errorMessage = String.format(
                     "Field '%s' should not be enabled", toString());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     /**
@@ -1020,17 +1030,19 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
 
     @Override
-    public void shouldBePresent() {
+    public WebElementState shouldBePresent() {
         if (!isPresent()) {
             failWithMessage("Field should be present");
         }
+        return this;
     }
 
     @Override
-    public void shouldNotBePresent() {
+    public WebElementState shouldNotBePresent() {
         if (isPresent()) {
             failWithMessage("Field should not be present");
         }
+        return this;
     }
 
     private void failWithMessage(String errorMessage) {
@@ -1417,21 +1429,23 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public void shouldContainElements(By bySelector) {
+    public WebElementState shouldContainElements(By bySelector) {
         if (!containsElements(bySelector)) {
             String errorMessage = String.format(
                     "Could not find contained elements %s in %s", bySelector, getElement().toString());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     @Override
-    public void shouldContainElements(String xpathOrCssSelector) {
+    public WebElementState shouldContainElements(String xpathOrCssSelector) {
         if (!containsElements(xpathOrCssSelector)) {
             String errorMessage = String.format(
                     "Could not find contained elements %s in %s", xpathOrCssSelector, getElement().toString());
             failWithMessage(errorMessage);
         }
+        return this;
     }
 
     @Override

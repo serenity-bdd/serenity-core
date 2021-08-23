@@ -53,7 +53,9 @@ And if you drill into the details, Serenity will give you a detailed account of 
 Check out Serenity BDD in more detail here:
 * [User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
 * [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
-
+* [The Serenity BDD Web Site](http://serenity-bdd.info)
+* NEW: [Testing Web Applications With Serenity BDD And Selenium - Online Training Course](https://www.udemy.com/course/serenity-bdd-web-testing/)
+    
 ## Release Notes
 Release notes are available for major releases:
 * [2.3.2](docs/release-notes/2.3.2.md)

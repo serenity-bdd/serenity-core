@@ -725,6 +725,7 @@
         <module>serenity-spring</module>
         <module>serenity-browsermob-plugin</module>
         <module>serenity-browserstack</module>
+        <module>serenity-lambdatest</module>
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>

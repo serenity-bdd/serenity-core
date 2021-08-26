@@ -294,7 +294,7 @@ public class TestOutcome {
     private static String identifierFrom(String testName, Class<?> testCase, Story userStory) {
         String identifer = null;
         if (testCase != null) {
-            identifer = testCase.getName();
+            identifer = testCase.getName().replaceAll("\\$",".");
         }
 
         if (userStory != null) {

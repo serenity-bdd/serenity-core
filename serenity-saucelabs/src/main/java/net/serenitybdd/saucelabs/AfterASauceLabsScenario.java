@@ -29,14 +29,26 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
                 .getOptionalProperty("saucelabs.accessKey")
                 .orElse(null);
 
-        String dataCenter = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.datacenter")
-                .orElse(null);
+        if (userName == null || key == null) {
+            LOGGER.warn("Incomplete SauceLabs configuration" + System.lineSeparator()
+                        +"SauceLabs integration needs the following system properties to work:" + System.lineSeparator()
+                        +"  - saucelabs.username - Your SauceLabs account name" + System.lineSeparator()
+                        +"  - saucelabs.accessKey - Your SauceLabs Access Key" + System.lineSeparator()
+                        +"You can find both of these here: https://app.saucelabs.com/user-settings"
+            );
+        } else {
+            SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
+            sauceLabsTestSession.updateTestResultFor(testOutcome);
 
-        SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(dataCenter, userName, key, sessionId);
-        sauceLabsTestSession.updateTestResultFor(testOutcome);
+            String publicUrl = sauceLabsTestSession.getTestLink();
+            testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
+        }
+    }
 
-        String publicUrl = sauceLabsTestSession.getTestLink();
-        testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
+    @Override
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty("saucelabs.platformName")
+                .isPresent();
     }
 }

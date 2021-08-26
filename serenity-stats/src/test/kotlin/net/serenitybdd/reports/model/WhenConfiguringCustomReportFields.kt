@@ -68,7 +68,7 @@ class WhenConfiguringCustomReportFields {
         val environmentVariables = SystemEnvironmentVariables()
 
         // GIVEN
-        environmentVariables.setProperty("report.customfields.color","\${HOME}")
+        environmentVariables.setProperty("report.customfields.color","\${JAVA_HOME}")
 
         // WHEN
         val customReportFields = CustomReportFields(environmentVariables)

@@ -3,14 +3,14 @@ package net.thucydides.core.webdriver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Splitter;
-import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 
 public class CapabilityValue {
@@ -60,19 +60,36 @@ public class CapabilityValue {
     }
 
     private static boolean isAList(String value) {
-        return value.startsWith("[") && value.endsWith("]");
+        return value.trim().startsWith("[") && value.trim().endsWith("]");
     }
 
     private static boolean isAMap(String value) {
         return value.startsWith("{") && value.endsWith("}");
     }
 
+    private static final String COMMAS_OUTSIDE_QUOTES = ",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)";
+
     private static List<Object> asList(String value) {
-        String listContents = StringUtils.removeEnd(StringUtils.removeStart(value, "["), "]");
-        List<String> items = Splitter.on(",").trimResults().splitToList(listContents);
-        return items.stream()
-                .map(CapabilityValue::asObject)
-                .collect(Collectors.toList());
+        String listContents = stripCommentsAndEmptyEntriesFrom(StringUtils.removeEnd(StringUtils.removeStart(value.trim(), "["), "]"));
+        return stream(listContents.split(COMMAS_OUTSIDE_QUOTES))
+                                .map(String::trim)
+                                .filter(item -> !(item.isEmpty()))
+                                .map(CapabilityValue::asObject)
+                                .collect(Collectors.toList());
+    }
+
+    private static String stripCommentsAndEmptyEntriesFrom(String value) {
+        return stream(value.split("\\r?\\n"))
+                .map(item -> removeTrailingCommaFrom(item))
+                .filter(line -> !(line.trim().startsWith("#") || line.trim().startsWith("//")))
+                .filter(item -> !item.trim().isEmpty())
+                .collect(Collectors.joining(","));
+
+    }
+
+    private static String removeTrailingCommaFrom(String item) {
+        String trimmed = item.trim();
+        return trimmed.endsWith(",") ? trimmed.substring(0, trimmed.length() - 1) : trimmed;
     }
 
     private static Map<String,Object> asMap(String value) {

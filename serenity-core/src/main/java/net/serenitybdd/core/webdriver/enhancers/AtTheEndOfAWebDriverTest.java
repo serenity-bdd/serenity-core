@@ -59,7 +59,11 @@ public class AtTheEndOfAWebDriverTest {
 
         String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
         afterAWebdriverScenarios(extensionPackage).forEach(
-                teardown -> teardown.apply(environmentVariables, testOutcome, driver)
+                teardown -> {
+                    if (teardown.isActivated(environmentVariables)) {
+                        teardown.apply(environmentVariables, testOutcome, driver);
+                    }
+                }
         );
     }
 }

@@ -63,10 +63,12 @@ public class ScenarioOutcomes {
                 testOutcome.getTestSteps()
                         .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
 
+
         return new SingleScenarioOutcome(
                 testOutcome.getQualified().withContext().getTitleWithLinks(),
-                testOutcome.getName(),
-                "Acceptance Test",
+//                testOutcome.getName(),
+                testOutcome.getTitle(),
+                "Scenario",
                 testOutcome.getResult(),
                 ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome),
                 testOutcome.getStartTime(),

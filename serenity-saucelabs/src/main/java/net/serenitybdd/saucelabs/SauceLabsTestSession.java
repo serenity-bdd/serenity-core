@@ -1,6 +1,6 @@
 package net.serenitybdd.saucelabs;
 
-import net.serenitybdd.rest.SerenityRest;
+import io.restassured.RestAssured;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import org.apache.commons.codec.binary.Hex;
@@ -20,12 +20,13 @@ import java.util.Map;
 public class SauceLabsTestSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SauceLabsTestSession.class);
-    private static final String BROWSER_SESSION_URL = "https://%s:%s@api.%s.saucelabs.com/rest/v1/%s/jobs/%s";
-    private static final String TEST_LINK_TEMPLATE = "https://%s.saucelabs.com/tests/%s";
-    private final String sauceLabsUsername, sauceLabsKey, sessionId, datacenter;
+    private static final String REST_API_URL = "https://%s:%s@saucelabs.com/rest/v1/USERNAME/jobs/%s";
+    private static final String APP_TEST_LINK_TEMPLATE = "https://app.saucelabs.com/tests/%s";
+    private final String sauceLabsUsername;
+    private final String sauceLabsKey;
+    private final String sessionId;
 
-    public SauceLabsTestSession(String datacenter, String sauceLabsUsername, String sauceLabsKey, String sessionId) {
-        this.datacenter = datacenter;
+    public SauceLabsTestSession(String sauceLabsUsername, String sauceLabsKey, String sessionId) {
         this.sauceLabsUsername = sauceLabsUsername;
         this.sauceLabsKey = sauceLabsKey;
         this.sessionId = sessionId;
@@ -37,16 +38,17 @@ public class SauceLabsTestSession {
             put("error", testOutcome.getErrorMessage());
         }};
 
-        SerenityRest.given()
+        RestAssured.given()
+                .contentType("application/json")
                 .body(requestBody)
-                .put(getSessionUri());
+                .put(getRESTAPIUri());
     }
 
     public String getTestLink() {
         if (sauceLabsKey != null) {
             return noLoginLink();
         } else {
-            return String.format(TEST_LINK_TEMPLATE, datacenter, sessionId);
+            return String.format(APP_TEST_LINK_TEMPLATE, sessionId);
         }
     }
 
@@ -54,10 +56,10 @@ public class SauceLabsTestSession {
         return latestResultOf(outcome) == TestResult.SUCCESS;
     }
 
-    private URI getSessionUri() {
+    private URI getRESTAPIUri() {
         URI uri = null;
         try {
-            uri = new URI(String.format(BROWSER_SESSION_URL, sauceLabsUsername, sauceLabsKey, datacenter, sauceLabsUsername, sessionId));
+            uri = new URI(String.format(REST_API_URL, sauceLabsUsername, sauceLabsKey, sessionId));
         } catch (URISyntaxException e) {
             LOGGER.error("Failed to parse SauceLabs API url.", e);
         }
@@ -75,7 +77,7 @@ public class SauceLabsTestSession {
 
     private String noLoginLink() {
         String authCode = generateHMACFor(sauceLabsUsername + ":" + sauceLabsKey, sessionId);
-        return String.format(TEST_LINK_TEMPLATE, datacenter, sessionId) + "?auth=" + authCode;
+        return String.format(APP_TEST_LINK_TEMPLATE, sessionId) + "?auth=" + authCode;
     }
 
     private String generateHMACFor(String secretKey, String message) {

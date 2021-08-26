@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_DATACENTER;
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
 
 /**
  * Created by john on 25/06/2016.
@@ -45,7 +46,7 @@ public class DriverStrategySelector {
     }
 
     public boolean sauceLabsIsUsed() {
-        return StringUtils.isNotEmpty(SAUCELABS_DATACENTER.from(environmentVariables));
+        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
     }
 
     public boolean browserStackUrlIsDefined() {

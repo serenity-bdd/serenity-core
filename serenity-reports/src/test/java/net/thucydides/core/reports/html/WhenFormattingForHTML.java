@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 public class WhenFormattingForHTML {
 
+    public static final String NEW_LINE = System.lineSeparator();
     private Locale currentLocale;
 
     @Mock
@@ -629,9 +630,9 @@ public class WhenFormattingForHTML {
                 "| ACME | Casino |\n";
 
         assertThat(RenderMarkdown.preprocessMarkdownTables(description), equalTo(
-                "Given a business with the following details:\n\n\n" +
-                "| Name | Category |\n" +
-                "|---|---|\n" +
+                "Given a business with the following details:" + NEW_LINE + NEW_LINE + NEW_LINE +
+                "| Name | Category |" + NEW_LINE +
+                "|---|---|" + NEW_LINE +
                 "| ACME | Casino |"));
     }
 
@@ -643,9 +644,9 @@ public class WhenFormattingForHTML {
                 "| ACME | Casino |］\n";
 
         assertThat(RenderMarkdown.preprocessMarkdownTables(description), equalTo(
-                "Given a business with the following details:\n\n\n" +
-                        "| Name | Category |\n" +
-                        "|---|---|\n" +
+                "Given a business with the following details:" + NEW_LINE + NEW_LINE + NEW_LINE +
+                        "| Name | Category |" + NEW_LINE +
+                        "|---|---|" + NEW_LINE +
                         "| ACME | Casino |"));
     }
 
@@ -670,9 +671,9 @@ public class WhenFormattingForHTML {
                 "Then system should display 6\n";
 
         assertThat(DescriptionSplitter.splitIntoSteps(statement), hasItems("Given a calculator",
-                "When I give the following instructions:" + System.lineSeparator() +
-                "| Operation | Amount |" + System.lineSeparator() +
-                        "| + | 10 |" + System.lineSeparator() +
+                "When I give the following instructions:" + NEW_LINE +
+                "| Operation | Amount |" + NEW_LINE +
+                        "| + | 10 |" + NEW_LINE +
                         "| - | 5|",
                 "Then system should display 6"));
 

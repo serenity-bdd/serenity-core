@@ -96,7 +96,6 @@ public class DataDrivenAnnotations {
                 .build();
     }
 
-
     private List<String> split(String columnNamesString, int numberOfColumns) {
 
         if (StringUtils.isEmpty(columnNamesString)) {

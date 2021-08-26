@@ -42,6 +42,7 @@ public class Serenity {
     /**
      * Initialize Serenity-related fields in the specified object.
      * This includes managed WebDriver instances,
+     *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static void initialize(final Object testCase) {
@@ -63,13 +64,13 @@ public class Serenity {
     }
 
     private static void injectDependenciesInto(Object testCase) {
-        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
+        for (DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.injectDependenciesInto(testCase);
         }
     }
 
     private static void resetDependencyInjectors() {
-        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
+        for (DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.reset();
         }
     }
@@ -87,12 +88,13 @@ public class Serenity {
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
 
         return Arrays.asList(new PageObjectDependencyInjector(getPages()),
-                             new EnvironmentDependencyInjector());
+                new EnvironmentDependencyInjector());
     }
 
     /**
      * Initialize Serenity-related fields in the specified object.
      * This includes managed WebDriver instances,
+     *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
@@ -114,7 +116,7 @@ public class Serenity {
     public static void initStepListener() {
         Configuration configuration = ConfiguredEnvironment.getConfiguration();
         File outputDirectory = configuration.getOutputDirectory();
-        StepListener listener  = new BaseStepListener(outputDirectory, getPages());
+        StepListener listener = new BaseStepListener(outputDirectory, getPages());
         stepListenerThreadLocal.set(listener);
         StepEventBus.getEventBus().registerListener(getStepListener());
     }
@@ -125,16 +127,18 @@ public class Serenity {
 
     /**
      * Instantiate the @Managed-annotated WebDriver instance with current WebDriver.
+     *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     protected static void injectDriverInto(final Object testCase) {
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(ThucydidesWebDriverSupport.getDriver(),
-                                                                ThucydidesWebDriverSupport.getWebdriverManager());
+                ThucydidesWebDriverSupport.getWebdriverManager());
 
     }
 
     /**
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
+     *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static void injectScenarioStepsInto(final Object testCase) {
@@ -143,13 +147,14 @@ public class Serenity {
 
     /**
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
+     *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     protected static void injectAnnotatedPagesObjectInto(final Object testCase) {
         StepAnnotations.injector().injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
     }
 
-   /**
+    /**
      * Indicate that the test run using this object is finished, and reports can be generated.
      */
     public static void done() {
@@ -161,7 +166,7 @@ public class Serenity {
 
     public static boolean currentDriverIsDisabled() {
         WebDriver currentDriver = getWebdriverManager().getCurrentDriver();
-        return (currentDriver != null) && (currentDriver instanceof WebDriverFacade) && ( ((WebDriverFacade)currentDriver).isDisabled());
+        return (currentDriver != null) && (currentDriver instanceof WebDriverFacade) && (((WebDriverFacade) currentDriver).isDisabled());
     }
 
     public static void done(boolean closeAllDrivers) {
@@ -211,12 +216,12 @@ public class Serenity {
     }
 
     private static void setupWebdriverManager(WebdriverManager webdriverManager) {
-        ThucydidesWebDriverSupport.initialize(webdriverManager,"");
+        ThucydidesWebDriverSupport.initialize(webdriverManager, "");
     }
 
     private static List<StepListener> stepListeners() {
         if (getStepListener() == null) {
-           return new ArrayList<>();
+            return new ArrayList<>();
         }
         return NewList.of(getStepListener());
     }
@@ -333,6 +338,8 @@ public class Serenity {
 
     /**
      * Perform an arbitrary task and record it as a step in the reports.
+     * Any exceptions that occur will be reported and thrown
+     *
      * @param message
      * @param reportableAction
      */
@@ -341,8 +348,9 @@ public class Serenity {
         try {
             reportableAction.perform();
             StepEventBus.getEventBus().stepFinished();
-        } catch(Throwable assertionFailed) {
+        } catch (Throwable assertionFailed) {
             StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(message), assertionFailed));
+            throw assertionFailed;
         }
     }
 }

@@ -16,14 +16,14 @@ Given some data:
         when:
         def renderedText = RenderMarkdown.convertEmbeddedTablesIn(scenarioText)
         then:
-        renderedText == """
+        withNormalizedNewLines(renderedText) == withNormalizedNewLines("""
 Given some data:
 
 
 | A | B | C |
 |---|---|---|
 | 1 | 2 | 3 |
-"""
+""")
     }
 
     def "Should convert multi-line tables to markdown format"() {
@@ -37,7 +37,7 @@ Given some data:
         when:
         def renderedText = RenderMarkdown.convertEmbeddedTablesIn(scenarioText)
         then:
-        renderedText == """
+        withNormalizedNewLines(renderedText) == withNormalizedNewLines("""
 Given some data:
 
 
@@ -45,13 +45,14 @@ Given some data:
 |---|---|---|
 | 1 | 2 | 3 |
 | 4 | 5 | 6 |
-"""
+""")
     }
+
     @Unroll
     def "Text without any tables should not be converted"() {
 
         expect:
-        RenderMarkdown.convertEmbeddedTablesIn(text) == markdownText
+        withNormalizedNewLines(RenderMarkdown.convertEmbeddedTablesIn(text)) == withNormalizedNewLines(markdownText)
         where:
         text | markdownText
         ""   | ""
@@ -60,7 +61,7 @@ Given some data:
 
     def "Already rendered markdown tables should not be converted"() {
         given:
-            def scenarioText = """
+        def scenarioText = """
 Given some data:
 
 
@@ -69,9 +70,9 @@ Given some data:
 | 1 | 2 | 3 |
 """
         when:
-            def renderedText = RenderMarkdown.convertEmbeddedTablesIn(scenarioText)
+        def renderedText = RenderMarkdown.convertEmbeddedTablesIn(scenarioText)
         then:
-            renderedText == scenarioText
+        withNormalizedNewLines(renderedText) == withNormalizedNewLines(scenarioText)
     }
 
     def "Should convert embedded tables"() {
@@ -84,7 +85,7 @@ Then the risk rating should be <Risk>"""
         when:
         def renderedText = RenderMarkdown.convertEmbeddedTablesIn(scenarioTest)
         then:
-        renderedText == """Given a business with the following details:
+        withNormalizedNewLines(renderedText) == withNormalizedNewLines("""Given a business with the following details:
 
 
 |Name | Category|
@@ -92,10 +93,11 @@ Then the risk rating should be <Risk>"""
 |<Name> | <Category>|
 When the business risk profile is assessed
 Then the risk rating should be <Risk>
-"""
+""")
     }
 
-
-
+    def withNormalizedNewLines(String text) {
+        return text.replaceAll("\\n","").replaceAll("\\r","")
+    }
 }
 

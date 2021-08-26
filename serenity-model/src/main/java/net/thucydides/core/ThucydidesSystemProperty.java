@@ -94,9 +94,14 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_CHROME_DRIVER,
 
     /**
-     * Path to the Chrome binary, if it is not on the system path.
+     * Old property for chrome.binary
      */
     WEBDRIVER_CHROME_BINARY,
+
+    /**
+     * Path to the Chrome binary, if it is not on the system path.
+     */
+    CHROME_BINARY,
 
     @Deprecated
     THUCYDIDES_PROJECT_KEY,
@@ -703,6 +708,10 @@ public enum ThucydidesSystemProperty {
      * Europe: eu-central-1
      */
     SAUCELABS_DATACENTER,
+    /**
+     * Saucelabs URL, including username and api key
+     */
+    SAUCELABS_URL,
 
     /**
      * SauceLabs access key - if provided, Thucydides can generate links to the SauceLabs reports that don't require a login.

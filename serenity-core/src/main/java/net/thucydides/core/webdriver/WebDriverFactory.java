@@ -95,7 +95,7 @@ public class WebDriverFactory {
     }
 
     public boolean usesSauceLabs() {
-        return StringUtils.isNotEmpty(SAUCELABS_DATACENTER.from(environmentVariables));
+        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
     }
 
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {

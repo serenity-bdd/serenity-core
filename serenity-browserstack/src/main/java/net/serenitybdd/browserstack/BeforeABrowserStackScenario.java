@@ -155,4 +155,9 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         return propertyName.replace(BROWSERSTACK, "");
     }
 
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return !EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                .getPropertiesWithPrefix("browserstack").isEmpty();
+    }
+
 }

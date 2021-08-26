@@ -26,6 +26,7 @@ public class WhenAddingBrowserStackCapabilities {
 
     BeforeABrowserStackScenario beforeABrowserStackScenario;
     DesiredCapabilities capabilities;
+
     @BeforeEach
     public void prepareSession() {
         OverrideDriverCapabilities.clear();

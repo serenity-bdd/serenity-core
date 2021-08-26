@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
 public class WhenReportingScenarioOutcomes {
 
@@ -46,8 +47,11 @@ public class WhenReportingScenarioOutcomes {
     public void should_load_feature_file_details_from_the_file_system() throws IOException {
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
-
+        System.out.println(featuresDirectory.getPath());
+        System.out.println(outcomeDirectory.getPath());
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
+
+        System.out.println("Requirements loaded: " + outcomes.getRequirementOutcomes().size());
 
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
@@ -65,6 +69,7 @@ public class WhenReportingScenarioOutcomes {
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes);
 
+        assertThat(scenarioOutcomes, hasSize(4));
         assertThat(scenarioOutcomes.get(0).getRule(),equalTo(null));
         assertThat(scenarioOutcomes.get(1).getRule().getName(),equalTo(RULE_1));
         assertThat(scenarioOutcomes.get(1).getRule().getDescription().trim(),equalTo(DESCRIPTION_1));

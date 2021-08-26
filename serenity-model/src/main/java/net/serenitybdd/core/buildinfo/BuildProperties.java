@@ -2,10 +2,7 @@ package net.serenitybdd.core.buildinfo;
 
 import net.serenitybdd.core.collect.NewMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -25,11 +22,22 @@ public class BuildProperties {
         this.generalProperties = generalProperties;
         this.drivers = drivers;
         this.driverProperties = driverProperties;
-        this.sections = sections;
+        this.sections = sorted(sections);
+    }
+
+    private Map<String, Map<String, String>> sorted(Map<String, Map<String, String>> sections) {
+        Map<String, Map<String, String>> sortedSections = new TreeMap<>();
+        sections.forEach(
+                (key, section) -> {
+                    Map<String, String> sortedSectionProperties = new TreeMap<>(section);
+                    sortedSections.put(key, sortedSectionProperties);
+                }
+        );
+        return sortedSections;
     }
 
     public Map<String, String> getGeneralProperties() {
-        return NewMap.copyOf(generalProperties);
+        return new TreeMap(generalProperties);
     }
 
     public List<String> getDrivers() {
@@ -37,7 +45,7 @@ public class BuildProperties {
     }
 
     public Map<String, Properties> getDriverProperties() {
-        return NewMap.copyOf(driverProperties);
+        return new TreeMap(driverProperties);
     }
 
 

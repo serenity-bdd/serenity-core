@@ -68,7 +68,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
         then:
         examples.isPresent()
         and:
-        examples.get() == """### Do some things
+        normalized(examples.get()) == normalized("""### Do some things
 
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
@@ -84,7 +84,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 | Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[37]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
-"""
+""")
     }
 
 
@@ -95,32 +95,32 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def "Should replace scenario references with the Given-When-Then text"() {
         expect:
-        DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("{Scenario} View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+        normalized(DescriptionWithScenarioReferences.from(filteringTodoFeature).
+                forText("{Scenario} View only completed items")) == normalized("""Given that Jane has a todo list containing Buy some milk, Walk the dog    
 And she has completed the task called 'Walk the dog'    
 When she filters her list to show only Completed tasks    
 Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](#a043407804870e3b974cd3d28b836eb49b21f28593eca8fa1807cdfa3863ed1e)
-"""
+""")
 
     }
 
     def "Should ignore leading spaces"() {
         expect:
-        DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("  {Scenario}   View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+        normalized(DescriptionWithScenarioReferences.from(filteringTodoFeature).
+                forText("  {Scenario}   View only completed items")) == normalized("""Given that Jane has a todo list containing Buy some milk, Walk the dog    
 And she has completed the task called 'Walk the dog'    
 When she filters her list to show only Completed tasks    
 Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](#a043407804870e3b974cd3d28b836eb49b21f28593eca8fa1807cdfa3863ed1e)
-"""
+""")
 
     }
 
     def "Should replace example references with the example table"() {
         expect:
-        DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("{Examples} Do many things") ==  """
+        normalized(DescriptionWithScenarioReferences.from(filteringTodoFeature).
+                forText("{Examples} Do many things")) ==  normalized("""
 | tasks                       | filter    | expected      |&nbsp;|
 |-----------------------------|-----------|---------------|---|
 | Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do[31]}|
@@ -134,7 +134,7 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
 | Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do[37]}|
 
 [<i class="fa fa-info-circle"></i> More details](#2d2f4c1a070b3434226e9ee8cf6f2d75c0e2847d548719e5ba07a47c67c1030a)
-"""
+""")
 
     }
 
@@ -147,6 +147,10 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
             def narrative = parser.loadFeatureNarrative(new File(featureFile))
         then:
             narrative.isPresent()
+    }
+
+    def normalized(String text) {
+        return text.replaceAll("\\n","").replaceAll("\\r","")
     }
 
 }

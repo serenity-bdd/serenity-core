@@ -336,14 +336,12 @@ public abstract class PageObject {
         return waitForRenderedElements(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
-    public PageObject waitFor(ExpectedCondition expectedCondition) {
-        getRenderedView().waitFor(expectedCondition);
-        return this;
+    public <T> T waitFor(ExpectedCondition<T> expectedCondition) {
+        return getRenderedView().waitFor(expectedCondition);
     }
 
-    public PageObject waitFor(String message, ExpectedCondition expectedCondition) {
-        getRenderedView().waitFor(message, expectedCondition);
-        return this;
+    public <T> T waitFor(String message, ExpectedCondition<T> expectedCondition) {
+        return getRenderedView().waitFor(message, expectedCondition);
     }
 
     public PageObject waitForRenderedElementsToBePresent(final By byElementCriteria) {
@@ -363,6 +361,10 @@ public abstract class PageObject {
 
     public PageObject waitForAbsenceOf(String xpathOrCssSelector, Object... arguments) {
         return waitForRenderedElementsToDisappear(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
+    }
+
+    public PageObject waitForAbsenceOf(By byLocator) {
+        return waitForRenderedElementsToDisappear(byLocator);
     }
 
     /**

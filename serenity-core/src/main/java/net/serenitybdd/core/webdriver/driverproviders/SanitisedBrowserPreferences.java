@@ -7,7 +7,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SanitisedBrowserPreferences {
 
@@ -17,6 +19,12 @@ public class SanitisedBrowserPreferences {
                 (key,value) -> preferences.put(key, SanitisedBrowserPreferences.of(value))
         );
         return preferences;
+    }
+
+    public static List<String> cleanUpPathsIn(List<String> rawPreferences) {
+        return rawPreferences.stream()
+                .map( value ->  SanitisedBrowserPreferences.of(value).toString() )
+                .collect(Collectors.toList());
     }
 
     private static Object of(Object value) {

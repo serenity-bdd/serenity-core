@@ -8,13 +8,9 @@ import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AfterABrowserStackScenario.class);
 
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
@@ -39,6 +35,11 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         String publicUrl = browserStackTestSession.getPublicUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
+    }
+
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return !EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getPropertiesWithPrefix("browserstack").isEmpty();
     }
 
 }

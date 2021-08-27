@@ -75,6 +75,7 @@
             $('#tree').treeview({
                 data: requirementsTree,
                 enableLinks: true,
+                levels:10,
                 showTags: true,
                 expandIcon: "glyphicon glyphicon-folder-close",
                 collapseIcon: "glyphicon glyphicon-folder-open",

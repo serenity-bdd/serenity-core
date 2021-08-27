@@ -1,8 +1,17 @@
 package net.thucydides.core.util;
 
 import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.tags.TagConverters;
 import net.thucydides.core.tags.Taggable;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -33,14 +42,24 @@ import static java.util.Arrays.stream;
  */
 public class JUnitAdapter {
 
+    private final static Logger logger = LoggerFactory.getLogger(JUnitAdapter.class);
+
     private static List<JUnitStrategy> strategies = new ArrayList<>();
+
+    private static Optional<JUnit4Strategy> jUnit4Strategy = Optional.empty();
+
+    private static Optional<JUnit5Strategy> jUnit5Strategy = Optional.empty();
 
     static {
         if (isClassPresent("org.junit.runner.RunWith")) {
-            strategies.add(new JUnit4Strategy());
+            JUnit4Strategy strategy = new JUnit4Strategy();
+            jUnit4Strategy = Optional.of(strategy);
+            strategies.add(strategy);
         }
         if (isClassPresent("org.junit.jupiter.api.Test")) {
-            strategies.add(new JUnit5Strategy());
+            JUnit5Strategy strategy = new JUnit5Strategy();
+            jUnit5Strategy = Optional.of(strategy);
+            strategies.add(strategy);
         }
     }
 
@@ -110,6 +129,32 @@ public class JUnitAdapter {
         }
     }
 
+    public static Optional<String> getTitleAnnotation(Method testMethod) {
+        if(jUnit4Strategy.isPresent()) {
+            Optional<String> junit4Title = jUnit4Strategy.flatMap(strategy -> strategy.getTitleAnnotation(testMethod));
+            if (junit4Title.isPresent()) {
+                return junit4Title;
+            }
+        }
+        if(jUnit5Strategy.isPresent()) {
+            return jUnit5Strategy.flatMap(strategy -> strategy.getTitleAnnotation(testMethod));
+        }
+        return Optional.empty();
+    }
+
+    public static List<TestTag> getTagsFor(Method testMethod) {
+        List<TestTag> allTags = new ArrayList<>();
+        if(jUnit4Strategy.isPresent()) {
+           List<TestTag> testTagsJUnit4 = jUnit4Strategy.get().getTagsFor(testMethod);
+           allTags.addAll(testTagsJUnit4);
+        }
+        if(jUnit5Strategy.isPresent()) {
+            List<TestTag> testTagsJUnit5 = jUnit5Strategy.get().getTagsFor(testMethod);
+            allTags.addAll(testTagsJUnit5);
+        }
+        return allTags;
+    }
+
     private interface JUnitStrategy {
 
         boolean isTestClass(final Class<?> testClass);
@@ -126,6 +171,9 @@ public class JUnitAdapter {
 
         boolean isIgnored(final Method method);
 
+        Optional<String> getTitleAnnotation(Method testMethod);
+
+        List<TestTag> getTagsFor(Method testMethod);
     }
 
     private static class JUnit4Strategy implements JUnitStrategy {
@@ -139,9 +187,6 @@ public class JUnitAdapter {
 //            return (testClass.getAnnotation(org.junit.runner.RunWith.class) != null);
         }
 
-        private boolean containsAnnotationCalled(Annotation[] annotations, String annotationName) {
-            return stream(annotations).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals(annotationName));
-        }
 
         @Override
         public boolean isTestMethod(final Method method) {
@@ -187,6 +232,25 @@ public class JUnitAdapter {
             );
         }
 
+        @Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            Title titleAnnotation = testMethod.getAnnotation(Title.class);
+            if (titleAnnotation != null) {
+                return java.util.Optional.of(titleAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }
+
+
+        @Override
+        public List<TestTag> getTagsFor(Method testMethod) {
+            List<TestTag> tags = new ArrayList<>();
+            TestAnnotations.addTagValues(tags, testMethod.getAnnotation(WithTagValuesOf.class));
+            TestAnnotations.addTags(tags, testMethod.getAnnotation(WithTags.class));
+            TestAnnotations.addTag(tags, testMethod.getAnnotation(WithTag.class));
+            return tags;
+        }
+
     }
 
     private static class JUnit5Strategy implements JUnitStrategy {
@@ -198,12 +262,26 @@ public class JUnitAdapter {
                     return true;
                 }
             }
+            //JUnit5 nested tests
+            for(Class innerClass : testClass.getDeclaredClasses()) {
+                if(isTestClass(innerClass) && isNestedTestClass(innerClass)){
+                    return true;
+                }
+            }
             return false;
+        }
+
+        private boolean isNestedTestClass(Class testClass) {
+            return (testClass.getAnnotation(org.junit.jupiter.api.Nested.class) != null);
         }
 
         @Override
         public boolean isTestMethod(final Method method) {
-            return (method.getAnnotation(org.junit.jupiter.api.Test.class) != null);
+
+            boolean testMethod =  (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) ||
+                       // containsAnnotationCalled(method.getAnnotations(), "ParameterizedTest");
+                    (method.getAnnotation(org.junit.jupiter.params.ParameterizedTest.class) != null);
+            return testMethod;
         }
 
         @Override
@@ -214,7 +292,7 @@ public class JUnitAdapter {
 
         @Override
         public boolean isSerenityTestCase(Class<?> testClass) {
-            return hasSerenityAnnotation(testClass, new HashSet<>());
+            return stream(testClass.getDeclaredMethods()).anyMatch(this::isTestMethod);
         }
 
         @Override
@@ -278,6 +356,49 @@ public class JUnitAdapter {
             return false;
         }
 
+        /*@Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
+            if (displayNameAnnotation != null) {
+                String innerClassName = "";
+                Class<?> enclosingClass = testMethod.getDeclaringClass().getEnclosingClass();
+                if( enclosingClass != null) {
+                    innerClassName = testMethod.getDeclaringClass().getSimpleName();
+                }
+                return java.util.Optional.of("[" + innerClassName + "] " + displayNameAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }*/
+
+        @Override
+        public Optional<String> getTitleAnnotation(Method testMethod) {
+            DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
+            if (displayNameAnnotation != null) {
+                return java.util.Optional.of(displayNameAnnotation.value());
+            }
+            return java.util.Optional.empty();
+        }
+
+
+        @Override public List<TestTag> getTagsFor(Method testMethod) {
+
+            List<TestTag> tags = new ArrayList<>();
+            for(Annotation currentAnnotation : testMethod.getDeclaredAnnotations()) {
+                if(currentAnnotation instanceof Tag) {
+                    tags.add(TestTag.withValue(((Tag)currentAnnotation).value()));
+                }
+                if(currentAnnotation instanceof Tags) {
+                    Tag[] allTags = ((Tags) currentAnnotation).value();
+                    Arrays.stream(allTags).forEach(tag->tags.add(TestTag.withValue(tag.value())));
+                }
+            }
+            return tags;
+        }
     }
+
+    private static  boolean containsAnnotationCalled(Annotation[] annotations, String annotationName) {
+            return stream(annotations).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals(annotationName));
+    }
+
 
 }

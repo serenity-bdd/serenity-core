@@ -103,7 +103,7 @@ public class TestOutcome {
      */
     private Story userStory;
 
-    private java.util.Optional<TestTag> featureTag = java.util.Optional.empty();
+    private Optional<TestTag> featureTag = Optional.empty();
 
     private String title;
     private String description;
@@ -254,6 +254,9 @@ public class TestOutcome {
     List<String> issues;
     List<String> versions;
 
+    List<String> nestedTestPath;
+
+
     /**
      * Scenario outline text.
      */
@@ -291,7 +294,7 @@ public class TestOutcome {
     private static String identifierFrom(String testName, Class<?> testCase, Story userStory) {
         String identifer = null;
         if (testCase != null) {
-            identifer = testCase.getName();
+            identifer = testCase.getName().replaceAll("\\$",".");
         }
 
         if (userStory != null) {
@@ -314,6 +317,7 @@ public class TestOutcome {
         this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
+        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -426,6 +430,7 @@ public class TestOutcome {
         this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
+        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -518,6 +523,7 @@ public class TestOutcome {
         this.id = id;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
+        this.nestedTestPath = calculateNestPath(testCase);
         addSteps(testSteps);
         this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
@@ -544,6 +550,18 @@ public class TestOutcome {
         this.environmentVariables = environmentVariables;
         this.externalLink = externalLink;
         this.context=context;
+    }
+
+    List<String> calculateNestPath(Class<?> testCase) {
+        List<String> nestPath = new ArrayList<>();
+        if(testCase != null){
+            String testCaseName = testCase.getName();
+            String className =  testCaseName.substring(testCaseName.lastIndexOf(".") + 1);
+            if(className.contains("$")) {
+                nestPath = Arrays.asList(className.split("\\$"));
+            }
+        }
+        return nestPath;
     }
 
     private List<String> removeDuplicates(List<String> issues) {
@@ -912,19 +930,19 @@ public class TestOutcome {
     }
 
     public boolean hasTagWithName(String tagName) {
-        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
+        return Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getName().equalsIgnoreCase(tagName));
     }
 
     public boolean hasTagWithType(String tagType) {
-        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
+        return Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tag.getType().equalsIgnoreCase(tagType));
     }
 
     public boolean hasTagWithTypes(List<String> tagTypes) {
-        return java.util.Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
+        return Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())
                 .stream()
                 .anyMatch(tag -> tagTypes.contains(tag.getType()));
     }
@@ -1158,7 +1176,7 @@ public class TestOutcome {
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {
-        java.util.Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
+        Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
         return annotatedTitle.orElse(NameConverter.humanize(NameConverter.withNoArguments(name)));
     }
 
@@ -1537,6 +1555,7 @@ public class TestOutcome {
     }
 
     public void setUserStory(Story story) {
+        LOGGER.info("SetUserStory " + story.getStoryName());
         this.userStory = story;
         this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }
@@ -1636,14 +1655,14 @@ public class TestOutcome {
                 .orElse(getTestFailureCause());
     }
 
-    public java.util.Optional<TestStep> firstStepWithErrorMessage() {
+    public Optional<TestStep> firstStepWithErrorMessage() {
         return getFlattenedTestSteps().stream()
                 .filter(step -> isNotBlank(step.getErrorMessage()))
                 .findFirst();
     }
 
-    public java.util.Optional<String> testFailureMessage() {
-        return java.util.Optional.ofNullable(testFailureMessage);
+    public Optional<String> testFailureMessage() {
+        return Optional.ofNullable(testFailureMessage);
 
     }
 
@@ -2571,7 +2590,7 @@ public class TestOutcome {
     }
 
 
-    public java.util.Optional<TestTag> getFeatureTag() {
+    public Optional<TestTag> getFeatureTag() {
         if (!featureTag.isPresent()) {
             featureTag = FeatureTagAsDefined.in(userStory, getPath());
         }
@@ -2744,5 +2763,9 @@ public class TestOutcome {
     public Integer getOrder() {
         if (order == null) { return 0; }
         return order;
+    }
+
+    public List<String> getNestedTestPath(){
+        return nestedTestPath;
     }
 }

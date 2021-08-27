@@ -714,6 +714,7 @@
         <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
         <module>serenity-junit</module>
+        <module>serenity-junit5</module>
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>
@@ -819,6 +820,7 @@
                 <module>serenity-reports-configuration</module>
                 <module>serenity-stats</module>
                 <module>serenity-junit</module>
+                <module>serenity-junit5</module>
                 <module>serenity-screenplay-rest</module>
                 <module>serenity-screenplay-webdriver</module>
                 <module>serenity-assertions</module>
@@ -853,6 +855,7 @@
                 <module>serenity-reports-configuration</module>
                 <module>serenity-stats</module>
                 <module>serenity-junit</module>
+                <module>serenity-junit5</module>
                 <module>serenity-screenplay</module>
                 <module>serenity-screenplay-rest</module>
                 <module>serenity-screenplay-webdriver</module>

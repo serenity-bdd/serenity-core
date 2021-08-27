@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.annotations;
 
-import com.google.common.reflect.ClassPath;
 import net.thucydides.core.util.JUnitAdapter;
 
 import java.lang.annotation.Annotation;
@@ -11,19 +10,19 @@ import java.util.Set;
 
 public class ClassInfoAnnotations {
 
-    private final ClassPath.ClassInfo classInfo;
+    private final Class classInfo;
 
-    public ClassInfoAnnotations(ClassPath.ClassInfo classInfo) {
+    public ClassInfoAnnotations(Class classInfo) {
         this.classInfo = classInfo;
     }
 
-    public static ClassInfoAnnotations theClassDefinedIn(ClassPath.ClassInfo classInfo) {
+    public static ClassInfoAnnotations theClassDefinedIn(Class classInfo) {
         return new ClassInfoAnnotations(classInfo);
     }
 
     public boolean hasAnAnnotation(Class<? extends Annotation>... annotationClasses) {
         for (Class<? extends Annotation> annotationClass : annotationClasses) {
-            if (classInfo.load().getAnnotation(annotationClass) != null) {
+            if (classInfo.getAnnotation(annotationClass) != null) {
                 return true;
             }
         }
@@ -32,7 +31,7 @@ public class ClassInfoAnnotations {
 
     public boolean hasAPackageAnnotation(Class<? extends Annotation>... annotationClasses) {
         for (Class<? extends Annotation> annotationClass : annotationClasses) {
-            if (classInfo.load().getPackage().getAnnotation(annotationClass) != null) {
+            if (classInfo.getPackage().getAnnotation(annotationClass) != null) {
                 return true;
             }
         }
@@ -46,12 +45,22 @@ public class ClassInfoAnnotations {
     private Set<Method> allMethods() {
         Set<Method> allMethods = new HashSet<>();
         try {
-            allMethods.addAll(Arrays.asList(classInfo.load().getMethods()));
+            allMethods.addAll(Arrays.asList(classInfo.getMethods()));
         } catch (java.lang.NoClassDefFoundError ignored) {}
 
         try {
-            allMethods.addAll(Arrays.asList(classInfo.load().getDeclaredMethods()));
+            allMethods.addAll(Arrays.asList(classInfo.getDeclaredMethods()));
         } catch (java.lang.NoClassDefFoundError ignored) {}
+
+        Class<?>[] innerClasses = classInfo.getClasses();
+        for(Class innerClass : innerClasses) {
+            allMethods.addAll(Arrays.asList(innerClass.getMethods()));
+        }
+
+        Class<?>[] declaredInnerClasses = classInfo.getClasses();
+        for(Class innerClass : declaredInnerClasses) {
+            allMethods.addAll(Arrays.asList(innerClass.getDeclaredMethods()));
+        }
 
         return allMethods;
     }

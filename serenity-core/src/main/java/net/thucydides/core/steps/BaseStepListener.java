@@ -492,9 +492,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param testMethod the name of the test method in the test suite class.
      */
     public void testStarted(final String testMethod) {
-        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
-//        this.currentTestOutcome.set(newTestOutcome);
-//        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        String testMethodName = testMethod;
+        String qualifier = "";
+        if(testMethod.contains("%")) {
+            String[] splittedTestMethod = testMethod.split("%");
+            testMethodName = splittedTestMethod[0];
+            qualifier = splittedTestMethod[1];
+        }
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethodName, testSuite, testedStory);
+        if(!qualifier.isEmpty()) {
+            newTestOutcome = newTestOutcome.withQualifier(qualifier);
+        }
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
 
@@ -1270,5 +1278,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStep().ifPresent(
                 step -> step.recordRestQuery(restQuery)
         );
+    }
+
+    public void clearTestOutcomes (){
+        testOutcomes.clear();
     }
 }

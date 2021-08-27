@@ -37,7 +37,7 @@ public class TestAnnotations {
     }
 
     public boolean isPending(final String methodName) {
-        Optional<Method> method = getMethodCalled(methodName);
+        java.util.Optional<Method> method = getMethodByNameIgnoringNumberOfParameters(methodName);
         return method.isPresent() && isPending(method.get());
     }
 
@@ -66,7 +66,7 @@ public class TestAnnotations {
     }
 
     public boolean isIgnored(final String methodName) {
-        Optional<Method> method = getMethodCalled(methodName);
+        Optional<Method> method = getMethodByNameIgnoringNumberOfParameters(methodName);
         return method.isPresent() && isIgnored(method.get());
     }
 
@@ -95,9 +95,26 @@ public class TestAnnotations {
         if (baseMethodName == null) {
             return Optional.empty();
         }
-        
+
         return Optional.ofNullable(MethodFinder.inClass(testClass).getMethodNamed(baseMethodName));
     }
+
+    private java.util.Optional<Method> getMethodByNameIgnoringNumberOfParameters(final String methodName) {
+        if (testClass == null) {
+            return java.util.Optional.empty();
+        }
+        String baseMethodName = withNoArguments(methodName);
+        if (baseMethodName == null) {
+            return java.util.Optional.empty();
+        } else {
+            return getFirstMethodWithName(methodName);
+        }
+    }
+
+    private Optional<Method> getFirstMethodWithName(String methodName) {
+        return Arrays.stream(testClass.getMethods()).filter(method->method.getName().equals(methodName)).findFirst();
+    }
+
 
     /**
      * Return a list of the issues mentioned in the title annotation of this method.
@@ -252,13 +269,13 @@ public class TestAnnotations {
         return tags;
     }
 
-    private void addTag(List<TestTag> tags, WithTag tagAnnotation) {
+    public static void addTag(List<TestTag> tags, WithTag tagAnnotation) {
         if (tagAnnotation != null) {
             tags.add(convertToTestTag(tagAnnotation));
         }
     }
 
-    private void addTags(List<TestTag> tags, WithTags tagSet) {
+    public static void addTags(List<TestTag> tags, WithTags tagSet) {
         if (tagSet != null) {
 
             Set<TestTag> newTags = Arrays.stream(tagSet.value())
@@ -269,7 +286,7 @@ public class TestAnnotations {
         }
     }
 
-    private void addTagValues(List<TestTag> tags, WithTagValuesOf tagSet) {
+    public static void addTagValues(List<TestTag> tags, WithTagValuesOf tagSet) {
         if (tagSet != null) {
 
             Set<TestTag> newTags = Arrays.stream(tagSet.value())
@@ -286,14 +303,13 @@ public class TestAnnotations {
 
         Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
-            addTagValues(tags, testMethod.get().getAnnotation(WithTagValuesOf.class));
-            addTags(tags, testMethod.get().getAnnotation(WithTags.class));
-            addTag(tags, testMethod.get().getAnnotation(WithTag.class));
+            return JUnitAdapter.getTagsFor(testMethod.get());
         }
         return tags;
+
     }
 
-    private TestTag convertToTestTag(WithTag withTag) {
+    public static TestTag convertToTestTag(WithTag withTag) {
         if (StringUtils.isEmpty(withTag.value())) {
             return TestTag.withName(withTag.name()).andType(withTag.type());
         } else {

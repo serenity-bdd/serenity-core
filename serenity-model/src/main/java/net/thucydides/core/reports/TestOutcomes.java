@@ -456,7 +456,7 @@ public class TestOutcomes {
             return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
         }
 
-        if ((dataTableRowResultsAreUndefinedIn(outcome.getDataTable()) || isJUnit(outcome))
+        if ((dataTableRowResultsAreUndefinedIn(outcome.getDataTable()) || isJUnit(outcome) || isJUnit5(outcome))
             && outcome.getTestSteps().size() >= outcome.getDataTable().getSize()) {
             return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
         }
@@ -468,6 +468,10 @@ public class TestOutcomes {
 
     private boolean isJUnit(TestOutcome outcome) {
         return (outcome.getTestSource() == null) || (TestSourceType.TEST_SOURCE_JUNIT.getValue().equalsIgnoreCase(outcome.getTestSource()));
+    }
+
+    private boolean isJUnit5(TestOutcome outcome) {
+        return (outcome.getTestSource() == null) || (TestSourceType.TEST_SOURCE_JUNIT5.getValue().equalsIgnoreCase(outcome.getTestSource()));
     }
 
     private long stepsWithResultIn(List<TestStep> steps, List<TestResult> expectedResults) {

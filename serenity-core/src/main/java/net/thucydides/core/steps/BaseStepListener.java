@@ -739,21 +739,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void startNewGroup() {
         getCurrentTestOutcome().startGroup();
-//        currentGroupStack.get().push(getCurrentStep());
         currentGroupStack.push(getCurrentStep());
     }
 
     private java.util.Optional<TestStep> currentStep() {
-//        if (currentStepStack.get() == null || currentStepStack.get().isEmpty()) {
-        if (currentStepStack == null || currentStepStack.isEmpty()) {
+        if (currentStepStack.isEmpty()) {
             return java.util.Optional.empty();
         }
-//        return (java.util.Optional.of(currentStepStack.get().peek()));
         return (java.util.Optional.of(currentStepStack.peek()));
     }
 
     private TestStep getCurrentStep() {
-//        return currentStepStack.get().peek();
         return currentStepStack.peek();
     }
 
@@ -1001,7 +997,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void recordScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         if (shouldTakeScreenshot(screenshotType, screenshotAndHtmlSource) && screenshotWasTaken(screenshotAndHtmlSource)) {
-            getCurrentStep().addScreenshot(screenshotAndHtmlSource);
+            currentStep().ifPresent(
+                    step -> step.addScreenshot(screenshotAndHtmlSource)
+            );
         }
     }
 

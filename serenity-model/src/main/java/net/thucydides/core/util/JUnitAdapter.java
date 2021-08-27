@@ -3,9 +3,7 @@ package net.thucydides.core.util;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestTag;
-import net.thucydides.core.tags.TagConverters;
 import net.thucydides.core.tags.Taggable;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
@@ -14,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
@@ -41,8 +38,6 @@ import static java.util.Arrays.stream;
  * a potential refactoring towards a more general approach.
  */
 public class JUnitAdapter {
-
-    private final static Logger logger = LoggerFactory.getLogger(JUnitAdapter.class);
 
     private static List<JUnitStrategy> strategies = new ArrayList<>();
 
@@ -198,9 +193,6 @@ public class JUnitAdapter {
         public boolean isTestSetupMethod(final Method method) {
             return containsAnnotationCalled(method.getAnnotations(), "Before")
                     || containsAnnotationCalled(method.getAnnotations(), "BeforeClass");
-
-//            return (method.getAnnotation(org.junit.Before.class) != null)
-//                    || (method.getAnnotation(org.junit.BeforeClass.class) != null);
         }
 
         @Override
@@ -328,22 +320,6 @@ public class JUnitAdapter {
             return hasSerenityAnnotation(annotation.annotationType(), checked);
         }
 
-        private String valueOf(Annotation annotation) {
-
-            try {
-                Method value = annotation.getClass().getMethod("value");
-                return value.invoke(annotation).toString();
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                return "";
-            }
-        }
-        private boolean hasValueMethod(Annotation annotation) {
-            try {
-                return (annotation.getClass().getMethod("value") != null);
-            } catch (NoSuchMethodException e) {
-                return false;
-            }
-        }
         @Override
         public boolean isAssumptionViolatedException(final Throwable throwable) {
             return (throwable instanceof org.opentest4j.TestAbortedException);
@@ -356,20 +332,6 @@ public class JUnitAdapter {
             return false;
         }
 
-        /*@Override
-        public Optional<String> getTitleAnnotation(Method testMethod) {
-            DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
-            if (displayNameAnnotation != null) {
-                String innerClassName = "";
-                Class<?> enclosingClass = testMethod.getDeclaringClass().getEnclosingClass();
-                if( enclosingClass != null) {
-                    innerClassName = testMethod.getDeclaringClass().getSimpleName();
-                }
-                return java.util.Optional.of("[" + innerClassName + "] " + displayNameAnnotation.value());
-            }
-            return java.util.Optional.empty();
-        }*/
-
         @Override
         public Optional<String> getTitleAnnotation(Method testMethod) {
             DisplayName displayNameAnnotation = testMethod.getAnnotation(DisplayName.class);
@@ -378,7 +340,6 @@ public class JUnitAdapter {
             }
             return java.util.Optional.empty();
         }
-
 
         @Override public List<TestTag> getTagsFor(Method testMethod) {
 
@@ -399,6 +360,4 @@ public class JUnitAdapter {
     private static  boolean containsAnnotationCalled(Annotation[] annotations, String annotationName) {
             return stream(annotations).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals(annotationName));
     }
-
-
 }

@@ -7,10 +7,8 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
 public class StepsInjectorTestInstancePostProcessor implements TestInstancePostProcessor {
 
-    private StepFactory stepFactory;
-
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) throws Exception {
+    public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
         StepFactory stepFactory =  StepFactory.getFactory();
         StepAnnotations.injector().injectScenarioStepsInto(testInstance, stepFactory);
     }

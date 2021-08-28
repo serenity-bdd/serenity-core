@@ -1,5 +1,6 @@
 package net.thucydides.core.adapters;
 
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

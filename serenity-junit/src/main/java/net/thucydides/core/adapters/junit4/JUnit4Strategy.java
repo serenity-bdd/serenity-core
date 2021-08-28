@@ -22,7 +22,11 @@ class JUnit4Strategy implements JUnitStrategy {
 
     @Override
     public boolean isTestClass(final Class<?> testClass) {
-        return containsAnnotationCalled(testClass.getAnnotations(), "RunWith");
+        return containsAnnotationCalled(testClass.getAnnotations(), "RunWith") || hasMethodWithTestAnnotation(testClass);
+    }
+
+    private boolean hasMethodWithTestAnnotation(final Class<?> testClass) {
+        return stream(testClass.getMethods()).anyMatch(this::isTestMethod);
     }
 
 

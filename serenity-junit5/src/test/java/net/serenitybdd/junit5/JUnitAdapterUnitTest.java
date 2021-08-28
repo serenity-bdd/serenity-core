@@ -45,22 +45,6 @@ public class JUnitAdapterUnitTest {
     }
 
     @Test
-    public void shouldDetectJunit4ClassesCorrectly() throws NoSuchMethodException {
-        assertThat(TestFramework.support().isTestClass(Junit4Test.class)).isTrue();
-        assertThat(TestFramework.support().isTestMethod(Junit4Test.class.getMethod("shouldSucceed"))).isTrue();
-        assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("beforeClass"))).isTrue();
-        assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("before"))).isTrue();
-        assertThat(TestFramework.support().isATaggableClass(Junit4Test.class)).isFalse();
-        assertThat(TestFramework.support().isATaggableClass(TaggableJunit4Test.class)).isTrue();
-        assertThat(TestFramework.support().isSerenityTestCase(Junit4Test.class)).isFalse();
-        assertThat(TestFramework.support().isSerenityTestCase(SerenityJunit4Test.class)).isTrue();
-        assertThat(TestFramework.support()
-                .isAssumptionViolatedException(new org.junit.AssumptionViolatedException("Assumption violated!")))
-                .isTrue();
-        assertThat(TestFramework.support().isIgnored(Junit4Test.class.getMethod("shouldBeIgnored"))).isTrue();
-    }
-
-    @Test
     public void shouldDetectJunit5ClassesCorrectly() throws NoSuchMethodException {
         assertThat(TestFramework.support().isTestClass(Junit5Test.class)).isTrue();
         assertThat(TestFramework.support().isTestMethod(Junit5Test.class.getDeclaredMethod("shouldSucceed"))).isTrue();

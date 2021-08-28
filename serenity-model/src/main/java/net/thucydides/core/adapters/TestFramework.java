@@ -19,15 +19,22 @@ public class TestFramework {
 
         availableStrategies.sort((o1, o2) -> o2.priority().compareTo(o1.priority()));
 
-        return availableStrategies.get(0);
+        if (availableStrategies.size() > 1) {
+            return new MultiStrategyAdapter(availableStrategies);
+        } else {
+            return availableStrategies.get(0);
+        }
     }
 
     private static Optional<TestStrategyAdapter> newInstanceOf(Class<?> adaptorClass) {
         try {
-            return Optional.of((TestStrategyAdapter) adaptorClass.newInstance());
+            TestStrategyAdapter adapter = (TestStrategyAdapter) adaptorClass.newInstance();
+            if (adapter.priority() > 0) {
+                return Optional.of(adapter);
+            }
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 }

@@ -25,7 +25,11 @@ class DefaultJUnitStrategy implements JUnitStrategy {
 
     @Override
     public boolean isTestClass(final Class<?> testClass) {
-        return containsAnnotationCalled(testClass.getAnnotations(), "RunWith");
+        return containsAnnotationCalled(testClass.getAnnotations(), "RunWith") || hasMethodWithTestAnnotation(testClass);
+    }
+
+    private boolean hasMethodWithTestAnnotation(final Class<?> testClass) {
+        return stream(testClass.getMethods()).anyMatch(this::isTestMethod);
     }
 
 
@@ -81,13 +85,15 @@ class DefaultJUnitStrategy implements JUnitStrategy {
     @Override
     public boolean isATaggableClass(Class<?> testClass) {
         Optional<String> runWithValue = runWithValue(testClass);
-        try {
-            Class<?> runWithClass = Class.forName(runWithValue.get());
-            return Taggable.class.isAssignableFrom(runWithClass);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
+        if (runWithValue.isPresent()) {
+            try {
+                Class<?> runWithClass = Class.forName(runWithValue.get());
+                return Taggable.class.isAssignableFrom(runWithClass);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
+        return false;
  //       RunWith runWith = testClass.getAnnotation(RunWith.class);
 //        return (runWith != null && Taggable.class.isAssignableFrom(runWith.value()));
     }

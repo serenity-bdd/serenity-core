@@ -366,7 +366,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     private TestOutcome testOutcomeWithTitle(String title, List<TestOutcome> testOutcomes) {
         for(TestOutcome testOutcome : testOutcomes) {
-            System.out.println("TestOutcome title " + testOutcome.getTitle());
             if (testOutcome.getTitle().startsWith(title)) {
                 return testOutcome;
             }

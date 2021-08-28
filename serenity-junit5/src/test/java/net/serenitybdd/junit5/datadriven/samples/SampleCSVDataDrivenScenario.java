@@ -43,9 +43,7 @@ public class SampleCSVDataDrivenScenario {
 
     @ParameterizedTest(name = "Another Csv File Data Test {0} ")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
-    public void another_data_driven_test(String name, int age,String address) {
-        System.out.println("another data_driven_test: "+ name + " " + age + " " + address);
-    }
+    public void another_data_driven_test(String name, int age,String address) {}
 
 
     public String getName() {

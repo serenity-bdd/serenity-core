@@ -1,13 +1,22 @@
 package net.thucydides.core.adapters;
 
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 public class TestFramework {
-    public static TestStrategyAdapter support() {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestFramework.class);
+
+    private static TestStrategyAdapter selectedTestStrategyAdapter;
+
+    static {
         List<Class<?>> testStrategies = ClassFinder.loadClasses()
                 .thatImplement(TestStrategyAdapter.class)
                 .fromPackage("net.thucydides.core.adapters");
@@ -16,14 +25,16 @@ public class TestFramework {
         for (Class<?> strategyClass : testStrategies) {
             newInstanceOf(strategyClass).ifPresent(availableStrategies::add);
         }
-
         availableStrategies.sort((o1, o2) -> o2.priority().compareTo(o1.priority()));
-
         if (availableStrategies.size() > 1) {
-            return new MultiStrategyAdapter(availableStrategies);
+            selectedTestStrategyAdapter =  new MultiStrategyAdapter(availableStrategies);
         } else {
-            return availableStrategies.get(0);
+            selectedTestStrategyAdapter = availableStrategies.get(0);
         }
+    }
+
+    public static TestStrategyAdapter support() {
+        return selectedTestStrategyAdapter;
     }
 
     private static Optional<TestStrategyAdapter> newInstanceOf(Class<?> adaptorClass) {
@@ -33,7 +44,7 @@ public class TestFramework {
                 return Optional.of(adapter);
             }
         } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot instantiate test framework adapter class " + adaptorClass, e);
         }
         return Optional.empty();
     }

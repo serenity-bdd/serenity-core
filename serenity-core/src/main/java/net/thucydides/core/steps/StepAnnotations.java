@@ -3,11 +3,13 @@ package net.thucydides.core.steps;
 import net.serenitybdd.core.pages.PagesAnnotatedField;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.construction.StepsClassResolver;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_MAXIMUM_STEP_NESTING_DEPTH;
@@ -18,6 +20,8 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_MAXIMUM_STEP
 public final class StepAnnotations {
 
     private final EnvironmentVariables environmentVariables;
+    private final List<StepsClassResolver> stepsClassResolvers;
+    private static final Logger LOGGER = LoggerFactory.getLogger(StepAnnotations.class);
 
     private StepAnnotations() {
         this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
@@ -25,6 +29,11 @@ public final class StepAnnotations {
 
     private StepAnnotations(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        this.stepsClassResolvers = new ArrayList<>();
+        Iterator<StepsClassResolver> resolverIterator = ServiceLoader.load(StepsClassResolver.class).iterator();
+        while (resolverIterator.hasNext()) {
+            this.stepsClassResolvers.add(resolverIterator.next());
+        }
     }
 
     public static StepAnnotations injector() {
@@ -74,7 +83,7 @@ public final class StepAnnotations {
 
             ensureThatThisFieldIsNotCyclicOrRecursive(stepsField);
 
-            Class<?> scenarioStepsClass = stepsField.getFieldClass();
+            Class<?> scenarioStepsClass = resolveStepsClass(stepsField.getFieldClass());
 
             Object steps = StepLibraryCreator.usingConfiguredCreationStrategy(stepFactory, stepsField, environmentVariables)
                                              .initiateStepsFor(scenarioStepsClass);
@@ -83,6 +92,22 @@ public final class StepAnnotations {
             stepsField.assignActorNameIn(steps);
             injectNestedScenarioStepsInto(steps, stepFactory, scenarioStepsClass);
         }
+    }
+
+    private Class<?> resolveStepsClass(Class<?> originalStepsClass) {
+        if (stepsClassResolvers.isEmpty()) {
+            return originalStepsClass;
+        }
+
+        for (StepsClassResolver stepsClassResolver : stepsClassResolvers) {
+            Class<?> resolvedClass = stepsClassResolver.resolveStepsClass(originalStepsClass);
+            if (resolvedClass != null) {
+                LOGGER.info("Steps {} will be instantiated as {}", originalStepsClass, resolvedClass);
+                return resolvedClass;
+            }
+        }
+
+        return originalStepsClass;
     }
 
     private void ensureThatThisFieldIsNotCyclicOrRecursive(StepsAnnotatedField stepsAnnotatedField) {

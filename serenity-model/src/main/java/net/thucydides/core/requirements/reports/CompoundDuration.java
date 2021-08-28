@@ -27,7 +27,7 @@ public class CompoundDuration {
                 FORMATS_PER_DURATION_THRESHOLD.entrySet()
                 .stream()
                 .filter(entry -> durationInMilliseconds < entry.getKey())
-                .map(entry -> entry.getValue())
+                .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse(DAYS_FORMAT);
 

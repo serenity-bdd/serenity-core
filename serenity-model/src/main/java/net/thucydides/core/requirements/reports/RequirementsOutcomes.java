@@ -96,6 +96,9 @@ public class RequirementsOutcomes {
                                       estimatedUnimplementedTests, issueTracking);
     }
 
+    public List<Requirement> getRequirements() {
+        return requirementOutcomes.stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
+    }
 
     RequirementsOutcomesOfTypeCache requirementsOfTypeCache = new RequirementsOutcomesOfTypeCache(this);
 
@@ -398,11 +401,21 @@ public class RequirementsOutcomes {
 
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
 
-                List<Requirement> childRequirements = requirement.getChildren();
-                RequirementsOutcomes childOutcomes =
-                        new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
-                                environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
-                flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
+                requirement.getChildren().forEach(
+                        childRequirement ->  {
+                            TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
+                            RequirementsOutcomes childOutcomes
+                                    = new RequirementsOutcomes(Arrays.asList(childRequirement), testOutcomesForChildRequirement, issueTracking,
+                                            environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+                            flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
+                        }
+
+                );
+//                List<Requirement> childRequirements = requirement.getChildren();
+//                RequirementsOutcomes childOutcomes =
+//                        new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
+//                                environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+//                flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
             }
         }
 
@@ -580,5 +593,9 @@ public class RequirementsOutcomes {
 
     public String getOverview() {
         return overview;
+    }
+
+    public Optional<RequirementOutcome> getOutcomeFor(Requirement requirement) {
+        return requirementOutcomes.stream().filter(requirementOutcome -> requirementOutcome.getRequirement().equals(requirement)).findFirst();
     }
 }

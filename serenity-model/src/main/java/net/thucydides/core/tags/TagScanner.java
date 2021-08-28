@@ -1,11 +1,11 @@
 package net.thucydides.core.tags;
 
 import net.serenitybdd.core.tags.EnvironmentDefinedTags;
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.CucumberCompatibleFilter;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.JUnitAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class TagScanner {
     // If the default tag scanner is applied to these test runners, it will interfere
     // with the real filtering.
     private boolean isATaggable(Class<?> testClass) {
-        return JUnitAdapter.isATaggableClass(testClass);
+        return TestFramework.support().isATaggableClass(testClass);
     }
 
     private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {

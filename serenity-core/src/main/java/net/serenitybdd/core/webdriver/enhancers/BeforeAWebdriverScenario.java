@@ -10,4 +10,6 @@ public interface BeforeAWebdriverScenario {
                               SupportedWebDriver driver,
                               TestOutcome testOutcome,
                               DesiredCapabilities capabilities);
+
+    default boolean isActivated(EnvironmentVariables environmentVariables) { return true; }
 }

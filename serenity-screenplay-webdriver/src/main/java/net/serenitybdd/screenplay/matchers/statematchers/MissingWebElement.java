@@ -30,20 +30,26 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldBeVisible() {
+    public WebElementState shouldBeVisible() {
         failWithMessage("Element should be visible");
+        return this;
     }
 
     @Override
-    public void shouldBeCurrentlyVisible() {
+    public WebElementState shouldBeCurrentlyVisible() {
         failWithMessage("Element should be visible");
+        return this;
     }
 
     @Override
-    public void shouldNotBeVisible() {}
+    public WebElementState shouldNotBeVisible() {
+        return this;
+    }
 
     @Override
-    public void shouldNotBeCurrentlyVisible() {}
+    public WebElementState shouldNotBeCurrentlyVisible() {
+        return this;
+    }
 
     @Override
     public boolean hasFocus() {
@@ -71,29 +77,36 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldContainText(String textValue) {
+    public WebElementState shouldContainText(String textValue) {
         String errorMessage = String.format(
                 "The text '%s' was not found in the web element. Element text '%s'.", textValue, elementName);
         failWithMessage(errorMessage);
+        return this;
     }
 
     @Override
-    public void shouldContainOnlyText(String textValue) {
+    public WebElementState shouldContainOnlyText(String textValue) {
         String errorMessage = String.format(
                 "The text '%s' does not match the elements text '%s'.", textValue, elementName);
+        failWithMessage(errorMessage);
+        return this;
     }
 
     @Override
-    public void shouldContainSelectedOption(String textValue) {
+    public WebElementState shouldContainSelectedOption(String textValue) {
         failWithMessage(String.format("The list element '%s' was not found in the web element %s", textValue, elementName));
+        return this;
     }
 
     @Override
-    public void shouldNotContainText(String textValue) {}
+    public WebElementState shouldNotContainText(String textValue) {
+        return this;
+    }
 
     @Override
-    public void shouldBeEnabled() {
+    public WebElementState shouldBeEnabled() {
         failWithMessage(String.format("Field '%s' should be enabled", elementName));
+        return this;
     }
 
     @Override
@@ -107,7 +120,9 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldNotBeEnabled() { }
+    public WebElementState shouldNotBeEnabled() {
+        return this;
+    }
 
     @Override
     public String getSelectedVisibleTextValue() {
@@ -130,12 +145,14 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
-    public void shouldBePresent() {
+    public WebElementState shouldBePresent() {
         failWithMessage(String.format("Field '%s' should be present", elementName));
+        return this;
     }
 
     @Override
-    public void shouldNotBePresent() {
+    public WebElementState shouldNotBePresent() {
+        return this;
     }
 
     @Override
@@ -155,6 +172,11 @@ public class MissingWebElement implements WebElementState {
 
     @Override
     public String getText() {
+        return "";
+    }
+
+    @Override
+    public String getAttribute(String name) {
         return "";
     }
 

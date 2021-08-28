@@ -32,7 +32,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question, actor.getName()));
         try {
-            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
+            performSetupActionsAs(actor);
             assertThat(reason(), question.answeredBy(actor), is(true));
         } catch (Throwable actualError) {
 

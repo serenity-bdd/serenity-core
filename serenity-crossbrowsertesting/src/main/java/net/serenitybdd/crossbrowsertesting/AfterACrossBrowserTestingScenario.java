@@ -16,7 +16,7 @@ public class AfterACrossBrowserTestingScenario implements AfterAWebdriverScenari
             return;
         }
 
-        String sessionId = RemoteDriver.of(driver).getSessionId().toString();
+        String sessionId = (RemoteDriver.isStubbed(driver)) ? "" : RemoteDriver.of(driver).getSessionId().toString();
         String userName = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("crossbrowsertesting.user")
                 .orElse(null);

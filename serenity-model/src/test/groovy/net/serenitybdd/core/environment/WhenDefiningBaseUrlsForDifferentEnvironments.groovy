@@ -9,6 +9,64 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
+    def "Environment-specific configuration sets can be combined"() {
+
+        given:
+        environmentVariables.setProperties([
+                "environment" : "chicken,masala",
+
+                "environments.lamb.meat": "lamb",
+                "environments.chicken.meat": "chicken",
+                "environments.masala.sauce": "garam masala",
+                "environments.masala.spicy": "moderate",
+        ])
+        when:
+        def meat = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("meat")
+        def sauce = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("sauce")
+        then:
+        meat == "chicken" && sauce == "garam masala"
+    }
+
+
+    def "When environment-specific configuration sets are combined the last non-empty value primes"() {
+
+        given:
+        environmentVariables.setProperties([
+                "environment" : "chicken,masala",
+
+                "environments.lamb.meat": "lamb",
+                "environments.chicken.meat": "chicken",
+                "environments.chicken.spicy": "no",
+                "environments.masala.sauce": "garam masala",
+                "environments.masala.spicy": "moderate",
+                "environments.appetiser.spicy": "",
+        ])
+        when:
+        def spicy = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("spicy")
+        then:
+        spicy == "moderate"
+    }
+
+    def "When environment-specific configuration sets are combined defaults are still used if no value is defined"() {
+
+        given:
+        environmentVariables.setProperties([
+                "environment" : "chicken,masala",
+
+                "environments.lamb.meat": "lamb",
+                "environments.chicken.meat": "chicken",
+                "environments.chicken.spicy": "no",
+                "environments.masala.sauce": "garam masala",
+                "environments.masala.spicy": "moderate",
+                "environments.appetiser.spicy": "",
+                "cuisine":"indian"
+        ])
+        when:
+        def cuisine = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("cuisine")
+        then:
+        cuisine == "indian"
+    }
+
     def "if no environments are defined, the normal base url will be used"() {
         given:
         environmentVariables.setProperty("webdriver.base.url", "http://foo.com")
@@ -36,7 +94,6 @@ class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {
         baseUrl == "http://dev.foo.com"
 
     }
-
 
     def """If a default environment is defined, it will be used if no environment is set
              environments {

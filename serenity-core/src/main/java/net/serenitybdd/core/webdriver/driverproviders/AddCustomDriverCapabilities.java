@@ -51,7 +51,10 @@ public class AddCustomDriverCapabilities {
         customCapabilityEnhancers.forEach(
                 enhancerType -> {
                     try {
-                        ((BeforeAWebdriverScenario)enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, capabilities);
+                        BeforeAWebdriverScenario beforeScenario = (BeforeAWebdriverScenario)enhancerType.newInstance();
+                        if (beforeScenario.isActivated(environmentVariables)) {
+                            ((BeforeAWebdriverScenario) enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, capabilities);
+                        }
                     } catch (InstantiationException | IllegalAccessException e) {
                         e.printStackTrace();
                     }

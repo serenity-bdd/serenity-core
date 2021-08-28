@@ -18,6 +18,7 @@ public abstract class SerenityAntTaskTestBase extends BuildFileTest {
         String indexFilePath = reportDirectory + "/" + "index.html";
         String screenshotFilePath = reportDirectory + "/" + "amazon.png";
         assertThat(currentThread().getContextClassLoader().getResource(indexFilePath)).isNotNull();
+        assertThat(Paths.get("target/test-classes/" + indexFilePath)).exists();
         assertThat(currentThread().getContextClassLoader().getResource(screenshotFilePath)).isNotNull();
     }
 

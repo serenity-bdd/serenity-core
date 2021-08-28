@@ -37,7 +37,6 @@ public class AddCustomCapabilities {
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
-            //String propertyValue = environmentVariables.getProperty(propertyKey);
 
             String propertyValue = EnvironmentSpecificConfiguration.from(environmentVariables)
                     .getOptionalProperty(propertyKey)

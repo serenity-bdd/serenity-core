@@ -193,6 +193,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
             generateHtmlStoryReports();
             generateExtraReports();
             generateCustomReports();
+
         } catch (IOException e) {
             throw new MojoExecutionException("Error generating aggregate serenity reports", e);
         }

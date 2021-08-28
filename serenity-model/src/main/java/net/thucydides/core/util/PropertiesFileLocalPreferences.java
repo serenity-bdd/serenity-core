@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -219,17 +220,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                 .findFirst();
     }
 
-    private final String SERENITY_CONF_FILE = "(.*)[\\/\\\\]?src[\\/\\\\]test[\\/\\\\]resources[\\/\\\\]serenity.conf";
-
+    private final String SERENITY_CONF_FILE = "src" + File.separator + "test" + File.separator + "resources" + File.separator + "serenity.conf";
     private Optional<String> serenityConfFileInASensibleLocation() {
-        try {
-            return SearchForFilesWithName.matching(Paths.get("."), SERENITY_CONF_FILE).getMatchingFiles()
-                    .stream()
-                    .findFirst()
-                    .map(path -> path.toAbsolutePath().toString());
-        } catch (IOException e) {
-            return Optional.empty();
-        }
+            Path configFileInCurrentDirectory = Paths.get(SERENITY_CONF_FILE);
+            return configFileInCurrentDirectory.toFile().exists() ? Optional.of(configFileInCurrentDirectory.toAbsolutePath().toString()) : Optional.empty();
     }
 
     private String defaultPropertiesFileName() {

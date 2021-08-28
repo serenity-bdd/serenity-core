@@ -2,6 +2,8 @@ package net.thucydides.core.reports.html;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.logging.ConsoleColors;
+import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.ThucydidesReporter;
 import net.thucydides.core.reports.templates.TemplateManager;
@@ -33,6 +35,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private final TemplateManager templateManager;
     private final EnvironmentVariables environmentVariables;
     private final Charset charset;
+    protected final ConsoleColors colored;
 
     protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm";
 
@@ -44,6 +47,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         super();
         this.templateManager = Injectors.getInjector().getInstance(TemplateManager.class);
         this.environmentVariables = environmentVariables;
+        this.colored = new ConsoleColors(environmentVariables);
         this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables,
                                                                                   StandardCharsets.UTF_8.name()));
     }
@@ -123,5 +127,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         return new Merger(templateFile);
     }
 
-
+    protected Boolean verboseReporting() {
+        return LoggingLevel.definedIn(environmentVariables).isAtLeast(LoggingLevel.VERBOSE);
+    }
 }

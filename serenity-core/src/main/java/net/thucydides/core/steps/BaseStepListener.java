@@ -1,6 +1,5 @@
 package net.thucydides.core.steps;
 
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.annotations.events.AfterExample;
@@ -10,10 +9,7 @@ import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
-import net.serenitybdd.core.photography.Darkroom;
-import net.serenitybdd.core.photography.Photographer;
-import net.serenitybdd.core.photography.ScreenshotPhoto;
-import net.serenitybdd.core.photography.SoundEngineer;
+import net.serenitybdd.core.photography.*;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
@@ -64,17 +60,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     private final List<TestOutcome> testOutcomes;
 
-    private ThreadLocal<TestOutcome> currentTestOutcome;
+//    private ThreadLocal<TestOutcome> currentTestOutcome;
+    private TestOutcome currentTestOutcome;
 
     /**
      * Keeps track of what steps have been started but not finished, in order to structure nested steps.
      */
-    private final ThreadLocal<Stack<TestStep>> currentStepStack;
+//    private final ThreadLocal<Stack<TestStep>> currentStepStack;
+    private final Stack<TestStep> currentStepStack = new Stack<>();
 
     /**
      * Keeps track of the current step group, if any.
      */
-    private final ThreadLocal<Stack<TestStep>> currentGroupStack;
+//    private final ThreadLocal<Stack<TestStep>> currentGroupStack;
+    private final Stack<TestStep> currentGroupStack;
 
     private StepEventBus eventBus;
     /**
@@ -103,7 +102,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
-    private ScrollStrategy scrollStrategy;
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
@@ -205,12 +203,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public Photographer getPhotographer() {
         if (photographer == null) {
-            if (shouldUseFullPageScreenshotStrategy()){
-                scrollStrategy = ScrollStrategy.WHOLE_PAGE;
-            } else {
-                scrollStrategy = ScrollStrategy.VIEWPORT_ONLY;
-            }
-            photographer = new Photographer(getDarkroom(), scrollStrategy);
+            photographer = new Photographer(getDarkroom());
         }
         return photographer;
     }
@@ -253,6 +246,18 @@ public class BaseStepListener implements StepListener, StepPublisher {
         );
     }
 
+    public void addStepsFrom(List<TestStep> newSteps) {
+        this.latestTestOutcome().ifPresent(
+                outcome -> outcome.recordSteps(newSteps)
+        );
+    }
+
+    public void addChildStepsFrom(List<TestStep> newSteps) {
+        this.latestTestOutcome().ifPresent(
+                outcome -> outcome.recordChildSteps(newSteps)
+        );
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;
@@ -272,6 +277,44 @@ public class BaseStepListener implements StepListener, StepPublisher {
         MANDATORY_SCREENSHOT
     }
 
+    public BaseStepListener childListenerFor(StepEventBus eventBus) {
+        BaseStepListener baseStepListener = new BaseStepListener(outputDirectory);
+        baseStepListener.photographer = photographer;
+        baseStepListener.screenshots = screenshots;
+        baseStepListener.darkroom = darkroom;
+        baseStepListener.eventBus = eventBus;
+        baseStepListener.soundEngineer = soundEngineer;
+        baseStepListener.storywideIssues = storywideIssues;
+        baseStepListener.storywideTags = storywideTags;
+        baseStepListener.suiteStarted = suiteStarted;
+        baseStepListener.testedStory = testedStory;
+        baseStepListener.testSuite = testSuite;
+        return baseStepListener;
+    }
+
+    /**
+     * Creates a new base step listener with
+     * @param outcomeName
+     * @return
+     */
+    public BaseStepListener spawn(String outcomeName) {
+        BaseStepListener baseStepListener = new BaseStepListener(outputDirectory);
+        baseStepListener.photographer = photographer;
+        baseStepListener.screenshots = screenshots;
+        baseStepListener.darkroom = darkroom;
+        baseStepListener.eventBus = eventBus;
+        baseStepListener.soundEngineer = soundEngineer;
+        baseStepListener.storywideIssues = storywideIssues;
+        baseStepListener.storywideTags = storywideTags;
+        baseStepListener.suiteStarted = suiteStarted;
+        baseStepListener.testedStory = testedStory;
+        baseStepListener.testSuite = testSuite;
+
+        baseStepListener.testStarted(outcomeName);
+
+        return baseStepListener;
+    }
+
     public BaseStepListener(final File outputDirectory) {
         this(outputDirectory, Injectors.getInjector());
     }
@@ -279,9 +322,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
         this.testOutcomes = new ArrayList<>();
-        this.currentTestOutcome = new ThreadLocal<>();
-        this.currentStepStack = ThreadLocal.withInitial(Stack<TestStep>::new);
-        this.currentGroupStack = ThreadLocal.withInitial(Stack<TestStep>::new);
+//        this.currentTestOutcome = new ThreadLocal<>();
+//        this.currentStepStack = ThreadLocal.withInitial(Stack<TestStep>::new);
+//        this.currentGroupStack = ThreadLocal.withInitial(Stack<TestStep>::new);
+        this.currentGroupStack = new Stack<TestStep>();
         this.outputDirectory = outputDirectory;
         this.storywideIssues = new ArrayList<>();
         this.storywideTags = new ArrayList<>();
@@ -374,7 +418,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (testOutcomes.isEmpty()) {
             return java.util.Optional.empty();
         } else {
-        	return java.util.Optional.ofNullable(currentTestOutcome.get());
+//        	return java.util.Optional.ofNullable(currentTestOutcome.get());
+        	return java.util.Optional.ofNullable(currentTestOutcome);
         }
     }
 
@@ -447,17 +492,29 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param testMethod the name of the test method in the test suite class.
      */
     public void testStarted(final String testMethod) {
-        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
-        this.currentTestOutcome.set(newTestOutcome);
-        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        String testMethodName = testMethod;
+        String qualifier = "";
+        if(testMethod.contains("%")) {
+            String[] splittedTestMethod = testMethod.split("%");
+            testMethodName = splittedTestMethod[0];
+            qualifier = splittedTestMethod[1];
+        }
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethodName, testSuite, testedStory);
+        if(!qualifier.isEmpty()) {
+            newTestOutcome = newTestOutcome.withQualifier(qualifier);
+        }
+        this.currentTestOutcome = newTestOutcome;
+        recordNewTestOutcome(testMethod, currentTestOutcome);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
     public void testStarted(final String testMethod, final String id) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
-        this.currentTestOutcome.set(newTestOutcome);
-        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+//        this.currentTestOutcome.set(newTestOutcome);
+//        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        this.currentTestOutcome = newTestOutcome;
+        recordNewTestOutcome(testMethod, currentTestOutcome);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
@@ -484,6 +541,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
             stepStarted(ExecutedStepDescription.withTitle(updatedStepTitle));
         }
         return new StepMutator(this);
+    }
+
+    public void updateCurrentStepFailureCause(Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(failure);
+        }
     }
 
     public class StepMutator {
@@ -555,7 +618,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         }
 
-        currentStepStack.get().clear();
+//        currentStepStack.get().clear();
+        currentStepStack.clear();
         LifecycleRegister.clear();
     }
 
@@ -579,7 +643,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testRetried() {
-        currentStepStack.get().clear();
+//        currentStepStack.get().clear();
+        currentStepStack.clear();
         testOutcomes.remove(getCurrentTestOutcome());
     }
 
@@ -646,7 +711,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         startNewGroupIfNested();
         setDefaultResultFromAnnotations(step, description);
 
-        currentStepStack.get().push(step);
+//        currentStepStack.get().push(step);
+        currentStepStack.push(step);
         recordStepToCurrentTestOutcome(step);
     }
 
@@ -673,18 +739,18 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void startNewGroup() {
         getCurrentTestOutcome().startGroup();
-        currentGroupStack.get().push(getCurrentStep());
+        currentGroupStack.push(getCurrentStep());
     }
 
     private java.util.Optional<TestStep> currentStep() {
-        if (currentStepStack.get() == null || currentStepStack.get().isEmpty()) {
+        if (currentStepStack.isEmpty()) {
             return java.util.Optional.empty();
         }
-        return (java.util.Optional.of(currentStepStack.get().peek()));
+        return (java.util.Optional.of(currentStepStack.peek()));
     }
 
     private TestStep getCurrentStep() {
-        return currentStepStack.get().peek();
+        return currentStepStack.peek();
     }
 
     private java.util.Optional<TestStep> getPreviousStep() {
@@ -697,15 +763,18 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private TestStep getCurrentGroup() {
-        if (currentGroupStack.get().isEmpty()) {
+//        if (currentGroupStack.get().isEmpty()) {
+        if (currentGroupStack.isEmpty()) {
             return null;
         } else {
-            return currentGroupStack.get().peek();// findLastChildIn(currentGroupStack.peek());
+//            return currentGroupStack.get().peek();// findLastChildIn(currentGroupStack.peek());
+            return currentGroupStack.peek();// findLastChildIn(currentGroupStack.peek());
         }
     }
 
     private boolean thereAreUnfinishedSteps() {
-        return !currentStepStack.get().isEmpty();
+//        return !currentStepStack.get().isEmpty();
+        return !currentStepStack.isEmpty();
     }
 
     public void stepFinished() {
@@ -721,7 +790,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void finishGroup() {
-        currentGroupStack.get().pop();
+//        currentGroupStack.get().pop();
+        currentGroupStack.pop();
         getCurrentTestOutcome().endGroup();
     }
 
@@ -753,6 +823,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
+    public void stepFailedWithException(Throwable failure) {
+        takeEndOfStepScreenshotFor(FAILURE);
+
+        TestFailureCause failureCause = TestFailureCause.from(failure);
+        getCurrentTestOutcome().appendTestFailure(failureCause);
+
+        recordFailureDetails(failure);
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
+
     public void lastStepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().lastStepFailedWith(failure);
@@ -770,16 +850,22 @@ public class BaseStepListener implements StepListener, StepPublisher {
         lastFailingExample = currentExample;
     }
 
+    private void recordFailureDetails(final Throwable failure) {
+        if (currentStepExists()) {
+            getCurrentStep().failedWith(new StepFailureException(failure.getMessage(), failure));
+        }
+        if (shouldTagErrors()) {
+            addTagFor(getCurrentTestOutcome());
+        }
+        lastFailingExample = currentExample;
+    }
+
     private void addTagFor(TestOutcome testOutcome) {
         testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error"));
     }
 
     private boolean shouldTagErrors() {
         return ThucydidesSystemProperty.SERENITY_TAG_FAILURES.booleanFrom(configuration.getEnvironmentVariables());
-    }
-
-    private boolean shouldUseFullPageScreenshotStrategy() {
-        return ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(configuration.getEnvironmentVariables());
     }
 
     public void stepIgnored() {
@@ -818,9 +904,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
             currentStepMethodStack.pop();
         }
         if (currentStepExists()) {
-            TestStep finishedStep = currentStepStack.get().pop();
+//            TestStep finishedStep = currentStepStack.get().pop();
+            TestStep finishedStep = currentStepStack.pop();
             finishedStep.recordDuration();
-            if (result != null) {
+            if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
             if ((finishedStep == getCurrentGroup())) {
@@ -831,10 +918,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean currentStepExists() {
-        return !currentStepStack.get().isEmpty();
+//        return !currentStepStack.get().isEmpty();
+        return !currentStepStack.isEmpty();
     }
 
-    public int getCurrentLevel() { return currentStepStack.get().size(); }
+    public int getCurrentLevel() {
+//        return currentStepStack.get().size();
+        return currentStepStack.size();
+    }
 
     private void takeEndOfStepScreenshotFor(final TestResult result) {
         if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
@@ -906,7 +997,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void recordScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         if (shouldTakeScreenshot(screenshotType, screenshotAndHtmlSource) && screenshotWasTaken(screenshotAndHtmlSource)) {
-            getCurrentStep().addScreenshot(screenshotAndHtmlSource);
+            currentStep().ifPresent(
+                    step -> step.addScreenshot(screenshotAndHtmlSource)
+            );
         }
     }
 
@@ -956,15 +1049,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         return SerenityWebdriverManager.inThisTestThread().getCurrentDrivers().stream().map(
-                driver -> new ScreenshotAndHtmlSource(
-                        screenshotFrom(driver),
-                        sourceFrom(result, driver))
+                driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver),sourceFrom(result, driver))
         ).collect(Collectors.toList());
     }
 
     private File screenshotFrom(WebDriver driver) {
         Path screenshotPath = getPhotographer().takesAScreenshot()
-                .with(driver)
+                .with(new WebDriverPhotoLens(driver))
                 .andWithBlurring(AnnotatedBluring.blurLevel())
                 .andSaveToDirectory(pathOf(outputDirectory))
                 .getPathToScreenshot();
@@ -976,27 +1067,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return soundEngineer.ifRequiredForResult(result)
                 .recordPageSourceUsing(driver)
                 .intoDirectory(pathOf(outputDirectory)).orElse(null);
-    }
-
-    private java.util.Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
-
-        ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
-        java.util.Optional<File> pageSource = java.util.Optional.empty();
-
-        if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-            newPhoto = getPhotographer().takesAScreenshot()
-                    .with(getDriver())
-                    .andWithBlurring(AnnotatedBluring.blurLevel())
-                    .andSaveToDirectory(pathOf(outputDirectory));
-
-            pageSource = soundEngineer.ifRequiredForResult(result)
-                    .recordPageSourceUsing(getDriver())
-                    .intoDirectory(pathOf(outputDirectory));
-
-        }
-        return (newPhoto == ScreenshotPhoto.None) ?
-                java.util.Optional.empty()
-                : java.util.Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orElse(null)));
     }
 
     private Path pathOf(File directory) {
@@ -1206,5 +1276,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStep().ifPresent(
                 step -> step.recordRestQuery(restQuery)
         );
+    }
+
+    public void clearTestOutcomes (){
+        testOutcomes.clear();
     }
 }

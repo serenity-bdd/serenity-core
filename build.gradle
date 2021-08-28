@@ -80,7 +80,8 @@ allprojects {
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
                     "org.eclipse.jetty:jetty-http:${jettyVersion}",
                     "org.eclipse.jetty:jetty-util:${jettyVersion}",
-                    "org.eclipse.jetty:jetty-io:${jettyVersion}"
+                    "org.eclipse.jetty:jetty-io:${jettyVersion}",
+                    "junit:junit:${junitVersion}"
         }
     }
 }
@@ -278,8 +279,10 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
 
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
+            exclude group: "org.junit"
             exclude group: "org.junit.jupiter"
             exclude group: "com.google.inject"
+            exclude group: "org.junit.platform"
         }
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "org.codehaus.groovy"

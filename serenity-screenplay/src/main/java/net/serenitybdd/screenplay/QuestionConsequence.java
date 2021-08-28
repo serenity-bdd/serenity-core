@@ -41,7 +41,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         Serenity.injectScenarioStepsInto(question);
 
         try {
-            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
+            performSetupActionsAs(actor);
 
             addHints(fromAssertion(expected)).to(question);
 

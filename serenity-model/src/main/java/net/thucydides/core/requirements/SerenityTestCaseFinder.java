@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements;
 
-import net.thucydides.core.util.JUnitAdapter;
+import net.thucydides.core.adapters.TestFramework;
 
 /**
  * Created by john on 22/07/2015.
@@ -8,7 +8,7 @@ import net.thucydides.core.util.JUnitAdapter;
 public class SerenityTestCaseFinder {
 
     public boolean isSerenityTestCase(Class<?> testClass) {
-        return JUnitAdapter.isSerenityTestCase(testClass);
+        return TestFramework.support().isSerenityTestCase(testClass);
     }
 
 }

@@ -3,7 +3,7 @@ package net.serenitybdd.junit.runners;
 import com.google.common.base.Splitter;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
-import net.thucydides.core.steps.FilePathParser;
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -95,7 +95,6 @@ public class DataDrivenAnnotations {
                 .andRows(parametersList)
                 .build();
     }
-
 
     private List<String> split(String columnNamesString, int numberOfColumns) {
 

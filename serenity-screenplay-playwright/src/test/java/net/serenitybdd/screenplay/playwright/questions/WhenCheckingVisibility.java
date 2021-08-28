@@ -27,7 +27,7 @@ public class WhenCheckingVisibility {
     public void weCanCheckforHiddenAndVisibleElements() {
         fred.attemptsTo(
                 Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
-                Ensure.that("text='Delete'").isHidden(),
+                Ensure.that("text='Delete'").withTimeout(0.0).isHidden(),
                 Click.on("text='Add Element'"),
                 Ensure.that("text='Delete'").isVisible()
         );
@@ -41,14 +41,6 @@ public class WhenCheckingVisibility {
                 Click.on("text='Enable'"),
                 WaitFor.selector("text='It's enabled!'"),
                 Ensure.that("#input-example input").isEnabled()
-        );
-    }
-
-    @Test
-    public void weCanSpecifyAnOptionalTimeout() {
-        fred.attemptsTo(
-                Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
-                Ensure.that("text='Delete'").withTimeout(0.0).isHidden()
         );
     }
 

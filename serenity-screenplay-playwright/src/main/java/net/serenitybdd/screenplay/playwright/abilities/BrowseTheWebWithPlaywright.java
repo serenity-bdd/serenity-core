@@ -2,13 +2,18 @@ package net.serenitybdd.screenplay.playwright.abilities;
 
 import com.google.common.eventbus.Subscribe;
 import com.microsoft.playwright.*;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
-import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
-import net.serenitybdd.screenplay.events.ActorPerformanceEvent;
+import net.serenitybdd.screenplay.events.*;
+import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.PageObjectDependencyInjector;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.SerenityWebdriverManager;
+import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +75,12 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         this.environmentVariables = environmentVariables;
         this.options = options;
         this.browserType = Optional.ofNullable(browserType);
+        registerForEventNotification();
+    }
+
+    private void registerForEventNotification() {
+        Broadcaster.getEventBus().register(this);
+        TestLifecycleEvents.register(this);
     }
 
     public static BrowseTheWebWithPlaywright as(Actor actor) {
@@ -136,9 +147,9 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         if (options.args == null) {
             ARGS.asListOfStringsFrom(environmentVariables).ifPresent(options::setArgs);
         }
-        if (options.channel == null) {
-            BROWSER_CHANNEL.asBrowserChannelFrom(environmentVariables).ifPresent(options::setChannel);
-        }
+//        if (options.channel == null) {
+//            BROWSER_CHANNEL.asBrowserChannelFrom(environmentVariables).ifPresent(options::setChannel);
+//        }
         if (options.chromiumSandbox == null) {
             CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(options::setChromiumSandbox);
         }
@@ -189,18 +200,43 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         return (T) this;
     }
 
+    @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
+        if (messageIsForThisActor(performanceEvent)) {
+            System.out.println("BEGIN " + performanceEvent.getClass());
+        }
+    }
+
+    @Subscribe
+    public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
+        if (messageIsForThisActor(performanceEvent)) {
+            System.out.println("END " + performanceEvent.getClass());
+        }
+    }
+
+
+    @Subscribe public void perform(ActorPerforms performAction) {
+        if (messageIsForThisActor(performAction)) {
+            System.out.println("Perform " + performAction.getPerformable());
+        }
+    }
+
+    @Subscribe public void prepareQuestion(ActorAsksQuestion questionEvent) {
+        if (messageIsForThisActor(questionEvent)) {
+            System.out.println("Question " + questionEvent.getQuestion());
+        }
+    }
+
     /**
      * Shut down the Playwright instance and browser cleanly at the end of a Screenplay test.
      */
     @Subscribe
-    public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
-        if (messageIsForThisActor(performanceEvent)) {
-            if (playwright != null) {
-                playwright.close();
-                playwright = null;
-            }
+    public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
+        if (playwright != null) {
+            playwright.close();
+            playwright = null;
         }
     }
+
 
     private boolean messageIsForThisActor(ActorPerformanceEvent event) {
         return event.getName().equals(actor.getName());

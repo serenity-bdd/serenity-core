@@ -25,6 +25,7 @@ public class ResponseConsequence extends BaseConsequence<Response> {
 
     @Override
     public void evaluateFor(Actor actor) {
+        performSetupActionsAs(actor);
         expression.accept(LastResponse.received().answeredBy(actor).then());
     }
 

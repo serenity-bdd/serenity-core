@@ -8,4 +8,6 @@ public interface AfterAWebdriverScenario {
     void apply(EnvironmentVariables environmentVariables,
                TestOutcome testOutcome,
                WebDriver driver);
+
+    default boolean isActivated(EnvironmentVariables environmentVariables) { return true; }
 }

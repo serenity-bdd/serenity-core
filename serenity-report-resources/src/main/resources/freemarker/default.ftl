@@ -4,7 +4,6 @@
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
     <#include "libraries/favicon.ftl">
-
     <#include "libraries/common.ftl">
     <#include "libraries/jquery-ui.ftl">
     <#include "libraries/datatables.ftl">
@@ -197,7 +196,7 @@
                                 </div>
                             </#if>
                         </td>
-                        <#if (testOutcome.externalLink)??>
+                        <#if (testOutcome.externalLink)?? && (testOutcome.externalLink.url)??>
                             <td valign="top">
                                 <a href="${testOutcome.externalLink.url}" class="tag"
                                    title="${testOutcome.externalLink.type}">
@@ -378,7 +377,6 @@
                         <tr>
                             <td colspan="5">
                                 <table id="stepSection${step_number}" class="step-table-nested" style="display:none;">
-
                                     <#assign level = level + 1>
                                     <#list step.children as nestedStep>
                                         <#if step.isAGroup() >
@@ -522,7 +520,7 @@
                                         </#list>
                                     </#if>
                                 </span>
-                                <#if (step.externalLink)??>
+                                <#if (step.externalLink)?? && (step.externalLink.url)??>
                                     <a href="${step.externalLink.url}" class="tag" title="${step.externalLink.type}">
                                         <i class="fa fa-video-camera fa-1x"></i>
                                     </a>
@@ -561,7 +559,7 @@
                         </#if>
                         <#-- OUTCOME & TIME -->
                         <td width="130"><span class="${step_class_root}-step">${step.result}</span></td>
-                        <td width="100"><span class="${step_class_root}-step">${step.durationInSeconds}s</span></td>
+                        <td width="100"><span class="${step_class_root}-step">${step.formattedDuration}</span></td>
                     </tr>
                     <#if (step.errorMessage?has_content) && !step.hasNestedErrors()>
                         <tr class="test-${step.result}">

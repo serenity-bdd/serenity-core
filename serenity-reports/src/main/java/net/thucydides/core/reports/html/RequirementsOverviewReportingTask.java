@@ -154,7 +154,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             Rule rule = scenario.getRule();
             if (rule == null) {
                 scenariosWithoutARule.add(scenario);
-            }  else {
+            } else {
                 if (!scenarioOutcomeMap.containsKey(rule)) {
                     scenarioOutcomeMap.put(rule, new ArrayList<>());
                 }
@@ -164,10 +164,15 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         List<ScenarioOutcomeGroup> scenarioGroups = new ArrayList<>();
         if (!scenariosWithoutARule.isEmpty()) {
             ScenarioOutcomeGroup scenarioGroup = new ScenarioOutcomeGroup(scenariosWithoutARule);
-            if (requirements.get(0).getBackground() != null) {
-                scenarioGroup.setBackgroundTitle(requirements.get(0).getBackground().getTitle());
-                scenarioGroup.setBackgroundDescription(requirements.get(0).getBackground().getDescription());
-            }
+            requirements.stream()
+                    .filter(requirement -> requirement.getBackground() != null)
+                    .findFirst()
+                    .ifPresent(
+                            requirement -> {
+                                scenarioGroup.setBackgroundTitle(requirement.getBackground().getTitle());
+                                scenarioGroup.setBackgroundDescription(requirement.getBackground().getDescription());
+                            }
+                    );
             scenarioGroups.add(scenarioGroup);
         }
         for (Rule rule : scenarioOutcomeMap.keySet()) {

@@ -12,10 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +22,8 @@ public class BuildInfoProvider {
     private final EnvironmentVariables environmentVariables;
     private final DriverCapabilityRecord driverCapabilityRecord;
     private final Map<String, Map<String, String>> sections;
+
+    private final static List<String> MASKABLE = Arrays.asList("accessKey", "key");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildInfoProvider.class);
 
@@ -36,83 +35,83 @@ public class BuildInfoProvider {
 
     public BuildProperties getBuildProperties() {
         Map<String, String> generalProperties = new HashMap<>();
-        generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
-        generalProperties.put("Operating System",System.getProperty("os.name") + " version " + System.getProperty("os.version"));
-        addRemoteDriverPropertiesTo(generalProperties);
-        addSaucelabsPropertiesTo(generalProperties);
+        generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables, "firefox"));
+        generalProperties.put("Operating System", System.getProperty("os.name") + " version " + System.getProperty("os.version"));
+        addGroupPropertiesTo("webdriver",generalProperties);
+        addGroupPropertiesTo("saucelabs",generalProperties);
+        addGroupPropertiesTo("browserstack",generalProperties);
         addCustomPropertiesTo(generalProperties);
 
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();
         return new BuildProperties(generalProperties, driverCapabilityRecord.getDrivers(), driverPropertiesMap, sections);
     }
 
-    private void addRemoteDriverPropertiesTo(Map<String, String> buildProperties) {
-        if (ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.isDefinedIn(environmentVariables)) {
-            buildProperties.put("Remote driver", ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables));
-            if (ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables) != null) {
-                buildProperties.put("Remote browser version", ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables));
-            }
-            if (ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables) != null) {
-                buildProperties.put("Remote OS", ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables));
-            }
+    private void addGroupPropertiesTo(String groupName, Map<String, String> buildProperties) {
+        if (EnvironmentSpecificConfiguration.from(environmentVariables).propertyGroupIsDefinedFor(groupName)) {
+            EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix(groupName).forEach(
+                    (key, value) -> {
+                        String ungroupedKey = key.toString().replace(groupName+".","");
+                        String sanitizedValue = sanitized(ungroupedKey, value.toString());
+                        buildProperties.put(StringUtils.capitalize(groupName) + " Property: " + ungroupedKey,
+                                            sanitized(key.toString(), sanitizedValue));
+                    }
+            );
         }
     }
 
-    private void addSaucelabsPropertiesTo(Map<String, String> buildProperties) {
-        if (ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables)) {
-            buildProperties.put("Saucelabs URL", maskAPIKey(ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables)));
-            if (ThucydidesSystemProperty.SAUCELABS_USER_ID.from(environmentVariables) != null) {
-                buildProperties.put("Saucelabs user", ThucydidesSystemProperty.SAUCELABS_USER_ID.from(environmentVariables));
-            }
-            if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables) != null) {
-                buildProperties.put("Saucelabs target platform", ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables));
-            }
-            if (ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables) != null) {
-                buildProperties.put("Saucelabs browser version", ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables));
-            }
-            if (ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables) != null) {
-                buildProperties.put("Remote OS", ThucydidesSystemProperty.WEBDRIVER_REMOTE_OS.from(environmentVariables));
-            }
+    private String sanitized(String property, String value) {
+        boolean isMaskable = MASKABLE.stream().anyMatch(
+                maskableKey -> property.contains(maskableKey)
+        );
+        if (isMaskable) {
+            return (value.contains("@") && value.contains(":")) ? maskAPIKey(value) : maskedKey(value);
         }
+        return (isMaskable) ? maskAPIKey(value) : value;
     }
-
+    /**
+     * Mask API key in URL if present
+     */
     private String maskAPIKey(String url) {
-        int apiKeyStart = url.indexOf(":");
-        int apiKeyEnd = url.indexOf("@");
-        return url.substring(0,apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
+        if (url == null) {
+            return "";
+        }
+        if (url.contains("@")) {
+            int apiKeyStart = url.indexOf(":");
+            int apiKeyEnd = url.indexOf("@");
+            return url.substring(0, apiKeyStart + 3) + "XXXXXXXXXXXXXXXX" + url.substring(apiKeyEnd);
+        } else {
+            return url;
+        }
     }
-
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
-        List<String> sysInfoKeys = environmentVariables.getKeys().stream()
-                                                        .filter( key -> key.startsWith("sysinfo."))
-                                                        .collect(Collectors.toList());
-        for(String key : sysInfoKeys) {
-            String simplifiedKey = key.replace("sysinfo.", "");
+        Properties sysInfoProperties = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix("sysinfo");
 
-            String expression = EnvironmentSpecificConfiguration.from(environmentVariables)
-                    .getOptionalProperty(key)
-                    .orElse(null);
+        sysInfoProperties.forEach(
+                (key, value) -> {
+                    String simplifiedKey = key.toString().replace("sysinfo.", "");
+                    String expression = value.toString();
+                    String resolvedValue = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key.toString(), expression) : expression;
 
-            String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;
-
-            if (isInASection(simplifiedKey)) {
-                String sectionKey = humanizedFormOf(sectionKeyFrom(simplifiedKey));
-                String fieldKey = humanizedFormOf(sectionLabelFrom(simplifiedKey));
-                Map<String, String> sectionValues = sections.getOrDefault(sectionKey, new HashMap<>());
-                sectionValues.put(fieldKey, value);
-                sections.put(sectionKey, sectionValues);
-            } else {
-                buildProperties.put(humanizedFormOf(simplifiedKey), value);
-            }
-        }
+                    if (isInASection(simplifiedKey)) {
+                        String sectionKey = humanizedFormOf(sectionKeyFrom(simplifiedKey));
+                        String fieldKey = humanizedFormOf(sectionLabelFrom(simplifiedKey));
+                        Map<String, String> sectionValues = sections.getOrDefault(sectionKey, new HashMap<>());
+                        sectionValues.put(fieldKey, resolvedValue);
+                        sections.put(sectionKey, sectionValues);
+                    } else {
+                        buildProperties.put(humanizedFormOf(simplifiedKey), resolvedValue);
+                    }
+                }
+        );
 
     }
 
     private String sectionKeyFrom(String simplifiedKey) {
         return Splitter.on(".").splitToList(simplifiedKey).get(0);
     }
+
     private String sectionLabelFrom(String simplifiedKey) {
         return Splitter.on(".").splitToList(simplifiedKey).get(1);
     }
@@ -127,11 +126,12 @@ public class BuildInfoProvider {
 
     private String humanizedFormOf(String simplifiedKey) {
         return StringUtils.strip(StringUtils.capitalize(
-                StringUtils.replace(simplifiedKey,"."," ")
-                           .replace("_"," ")),"\"");
+                StringUtils.replace(simplifiedKey, ".", " ")
+                        .replace("_", " ")), "\"");
     }
 
     private Binding binding;
+
     private Binding groovyBinding() {
         binding = new Binding();
         binding.setVariable("env", environmentVariables.asMap());
@@ -147,9 +147,13 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'",expression, key);
+            String error = String.format("Failed to evaluate build info expression '%s' for key '%s'", expression, key);
             LOGGER.warn(error);
         }
         return (result != null) ? result.toString() : expression;
+    }
+
+    private String maskedKey(String value) {
+        return value.substring(0,3) + "XXXXXXXXXXXXXXXX" + value.substring(value.length() - 3);
     }
 }

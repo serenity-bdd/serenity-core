@@ -52,6 +52,19 @@ public class DataTableRow {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        }
+        if(!(other instanceof DataTableRow)){
+            return false;
+        }
+        return (this.values.equals(((DataTableRow) other).values))
+                && (this.lineNumber == ((DataTableRow) other).getLineNumber())
+                && (this.result == ((DataTableRow) other).getResult());
+    }
+
+    @Override
     public String toString() {
         return "DataTableRow{" +
                 "values=" + values +

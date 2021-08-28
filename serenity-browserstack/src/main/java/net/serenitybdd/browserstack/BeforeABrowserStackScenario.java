@@ -4,6 +4,7 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -53,6 +54,9 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
 
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
+        }
+        if (!ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables,"").contains("browserstack")) {
+            return  capabilities;
         }
 
         String remotePlatform = EnvironmentSpecificConfiguration.from(environmentVariables)
@@ -149,6 +153,11 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
 
     private String unprefixed(String propertyName) {
         return propertyName.replace(BROWSERSTACK, "");
+    }
+
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return !EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                .getPropertiesWithPrefix("browserstack").isEmpty();
     }
 
 }

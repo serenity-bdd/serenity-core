@@ -14,12 +14,12 @@ import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -50,6 +50,15 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
     private final EnvironmentVariables environmentVariables;
+    private static ThreadLocal<Class> expectedExceptionType = new ThreadLocal<>();
+
+    public static void setExpectedExceptionType(Class expectedException) {
+        expectedExceptionType.set(expectedException);
+    }
+
+    public static void resetExpectedExceptionType() {
+        expectedExceptionType.remove();
+    }
 
     private List<StepInterceptionListener> listeners = new ArrayList<>();
 
@@ -70,7 +79,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             @SuperMethod Method zuper
     ) throws Throwable {
         Object result;
-        if (baseClassMethod(method, target)) {
+        if (baseClassMethod(method, target) || isAStepThatMayThrowAnException(method)) {
             result = runBaseObjectMethod(target, method, args, zuper);
         } else {
             result = testStepResult(target, method, args, zuper);
@@ -423,6 +432,10 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         return false;
     }
 
+    private boolean isAStepThatMayThrowAnException(final Method method) {
+        return expectedExceptionType.get() != null;
+    }
+
     private boolean isAThucydidesStep(Annotation annotation) {
         return (annotation instanceof Step) || (annotation instanceof StepGroup);
     }
@@ -449,7 +462,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             logStepFailure(obj, method, args, failedAssertion);
             result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
-            if (JUnitAdapter.isAssumptionViolatedException(testErrorException)) {
+            if (TestFramework.support().isAssumptionViolatedException(testErrorException)) {
                 result = appropriateReturnObject(obj, method);
             } else {
                 error = SerenityManagedException.detachedCopyOf(testErrorException);
@@ -463,7 +476,6 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
         notifyOfStepFailure(object, method, args, assertionError);
 
-
         LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
     }
 
@@ -476,7 +488,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         } catch (IgnoredStepException ignoredStep) {
             notifyStepIgnored(ignoredStep.getMessage());
         } catch (Throwable throwable) {
-            if (JUnitAdapter.isAssumptionViolatedException(throwable)) {
+            if (TestFramework.support().isAssumptionViolatedException(throwable)) {
                 notifyAssumptionViolated(throwable.getMessage());
             } else {
                 throw throwable;
@@ -535,7 +547,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
             final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
+                                                                     .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);

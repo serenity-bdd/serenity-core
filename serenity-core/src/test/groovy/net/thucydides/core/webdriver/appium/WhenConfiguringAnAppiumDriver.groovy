@@ -161,7 +161,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         appiumConfiguration.capabilities
         then:
         ThucydidesConfigurationException invalidConfiguration = thrown()
-        invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")
+        invalidConfiguration.message.contains("The browser under test or path to the app or (appPackage and appActivity) needs to be provided in the appium.app or appium.browserName property.")
     }
 
     def "should filter Appium properties that are not supported if 'appium.process.desired.capabilities' is enabled"() {

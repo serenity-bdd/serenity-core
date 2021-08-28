@@ -1,8 +1,10 @@
 package net.thucydides.core.webdriver.stubs;
 
+import net.serenitybdd.core.webdriver.RemoteDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.ArrayList;
 import java.util.HashSet;

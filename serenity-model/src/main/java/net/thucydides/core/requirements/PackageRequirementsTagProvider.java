@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Splitter;
-import com.google.common.reflect.ClassPath;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -12,11 +11,12 @@ import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
 import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -167,19 +167,22 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
-        try {
-            ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-            return classpath.getTopLevelClassesRecursive(rootPackage)
-                    .stream()
-                    .filter(classInfo -> classRepresentsARequirementIn(classInfo))
-                    .map(classInfo -> classInfo.getName())
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new CouldNotLoadRequirementsException(e);
-        }
+        Set<Class> allClassesRecursive = findAllClassesUsingReflectionsLibrary(rootPackage);
+        return allClassesRecursive.stream()
+                .filter(classInfo -> classRepresentsARequirementIn(classInfo))
+                .map(classInfo -> classInfo.getName())
+                .map(className -> className.replaceAll("\\$","."))
+                .collect(Collectors.toList());
     }
 
-    private boolean classRepresentsARequirementIn(ClassPath.ClassInfo classInfo) {
+    private Set<Class> findAllClassesUsingReflectionsLibrary(String packageName) {
+        Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
+        return reflections.getSubTypesOf(Object.class)
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
+    private boolean classRepresentsARequirementIn(Class classInfo) {
         return (ClassInfoAnnotations.theClassDefinedIn(classInfo)
                 .hasAnAnnotation(net.thucydides.core.annotations.Narrative.class))
                 || (ClassInfoAnnotations.theClassDefinedIn(classInfo)

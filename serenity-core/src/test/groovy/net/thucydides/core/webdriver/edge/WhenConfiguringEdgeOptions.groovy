@@ -10,14 +10,21 @@ class WhenConfiguringEdgeOptions extends Specification {
     def "should add Edge-specific options"() {
         given:
 
-        def edgeOptions = """
-        {"args": ["headless", "start-maximized", "disable-gpu"]}
+        def edgeOptions = """["headless", 
+                              "start-maximized", 
+                              # A comment
+                              "window-size=100,100"
+                              "disable-gpu"
+                              ]
         """
-            environmentVariables.setProperty("edge.options", edgeOptions)
-        EdgeDriverCapabilities capabilities = new EdgeDriverCapabilities(environmentVariables)
+            environmentVariables.setProperty("edge.args", edgeOptions)
+            environmentVariables.setProperty("edge.preferences.download.default_directory", "some-directory")
+
+            EdgeDriverCapabilities capabilities = new EdgeDriverCapabilities(environmentVariables)
         when:
             def desiredCapabilities = capabilities.getCapabilities()
         then:
-            desiredCapabilities.getCapability("ms:edgeOptions")["args"] == ["headless", "start-maximized", "disable-gpu"]
+            desiredCapabilities.getCapability("ms:edgeOptions")["args"] == ["headless", "start-maximized", "window-size=100,100", "disable-gpu"]
+            desiredCapabilities.getCapability("ms:edgeOptions")["prefs"]["download.default_directory"] == "some-directory"
     }
 }

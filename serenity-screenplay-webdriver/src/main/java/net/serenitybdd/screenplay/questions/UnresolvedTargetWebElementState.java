@@ -37,20 +37,24 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
-    public void shouldBeVisible() {
+    public WebElementState shouldBeVisible() {
         throw new AssertionError("Element should be visible");
     }
 
     @Override
-    public void shouldBeCurrentlyVisible() {
+    public WebElementState shouldBeCurrentlyVisible() {
         throw new AssertionError("Element should be visible");
     }
 
     @Override
-    public void shouldNotBeVisible() {}
+    public WebElementState shouldNotBeVisible() {
+        return this;
+    }
 
     @Override
-    public void shouldNotBeCurrentlyVisible() {}
+    public WebElementState shouldNotBeCurrentlyVisible() {
+        return this;
+    }
 
     @Override
     public boolean hasFocus() {
@@ -78,25 +82,27 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
-    public void shouldContainText(String textValue) {
+    public WebElementState shouldContainText(String textValue) {
         throw new AssertionError("Element should contain text " + textValue);
     }
 
     @Override
-    public void shouldContainOnlyText(String textValue) {
+    public WebElementState shouldContainOnlyText(String textValue) {
         throw new AssertionError("Element should contain text " + textValue);
     }
 
     @Override
-    public void shouldContainSelectedOption(String textValue) {
+    public WebElementState shouldContainSelectedOption(String textValue) {
         throw new AssertionError("Element should contain selected option " + textValue);
     }
 
     @Override
-    public void shouldNotContainText(String textValue) {}
+    public WebElementState shouldNotContainText(String textValue) {
+        return this;
+    }
 
     @Override
-    public void shouldBeEnabled() {
+    public WebElementState shouldBeEnabled() {
         throw new AssertionError("Element should be enabled");
     }
 
@@ -111,8 +117,8 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
-    public void shouldNotBeEnabled() {
-
+    public WebElementState shouldNotBeEnabled() {
+        return this;
     }
 
     @Override
@@ -136,13 +142,13 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
-    public void shouldBePresent() {
+    public WebElementState shouldBePresent() {
         throw new AssertionError("Element should be present");
     }
 
     @Override
-    public void shouldNotBePresent() {
-
+    public WebElementState shouldNotBePresent() {
+        return this;
     }
 
     @Override
@@ -162,6 +168,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
 
     @Override
     public String getText() {
+        return null;
+    }
+
+    @Override
+    public String getAttribute(String name) {
         return null;
     }
 

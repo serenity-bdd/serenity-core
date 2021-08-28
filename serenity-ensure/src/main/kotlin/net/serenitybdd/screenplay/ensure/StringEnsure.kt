@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualAndExpe
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualNotNull
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNoNullElementsIn
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNotEmpty
+import net.thucydides.core.steps.StepEventBus
 import org.assertj.core.internal.InputStreamsException
 import java.io.IOException
 import java.io.LineNumberReader
@@ -265,7 +266,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
 
                     val actualValue = resolveActual(actual, actor, expectedList) ?: return false
 
-                    return expectedList.all { expectedItem -> actualValue.toLowerCase().contains(expectedItem.toString().toLowerCase()) }
+                    return expectedList.all { expectedItem -> actualValue.lowercase().contains(expectedItem.toString().lowercase()) }
                 }
         )
 
@@ -280,7 +281,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
 
                     val actualValue = resolveActual(actual, actor, expected) ?: return expected.isEmpty()
 
-                    return actualValue.toLowerCase() == expected.toString().toLowerCase()
+                    return actualValue.lowercase() == expected.toString().lowercase()
                 }
         )
 
@@ -304,7 +305,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     BlackBox.logAssertion(actualValue,"a lowercase value")
                     if (actualValue == null) { return false }
 
-                    return actualValue.isNotEmpty() && actualValue.toLowerCase() == actualValue
+                    return actualValue.isNotEmpty() && actualValue.lowercase() == actualValue
                 }
         )
 
@@ -499,6 +500,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     try {
                         while (reader.readLine() != null);
                     } catch (e: IOException) {
+                        StepEventBus.getEventBus().takeScreenshot()
                         throw InputStreamsException("Unable to count lines in $actual", e)
                     }
                     return reader.lineNumber == expected

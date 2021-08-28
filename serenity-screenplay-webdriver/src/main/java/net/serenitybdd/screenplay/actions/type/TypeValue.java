@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getFollowedByKeysDescriptionFor;
 import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getTextAsStringFor;
@@ -32,4 +33,16 @@ public abstract class TypeValue implements Interaction {
         return followedByKeys.toArray(new Keys[]{});
     }
 
+    protected Optional<CharSequence[]> textValue() {
+        if (theText == null) {
+            return Optional.empty();
+        }
+        if (theText.length == 0) {
+            return Optional.empty();
+        }
+        if (theText[0] == null) {
+            return Optional.empty();
+        }
+        return Optional.of(theText);
+    }
 }

@@ -21,6 +21,7 @@ public class ExecutedStepDescription implements Cloneable {
     private final List<Object> argumentsList;
     private final List<String> convertedArgumentsList;
     private final Map<String, Object> displayedFields;
+//    private final Object subject;
     private boolean isAGroup;
 
     private final static Map<String,Object> NO_FIELDS = new HashMap();

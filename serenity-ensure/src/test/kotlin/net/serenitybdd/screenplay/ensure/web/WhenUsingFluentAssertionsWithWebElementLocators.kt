@@ -41,8 +41,10 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        WebDriverManager.phantomjs().setup();
-        driver = PhantomJSDriver()
+        WebDriverManager.chromedriver().setup();
+        val options = ChromeOptions()
+        options.setHeadless(true)
+        driver = ChromeDriver(options)
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)
@@ -417,7 +419,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 @Test
                 fun `when the element is on the page`() {
                     val aSlowDisplayingField: Target = ElementLocated.by(By.id("city"))
-                            .waitingForNoMoreThan(Duration.ofSeconds(0))
+                            .waitingForNoMoreThan(Duration.ofSeconds(5))
 
                     shouldPassWhenChecking(that(aSlowDisplayingField).isDisplayed(), wendy)
                 }

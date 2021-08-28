@@ -5,6 +5,10 @@ import net.serenitybdd.screenplay.Actor;
 
 import java.util.Optional;
 
+/**
+ * The stage keeps track of the actors currently in a screenplay test, referenced by name.
+ * You rarely need to use this class directly in your tests. Normally you would use the OnStage class instead.
+ */
 public class Stage {
 
     private Actor actorInTheSpotlight;
@@ -14,6 +18,9 @@ public class Stage {
         this.cast = cast;
     }
 
+    /**
+     * Place an actor with a given name in the spotlight, without the intent to have them perform an action at this time.
+     */
     public Actor shineSpotlightOn(String actorName) {
 
         Optional<Actor> knownActor = cast.getActors()
@@ -25,6 +32,9 @@ public class Stage {
         return theActorInTheSpotlight().withNoPronoun();
     }
 
+    /**
+     * Return the current actor in the spotlight.
+     */
     public Actor theActorInTheSpotlight() {
         Preconditions.checkNotNull(actorInTheSpotlight);
         return actorInTheSpotlight;
@@ -37,10 +47,17 @@ public class Stage {
         return theActorInTheSpotlight();
     }
 
+    /**
+     * This method should be called at the end of the screenplay test to perform teardown actions on each actor.
+     * It will generally be done automatically by Serenity.
+     */
     public void drawTheCurtain() {
         cast.dismissAll();
     }
 
+    /**
+     * Check whether there is any actor in the spotlight at the moment.
+     */
     public boolean anActorIsOnStage() {
         return actorInTheSpotlight != null;
     }

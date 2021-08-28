@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public class SilentEventBus extends StepEventBus {
     public SilentEventBus(EnvironmentVariables environmentVariables) {
-        super(environmentVariables);
+        super(environmentVariables, ConfiguredEnvironment.getConfiguration());
     }
 
     @Override

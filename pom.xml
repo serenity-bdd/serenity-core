@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-bdd</artifactId>
-    <version>2.4.2-SNAPSHOT</version>
+    <version>2.5.11-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
@@ -20,7 +19,7 @@
     </licenses>
     <developers>
         <developer>
-            <id>johnsmart</id>
+            <id>john.smart</id>
             <name>John Ferguson Smart</name>
             <email>john.smart@wakaleo.com</email>
         </developer>
@@ -34,6 +33,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
+        <tag>2.5.4-SNAPSHOT</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,44 +41,43 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <junit.version>4.13.1</junit.version>
-        <groovy.version>3.0.7</groovy.version>
+        <groovy.version>3.0.8</groovy.version>
         <spock.version>2.0-M3-groovy-3.0</spock.version>
-        <byte-buddy.version>1.10.10</byte-buddy.version>
+        <byte-buddy.version>1.11.1</byte-buddy.version>
         <guava.version>30.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>1.7.30</slf4j.version>
         <guice.version>5.0.1</guice.version>
         <cucumber.version>6.10.2</cucumber.version>
-        <gson.version>2.8.6</gson.version>
+        <gson.version>2.8.7</gson.version>
         <junit5.version>5.7.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>
         <assertj.version>3.18.0</assertj.version>
         <commons.lang.version>3.11</commons.lang.version>
         <commons.lang2.version>2.6</commons.lang2.version>
-        <commons.io.version>2.6</commons.io.version>
+        <commons.io.version>2.8.0</commons.io.version>
         <commons.text.version>1.9</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.collections.version>3.2.2</commons.collections.version>
         <commons.net.version>3.6</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
-        <freemarker.version>2.3.29</freemarker.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <selenium.version>3.141.59</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <jsoup.version>1.13.1</jsoup.version>
         <joda-time.version>2.8.2</joda-time.version>
-        <xstream.version>1.4.13</xstream.version>
+        <xstream.version>1.4.17</xstream.version>
         <opencsv.version>2.0</opencsv.version>
         <typesafe.version>1.3.1</typesafe.version>
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.0.3</awaitility.version>
         <freemarker.version>2.3.29</freemarker.version>
-        <asciidoctor.version>1.5.6</asciidoctor.version>
-        <appium.version>7.3.0</appium.version>
+        <asciidoctor.version>2.5.1</asciidoctor.version>
+        <appium.version>7.5.1</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <phantomjs.version>1.4.4</phantomjs.version>
-        <webdrivermanager.version>4.3.1</webdrivermanager.version>
+        <webdrivermanager.version>4.4.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
-        <shutterbug.version>0.9.3</shutterbug.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
         <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
@@ -91,11 +90,12 @@
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <javassist.version>3.21.0-GA</javassist.version>
+        <jackson.version>2.12.4</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.4.10</kotlin.version>
+        <!--        <kotlin.version>1.4.10</kotlin.version>-->
+        <kotlin.version>1.5.0</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -300,6 +300,17 @@
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
             <!-- Testing -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -404,6 +415,25 @@
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctorj</artifactId>
                 <version>${asciidoctor.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.annotation</groupId>
+                        <artifactId>javax.annotation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-engine</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>1.3.2</version>
             </dependency>
             <dependency>
                 <groupId>org.fluentlenium</groupId>
@@ -483,10 +513,12 @@
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
+            <!--        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
+            <!--        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
@@ -549,7 +581,7 @@
                             <exclude>**/*Sample*</exclude>
                         </excludes>
                         <parallel>all</parallel>
-                        <threadCount>8</threadCount>
+                        <threadCount>16</threadCount>
                         <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                 </plugin>
@@ -569,7 +601,7 @@
                             <exclude>**/*Sample*</exclude>
                         </excludes>
                         <parallel>all</parallel>
-                        <threadCount>4</threadCount>
+                        <threadCount>8</threadCount>
                         <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                     <executions>
@@ -600,6 +632,11 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.1.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -612,7 +649,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence/>
+                                <dependencyConvergence />
                             </rules>
                         </configuration>
                         <goals>
@@ -637,8 +674,20 @@
                 </executions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
+                    <failOnWarnings>false</failOnWarnings>
+                    <failOnError>false</failOnError>
                 </configuration>
             </plugin>
         </plugins>
@@ -657,6 +706,7 @@
                 <configuration>
                     <source>1.8</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
+                    <failOnWarnings>false</failOnWarnings>
                 </configuration>
             </plugin>
         </plugins>
@@ -666,12 +716,13 @@
         <module>serenity-sample-alternative-resources</module>
         <module>serenity-model</module>
         <module>serenity-core</module>
+        <module>serenity-screenplay</module>
         <module>serenity-rest-assured</module>
         <module>serenity-reports</module>
         <module>serenity-reports-configuration</module>
         <module>serenity-stats</module>
         <module>serenity-junit</module>
-        <module>serenity-screenplay</module>
+        <module>serenity-junit5</module>
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>
@@ -683,10 +734,14 @@
         <module>serenity-spring</module>
         <module>serenity-browsermob-plugin</module>
         <module>serenity-browserstack</module>
+        <module>serenity-lambdatest</module>
         <module>serenity-crossbrowsertesting</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-cli</module>
-        <module>serenity-screenplay-playwright</module>
+        <module>serenity-shutterbug</module>
+        <module>serenity-shutterbug1x</module>
+        <module>serenity-saucelabs</module>
+        <!--        <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>
         <profile>
@@ -696,12 +751,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
-                        <version>3.0.0-M1</version>
+                        <version>3.0.0-M4</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <useReleaseProfile>false</useReleaseProfile>
                             <releaseProfiles>release</releaseProfiles>
                             <goals>deploy</goals>
+                            <localCheckout>true</localCheckout>
+                            <scmCommentPrefix>[ci skip]</scmCommentPrefix>
+                            <tagNameFormat>@{project.version}</tagNameFormat>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -765,12 +822,13 @@
                 <module>serenity-sample-alternative-resources</module>
                 <module>serenity-model</module>
                 <module>serenity-core</module>
+                <module>serenity-screenplay</module>
                 <module>serenity-rest-assured</module>
                 <module>serenity-reports</module>
                 <module>serenity-reports-configuration</module>
                 <module>serenity-stats</module>
                 <module>serenity-junit</module>
-                <module>serenity-screenplay</module>
+                <module>serenity-junit5</module>
                 <module>serenity-screenplay-rest</module>
                 <module>serenity-screenplay-webdriver</module>
                 <module>serenity-assertions</module>
@@ -783,37 +841,11 @@
                 <module>serenity-browsermob-plugin</module>
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
+                <module>serenity-saucelabs</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-cli</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>smoke-tests</id>
-            <modules>
-                <module>serenity-report-resources</module>
-                <module>serenity-sample-alternative-resources</module>
-                <module>serenity-model</module>
-                <module>serenity-core</module>
-                <module>serenity-rest-assured</module>
-                <module>serenity-reports</module>
-                <module>serenity-reports-configuration</module>
-                <module>serenity-stats</module>
-                <module>serenity-junit</module>
-                <module>serenity-screenplay</module>
-                <module>serenity-screenplay-rest</module>
-                <module>serenity-screenplay-webdriver</module>
-                <module>serenity-assertions</module>
-                <module>serenity-ensure</module>
-                <module>serenity-ant-task</module>
-                <module>serenity-zalenium</module>
-                <module>serenity-single-page-report</module>
-                <module>serenity-json-summary-report</module>
-                <module>serenity-spring</module>
-                <module>serenity-browsermob-plugin</module>
-                <module>serenity-browserstack</module>
-                <module>serenity-crossbrowsertesting</module>
-                <module>serenity-maven-plugin</module>
-                <module>serenity-smoketests</module>
+                <module>serenity-shutterbug</module>
+                <module>serenity-shutterbug1x</module>
             </modules>
         </profile>
         <profile>
@@ -831,6 +863,7 @@
                 <module>serenity-reports-configuration</module>
                 <module>serenity-stats</module>
                 <module>serenity-junit</module>
+                <module>serenity-junit5</module>
                 <module>serenity-screenplay</module>
                 <module>serenity-screenplay-rest</module>
                 <module>serenity-screenplay-webdriver</module>
@@ -844,8 +877,11 @@
                 <module>serenity-browsermob-plugin</module>
                 <module>serenity-browserstack</module>
                 <module>serenity-crossbrowsertesting</module>
+                <module>serenity-saucelabs</module>
                 <module>serenity-maven-plugin</module>
                 <module>serenity-smoketests</module>
+                <module>serenity-shutterbug</module>
+                <module>serenity-shutterbug1x</module>
                 <module>serenity-screenplay-playwright</module>
             </modules>
         </profile>

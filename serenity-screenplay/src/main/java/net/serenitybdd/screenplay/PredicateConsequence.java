@@ -39,9 +39,9 @@ public class PredicateConsequence<T> extends BaseConsequence<T> {
 
         Serenity.injectScenarioStepsInto(question);
 
-        try {
-            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
 
+        try {
+            performSetupActionsAs(actor);
             assertTrue("predicate failed", expected.test(question.answeredBy(actor)));
 
         } catch (Throwable actualError) {

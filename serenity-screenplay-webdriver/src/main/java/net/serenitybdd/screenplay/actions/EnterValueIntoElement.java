@@ -15,7 +15,9 @@ public class EnterValueIntoElement extends EnterValue {
 
     @Step("{0} enters #theTextAsAString into #element")
     public <T extends Actor> void performAs(T theUser) {
-        element.type(theText);
+        textValue().ifPresent(
+                text -> element.type(text)
+        );
         if (getFollowedByKeys().length > 0) {
             element.sendKeys(getFollowedByKeys());
         }

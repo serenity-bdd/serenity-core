@@ -105,7 +105,6 @@ public class ResultChecker {
 
         logger.info(white("SERENITY REPORTS"));
         logger.info("  - Full Report: " + index.toUri());
-
     }
 
     private String resultLine(String label, String value) {
@@ -173,10 +172,17 @@ public class ResultChecker {
     private Optional<TestOutcomes> loadOutcomes() {
         TestOutcomes outcomes = null;
         try {
-            outcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outputDirectory);
-            if (outcomes.getTotal() == 0) {
-                outcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(outputDirectory);
-            }
+            outcomes = TestOutcomeLoader.loadTestOutcomes()
+                                        .inFormat(OutcomeFormat.JSON)
+                                        .from(outputDirectory)
+                                        .filteredByEnvironmentTags();
+//
+//            if (outcomes.getTotal() == 0) {
+//                outcomes = TestOutcomeLoader.loadTestOutcomes()
+//                                            .inFormat(OutcomeFormat.XML)
+//                                            .from(outputDirectory)
+//                                            .filteredByEnvironmentTags();
+//            }
 
             if (thereAreTagsIn(tags)) {
                 outcomes = outcomes.withTags(tags);

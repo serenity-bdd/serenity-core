@@ -51,7 +51,11 @@ class WhenHandlingFailingTests extends Specification {
 
         @Test(expected=IllegalStateException)
         public void shouldThrowAnIllegalStateException() {
-            mysteps.myFailingStep();
+            try {
+                mysteps.myFailingStep();
+            } catch(Exception e) {
+                System.out.println("ZZZThrowsException " + e);
+            }
         }
     }
 

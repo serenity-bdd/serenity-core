@@ -12,11 +12,9 @@ import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +41,6 @@ public class WebDriverFactory {
 
     private final EnvironmentVariables environmentVariables;
     private final FixtureProviderService fixtureProviderService;
-    private final SaucelabsRemoteDriverCapabilities sauceRemoteDriverCapabilities;
 
     private final CloseBrowser closeBrowser;
 
@@ -54,38 +51,33 @@ public class WebDriverFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFactory.class);
 
     public WebDriverFactory() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
-
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
-        this(environmentVariables,
-            WebDriverInjectors.getInjector().getInstance(FixtureProviderService.class));
+        this(environmentVariables, WebDriverInjectors.getInjector().getInstance(FixtureProviderService.class));
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,
                             FixtureProviderService fixtureProviderService) {
         this.environmentVariables = environmentVariables;
         this.fixtureProviderService = fixtureProviderService;
-        this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
         this.closeBrowser = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,
                             FixtureProviderService fixtureProviderService,
-                            SaucelabsRemoteDriverCapabilities saucelabsRemoteDriverCapabilities,
                             TimeoutStack timeoutStack,
                             CloseBrowser closeBrowser) {
         this.environmentVariables = environmentVariables;
         this.fixtureProviderService = fixtureProviderService;
-        this.sauceRemoteDriverCapabilities = saucelabsRemoteDriverCapabilities;
         this.timeoutStack = timeoutStack;
         this.closeBrowser = closeBrowser;
     }
 
     public WebDriverFactory withEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        return new WebDriverFactory(environmentVariables, fixtureProviderService, sauceRemoteDriverCapabilities, timeoutStack, closeBrowser);
+        return new WebDriverFactory(environmentVariables, fixtureProviderService, timeoutStack, closeBrowser);
     }
 
     /**
@@ -99,15 +91,11 @@ public class WebDriverFactory {
     }
 
     public Class<? extends WebDriver> getClassFor(final SupportedWebDriver driverType) {
-        if (usesSauceLabs() && (driverType != SupportedWebDriver.HTMLUNIT)) {
-            return RemoteWebDriver.class;
-        } else {
-            return driverType.getWebdriverClass();
-        }
+        return driverType.getWebdriverClass();
     }
 
     public boolean usesSauceLabs() {
-        return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
+        return StringUtils.isNotEmpty(SAUCELABS_URL.from(environmentVariables));
     }
 
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {
@@ -125,7 +113,6 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
-
         }
         return driverProvidersByDriverType;
     }
@@ -136,7 +123,7 @@ public class WebDriverFactory {
      * with each other.
      */
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
-        String driverOptions = DRIVER_OPTIONS.from(environmentVariables,"");
+        String driverOptions = DRIVER_OPTIONS.from(environmentVariables, "");
         return newWebdriverInstance(driverClass, driverOptions);
     }
 
@@ -156,7 +143,9 @@ public class WebDriverFactory {
                 LOGGER.info("Waiting to retry: " + cause.getMessage() + ")");
                 return waitThenRetry(driverClass, options, environmentVariables);
             } else {
-                throw new DriverConfigurationError("Could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
+                throw new DriverConfigurationError(
+                        "Could not instantiate new WebDriver instance of type " + driverClass + " (" +
+                        cause.getMessage() + "). See below for more details.", cause);
             }
         }
     }
@@ -167,7 +156,7 @@ public class WebDriverFactory {
 
         String resolvedOptions = (options.isEmpty()) ? ThucydidesWebDriverSupport.getDefaultDriverOptions().orElse(options) : options;
 
-        WebDriver driver = driverProviders().get(supportedDriverType).newInstance(resolvedOptions,environmentVariables);
+        WebDriver driver = driverProviders().get(supportedDriverType).newInstance(resolvedOptions, environmentVariables);
         setImplicitTimeoutsIfSpecified(driver);
         redimensionBrowser.withDriver(driver);
         closeBrowser.closeWhenTheTestsAreFinished(driver);
@@ -177,7 +166,7 @@ public class WebDriverFactory {
     private WebDriver waitThenRetry(Class<? extends WebDriver> driverClass,
                                     String options,
                                     EnvironmentVariables environmentVariables) {
-        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables,30);
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables, 30);
         return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, null);
     }
 
@@ -189,7 +178,9 @@ public class WebDriverFactory {
         LOGGER.info("Remaining tries: " + remainingTries);
 
         if (remainingTries == 0) {
-            throw new DriverConfigurationError("After several attempts, could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
+            throw new DriverConfigurationError(
+                    "After several attempts, could not instantiate new WebDriver instance of type " + driverClass +
+                    " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
         PauseTestExecution.forADelayOf(30).seconds();
@@ -205,27 +196,25 @@ public class WebDriverFactory {
 
     private boolean shouldRetry(Exception cause) {
         List<String> RETRY_CAUSES = Splitter.on(";")
-                                            .trimResults()
-                                            .omitEmptyStrings()
-                                            .splitToList(WEBDRIVER_CREATION_RETRY_CAUSES
-                                            .from(environmentVariables,"All parallel tests are currently in use"));
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(WEBDRIVER_CREATION_RETRY_CAUSES
+                        .from(environmentVariables, "All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
                 partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
-                                        && (cause.getMessage().contains(partialErrorMessage))
+                                       && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 
-
     private void setImplicitTimeoutsIfSpecified(WebDriver driver) {
         if (ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.isDefinedIn(environmentVariables)) {
-            int timeout = WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables,0);
+            int timeout = WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, 0);
 //            int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
 //                    .getPropertyName(),0);
 
             driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.MILLISECONDS);
         }
     }
-
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -240,33 +229,14 @@ public class WebDriverFactory {
         return driver;
     }
 
-    public static String getBrowserStackDriverFrom(EnvironmentVariables environmentVariables) {
-        String driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSER.from(environmentVariables);
-        if (driver == null) {
-            driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSERNAME.from(environmentVariables);
-        }
-        if (driver == null) {
-            driver = getDriverFrom(environmentVariables);
-        }
-        return driver;
-    }
-
-    public static String getSaucelabsDriverFrom(EnvironmentVariables environmentVariables) {
-        String driver = ThucydidesSystemProperty.SAUCELABS_BROWSERNAME.from(environmentVariables);
-        if (driver == null) {
-            driver = getDriverFrom(environmentVariables);
-        }
-        return driver;
-    }
-
     public void setupFixtureServices() throws FixtureException {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.setup();
         }
     }
 
     public void shutdownFixtureServices() {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.shutdown();
         }
     }
@@ -296,7 +266,7 @@ public class WebDriverFactory {
 
         timeoutStack.popTimeoutFor(proxiedDriver);
         Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
-        if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
+        if ((currentTimeout != previousTimeout) && isNotAMocked(proxiedDriver)) {
             proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.toMillis(), TimeUnit.MILLISECONDS);
         }
         return previousTimeout;
@@ -306,16 +276,15 @@ public class WebDriverFactory {
         String configuredTimeoutValue = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables);
         return (configuredTimeoutValue != null) ? Duration.ofMillis(Integer.parseInt(configuredTimeoutValue))
                 : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
-
     }
 
     public static boolean isAlive(final WebDriver driver) {
         try {
             WebDriver local = driver;
-            if(driver instanceof WebDriverFacade){
-                local = ((WebDriverFacade)driver).getDriverInstance();
+            if (driver instanceof WebDriverFacade) {
+                local = ((WebDriverFacade) driver).getDriverInstance();
             }
-            if(!(local instanceof AppiumDriver)){
+            if (!(local instanceof AppiumDriver)) {
                 local.getCurrentUrl();
             }
         } catch (Exception e) {
@@ -324,7 +293,7 @@ public class WebDriverFactory {
         return true;
     }
 
-    public static boolean isNotAlive(final WebDriver driver){
+    public static boolean isNotAlive(final WebDriver driver) {
         return !isAlive(driver);
     }
 

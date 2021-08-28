@@ -13,8 +13,6 @@ import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
@@ -29,8 +27,6 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
     private final WebdriverManager webdriverManager;
 
     private Actor actor;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected BrowseTheWeb(WebDriver browser) {
         super(browser);

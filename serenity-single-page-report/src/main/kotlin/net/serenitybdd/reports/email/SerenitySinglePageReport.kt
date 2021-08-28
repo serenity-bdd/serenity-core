@@ -16,6 +16,7 @@ sealed class SerenitySinglePageReport {
 
         private const val DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity"
         private const val DEFAULT_TITLE = "Serenity Summary Report"
+        private const val DEFAULT_FILENAME = "serenity-summary.html"
         private const val DEFAULT_TAGTYPE_TITLE = "Category"
         private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
         private const val DEFAULT_SCOREBOARD_SIZE = 5
@@ -25,6 +26,8 @@ sealed class SerenitySinglePageReport {
         fun sourceDirectory(): ReportProperty<Path> = PathReportProperty(SERENITY_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY)
 
         fun reportTitle(): ReportProperty<String> = StringReportProperty(SERENITY_SUMMARY_REPORT_TITLE, DEFAULT_TITLE)
+
+        fun reportFilename(): ReportProperty<String> = StringReportProperty(SERENITY_SUMMARY_REPORT_FILENAME, DEFAULT_FILENAME)
 
         fun reportLink(): ReportProperty<String> = StringReportProperty(SERENITY_REPORT_URL, "")
 

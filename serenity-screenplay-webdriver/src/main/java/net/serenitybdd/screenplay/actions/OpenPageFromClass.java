@@ -19,6 +19,10 @@ public class OpenPageFromClass implements Interaction {
         this.targetPageName = NameConverter.humanize(targetPageClass.getSimpleName());
     }
 
+    public OpenPageFromClassWithParameters withParameters(String... parameters) {
+        return new OpenPageFromClassWithParameters(targetPageClass, targetPageName, parameters);
+    }
+
     @Step("{0} opens the #targetPageName")
     public <T extends Actor> void performAs(T theUser) {
         PageObject targetPage = new Pages(BrowseTheWeb.as(theUser).getDriver()).getPage(targetPageClass);

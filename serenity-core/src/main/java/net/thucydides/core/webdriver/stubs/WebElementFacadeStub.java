@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class WebElementFacadeStub implements WebElementFacade {
+public class WebElementFacadeStub implements WebElementFacade, WebElementState {
 
     public WebElement getElement() {
         return this;
@@ -158,7 +158,8 @@ public class WebElementFacadeStub implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldBeVisible() {
+    public WebElementState shouldBeVisible() {
+        return this;
     }
 
     /**
@@ -166,7 +167,8 @@ public class WebElementFacadeStub implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldBeCurrentlyVisible() {
+    public WebElementState shouldBeCurrentlyVisible() {
+        return this;
     }
 
     /**
@@ -174,7 +176,8 @@ public class WebElementFacadeStub implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldNotBeVisible() {
+    public WebElementState shouldNotBeVisible() {
+        return this;
     }
 
     /**
@@ -182,7 +185,8 @@ public class WebElementFacadeStub implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-    public void shouldNotBeCurrentlyVisible() {
+    public WebElementState shouldNotBeCurrentlyVisible() {
+        return this;
     }
 
     /**
@@ -253,7 +257,8 @@ public class WebElementFacadeStub implements WebElementFacade {
      * @param textValue
      */
     @Override
-    public void shouldContainText(String textValue) {
+    public WebElementState shouldContainText(String textValue) {
+        return this;
     }
 
     /**
@@ -262,11 +267,13 @@ public class WebElementFacadeStub implements WebElementFacade {
      * @param textValue
      */
     @Override
-    public void shouldContainOnlyText(String textValue) {
+    public WebElementState shouldContainOnlyText(String textValue) {
+        return this;
     }
 
     @Override
-    public void shouldContainSelectedOption(String textValue) {
+    public WebElementState shouldContainSelectedOption(String textValue) {
+        return this;
     }
 
     /**
@@ -275,11 +282,13 @@ public class WebElementFacadeStub implements WebElementFacade {
      * @param textValue
      */
     @Override
-    public void shouldNotContainText(String textValue) {
+    public WebElementState shouldNotContainText(String textValue) {
+        return this;
     }
 
     @Override
-    public void shouldBeEnabled() {
+    public WebElementState shouldBeEnabled() {
+        return this;
     }
 
     @Override
@@ -288,7 +297,8 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public void shouldNotBeEnabled() {
+    public WebElementState shouldNotBeEnabled() {
+        return this;
     }
 
     /**
@@ -393,11 +403,13 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public void shouldBePresent() {
+    public WebElementState shouldBePresent() {
+        return this;
     }
 
     @Override
-    public void shouldNotBePresent() {
+    public WebElementState shouldNotBePresent() {
+        return this;
     }
 
     @Override
@@ -629,13 +641,13 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public void shouldContainElements(By selector) {
-        
+    public WebElementState shouldContainElements(By selector) {
+        return this;
     }
 
     @Override
-    public void shouldContainElements(String xpathOrCssSelector) {
-
+    public WebElementState shouldContainElements(String xpathOrCssSelector) {
+        return this;
     }
 
     @Override

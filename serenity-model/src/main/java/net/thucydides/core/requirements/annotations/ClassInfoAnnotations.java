@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.annotations;
 
-import net.thucydides.core.util.JUnitAdapter;
+import net.thucydides.core.adapters.TestFramework;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,7 +39,7 @@ public class ClassInfoAnnotations {
     }
 
     public boolean containsTests() {
-        return allMethods().stream().anyMatch(JUnitAdapter::isTestMethod);
+        return allMethods().stream().anyMatch(method -> TestFramework.support().isTestMethod(method));
     }
 
     private Set<Method> allMethods() {

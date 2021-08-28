@@ -38,17 +38,17 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit5.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>junit</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <scope>compile</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.junit.jupiter</groupId>-->
+<!--            <artifactId>junit-jupiter-params</artifactId>-->
+<!--            <version>${junit5.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-report-resources</artifactId>

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.thucydides.core.util.JUnitAdapter;
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.util.NameConverter;
 
 import java.lang.reflect.Method;
@@ -24,10 +24,10 @@ public class RemoteTestName {
     }
 
     private static boolean isATestMethod(Method callingMethod) {
-        return JUnitAdapter.isTestMethod(callingMethod);
+        return TestFramework.support().isTestMethod(callingMethod);
     }
 
     private static boolean isASetupMethod(Method callingMethod) {
-        return JUnitAdapter.isTestSetupMethod(callingMethod);
+        return TestFramework.support().isTestSetupMethod(callingMethod);
     }
 }

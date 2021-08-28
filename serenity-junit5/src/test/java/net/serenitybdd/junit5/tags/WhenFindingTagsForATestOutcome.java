@@ -1,16 +1,9 @@
 package net.serenitybdd.junit5.tags;
 
-import com.google.common.io.Resources;
 import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTagValuesOf;
 import net.thucydides.core.annotations.WithTags;
-import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomeStream;
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.requirements.PackageRequirementsTagProvider;
-import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.*;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -21,20 +14,12 @@ import org.junit.jupiter.api.Tags;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
-
-
-
 
 public class WhenFindingTagsForATestOutcome {
 

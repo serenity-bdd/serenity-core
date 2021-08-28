@@ -1,10 +1,10 @@
 package net.thucydides.core.annotations;
 
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.tags.TagConverters;
-import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
@@ -46,7 +46,7 @@ public class TestAnnotations {
     }
 
     public static boolean isIgnored(final Method method) {
-        return JUnitAdapter.isIgnored(method);
+        return TestFramework.support().isIgnored(method);
     }
 
     public static boolean shouldSkipNested(Method method) {
@@ -303,7 +303,7 @@ public class TestAnnotations {
 
         Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
-            return JUnitAdapter.getTagsFor(testMethod.get());
+            return TestFramework.support().getTagsFor(testMethod.get());
         }
         return tags;
 

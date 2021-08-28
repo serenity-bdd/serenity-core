@@ -56,26 +56,6 @@ class WhenCheckingTestTags extends Specification {
     }
 
     @Unroll
-    def "should find tags on a method"() {
-        given:
-            environmentVariables.setProperty("tags",tagExpression)
-        when:
-            def scanner = new TagScanner(environmentVariables)
-        then:
-            scanner.shouldRunMethod(classUnderTest,methodUnderTest) == expectedMatch
-        where:
-            classUnderTest  | methodUnderTest   | tagExpression       | expectedMatch
-//            ClassWithTags   | "blue"            | "color:blue"        | true
-//            ClassWithTags   | "blue"            | "flavor:strawberry" | true
-            ClassWithTags   | "blue"            | "color:yellow"      | false
-            ClassWithTags   | "blue"            | "not color:yellow"     | true
-            ClassWithTags   | "blue"            | "not color:blue"       | false
-            ClassWithTags   | "doesnotexist"    | "color:yellow"      | false
-            ClassWithTags   | "orange"          | "flavor:licorice"   | true
-            ClassWithTags   | "red"             | "tag:red"               | true
-    }
-
-    @Unroll
     def "should find tags on a list of tags"() {
         given:
             environmentVariables.setProperty("tags",tagExpression)

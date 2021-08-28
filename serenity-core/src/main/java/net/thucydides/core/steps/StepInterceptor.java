@@ -14,12 +14,12 @@ import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.JUnitAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -462,7 +462,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             logStepFailure(obj, method, args, failedAssertion);
             result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
-            if (JUnitAdapter.isAssumptionViolatedException(testErrorException)) {
+            if (TestFramework.support().isAssumptionViolatedException(testErrorException)) {
                 result = appropriateReturnObject(obj, method);
             } else {
                 error = SerenityManagedException.detachedCopyOf(testErrorException);
@@ -488,7 +488,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         } catch (IgnoredStepException ignoredStep) {
             notifyStepIgnored(ignoredStep.getMessage());
         } catch (Throwable throwable) {
-            if (JUnitAdapter.isAssumptionViolatedException(throwable)) {
+            if (TestFramework.support().isAssumptionViolatedException(throwable)) {
                 notifyAssumptionViolated(throwable.getMessage());
             } else {
                 throw throwable;

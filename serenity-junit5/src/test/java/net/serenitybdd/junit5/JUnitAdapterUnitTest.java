@@ -1,5 +1,6 @@
-package net.thucydides.core.util;
+package net.serenitybdd.junit5;
 
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.tags.Taggable;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,55 +25,55 @@ public class JUnitAdapterUnitTest {
 
     @Test
     public void shouldHandleNullInput() {
-        assertThat(JUnitAdapter.isTestClass(null)).isFalse();
-        assertThat(JUnitAdapter.isTestMethod(null)).isFalse();
-        assertThat(JUnitAdapter.isTestSetupMethod(null)).isFalse();
-        assertThat(JUnitAdapter.isATaggableClass(null)).isFalse();
-        assertThat(JUnitAdapter.isSerenityTestCase(null)).isFalse();
-        assertThat(JUnitAdapter.isIgnored(null)).isFalse();
+        assertThat(TestFramework.support().isTestClass(null)).isFalse();
+        assertThat(TestFramework.support().isTestMethod(null)).isFalse();
+        assertThat(TestFramework.support().isTestSetupMethod(null)).isFalse();
+        assertThat(TestFramework.support().isATaggableClass(null)).isFalse();
+        assertThat(TestFramework.support().isSerenityTestCase(null)).isFalse();
+        assertThat(TestFramework.support().isIgnored(null)).isFalse();
     }
 
     @Test
     public void shouldNotDetectOtherClasses() throws NoSuchMethodException {
-        assertThat(JUnitAdapter.isTestClass(NoTestAtAll.class)).isFalse();
-        assertThat(JUnitAdapter.isTestMethod(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
-        assertThat(JUnitAdapter.isTestSetupMethod(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
-        assertThat(JUnitAdapter.isATaggableClass(NoTestAtAll.class)).isFalse();
-        assertThat(JUnitAdapter.isSerenityTestCase(NoTestAtAll.class)).isFalse();
-        assertThat(JUnitAdapter.isAssumptionViolatedException(new RuntimeException("Assumption violated!"))).isFalse();
-        assertThat(JUnitAdapter.isIgnored(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
+        assertThat(TestFramework.support().isTestClass(NoTestAtAll.class)).isFalse();
+        assertThat(TestFramework.support().isTestMethod(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
+        assertThat(TestFramework.support().isTestSetupMethod(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
+        assertThat(TestFramework.support().isATaggableClass(NoTestAtAll.class)).isFalse();
+        assertThat(TestFramework.support().isSerenityTestCase(NoTestAtAll.class)).isFalse();
+        assertThat(TestFramework.support().isAssumptionViolatedException(new RuntimeException("Assumption violated!"))).isFalse();
+        assertThat(TestFramework.support().isIgnored(NoTestAtAll.class.getMethod("justAMethod"))).isFalse();
     }
 
     @Test
     public void shouldDetectJunit4ClassesCorrectly() throws NoSuchMethodException {
-        assertThat(JUnitAdapter.isTestClass(Junit4Test.class)).isTrue();
-        assertThat(JUnitAdapter.isTestMethod(Junit4Test.class.getMethod("shouldSucceed"))).isTrue();
-        assertThat(JUnitAdapter.isTestSetupMethod(Junit4Test.class.getMethod("beforeClass"))).isTrue();
-        assertThat(JUnitAdapter.isTestSetupMethod(Junit4Test.class.getMethod("before"))).isTrue();
-        assertThat(JUnitAdapter.isATaggableClass(Junit4Test.class)).isFalse();
-        assertThat(JUnitAdapter.isATaggableClass(TaggableJunit4Test.class)).isTrue();
-        assertThat(JUnitAdapter.isSerenityTestCase(Junit4Test.class)).isFalse();
-        assertThat(JUnitAdapter.isSerenityTestCase(SerenityJunit4Test.class)).isTrue();
-        assertThat(JUnitAdapter
+        assertThat(TestFramework.support().isTestClass(Junit4Test.class)).isTrue();
+        assertThat(TestFramework.support().isTestMethod(Junit4Test.class.getMethod("shouldSucceed"))).isTrue();
+        assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("beforeClass"))).isTrue();
+        assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("before"))).isTrue();
+        assertThat(TestFramework.support().isATaggableClass(Junit4Test.class)).isFalse();
+        assertThat(TestFramework.support().isATaggableClass(TaggableJunit4Test.class)).isTrue();
+        assertThat(TestFramework.support().isSerenityTestCase(Junit4Test.class)).isFalse();
+        assertThat(TestFramework.support().isSerenityTestCase(SerenityJunit4Test.class)).isTrue();
+        assertThat(TestFramework.support()
                 .isAssumptionViolatedException(new org.junit.AssumptionViolatedException("Assumption violated!")))
                 .isTrue();
-        assertThat(JUnitAdapter.isIgnored(Junit4Test.class.getMethod("shouldBeIgnored"))).isTrue();
+        assertThat(TestFramework.support().isIgnored(Junit4Test.class.getMethod("shouldBeIgnored"))).isTrue();
     }
 
     @Test
     public void shouldDetectJunit5ClassesCorrectly() throws NoSuchMethodException {
-        assertThat(JUnitAdapter.isTestClass(Junit5Test.class)).isTrue();
-        assertThat(JUnitAdapter.isTestMethod(Junit5Test.class.getDeclaredMethod("shouldSucceed"))).isTrue();
-        assertThat(JUnitAdapter.isTestSetupMethod(Junit5Test.class.getDeclaredMethod("beforeAll"))).isTrue();
-        assertThat(JUnitAdapter.isTestSetupMethod(Junit5Test.class.getDeclaredMethod("beforeEach"))).isTrue();
-        assertThat(JUnitAdapter.isATaggableClass(Junit5Test.class)).isFalse();
-        assertThat(JUnitAdapter.isSerenityTestCase(Junit5Test.class)).isTrue();
-        assertThat(JUnitAdapter.isSerenityTestCase(Junit5ParameterizedTest.class)).isTrue();
-        assertThat(JUnitAdapter.isSerenityTestCase(SerenityJunit5Test.class)).isTrue();
-        assertThat(JUnitAdapter
+        assertThat(TestFramework.support().isTestClass(Junit5Test.class)).isTrue();
+        assertThat(TestFramework.support().isTestMethod(Junit5Test.class.getDeclaredMethod("shouldSucceed"))).isTrue();
+        assertThat(TestFramework.support().isTestSetupMethod(Junit5Test.class.getDeclaredMethod("beforeAll"))).isTrue();
+        assertThat(TestFramework.support().isTestSetupMethod(Junit5Test.class.getDeclaredMethod("beforeEach"))).isTrue();
+        assertThat(TestFramework.support().isATaggableClass(Junit5Test.class)).isFalse();
+        assertThat(TestFramework.support().isSerenityTestCase(Junit5Test.class)).isTrue();
+        assertThat(TestFramework.support().isSerenityTestCase(Junit5ParameterizedTest.class)).isTrue();
+        assertThat(TestFramework.support().isSerenityTestCase(SerenityJunit5Test.class)).isTrue();
+        assertThat(TestFramework.support()
                 .isAssumptionViolatedException(new org.opentest4j.TestAbortedException("Assumption violated!")))
                 .isTrue();
-        assertThat(JUnitAdapter.isIgnored(Junit5Test.class.getDeclaredMethod("shouldBeIgnored"))).isTrue();
+        assertThat(TestFramework.support().isIgnored(Junit5Test.class.getDeclaredMethod("shouldBeIgnored"))).isTrue();
     }
 
     public static class NoTestAtAll {

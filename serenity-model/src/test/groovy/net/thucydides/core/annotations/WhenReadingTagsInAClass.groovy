@@ -5,7 +5,6 @@ import spock.lang.Specification
 
 class WhenReadingTagsInAClass extends Specification {
 
-
     @WithTag("flavor:strawberry")
     static class StrawberryClass {
     }

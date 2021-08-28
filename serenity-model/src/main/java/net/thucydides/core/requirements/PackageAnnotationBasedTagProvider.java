@@ -3,6 +3,7 @@ package net.thucydides.core.requirements;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
@@ -11,7 +12,6 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.JUnitAdapter;
 import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
@@ -289,13 +289,13 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     protected List<Class<?>> loadClassesFromPath() {
-        Set<Class<?>> classesWithNarratives = new HashSet(loadClasses().annotatedWith(Narrative.class)
+        Set<Class<?>> classesWithNarratives = new HashSet<>(loadClasses().annotatedWith(Narrative.class)
                 .fromPackage(rootPackage));
 
-        Set<Class<?>> testCases = new HashSet(loadClasses().thatMatch(JUnitAdapter::isTestClass)
+        Set<Class<?>> testCases = new HashSet<>(loadClasses().thatMatch(clazz ->TestFramework.support().isTestClass(clazz))
                 .fromPackage(rootPackage));
 
-        Set<Class<?>> requirementClasses = new HashSet();
+        Set<Class<?>> requirementClasses = new HashSet<>();
         requirementClasses.addAll(classesWithNarratives);
         requirementClasses.addAll(classesThatContainSerenityTestsIn(testCases));
 

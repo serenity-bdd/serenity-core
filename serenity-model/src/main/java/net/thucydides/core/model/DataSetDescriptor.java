@@ -26,7 +26,7 @@ public class DataSetDescriptor {
     }
 
     public DataSetDescriptor(int startrow, int rowCount) {
-        this(startrow, rowCount, null, null, emptyList());
+        this(startrow, rowCount, "", "", emptyList());
     }
 
     public int getStartRow() {

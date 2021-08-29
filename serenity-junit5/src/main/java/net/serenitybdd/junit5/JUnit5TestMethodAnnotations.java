@@ -3,8 +3,10 @@ package net.serenitybdd.junit5;
 import com.google.common.base.Preconditions;
 import net.thucydides.core.annotations.DriverOptions;
 import net.thucydides.core.annotations.WithDriver;
+import org.junit.jupiter.api.DisplayName;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class JUnit5TestMethodAnnotations {
 
@@ -20,6 +22,14 @@ public class JUnit5TestMethodAnnotations {
 
     public boolean isDriverSpecified() {
         return (method.getAnnotation(WithDriver.class) != null);
+    }
+
+    public Optional<String> getDisplayName(){
+        DisplayName displayNameAnnotation = method.getAnnotation(DisplayName.class);
+        if( displayNameAnnotation != null){
+            return Optional.of(displayNameAnnotation.value());
+        }
+        return Optional.empty();
     }
 
     public String specifiedDriver() {

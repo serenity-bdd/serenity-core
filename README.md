@@ -72,6 +72,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 2.5.8         | 2.5.8                 | 3.141.59          | 4.3.3                | 7.5.1                 |
 | 2.5.7         | 2.5.7                 | 3.141.59          | 4.3.3                | 7.5.1                 |
 | 2.4.51        | 2.4.51                | 3.141.59          | 4.3.3                | 7.5.1                 |
 | 2.4.34        | 2.4.34                | 3.141.59          | 4.3.3                | 7.5.1                 |
@@ -102,6 +103,7 @@ From version 2.3.x we will be supporting Cucumber 6 only.
 
 | serenity-core | serenity-maven-plugin | serenity-cucumber6 | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 2.5.8         | 2.5.8                 |  2.5.8             | 6.10.4              |
 | 2.5.7         | 2.5.7                 |  2.5.7             | 6.10.4              |
 | 2.4.51        | 2.4.51                |  2.4.51            | 6.10.4              |
 | 2.4.34        | 2.4.34                |  2.4.34            | 6.10.4              |

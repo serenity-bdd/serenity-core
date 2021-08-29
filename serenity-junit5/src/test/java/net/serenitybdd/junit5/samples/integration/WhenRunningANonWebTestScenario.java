@@ -3,10 +3,8 @@ package net.serenitybdd.junit5.samples.integration;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
-import net.serenitybdd.junit5.extensions.TemporaryFolderExtension;
-import net.serenitybdd.junit5.TestLauncher;
 import net.serenitybdd.junit5.extensions.Serenity;
-import net.serenitybdd.junit5.extensions.TemporaryFolder;
+import net.serenitybdd.junit5.extensions.TemporaryFolderExtension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.model.TestOutcome;
@@ -29,12 +27,12 @@ import java.util.List;
 import static net.serenitybdd.core.environment.ConfiguredEnvironment.getConfiguration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import net.serenitybdd.junit5.TestLauncher;
 
 @ExtendWith(TemporaryFolderExtension.class)
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
 
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /*@Rule
     @Rule

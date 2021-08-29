@@ -12,7 +12,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static net.thucydides.core.webdriver.SupportedWebDriver.CHROME;
 
-@Ignore("Disabling temporarily due to chromedriver bug")
+//@Ignore("Disabling temporarily due to chromedriver bug")
 public class UsingWebdriverActionsWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
     static WebDriver driver;

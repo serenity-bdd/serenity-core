@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
@@ -31,7 +32,6 @@ import static org.hamcrest.Matchers.*;
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
 
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /*@Rule
     @Rule

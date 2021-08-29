@@ -3,7 +3,6 @@ package net.serenitybdd.junit5.samples.integration;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
-import net.serenitybdd.junit5.extensions.Serenity;
 import net.serenitybdd.junit5.extensions.TemporaryFolderExtension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.guice.ThucydidesModule;
@@ -32,11 +31,6 @@ import net.serenitybdd.junit5.TestLauncher;
 @ExtendWith(TemporaryFolderExtension.class)
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
-
-
-    /*@Rule
-    @Rule
-    public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();*/
 
     Injector injector;
 
@@ -107,8 +101,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_marked_as_manual_should_be_skipped_and_be_flagged_as_manual_tests()  {
 
-        //SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithManualTests.class);
-        //runner.run(new RunNotifier());
         TestLauncher.runTestForClass(SamplePassingNonWebScenarioWithManualTests.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
@@ -118,7 +110,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
                 hasItem(TestTag.withName("Manual").andType("External Tests")));
     }
 
-    @Serenity
     public static final class ATestWithNoSteps {
         @Test
         public void test_with_no_steps() {}
@@ -134,7 +125,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(inTheTestOutcomes(executedSteps).theResultFor("test_with_no_steps"), is(TestResult.SUCCESS));
     }
 
-    @Serenity
     public static final class AnIgnoredTest {
         @Test
         public void previous_test() {}
@@ -157,7 +147,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(inTheTestOutcomes(executedSteps).theResultFor("following_test"), is(TestResult.SUCCESS));
     }
 
-    @Serenity
     public static final class APendingTest {
         @Test
         public void previous_test() {}

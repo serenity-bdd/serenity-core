@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.model
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.NameConverter.humanize
 
@@ -16,7 +17,8 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
         const val CUSTOM_FIELD_ORDER = "report.customfields.order"
     }
 
-    private val orderedFields: List<String> = orderedFields(environmentVariables).map { field -> "report.customfields." + field }
+    private val orderedFields: List<String> =
+        orderedFields(environmentVariables).map { field -> "report.customfields." + field }
     private val fields: List<String> = customFieldsDefinedIn(environmentVariables)
     val fieldNames: List<String> = customFieldOrderDefinedIn(fields, environmentVariables)
     val values: List<String> = customFieldValueDefinedIn(fields, environmentVariables)
@@ -33,18 +35,26 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
             orderedFields
         } else {
             environmentVariables
-                    .keys
-                    .filter { key -> key.matches(fieldsRegex) }
+                .keys
+                .filter { key -> key.matches(fieldsRegex) }
         }
     }
 
-    private fun customFieldValueDefinedIn(fields: List<String>, environmentVariables: EnvironmentVariables): List<String> =
-            fields.map { key ->
-                environmentVariables.injectSystemPropertiesInto(environmentVariables.getProperty(key)) ?: ""
-            }
+    private fun customFieldValueDefinedIn(
+        fields: List<String>,
+        environmentVariables: EnvironmentVariables
+    ): List<String> =
+        fields.map { key ->
+            environmentVariables.injectSystemPropertiesInto(
+                EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(key)
+            ) ?: ""
+        }
 
 
-    private fun customFieldOrderDefinedIn(fields: List<String>, environmentVariables: EnvironmentVariables): List<String> {
+    private fun customFieldOrderDefinedIn(
+        fields: List<String>,
+        environmentVariables: EnvironmentVariables
+    ): List<String> {
         val predefinedFields = orderedFields(environmentVariables)
         return if (predefinedFields.isNotEmpty()) {
             predefinedFields.map { field -> humanize(field) }
@@ -56,11 +66,12 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
     private fun humanReadableLabelOf(field: String): String = humanize(field.substringAfter("$CUSTOM_FIELDS_PREFIX."))
 
     private fun orderedFields(environmentVariables: EnvironmentVariables): List<String> = environmentVariables
-            .keys
-            .firstOrNull { key ->
-                key.matches(orderedFieldsRegex)
-            }?.let { key ->
-                environmentVariables.getProperty(key).split(",").map { field -> field.trim() }
-            } ?: emptyList()
+        .keys
+        .firstOrNull { key ->
+            key.matches(orderedFieldsRegex)
+        }?.let { key ->
+            EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(key)
+                .split(",").map { field -> field.trim() }
+        } ?: emptyList()
 
 }

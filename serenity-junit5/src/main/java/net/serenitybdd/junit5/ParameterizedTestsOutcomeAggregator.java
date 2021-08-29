@@ -143,9 +143,19 @@ public class ParameterizedTestsOutcomeAggregator {
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
             //if (!testOutcomes.contains(testOutcome)) {
-                testOutcomes.add(testOutcome);
+                testOutcomes.add(withParentStepsMerged(testOutcome));
             //}
         }
         return testOutcomes;
+    }
+
+    private static TestOutcome withParentStepsMerged(TestOutcome testOutcome) {
+        if ( (testOutcome.getTestSteps().size() == 1) && testOutcome.getTestSteps().get(0).getDescription().startsWith("Example ") ){
+            String testStepQualifier = testOutcome.getTestSteps().get(0).getDescription().replaceAll("Example \\d+:","");
+            List<TestStep> childSteps = testOutcome.getTestSteps().get(0).getChildren();
+            return testOutcome.withQualifier(testStepQualifier).withSteps(childSteps);
+        } else {
+            return testOutcome;
+        }
     }
 }

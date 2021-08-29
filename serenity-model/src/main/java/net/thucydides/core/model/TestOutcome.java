@@ -1022,6 +1022,11 @@ public class TestOutcome {
         return (testSteps == null || testSteps.isEmpty());
     }
 
+    public TestOutcome withSteps(List<TestStep> childSteps) {
+        this.testSteps = new ArrayList<>(childSteps);
+        return this;
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -2532,9 +2537,8 @@ public class TestOutcome {
 
         StringBuilder sampleScenario = new StringBuilder();
         for (TestStep step : getStepChildren()) {
-            sampleScenario.append(
-                    withPlaceholderSubstitutes(step.getDescription()))
-                    .append("\n");
+            sampleScenario.append(withPlaceholderSubstitutes(step.getDescription()))
+                          .append("\n");
         }
         return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
     }

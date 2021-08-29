@@ -46,7 +46,7 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
     ): List<String> =
         fields.map { key ->
             environmentVariables.injectSystemPropertiesInto(
-                EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(key)
+                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(key).orElse("")
             ) ?: ""
         }
 
@@ -70,7 +70,7 @@ class CustomReportFields(val environmentVariables: EnvironmentVariables) {
         .firstOrNull { key ->
             key.matches(orderedFieldsRegex)
         }?.let { key ->
-            EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(key)
+            EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(key).orElse("")
                 .split(",").map { field -> field.trim() }
         } ?: emptyList()
 

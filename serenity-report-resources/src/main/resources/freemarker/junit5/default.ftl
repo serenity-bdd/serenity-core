@@ -38,7 +38,7 @@
 
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
-            <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+            <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
             > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
         > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}
@@ -73,7 +73,7 @@
                         <td>
                             <#if (parentRequirement?? && parentRequirement.isPresent())>
                                 <div>
-                                    <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
+                                    <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().displayName).asATitle()) >
                                     <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
                                     <#if (parentRequirement.get().cardNumber?has_content) >
                                         <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.get().cardNumber) + "]" >
@@ -91,7 +91,7 @@
                                 </div>
                             <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                                 <div>
-                                    <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
+                                    <#assign parentTitle = inflection.of(featureOrStory.get().displayName).asATitle() >
                                     <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                     <h3 class="discreet-story-header">
                                         <i class="fa fa-2x fa-comments-o"></i>

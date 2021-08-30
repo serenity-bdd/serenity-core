@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
@@ -234,13 +235,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public java.util.Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
-//                return java.util.Optional.of(requirement);
-//            }
-//        }
-//        return java.util.Optional.empty();
-//
         return AllRequirements.asStreamFrom(getRequirements())
                 .filter(
                         requirement -> (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag()))
@@ -256,12 +250,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         if (matching.isPresent()) {
             return matching;
         }
-//
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
-//                return Optional.of(requirement);
-//            }
-//        }
         return uniqueRequirementWithName(testTag.getName());
     }
 
@@ -272,7 +260,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     @Override
     public Set<TestTag> getTagsFor(TestOutcome testOutcome) {
         if (testOutcome.getUserStory() == null) {
-            return new HashSet();
+            return new HashSet<>();
         }
 
         Set<TestTag> tags = new HashSet<>();
@@ -309,7 +297,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     public List<String> getActiveRequirementTypes() {
         List<String> allRequirementTypes = requirementsConfiguration.getRequirementTypes();
 
-        int maxDepth = longestPathIn(requirementPathsStartingFrom(rootPackage));// RequirementsList.of(getRequirements()).maxDepth();
+        int maxDepth = longestPathIn(requirementPathsStartingFrom(rootPackage));
 
         return applicableRequirements(allRequirementTypes, maxDepth);
     }

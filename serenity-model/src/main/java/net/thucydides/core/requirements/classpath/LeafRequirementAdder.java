@@ -2,15 +2,13 @@ package net.thucydides.core.requirements.classpath;
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.strings.Joiner;
+import net.thucydides.core.model.AnnotatedStoryTitle;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -92,15 +90,42 @@ public class LeafRequirementAdder {
 
         List<TestTag> storyTags = AnnotatedTags.forClassDefinedInPath(path);
         Map<String, Collection<TestTag>> testTags = AnnotatedTags.forTestMethodsDefinedInPath(path);
+
+        String displayName = displayNameFor(path).orElse(storyName);
+
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
                 .withNarrative(narrativeText)
                 .withParent(parent)
+                .withDisplayName(displayName)
                 .withTags(storyTags)
                 .withScenarioTags(testTags)
                 .withPath(Joiner.on("/").join(allButLast(pathElements)));
 
         return story;
+    }
+
+    private Optional<String> displayNameFor(String path) {
+        try {
+            return AnnotatedStoryTitle.forClass(Class.forName(path));
+        } catch (ClassNotFoundException tryWithInnerClasses) {
+            List<Integer> dotIndexes = new ArrayList<>();
+            for (int i = 0; i < path.length(); i++) {
+                if (path.charAt(i) == '.') {
+                    dotIndexes.add(i);
+                }
+            }
+            StringBuilder updatedPath = new StringBuilder(path);
+            for (int index = dotIndexes.size() - 1; index >= 0; index--) {
+                updatedPath.setCharAt(dotIndexes.get(index), '$');
+                try {
+                    return AnnotatedStoryTitle.forClass(Class.forName(updatedPath.toString()));
+                } catch (ClassNotFoundException noMatchingInnerClass) {
+                    // Continue with next level of nesting
+                }
+            }
+            return Optional.empty();
+        }
     }
 
     private Requirement requirementDefinedByNarrativeAt(String path, Collection<Requirement> knownRequirements) {
@@ -131,7 +156,7 @@ public class LeafRequirementAdder {
     }
 
     private Optional<Requirement> findMatchingRequirementWithName(Collection<Requirement> knownRequirements, String featureName, String featureType) {
-        for(Requirement requirement : knownRequirements) {
+        for (Requirement requirement : knownRequirements) {
             if (requirement.getName().equalsIgnoreCase(featureName) && requirement.getType().equalsIgnoreCase(featureType)) {
                 return Optional.of(requirement);
             }

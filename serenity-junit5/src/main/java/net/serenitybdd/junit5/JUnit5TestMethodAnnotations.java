@@ -33,12 +33,12 @@ public class JUnit5TestMethodAnnotations {
     }
 
     public String specifiedDriver() {
-        Preconditions.checkArgument(isDriverSpecified() == true);
+        Preconditions.checkArgument(isDriverSpecified());
         return (method.getAnnotation(WithDriver.class).value());
     }
 
     public String driverOptions() {
-        Preconditions.checkArgument(isDriverSpecified() == true);
+        Preconditions.checkArgument(isDriverSpecified());
         return (method.getAnnotation(DriverOptions.class).value());
     }
 

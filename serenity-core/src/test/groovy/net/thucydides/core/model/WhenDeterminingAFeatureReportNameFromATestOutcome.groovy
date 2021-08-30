@@ -9,6 +9,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
         given:
             Story story = new Story("test-reports",
                     "Test Reports",
+                    "Test Reports",
                     null,
                     "reports_examples/test_reports.feature").asFeature()
         when:
@@ -20,6 +21,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
     def "Should use parent directory with story files if present"() {
         given:
         Story story = new Story("test-reports",
+                "Test Reports",
                 "Test Reports",
                 null,
                 "reports_examples/test_reports.story")
@@ -34,6 +36,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
         given:
         Story story = new Story("test-reports",
                 "Test Reports",
+                "Test Reports",
                 null,
                 "reports/reports_examples/test_reports.feature").asFeature()
         when:
@@ -45,6 +48,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
     def "Should use parent directory with junit test results for class-based directory structures"() {
         given:
         Story story = new Story("net.serenitybdd.demos.todos.screenplay.features.accessing_the_application.LearnAboutTheApplication",
+                "Learn about the application",
                 "Learn about the application",
                 null,
                 "accessing_the_application").asFeature()

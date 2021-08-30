@@ -23,24 +23,11 @@ jobs:
         run: |
           cat <(echo -e "${{ secrets.GPG_PRIVATE_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
-#
-#
-#
-#      - name: Maven Release
-#        env:
-#          OSSRHUSERNAME: ${{ secrets.OSSRHUSERNAME }}
-#          OSSRHPASSWORD: ${{ secrets.OSSRHPASSWORD }}
-#        run: mvn -DskipTests -Darguments=-DskipTests release:prepare release:perform -Pdeploy
-#
-#      - name: Release
-#          uses: qcastel/github-actions-maven-release@1.12.26
-#          env:
-#            JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
-#          with:
-#            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#            maven-args: "-DskipTests -DskipITs"
-#            git-release-bot-name: "release-bot"
-#            git-release-bot-email: "release-bot@serenity-bdd.info"
-#            gpg-enabled: "true"
-#            gpg-key-id: ${{ secrets.GITHUB_GPG_KEY_ID }}
-#            gpg-key: ${{ secrets.GITHUB_GPG_KEY }}
+
+        - id: publish-to-central
+          name: Publish to Central Repository
+          env:
+            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          run: |
+            mvn --no-transfer-progress --batch-mode -DskipTests -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Darguments=-DskipTests release:prepare release:perform -Pdeploy

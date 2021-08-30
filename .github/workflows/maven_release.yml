@@ -1,11 +1,11 @@
-name: Release to Maven Central
+name: Publish To Maven Central
 on:
   workflow_dispatch:
-    inputs:
-      versionNumber:
-        description: 'Next version number'
-      nextSnapshopVersionNumber:
-        description: 'Next SNAPSHOT version number'
+#    inputs:
+#      versionNumber:
+#        description: 'Next version number'
+#      nextSnapshopVersionNumber:
+#        description: 'Next SNAPSHOT version number'
 jobs:
   publish:
     runs-on: ubuntu-latest

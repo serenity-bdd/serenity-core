@@ -18,35 +18,17 @@ jobs:
         with:
           java-version: 11
 
-      - name: Set Version
-        run: mvn versions:set -DnewVersion=${{ github.event.inputs.versionNumber }} && mvn versions:commit
-
-      - name: Tag Version
+      - name: Release
+        uses: qcastel/github-actions-maven-release@v1.12.26
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        run: |
-          git config --global user.email "john.smart@wakaleo.com"
-          git config --global user.name "John Ferguson Smart (Github Actions)"
-          git pull --tags -f
-          git commit -a -m"Release version ${{ github.event.inputs.versionNumber }}"
-          git tag v${{ github.event.inputs.versionNumber }}
-          git push origin --tags -f
-
-      - name: Release Build
-        uses: samuelmeuli/action-maven-publish@v1.4.0
+          JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+          OSSRHUSERNAME: ${{ secrets.NEXUS_USERNAME }}
+          OSSRHPASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         with:
-          gpg_private_key: ${{ secrets.gpg_private_key }}
-          gpg_passphrase: ${{ secrets.gpg_passphrase }}
-          nexus_username: ${{ secrets.nexus_username }}
-          nexus_password: ${{ secrets.nexus_password }}
-
-      - name: Update to next Snapshot version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        run: |
-          git pull --tags -f
-          mvn versions:set -DnewVersion=${{ github.event.inputs.nextSnapshopVersionNumber }} && mvn versions:commit
-          git config --global user.email "john.smart@wakaleo.com"
-          git config --global user.name "John Ferguson Smart (Github Actions)"
-          git commit -a -m"Updated to snapshot version ${{ github.event.inputs.nextSnapshopVersionNumber }}"
-          git push origin --tags -f
+            access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+            gpg-enabled: "true"
+            gpg-key-id: ${{ secrets.GPG_KEY_ID }}
+            gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
+            gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}

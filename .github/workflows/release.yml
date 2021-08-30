@@ -19,7 +19,7 @@ jobs:
           java-version: 11
 
       - name: Release
-        uses: qcastel/github-actions-maven-release@1.12.26
+        uses: qcastel/github-actions-maven-release@master
         env:
           JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
           OSSRHUSERNAME: ${{ secrets.NEXUS_USERNAME }}

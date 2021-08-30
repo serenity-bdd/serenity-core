@@ -182,7 +182,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         String displayName = removeEndBracketsFromDisplayName(testIdentifier.getDisplayName());
         if( isMethodSource(testIdentifier) ) {
             String className = ((MethodSource) testIdentifier.getSource().get()).getClassName();
-            String methodName = ((MethodSource) testIdentifier.getSource().get()).getMethodName();
             try {
                 StepEventBus.getEventBus().testStarted(
                         Optional.ofNullable(displayName).orElse("Initialisation"),
@@ -365,26 +364,31 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         return testId.getSource().isPresent() && (testId.getSource().get() instanceof MethodSource);
     }
 
-
-
     /**
      * Called when a test starts. We also need to start the test suite the first
      * time, as the testRunStarted() method is not invoked for some reason.
      */
-    //@Override
     private void testStarted(MethodSource methodSource,TestIdentifier testIdentifier/*final Description description*/) {
         if (testingThisTest(testIdentifier)) {
             startTestSuiteForFirstTest(testIdentifier);
             logger.info(Thread.currentThread() + " Test started " + testIdentifier);
             StepEventBus.getEventBus().clear();
             StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
-            StringBuffer testName = new StringBuffer(methodSource.getMethodName());
+            String testName = methodSource.getMethodName();
+            try {
+                Method javaMethod = methodSource.getJavaMethod();
+                if (JUnit5TestMethodAnnotations.forTest(javaMethod).getDisplayName().isPresent()) {
+                    testName = JUnit5TestMethodAnnotations.forTest(javaMethod).getDisplayName().get();
+                }
+            } catch(Exception e) {
+               //ignore org.junit.platform.commons.PreconditionViolationException: Could not find method with name
+            }
             /*if(testIdentifier.getDisplayName() != null)
             {
                 testName.append("%" + testIdentifier.getDisplayName());
             }*/
             StepEventBus.getEventBus().testStarted(
-                    Optional.ofNullable(testName.toString()).orElse("Initialisation"),
+                    Optional.ofNullable(testName).orElse("Initialisation"),
                     methodSource.getJavaClass());
         }
     }

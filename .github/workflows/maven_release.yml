@@ -24,10 +24,10 @@ jobs:
           cat <(echo -e "${{ secrets.GPG_PRIVATE_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
 
-        - id: publish-to-central
-          name: Publish to Central Repository
-          env:
-            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          run: |
-            mvn --no-transfer-progress --batch-mode -DskipTests -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Darguments=-DskipTests release:prepare release:perform -Pdeploy
+      - id: publish-to-central
+        name: Publish to Central Repository
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        run: |
+          mvn --no-transfer-progress --batch-mode -DskipTests -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Darguments=-DskipTests release:prepare release:perform -Pdeploy

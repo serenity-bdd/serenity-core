@@ -110,7 +110,13 @@ public class Requirement implements Comparable {
         this.background = background;
     }
 
-    protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, String path,
+    protected Requirement(String name,
+                          String id,
+                          String displayName,
+                          String cardNumber,
+                          String parent,
+                          String type,
+                          String path,
                           CustomFieldValue narrative,
                           List<Requirement> children,
                           List<Example> examples,
@@ -121,7 +127,6 @@ public class Requirement implements Comparable {
         this.name = name;
         this.id = id;
         this.displayName = (displayName != null) ? displayName : name;
-        ;
         this.cardNumber = cardNumber;
         this.type = type;
         this.parent = parent;

@@ -59,7 +59,6 @@ public class JSONRequirementsTree {
         String childCount = (children.isEmpty()) ? countScenariosIn(requirement, requirementsOutcomes) : countChildRequirementsIn(requirement);
 
         String report = new ReportNameProvider().forRequirement(requirement);
-//        return new Node(requirement.getName(), requirement.getType(), report, label, childCount, children);
         return new Node(requirement.getDisplayName(), requirement.getType(), report, label, childCount, children);
     }
 

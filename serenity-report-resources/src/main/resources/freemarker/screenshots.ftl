@@ -107,7 +107,7 @@
                         <td>
                         <#if (parentRequirement?? && parentRequirement.isPresent())>
                             <div>
-                                <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
+                                <#assign parentTitle = inflection.of(parentRequirement.get().displayName).asATitle() >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
                                 <#if (parentRequirement.get().cardNumber?has_content) >
                                     <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.get().cardNumber) + "]" >
@@ -127,7 +127,7 @@
                             </div>
                         <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                             <div>
-                                <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().name).asATitle())>
+                                <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().displayName).asATitle())>
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-2x fa-comments-o"></i>

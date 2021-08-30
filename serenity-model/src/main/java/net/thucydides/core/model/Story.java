@@ -11,6 +11,8 @@ import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -22,6 +24,7 @@ public class Story {
 
     private String id;
     private String storyName;
+    private String displayName;
     private String storyClassName;
     private String path;
     private String narrative;
@@ -32,6 +35,7 @@ public class Story {
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
         this.storyName = humanize(userStoryClass.getSimpleName());
+        this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(humanize(userStoryClass.getSimpleName()));
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
         this.type = FeatureType.STORY.toString();
@@ -74,11 +78,13 @@ public class Story {
     public Story(String id,
                  final String storyName,
                  final String storyClassName,
+                 final String displayName,
                  final String path,
                  final ApplicationFeature feature) {
         this.id = id;
         this.storyName = storyName;
         this.storyClassName = storyClassName;
+        this.displayName = displayName;
         this.feature = feature;
         this.path = path;
         this.narrative = null;
@@ -89,16 +95,18 @@ public class Story {
     public Story(String id,
                  final String storyName,
                  final String storyClassName,
+                 final String displayName,
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName, storyClassName, path, feature, narrative, FeatureType.STORY.toString());
+        this(id, storyName, storyClassName, displayName, path, feature, narrative, FeatureType.STORY.toString());
     }
 
 
     public Story(String id,
                  final String storyName,
                  final String storyClassName,
+                 final String displayName,
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative,
@@ -106,6 +114,7 @@ public class Story {
         this.id = id;
         this.storyName = storyName;
         this.storyClassName = storyClassName;
+        this.displayName = displayName;
         this.feature = feature;
         this.path = path;
         this.narrative = narrative;
@@ -114,10 +123,12 @@ public class Story {
 
     protected Story(final String id,
                     final String storyName,
+                    final String displayName,
                     final ApplicationFeature feature,
                     final String path) {
         this.id = id;
         this.storyName = storyName;
+        this.displayName = displayName;
         this.storyClassName = null;
         this.feature = feature;
         this.path = path;
@@ -147,15 +158,15 @@ public class Story {
     }
 
     public Story withNarrative(String narrative) {
-        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
     }
 
     public Story withType(String type) {
-        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
     }
 
     public static Story withIdAndPath(final String storyId, final String storyName, final String storyPath) {
-        return new Story(storyId, storyName, null, storyPath, null);
+        return new Story(storyId, storyName, null, storyName, storyPath, null);
     }
 
     public static Story called(final String storyName) {
@@ -164,13 +175,13 @@ public class Story {
 
     public static Story withId(final String storyId, final String storyName,
                                final String featureClassName, final String featureName) {
-        return new Story(storyId, storyName, new ApplicationFeature(featureClassName, featureName), null);
+        return new Story(storyId, storyName, storyName, new ApplicationFeature(featureClassName, featureName), null);
     }
 
 
     public static Story withIdAndPathAndFeature(final String storyId, final String storyName, String storyPath,
                                                 final String featureClassName, final String featureName) {
-        return new Story(storyId, storyName, new ApplicationFeature(featureClassName, featureName), storyPath);
+        return new Story(storyId, storyName, storyName, new ApplicationFeature(featureClassName, featureName), storyPath);
     }
 
     @Override
@@ -181,9 +192,7 @@ public class Story {
         Story story = (Story) o;
 
         if (!id.equals(story.id)) return false;
-        if (path != null ? !path.equals(story.path) : story.path != null) return false;
-
-        return true;
+        return Objects.equals(path, story.path);
     }
 
     @Override
@@ -232,7 +241,7 @@ public class Story {
     }
 
     public String getDisplayName() {
-        return storyName;
+        return StringUtils.isNotEmpty(displayName) ? displayName : storyName;
     }
 
     public String getStoryClassName() {
@@ -275,11 +284,11 @@ public class Story {
     }
 
     public Story withPath(String path) {
-        return new Story(this.id, this.storyName, this.storyClassName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
+        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
     }
 
     public Story asFeature() {
-        return new Story(this.id, this.storyName, this.storyClassName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
+        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
     }
 
     public TestTag asTag() {

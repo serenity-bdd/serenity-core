@@ -96,7 +96,7 @@
         <#if (breadcrumbs?has_content)>
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
-                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
                 <#assign breadcrumbType = inflection.of(breadcrumb.type).asATitle() >
                 > <a href="${breadcrumbReport}" title="${breadcrumbTitle} (breadcrumbType)">
                     <#--${formatter.htmlCompatible(breadcrumbTitle)}-->

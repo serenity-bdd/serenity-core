@@ -1,6 +1,7 @@
 package net.thucydides.core.model.features;
 
 import com.google.common.base.Preconditions;
+import net.thucydides.core.model.AnnotatedStoryTitle;
 import net.thucydides.core.util.NameConverter;
 
 /**
@@ -43,7 +44,7 @@ public class ApplicationFeature {
     protected ApplicationFeature(final Class<?> featureClass) {
         Preconditions.checkNotNull(featureClass);
         this.id = featureClass.getCanonicalName();
-        this.name = NameConverter.humanize(featureClass.getSimpleName());
+        this.name = NameConverter.humanize(featureClass.getSimpleName());// AnnotatedStoryTitle.forClass(featureClass).orElse(NameConverter.humanize(featureClass.getSimpleName()));
     }
 
     public String getName() {

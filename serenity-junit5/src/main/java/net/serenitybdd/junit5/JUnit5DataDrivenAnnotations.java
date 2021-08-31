@@ -66,6 +66,10 @@ public class JUnit5DataDrivenAnnotations {
             else if (isACsvSourceAnnotatedMethod(testDataMethod)) {
                 fillDataTablesFromCsvSource(dataTables,testDataMethod);
             }
+            else if (isAMethodSourceAnnotatedMethod(testDataMethod)) {
+                fillDataTablesFromMethodSource(dataTables,testDataMethod);
+            }
+
         }
         return dataTables;
     }
@@ -117,6 +121,14 @@ public class JUnit5DataDrivenAnnotations {
         }
     }
 
+     private void fillDataTablesFromMethodSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
+        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+    }
+
     List<Method> findTestDataMethods() {
         return Arrays.asList(testClass.getMethods()).stream().filter(this::findParameterizedTests).collect(Collectors.toList());
     }
@@ -160,7 +172,6 @@ public class JUnit5DataDrivenAnnotations {
             ret.add(Arrays.asList(split));
         }
         return ret;
-        //return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(((String)parameter).split(","))).collect(Collectors.toList());
     }
 
     List<List<Object>> listOfEnumSourceObjectsFrom(Method testDataMethod){
@@ -218,14 +229,13 @@ public class JUnit5DataDrivenAnnotations {
         return columnNames;
     }
 
-
-
     private boolean findParameterizedTests(Method method) {
         return method.getAnnotation(ParameterizedTest.class) != null &&
                 (isAValueSourceAnnotatedMethod(method)
                         || isACsvFileSourceAnnotatedMethod(method)
                         || isACsvSourceAnnotatedMethod(method)
-                        || isAEnumSourceAnnotatedMethod(method));
+                        || isAEnumSourceAnnotatedMethod(method)
+                        || isAMethodSourceAnnotatedMethod(method));
     }
 
     private boolean isAValueSourceAnnotatedMethod(Method method){
@@ -242,5 +252,9 @@ public class JUnit5DataDrivenAnnotations {
 
     private boolean isACsvFileSourceAnnotatedMethod(Method method){
         return method.getAnnotation(CsvFileSource.class) != null;
+    }
+
+    private boolean isAMethodSourceAnnotatedMethod(Method method){
+        return method.getAnnotation(MethodSource.class) != null;
     }
 }

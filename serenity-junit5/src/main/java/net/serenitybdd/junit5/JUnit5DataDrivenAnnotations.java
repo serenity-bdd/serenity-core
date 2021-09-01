@@ -15,10 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JUnit5DataDrivenAnnotations {
 
@@ -85,7 +87,7 @@ public class JUnit5DataDrivenAnnotations {
     private void fillDataTablesFromValueSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
+        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromValueSource(testDataMethod);
         logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
@@ -124,7 +126,7 @@ public class JUnit5DataDrivenAnnotations {
      private void fillDataTablesFromMethodSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
-        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFrom(testDataMethod);
+        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromMethodSource(testDataMethod);
         logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
@@ -137,7 +139,32 @@ public class JUnit5DataDrivenAnnotations {
         return Arrays.asList(method.getParameters()).stream().map(Parameter::getName).collect(Collectors.joining(","));
     }
 
-    List<List<Object>> listOfObjectsFrom(Method testDataMethod){
+    List<List<Object>> listOfObjectsFromMethodSource(Method testDataMethod) {
+        MethodSource methodSourceAnnotation  = testDataMethod.getAnnotation(MethodSource.class);
+        String[] value = methodSourceAnnotation.value();
+        if(value != null) {
+            List<String> methodNames = Arrays.asList(value);
+            try {
+                Method staticMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodNames.get(0));
+                staticMethod.setAccessible(true);
+                try {
+                    Stream<Object> result = (Stream<Object>)staticMethod.invoke(null);
+                    List<Object> collect = result.collect(Collectors.toList());
+                    System.out.println("Received invocation " + result);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            } catch(NoSuchMethodException ex) {
+                logger.error("No static method with the name " + methodNames.get(0)  + "found ");
+            }
+        }
+
+        return null;
+    }
+
+    List<List<Object>> listOfObjectsFromValueSource(Method testDataMethod) {
         ValueSource annotation = testDataMethod.getAnnotation(ValueSource.class);
         if(ArrayUtils.isNotEmpty(annotation.strings()))
             return listOfObjectsFrom(annotation.strings());

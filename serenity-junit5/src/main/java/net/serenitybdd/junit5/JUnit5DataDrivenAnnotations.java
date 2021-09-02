@@ -127,7 +127,7 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromMethodSource(testDataMethod);
-        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        System.out.println("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
@@ -142,15 +142,16 @@ public class JUnit5DataDrivenAnnotations {
     List<List<Object>> listOfObjectsFromMethodSource(Method testDataMethod) {
         MethodSource methodSourceAnnotation  = testDataMethod.getAnnotation(MethodSource.class);
         String[] value = methodSourceAnnotation.value();
+        Parameter[] parameters = testDataMethod.getParameters();
         if(value != null) {
             List<String> methodNames = Arrays.asList(value);
+            List<Parameter> parametersList = Arrays.asList(parameters);
             try {
                 Method staticMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodNames.get(0));
                 staticMethod.setAccessible(true);
                 try {
-                    Stream<Object> result = (Stream<Object>)staticMethod.invoke(null);
-                    List<Object> collect = result.collect(Collectors.toList());
-                    System.out.println("Received invocation " + result);
+                    Stream<Arguments> result = (Stream<Arguments>)staticMethod.invoke(null);
+                    return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {

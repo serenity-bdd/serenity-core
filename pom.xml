@@ -48,7 +48,7 @@
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>1.7.30</slf4j.version>
         <guice.version>5.0.1</guice.version>
-        <cucumber.version>6.10.2</cucumber.version>
+        <cucumber.version>6.11.0</cucumber.version>
         <gson.version>2.8.7</gson.version>
         <junit5.version>5.7.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>
@@ -513,12 +513,10 @@
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
-            <!--        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
-            <!--        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
@@ -674,8 +672,8 @@
                 </executions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+<!--                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
+                    <nexusUrl>https://oss.sonatype.org</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>

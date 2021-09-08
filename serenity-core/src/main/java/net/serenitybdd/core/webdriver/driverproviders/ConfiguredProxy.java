@@ -61,7 +61,7 @@ public class ConfiguredProxy {
             if (socksProxyPassword != null) {
                 proxy.setSocksPassword(socksProxyPassword);
             }
-            if ((socksProxyVersion != null) && (socksProxyVersion != 0)) {
+            if (socksProxyVersion != 0) {
                 proxy.setSocksVersion(socksProxyVersion);
             }
             return Optional.of(proxy);

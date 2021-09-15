@@ -142,26 +142,25 @@ public class JUnit5DataDrivenAnnotations {
     List<List<Object>> listOfObjectsFromMethodSource(Method testDataMethod) {
         MethodSource methodSourceAnnotation  = testDataMethod.getAnnotation(MethodSource.class);
         String[] value = methodSourceAnnotation.value();
-        Parameter[] parameters = testDataMethod.getParameters();
-        if(value != null) {
+        String methodName;
+        if(value != null  && (value.length > 0) && (!value[0].isEmpty())) {
             List<String> methodNames = Arrays.asList(value);
-            List<Parameter> parametersList = Arrays.asList(parameters);
-            try {
-                Method staticMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodNames.get(0));
-                staticMethod.setAccessible(true);
-                try {
-                    Stream<Arguments> result = (Stream<Arguments>)staticMethod.invoke(null);
-                    return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            } catch(NoSuchMethodException ex) {
-                logger.error("No static method with the name " + methodNames.get(0)  + "found ");
-            }
+            methodName = methodNames.get(0);
+        } else {
+            methodName = testDataMethod.getName();
         }
-
+        try {
+            Method staticMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
+            staticMethod.setAccessible(true);
+            try {
+                Stream<Arguments> result = (Stream<Arguments>)staticMethod.invoke(null);
+                return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                logger.error("Cannot get list of objects from method source ", e);
+            }
+        } catch(NoSuchMethodException ex) {
+            logger.error("No static method with the name " + methodName  + " found ",ex);
+        }
         return null;
     }
 

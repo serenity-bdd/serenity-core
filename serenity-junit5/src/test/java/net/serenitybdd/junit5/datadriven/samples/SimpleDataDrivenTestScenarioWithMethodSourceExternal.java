@@ -7,27 +7,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
-public class SimpleDataDrivenTestScenarioWithMethodSource {
+public class SimpleDataDrivenTestScenarioWithMethodSourceExternal {
 
     @Steps
     public SampleScenarioSteps steps;
 
     @ParameterizedTest(name = "run {index} with {arguments}")
-    @MethodSource("stringProvider")
+    @MethodSource("net.serenitybdd.junit5.datadriven.samples.ExternalParametersProvider#stringProvider")
     public void withMethodSourceSimpleStatic(String string1,String string2) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
     }
 
-    static Stream<Arguments> stringProvider() {
-        return Stream.of(arguments("apple", "banana"), arguments("peaches","pears"));
-    }
+
 }

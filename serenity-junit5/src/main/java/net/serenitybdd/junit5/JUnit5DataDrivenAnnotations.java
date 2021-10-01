@@ -143,23 +143,44 @@ public class JUnit5DataDrivenAnnotations {
         MethodSource methodSourceAnnotation  = testDataMethod.getAnnotation(MethodSource.class);
         String[] value = methodSourceAnnotation.value();
         String methodName;
+        Method factoryMethod = null;
         if(value != null  && (value.length > 0) && (!value[0].isEmpty())) {
             List<String> methodNames = Arrays.asList(value);
             methodName = methodNames.get(0);
-        } else {
+            if(methodName.indexOf("#") > 0) { //external class source
+                List<List<Object>> result = getListOfObjectsFromExternalClassSource(methodName);
+                if (result != null) return result;
+            }
+        } else { //no factory method name
             methodName = testDataMethod.getName();
         }
         try {
-            Method staticMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
-            staticMethod.setAccessible(true);
+            factoryMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
+            factoryMethod.setAccessible(true);
             try {
-                Stream<Arguments> result = (Stream<Arguments>)staticMethod.invoke(null);
+                Stream<Arguments> result = (Stream<Arguments>)factoryMethod.invoke(null);
                 return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
             } catch (IllegalAccessException | InvocationTargetException e) {
                 logger.error("Cannot get list of objects from method source ", e);
             }
         } catch(NoSuchMethodException ex) {
             logger.error("No static method with the name " + methodName  + " found ",ex);
+        }
+        return null;
+    }
+
+    private List<List<Object>> getListOfObjectsFromExternalClassSource(String methodName) {
+        Method factoryMethod;
+        String externalParameterFactoryClassName = methodName.substring(0, methodName.indexOf("#"));
+        String externalParameterFactoryMethodName = methodName.substring(methodName.indexOf("#") +1, methodName.length());
+        try {
+            Class externalClassFactory = Class.forName(externalParameterFactoryClassName);
+            factoryMethod = externalClassFactory.getDeclaredMethod(externalParameterFactoryMethodName);
+            factoryMethod.setAccessible(true);
+            Stream<Arguments> result = (Stream<Arguments>)factoryMethod.invoke(null);
+            return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Cannot found external parameter factory class method", e);
         }
         return null;
     }

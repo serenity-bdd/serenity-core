@@ -1,9 +1,6 @@
 package net.serenitybdd.junit5;
 
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithMethodSource;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithMethodSourceExternal;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithMethodSourceNoName;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource;
+import net.serenitybdd.junit5.datadriven.samples.*;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +42,12 @@ public class JUnit5DataDrivenAnnotationsTest {
     @Test
     public void testFindMethodSourceFromExternalSource() throws Exception{
         JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(SimpleDataDrivenTestScenarioWithMethodSourceExternal.class);
+        assertEquals(1,dda.findTestDataMethods().size());
+    }
+
+    @Test
+    public void testFindMethodSourceInstanceMethodSource() throws Exception{
+        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(SimpleDataDrivenTestScenarioWithMethodSourceInstance.class);
         assertEquals(1,dda.findTestDataMethods().size());
     }
 }

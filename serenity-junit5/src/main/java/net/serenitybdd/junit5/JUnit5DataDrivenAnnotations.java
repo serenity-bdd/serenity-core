@@ -6,15 +6,16 @@ import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.collections.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -143,7 +144,7 @@ public class JUnit5DataDrivenAnnotations {
         MethodSource methodSourceAnnotation  = testDataMethod.getAnnotation(MethodSource.class);
         String[] value = methodSourceAnnotation.value();
         String methodName;
-        Method factoryMethod = null;
+        boolean staticMethodUsed = isStaticMethodUsed(testDataMethod);
         if(value != null  && (value.length > 0) && (!value[0].isEmpty())) {
             List<String> methodNames = Arrays.asList(value);
             methodName = methodNames.get(0);
@@ -154,19 +155,32 @@ public class JUnit5DataDrivenAnnotations {
         } else { //no factory method name
             methodName = testDataMethod.getName();
         }
+
         try {
-            factoryMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
+            Method factoryMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
             factoryMethod.setAccessible(true);
             try {
-                Stream<Arguments> result = (Stream<Arguments>)factoryMethod.invoke(null);
+                Stream<Arguments> result = null;
+                if(staticMethodUsed) {
+                    result = (Stream<Arguments>)factoryMethod.invoke(null);
+                } else {
+                    result = (Stream<Arguments>)factoryMethod.invoke(testDataMethod.getDeclaringClass().getConstructor().newInstance());
+                }
                 return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 logger.error("Cannot get list of objects from method source ", e);
             }
         } catch(NoSuchMethodException ex) {
             logger.error("No static method with the name " + methodName  + " found ",ex);
         }
         return null;
+    }
+
+    private boolean isStaticMethodUsed(Method testDataMethod) {
+        List<Annotation> annotations = Arrays.asList(testDataMethod.getDeclaringClass().getDeclaredAnnotations());
+        List<Annotation> allTestInstanceAnnotations = annotations.stream().filter(annotation -> annotation.annotationType().equals(TestInstance.class)).collect(Collectors.toList());
+        Optional<Annotation> perClassAnnotation = allTestInstanceAnnotations.stream().filter(currentAnnotation -> ((TestInstance) currentAnnotation).value().equals(TestInstance.Lifecycle.PER_CLASS)).findAny();
+        return !perClassAnnotation.isPresent();
     }
 
     private List<List<Object>> getListOfObjectsFromExternalClassSource(String methodName) {

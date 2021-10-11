@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
+import net.serenitybdd.screenplay.shopping.DanaGoesShoppingQuicklySample
 import net.thucydides.core.model.TestResult
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
@@ -14,8 +15,10 @@ class WhenActorsGoOnAJourney extends Specification{
     def danaGoesShoppingSample
 
     def setup() {
-        danaGoesShoppingSample = new SerenityRunner(DanaGoesShoppingSample)
+        danaGoesShoppingSample = new SerenityRunner(DanaGoesShoppingQuicklySample)
     }
+
+
     def "should produce a normal test outcome"() {
         when:
             danaGoesShoppingSample.run(new RunNotifier())

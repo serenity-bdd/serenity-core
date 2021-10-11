@@ -2,10 +2,12 @@ package net.thucydides.core.steps;
 
 
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a class that monitors step results and can report on test outcomes.
@@ -33,6 +35,7 @@ public interface StepPublisher {
      */
     boolean aStepHasFailed();
 
+    Optional<TestStep> firstFailingStep();
     /**
      * If a test failed, what was the error.
      */

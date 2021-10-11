@@ -1106,6 +1106,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
     }
 
+    public Optional<TestStep> firstFailingStep() {
+        return latestTestOutcome()
+                .flatMap(outcome -> outcome.getFlattenedTestSteps()
+                                            .stream()
+                                            .filter(step -> step.getException() != null)
+                                            .findFirst());
+    }
+
     public boolean aStepHasFailedInTheCurrentExample() {
         if (currentExample == 0) {
             return aStepHasFailed();

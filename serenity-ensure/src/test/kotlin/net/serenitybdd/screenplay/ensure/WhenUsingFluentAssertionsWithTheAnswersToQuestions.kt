@@ -41,7 +41,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting a color value that is equal to: <"RED">
                                      |But got.................................: <"BLUE">"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("a color value", colorRed()).asAString().isEqualTo("RED"))
+                    .whenChecking(that("a color value", colorRed()).isEqualTo("RED"))
         }
 
         @Test

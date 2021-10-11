@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.ensure
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Question
-import net.serenitybdd.screenplay.questions.EnumValues
 import net.serenitybdd.screenplay.targets.Target
 import org.openqa.selenium.By
 import java.math.BigDecimal

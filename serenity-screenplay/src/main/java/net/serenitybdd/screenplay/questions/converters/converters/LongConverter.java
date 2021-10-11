@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.questions.converters;
+package net.serenitybdd.screenplay.questions.converters.converters;
 
 public class LongConverter implements Converter<Long> {
     @Override

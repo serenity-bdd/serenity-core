@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.questions.converters;
+package net.serenitybdd.screenplay.questions.converters.converters;
 
 public class DoubleConverter implements Converter<Double> {
     @Override

@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.InParallel;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.Test;
@@ -140,6 +141,10 @@ public class WhenRunningTasksInParallel {
         Actor actorC = Actor.named("Actor C");
 
         InParallel.theActors(actorA, actorB, actorC).eachAttemptTo(doSomething(), doSomethingThatFails());
+
+        actorA.attemptsTo(doSomethingElse());
+
+        assertThat(StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getResult()).isEqualTo(TestResult.FAILURE);
     }
 
     @Test

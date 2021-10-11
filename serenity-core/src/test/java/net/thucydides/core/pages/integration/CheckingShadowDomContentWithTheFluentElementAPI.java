@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.temporal.ChronoUnit;
 
@@ -25,9 +25,10 @@ public class CheckingShadowDomContentWithTheFluentElementAPI {
     @BeforeClass
     public static void openStaticPage() {
         WebDriverManager.firefoxdriver().setup();
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.setHeadless(true);
-        localDriver = new FirefoxDriver(firefoxOptions);
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+        localDriver = new ChromeDriver(options);
         page = new ShadowDomSitePage(localDriver);
         page.open();
     }

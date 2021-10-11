@@ -467,6 +467,15 @@ class WhenManagingWebdriverTimeouts extends Specification {
             city.isCurrentlyVisible()
     }
 
+    def "The find() method after withTimeout can take parameters"() {
+        given:
+        def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
+        when:
+        WebElementFacade city = page.withTimeoutOf(10, SECONDS).find("#{0}","city")
+        then:
+        city.isCurrentlyVisible()
+    }
+
     def "waitForAbsenceOf should return immediately if no elements are present"() {
         when:
             def page = openStaticPageWith(["webdriver.wait.for.timeout": "50000"])

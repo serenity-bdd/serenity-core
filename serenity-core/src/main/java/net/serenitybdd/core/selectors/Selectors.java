@@ -20,6 +20,13 @@ public class Selectors {
         return true;
     }
 
+    public static By formattedXpathOrCssSelector(String xpathOrCssSelector, Object... parameters) {
+        String formattedSelector = xpathOrCssSelector;
+        for(int parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
+            formattedSelector = formattedSelector.replace("{" + parameterIndex + "}", parameters[parameterIndex].toString());
+        }
+        return xpathOrCssSelector(formattedSelector);
+    }
 
     public static By xpathOrCssSelector(String xpathOrCssSelector) {
         if (hasPrefix(xpathOrCssSelector)) {

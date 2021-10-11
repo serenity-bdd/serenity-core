@@ -17,6 +17,6 @@ public class TargetSelectedVisibleText implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return SelectedVisibleTextValue.of(target).viewedBy(actor).asString();
+        return SelectedVisibleTextValue.of(target).answeredBy(actor);
     }
 }

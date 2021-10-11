@@ -1,13 +1,15 @@
-package net.serenitybdd.screenplay.webtests;
+package net.serenitybdd.screenplay.webtests.dsl;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
-import net.serenitybdd.screenplay.questions.*;
+import net.serenitybdd.screenplay.questions.Presence;
+import net.serenitybdd.screenplay.questions.Value;
+import net.serenitybdd.screenplay.questions.Visibility;
+import net.serenitybdd.screenplay.questions.WebDriverQuestion;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.waits.WaitUntil;
@@ -20,30 +22,25 @@ import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static java.time.temporal.ChronoUnit.SECONDS;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.hasValue;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SerenityRunner.class)
-public class WhenDinaBrowsesTheWeb {
+public class WhenDinaManagesHerTodoList {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver firstBrowser;

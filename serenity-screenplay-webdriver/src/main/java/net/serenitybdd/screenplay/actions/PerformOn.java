@@ -12,6 +12,11 @@ public class PerformOn implements Performable {
     private final Target target;
     private final Consumer<WebElementFacade> action;
 
+    public PerformOn(String xpathOrCssLocator, Consumer<WebElementFacade> action) {
+        this.target = Target.the(xpathOrCssLocator).locatedBy(xpathOrCssLocator);
+        this.action = action;
+    }
+
     public PerformOn(Target target, Consumer<WebElementFacade> action) {
         this.target = target;
         this.action = action;

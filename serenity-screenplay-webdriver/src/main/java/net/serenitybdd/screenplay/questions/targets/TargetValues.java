@@ -19,6 +19,6 @@ public class TargetValues implements Question<List<String>> {
 
     @Override
     public List<String> answeredBy(Actor actor) {
-        return Value.of(target).viewedBy(actor).asList();
+        return Value.ofEach(target).answeredBy(actor);
     }
 }

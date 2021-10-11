@@ -21,6 +21,6 @@ public class TargetCSSValues implements Question<List<String>> {
 
     @Override
     public List<String> answeredBy(Actor actor) {
-        return CSSValue.of(target).named(name) .viewedBy(actor).asList();
+        return CSSValue.ofEach(target).named(name).answeredBy(actor);
     }
 }

@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.exceptions;
+package net.serenitybdd.screenplay;
 
 public class UnexpectedEnumValueException extends AssertionError {
 

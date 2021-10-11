@@ -25,6 +25,6 @@ public class TargetText implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return Text.of(target).viewedBy(actor).asString();
+        return Text.of(target).answeredBy(actor);
     }
 }

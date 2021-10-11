@@ -21,6 +21,6 @@ public class TargetAttributes implements Question<List<String>> {
 
     @Override
     public List<String> answeredBy(Actor actor) {
-        return Attribute.of(target).named(name).viewedBy(actor).asList();
+        return Attribute.ofEach(target).named(name).answeredBy(actor);
     }
 }

@@ -17,6 +17,6 @@ public class TargetTextContent implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return Attribute.of(target).named("textContent").viewedBy(actor).asString();
+        return Attribute.of(target).named("textContent").answeredBy(actor);
     }
 }

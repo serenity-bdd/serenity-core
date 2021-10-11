@@ -35,14 +35,12 @@ public class TargetTextValues implements Question<List<String>> {
 
     @Override
     public List<String> answeredBy(Actor actor) {
-        List<String> textValues = Attribute.of(target)
+        List<String> textValues = Attribute.ofEach(target)
                                             .named("innerText")
-                                            .viewedBy(actor)
-                                            .asList();
-
+                                            .answeredBy(actor);
 
         return textValues.stream()
-                         .map(renderElement::apply)
+                         .map(renderElement)
                          .collect(Collectors.toList());
 
     }

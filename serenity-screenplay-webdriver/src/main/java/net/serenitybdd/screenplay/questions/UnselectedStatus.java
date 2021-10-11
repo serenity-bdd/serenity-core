@@ -12,45 +12,46 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
-public class SelectedValue {
+public class UnselectedStatus {
 
-    public static Question<String> of(Target target) {
+    public static Question<Boolean> of(Target target) {
         return actor -> matches(target.resolveAllFor(actor));
     }
 
-    public static Question<String> of(By byLocator) {
+    public static Question<Boolean> of(By byLocator) {
         return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
     }
 
-    public static Question<String> of(String locator) {
+    public static Question<Boolean> of(String locator) {
         return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
     }
 
-    public static Question<List<String>> ofEach(Target target) {
+
+    public static Question<List<Boolean>> ofEach(Target target) {
         return actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(By byLocator) {
+    public static Question<List<Boolean>> ofEach(By byLocator) {
         return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(String locator) {
+    public static Question<List<Boolean>> ofEach(String locator) {
         return actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    private static String matches(List<WebElementFacade> elements) {
+    private static boolean matches(List<WebElementFacade> elements) {
         return elements.stream()
                 .findFirst()
-                .map(WebElementState::getSelectedValue)
-                .orElse("");
+                .map(element -> !element.isSelected())
+                .orElse(true);
     }
 }

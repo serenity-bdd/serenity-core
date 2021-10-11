@@ -15,7 +15,7 @@ public class CheckCheckboxOfTarget extends ClickOnClickable {
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        boolean isSelected = actor.asksFor(SelectedStatus.of(target).asABoolean());
-        if(isSelected != expectedToBeChecked) actor.attemptsTo(Click.on(target));
+        boolean isSelected = actor.asksFor(SelectedStatus.of(target));
+        if (isSelected != expectedToBeChecked) actor.attemptsTo(Click.on(target));
     }
 }

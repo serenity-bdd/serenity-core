@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.questions.SelectedVisibleTextValue;
 import net.serenitybdd.screenplay.targets.Target;
 
+
 @Subject("#field")
 public class ReadProfileOptionValue implements Question<String> {
 
@@ -17,6 +18,6 @@ public class ReadProfileOptionValue implements Question<String> {
     }
  
     public String answeredBy(Actor actor) {
-        return SelectedVisibleTextValue.of(field).viewedBy(actor).value();
+        return SelectedVisibleTextValue.of(field).answeredBy(actor);
     }
 }

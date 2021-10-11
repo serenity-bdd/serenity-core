@@ -1,38 +1,60 @@
 package net.serenitybdd.screenplay.questions;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CurrentlyEnabled extends TargetedUIState<Boolean> {
+import static java.util.Collections.singletonList;
 
-    public CurrentlyEnabled(Target target, Actor actor) {
-        super(target, actor);
+public class CurrentlyEnabled {
+
+    public static Question<Boolean> of(Target target) {
+        return actor -> matches(target.resolveAllFor(actor));
     }
 
-    public static UIStateReaderBuilder<CurrentlyEnabled> of(Target target) {
-        return new UIStateReaderBuilder<>(target, CurrentlyEnabled.class);
+    public static Question<Boolean> of(By byLocator) {
+        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
     }
 
-    public static UIStateReaderBuilder<CurrentlyEnabled> of(By byLocator) {
-        return new UIStateReaderBuilder<>(Target.the(byLocator.toString()).located(byLocator), CurrentlyEnabled.class);
+    public static Question<Boolean> of(String locator) {
+        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
     }
 
-    public static UIStateReaderBuilder<CurrentlyEnabled> of(String locator) {
-        return new UIStateReaderBuilder<>(Target.the(locator).locatedBy(locator), CurrentlyEnabled.class);
+    public static Question<List<Boolean>> ofEach(Target target) {
+        return actor -> target.resolveAllFor(actor)
+                    .stream()
+                    .map(element -> matches(singletonList(element)))
+                    .collect(Collectors.toList());
     }
 
-    public Boolean resolve() {
-        return target.resolveFor(actor).isCurrentlyEnabled();
-    }
-
-    public List<Boolean> resolveAll() {
-        return resolvedElements()
-                .map(WebElementState::isCurrentlyEnabled)
+    public static Question<List<Boolean>> ofEach(By byLocator) {
+        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+                .stream()
+                .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
+
+    public static Question<List<Boolean>> ofEach(String locator) {
+        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+                .stream()
+                .map(element -> matches(singletonList(element)))
+                .collect(Collectors.toList());
+    }
+
+    private static boolean matches(List<WebElementFacade> elements) {
+        return elements.stream()
+                .findFirst()
+                .map(WebElementState::isCurrentlyEnabled)
+                .orElse(false);
+    }
+
 }

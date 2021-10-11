@@ -3,11 +3,13 @@ package net.serenitybdd.screenplay;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.parallel.Agent;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,7 +80,19 @@ public class InParallel {
         } finally {
             StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(stepName, cast);
             StepEventBus.getEventBus().dropAgents(cast);
+            firstFailingStep().ifPresent(
+                    step -> {
+                        StepEventBus.getEventBus().testFailed(step.getException().asException());
+                        StepEventBus.getEventBus().suspendTest();
+                    }
+            );
         }
+    }
+
+    private Optional<TestStep> firstFailingStep() {
+        return StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getFlattenedTestSteps().stream()
+                                  .filter(step -> step.getException() != null)
+                                  .findFirst();
     }
 
     /**

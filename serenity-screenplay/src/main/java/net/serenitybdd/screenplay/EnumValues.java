@@ -1,6 +1,5 @@
-package net.serenitybdd.screenplay.questions;
+package net.serenitybdd.screenplay;
 
-import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException;
 import net.thucydides.core.annotations.Methods;
 
 import java.lang.reflect.InvocationTargetException;

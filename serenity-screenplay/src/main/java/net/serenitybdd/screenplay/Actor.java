@@ -241,6 +241,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
             performTask(todo);
 
+            // TODO: When and how should this work
             if (anOutOfStepErrorOccurred()) {
                 eventBusInterface.mergePreviousStep();
             }

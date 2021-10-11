@@ -28,6 +28,7 @@ import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -46,11 +47,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -332,8 +331,51 @@ public abstract class PageObject {
         return new RenderedPageObjectView(driver, this, timeout, false);
     }
 
-    public PageObject waitFor(String xpathOrCssSelector, Object... arguments) {
-        return waitForRenderedElements(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
+    /**
+     * Alternative to withTimeoutOf()
+     */
+    public RenderedPageObjectView waitingForNoLongerThan(int timeout, TimeUnit units) {
+        return withTimeoutOf(Duration.of(timeout, TemporalUnitConverter.fromTimeUnit(units)));
+    }
+
+    /**
+     * Alternative to withTimeoutOf() using a DSL
+     */
+    public WaitingBuilder waitingForNoLongerThan(int timeout) {
+        return new WaitingBuilder(timeout, this);
+    }
+
+    public static class WaitingBuilder {
+
+        private final int timeout;
+        private final PageObject page;
+
+        public WaitingBuilder(int timeout, PageObject page) {
+            this.timeout = timeout;
+            this.page = page;
+        }
+
+        public RenderedPageObjectView milliseconds() {
+            return page.withTimeoutOf(Duration.ofMillis(timeout));
+        }
+        public RenderedPageObjectView seconds() {
+            return page.withTimeoutOf(Duration.ofSeconds(timeout));
+        }
+        public RenderedPageObjectView minutes() {
+            return page.withTimeoutOf(Duration.ofMinutes(timeout));
+        }
+    }
+
+
+    public PageObject waitFor(String xpathOrCssSelector, Object firstArgument, Object... arguments) {
+        List<Object> args = new ArrayList<>();
+        args.add(firstArgument);
+        args.addAll(Arrays.asList(arguments));
+        return waitForRenderedElements(xpathOrCssSelector(withArguments(xpathOrCssSelector, args.toArray())));
+    }
+
+    public PageObject waitFor(String xpathOrCssSelector) {
+        return waitForRenderedElements(xpathOrCssSelector(xpathOrCssSelector));
     }
 
     public <T> T waitFor(ExpectedCondition<T> expectedCondition) {

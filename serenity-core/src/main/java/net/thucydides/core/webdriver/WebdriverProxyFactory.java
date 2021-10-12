@@ -109,7 +109,8 @@ public class WebdriverProxyFactory implements Serializable {
 
         if (StepEventBus.getEventBus().isDryRun()) { return; }
 
-        if (((WebDriverFacade) driver).isInstantiated()
+        if ((driver instanceof WebDriverFacade)
+                && ((WebDriverFacade) driver).isInstantiated()
                 && !((WebDriverFacade) driver).getProxiedDriver().getCurrentUrl().isEmpty()) {
 
             WebDriver proxiedDriver = ((WebDriverFacade) driver).getProxiedDriver();

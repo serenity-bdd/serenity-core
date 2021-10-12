@@ -1,6 +1,10 @@
 package net.serenitybdd.core.pages;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 class DropdownSelector {
 
@@ -26,6 +30,12 @@ class DropdownSelector {
         return select.getFirstSelectedOption().getText();
     }
 
+    public List<String> visibleTextValues() {
+        Select select = new Select(webElementFacade.getElement());
+        return select.getAllSelectedOptions().stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+    }
 
     public WebElementFacade byValue(String value) {
         if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
@@ -39,6 +49,13 @@ class DropdownSelector {
     public String value() {
         Select select = new Select(webElementFacade.getElement());
         return select.getFirstSelectedOption().getAttribute("value");
+    }
+
+    public List<String> values() {
+        Select select = new Select(webElementFacade.getElement());
+        return select.getAllSelectedOptions().stream()
+                .map(option -> option.getAttribute("value"))
+                .collect(Collectors.toList());
     }
 
     public WebElementFacade byIndex(int indexValue) {

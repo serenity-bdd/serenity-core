@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <style>
+        .buy {
+            color: #BADA55;
+        }
+    </style>
+</head>
+<body>
+<div id="shopping-list-app">
+    <h1>Shopping list</h1>
+    <ul>
+        <li class="buy 1st">
+            <span class="item-name">oats</span>
+            <a href="#" onclick="toggle(event); return false;">x</a>
+        </li>
+        <li class="buy 2nd">
+            <span class="item-name">coconut milk</span>
+            <a href="#" onclick="toggle(event); return false;">x</a>
+        </li>
+        <li class="3rd">
+            <span class="item-name">coffee</span>
+            <a href="#" onclick="toggle(event); return false;">x</a>
+        </li>
+    </ul>
+    <pre id="output"></pre>
+</div>
+<script>
+    function toggle(event) {
+        event.target.parentNode.classList.toggle('buy');
+        document.getElementById('output').innerText = 'clicked on: ' + event.target.parentNode.innerText;
+        event.preventDefault();
+    }
+</script>
+</body>
+</html>

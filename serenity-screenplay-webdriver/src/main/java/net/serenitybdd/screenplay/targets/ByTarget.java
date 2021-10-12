@@ -1,13 +1,17 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,43 +46,40 @@ public class ByTarget extends Target {
         this.iosLocator = iosLocator;
     }
 
-    public WebElementFacade resolveFor(Actor actor) {
-        TargetResolver resolver = TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this);
+
+    public WebElementFacade resolveFor(PageObject page) {
         if (timeout.isPresent()) {
-            return resolver.withTimeoutOf(timeout.get()).find(getLocatorForPlatform(actor));
+            return page.withTimeoutOf(timeout.get()).find(getLocatorForPlatform(page.getDriver()));
         } else {
-            return resolver.find(getLocatorForPlatform(actor));
+            return page.find(getLocatorForPlatform(page.getDriver()));
         }
-//        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).find(getLocatorForPlatform(actor));
     }
 
-    public List<WebElementFacade> resolveAllFor(Actor actor) {
-        TargetResolver resolver = TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this);
+    public List<WebElementFacade> resolveAllFor(PageObject page) {
         if (timeout.isPresent()) {
-            return resolver.withTimeoutOf(timeout.get()).findAll(getLocatorForPlatform(actor));
+            return page.withTimeoutOf(timeout.get()).findAll(getLocatorForPlatform(page.getDriver()));
         } else {
-            return resolver.findAll(getLocatorForPlatform(actor));
+            return page.findAll(getLocatorForPlatform(page.getDriver()));
         }
-//        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).findAll(getLocatorForPlatform(actor));
     }
 
     public XPathOrCssTarget of(String... parameters) {
         throw new UnsupportedOperationException("The of() method is not supported for By-type Targets");
     }
 
-    private By getLocatorForPlatform(Actor actor) {
+    private By getLocatorForPlatform(WebDriver driver) {
         if (null != this.androidLocator && null != this.iosLocator) {
             String platform;
             try {
-                platform = (RemoteDriver.isStubbed(BrowseTheWeb.as(actor).getDriver())) ?
+                platform = (RemoteDriver.isStubbed(driver)) ?
                         "IOS" :
-                        RemoteDriver.of(BrowseTheWeb.as(actor).getDriver())
+                        RemoteDriver.of(driver)
                                 .getCapabilities().getCapability("platformName")
                                 .toString().toUpperCase();
             } catch (Exception e) {
                 throw new ThucydidesConfigurationException(String.format(
                         "The configured driver '%s' does not support Cross Platform Mobile targets",
-                        BrowseTheWeb.as(actor).getDriver()
+                        driver
                 ), e);
             }
             if (platform.equals("ANDROID")) {
@@ -102,6 +103,11 @@ public class ByTarget extends Target {
     @Override
     public Target waitingForNoMoreThan(Duration timeout) {
         return new ByTarget(targetElementName, locator, androidLocator, iosLocator, iFrame, Optional.ofNullable(timeout));
+    }
+
+    @Override
+    public List<By> selectors(WebDriver driver) {
+        return Collections.singletonList(getLocatorForPlatform(driver));
     }
 
     public ByTarget called(String name) {

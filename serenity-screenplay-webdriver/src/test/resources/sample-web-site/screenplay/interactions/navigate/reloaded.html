@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+<h1 id="h">Hello!</h1>
+</body>
+<script>
+    const reloaded = window.performance.getEntriesByType("navigation")
+        .map(entry => entry.type)
+        .includes('reload');
+
+    if(reloaded) {
+        document.getElementById('h').textContent = 'Reloaded'
+    }
+</script>
+</html>

@@ -946,7 +946,8 @@ public abstract class PageObject {
     }
 
     private void openPageAtUrl(final String startingUrl) {
-        getDriver().get(startingUrl);
+        String url = NormalizeUrlForm.ofUrl(startingUrl);
+        getDriver().get(url);
         if (javascriptIsSupportedIn(getDriver())) {
             addJQuerySupport();
         }

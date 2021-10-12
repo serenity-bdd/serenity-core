@@ -1,0 +1,20 @@
+<html>
+<body>
+<div id="section1" class="section">
+    <h2>Section 1</h2>
+    <button value="Submit" id="button-1" onclick="update('Section 1')">Submit</button>
+</div>
+<div id="section2" class="section">
+    <h2>Section 2</h2>
+        <button value="Submit" id="button-2" onclick="update('Section 2')">Submit</button>
+</div>
+<div>
+    <span id="result"></span>
+</div>
+</body>
+<script>
+    function update(value) {
+        document.getElementById("result").innerHTML = value;
+    }
+</script>
+</html>

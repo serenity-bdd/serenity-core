@@ -6,16 +6,28 @@ import net.serenitybdd.screenplay.actions.ByAction;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.By;
 
+import java.util.Collections;
+import java.util.List;
+
 public class SelectByIndexFromBy extends ByAction {
-    private final Integer index;
+    private List<Integer> indexes;
+
+    public SelectByIndexFromBy() {}
 
     public SelectByIndexFromBy(Integer index, By... locators) {
         super(locators);
-        this.index = index;
+        this.indexes = Collections.singletonList(index);
+    }
+
+    public SelectByIndexFromBy(List<Integer> indexes, By... locators) {
+        super(locators);
+        this.indexes = indexes;
     }
 
     @Step("{0} selects index #index")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).find(locators).selectByIndex(index);
+        indexes.forEach(
+            index -> BrowseTheWeb.as(theUser).find(locators).selectByIndex(index)
+        );
     }
 }

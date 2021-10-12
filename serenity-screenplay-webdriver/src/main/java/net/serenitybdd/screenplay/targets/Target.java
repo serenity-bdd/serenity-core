@@ -1,7 +1,12 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.ui.LocatorStrategies;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 import java.util.List;
@@ -34,9 +39,20 @@ public abstract class Target {
         return new TargetBuilder(targetElementName);
     }
 
-    public abstract WebElementFacade resolveFor(Actor actor);
+    protected PageObject currentPageVisibleTo(Actor actor) {
+        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this);
+    }
 
-    public abstract List<WebElementFacade> resolveAllFor(Actor actor);
+    public WebElementFacade resolveFor(Actor actor) {
+        return resolveFor(currentPageVisibleTo(actor));
+    }
+
+    public List<WebElementFacade> resolveAllFor(Actor actor) {
+        return resolveAllFor(currentPageVisibleTo(actor));
+    }
+
+    public abstract WebElementFacade resolveFor(PageObject page);
+    public abstract List<WebElementFacade> resolveAllFor(PageObject page);
 
     public abstract Target called(String name);
 
@@ -53,4 +69,16 @@ public abstract class Target {
     }
 
     public abstract Target waitingForNoMoreThan(Duration timeout);
+
+    public Target inside(String locator) {
+        return inside(Target.the("Containing element").locatedBy(locator));
+    }
+
+    public Target inside(Target container) {
+        return Target.the(getName()).locatedBy(
+                LocatorStrategies.findNestedElements(container, this)
+        );
+    }
+
+    public abstract List<By> selectors(WebDriver driver);
 }

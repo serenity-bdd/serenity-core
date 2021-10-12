@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+<form>
+    <input type="text" id="field" oncontextmenu="update(event); return false;" value="Test for right click." />
+    <div id="result"></div>
+</form>
+<script>
+    function update(event) {
+        document.getElementById("result").textContent = event.target.value;
+        this.event.preventDefault();
+    }
+</script>
+</body>
+</html>

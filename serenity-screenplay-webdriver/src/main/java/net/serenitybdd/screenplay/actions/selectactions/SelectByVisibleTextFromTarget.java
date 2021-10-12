@@ -1,22 +1,28 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 public class SelectByVisibleTextFromTarget implements Interaction {
-    private final Target target;
-    private final String visibleText;
+    private Target target;
+    private String[] options;
 
-    public SelectByVisibleTextFromTarget(Target target, String visibleText) {
+    public SelectByVisibleTextFromTarget() {}
+
+    public SelectByVisibleTextFromTarget(Target target, String... options) {
         this.target = target;
-        this.visibleText = visibleText;
+        this.options = options;
     }
 
     @Step("{0} select #visibleText on #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).selectByVisibleText(visibleText);
+        WebElementFacade dropdown = target.resolveFor(theUser);
+        for(String option : options) {
+            dropdown.selectByVisibleText(option);
+        }
     }
 
 

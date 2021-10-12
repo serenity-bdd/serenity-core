@@ -1,22 +1,28 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 public class SelectByIndexFromTarget implements Interaction {
-    private final Target target;
-    private final Integer index;
+    private Target target;
+    private Integer[] indexes;
 
-    public SelectByIndexFromTarget(Target target, Integer index) {
+    public SelectByIndexFromTarget() {}
+
+    public SelectByIndexFromTarget(Target target, Integer... indexes) {
         this.target = target;
-        this.index = index;
+        this.indexes = indexes;
     }
 
     @Step("{0} selects index #index in #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).selectByIndex(index);
+        WebElementFacade dropdown = target.resolveFor(theUser);
+        for(Integer index : indexes) {
+            dropdown.selectByIndex(index);
+        }
     }
 
 

@@ -6,18 +6,24 @@ import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class SelectByValueFromTarget implements Performable {
-    private final Target target;
-    private final String value;
+import java.util.Arrays;
 
-    public SelectByValueFromTarget(Target target, String value) {
+public class SelectByValueFromTarget implements Performable {
+    private Target target;
+    private String[] values;
+
+    public SelectByValueFromTarget() {}
+
+    public SelectByValueFromTarget(Target target, String... values) {
         this.target = target;
-        this.value = value;
+        this.values = values;
     }
 
     @Step("{0} selects #value in #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).selectByValue(value);
+        for(String value : values) {
+            target.resolveFor(theUser).selectByValue(value);
+        }
     }
 
 

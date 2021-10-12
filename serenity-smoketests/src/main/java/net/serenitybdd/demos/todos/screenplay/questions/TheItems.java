@@ -10,10 +10,9 @@ import java.util.List;
  * A factory class used to provide different questions about the items displayed in the todo list
  */
 public class TheItems {
+
     public static Question<List<String>> displayed() {
-        return Text.of(TodoList.ITEMS)
-                .describedAs("the items displayed")
-                .asAList();
+        return Text.ofEach(TodoList.ITEMS).describedAs("the items displayed");
     }
 
     public static Question<Integer> leftCount() {

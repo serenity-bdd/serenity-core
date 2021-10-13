@@ -35,7 +35,7 @@ public class ButtonExamples {
         sarah.can(BrowseTheWeb.with(driver));
 
         sarah.attemptsTo(
-                Open.url("classpath:/sample-web-site/screenplay/ui-elements/buttons/multi-button-form.html")
+                Open.url("classpath:/sample-web-site/screenplay/ui-elements/forms/multi-button-form.html")
         );
     }
 

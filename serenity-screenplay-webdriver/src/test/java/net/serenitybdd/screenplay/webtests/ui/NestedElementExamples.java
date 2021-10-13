@@ -70,6 +70,13 @@ public class NestedElementExamples {
         assertThat(Text.of(PageElement.containingText(".section","Section 2")).answeredBy(sarah)).contains("Section 2");
     }
 
+
+    @Test
+    public void findingAnElementContainingTextAndMatchingASelectorWithFluentDSL() {
+        assertThat(Text.of(PageElement.called("section").containingText("Section 1")).answeredBy(sarah)).contains("Section 1");
+        assertThat(Text.of(PageElement.called("section").containingText("Section 2")).answeredBy(sarah)).contains("Section 2");
+    }
+
     @Test
     public void findingAnElementUsingContainingText() {
         sarah.attemptsTo(

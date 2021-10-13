@@ -44,20 +44,25 @@ public class CheckBoxExamples {
     }
 
     @Test
-    public void identifyingARadioButtonById() {
+    public void identifyingACheckBoxById() {
         sarah.attemptsTo(Click.on(Checkbox.called("vehicle1")));
         assertThat(SelectedStatus.of("#vehicle1").answeredBy(sarah)).isTrue();
     }
 
 
     @Test
-    public void identifyingARadioButtonByLabel() {
+    public void identifyingACheckBoxByLabel() {
         sarah.attemptsTo(Click.on(Checkbox.withLabel("I have a bike")));
         assertThat(SelectedStatus.of("#vehicle1").answeredBy(sarah)).isTrue();
     }
 
+    public void identifyingACheckBoxByClass() {
+        sarah.attemptsTo(Click.on(Checkbox.called("field-style")));
+        assertThat(SelectedStatus.of("#vehicle2").answeredBy(sarah)).isTrue();
+    }
+
     @Test
-    public void identifyingARadioButtonByValue() {
+    public void identifyingACheckBoxByValue() {
         sarah.attemptsTo(Click.on(Checkbox.withValue("Car")));
         assertThat(SelectedStatus.of("#vehicle2").answeredBy(sarah)).isTrue();
     }

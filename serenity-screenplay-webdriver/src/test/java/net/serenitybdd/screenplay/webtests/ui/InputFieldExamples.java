@@ -69,6 +69,14 @@ public class InputFieldExamples {
     }
 
     @Test
+    public void identifyingATextFieldByClassname() {
+        sarah.attemptsTo(
+                Type.theValue("Some value").into(InputField.called("field-style"))
+        );
+        assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Some value");
+    }
+
+    @Test
     public void identifyingATextFieldByPlaceholder() {
         sarah.attemptsTo(
                 Type.theValue("Some value").into(InputField.withPlaceholder("value goes here"))

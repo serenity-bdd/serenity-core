@@ -63,7 +63,7 @@ public class ByTarget extends Target {
         }
     }
 
-    public XPathOrCssTarget of(String... parameters) {
+    public SearchableTarget of(String... parameters) {
         throw new UnsupportedOperationException("The of() method is not supported for By-type Targets");
     }
 

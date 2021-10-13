@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
@@ -532,6 +533,34 @@ public class RenderedPageObjectView {
 
     public List<WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+    public List<WebElementFacade> findFirstMatching(List<String> xpathOrCssSelectors) {
+        List<WebElementFacade> matchingElements = new ArrayList<>();
+        for(String selector : xpathOrCssSelectors) {
+            matchingElements = findAllWithNoWait(xpathOrCssSelector(selector));
+            if (!matchingElements.isEmpty()) {
+                break;
+            }
+        }
+        return matchingElements;
+    }
+
+    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(String cssOrXPathLocator, String expectedText) {
+        return page -> page.withTimeoutOf(Duration.ZERO)
+                .findAll(cssOrXPathLocator)
+                .stream()
+                .filter(element -> element.getTextContent().contains(expectedText))
+                .collect(Collectors.toList());
+    }
+
+
+    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(List<String> cssOrXPathLocators, String expectedText) {
+        return page -> page.withTimeoutOf(Duration.ZERO)
+                .findFirstMatching(cssOrXPathLocators)
+                .stream()
+                .filter(element -> element.getTextContent().contains(expectedText))
+                .collect(Collectors.toList());
     }
 
     public WebElementFacade find(By bySelector) {

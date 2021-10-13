@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 
-public class MultiXPathOrCssTarget extends Target {
+public class MultiXPathOrCssTarget extends SearchableTarget {
 
     private final String[] cssOrXPathSelectors;
 
@@ -90,7 +90,7 @@ public class MultiXPathOrCssTarget extends Target {
         return resolvedElements;
     }
 
-    public Target of(String... parameters) {
+    public SearchableTarget of(String... parameters) {
         List<String> instantiatedLocators = stream(cssOrXPathSelectors)
                                                   .map(locator -> instantiated(locator, parameters))
                                                   .collect(Collectors.toList());
@@ -118,6 +118,10 @@ public class MultiXPathOrCssTarget extends Target {
     @Override
     public List<By> selectors(WebDriver driver) {
         return stream(cssOrXPathSelectors).map(Selectors::xpathOrCssSelector).collect(Collectors.toList());
+    }
+
+    public List<String> getCssOrXPathSelectors() {
+        return Arrays.asList(cssOrXPathSelectors);
     }
 
     private String instantiated(String cssOrXPathSelector, String[] parameters) {

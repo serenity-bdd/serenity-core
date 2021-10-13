@@ -1,6 +1,9 @@
 package net.serenitybdd.screenplay.ui;
 
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.actions.DeselectFromOptions;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.targets.Target;
 
 /**
  * Interact with a SELECT Html element
@@ -28,5 +31,9 @@ public class Select {
 
     public static SelectFromOptions optionNumbers(Integer... indexes) {
         return SelectFromOptions.byIndex(indexes);
+    }
+
+    public static Performable noOptionsIn(Target dropdownList) {
+        return DeselectFromOptions.clear(dropdownList);
     }
 }

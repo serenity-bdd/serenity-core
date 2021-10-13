@@ -42,11 +42,15 @@ public class DeselectFromOptions {
 
     public Performable from(Target target) {
         switch (strategy) {
-            case ByValue: return instrumented(DeselectByValueFromTarget.class, target, theText);
-            case ByVisibleText: return instrumented(DeselectByVisibleTextFromTarget.class, target, theText);
-            case ByIndex: return instrumented(DeselectByIndexFromTarget.class, target, indexValue);
+            case ByValue: return new DeselectByValueFromTarget(target, theText);
+            case ByVisibleText: return new DeselectByVisibleTextFromTarget(target, theText);
+            case ByIndex: return new DeselectByIndexFromTarget(target, indexValue);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
+    }
+
+    public static Performable clear(Target dropdownList) {
+        return null;
     }
 
 }

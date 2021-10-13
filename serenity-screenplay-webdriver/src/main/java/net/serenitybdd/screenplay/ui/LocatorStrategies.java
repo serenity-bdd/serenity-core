@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class LocatorStrategies {
 
@@ -16,7 +17,7 @@ public class LocatorStrategies {
         return onThePage -> {
             // Find the label
             WebElementFacade label = onThePage.withTimeoutOf(Duration.ZERO)
-                    .find("//label[normalize-space(.)='" + AttributeValue.withEscapedQuotes(labelText) + "']");
+                    .find("//label[normalize-space(.)='" + CSSAttributeValue.withEscapedQuotes(labelText) + "']");
             // Find the ID specified in the ID
             String fieldId = label.getAttribute("for");
             // Find the field with that ID
@@ -37,5 +38,6 @@ public class LocatorStrategies {
                     );
         };
     }
+
 
 }

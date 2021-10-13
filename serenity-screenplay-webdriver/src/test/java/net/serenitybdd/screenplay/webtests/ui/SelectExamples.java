@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actions.Clear;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
@@ -11,6 +12,7 @@ import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.SelectedValue;
 import net.serenitybdd.screenplay.questions.SelectedValues;
 import net.serenitybdd.screenplay.questions.SelectedVisibleTextValues;
+import net.serenitybdd.screenplay.ui.Deselect;
 import net.serenitybdd.screenplay.ui.Dropdown;
 import net.serenitybdd.screenplay.ui.RadioButton;
 import net.serenitybdd.screenplay.ui.Select;
@@ -87,6 +89,16 @@ public class SelectExamples {
         );
         assertThat(SelectedValues.of("#planes").answeredBy(sarah)).contains("spitfire","hurricane");
     }
+
+    @Test
+    public void clearSelectedOptions() {
+        sarah.attemptsTo(
+                Select.options("Spitfire","Hurricane").from(Dropdown.called("planes")),
+                Deselect.allOptionsFrom(Dropdown.called("planes"))
+        );
+        assertThat(SelectedValues.of("#planes").answeredBy(sarah)).isEmpty();
+    }
+
 
     @Test
     public void identifyingASelectOptionByValue() {

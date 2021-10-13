@@ -90,7 +90,7 @@ public class LambdaTarget extends Target {
         return resolvedElements;
     }
 
-    public XPathOrCssTarget of(String... parameters) {
+    public SearchableTarget of(String... parameters) {
         throw new UnsupportedOperationException("The of() method is not supported for By-type Targets");
     }
 

@@ -51,6 +51,12 @@ public class RadioButtonExamples {
         assertThat(SelectedStatus.of("#html").answeredBy(sarah)).isTrue();
     }
 
+    @Test
+    public void identifyingARadioButtonByClass() {
+        sarah.attemptsTo(Click.on(RadioButton.called("html-radio")));
+        assertThat(SelectedStatus.of("#html").answeredBy(sarah)).isTrue();
+    }
+
 
     @Test
     public void identifyingARadioButtonByLabel() {

@@ -12,6 +12,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
+import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
+
 public abstract class Target {
 
     protected final String targetElementName;
@@ -56,7 +58,7 @@ public abstract class Target {
 
     public abstract Target called(String name);
 
-    public abstract Target of(String... parameters);
+    public abstract SearchableTarget of(String... parameters);
 
     public abstract String getCssOrXPathSelector();
 

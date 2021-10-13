@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class XPathOrCssTarget extends Target {
+public class XPathOrCssTarget extends SearchableTarget {
 
     private final String cssOrXPathSelector;
 
@@ -38,7 +38,7 @@ public class XPathOrCssTarget extends Target {
         }
     }
 
-    public Target of(String... parameters) {
+    public SearchableTarget of(String... parameters) {
         return new XPathOrCssTarget(instantiated(targetElementName, parameters),
                                     instantiated(cssOrXPathSelector, parameters),
                                     iFrame,
@@ -47,6 +47,10 @@ public class XPathOrCssTarget extends Target {
 
     public Target called(String name) {
         return new XPathOrCssTarget(name, cssOrXPathSelector, iFrame, timeout);
+    }
+
+    public List<String> getCssOrXPathSelectors() {
+        return Collections.singletonList(cssOrXPathSelector);
     }
 
     public String getCssOrXPathSelector() {

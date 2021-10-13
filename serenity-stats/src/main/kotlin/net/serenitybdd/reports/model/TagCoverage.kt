@@ -9,6 +9,7 @@ import net.thucydides.core.reports.html.ResultIconFormatter
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.NameConverter.humanize
 import org.apache.commons.lang3.StringUtils
+import java.util.*
 
 
 class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcomes: TestOutcomes) {
@@ -26,7 +27,8 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
     fun forTagTypes(displayedTagTypes: List<String>): List<CoverageByTagType> {
 
         return displayedTagTypes.map { displayedTagType ->
-            CoverageByTagType(displayedTagType.capitalize(),
+            CoverageByTagType(
+                displayedTagType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
                     humanize(displayedTagType),
                     testOutcomes.withTagType(displayedTagType),
                     tagsToDisplay.filter{ t -> t.type.equals(displayedTagType) })

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_DATACENTER;
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
 
 /**

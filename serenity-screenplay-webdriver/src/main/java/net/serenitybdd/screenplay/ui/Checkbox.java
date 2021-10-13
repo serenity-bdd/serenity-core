@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.ui;
 
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 
 import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
@@ -10,13 +11,13 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
  */
 public class Checkbox {
 
-    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[data-test='{0}' i]";
+    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[data-test='{0}' i], input.{0}";
     private static final String BY_VALUE = "css:input[type='checkbox'][value='{0}' i]";
 
     /**
      * Locate a radio button with a given name or id.
      */
-    public static Target called(String name) {
+    public static SearchableTarget called(String name) {
         return Target.the("'" + name + "' checkbox").locatedBy(BY_ID_OR_NAME).of(name);
     }
 

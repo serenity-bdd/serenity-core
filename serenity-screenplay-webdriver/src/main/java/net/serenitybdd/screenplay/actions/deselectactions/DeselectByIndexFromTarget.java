@@ -6,8 +6,10 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 public class DeselectByIndexFromTarget implements Interaction {
-    private final Target target;
-    private final Integer index;
+    private Target target;
+    private Integer index;
+
+    public DeselectByIndexFromTarget() {}
 
     public DeselectByIndexFromTarget(Target target, Integer index) {
         this.target = target;

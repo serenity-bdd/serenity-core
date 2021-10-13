@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.ui;
 
-class AttributeValue {
+class XMLAttributeValue {
     public static String withEscapedQuotes(String value) {
-        return value.replace("'","&#39;");
+        return value.replace("'","&apos;");
     }
 }

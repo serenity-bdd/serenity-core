@@ -1,9 +1,7 @@
 package net.serenitybdd.junit5.datadriven;
 
 import net.serenitybdd.junit5.JUnit5DataDrivenAnnotations;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithCsvSource;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithEnumSource;
-import net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource;
+import net.serenitybdd.junit5.datadriven.samples.*;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.DataTableRow;
 import org.junit.jupiter.api.Test;
@@ -23,11 +21,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithValueSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(2));
-        System.out.println("TestDataTable " + testDataTable);
-
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource.withValueSource");
-        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(2));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
@@ -48,11 +43,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithEnumSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(3));
-        System.out.println("TestDataTable " + testDataTable);
-
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithEnumSource.withEnumSource");
-        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(3));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
@@ -99,18 +91,48 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithCsvSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(1));
-        System.out.println("TestDataTable " + testDataTable);
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithCsvSource.testWordsInSentence");
-        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(3));
-        System.out.println("XXHeaders " + dataTableStrings.getHeaders());
         assertThat(dataTableStrings.getHeaders(),contains("arg0","arg1"));
         List<DataTableRow> rows = dataTableStrings.getRows();
         assertThat(rows.get(0).getStringValues().get(0), is("2"));
         assertThat(rows.get(0).getStringValues().get(1).trim(), is("Unit testing"));
         assertThat(rows.get(1).getStringValues().get(0), is("3"));
         assertThat(rows.get(1).getStringValues().get(1).trim(), is("JUnit in Action"));
+    }
+
+     @Test
+    public void the_parameterized_data_method_returns_the_set_of_test_data_methodSource() throws Throwable {
+
+        Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithMethodSource.class).getParameterTables();
+        assertThat(testDataTable.keySet().size(), is(1));
+
+        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithMethodSource.withMethodSourceSimpleStatic");
+        assertThat(dataTableStrings.getRows().size(), is(2));
+        assertThat(dataTableStrings.getHeaders(),contains("arg0","arg1"));
+        List<DataTableRow> rows = dataTableStrings.getRows();
+        assertThat(rows.get(0).getStringValues().get(0), is("apple"));
+        assertThat(rows.get(0).getStringValues().get(1), is("banana"));
+        assertThat(rows.get(1).getStringValues().get(0), is("peaches"));
+        assertThat(rows.get(1).getStringValues().get(1), is("pears"));
+    }
+
+
+     @Test
+    public void the_parameterized_data_method_returns_the_set_of_test_data_methodSource_no_name() throws Throwable {
+
+        Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithMethodSourceNoName.class).getParameterTables();
+        assertThat(testDataTable.keySet().size(), is(1));
+
+        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithMethodSourceNoName.withMethodSourceSimpleStaticNoName");
+        assertThat(dataTableStrings.getRows().size(), is(2));
+        assertThat(dataTableStrings.getHeaders(),contains("arg0","arg1"));
+        List<DataTableRow> rows = dataTableStrings.getRows();
+        assertThat(rows.get(0).getStringValues().get(0), is("apple"));
+        assertThat(rows.get(0).getStringValues().get(1), is("banana"));
+        assertThat(rows.get(1).getStringValues().get(0), is("peaches"));
+        assertThat(rows.get(1).getStringValues().get(1), is("pears"));
     }
 
 

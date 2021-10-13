@@ -25,7 +25,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario {
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {
         return !EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getPropertiesWithPrefix("browserstack").isEmpty();
+                .getPropertiesWithPrefix("lambdatest").isEmpty();
     }
 
 }

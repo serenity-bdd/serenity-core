@@ -73,8 +73,8 @@ public class NestedElementExamples {
 
     @Test
     public void findingAnElementContainingTextAndMatchingASelectorWithFluentDSL() {
-        assertThat(Text.of(PageElement.called("section").containingText("Section 1")).answeredBy(sarah)).contains("Section 1");
-        assertThat(Text.of(PageElement.called("section").containingText("Section 2")).answeredBy(sarah)).contains("Section 2");
+        sarah.attemptsTo(Click.on(Button.called("Add to cart").inside(PageElement.called("item").containingText("Item 2"))));
+        assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Item 2");
     }
 
     @Test

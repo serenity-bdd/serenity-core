@@ -4,6 +4,7 @@ import net.serenitybdd.demos.todos.screenplay.user_interface.TodoList;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.questions.Text;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class TheItems {
 
-    public static Question<List<String>> displayed() {
+    public static Question<Collection<String>> displayed() {
         return Text.ofEach(TodoList.ITEMS).describedAs("the items displayed");
     }
 

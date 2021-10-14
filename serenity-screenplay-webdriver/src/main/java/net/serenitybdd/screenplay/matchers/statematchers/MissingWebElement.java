@@ -130,7 +130,17 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
+    public List<String> getSelectedVisibleTexts() {
+        return null;
+    }
+
+    @Override
     public String getSelectedValue() {
+        return null;
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
         return null;
     }
 

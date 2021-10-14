@@ -11,7 +11,7 @@ In serenity.conf the following properties can be used to run tests against Sauce
 ```
 webdriver {
     driver = remote
-    remote.url = "https://ondemand.#{saucelabs.datacenter}.saucelabs.com/wd/hub"
+    remote.url = "https://#{saucelabs.username}:#{saucelabs.accessKey}@ondemand.#{saucelabs.datacenter}.saucelabs.com/wd/hub"
 }
 
 saucelabs {

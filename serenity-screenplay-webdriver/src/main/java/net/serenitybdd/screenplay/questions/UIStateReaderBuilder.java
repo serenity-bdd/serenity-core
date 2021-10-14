@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.EnumValues;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.targets.Target;
 import org.slf4j.Logger;
@@ -11,7 +12,9 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
+@Deprecated
 public class UIStateReaderBuilder<T>{
     private final Target target;
     private final Class<T> type;
@@ -39,6 +42,15 @@ public class UIStateReaderBuilder<T>{
         return this;
     }
 
+    /**
+     * Convert the value returned by a question to an arbitrary type
+     * @return
+     */
+    public <T> Question<T> map(Function<String, T> transformer) {
+        return Question.about(subject).answeredBy(
+                actor -> transformer.apply(asAString().answeredBy(actor))
+        );
+    }
     /**
      * A convenience method to return a question about a target
      * e.g. Text.of(VetList.VET_NAME).asAString()

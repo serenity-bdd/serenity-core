@@ -19,6 +19,6 @@ public class TargetCSSValue implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return CSSValue.of(target).named(name) .viewedBy(actor).asString();
+        return CSSValue.of(target).named(name).answeredBy(actor);
     }
 }

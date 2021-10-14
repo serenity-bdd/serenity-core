@@ -2,12 +2,14 @@ package net.serenitybdd.screenplay.questions
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException
+//import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException
 import net.serenitybdd.screenplay.targets.Target
 import org.joda.time.DateTime
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
 import spock.lang.Specification
+
+import java.time.LocalDate
 
 class WhenReadingUIValues extends Specification {
 
@@ -25,13 +27,13 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getValue() >> "some value"
         then:
-            Value.of(target).viewedBy(actor).as(String) == "some value"
+            Value.of(target).answeredBy(actor) == "some value"
     }
 
     def "questions about string values"() {
         when:
         element.getValue() >> "some value"
-        def theValue = Value.of(target).asAString();
+        def theValue = Value.of(target).asString();
         then:
         theValue.answeredBy(actor) == "some value"
     }
@@ -40,50 +42,49 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getValue() >> "some value"
         then:
-            Value.of(target).viewedBy(actor).as(String) == "some value"
+            Value.of(target).answeredBy(actor) == "some value"
     }
 
     def "should read boolean values"() {
         when:
             element.getValue() >> "true"
         then:
-            Value.of(target).viewedBy(actor).asBoolean() == true
+            Value.of(target).asBoolean().answeredBy(actor) == true
         and:
-            Value.of(target).viewedBy(actor).as(Boolean) == true
+            Value.of(target).as(Boolean).answeredBy(actor) == true
     }
 
     def "should convert string values to numerical types"() {
         when:
             element.getValue() >> "1"
         then:
-            Value.of(target).viewedBy(actor).as(Integer) == 1
-            Value.of(target).viewedBy(actor).as(Long) == 1L
-            Value.of(target).viewedBy(actor).as(Double) == 1.0D
-            Value.of(target).viewedBy(actor).as(Float) == 1.0F
-            Value.of(target).viewedBy(actor).as(BigDecimal) == new BigDecimal("1.0")
+            Value.of(target).as(Integer).answeredBy(actor) == 1
+            Value.of(target).as(Long).answeredBy(actor) == 1L
+            Value.of(target).as(Double).answeredBy(actor) == 1.0D
+            Value.of(target).as(Float).answeredBy(actor) == 1.0F
+            Value.of(target).as(BigDecimal).answeredBy(actor) == new BigDecimal("1.0")
     }
 
     def "should convert string values to numerical types using shortcut methods"() {
         when:
         element.getValue() >> "1"
         then:
-        Value.of(target).viewedBy(actor).asInteger() == 1
-        Value.of(target).viewedBy(actor).asDouble() == 1.0D
+        Value.of(target).asInteger().answeredBy(actor) == 1
+        Value.of(target).asDouble().answeredBy(actor) == 1.0D
     }
 
     def "should convert string values to dates"() {
         when:
             element.getValue() >> "2015-10-15"
         then:
-        def question = Value.of(target).asADate();
-            Value.of(target).viewedBy(actor).asDate() == new DateTime(2015,10,15,0,0)
+            Value.of(target).asADate().answeredBy(actor) == LocalDate.parse("2015-10-15")
     }
 
     def "should convert string values to formatted dates"() {
         when:
             element.getValue() >> "15/10/2015"
         then:
-           Value.of(target).viewedBy(actor).asDate("dd/MM/yyyy") == new DateTime(2015,10,15,0,0)
+           Value.of(target).asADate("dd/MM/yyyy").answeredBy(actor) == LocalDate.parse("2015-10-15")
     }
 
     static enum Color { red, blue }
@@ -92,24 +93,31 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getValue() >> "red"
         then:
-            Value.of(target).viewedBy(actor).asEnum(Color.class) == Color.red
-    }
-
-    def "should throw assertion error if the enum is not an expected value"() {
-        given:
-            element.getValue() >> "spicy"
-        when:
-            Value.of(target).viewedBy(actor).asEnum(Color.class)
-        then:
-            thrown(UnexpectedEnumValueException)
+            Value.of(target).asEnum(Color.class).answeredBy(actor) == Color.red
     }
 
     def "should convert lists of string values"() {
         when:
-            element.getValue() >> "A"
-            element2.getValue() >> "B"
+        element.getValue() >> "A"
+        element2.getValue() >> "B"
         then:
-            Value.of(target).viewedBy(actor).asList() == ["A", "B"]
+        Value.ofEach(target).answeredBy(actor) == ["A", "B"]
+    }
+
+    def "should convert lists to other types"() {
+        when:
+        element.getValue() >> "1"
+        element2.getValue() >> "2"
+        then:
+        Value.ofEach(target).asListOf(Integer).answeredBy(actor) == [1,2]
+    }
+
+    def "should convert lists to other types using a map"() {
+        when:
+        element.getValue() >> "1"
+        element2.getValue() >> "2"
+        then:
+        Value.ofEach(target).mapEach(value -> Integer.parseInt(value)).answeredBy(actor) == [1,2]
     }
 
     def "should be possible to provide a question about lists of values"() {
@@ -117,43 +125,15 @@ class WhenReadingUIValues extends Specification {
             element.getValue() >> "A"
             element2.getValue() >> "B"
         then:
-            def theValues = Value.of(target).asAList();
+            def theValues = Value.ofEach(target)
             theValues.answeredBy(actor) == ["A", "B"]
     }
-
-
-    def "should convert lists of string enums"() {
-        when:
-            element.getValue() >> "red"
-            element2.getValue() >> "blue"
-        then:
-            Value.of(target).viewedBy(actor).asListOf(Color) == [Color.red, Color.blue]
-    }
-
-    def "questions about lists of string enums"() {
-        when:
-        element.getValue() >> "red"
-        element2.getValue() >> "blue"
-        then:
-        def theValues = Value.of(target).asAListOf(Color)
-        theValues.answeredBy(actor) == [Color.red, Color.blue]
-    }
-
-    def "should throw exception if an invalid enum is found"() {
-        given:
-            element.getValue() >> "red"
-            element2.getValue() >> "spicy"
-        when:
-            Value.of(target).viewedBy(actor).asListOf(Color) == [Color.red, Color.blue]
-        then:
-            thrown(UnexpectedEnumValueException)
-    }
-
+    
     def "should read text values"() {
         when:
             element.getText() >> "some value"
         then:
-            Text.of(target).viewedBy(actor).as(String) == "some value"
+            Text.of(target).answeredBy(actor) == "some value"
     }
 
     def "should read multiple text values"() {
@@ -161,21 +141,29 @@ class WhenReadingUIValues extends Specification {
             element.getText() >> "some value"
             element2.getText() >> "some other value"
         then:
-            Text.of(target).viewedBy(actor).asList() == ["some value", "some other value"]
+            Text.ofEach(target).answeredBy(actor) == ["some value", "some other value"]
+    }
+
+    def "should read multiple text values converted into another form"() {
+        when:
+        element.getText() >> "some value"
+        element2.getText() >> "some other value"
+        then:
+        Text.ofEach(target).mapEach(s -> s.length()).answeredBy(actor) == [10, 16]
     }
 
     def "should read native text values"() {
         when:
             element.getText() >> "some value"
         then:
-            Text.of(target).viewedBy(actor).value() == "some value"
+            Text.of(target).answeredBy(actor) == "some value"
     }
 
     def "should read selected values"() {
         when:
             element.getSelectedValue() >> "some value"
         then:
-            SelectedValue.of(target).viewedBy(actor).as(String) == "some value"
+            SelectedValue.of(target).answeredBy(actor) == "some value"
     }
 
     def "should read multiple selected values"() {
@@ -183,14 +171,14 @@ class WhenReadingUIValues extends Specification {
             element.getSelectedValue() >> "some value"
             element2.getSelectedValue() >> "some other value"
         then:
-            SelectedValue.of(target).viewedBy(actor).asList() == ["some value", "some other value"]
+            SelectedValue.ofEach(target).answeredBy(actor) == ["some value", "some other value"]
     }
 
     def "should read visible selected values"() {
         when:
         element.getSelectedVisibleTextValue() >> "some value"
         then:
-        SelectedVisibleTextValue.of(target).viewedBy(actor).as(String) == "some value"
+        SelectedVisibleTextValue.of(target).answeredBy(actor) == "some value"
     }
 
     def "should read multiple svisible elected values"() {
@@ -198,21 +186,21 @@ class WhenReadingUIValues extends Specification {
         element.getSelectedVisibleTextValue() >> "some value"
         element2.getSelectedVisibleTextValue() >> "some other value"
         then:
-        SelectedVisibleTextValue.of(target).viewedBy(actor).asList() == ["some value", "some other value"]
+        SelectedVisibleTextValue.ofEach(target).answeredBy(actor) == ["some value", "some other value"]
     }
 
     def "should read selected options as string"() {
         when:
             element.getSelectOptions() >> ["value1", "value2"]
         then:
-            SelectOptions.of(target).viewedBy(actor).as(String) == "[value1, value2]"
+            SelectOptions.of(target).asString().answeredBy(actor) == "[value1, value2]"
     }
 
     def "should read selected options"() {
         when:
             element.getSelectOptions() >> ["value1", "value2"]
         then:
-            SelectOptions.of(target).viewedBy(actor).value() == ["value1", "value2"]
+            SelectOptions.of(target).answeredBy(actor) == ["value1", "value2"]
     }
 
     def "should read multiple selected options"() {
@@ -220,22 +208,21 @@ class WhenReadingUIValues extends Specification {
             element.getSelectOptions() >> ["value1", "value2"]
             element2.getSelectOptions() >> ["value3", "value4"]
         then:
-            SelectOptions.of(target).viewedBy(actor).asList() == [["value1", "value2"], ["value3", "value4"]]
+            SelectOptions.ofEach(target).answeredBy(actor) == [["value1", "value2"], ["value3", "value4"]]
     }
 
     def "should be able to read values without calling value() directly"() {
         when:
             element.getCssValue("font") >> "Italics"
         then:
-
-            ValueOf.the(CSSValue.of(target).named("font").viewedBy(actor)) == "Italics"
+            CSSValue.of(target).named("font").answeredBy(actor) == "Italics"
     }
 
     def "should read css value"() {
         when:
         element.getCssValue("font") >> "Italics"
         then:
-        CSSValue.of(target).named("font").viewedBy(actor).value() == "Italics"
+        CSSValue.of(target).named("font").answeredBy(actor) == "Italics"
     }
 
     def "should read multiple css values"() {
@@ -243,14 +230,14 @@ class WhenReadingUIValues extends Specification {
             element.getCssValue("font") >> "Italics"
             element2.getCssValue("font") >> "Bold"
         then:
-            CSSValue.of(target).named("font").viewedBy(actor).asList() == ["Italics", "Bold"]
+            CSSValue.ofEach(target).named("font").answeredBy(actor) == ["Italics", "Bold"]
     }
 
     def "should read attribute value"() {
         when:
             element.getAttribute("checked") >> "true"
         then:
-            Attribute.of(target).named("checked").viewedBy(actor).as(Boolean) == true
+            Attribute.of(target).named("checked").as(Boolean).answeredBy(actor) == true
     }
 
     def "should read multiple attribute values"() {
@@ -258,14 +245,14 @@ class WhenReadingUIValues extends Specification {
             element.getAttribute("checked") >> "true"
             element2.getAttribute("checked") >> "false"
         then:
-            Attribute.of(target).named("checked").viewedBy(actor).asListOf(Boolean.class) == [Boolean.TRUE, Boolean.FALSE]
+            Attribute.ofEach(target).named("checked").answeredBy(actor) == ["true","false"]
     }
 
     def "should read size value"() {
         when:
             element.getSize() >> new Dimension(10,10)
         then:
-            TheSize.of(target).viewedBy(actor).value() == new Dimension(10,10)
+            TheSize.of(target).answeredBy(actor) == new Dimension(10,10)
     }
 
     def "should read multiple size values"() {
@@ -273,14 +260,14 @@ class WhenReadingUIValues extends Specification {
             element.getSize() >> new Dimension(10,10)
             element2.getSize() >> new Dimension(20,20)
         then:
-            TheSize.of(target).viewedBy(actor).asList() == [new Dimension(10,10), new Dimension(20,20)]
+            TheSize.ofEach(target).answeredBy(actor) == [new Dimension(10,10), new Dimension(20,20)]
     }
 
     def "should read location value"() {
         when:
             element.getLocation() >> new Point(10,10)
         then:
-            TheLocation.of(target).viewedBy(actor).value() == new Point(10,10)
+            TheLocation.of(target).answeredBy(actor) == new Point(10,10)
     }
 
     def "should read multiple location values"() {
@@ -288,7 +275,7 @@ class WhenReadingUIValues extends Specification {
             element.getLocation() >> new Point(10,10)
             element2.getLocation() >> new Point(20,20)
         then:
-            TheLocation.of(target).viewedBy(actor).asList() == [new Point(10,10), new Point(20,20)]
+            TheLocation.ofEach(target).answeredBy(actor) == [new Point(10,10), new Point(20,20)]
     }
 
     def coordinates1 = Mock(org.openqa.selenium.interactions.internal.Coordinates);
@@ -298,7 +285,7 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getCoordinates() >> coordinates1
         then:
-            TheCoordinates.of(target).viewedBy(actor).value() == coordinates1
+            TheCoordinates.of(target).answeredBy(actor) == coordinates1
     }
 
     def "should read multiple coordinated values"() {
@@ -306,21 +293,21 @@ class WhenReadingUIValues extends Specification {
             element.getCoordinates() >> coordinates1
             element2.getCoordinates() >> coordinates2
         then:
-            TheCoordinates.of(target).viewedBy(actor).asList() == [coordinates1, coordinates2]
+            TheCoordinates.ofEach(target).answeredBy(actor) == [coordinates1, coordinates2]
     }
 
     def "should see if enabled"() {
         when:
             element.isEnabled() >> true
         then:
-            Enabled.of(target).viewedBy(actor).value()== true
+            Enabled.of(target).answeredBy(actor)
     }
 
     def "should see if selected"() {
         when:
             element.isSelected() >> true
         then:
-            SelectedStatus.of(target).viewedBy(actor).value()== true
+            SelectedStatus.of(target).answeredBy(actor)
     }
 
     def "should see if multiple fields are selected"() {
@@ -328,7 +315,7 @@ class WhenReadingUIValues extends Specification {
             element.isSelected() >> true
             element2.isSelected() >> false
         then:
-            SelectedStatus.of(target).viewedBy(actor).asList()== [true, false]
+            SelectedStatus.ofEach(target).answeredBy(actor) == [true, false]
     }
 
     def "should see if multiple elements enabled"() {
@@ -336,7 +323,7 @@ class WhenReadingUIValues extends Specification {
             element.isEnabled() >> true
             element2.isEnabled() >> false
         then:
-            Enabled.of(target).viewedBy(actor).asList() == [true, false]
+            Enabled.ofEach(target).answeredBy(actor) == [true, false]
     }
 
 
@@ -344,7 +331,7 @@ class WhenReadingUIValues extends Specification {
         when:
             element.isCurrentlyEnabled() >> true
         then:
-            CurrentlyEnabled.of(target).viewedBy(actor).value()== true
+            CurrentlyEnabled.of(target).answeredBy(actor)
     }
 
     def "should see if multiple elements currently enabled"() {
@@ -352,14 +339,14 @@ class WhenReadingUIValues extends Specification {
             element.isCurrentlyEnabled() >> true
             element2.isCurrentlyEnabled() >> false
         then:
-        CurrentlyEnabled.of(target).viewedBy(actor).asList() == [true, false]
+        CurrentlyEnabled.ofEach(target).answeredBy(actor) == [true, false]
     }
 
     def "should see if currently visible"() {
         when:
         element.isCurrentlyVisible() >> true
         then:
-        CurrentVisibility.of(target).viewedBy(actor).value()== true
+        CurrentVisibility.of(target).answeredBy(actor)
     }
 
     def "should see if multiple elements currently visible"() {
@@ -367,7 +354,7 @@ class WhenReadingUIValues extends Specification {
         element.isCurrentlyVisible() >> true
         element2.isCurrentlyVisible() >> false
         then:
-        CurrentVisibility.of(target).viewedBy(actor).asList() == [true, false]
+        CurrentVisibility.ofEach(target).answeredBy(actor) == [true, false]
     }
 
 
@@ -375,7 +362,7 @@ class WhenReadingUIValues extends Specification {
         when:
             element.isVisible() >> true
         then:
-            Visibility.of(target).viewedBy(actor).value()== true
+            Visibility.of(target).answeredBy(actor)
     }
 
     def "should see if multiple elements visible"() {
@@ -383,7 +370,7 @@ class WhenReadingUIValues extends Specification {
             element.isVisible() >> true
             element2.isVisible() >> false
         then:
-            Visibility.of(target).viewedBy(actor).asList() == [true, false]
+            Visibility.ofEach(target).answeredBy(actor) == [true, false]
     }
 
 
@@ -391,7 +378,7 @@ class WhenReadingUIValues extends Specification {
         when:
         element.isPresent() >> true
         then:
-        Presence.of(target).viewedBy(actor).value()== true
+        Presence.of(target).answeredBy(actor)
     }
 
     def "should see if multiple elements present"() {
@@ -399,7 +386,7 @@ class WhenReadingUIValues extends Specification {
         element.isPresent() >> true
         element2.isPresent() >> false
         then:
-        Presence.of(target).viewedBy(actor).asList() == [true, false]
+        Presence.ofEach(target).answeredBy(actor) == [true, false]
     }
 
 

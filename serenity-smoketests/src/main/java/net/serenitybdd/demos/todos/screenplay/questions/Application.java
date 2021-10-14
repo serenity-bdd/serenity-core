@@ -14,8 +14,8 @@ public class Application implements Question<ApplicationInformation> {
     @Override
     public ApplicationInformation answeredBy(Actor actor) {
         String title = BrowseTheWeb.as(actor).getTitle();
-        String heading = the(Text.of(TodoListApp.MAIN_HEADING).viewedBy(actor));
-        String aboutInformation = the(Text.of(TodoListApp.FOOTER).viewedBy(actor));
+        String heading = Text.of(TodoListApp.MAIN_HEADING).answeredBy(actor);
+        String aboutInformation = Text.of(TodoListApp.FOOTER).answeredBy(actor);
 
         return new ApplicationInformation(title, heading, aboutInformation);
     }

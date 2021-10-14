@@ -294,7 +294,7 @@ public class DanaGoesShoppingSample {
         givenThat(dana).attemptsTo(
             joinTheCheckoutQueue().of(slowCheckout),
             Wait.until(nextPersonToBeServed().by(slowCheckout), is("Dana"))
-                .forNoLongerThan(10).seconds(),
+                .forNoMoreThan(10).seconds(),
             purchase().anApple().thatCosts(10).dollars()
         );
     }

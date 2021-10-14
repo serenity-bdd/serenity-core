@@ -11,6 +11,7 @@ import net.serenitybdd.screenplay.ensure.web.ElementsLocated;
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation;
 import net.serenitybdd.screenplay.ensure.web.TheMatchingElement;
 import net.serenitybdd.screenplay.questions.NamedPredicate;
+import net.serenitybdd.screenplay.questions.Text;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
@@ -267,7 +268,18 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the color red", colorRed()).asAString().isEqualTo("RED")
+                Ensure.thatTheAnswerTo("the color red", colorRed()).isEqualTo("RED"),
+                Ensure.that("the color red", colorRed()).startsWith("RED"),
+                Ensure.that(colorRed(), value -> value.startsWith("RED"))
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsUsingLambdaExpressions() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that("The color starts with R", colorRed(), value -> value.startsWith("R"))
         );
     }
 
@@ -285,7 +297,9 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo("the count", countOf("some-todo-item")).isEqualTo(1)
+                Ensure.thatTheAnswerTo("the count", countOf("some-todo-item")).isEqualTo(1),
+                Ensure.that("the count", countOf("some-todo-item")).isEqualTo(1),
+                Ensure.that(countOf("some-todo-item")).isEqualTo(1)
         );
     }
 
@@ -294,7 +308,8 @@ public class WhenUsingFluentAssertionsInJava {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswersTo(colors()).contains("red")
+                Ensure.thatTheAnswersTo(colors()).contains("red"),
+                Ensure.that(colors()).contains("red")
         );
     }
 
@@ -308,11 +323,21 @@ public class WhenUsingFluentAssertionsInJava {
     }
 
     @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutBooleansWithDescriptionsV2() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that("the boolean", booleanEquivalentOf("true")).isTrue()
+        );
+    }
+
+    @Test
     public void weCanMakeAssertionsAboutQuestionsAboutBooleans() {
         Actor aster = Actor.named("Aster");
 
         aster.attemptsTo(
-                Ensure.thatTheAnswerTo(booleanEquivalentOf("true")).isTrue()
+                Ensure.thatTheAnswerTo(booleanEquivalentOf("true")).isTrue(),
+                Ensure.that(booleanEquivalentOf("true")).isTrue()
         );
     }
 

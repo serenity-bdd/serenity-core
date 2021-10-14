@@ -1,11 +1,18 @@
 package net.serenitybdd.screenplay.questions.page;
 
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+
 public class TheWebPage {
-    public static PageTitleQuestion title() {
-        return new PageTitleQuestion();
+    public static Question<String> title() {
+        return Question.about("the title of the page").answeredBy(actor -> BrowseTheWeb.as(actor).getTitle());
     }
-    public static CurrentURLQuestion currentUrl() { return new CurrentURLQuestion(); }
-    public static AlertTextQuestion alertText() {
-        return new AlertTextQuestion();
+
+    public static Question<String> currentUrl() {
+        return Question.about("the current URL").answeredBy(actor -> BrowseTheWeb.as(actor).getDriver().getCurrentUrl());
+    }
+
+    public static Question<String> alertText() {
+        return Question.about("alert text").answeredBy(actor -> BrowseTheWeb.as(actor).getAlert().getText());
     }
 }

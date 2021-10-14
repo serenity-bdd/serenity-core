@@ -6,10 +6,10 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.questions.CSSValue;
 import net.serenitybdd.screenplay.targets.Target;
 
-import java.util.List;
+import java.util.Collection;
 
 @Subject("#target")
-public class TargetCSSValues implements Question<List<String>> {
+public class TargetCSSValues implements Question<Collection<String>> {
 
     private final Target target;
     private final String name;
@@ -20,7 +20,7 @@ public class TargetCSSValues implements Question<List<String>> {
     }
 
     @Override
-    public List<String> answeredBy(Actor actor) {
-        return CSSValue.of(target).named(name) .viewedBy(actor).asList();
+    public Collection<String> answeredBy(Actor actor) {
+        return CSSValue.ofEach(target).named(name).answeredBy(actor);
     }
 }

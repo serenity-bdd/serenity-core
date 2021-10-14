@@ -6,17 +6,21 @@ import net.serenitybdd.screenplay.Interaction;
 import net.thucydides.core.annotations.Step;
 
 public class SelectByIndexFromElement implements Interaction {
-    private final WebElementFacade element;
-    private final Integer index;
+    private WebElementFacade element;
+    private Integer[] indexes;
 
-    public SelectByIndexFromElement(WebElementFacade element, Integer index) {
+    public SelectByIndexFromElement() {}
+
+    public SelectByIndexFromElement(WebElementFacade element, Integer... indexes) {
         this.element = element;
-        this.index = index;
+        this.indexes = indexes;
     }
 
     @Step("{0} selects index #index")
     public <T extends Actor> void performAs(T theUser) {
-        element.selectByIndex(index);
+        for(Integer index : indexes) {
+            element.selectByIndex(index);
+        }
     }
 
 

@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
@@ -21,6 +22,10 @@ public class WaitUntil {
 
     public static WaitUntilTargetIsReady the(By byLocator, Matcher<WebElementState> expectedState) {
         return  instrumented(WaitUntilTargetIsReady.class, Target.the(byLocator.toString()).located(byLocator), expectedState);
+    }
+
+    public static <T> WaitUntilExpectation<T> the(ExpectedCondition<T> expectedCondition) {
+        return new WaitUntilExpectation<>(expectedCondition);
     }
 
     public static Interaction angularRequestsHaveFinished() {

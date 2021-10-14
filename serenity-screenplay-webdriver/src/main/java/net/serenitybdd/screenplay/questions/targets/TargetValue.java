@@ -17,6 +17,6 @@ public class TargetValue implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return Value.of(target).viewedBy(actor).asString();
+        return Value.of(target).answeredBy(actor);
     }
 }

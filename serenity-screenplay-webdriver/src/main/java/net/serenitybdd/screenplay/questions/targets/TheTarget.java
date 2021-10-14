@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.questions.targets;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.targets.Target;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TheTarget {
@@ -10,7 +11,7 @@ public class TheTarget {
         return new TargetValue(target);
     }
 
-    public static Question<List<String>> valuesOf(Target target) {
+    public static Question<Collection<String>> valuesOf(Target target) {
         return new TargetValues(target);
     }
 
@@ -53,7 +54,7 @@ public class TheTarget {
             return new TargetAttribute(target, name);
         }
 
-        public Question<List<String>> forTargetsMatching(Target target) {
+        public Question<Collection<String>> forTargetsMatching(Target target) {
             return new TargetAttributes(target, name);
         }
     }
@@ -68,7 +69,7 @@ public class TheTarget {
         public Question<String> forTarget(Target target) {
             return new TargetCSSValue(target, name);
         }
-        public Question<List<String>> forTargetsMatching(Target target) {
+        public Question<Collection<String>> forTargetsMatching(Target target) {
             return new TargetCSSValues(target, name);
         }
     }

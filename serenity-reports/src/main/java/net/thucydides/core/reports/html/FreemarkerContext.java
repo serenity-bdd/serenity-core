@@ -25,8 +25,13 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.TagInflector;
 import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
+import org.joda.time.ReadableDateTime;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +39,7 @@ import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
+import static net.thucydides.core.reports.html.HtmlReporter.ZONED_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
@@ -104,7 +110,12 @@ public class FreemarkerContext {
         context.put("leafRequirementType", last(requirements.getRequirementTypes()));
         addFormattersToContext(context);
 
-        context.put("totalTestDuration", formattedDuration(Duration.ofMillis(testOutcomes.getDuration())));
+        ZonedDateTime startTime = startTimeOf(testOutcomes.getOutcomes());
+        ZonedDateTime endTime = endTimeOf(testOutcomes.getOutcomes());
+
+        context.put("startTimestamp", zonedTimestampFrom(startTime));
+        context.put("endTimestamp", zonedTimestampFrom(endTime));
+        context.put("totalTestDuration", formattedDuration(totalDurationOf(testOutcomes.getOutcomes())));
         context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
         context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
         context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
@@ -210,8 +221,11 @@ public class FreemarkerContext {
         context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 
+    protected String zonedTimestampFrom(ZonedDateTime time) {
+        return time == null ? "" : time.format(DateTimeFormatter.ofPattern(ZONED_TIMESTAMP_FORMAT));
+    }
 
-    protected String timestampFrom(DateTime startTime) {
+    protected String timestampFrom(ReadableDateTime startTime) {
         return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
     }
 

@@ -26,6 +26,6 @@ class BackgroundColor {
 
     }
     fun forResult(result : TestResult) : String = RESULT_BACKGROUND_COLORS[result]!!
-    fun forResult(result : String) : String = RESULT_BACKGROUND_COLORS[TestResult.valueOf(result.toUpperCase())]!!
+    fun forResult(result : String) : String = RESULT_BACKGROUND_COLORS[TestResult.valueOf(result.uppercase())]!!
     fun inDarkforResult(result : TestResult) : String = DARKER_RESULT_BACKGROUND_COLORS[result]!!
 }

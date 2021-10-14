@@ -27,12 +27,12 @@ class FrequentFailuresBuilder(val testOutcomes: TestOutcomes) {
                     .take(maxEntries)
 
     private fun testResultOf(outcomes: List<ScenarioSummaryResult>) =
-            TestResult.valueOf(outcomes.first().result.toUpperCase())
+            TestResult.valueOf(outcomes.first().result.uppercase())
 }
 
 class FrequentFailure(val type: String, val count: Int, val result: TestResult) {
     val name = humanize(type.substringAfterLast("."))
-    val resultClass = result.name.toLowerCase()
+    val resultClass = result.name.lowercase()
     val resultIcon = ResultIconFormatter().forResult(result)
     val report = ReportNameProvider().forErrorType(type)
 }

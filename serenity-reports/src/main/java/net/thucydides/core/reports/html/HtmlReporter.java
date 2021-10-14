@@ -37,7 +37,8 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private final Charset charset;
     protected final ConsoleColors colored;
 
-    protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm";
+    protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm:ss";
+    protected static final String ZONED_TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm:ss Z";
 
     public HtmlReporter() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );

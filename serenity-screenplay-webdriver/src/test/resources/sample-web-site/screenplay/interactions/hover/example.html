@@ -1,0 +1,15 @@
+<html lang="en">
+<head>
+    <style>
+        a { display: block; margin: 10px; padding: 10px; color: white; }
+        a:hover { color: black; }
+        .off { background: darkred; }
+        .on { background: darkgreen; }
+    </style>
+<body>
+<h1>A page with a link</h1>
+<a href="javascript:void(0)"
+   class="off"
+   onmouseover="this.className='on';" onmouseout="this.className='off';">link</a>
+</body>
+</html>

@@ -6,8 +6,10 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 public class DeselectByVisibleTextFromTarget implements Interaction {
-    private final Target target;
-    private final String visibleText;
+    private Target target;
+    private String visibleText;
+
+    public DeselectByVisibleTextFromTarget() {}
 
     public DeselectByVisibleTextFromTarget(Target target, String visibleText) {
         this.target = target;

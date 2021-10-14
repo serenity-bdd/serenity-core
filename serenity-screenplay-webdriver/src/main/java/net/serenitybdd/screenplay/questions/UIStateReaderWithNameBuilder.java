@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class UIStateReaderWithNameBuilder<T> {
     protected final Target target;
     protected final Class<T> type;

@@ -50,7 +50,13 @@ class SerenityStatement extends Statement {
 
     private void checkForStepFailures() throws Throwable {
         if (publisher.aStepHasFailed()) {
-            throw publisher.getTestFailureCause().toException();
+            if (publisher.getTestFailureCause() != null) {
+                throw publisher.getTestFailureCause().toException();
+            } else {
+                if (publisher.firstFailingStep().isPresent()) {
+                    throw publisher.firstFailingStep().get().getException().asException();
+                }
+            }
         }
     }
 

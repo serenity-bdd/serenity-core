@@ -16,6 +16,6 @@ public class ReadProfileField implements Question<String> {
     }
 
     public String answeredBy(Actor actor) {
-        return Value.of(field).viewedBy(actor).value();
+        return Value.of(field).answeredBy(actor);
     }
 }

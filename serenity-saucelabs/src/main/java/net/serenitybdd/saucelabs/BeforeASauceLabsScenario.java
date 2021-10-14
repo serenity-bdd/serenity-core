@@ -19,9 +19,8 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
 
     @Override
     public boolean isActivated(EnvironmentVariables environmentVariables) {
-        return EnvironmentSpecificConfiguration.from(environmentVariables)
-                                               .getOptionalProperty("saucelabs.platformName")
-                                               .isPresent();
+        return !EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getPropertiesWithPrefix("saucelabs").isEmpty();
     }
 
 }

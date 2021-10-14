@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 abstract class MoveMouseTo implements WithChainableActions {
 
-    private List<Consumer<Actions>> actionsToPerfomm = new ArrayList<>();
+    private List<Consumer<Actions>> actionsToPerform = new ArrayList<>();
 
     protected MoveMouseTo() {
     }
@@ -20,14 +20,14 @@ abstract class MoveMouseTo implements WithChainableActions {
         Actions browserActions = BrowseTheWeb.as(actor).withAction();
 
         browserActions.moveToElement(element);
-        actionsToPerfomm.forEach(
+        actionsToPerform.forEach(
                 action -> action.accept(browserActions)
         );
         browserActions.perform();
     }
 
     public WithChainableActions andThen(Consumer<Actions> nextAction) {
-        actionsToPerfomm.add(nextAction);
+        actionsToPerform.add(nextAction);
         return this;
     }
 

@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+<form>
+    <label for="field">Customer Name</label>
+    <input type="text" id="field" name="fieldname" class="field-style" data-test="field-name" placeholder="value goes here" onkeyup="update()" />
+    <div id="result"></div>
+</form>
+<script>
+    function update() {
+        document.getElementById("result").textContent = document.getElementById("field").value;
+    }
+</script>
+</body>
+</html>

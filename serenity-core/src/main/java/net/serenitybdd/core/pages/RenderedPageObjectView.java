@@ -18,9 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
+import static net.serenitybdd.core.selectors.Selectors.formattedXpathOrCssSelector;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -104,18 +106,11 @@ public class RenderedPageObjectView {
             return new WebElementFacadeStub();
         }
     }
-    /*
-        public void waitFor(final By byElementCriteria) {
-        if (!driverIsDisabled()) {
-            waitForCondition().until(elementDisplayed(byElementCriteria));
-        }
-    }
-     */
 
     public <T> T waitFor(final ExpectedCondition<T> expectedCondition) {
         return doWait().until(expectedCondition);
     }
-//
+
     public <T> T waitFor(String message, final ExpectedCondition<T> expectedCondition) {
         return doWait().until(new WaitForWithMessage<>(message, expectedCondition));
     }
@@ -540,6 +535,34 @@ public class RenderedPageObjectView {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
     }
 
+    public List<WebElementFacade> findFirstMatching(List<String> xpathOrCssSelectors) {
+        List<WebElementFacade> matchingElements = new ArrayList<>();
+        for(String selector : xpathOrCssSelectors) {
+            matchingElements = findAllWithNoWait(xpathOrCssSelector(selector));
+            if (!matchingElements.isEmpty()) {
+                break;
+            }
+        }
+        return matchingElements;
+    }
+
+    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(String cssOrXPathLocator, String expectedText) {
+        return page -> page.withTimeoutOf(Duration.ZERO)
+                .findAll(cssOrXPathLocator)
+                .stream()
+                .filter(element -> element.getTextContent().contains(expectedText))
+                .collect(Collectors.toList());
+    }
+
+
+    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(List<String> cssOrXPathLocators, String expectedText) {
+        return page -> page.withTimeoutOf(Duration.ZERO)
+                .findFirstMatching(cssOrXPathLocators)
+                .stream()
+                .filter(element -> element.getTextContent().contains(expectedText))
+                .collect(Collectors.toList());
+    }
+
     public WebElementFacade find(By bySelector) {
         waitFor(bySelector);
         pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);
@@ -550,6 +573,13 @@ public class RenderedPageObjectView {
 
     public WebElementFacade find(String xpathOrCssSelector) {
         return find(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+    public WebElementFacade find(String xpathOrCssSelector, Object firstArgument, Object... arguments) {
+        List<Object> args = new ArrayList<>();
+        args.add(firstArgument);
+        args.addAll(Arrays.asList(arguments));
+        return find(formattedXpathOrCssSelector(xpathOrCssSelector, args.toArray()));
     }
 
     public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {

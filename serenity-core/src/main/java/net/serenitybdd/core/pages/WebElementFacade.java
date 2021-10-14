@@ -40,7 +40,7 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
 
     String getAttribute(String name);
 
-    ListOfWebElementFacades thenFindAll(By selector);
+    ListOfWebElementFacades thenFindAll(By... selector);
 
     long getImplicitTimeoutInMilliseconds();
 

@@ -1,0 +1,13 @@
+<html lang="en">
+<body>
+<form>
+    <input type="text" id="field" name="the field" onkeyup="update()" />
+    <div id="result"></div>
+</form>
+<script>
+    function update() {
+        document.getElementById("result").textContent = document.getElementById("field").value;
+    }
+</script>
+</body>
+</html>

@@ -108,7 +108,11 @@ public interface WebElementState {
 
     String getSelectedVisibleTextValue();
 
+    List<String> getSelectedVisibleTexts();
+
     String getSelectedValue();
+
+    List<String> getSelectedValues();
 
     List<String> getSelectOptions();
 

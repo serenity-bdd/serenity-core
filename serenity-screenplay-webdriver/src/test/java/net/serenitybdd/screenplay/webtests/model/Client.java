@@ -14,7 +14,7 @@ public class Client {
             @Override
             @Subject("name")
             public String answeredBy(Actor actor) {
-                return Value.of(ProfilePage.NAME).viewedBy(actor).asString();
+                return Value.of(ProfilePage.NAME).answeredBy(actor);
             }
         };
     }
@@ -22,7 +22,7 @@ public class Client {
     public static Question<String> color() {
         return new Question<String>() {
             public String answeredBy(Actor actor) {
-                return SelectedVisibleTextValue.of(ProfilePage.COLOR).viewedBy(actor).asString();
+                return SelectedVisibleTextValue.of(ProfilePage.COLOR).answeredBy(actor);
             }
 
             public String getSubject() {
@@ -36,7 +36,7 @@ public class Client {
             @Override
             @Subject("date of birth")
             public String answeredBy(Actor actor) {
-                return Value.of(ProfilePage.DATE_OF_BIRTH).viewedBy(actor).asString();
+                return Value.of(ProfilePage.DATE_OF_BIRTH).answeredBy(actor);
             }
         };
     }
@@ -46,7 +46,7 @@ public class Client {
             @Override
             @Subject("country")
             public String answeredBy(Actor actor) {
-                return SelectedVisibleTextValue.of(ProfilePage.COUNTRY).viewedBy(actor).asString();
+                return SelectedVisibleTextValue.of(ProfilePage.COUNTRY).answeredBy(actor);
             }
         };
     }

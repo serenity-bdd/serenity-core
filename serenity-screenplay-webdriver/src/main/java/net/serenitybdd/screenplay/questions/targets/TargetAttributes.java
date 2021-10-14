@@ -6,10 +6,10 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.questions.Attribute;
 import net.serenitybdd.screenplay.targets.Target;
 
-import java.util.List;
+import java.util.Collection;
 
 @Subject("#target")
-public class TargetAttributes implements Question<List<String>> {
+public class TargetAttributes implements Question<Collection<String>> {
 
     private final Target target;
     private final String name;
@@ -20,7 +20,7 @@ public class TargetAttributes implements Question<List<String>> {
     }
 
     @Override
-    public List<String> answeredBy(Actor actor) {
-        return Attribute.of(target).named(name).viewedBy(actor).asList();
+    public Collection<String> answeredBy(Actor actor) {
+        return Attribute.ofEach(target).named(name).answeredBy(actor);
     }
 }

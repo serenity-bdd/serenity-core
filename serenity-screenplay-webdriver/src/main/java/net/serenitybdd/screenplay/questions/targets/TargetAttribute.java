@@ -19,6 +19,6 @@ public class TargetAttribute implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return Attribute.of(target).named(name).viewedBy(actor).asString();
+        return Attribute.of(target).named(name).answeredBy(actor);
     }
 }

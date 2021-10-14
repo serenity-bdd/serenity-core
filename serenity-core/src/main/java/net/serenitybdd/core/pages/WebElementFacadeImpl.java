@@ -354,13 +354,19 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public ListOfWebElementFacades thenFindAll(By selector) {
-        logIfVerbose("findAll " + selector);
+    public ListOfWebElementFacades thenFindAll(By... selectors) {
+        logIfVerbose("findAll " + selectors);
         if (driverIsDisabled()) {
             return new ListOfWebElementFacades(new ArrayList<>());
         }
 
-        List<WebElement> nestedElements = findElements(selector);
+        List<WebElement> nestedElements = new ArrayList<>();
+        for(By selector : selectors) {
+            nestedElements = findElements(selector);
+            if (!nestedElements.isEmpty()) {
+                break;
+            }
+        }
         return webElementFacadesFrom(nestedElements);
     }
 
@@ -824,7 +830,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        waitUntilElementAvailable();
+//        waitUntilElementAvailable();
         clear();
         getElement().sendKeys(keysToSend);
         notifyScreenChange();
@@ -946,17 +952,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public List<String> getSelectedVisibleTexts() {
-        return new Select(this).getAllSelectedOptions().stream().map(WebElement::getText).collect(Collectors.toList());
+        return dropdownSelect().visibleTextValues();
     }
 
     @Override
     public String getFirstSelectedOptionValue() {
         return new Select(this).getFirstSelectedOption().getAttribute("value");
-    }
-
-    @Override
-    public List<String> getSelectedValues() {
-        return new Select(this).getAllSelectedOptions().stream().map(element -> element.getAttribute("value")).collect(Collectors.toList());
     }
 
     @Override
@@ -968,6 +969,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public String getSelectedValue() {
         return dropdownSelect().value();
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return dropdownSelect().values();
     }
 
     @Override

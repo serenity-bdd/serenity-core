@@ -1,10 +1,19 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.parallel.Agent;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -16,9 +25,11 @@ import static java.util.Arrays.stream;
 public class InParallel {
 
     Actor[] cast;
+    EnvironmentVariables environmentVariables;
 
-    private InParallel(Actor[] actors) {
+    private InParallel(Actor[] actors, EnvironmentVariables environmentVariables) {
         cast = actors;
+        this.environmentVariables = environmentVariables;
     }
 
     /**
@@ -35,11 +46,14 @@ public class InParallel {
      * </pre>
      */
     public static InParallel theActors(Actor... actors) {
-        return new InParallel(actors);
+        return new InParallel(actors, Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
+    /**
+     * Useful if you have a collection or cast of actors.
+     */
     public static InParallel theActors(Collection<Actor> actors) {
-        return new InParallel(actors.toArray(new Actor[]{}));
+        return new InParallel(actors.toArray(new Actor[]{}), Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
     public void perform(List<Runnable> tasks) {
@@ -53,11 +67,32 @@ public class InParallel {
     public void perform(String stepName, Runnable... tasks) {
         try {
             StepEventBus.getEventBus().registerAgents(cast);
-            asList(tasks).parallelStream().forEach(Runnable::run);
+            ExecutorService executorService = Executors.newFixedThreadPool(environmentVariables.getPropertyAsInteger("screenplay.max.parallel.tasks", 16));
+            List<Future<?>> futures = stream(tasks).map( task -> executorService.submit(task)).collect(Collectors.toList());
+
+            futures.forEach(future -> {
+                try {
+                    future.get();
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new SerenityManagedException("Parallel task execution failed", e);
+                }
+            });
         } finally {
             StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(stepName, cast);
             StepEventBus.getEventBus().dropAgents(cast);
+            firstFailingStep().ifPresent(
+                    step -> {
+                        StepEventBus.getEventBus().testFailed(step.getException().asException());
+                        StepEventBus.getEventBus().suspendTest();
+                    }
+            );
         }
+    }
+
+    private Optional<TestStep> firstFailingStep() {
+        return StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getFlattenedTestSteps().stream()
+                                  .filter(step -> step.getException() != null)
+                                  .findFirst();
     }
 
     /**

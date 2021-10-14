@@ -2,7 +2,8 @@ package net.serenitybdd.screenplay.questions;
 
 import com.google.common.base.Preconditions;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.questions.converters.*;
+import net.serenitybdd.screenplay.EnumValues;
+import net.serenitybdd.screenplay.questions.converters.converters.*;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -78,19 +79,19 @@ public abstract class UIState<T> {
     }
 
     public LocalDate asLocalDate(String format) {
-        return LocalDate.parse(format, DateTimeFormatter.ofPattern(format));
+        return LocalDate.parse(resolve().toString(), DateTimeFormatter.ofPattern(format));
     }
 
     public DateTime asDate(String format) {
         return DateTime.parse(resolve().toString(), DateTimeFormat.forPattern(format));
     }
 
-    public <T> T asEnum(Class<T> enumType) {
+    public <C> C asEnum(Class<C> enumType) {
         String value = resolve().toString();
         return EnumValues.forType(enumType).getValueOf(value);
     }
 
-    protected <T> List<T> convertToEnums(Class<T> enumType, List<?> values) {
+    protected <C> List<C> convertToEnums(Class<C> enumType, List<?> values) {
         return EnumValues.forType(enumType).getValuesOf(values);
     }
 

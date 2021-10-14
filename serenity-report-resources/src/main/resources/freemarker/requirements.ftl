@@ -692,20 +692,24 @@
                                                     <table class="table">
                                                         <thead>
                                                         <tr>
-                                                            <th>Execution Time</th>
-                                                            <th>Clock Time</th>
+                                                            <th>Tests Started</th>
+                                                            <th>Tests Finished</th>
+                                                            <th>Total Duration</th>
                                                             <th>Fastest Test</th>
                                                             <th>Slowest Test</th>
                                                             <th>Average Execution Time</th>
+                                                            <th>Total Execution Time</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         <tr>
-                                                            <td>${totalTestDuration}</td>
+                                                            <td>${startTimestamp}</td>
+                                                            <td>${endTimestamp}</td>
                                                             <td>${totalClockDuration}</td>
                                                             <td>${minTestDuration}</td>
                                                             <td>${maxTestDuration}</td>
                                                             <td>${averageTestDuration}</td>
+                                                            <td>${totalTestDuration}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>

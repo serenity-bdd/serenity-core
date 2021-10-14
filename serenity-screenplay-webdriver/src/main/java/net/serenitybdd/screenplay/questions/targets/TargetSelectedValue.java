@@ -17,6 +17,6 @@ public class TargetSelectedValue implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        return SelectedValue.of(target).viewedBy(actor).asString();
+        return SelectedValue.of(target).answeredBy(actor);
     }
 }

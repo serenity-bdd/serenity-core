@@ -9,13 +9,8 @@ import net.serenitybdd.screenplay.webtests.pages.BankAccountBalanceTargets;
 public class BankBalanceQuestion implements Question<BankBalances> {
     @Override
     public BankBalances answeredBy(Actor actor) {
-        String currentAccount = Text.of(BankAccountBalanceTargets.CURRENT_ACCOUNT_BALANCE)
-                .viewedBy(actor)
-                .value();
-
-        String savingsAccount = Text.of(BankAccountBalanceTargets.SAVINGS_ACCOUNT_BALANCE)
-                .viewedBy(actor)
-                .value();
+        String currentAccount = Text.of(BankAccountBalanceTargets.CURRENT_ACCOUNT_BALANCE).answeredBy(actor);
+        String savingsAccount = Text.of(BankAccountBalanceTargets.SAVINGS_ACCOUNT_BALANCE).answeredBy(actor);
 
         return new BankBalances(currentAccount, savingsAccount);
     }

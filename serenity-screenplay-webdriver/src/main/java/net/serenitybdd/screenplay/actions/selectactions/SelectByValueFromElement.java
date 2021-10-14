@@ -6,18 +6,20 @@ import net.serenitybdd.screenplay.Interaction;
 import net.thucydides.core.annotations.Step;
 
 public class SelectByValueFromElement implements Interaction {
-    private final WebElementFacade element;
-    private final String value;
+    private WebElementFacade element;
+    private String[] values;
 
-    public SelectByValueFromElement(WebElementFacade element, String value) {
+    SelectByValueFromElement() {}
+
+    public SelectByValueFromElement(WebElementFacade element, String... values) {
         this.element = element;
-        this.value = value;
+        this.values = values;
     }
 
     @Step("{0} selects #value in #element")
     public <T extends Actor> void performAs(T theUser) {
-        element.selectByValue(value);
+        for(String value : values) {
+            element.selectByValue(value);
+        }
     }
-
-
 }

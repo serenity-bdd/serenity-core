@@ -20,7 +20,7 @@ import java.util.Map;
 public class SauceLabsTestSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SauceLabsTestSession.class);
-    private static final String REST_API_URL = "https://%s:%s@saucelabs.com/rest/v1/USERNAME/jobs/%s";
+    private static final String REST_API_URL = "https://%s:%s@saucelabs.com/rest/v1/%s/jobs/%s";
     private static final String APP_TEST_LINK_TEMPLATE = "https://app.saucelabs.com/tests/%s";
     private final String sauceLabsUsername;
     private final String sauceLabsKey;
@@ -59,7 +59,7 @@ public class SauceLabsTestSession {
     private URI getRESTAPIUri() {
         URI uri = null;
         try {
-            uri = new URI(String.format(REST_API_URL, sauceLabsUsername, sauceLabsKey, sessionId));
+            uri = new URI(String.format(REST_API_URL, sauceLabsUsername, sauceLabsKey, sauceLabsUsername, sessionId));
         } catch (URISyntaxException e) {
             LOGGER.error("Failed to parse SauceLabs API url.", e);
         }

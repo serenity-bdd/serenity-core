@@ -6,35 +6,40 @@ import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
+import static net.serenitybdd.screenplay.actions.SelectStrategy.*;
 
 public class SelectFromOptions {
 
     private final SelectStrategy strategy;
-    private String theText;
-    private String theValue;
-    private Integer indexValue;
+    private String[] options;
+    private String[] values;
+    private Integer[] indexes;
 
     public SelectFromOptions(SelectStrategy strategy) {
         this.strategy = strategy;
     }
 
-    public static SelectFromOptions byValue(String value) {
+    public static SelectFromOptions byValue(String... values) {
 
-        SelectFromOptions selectFromOptions = new SelectFromOptions(SelectStrategy.ByValue);
-        selectFromOptions.theValue = value;
+        SelectFromOptions selectFromOptions = new SelectFromOptions(ByValue);
+        selectFromOptions.values = values;
         return selectFromOptions;
     }
 
-    public static SelectFromOptions byVisibleText(String visibleText) {
-        SelectFromOptions selectFromOptions = new SelectFromOptions(SelectStrategy.ByVisibleText);
-        selectFromOptions.theText = visibleText;
+    public static SelectFromOptions byVisibleText(String... visibleTexts) {
+        SelectFromOptions selectFromOptions = new SelectFromOptions(ByVisibleText);
+        selectFromOptions.options = visibleTexts;
         return selectFromOptions;
     }
 
-    public static SelectFromOptions byIndex(Integer indexValue) {
-        SelectFromOptions selectFromOptions = new SelectFromOptions( SelectStrategy.ByIndex);
-        selectFromOptions.indexValue = indexValue;
+    public static SelectFromOptions byIndex(Integer... indexValues) {
+        SelectFromOptions selectFromOptions = new SelectFromOptions(ByIndex);
+        selectFromOptions.indexes = indexValues;
         return selectFromOptions;
     }
 
@@ -44,27 +49,27 @@ public class SelectFromOptions {
 
     public Performable from(Target target) {
         switch (strategy) {
-            case ByValue: return instrumented(SelectByValueFromTarget.class, target, theValue);
-            case ByVisibleText: return instrumented(SelectByVisibleTextFromTarget.class, target, theText);
-            case ByIndex: return instrumented(SelectByIndexFromTarget.class, target, indexValue);
+            case ByValue: return new SelectByValueFromTarget(target, values);
+            case ByVisibleText: return new SelectByVisibleTextFromTarget(target, options);
+            case ByIndex: return new SelectByIndexFromTarget(target, indexes);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }
 
     public Performable from(WebElementFacade element) {
         switch (strategy) {
-            case ByValue: return instrumented(SelectByValueFromElement.class, element, theValue);
-            case ByVisibleText: return instrumented(SelectByVisibleTextFromElement.class, element, theText);
-            case ByIndex: return instrumented(SelectByIndexFromElement.class, element, indexValue);
+            case ByValue: return new SelectByValueFromElement(element, values);
+            case ByVisibleText: return new SelectByVisibleTextFromElement(element, options);
+            case ByIndex: return new SelectByIndexFromElement(element, indexes);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }
 
     public Performable from(By... locators) {
         switch (strategy) {
-            case ByValue: return instrumented(SelectByValueFromBy.class, theValue, locators);
-            case ByVisibleText: return instrumented(SelectByVisibleTextFromBy.class, theText, locators);
-            case ByIndex: return instrumented(SelectByIndexFromBy.class, indexValue, locators);
+            case ByValue: return new SelectByValueFromBy(asList(values), locators);
+            case ByVisibleText: return new SelectByVisibleTextFromBy(asList(options), locators);
+            case ByIndex: return new SelectByIndexFromBy(asList(indexes), locators);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }

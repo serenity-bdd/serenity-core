@@ -7,8 +7,9 @@ import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
-import net.serenitybdd.screenplay.questions.WebDriverQuestion;
+import net.serenitybdd.screenplay.questions.*;
 import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.BankAccountEntry;
@@ -19,19 +20,27 @@ import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SerenityRunner.class)
 public class WhenDinaBrowsesTheWeb {
@@ -74,16 +83,46 @@ public class WhenDinaBrowsesTheWeb {
         );
     }
 
-    public static class TheProfileName implements Question<Boolean> {
+    public static class TheProfileName {
 
-        @Override
-        public Boolean answeredBy(Actor actor) {
-            return the(ProfilePage.NAME).answeredBy(actor).isCurrentlyVisible();
+        public static Question<Boolean> isDisplayed() {
+            return Visibility.of(ProfilePage.NAME);
         }
+    }
 
-        public static TheProfileName isDisplayed() {
-            return new TheProfileName();
-        }
+
+    @Test
+    public void dinaCanAskQuestionsAboutWebElements() {
+
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dina).has(openedTheApplication);
+
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
+
+        int nameLength = Value.of(ProfilePage.NAME).map(String::length).answeredBy(dina);
+        String firstLetter = Value.of(ProfilePage.NAME).map(value -> value.substring(0,1)).answeredBy(dina);
+
+        assertThat(nameLength, equalTo(4));
+        assertThat(firstLetter, equalTo("d"));
+    }
+
+    @Test
+    public void dinaCanAskQuestionsAboutCollectionsOfWebElements() {
+
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dina).has(openedTheApplication);
+
+        when(dina).attemptsTo(viewHerProfile);
+        and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
+
+        List<String> firstLetters = Value.ofEach(ProfilePage.NAME).mapEach(value -> value.substring(0,1)).answeredBy(dina);
+
+        assertThat(firstLetters, hasItems("d"));
     }
 
     @Test
@@ -103,6 +142,10 @@ public class WhenDinaBrowsesTheWeb {
         and(dina).should(seeThat(the(ProfilePage.NAME), isEnabled()));
         and(dina).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
         and(dina).should(seeThat(TheProfileName.isDisplayed()));
+        and(dina).should(seeThat(Visibility.of(ProfilePage.NAME)));
+        and(dina).should(seeThat(Presence.of(ProfilePage.NAME)));
+        assertThat(Visibility.of(ProfilePage.NAME).answeredBy(dina), is(true));
+        assertThat(Visibility.of(ProfilePage.NAME).answeredBy(dina), is(true));
     }
 
 
@@ -137,6 +180,48 @@ public class WhenDinaBrowsesTheWeb {
         assertThat(the(nameField).answeredBy(dina), isVisible());
     }
 
+    @Test
+    public void dinaCanWaitForTheStateOfTheWebPageUsingAnExpectedCondition() {
+
+        Target nameField = Target.the("nameField").locatedBy("#name");
+
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dina).has(openedTheApplication);
+
+        when(dina).attemptsTo(viewHerProfile);
+
+        and(dina).attemptsTo(
+                Wait.until(() -> theFileIsProcessed())
+                    .forNoMoreThan(Duration.ofSeconds(3))
+        );
+
+        assertThat(the(nameField).answeredBy(dina), isVisible());
+    }
+
+    private static boolean theFileIsProcessed() {
+        return true;
+    }
+
+    @Test
+    public void dinaCanWaitForTheStateOfTheWebPageUsingAnArbitraryCondition() {
+
+        Target nameField = Target.the("nameField").locatedBy("#name");
+
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dina).has(openedTheApplication);
+
+        when(dina).attemptsTo(viewHerProfile);
+
+        and(dina).attemptsTo(
+                Wait.until(() -> 1 + 1 == 2)
+        );
+
+        assertThat(the(nameField).answeredBy(dina), isVisible());
+    }
 
     ProfilePage profilePage;
 

@@ -4,6 +4,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class NamedUIStateReaderBuilder<T> extends UIStateReaderBuilder<T> {
     private String attributeName;
 

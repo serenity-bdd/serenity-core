@@ -8,6 +8,11 @@ import java.util.Arrays;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+/**
+ * Enter a value into a field, first waiting until the field is enabled, and then clearing the field of any current values,
+ * before entering the specified value.
+ * To perform the equivalent of Selenium `sendKeys()`, you can use `Enter.keyValue()` instead of `Enter.theValue()`
+ */
 public class Enter {
 
     private final CharSequence[] theText;

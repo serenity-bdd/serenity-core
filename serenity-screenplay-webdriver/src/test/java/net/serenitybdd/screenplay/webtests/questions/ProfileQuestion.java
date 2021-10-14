@@ -10,11 +10,8 @@ import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 public class ProfileQuestion implements Question<Customer> {
     @Override
     public Customer answeredBy(Actor actor) {
-        String name = Value.of(ProfilePage.NAME)
-                           .viewedBy(actor)
-                           .value();
-
-        String country = SelectedVisibleTextValue.of(ProfilePage.COUNTRY).viewedBy(actor).value();
+        String name = Value.of(ProfilePage.NAME).answeredBy(actor);
+        String country = SelectedVisibleTextValue.of(ProfilePage.COUNTRY).answeredBy(actor);
         return new Customer(name, country);
     }
 }

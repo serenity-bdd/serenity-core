@@ -19,6 +19,6 @@ public class TargetSelectOptions implements Question<List<String>> {
 
     @Override
     public List<String> answeredBy(Actor actor) {
-        return SelectOptions.of(target).viewedBy(actor).resolve();
+        return SelectOptions.of(target).answeredBy(actor);
     }
 }

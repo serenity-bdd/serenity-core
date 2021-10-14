@@ -4,9 +4,15 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
+
 public class Scroll {
 
-   public static ScrollToTarget to(Target target) {
+    public ScrollToTarget to(String cssOrXpathForElement) {
+        return instrumented(ScrollToTarget.class, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
+    }
+
+    public static ScrollToTarget to(Target target) {
        return new ScrollToTarget(target);
    }
 

@@ -8,6 +8,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,28 +28,28 @@ public class Text {
         return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
     }
 
-    public static Question<List<String>> ofEach(Target target) {
+    public static Question<Collection<String>> ofEach(Target target) {
         return actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(By byLocator) {
+    public static Question<Collection<String>> ofEach(By byLocator) {
         return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(String locator) {
+    public static Question<Collection<String>> ofEach(String locator) {
         return actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList());
     }
 
-    private static String matches(List<WebElementFacade> elements) {
+    private static String matches(Collection<WebElementFacade> elements) {
         return elements.stream()
                 .findFirst()
                 .map(WebElementState::getText)

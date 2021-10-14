@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,21 +34,21 @@ public class Attribute {
         return actor -> matches(BrowseTheWeb.as(actor).findAll(locator), attributeName);
     }
 
-    public static Question<List<String>> ofEach(Target target, String attributeName) {
+    public static Question<Collection<String>> ofEach(Target target, String attributeName) {
         return actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(By byLocator, String attributeName) {
+    public static Question<Collection<String>> ofEach(By byLocator, String attributeName) {
         return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))
                 .collect(Collectors.toList());
     }
 
-    public static Question<List<String>> ofEach(String locator, String attributeName) {
+    public static Question<Collection<String>> ofEach(String locator, String attributeName) {
         return actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))

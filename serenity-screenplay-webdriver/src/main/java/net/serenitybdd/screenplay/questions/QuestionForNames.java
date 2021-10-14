@@ -2,8 +2,8 @@ package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.screenplay.Question;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface QuestionForNames {
-    Question<List<String>> named(String name);
+    Question<Collection<String>> named(String name);
 }

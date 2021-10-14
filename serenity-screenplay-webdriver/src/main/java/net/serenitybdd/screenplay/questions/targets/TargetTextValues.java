@@ -6,12 +6,13 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.questions.Attribute;
 import net.serenitybdd.screenplay.targets.Target;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Subject("#target")
-public class TargetTextValues implements Question<List<String>> {
+public class TargetTextValues implements Question<Collection<String>> {
 
     private final Target target;
     private final Function<String, String> renderElement;
@@ -34,8 +35,8 @@ public class TargetTextValues implements Question<List<String>> {
     }
 
     @Override
-    public List<String> answeredBy(Actor actor) {
-        List<String> textValues = Attribute.ofEach(target)
+    public Collection<String> answeredBy(Actor actor) {
+        Collection<String> textValues = Attribute.ofEach(target)
                                             .named("innerText")
                                             .answeredBy(actor);
 

@@ -3,56 +3,54 @@ package net.serenitybdd.reports.model
 import net.thucydides.core.model.TestOutcome
 import java.time.Duration
 import java.time.Duration.ofMillis
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-fun maxDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
-//        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> maxDurationOf(outcome) }.maxOrNull()!!
-        if (outcomes.isEmpty()) 0 else outcomes.maxOf { outcome -> maxDurationOf(outcome)!! }
-);
+fun maxDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
+    if (outcomes.isEmpty()) 0 else outcomes.maxOf { outcome -> maxDurationOf(outcome)!! }
+)
 
-fun minDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
-//        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> minDurationOf(outcome) }.minOrNull()!!
+fun minDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
     if (outcomes.isEmpty()) 0 else outcomes.minOf { outcome -> minDurationOf(outcome)!! }
-);
+)
 
 fun totalDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.sumOf { outcome -> outcome.duration }
+    if (outcomes.isEmpty()) 0 else outcomes.sumOf { outcome -> outcome.duration }
 )
 
 fun maxDurationOf(outcome: TestOutcome) =
-        if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
-            outcome.testSteps.maxOfOrNull { step -> step.duration }
-//            outcome.testSteps.map { step -> step.duration }.maxOrNull()!!
-        } else {
-            outcome.duration
-        }
+    if (outcome.isDataDriven && outcome.testSteps.isNotEmpty()) {
+        outcome.testSteps.maxOfOrNull { step -> step.duration }
+    } else {
+        outcome.duration
+    }
 
 fun minDurationOf(outcome: TestOutcome) =
-        if (outcome.isDataDriven && !outcome.testSteps.isEmpty()) {
-            outcome.testSteps.minOfOrNull { step -> step.duration }
-//            outcome.testSteps.map { step -> step.duration }.minOrNull()!!
-        } else {
-            outcome.duration
-        }
+    if (outcome.isDataDriven && outcome.testSteps.isNotEmpty()) {
+        outcome.testSteps.minOfOrNull { step -> step.duration }
+    } else {
+        outcome.duration
+    }
 
 fun clockDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty())
-            0
-        else {
-            startToFinishTimeIn(outcomes)
-        }
+    if (outcomes.isEmpty())
+        0
+    else {
+        startToFinishTimeIn(outcomes)
+    }
 )
 
-private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
-    val minStartTime = outcomes.filter { outcome -> outcome.startTime != null }
+fun startTimeOf(outcomes: List<TestOutcome>): ZonedDateTime? =
+    outcomes.filter { outcome -> outcome.startTime != null }
         .minOfOrNull { outcome -> outcome.startTime }
-//            .map { outcome -> outcome.startTime }
-//            .minOrNull()
 
-    val maxEndTime = outcomes.filter { outcome -> outcome.startTime != null }
-        .maxOfOrNull { outcome -> outcome.startTime }
-//            .map { outcome -> outcome.endTime }
-//            .maxOrNull();
+fun endTimeOf(outcomes: List<TestOutcome>): ZonedDateTime? =
+    outcomes.filter { outcome -> outcome.startTime != null }
+        .maxOfOrNull { outcome -> outcome.startTime.plus(ofMillis(outcome.duration)) }
+
+private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
+    val minStartTime = startTimeOf(outcomes)
+    val maxEndTime = endTimeOf(outcomes)
 
     return if ((minStartTime != null) && (maxEndTime != null))
         ChronoUnit.MILLIS.between(minStartTime, maxEndTime)
@@ -60,7 +58,7 @@ private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
 }
 
 fun averageDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average().toLong()
+    if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average().toLong()
 )
 
 fun formattedDuration(duration: Duration): String {
@@ -72,10 +70,10 @@ fun formattedDuration(duration: Duration): String {
     val durationInMilliseconds = "" + duration.toMillis() + "ms"
 
     val durationForSlowTests =
-            (if (days > 0) "" + days + "d " else "") +
-            (if (hours > 0) " " + hours + "h " else "") +
-            (if (minutes > 0) " " + minutes + "m " else "") +
-            (if (seconds > 0) " " + seconds + "s " else "0s ").trim()
+        (if (days > 0) "" + days + "d " else "") +
+                (if (hours > 0) " " + hours + "h " else "") +
+                (if (minutes > 0) " " + minutes + "m " else "") +
+                (if (seconds > 0) " " + seconds + "s " else "0s ").trim()
 
     return if (duration.toMillis() < 1000L) durationInMilliseconds else durationForSlowTests
 }

@@ -19,7 +19,7 @@ public class SimpleDataDrivenTestScenarioWithValueSource {
 
     @ParameterizedTest(name = "run {index} with {arguments}")
     @ValueSource(strings = { "Hello", "JUnit" })
-    public void withValueSource(String word) {
+    void withValueSource(String word) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
         assertNotNull(word);
@@ -27,16 +27,8 @@ public class SimpleDataDrivenTestScenarioWithValueSource {
 
     @ParameterizedTest
     @ValueSource(ints = { 1,2,3 })
-    public void withValueSourceIntegers(int number) {
+    void withValueSourceIntegers(int number) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
     }
-
-    /*@Test
-    @ValueSource(strings = { "Hello", "JUnit" })
-    public void happy_day_scenario() {
-        steps.stepWithParameters(option1, option2);
-        steps.stepThatSucceeds();
-        steps.anotherStepThatSucceeds();
-    } */
 }

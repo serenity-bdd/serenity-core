@@ -22,7 +22,7 @@ public class SimpleDataDrivenTestScenarioWithMethodSource {
 
     @ParameterizedTest(name = "run {index} with {arguments}")
     @MethodSource("stringProvider")
-    public void withMethodSourceSimpleStatic(String string1,String string2) {
+    void withMethodSourceSimpleStatic(String string1,String string2) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
     }

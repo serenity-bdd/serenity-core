@@ -20,7 +20,7 @@ public class SimpleDataDrivenTestScenarioWithMethodSourceExternal {
 
     @ParameterizedTest(name = "run {index} with {arguments}")
     @MethodSource("net.serenitybdd.junit5.datadriven.samples.ExternalParametersProvider#stringProvider")
-    public void withMethodSourceSimpleStatic(String string1,String string2) {
+    void withMethodSourceSimpleStatic(String string1,String string2) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
     }

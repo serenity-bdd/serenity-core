@@ -20,7 +20,7 @@ public class SimpleDataDrivenTestScenarioWithMethodSourceNoName {
 
     @ParameterizedTest(name = "run {index} with {arguments}")
     @MethodSource
-    public void withMethodSourceSimpleStaticNoName(String string1,String string2) {
+    void withMethodSourceSimpleStaticNoName(String string1,String string2) {
         steps.stepThatSucceeds();
         steps.anotherStepThatSucceeds();
     }

@@ -133,7 +133,7 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     List<Method> findTestDataMethods() {
-        return Arrays.asList(testClass.getMethods()).stream().filter(this::findParameterizedTests).collect(Collectors.toList());
+        return Arrays.asList(testClass.getDeclaredMethods()).stream().filter(this::findParameterizedTests).collect(Collectors.toList());
     }
 
     String createColumnNamesFromParameterNames(Method method) {

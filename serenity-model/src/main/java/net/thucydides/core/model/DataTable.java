@@ -128,7 +128,7 @@ public class DataTable {
     }
 
     public void updateLineNumbers(Map<Integer, Integer> lineNumbersOfEachRow) {
-        lineNumbersForEachRow().putAll(withLineNumbersIncrementedBy(lineNumbersOfEachRow.size() - 1,lineNumbersOfEachRow));
+        lineNumbersForEachRow().putAll(withLineNumbersIncrementedBy(lineNumbersOfEachRow.size() - 1, lineNumbersOfEachRow));
     }
 
     private Map<Integer, Integer> lineNumbersForEachRow() {
@@ -142,7 +142,7 @@ public class DataTable {
         return lineNumbersOfEachRow.entrySet()
                 .stream()
                 .collect(toMap(entry -> entry.getKey() + startRow,
-                               Map.Entry::getValue));
+                        Map.Entry::getValue));
     }
 
     public void addRow(List<?> data) {
@@ -515,23 +515,39 @@ public class DataTable {
 
         public Map<String, String> toStringMap() {
             Map<String, String> rowData = new HashMap();
-            int i = 0;
-            for (Object value : dataTable.rows.get(rowNumber).getValues()) {
-                rowData.put(dataTable.headers.get(i), value.toString());
-                i++;
+            // Empty line at the end of a text table
+            if (rowNumber >= dataTable.rows.size()) {
+                return rowData;
             }
 
+            int column = 0;
+            for (Object value : dataTable.rows.get(rowNumber).getValues()) {
+                headerForColumn(column++).ifPresent(
+                        heading -> rowData.put(heading, value.toString())
+                );
+            }
             return rowData;
+        }
 
+        private Optional<String> headerForColumn(int column) {
+            if (column < dataTable.headers.size()) {
+                return Optional.of(dataTable.headers.get(column));
+            } else {
+                return Optional.empty();
+            }
         }
 
     }
 
     public String restoreVariablesIn(String stepDescription) {
-        for (int column = 0; column < getHeaders().size(); column++) {
-            String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
-            if (isNotEmpty(correspondingValueInFirstRow)) {
-                stepDescription = stepDescription.replaceAll("\\b" + withEscapedRegExChars(correspondingValueInFirstRow) + "\\b", "{{" + column + "}}");
+        if (!getRows().isEmpty()) {
+            for (int column = 0; column < getHeaders().size(); column++) {
+                if (getRows().get(0).getStringValues().size() > column) {
+                    String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
+                    if (isNotEmpty(correspondingValueInFirstRow)) {
+                        stepDescription = stepDescription.replaceAll("\\b" + withEscapedRegExChars(correspondingValueInFirstRow) + "\\b", "{{" + column + "}}");
+                    }
+                }
             }
         }
 

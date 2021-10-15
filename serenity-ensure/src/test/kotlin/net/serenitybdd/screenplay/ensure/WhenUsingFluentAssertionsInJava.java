@@ -1,31 +1,21 @@
 package net.serenitybdd.screenplay.ensure;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.ensure.web.ElementsLocated;
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation;
-import net.serenitybdd.screenplay.ensure.web.TheMatchingElement;
-import net.serenitybdd.screenplay.questions.NamedPredicate;
-import net.serenitybdd.screenplay.questions.Text;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith(SerenityRunner.class)
@@ -149,7 +139,7 @@ public class WhenUsingFluentAssertionsInJava {
         );
     }
 
-    static enum Color {RED, GREEN, BLUE}
+    enum Color {RED, BLUE}
 
     @Test
     public void weCanCompareEnums() {
@@ -223,7 +213,7 @@ public class WhenUsingFluentAssertionsInJava {
 //            = GivenWhenThen.returnsAValueThat("is a primary color",
 //                                              color -> (color == "red") || (color == "green") || (color == "blue"));
 
-    private static final  NamedExpectation<String> IS_A_PRIMARY_COLOR
+    private static final NamedExpectation<String> IS_A_PRIMARY_COLOR
             = new NamedExpectation<>("is a primary color",
                                    color -> (color.equals("red")) || (color.equals("green")) || (color.equals("blue")));
 

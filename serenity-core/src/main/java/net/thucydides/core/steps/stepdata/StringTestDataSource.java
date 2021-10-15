@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Test data from a set of Strings.
@@ -46,10 +47,19 @@ public class StringTestDataSource implements TestDataSource {
         return loadTestDataFrom(getRows());
     }
 
-    private List<List<String>> getRows() {
+    public List<List<String>> getRows() {
         List<List<String>> expandedRows = new ArrayList<>();
         for (String row : rows) {
-           expandedRows.add(Splitter.on(separator).splitToList(row));
+           expandedRows.add(Splitter.on(separator).trimResults().splitToList(row));
+        }
+        return expandedRows;
+    }
+
+    public List<List<Object>> getRowsOfObjects() {
+        List<List<Object>> expandedRows = new ArrayList<>();
+        for (String row : rows) {
+            List<Object> rowData = new ArrayList<>(Splitter.on(separator).trimResults().splitToList(row));
+            expandedRows.add(rowData);
         }
         return expandedRows;
     }
@@ -94,7 +104,7 @@ public class StringTestDataSource implements TestDataSource {
     }
 
     @Override
-    public TestDataSource separatedBy(char newSeparator) {
+    public StringTestDataSource separatedBy(char newSeparator) {
         this.separator = newSeparator;
         return this;
     }

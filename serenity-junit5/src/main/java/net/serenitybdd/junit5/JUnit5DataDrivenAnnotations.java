@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
+import net.thucydides.core.steps.stepdata.StringTestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +95,33 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     private void fillDataTablesFromCsvSource(Map<String, DataTable> dataTables, Method testDataMethod) {
+        CsvSource csvSource = ((CsvSource)testDataMethod.getAnnotation(CsvSource.class));
+        if (csvSource.textBlock() != null && !csvSource.textBlock().isEmpty()) {
+            fillDataTablesFromCsvSourceTextBlock(dataTables, testDataMethod);
+        } else {
+            fillDataTablesFromCsvSourceValues(dataTables,testDataMethod);
+        }
+    }
+
+    private void fillDataTablesFromCsvSourceTextBlock(Map<String, DataTable> dataTables, Method testDataMethod) {
+        CsvSource csvSource = testDataMethod.getAnnotation(CsvSource.class);
+        String deliminator = ",";
+        if (csvSource.delimiterString() != null) {
+            deliminator = csvSource.delimiterString();
+        } else if (csvSource.delimiter() != 0) {
+            deliminator = String.valueOf(csvSource.delimiter());
+        }
+        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
+        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+
+        String testData = csvSource.textBlock();
+
+        List<List<Object>> rows = new StringTestDataSource(testData.split("\\R")).separatedBy(deliminator.charAt(0)).getRowsOfObjects();
+        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + rows);
+        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, rows));
+    }
+
+    private void fillDataTablesFromCsvSourceValues(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfCsvObjectsFrom(testDataMethod);
@@ -264,7 +292,7 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     private List<List<Object>> listOfObjectsFrom(Object[] parameters) {
-        return Arrays.asList(parameters).stream().map(parameter->Arrays.asList(parameter)).collect(Collectors.toList());
+        return Arrays.stream(parameters).map(Arrays::asList).collect(Collectors.toList());
     }
 
 

@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static net.serenitybdd.screenplay.ensure.web.TheMatchingElement.containsText;
+import static net.serenitybdd.screenplay.ensure.web.AnElementThat.containsText;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith(SerenityRunner.class)

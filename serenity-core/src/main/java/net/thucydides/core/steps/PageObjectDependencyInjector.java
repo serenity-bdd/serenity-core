@@ -23,8 +23,6 @@ import static net.serenitybdd.core.Serenity.getStepFactory;
 
 public class PageObjectDependencyInjector implements DependencyInjector {
 
-//    private final Pages pages;
-
     EnvironmentDependencyInjector environmentDependencyInjector;
     Configuration configuration;
 

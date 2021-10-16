@@ -594,13 +594,15 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     @Override
     protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
 
+//  This might work too:
+//        Serenity.initialize(test);
         if (webtestsAreSupported()) {
             injectDriverInto(test);
             initPagesObjectUsing(driverFor(method));
             injectAnnotatedPagesObjectInto(test);
             initStepFactoryUsing(getPages());
         }
-
+        Serenity.injectDependenciesInto(test);
         injectScenarioStepsInto(test);
         injectEnvironmentVariablesInto(test);
         useStepFactoryForDataDrivenSteps();

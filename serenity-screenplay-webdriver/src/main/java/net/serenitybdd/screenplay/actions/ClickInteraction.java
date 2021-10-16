@@ -1,4 +1,6 @@
-package net.serenitybdd.screenplay;
+package net.serenitybdd.screenplay.actions;
+
+import net.serenitybdd.screenplay.Performable;
 
 public interface ClickInteraction extends Performable {
     /**

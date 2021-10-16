@@ -63,7 +63,7 @@ public class Serenity {
         injectDependenciesInto(testCase);
     }
 
-    private static void injectDependenciesInto(Object testCase) {
+    public static void injectDependenciesInto(Object testCase) {
         for (DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.injectDependenciesInto(testCase);
         }

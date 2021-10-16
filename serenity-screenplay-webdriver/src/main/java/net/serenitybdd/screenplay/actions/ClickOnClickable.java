@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.ClickStrategy;
-import net.serenitybdd.screenplay.ClickInteraction;
 
 import static net.serenitybdd.core.pages.ClickStrategy.*;
 

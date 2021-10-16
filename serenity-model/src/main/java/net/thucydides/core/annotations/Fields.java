@@ -75,13 +75,13 @@ public class Fields {
                 .findFirst();
     }
 
-    public Set<Field> fieldsAnnotatedBy(Class<? extends Annotation> annotationClass) {
+    public List<Field> fieldsAnnotatedBy(Class<? extends Annotation> annotationClass) {
         return allFields()
                 .stream()
                 .filter(
                       field -> field.getAnnotation(annotationClass) != null
                 )
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public static FieldValueBuilder of(Object object) {

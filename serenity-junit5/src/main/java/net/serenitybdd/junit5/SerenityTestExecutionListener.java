@@ -119,6 +119,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         } else {
             generateReports();
         }
+        baseStepListener.clearTestOutcomes();
     }
 
     @Override

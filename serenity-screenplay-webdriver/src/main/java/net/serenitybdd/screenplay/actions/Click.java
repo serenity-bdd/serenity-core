@@ -2,8 +2,6 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.ClickInteraction;
-import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 

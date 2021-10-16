@@ -231,7 +231,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     logger.trace("-->EventBus.useExamplesFrom" + dataTable);
                     logger.trace("-->EventBus.exampleStarted " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
+                    StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap(), "Example #" + parameterSetNumber);
                 }
             }
         }

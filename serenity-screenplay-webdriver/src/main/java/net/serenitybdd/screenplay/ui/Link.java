@@ -4,7 +4,10 @@ import net.serenitybdd.screenplay.targets.Target;
 
 public class Link {
 
-    private final static String BY_LINK_TEXT = ".//a[translate(normalize-space(.),\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=translate(\"{0}\",\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")]";
+    private final static String[] BY_LINK_TEXT_OR_CLASS = {
+            ".//a[translate(normalize-space(.),\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=translate(\"{0}\",\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")]",
+            "css:a[id='{0}'],a[data-test='{0}'],a.{0}"
+    };
     private final static String BY_PARTIAL_LINK_TEXT = ".//a[contains(translate(normalize-space(.),\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\"),translate(\"{0}\",\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\"))]";
     private final static String BY_LINK_TITLE = "css:a[title='{0}' i]";
 
@@ -12,7 +15,7 @@ public class Link {
      * Locate a link element with a given name.
      */
     public static Target called(String name) {
-        return Target.the("the '" + name + "' link").locatedByFirstMatching(BY_LINK_TEXT).of(name);
+        return Target.the("the '" + name + "' link").locatedByFirstMatching(BY_LINK_TEXT_OR_CLASS).of(name);
     }
 
     /**

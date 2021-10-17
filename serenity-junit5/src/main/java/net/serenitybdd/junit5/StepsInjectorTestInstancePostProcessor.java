@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5;
 
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -11,5 +12,6 @@ public class StepsInjectorTestInstancePostProcessor implements TestInstancePostP
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
         StepFactory stepFactory =  StepFactory.getFactory();
         StepAnnotations.injector().injectScenarioStepsInto(testInstance, stepFactory);
+        Serenity.injectDependenciesInto(testInstance);
     }
 }

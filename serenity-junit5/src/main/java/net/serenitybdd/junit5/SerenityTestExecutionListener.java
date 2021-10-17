@@ -117,7 +117,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         } else {
             generateReports();
         }
-        baseStepListener.clearTestOutcomes();
     }
 
     @Override
@@ -232,14 +231,17 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     logger.trace("-->EventBus.useExamplesFrom" + dataTable);
                     logger.trace("-->EventBus.exampleStarted " +  parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap(), "Example #" + parameterSetNumber);
+                    StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
+                    //StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap(),"Example #" + parameterSetNumber);
                 }
             }
         }
     }
 
     private boolean hasToClearPreviousTestOutcomes(TestIdentifier testIdentifier) {
-         return (testIdentifier.getClass().getAnnotation(Nested.class) != null);
+         return true;
+         //TOOD find out if is necessary to clean all test outcomes
+         //return (testIdentifier.getClass().getAnnotation(Nested.class) != null);
     }
 
     private boolean isTestContainer(TestIdentifier testIdentifier) {

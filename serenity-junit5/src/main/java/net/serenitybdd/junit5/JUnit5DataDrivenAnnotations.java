@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -115,8 +116,7 @@ public class JUnit5DataDrivenAnnotations {
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
 
         String testData = csvSource.textBlock();
-
-        List<List<Object>> rows = new StringTestDataSource(testData.split("\\R")).separatedBy(deliminator.charAt(0)).getRowsOfObjects();
+        List<List<Object>> rows = listOfCsvObjectsFrom(testData.split("\\R"),deliminator);
         logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + rows);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, rows));
     }
@@ -258,7 +258,7 @@ public class JUnit5DataDrivenAnnotations {
     private List<List<Object>> listOfCsvObjectsFrom(Object[] parameters,String delimiter) {
         List<List<Object>> ret = new ArrayList<>();
         for(Object parameter : parameters) {
-            String[] split = ((String) parameter).split(delimiter);
+            String[] split = ((String) parameter).split(Pattern.quote(delimiter));
             ret.add(Arrays.asList(split));
         }
         return ret;

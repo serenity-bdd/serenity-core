@@ -20,7 +20,7 @@ public class SelectedVisibleTextValue {
     }
 
     public static Question<String> of(By byLocator) {
-        return Question.about("selected option of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("selected option of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<String> of(String locator) {
@@ -35,7 +35,7 @@ public class SelectedVisibleTextValue {
     }
 
     public static Question<Collection<String>> ofEach(By byLocator) {
-        return Question.about("selected options of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("selected options of element located by " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList()));

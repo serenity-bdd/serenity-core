@@ -10,8 +10,8 @@ public class StepsInjectorTestInstancePostProcessor implements TestInstancePostP
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
-        StepFactory stepFactory =  StepFactory.getFactory();
-        StepAnnotations.injector().injectScenarioStepsInto(testInstance, stepFactory);
-        Serenity.injectDependenciesInto(testInstance);
+//        StepFactory stepFactory =  StepFactory.getFactory();
+//        StepAnnotations.injector().injectScenarioStepsInto(testInstance, stepFactory);
+        Serenity.initialize(testInstance);
     }
 }

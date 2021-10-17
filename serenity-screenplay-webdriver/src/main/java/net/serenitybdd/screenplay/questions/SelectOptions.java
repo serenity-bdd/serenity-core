@@ -20,7 +20,7 @@ public class SelectOptions {
     }
 
     public static Question<List<String>> of(By byLocator) {
-        return Question.about("options of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("options of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<List<String>> of(String locator) {

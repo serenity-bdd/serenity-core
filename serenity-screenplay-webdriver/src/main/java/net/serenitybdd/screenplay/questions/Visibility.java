@@ -15,36 +15,36 @@ import static java.util.Collections.singletonList;
 public class Visibility {
 
     public static Question<Boolean> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return Question.about("visibility of " + target.getName()).answeredBy(actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<Boolean> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return Question.about("visibility of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Boolean> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return Question.about("visibility of " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<List<Boolean>> ofEach(Target target) {
-        return actor -> target.resolveAllFor(actor)
+        return Question.about("visibility of each " + target.getName()).answeredBy(actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Boolean>> ofEach(By byLocator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("visibility of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Boolean>> ofEach(String locator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+        return Question.about("visibility of each" + locator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private static boolean matches(List<WebElementFacade> elements) {

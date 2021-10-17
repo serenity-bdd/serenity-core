@@ -310,12 +310,27 @@ class WhenReadingUIValues extends Specification {
             SelectedStatus.of(target).answeredBy(actor)
     }
 
+    def "should see if unselected"() {
+        when:
+            element.isSelected() >> false
+        then:
+            UnselectedStatus.of(target).answeredBy(actor)
+    }
+
     def "should see if multiple fields are selected"() {
+        when:
+        element.isSelected() >> true
+        element2.isSelected() >> false
+        then:
+        SelectedStatus.ofEach(target).answeredBy(actor) == [true, false]
+    }
+
+    def "should see if multiple fields are not selected"() {
         when:
             element.isSelected() >> true
             element2.isSelected() >> false
         then:
-            SelectedStatus.ofEach(target).answeredBy(actor) == [true, false]
+            UnselectedStatus.ofEach(target).answeredBy(actor) == [false, true]
     }
 
     def "should see if multiple elements enabled"() {

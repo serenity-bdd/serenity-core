@@ -16,36 +16,36 @@ import static java.util.Collections.singletonList;
 public class SelectOptions {
 
     public static Question<List<String>> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return Question.about("options of " + target.getName()).answeredBy(actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<List<String>> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return Question.about("options of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<List<String>> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return Question.about("options of " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<List<List<String>>> ofEach(Target target) {
-        return actor -> target.resolveAllFor(actor)
+        return Question.about("options of each " + target.getName()).answeredBy(actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<List<String>>> ofEach(By byLocator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("options of each " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<List<String>>> ofEach(String locator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+        return Question.about("options of each " + locator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private static List<String> matches(List<WebElementFacade> elements) {

@@ -11,40 +11,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
+import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
+import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
 public class SelectedStatus {
 
     public static Question<Boolean> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return answer(target.getName() + " is selected", actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<Boolean> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return answer(byLocator + " is selected", actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Boolean> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return answer(locator + " is selected", actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<List<Boolean>> ofEach(Target target) {
-        return actor -> target.resolveAllFor(actor)
+        return answerEach(target.getName() + " are selected", actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Boolean>> ofEach(By byLocator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return answerEach(byLocator + " are selected", actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Boolean>> ofEach(String locator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+        return  answerEach(locator + " are selected", actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private static boolean matches(List<WebElementFacade> elements) {

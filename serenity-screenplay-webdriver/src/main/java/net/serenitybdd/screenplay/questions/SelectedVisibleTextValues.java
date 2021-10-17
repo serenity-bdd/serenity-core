@@ -13,15 +13,15 @@ import java.util.List;
 public class SelectedVisibleTextValues {
 
     public static Question<List<String>> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return Question.about("selected value of " + target.getName()).answeredBy(actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<List<String>> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return Question.about("selected value of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<List<String>> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return Question.about("selected value of " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     private static List<String> matches(List<WebElementFacade> elements) {

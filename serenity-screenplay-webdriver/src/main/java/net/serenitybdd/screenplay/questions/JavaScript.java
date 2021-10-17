@@ -27,7 +27,7 @@ public class JavaScript extends UIState<String> {
 
     public static final class JavaScriptBuilder {
         private final String expression;
-        private Object[] parameters = new Object[]{};
+        private Object[] parameters;
 
         public JavaScriptBuilder(String expression, Object... parameters) {
             this.expression = expression;

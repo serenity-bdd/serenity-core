@@ -11,19 +11,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
+import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 
 public class Absence {
 
+    private static Question<Boolean> namedQuestion(String label, Question<Boolean> questionToAsk) {
+        return Question.about(label).answeredBy(questionToAsk);
+    }
+
     public static Question<Boolean> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return answer(target.getName() + " is not present for", actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<Boolean> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return answer(byLocator + " is not present for", actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Boolean> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return answer(locator + " is not present for", actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
 

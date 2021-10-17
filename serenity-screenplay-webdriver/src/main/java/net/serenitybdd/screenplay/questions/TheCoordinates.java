@@ -16,36 +16,39 @@ import static java.util.Collections.singletonList;
 public class TheCoordinates {
 
     public static Question<Coordinates> of(Target target) {
-        return actor -> matches(target.resolveAllFor(actor));
+        return Question.about("coordinates of " + target.getName()).answeredBy(actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<Coordinates> of(By byLocator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator));
+        return Question.about("coordinates of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Coordinates> of(String locator) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator));
+        return Question.about("coordinates of " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<List<Coordinates>> ofEach(Target target) {
-        return actor -> target.resolveAllFor(actor)
+        return Question.about("coordinates of each of " + target.getName()).answeredBy(
+                actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Coordinates>> ofEach(By byLocator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("coordinates of each of " + byLocator).answeredBy(
+                actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<List<Coordinates>> ofEach(String locator) {
-        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+        return Question.about("coordinates of each of " + locator)
+                .answeredBy(actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     private static Coordinates matches(List<WebElementFacade> elements) {

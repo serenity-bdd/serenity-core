@@ -14,45 +14,43 @@ import static java.util.Collections.singletonList;
 
 public class Attribute {
 
-    private String cssAttributeName;
-    private Target target;
-
-    public Attribute(Target target, String attributeName) {
-        this.target = target;
-        this.cssAttributeName = attributeName;
-    }
-
     public static Question<String> of(Target target, String attributeName) {
-        return actor -> matches(target.resolveAllFor(actor), attributeName);
+        return Question.about(attributeName +" attribute of " + target.getName())
+                .answeredBy(actor -> matches(target.resolveAllFor(actor), attributeName));
     }
 
     public static Question<String> of(By byLocator, String attributeName) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator), attributeName);
+        return Question.about(attributeName + " attribute of " + attributeName)
+                .answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator), attributeName));
     }
 
     public static Question<String> of(String locator, String attributeName) {
-        return actor -> matches(BrowseTheWeb.as(actor).findAll(locator), attributeName);
+        return Question.about(attributeName + " attribute of " + locator)
+                .answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator), attributeName));
     }
 
     public static Question<Collection<String>> ofEach(Target target, String attributeName) {
-        return actor -> target.resolveAllFor(actor)
+        return Question.about(attributeName +" attribute of each " + target.getName())
+                .answeredBy(actor -> target.resolveAllFor(actor)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<Collection<String>> ofEach(By byLocator, String attributeName) {
-        return actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about(attributeName +" attribute of each " + byLocator)
+                .answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static Question<Collection<String>> ofEach(String locator, String attributeName) {
-        return actor -> BrowseTheWeb.as(actor).findAll(locator)
+        return Question.about(attributeName +" attribute of each " + locator)
+                .answeredBy(actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element), attributeName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public static QuestionForName of(Target target) {

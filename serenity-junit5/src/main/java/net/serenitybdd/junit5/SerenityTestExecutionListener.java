@@ -117,6 +117,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         } else {
             generateReports();
         }
+        baseStepListener.clearTestOutcomes();
     }
 
     @Override
@@ -258,7 +259,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
          *             StepEventBus.getEventBus().testSuiteFinished();
          */
         if(isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
-            logger.info("-->TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
+            logger.info("-->EventBus.TestSuiteFinished " + ((ClassSource)testIdentifier.getSource().get()).getJavaClass() );
             StepEventBus.getEventBus().testSuiteFinished();
             generateReportsForTest();
         }

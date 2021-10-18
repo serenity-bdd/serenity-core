@@ -6,19 +6,23 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.annotations.CastMember;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
+/**
+ * Injects actors into the test, and gives them browsers where appropriate.
+ */
 public class WebCapableActorInjector implements DependencyInjector {
     @Override
     public void injectDependenciesInto(Object object) {
-        List<Field> actorFields = Fields.of(object.getClass()).fieldsAnnotatedBy(CastMember.class);
-        actorFields.forEach(field -> injectActor(field, object));
+        Fields.of(object.getClass())
+                .fieldsAnnotatedBy(CastMember.class)
+                .forEach(field -> injectActor(field, object));
     }
 
     private void injectActor(Field field, Object object) {
@@ -31,7 +35,7 @@ public class WebCapableActorInjector implements DependencyInjector {
 
         try {
             browserFor(object, castMember).ifPresent(
-                browser -> actor.can(BrowseTheWeb.with(browser))
+                    browser -> actor.can(BrowseTheWeb.with(browser))
             );
             field.setAccessible(true);
             field.set(object, actor);
@@ -42,17 +46,44 @@ public class WebCapableActorInjector implements DependencyInjector {
 
     private Optional<WebDriver> browserFor(Object object, CastMember castMember) throws IllegalAccessException {
         List<Field> browserFields = Fields.of(object.getClass()).fieldsAnnotatedBy(Managed.class);
-        if (browserFields.isEmpty()) {
+
+        //
+        // If the actor doesn't want a browser, don't give them one.
+        //
+        if (!castMember.withAssignedBrowser()) {
             return Optional.empty();
         }
-        String browserName = castMember.browser();
-        if (browserName.isEmpty()) {
-            return Optional.of(driverInField(browserFields.get(0), object));
+
+        //
+        // If no browser field name is specified, we give the actor his or her own browser
+        //
+        if (castMember.browserField().isEmpty()) {
+            return Optional.of(driverFor(castMember));
         }
 
+        //
+        // If the browser field name is specified, it must match a @Managed-annotated field in the class
+        //
+        Field matchingBrowserField = browserFieldCalled(browserFields, castMember.browserField(), object)
+                .orElseThrow(() -> new IllegalArgumentException("Could not instantiate the actor " + castMember.name() + ": the browserField attribute was specified but no @Managed field called '" +  castMember.browserField() + "' was found in this class."));
+
+        return Optional.of(driverInField(matchingBrowserField, object));
+
+    }
+
+    private WebDriver driverFor(CastMember castMember) {
+        if (castMember.driver().isEmpty()) {
+            return ThucydidesWebDriverSupport.getWebdriverManager().getWebdriverByName(castMember.name());
+        } else {
+            return ThucydidesWebDriverSupport.getWebdriverManager()
+                    .withOptions(castMember.options())
+                    .getWebdriverByName(castMember.name(), castMember.driver());
+        }
+    }
+
+    private Optional<Field> browserFieldCalled(List<Field> browserFields, String browserFieldName, Object object) {
         return browserFields.stream()
-                .filter(field -> field.getName().equals(browserName))
-                .map(field -> driverInField(field, object))
+                .filter(field -> field.getName().equals(browserFieldName))
                 .findFirst();
     }
 

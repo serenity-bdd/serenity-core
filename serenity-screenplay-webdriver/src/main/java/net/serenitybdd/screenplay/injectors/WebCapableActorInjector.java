@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.annotations.CastMember;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -72,13 +73,19 @@ public class WebCapableActorInjector implements DependencyInjector {
     }
 
     private WebDriver driverFor(CastMember castMember) {
+        WebDriver driver;
         if (castMember.driver().isEmpty()) {
-            return ThucydidesWebDriverSupport.getWebdriverManager().getWebdriverByName(castMember.name());
+            driver = ThucydidesWebDriverSupport.getWebdriverManager().getWebdriverByName(castMember.name());
         } else {
-            return ThucydidesWebDriverSupport.getWebdriverManager()
+            driver = ThucydidesWebDriverSupport.getWebdriverManager()
                     .withOptions(castMember.options())
                     .getWebdriverByName(castMember.name(), castMember.driver());
         }
+        if (driver instanceof WebDriverFacade) {
+            ((WebDriverFacade) driver).reset();
+        }
+
+        return driver;
     }
 
     private Optional<Field> browserFieldCalled(List<Field> browserFields, String browserFieldName, Object object) {

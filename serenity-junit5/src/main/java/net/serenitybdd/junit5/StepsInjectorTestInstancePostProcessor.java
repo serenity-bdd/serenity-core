@@ -10,6 +10,9 @@ public class StepsInjectorTestInstancePostProcessor implements TestInstancePostP
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
-        Serenity.initialize(testInstance);
+        Serenity.injectDriverInto(testInstance);
+        Serenity.injectAnnotatedPagesObjectInto(testInstance);
+        Serenity.injectScenarioStepsInto(testInstance);
+        Serenity.injectDependenciesInto(testInstance);
     }
 }

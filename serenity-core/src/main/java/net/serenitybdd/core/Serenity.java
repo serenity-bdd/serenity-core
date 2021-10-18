@@ -130,7 +130,7 @@ public class Serenity {
      *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    protected static void injectDriverInto(final Object testCase) {
+    public static void injectDriverInto(final Object testCase) {
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(ThucydidesWebDriverSupport.getDriver(),
                 ThucydidesWebDriverSupport.getWebdriverManager());
 
@@ -150,7 +150,7 @@ public class Serenity {
      *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    protected static void injectAnnotatedPagesObjectInto(final Object testCase) {
+    public static void injectAnnotatedPagesObjectInto(final Object testCase) {
         StepAnnotations.injector().injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
     }
 

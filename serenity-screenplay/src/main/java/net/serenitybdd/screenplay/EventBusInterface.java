@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
@@ -31,7 +32,9 @@ public class EventBusInterface {
     }
 
     public void updateOverallResult() {
-        StepEventBus.getEventBus().updateOverallResults();
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            StepEventBus.getEventBus().updateOverallResults();
+        }
     }
 
     public void startQuestion(String title) {
@@ -56,9 +59,14 @@ public class EventBusInterface {
         StepEventBus.getEventBus().stepIgnored();
     }
 
+    public boolean isBaseStepListenerRegistered() { return StepEventBus.getEventBus().isBaseStepListenerRegistered(); }
 
     public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
     public boolean aStepHasFailedInTheCurrentExample() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample(); }
+
+    public FailureCause getFailureCause() {
+        return StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause();
+    }
 
     public boolean shouldIgnoreConsequences() {
         if (StepEventBus.getEventBus().isDryRun()) { return true; }

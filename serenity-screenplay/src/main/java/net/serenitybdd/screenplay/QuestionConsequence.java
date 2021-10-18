@@ -10,6 +10,7 @@ import org.hamcrest.Matcher;
 import java.util.Optional;
 
 
+import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
 import static net.serenitybdd.screenplay.questions.QuestionHints.addHints;
 import static net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,16 +48,13 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
             assertThat(question.answeredBy(actor), expected);
         } catch (Throwable actualError) {
-
-            throwComplaintTypeErrorIfSpecified(errorFrom(actualError));
-
-            throwDiagosticErrorIfProvided(errorFrom(actualError));
-
+            throwComplaintTypeErrorIfSpecified(actualError);
+            throwDiagosticErrorIfProvided(actualError);
             throw actualError;
         }
     }
 
-    private void throwDiagosticErrorIfProvided(Error actualError) {
+    private void throwDiagosticErrorIfProvided(Throwable actualError) {
         if (question instanceof QuestionDiagnostics) {
             throw Complaint.from(((QuestionDiagnostics) question).onError(), actualError);
         }

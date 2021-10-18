@@ -74,7 +74,12 @@ public class InParallel {
                 try {
                     future.get();
                 } catch (ExecutionException | InterruptedException e) {
-                    throw new SerenityManagedException("Parallel task execution failed", e);
+                    if (e.getCause() instanceof AssertionError) {
+                        throw (AssertionError) e.getCause();
+                    } else if (e.getCause() instanceof Error) {
+                        throw (Error) e.getCause();
+                    }
+                    throw new SerenityManagedException("An error occurred in one of the parallel tasks", e.getCause());
                 }
             });
         } finally {

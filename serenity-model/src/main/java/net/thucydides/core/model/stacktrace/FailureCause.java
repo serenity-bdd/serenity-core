@@ -1,6 +1,7 @@
 package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
@@ -258,7 +259,35 @@ public class FailureCause {
         return false;
     }
 
+    public boolean isAnError() {
+        return (getOriginalCause() instanceof Error) && (!(getOriginalCause() instanceof AssertionError));
+    }
+
+    public boolean isAnAssertionError() {
+        return (getOriginalCause() instanceof AssertionError);
+    }
+
     public Throwable asException() {
         return getOriginalCause();
+    }
+
+    public RuntimeException asFailure() {
+        return new SerenityManagedException(getOriginalCause());
+    }
+
+    public Error asAssertionError() {
+        if ((getOriginalCause() instanceof AssertionError)) {
+            return (AssertionError) getOriginalCause();
+        } else {
+            return new AssertionError(getOriginalCause());
+        }
+    }
+
+    public Error asError() {
+        if (isAnError()) {
+            return (Error) getOriginalCause();
+        } else {
+            return new Error(getOriginalCause());
+        }
     }
 }

@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SerenityRunner.class)
 public class WhenRunningTasksInParallel {
 
-    private List<String> completedTasks = new ArrayList<>();
+    private List<String> completedTasks =  Collections.synchronizedList(new ArrayList<String>());
 
     private Performable doSomething() {
         return Task.where("{0} does something",
@@ -102,7 +103,7 @@ public class WhenRunningTasksInParallel {
                 () -> actorA.attemptsTo(doSomething())
         );
         assertThat(completedTasks).containsExactlyInAnyOrder("Do something");
-        assertThat(testSteps()).containsExactly("Actor A performs","Actor A does something");
+        assertThat(testSteps()).containsExactly("Actor A performs", "Actor A does something");
     }
 
     @Test
@@ -115,7 +116,7 @@ public class WhenRunningTasksInParallel {
         );
 
         assertThat(completedTasks).containsExactlyInAnyOrder("Do something", "Do something else");
-        assertThat(testSteps()).containsExactly("Actor A","Actor A does something", "Actor A does something else");
+        assertThat(testSteps()).containsExactly("Actor A", "Actor A does something", "Actor A does something else");
     }
 
     @Test
@@ -128,9 +129,9 @@ public class WhenRunningTasksInParallel {
         InParallel.theActors(actorA, actorB, actorC).eachAttemptTo(doSomething(), doSomethingElse());
 
         assertThat(testSteps()).containsExactly(
-                "Actor A","Actor A does something", "Actor A does something else",
-                "Actor B","Actor B does something", "Actor B does something else",
-                "Actor C","Actor C does something", "Actor C does something else");
+                "Actor A", "Actor A does something", "Actor A does something else",
+                "Actor B", "Actor B does something", "Actor B does something else",
+                "Actor C", "Actor C does something", "Actor C does something else");
     }
 
     @Test(expected = AssertionError.class)
@@ -141,7 +142,6 @@ public class WhenRunningTasksInParallel {
         Actor actorC = Actor.named("Actor C");
 
         InParallel.theActors(actorA, actorB, actorC).eachAttemptTo(doSomething(), doSomethingThatFails());
-
         actorA.attemptsTo(doSomethingElse());
 
         assertThat(StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getResult()).isEqualTo(TestResult.FAILURE);
@@ -158,9 +158,9 @@ public class WhenRunningTasksInParallel {
         InParallel.theActors(cast).eachAttemptTo(doSomething(), doSomethingElse());
 
         assertThat(testSteps()).containsExactly(
-                "Actor A","Actor A does something", "Actor A does something else",
-                "Actor B","Actor B does something", "Actor B does something else",
-                "Actor C","Actor C does something", "Actor C does something else");
+                "Actor A", "Actor A does something", "Actor A does something else",
+                "Actor B", "Actor B does something", "Actor B does something else",
+                "Actor C", "Actor C does something", "Actor C does something else");
     }
 
     @Test
@@ -175,7 +175,7 @@ public class WhenRunningTasksInParallel {
         );
 
         assertThat(completedTasks).containsExactlyInAnyOrder("Do something", "Do another thing");
-        assertThat(testSteps()).containsExactly("Actor A","Actor A does something","Actor B", "Actor B does another thing");
+        assertThat(testSteps()).containsExactly("Actor A", "Actor A does something", "Actor B", "Actor B does another thing");
     }
 
     @Test
@@ -189,8 +189,8 @@ public class WhenRunningTasksInParallel {
                 () -> actorB.attemptsTo(doSomethingElse(), doAnotherThing())
         );
 
-        assertThat(completedTasks).containsExactlyInAnyOrder("Do something", "Do something else","Do another thing");
-        assertThat(testSteps()).containsExactly("Actor A","Actor A does something","Actor B", "Actor B does something else", "Actor B does another thing");
+        assertThat(completedTasks).containsExactlyInAnyOrder("Do something", "Do something else", "Do another thing");
+        assertThat(testSteps()).containsExactly("Actor A", "Actor A does something", "Actor B", "Actor B does something else", "Actor B does another thing");
     }
 
     @Test

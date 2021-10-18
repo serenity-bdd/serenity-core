@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
 
 public abstract class BaseConsequence<T> implements Consequence<T> {
 
@@ -18,13 +19,17 @@ public abstract class BaseConsequence<T> implements Consequence<T> {
     private List<Performable> setupActions = new ArrayList<>();
 
     protected Error errorFrom(Throwable actualError) {
-        if (actualError instanceof Error) {
+        if (actualError instanceof AssertionError) {
+            return null;
+        } else if (actualError instanceof Error) {
             return (Error) actualError;
+        } else {
+            return null;
         }
-        return new Error(actualError);
+//        return new Error(actualError);
     }
 
-    protected void throwComplaintTypeErrorIfSpecified(Error actualError) {
+    protected void throwComplaintTypeErrorIfSpecified(Throwable actualError) {
         if (complaintType != null) {
             throw Complaint.from(complaintType, complaintDetails, actualError);
         }
@@ -78,9 +83,7 @@ public abstract class BaseConsequence<T> implements Consequence<T> {
     }
 
     protected void performSetupActionsAs(Actor actor) {
-        actor.attemptsTo(
-                setupActions.toArray(new Performable[]{})
-        );
+        actor.attemptsTo(IGNORE_EXCEPTIONS, setupActions.toArray(new Performable[]{}));
     }
 
 }

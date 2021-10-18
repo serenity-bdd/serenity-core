@@ -48,6 +48,7 @@ class WhenWaitingForDelayedResults extends Specification {
         when:
             jane.should(eventually(seeThat(TheClickerValue.of(clicker), equalTo(-1))).waitingForNoLongerThan(100).milliseconds())
         then:
+            def exception = thrown(Error)
             theTestResult() == FAILURE
     }
 
@@ -56,8 +57,9 @@ class WhenWaitingForDelayedResults extends Specification {
             Actor jane = Actor.named("Jane")
             Clicker clicker = new Clicker();
         when:
-            jane.should(eventually(seeThat(TheClickerValue.ofBroken(clicker), equalTo(1))).waitingForNoLongerThan(250).milliseconds())
+             jane.should(eventually(seeThat(TheClickerValue.ofBroken(clicker), equalTo(1))).waitingForNoLongerThan(250).milliseconds())
         then:
+            def exception = thrown(Error)
             theTestResult() == ERROR
     }
 
@@ -70,7 +72,8 @@ class WhenWaitingForDelayedResults extends Specification {
                                   orComplainWith(SomethingBadHappenedException)).
                         waitingForNoLongerThan(100).milliseconds())
         then:
-        theFailureClass() == SomethingBadHappenedException.getCanonicalName()
+            def exception = thrown(Error)
+            theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 
     def "should report custom error if one is declared outside of the eventually scope"() {
@@ -81,6 +84,7 @@ class WhenWaitingForDelayedResults extends Specification {
         jane.should(eventually(seeThat(TheClickerValue.of(clicker), equalTo(-1))).
                 waitingForNoLongerThan(100).milliseconds().orComplainWith(SomethingBadHappenedException))
         then:
+        def exception = thrown(Error)
         theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 

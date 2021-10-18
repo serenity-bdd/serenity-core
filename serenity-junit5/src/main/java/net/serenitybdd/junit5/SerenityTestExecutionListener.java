@@ -4,9 +4,11 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
@@ -14,7 +16,6 @@ import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 
@@ -278,6 +280,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 }
             }
         }
+        recordSummaryData(testIdentifier, testExecutionResult);
+    }
+
+    private void recordSummaryData(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
         try {
             switch (testExecutionResult.getStatus()) {
 
@@ -310,8 +316,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     if (testIdentifier.isTest()) {
                         this.summary.testsFailed.incrementAndGet();
                     }
-                    testExecutionResult.getThrowable().ifPresent(
-                            throwable -> this.summary.addFailure(testIdentifier, throwable));
+                    testExecutionResult.getThrowable().ifPresent(throwable -> this.summary.addFailure(testIdentifier, throwable));
                     StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
                     break;
                 }

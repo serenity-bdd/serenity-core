@@ -64,7 +64,7 @@ public class ResultChecker {
 
     private void logOutcomesFrom(TestOutcomes testOutcomes) {
         logger.info(white("-----------------------------------------"));
-        logger.info(white(" SERENITY TESTS : ") + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
+        logger.info(white(" SERENITY TESTS: ") + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
         logger.info(white("-----------------------------------------"));
         logger.info(
                 resultLine(white(

@@ -271,7 +271,7 @@ public class FailureCause {
         return getOriginalCause();
     }
 
-    public RuntimeException asFailure() {
+    public SerenityManagedException asFailure() {
         return new SerenityManagedException(getOriginalCause());
     }
 

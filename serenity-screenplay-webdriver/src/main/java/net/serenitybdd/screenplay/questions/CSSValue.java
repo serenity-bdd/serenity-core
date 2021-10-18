@@ -20,7 +20,7 @@ public class CSSValue {
     }
 
     public static Question<String> of(By byLocator, String attributeName) {
-        return Question.about(attributeName +" CSS value of " + byLocator)
+        return Question.about(attributeName +" CSS value of element located by " + byLocator)
                 .answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator), attributeName));
     }
 

@@ -22,7 +22,7 @@ public class SelectedValue {
     }
 
     public static Question<String> of(By byLocator) {
-        return Question.about("selected value of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("selected value of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<String> of(String locator) {
@@ -37,7 +37,7 @@ public class SelectedValue {
     }
 
     public static Question<Collection<String>> ofEach(By byLocator) {
-        return Question.about("selected values of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("selected values of element located by " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList()));

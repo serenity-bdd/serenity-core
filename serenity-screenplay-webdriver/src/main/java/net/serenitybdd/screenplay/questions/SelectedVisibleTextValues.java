@@ -17,7 +17,7 @@ public class SelectedVisibleTextValues {
     }
 
     public static Question<List<String>> of(By byLocator) {
-        return Question.about("selected value of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("selected value of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<List<String>> of(String locator) {

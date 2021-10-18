@@ -19,11 +19,11 @@ public class Text {
     }
 
     public static Question<String> of(By byLocator) {
-        return Question.about("text of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("text of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<String> of(String locator) {
-        return Question.about("text of " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
+        return Question.about("text of element located by " + locator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<Collection<String>> ofEach(Target target) {
@@ -36,7 +36,7 @@ public class Text {
     }
 
     public static Question<Collection<String>> ofEach(By byLocator) {
-        return Question.about("text of each of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("text of each of element located by " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList())

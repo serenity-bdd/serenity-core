@@ -19,7 +19,7 @@ public class Visibility {
     }
 
     public static Question<Boolean> of(By byLocator) {
-        return Question.about("visibility of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("visibility of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Boolean> of(String locator) {
@@ -34,7 +34,7 @@ public class Visibility {
     }
 
     public static Question<List<Boolean>> ofEach(By byLocator) {
-        return Question.about("visibility of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("visibility of element located by " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList()));

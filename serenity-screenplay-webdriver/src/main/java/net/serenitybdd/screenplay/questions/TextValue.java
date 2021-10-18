@@ -20,7 +20,7 @@ public class TextValue {
     }
 
     public static Question<String> of(By byLocator) {
-        return Question.about("value of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("value of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<String> of(String locator) {
@@ -36,7 +36,7 @@ public class TextValue {
     }
 
     public static Question<Collection<String>> ofEach(By byLocator) {
-        return Question.about("value of each of " + byLocator)
+        return Question.about("value of each of element located by " + byLocator)
                 .answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))

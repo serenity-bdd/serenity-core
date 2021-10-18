@@ -19,13 +19,13 @@ public class WhenAnnaAndAntonAreAnnotatedActors {
     @Managed(driver = "chrome", options = "--headless")
     WebDriver annasBrowser;
 
-    @CastMember(name = "Anna The Annotated User", browser = "annasBrowser")
+    @CastMember(name = "Anna The Annotated User", browserField = "annasBrowser")
     Actor anna;
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver antonsBrowser;
 
-    @CastMember(name = "Anton The Other Annotated User", browser = "antonsBrowser")
+    @CastMember(name = "Anton The Other Annotated User", browserField = "antonsBrowser")
     Actor anton;
 
     @Test

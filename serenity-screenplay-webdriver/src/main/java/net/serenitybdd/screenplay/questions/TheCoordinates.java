@@ -20,7 +20,7 @@ public class TheCoordinates {
     }
 
     public static Question<Coordinates> of(By byLocator) {
-        return Question.about("coordinates of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("coordinates of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Coordinates> of(String locator) {
@@ -36,7 +36,7 @@ public class TheCoordinates {
     }
 
     public static Question<List<Coordinates>> ofEach(By byLocator) {
-        return Question.about("coordinates of each of " + byLocator).answeredBy(
+        return Question.about("coordinates of each of element located by " + byLocator).answeredBy(
                 actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))

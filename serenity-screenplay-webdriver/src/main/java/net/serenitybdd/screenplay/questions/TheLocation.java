@@ -20,7 +20,7 @@ public class TheLocation {
     }
 
     public static Question<Point> of(By byLocator) {
-        return Question.about("location of " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return Question.about("location of element located by " + byLocator).answeredBy(actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Point> of(String locator) {
@@ -35,7 +35,7 @@ public class TheLocation {
     }
 
     public static Question<List<Point>> ofEach(By byLocator) {
-        return Question.about("location of each of " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
+        return Question.about("location of each of element located by " + byLocator).answeredBy(actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
                 .collect(Collectors.toList()));

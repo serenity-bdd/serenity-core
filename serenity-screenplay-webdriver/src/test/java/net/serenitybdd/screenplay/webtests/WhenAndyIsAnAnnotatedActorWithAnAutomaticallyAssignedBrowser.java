@@ -15,32 +15,19 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(SerenityRunner.class)
-public class WhenAnnaIsAnAnnotatedActor {
+public class WhenAndyIsAnAnnotatedActorWithAnAutomaticallyAssignedBrowser {
 
-    @Managed(driver = "chrome", options = "--headless")
-    WebDriver annasBrowser;
-
-    @CastMember(browserField = "annasBrowser")
-    Actor anna;
+    @CastMember(driver = "chrome", options = "--headless")
+    Actor andy;
 
     @Test
     public void annotatedActorsAreInstantiatedAutomatically() {
-        assertThat(anna, notNullValue());
-    }
-
-    @Test
-    public void annotatedActorsAreNamed() {
-        assertThat(anna.getName(), equalTo("Anna"));
-    }
-
-    @Test
-    public void annotatedActorsDeclaredInAClassWithADriverCanBrowseTheWebWithThatDriver() {
-        assertThat(BrowseTheWeb.as(anna).getDriver(), equalTo(annasBrowser));
+        assertThat(andy, notNullValue());
     }
 
     @Test
     public void annotatedActorsCanInteractWithABrowser() {
-        anna.attemptsTo(
+        andy.attemptsTo(
                 Open.url("classpath:/sample-web-site/index.html")
         );
     }

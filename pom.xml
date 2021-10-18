@@ -4,10 +4,10 @@
 
     <groupId>net.serenity-bdd</groupId>
     <artifactId>serenity-bdd</artifactId>
-    <version>2.6.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
+    <version>${revision}</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -39,6 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <revision>2.7.0-SNAPSHOT</revision>
 
         <junit.version>4.13.1</junit.version>
         <groovy.version>3.0.9</groovy.version>
@@ -688,6 +689,31 @@
                     <failOnWarnings>false</failOnWarnings>
                     <failOnError>false</failOnError>
                 </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>flatten-maven-plugin</artifactId>
+              <version>1.1.0</version>
+              <configuration>
+                <updatePomFile>true</updatePomFile>
+                <flattenMode>resolveCiFriendliesOnly</flattenMode>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>flatten</id>
+                  <phase>process-resources</phase>
+                  <goals>
+                    <goal>flatten</goal>
+                  </goals>
+                </execution>
+                <execution>
+                  <id>flatten.clean</id>
+                  <phase>clean</phase>
+                  <goals>
+                    <goal>clean</goal>
+                  </goals>
+                </execution>
+              </executions>
             </plugin>
         </plugins>
     </build>

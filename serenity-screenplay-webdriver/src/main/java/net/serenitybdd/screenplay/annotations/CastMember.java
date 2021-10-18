@@ -21,6 +21,7 @@ public @interface CastMember {
     /**
      * The name of the @Managed-annotated WebDriver field
      * This can be used if there are more than one @Managed driver in a test.
+     * By default, the cast member will use the first @Managed-annotated field it finds in the current class.
      */
     String browser() default "";
 }

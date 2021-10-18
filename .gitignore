@@ -20,3 +20,4 @@ out
 bin
 *.versionsBackup
 serenity-cli/dependency-reduced-pom.xml
+.flattened-pom.xml

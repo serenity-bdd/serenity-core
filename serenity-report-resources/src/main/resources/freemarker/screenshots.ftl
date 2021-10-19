@@ -200,21 +200,17 @@
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
-        <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR")>
+        <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR" || testOutcome.result == "COMPROMISED")>
             <div class="screenshotFailure panel panel-danger">
-                <#--<div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage, 40)}</span></div>-->
-
-                    <#if (testOutcome.errorMessage)??>
-                        <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace title=formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage) cause=testOutcome.nestedTestFailureCause id="overall" />
-                        <#else>
-                            <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
-                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
-                            </div>
-                        </#if>
+                <#if (testOutcome.errorMessage)??>
+                    <#if (testOutcome.nestedTestFailureCause)??>
+                        <@stacktrace title=formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage) cause=testOutcome.nestedTestFailureCause id="overall" />
+                    <#else>
+                        <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
+                        </div>
                     </#if>
-
-
+                </#if>
                 <div class="panel-body">
                     <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
                 </div>

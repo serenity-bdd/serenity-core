@@ -63,7 +63,7 @@ public class ParameterizedTestsOutcomeAggregator {
         List<TestStep> testSteps = testOutcome.getTestSteps();
 
         if (testOutcome.getTestFailureCause() != null) {
-            nestedStep.failedWith(testOutcome.getTestFailureCause().toException());
+            nestedStep.failedWith(testOutcome.getTestFailureCause().getOriginalCause());
         }
 
         if (!testSteps.isEmpty()) {

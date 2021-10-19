@@ -3,6 +3,7 @@ package net.thucydides.core.model.stacktrace;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.core.exceptions.TestCompromisedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
 import net.thucydides.core.util.NameConverter;
@@ -263,6 +264,10 @@ public class FailureCause {
         return (getOriginalCause() instanceof Error) && (!(getOriginalCause() instanceof AssertionError));
     }
 
+    public boolean isCompromised() {
+        return (getOriginalCause() instanceof CausesCompromisedTestFailure);
+    }
+
     public boolean isAnAssertionError() {
         return (getOriginalCause() instanceof AssertionError);
     }
@@ -288,6 +293,14 @@ public class FailureCause {
             return (Error) getOriginalCause();
         } else {
             return new Error(getOriginalCause());
+        }
+    }
+
+    public RuntimeException asCompromisedException() {
+        if (originalCause instanceof RuntimeException) {
+            throw (RuntimeException) originalCause;
+        } else {
+            throw new TestCompromisedException(originalCause);
         }
     }
 }

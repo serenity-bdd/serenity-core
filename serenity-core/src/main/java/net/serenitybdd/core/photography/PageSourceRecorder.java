@@ -45,7 +45,6 @@ public class PageSourceRecorder {
 
 
     private final static String HTML_PRISM_HIGHLIGHT = "<html lang='en'><head><link href='prism/prism.css' rel='stylesheet' /></head><body><script src='prism/prism.js'></script><body><div><pre><code class='language-html'>";
-    private final static String HTML_HIGHLIGHTING = "<html lang='en'><head><link rel='stylesheet' href='css/core.css'><link rel='stylesheet' href='highlight/styles/default.min.css'><script src='highlight/highlight.min.js'></script><script>hljs.highlightAll().value;</script></head><body><div><pre><code class='language-html'>";
     private final static String HTML_CLOSE = "</code></pre></div></body></html>";
 
     private byte[] render(byte[] pageSource) {

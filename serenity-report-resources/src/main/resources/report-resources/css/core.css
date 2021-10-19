@@ -2377,3 +2377,7 @@ span.evidence {
     padding: 0.25em;
     font-style: italic;
 }
+
+div.code {
+    white-space: pre;
+}

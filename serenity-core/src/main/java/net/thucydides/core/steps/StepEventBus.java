@@ -748,6 +748,10 @@ public class StepEventBus {
         getBaseStepListener().takeScreenshot();
     }
 
+    public void notifyFailure() {
+        getBaseStepListener().notifyUIError();
+    }
+
     public boolean testSuiteHasStarted() {
         return getBaseStepListener().testSuiteRunning();
     }

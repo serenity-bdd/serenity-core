@@ -4,11 +4,9 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
@@ -38,7 +36,6 @@ import java.util.stream.Collectors;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 

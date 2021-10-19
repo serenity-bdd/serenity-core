@@ -1189,6 +1189,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+    public void notifyUIError() {
+        if (currentTestIsABrowserTest() && screenshots().areAllowed(TakeScreenshots.FOR_FAILURES)) {
+            take(OPTIONAL_SCREENSHOT);
+        }
+    }
+
     /**
      * Take a screenshot now.
      */

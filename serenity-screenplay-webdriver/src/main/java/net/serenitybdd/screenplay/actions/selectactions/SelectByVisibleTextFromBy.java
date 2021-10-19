@@ -8,23 +8,27 @@ import org.openqa.selenium.By;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SelectByVisibleTextFromBy extends ByAction {
     private List<String> options;
+    private String selectedOptions;
 
     public SelectByVisibleTextFromBy() {}
 
     public SelectByVisibleTextFromBy(String option, By... locators) {
         super(locators);
         this.options = Collections.singletonList(option);
+        this.selectedOptions = option;
     }
 
-    public SelectByVisibleTextFromBy(List<String> optionss, By... locators) {
+    public SelectByVisibleTextFromBy(List<String> options, By... locators) {
         super(locators);
-        this.options = optionss;
+        this.options = options;
+        this.selectedOptions = String.join(",", options);
     }
 
-    @Step("{0} selects #visibleText")
+    @Step("{0} selects #selectedOptions")
     public <T extends Actor> void performAs(T theUser) {
         options.forEach(
             option -> BrowseTheWeb.as(theUser).find(locators).selectByVisibleText(option)

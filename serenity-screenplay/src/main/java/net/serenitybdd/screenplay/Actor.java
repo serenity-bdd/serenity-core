@@ -420,6 +420,8 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
         if (mode == THROW_EXCEPTION_ON_FAILURE) {
             if (eventBusInterface.isBaseStepListenerRegistered() && eventBusInterface.aStepHasFailed()) {
+                StepEventBus.getEventBus().notifyFailure();
+                StepEventBus.getEventBus().testFinished();
                 if (eventBusInterface.getFailureCause().isAnError()) {
                     throw eventBusInterface.getFailureCause().asError();
                 } else if (eventBusInterface.getFailureCause().isAnAssertionError()) {

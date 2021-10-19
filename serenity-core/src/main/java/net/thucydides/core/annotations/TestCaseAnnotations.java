@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -107,17 +108,21 @@ public final class TestCaseAnnotations {
     }
 
     public static boolean isUniqueSession(Class<?> testClass) {
-        ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
-        return webDriverField.isUniqueSession();
+        Optional<ManagedWebDriverAnnotatedField> webDriverField = findOptionalAnnotatedField(testClass);
+        return webDriverField.map(ManagedWebDriverAnnotatedField::isUniqueSession).orElse(false);
     }
 
     public static boolean isWebTest(Class<?> testClass) {
-        return (testClass != null) && findOptionalAnnotatedField(testClass).isPresent();
+        return (testClass != null) &&
+                ((ThucydidesWebDriverSupport.getWebdriverManager().getActiveWebdriverCount() > 0)
+                        || findOptionalAnnotatedField(testClass).isPresent());
     }
 
     public static boolean shouldClearCookiesBeforeEachTestIn(Class<?> testClass) {
-        ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
-        return webDriverField.getClearCookiesPolicy() == ClearCookiesPolicy.BeforeEachTest;
+        Optional<ManagedWebDriverAnnotatedField> webDriverField = findOptionalAnnotatedField(testClass);
+        return webDriverField
+                .filter(managedWebDriverAnnotatedField -> managedWebDriverAnnotatedField.getClearCookiesPolicy() == ClearCookiesPolicy.BeforeEachTest)
+                .isPresent();
     }
 
     public static boolean shouldUsePersistantStepLibraries(Class<?> testClass) {

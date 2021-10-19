@@ -9,15 +9,17 @@ import net.thucydides.core.annotations.Step;
 public class SelectByVisibleTextFromTarget implements Interaction {
     private Target target;
     private String[] options;
+    private String selectedOptions;
 
     public SelectByVisibleTextFromTarget() {}
 
     public SelectByVisibleTextFromTarget(Target target, String... options) {
         this.target = target;
         this.options = options;
+        this.selectedOptions = String.join(",", options);
     }
 
-    @Step("{0} select #visibleText on #target")
+    @Step("{0} selects #selectedOptions on #target")
     public <T extends Actor> void performAs(T theUser) {
         WebElementFacade dropdown = target.resolveFor(theUser);
         for(String option : options) {

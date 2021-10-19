@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.targets;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -47,6 +48,7 @@ public class LambdaTarget extends Target {
         }
         if (!resolvedElement.isPresent()) {
             String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
+            StepEventBus.getEventBus().notifyFailure();
             if (lastThrownException != null) {
                 throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
             } else {

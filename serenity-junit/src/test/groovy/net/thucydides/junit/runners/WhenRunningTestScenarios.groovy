@@ -82,7 +82,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             List<String> drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.each { driver -> assert driver == null }
+            drivers.each { driver -> assert driver.isEmpty() }
     }
 
     @Ignore

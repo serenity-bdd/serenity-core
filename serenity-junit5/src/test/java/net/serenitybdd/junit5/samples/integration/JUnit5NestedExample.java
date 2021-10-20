@@ -1,40 +1,38 @@
 package net.serenitybdd.junit5.samples.integration;
 
+import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 
 
+@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
 @DisplayName("JUnit 5 Nested Example")
-class JUnit5NestedExampleTest {
+class JUnit5NestedExample {
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("Before all test methods");
     }
 
     @BeforeEach
     void beforeEach() {
-        System.out.println("Before each test method");
     }
 
     @AfterEach
     void afterEach() {
-        System.out.println("After each test method");
     }
 
     @AfterAll
     static void afterAll() {
-        System.out.println("After all test methods");
     }
 
     @Test
     @DisplayName("Example test for method A outerClass")
     void sampleTestForMethodAOuterClass() {
-        System.out.println("Example test for method A");
     }
 
     @Nested
@@ -43,23 +41,19 @@ class JUnit5NestedExampleTest {
 
         @BeforeEach
         void beforeEach() {
-            System.out.println("Before each test method of the A class");
         }
 
         @AfterEach
         public void afterEach() {
-            System.out.println("After each test method of the A class");
         }
 
         @Test
         @DisplayName("Example test for method A")
         void sampleTestForMethodA() {
-            System.out.println("Example test for method A");
         }
 
         @Test
         void sampleTestForMethodB() {
-            System.out.println("Example test for method B");
         }
     }
 }

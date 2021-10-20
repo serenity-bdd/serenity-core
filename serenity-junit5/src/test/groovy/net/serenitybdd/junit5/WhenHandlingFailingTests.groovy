@@ -8,10 +8,12 @@ import net.thucydides.core.steps.StepEventBus
 import org.junit.Rule
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
+@Ignore
 class WhenHandlingFailingTests extends Specification {
 
     static class SomeSteps {

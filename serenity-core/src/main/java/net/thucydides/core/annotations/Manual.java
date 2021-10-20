@@ -22,4 +22,10 @@ public @interface Manual {
      * An optional reason explaining the manual result
      */
     String reason() default "";
+
+    /**
+     * An optional indication of the last date or version an appl
+     */
+    String lastTested() default "";
+
 }

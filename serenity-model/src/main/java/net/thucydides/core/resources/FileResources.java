@@ -140,7 +140,7 @@ public class FileResources {
             throws IOException {
         byte[] buffer = new byte[BUFFER_SIZE];
         int bytesRead;
-        while ((bytesRead = in.read(buffer)) != -1) {
+        while ((in != null) && (bytesRead = in.read(buffer)) != -1) {
             out.write(buffer, 0, bytesRead);
         }
     }

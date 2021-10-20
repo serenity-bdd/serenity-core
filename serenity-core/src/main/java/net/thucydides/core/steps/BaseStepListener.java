@@ -157,6 +157,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         );
     }
 
+    public void recordManualTestResult(TestResult result) {
+        getCurrentTestOutcome().overrideAnnotatedResult(result);
+    }
+
     private List<String> testEvidenceLinksFrom(Optional<String> testEvidence) {
         List<String> testEvidenceLinks = new ArrayList<>();
         if (testEvidence.isPresent()) {

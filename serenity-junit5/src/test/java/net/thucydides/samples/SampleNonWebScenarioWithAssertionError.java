@@ -1,10 +1,13 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
-public class SampleNonWebScenarioWithError {
+@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+public class SampleNonWebScenarioWithAssertionError {
     
     @Steps
     public SampleNonWebSteps steps;

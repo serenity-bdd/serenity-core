@@ -5,6 +5,8 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
 
+import java.util.Optional;
+
 
 public class EventBusInterface {
 
@@ -66,6 +68,15 @@ public class EventBusInterface {
 
     public FailureCause getFailureCause() {
         return StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause();
+    }
+
+    public Optional<FailureCause> failureCause() {
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            if (StepEventBus.getEventBus().getBaseStepListener() != null && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed()) {
+                return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause());
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean shouldIgnoreConsequences() {

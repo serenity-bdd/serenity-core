@@ -1,6 +1,7 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
 
+import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.samples.SampleScenarioSteps;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@SerenityBDD
 public class SampleCSVDataDrivenScenario {
 
     private String name;
@@ -38,7 +40,6 @@ public class SampleCSVDataDrivenScenario {
     @ParameterizedTest(name = "Csv File Data Test {0}")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void data_driven_test(String name, int age,String address) {
-        System.out.println("data_driven_test: "+ name + " " + age + " " + address);
     }
 
     @ParameterizedTest(name = "Another Csv File Data Test {0} ")

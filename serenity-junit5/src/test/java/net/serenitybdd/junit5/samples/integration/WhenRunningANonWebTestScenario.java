@@ -157,7 +157,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         @Pending
         @Test
         public void pending_test() {
-            System.out.println("RUNNING A PENDING TEST");
             pendingTestWasSuspended = StepEventBus.getEventBus().currentTestIsSuspended();
         }
 

@@ -59,10 +59,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithEnumSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(3));
-        System.out.println("TestDataTable " + testDataTable);
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithEnumSource.withEnumSourceExcludedBooks");
-        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(2));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
@@ -75,10 +73,8 @@ public class WhenFindingTestDataInADataDrivenTest {
 
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithEnumSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(3));
-        System.out.println("TestDataTable " + testDataTable);
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithEnumSource.withEnumSourceSelectedBooks");
-        System.out.println("DataTableStrings " + dataTableStrings);
         assertThat(dataTableStrings.getRows().size(), is(2));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();

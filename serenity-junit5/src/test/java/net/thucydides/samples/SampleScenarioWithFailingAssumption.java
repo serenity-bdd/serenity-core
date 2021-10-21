@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@SerenityBDD
 public class SampleScenarioWithFailingAssumption {
     
     @Steps

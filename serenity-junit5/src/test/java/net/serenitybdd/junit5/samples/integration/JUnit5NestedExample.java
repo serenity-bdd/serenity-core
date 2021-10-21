@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5.samples.integration;
 
+import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@SerenityBDD
 @DisplayName("JUnit 5 Nested Example")
 class JUnit5NestedExample {
 

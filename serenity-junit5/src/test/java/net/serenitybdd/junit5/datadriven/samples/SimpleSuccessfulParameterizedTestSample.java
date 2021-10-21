@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
+import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@SerenityBDD
 public class SimpleSuccessfulParameterizedTestSample {
 
 

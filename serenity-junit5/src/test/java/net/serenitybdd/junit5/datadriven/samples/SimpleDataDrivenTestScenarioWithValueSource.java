@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
+import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.samples.SampleNonWebSteps;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SerenityBDD
 @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
 public class SimpleDataDrivenTestScenarioWithValueSource {
 

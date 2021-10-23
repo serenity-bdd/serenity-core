@@ -1,1 +1,1 @@
-net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor
+net.serenitybdd.junit5.SerenityJUnit5Extension

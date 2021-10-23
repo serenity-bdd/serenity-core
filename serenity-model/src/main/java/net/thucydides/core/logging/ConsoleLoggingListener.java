@@ -362,6 +362,13 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     @Override
+    public void testAborted() {
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            getLogger().info(colored.yellow("      -> TEST ABORTED"));
+        }
+    }
+
+    @Override
     public void testPending() {
     }
 

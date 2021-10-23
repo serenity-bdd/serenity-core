@@ -276,6 +276,22 @@ public class FailureCause {
         return getOriginalCause();
     }
 
+    public RuntimeException asRuntimeException() {
+        Throwable cause = getOriginalCause();
+        if (isCompromised()) {
+            throw asCompromisedException();
+        } else if (isAnError()) {
+            throw asError();
+        } else if (isAnAssertionError()) {
+            throw asAssertionError();
+        } else if (getOriginalCause() instanceof RuntimeException) {
+            throw (RuntimeException) getOriginalCause();
+        } else {
+            throw asFailure();
+        }
+
+    }
+
     public SerenityManagedException asFailure() {
         return new SerenityManagedException(getOriginalCause());
     }

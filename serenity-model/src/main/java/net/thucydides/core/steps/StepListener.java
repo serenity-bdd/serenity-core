@@ -120,6 +120,11 @@ public interface StepListener {
     void testSkipped();
 
     /**
+     * The test as a whole was aborted.
+     */
+    default void testAborted() {};
+
+    /**
      * The test as a whole should be marked as 'pending'.
      */
     void testPending();

@@ -9,6 +9,7 @@ class CSSColor {
                 TestResult.PENDING to "#A2C4EC",
                 TestResult.IGNORED to "darkgrey",
                 TestResult.SKIPPED to "#EEE098",
+                TestResult.ABORTED to "#FF9966",
                 TestResult.FAILURE to "#f8001f",
                 TestResult.ERROR to "darkorange",
                 TestResult.COMPROMISED to "fuchsia"

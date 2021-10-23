@@ -1,7 +1,7 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
 import net.serenitybdd.junit5.SerenityBDD;
-import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.samples.SampleScenarioSteps;
 
@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
-@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 @SerenityBDD
 public class SampleDataDrivenIgnoredScenario {
 

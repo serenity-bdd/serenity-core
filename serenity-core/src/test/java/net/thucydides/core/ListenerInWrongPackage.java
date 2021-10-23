@@ -83,6 +83,11 @@ public class ListenerInWrongPackage implements StepListener {
     }
 
     @Override
+    public void testAborted() {
+
+    }
+
+    @Override
     public void testPending() {
 
     }

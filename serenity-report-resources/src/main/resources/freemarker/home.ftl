@@ -22,13 +22,14 @@
     <#assign automatedTests = testOutcomes.count("automated")>
     <#assign totalTests = testOutcomes.count("automated")>
 
-    <#assign testResultData = resultCounts.byTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
-    <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
+    <#assign testResultData =             resultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
+    <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <#assign graphType="automated-and-manual-results"/>
 
     <#assign successfulManualTests = (manualTests.withResult("SUCCESS") > 0)>
     <#assign pendingManualTests = (manualTests.withResult("PENDING") > 0)>
     <#assign ignoredManualTests = (manualTests.withResult("IGNORED") > 0)>
+    <#assign abortedManualTests = (manualTests.withResult("ABORTED") > 0)>
     <#assign failingManualTests = (manualTests.withResult("FAILURE") > 0)>
 
     <script class="code" type="text/javascript">$(document).ready(function () {
@@ -101,7 +102,7 @@
         <#assign resultsContext = '> ' + testOutcomes.label>
 
         <#if (currentTagType! != '')>
-            <#assign pageTitle = "<i class='fa fa-tags'></i> " + inflection.of(currentTagType!"").asATitle() + ': ' +  tagInflector.ofTag(currentTagType!"", testOutcomes.label).toFinalView() >
+            <#assign pageTitle = "<i class='bi bi-tags'></i> " + inflection.of(currentTagType!"").asATitle() + ': ' +  tagInflector.ofTag(currentTagType!"", testOutcomes.label).toFinalView() >
         <#else>
             <#assign pageTitle = inflection.of(testOutcomes.label).asATitle() >
         </#if>
@@ -181,7 +182,7 @@
                                     ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>
                                         (including ${testOutcomes.totalDataRows} rows of test data)</#if>
                                     <#if (csvReport! != '')> |
-                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download"
+                                        <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
                                                                                         title="Download CSV"></i></a>
                                     </#if>
                                     <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
@@ -191,6 +192,7 @@
                                     <#assign compromisedReport = reportName.withPrefix(currentTag).forTestResult("compromised") >
                                     <#assign pendingReport = reportName.withPrefix(currentTag).forTestResult("pending") >
                                     <#assign skippedReport = reportName.withPrefix(currentTag).forTestResult("skipped") >
+                                    <#assign abortedReport = reportName.withPrefix(currentTag).forTestResult("aborted") >
                                     <#assign ignoredReport = reportName.withPrefix(currentTag).forTestResult("ignored") >
 
                                     <#assign totalCount   = testOutcomes.totalScenarios.total >
@@ -198,6 +200,7 @@
                                     <#assign pendingCount = testOutcomes.totalScenarios.withResult("pending") >
                                     <#assign ignoredCount = testOutcomes.totalScenarios.withResult("ignored") >
                                     <#assign skippedCount = testOutcomes.totalScenarios.withResult("skipped") >
+                                    <#assign abortedCount = testOutcomes.totalScenarios.withResult("aborted") >
                                     <#assign failureCount = testOutcomes.totalScenarios.withResult("failure") >
                                     <#assign errorCount   = testOutcomes.totalScenarios.withResult("error") >
                                     <#assign brokenCount  = failureCount + errorCount >
@@ -211,7 +214,7 @@
                             <#assign flagTag = "flag_${inflection.of(flag.message).asATitle()}" >
                             <#assign flagReport = reportName.forTag(flagTag) >
                             <#assign flagCount = testOutcomes.flagCountFor(flag)>
-                            <i class="fa fa fa-${flag.symbol} flag-color" alt="${flag.message}"
+                            <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}"
                                title="${flag.message}"></i> <a href="${flagReport}">${flagTitle}</a> (${flagCount})
                         </#list>
                     </span>
@@ -223,15 +226,15 @@
                             <div>
                                 <ul class="nav nav-tabs">
                                     <li class="active">
-                                        <a data-toggle="tab" href="#summary"><i class="fas fa-home"></i> Summary</a>
+                                        <a data-toggle="tab" href="#summary"><i class="bi bi-house-door"></i> Summary</a>
                                     </li>
                                     <li>
-                                        <a data-toggle="tab" href="#tests"><i class="fas fa-tachometer-alt"></i> Test
+                                        <a data-toggle="tab" href="#tests"><i class="bi bi-speedometer"></i> Test
                                             Results</a>
                                     </li>
                                     <#if evidence?has_content>
                                         <li>
-                                            <a data-toggle="tab" href="#evidence"><i class="far fa-file"></i>
+                                            <a data-toggle="tab" href="#evidence"><i class="bi bi-download"></i>
                                                 Evidence</a>
                                         </li>
                                     </#if>
@@ -245,8 +248,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <#if testOutcomes.total != 0>
-                                                            <div style="width:300px;"
-                                                                 class="chart-container ${graphType}">
+                                                            <div style="width:300px;" class="chart-container ${graphType}">
                                                                 <div class="ct-chart ct-square"></div>
                                                             </div>
                                                             <script>
@@ -321,11 +323,11 @@
                                                                 <#if (resultCounts.getOverallTestCount("success") != 0)>
                                                                     <td class="aggregate-result-count">
                                                                         <a href="${successReport}"><i
-                                                                                    class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing</a>
+                                                                                    class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
-                                                                                class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing
+                                                                                class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("success")}</td>
@@ -341,11 +343,11 @@
                                                                 <#if (resultCounts.getOverallTestCount("pending") != 0)>
                                                                     <td class="aggregate-result-count">
                                                                         <a href="${pendingReport}"><i
-                                                                                    class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending</a>
+                                                                                    class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
-                                                                                class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending
+                                                                                class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("pending")}</td>
@@ -361,11 +363,11 @@
                                                                 <#if (resultCounts.getOverallTestCount("ignored") != 0)>
                                                                     <td class="aggregate-result-count">
                                                                         <a href="${ignoredReport}"><i
-                                                                                    class='fa fa-ban ignored-icon'></i>&nbsp;Ignored</a>
+                                                                                    class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
-                                                                                class='fa fa-ban ignored-icon'></i>&nbsp;Ignored
+                                                                                class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("ignored")}</td>
@@ -381,11 +383,11 @@
                                                                 <#if (resultCounts.getOverallTestCount("skipped") != 0)>
                                                                     <td class="aggregate-result-count">
                                                                         <a href="${skippedReport}"><i
-                                                                                    class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped</a>
+                                                                                    class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
-                                                                                class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped
+                                                                                class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("skipped")}</td>
@@ -398,26 +400,46 @@
                                                                 </#if>
                                                             </tr>
                                                             <tr>
+                                                                <#if (resultCounts.getOverallTestCount("aborted") != 0)>
+                                                                    <td class="aggregate-result-count">
+                                                                        <a href="${abortedReport}"><i
+                                                                                    class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted</a>
+                                                                    </td>
+                                                                <#else>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted
+                                                                    </td>
+                                                                </#if>
+                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("aborted")}</td>
+                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("aborted")}</td>
+                                                                <#if resultCounts.hasManualTests() >
+                                                                    <td class="manual-stats">${resultCounts.getManualTestCount("aborted")}</td>
+                                                                    <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("aborted")}</td>
+                                                                    <td class="total-stats">${resultCounts.getOverallTestCount("aborted")}</td>
+                                                                    <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("aborted")}</td>
+                                                                </#if>
+                                                            </tr>
+                                                            <tr>
                                                                 <#if resultCounts.hasManualTests() >
                                                                     <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
                                                                         <td colspan="7"><a
                                                                                     href="${relativeLink}${brokenReport}"><i
-                                                                                        class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                        class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                         </td>
                                                                     <#else>
                                                                         <td colspan="7"><i
-                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                         </td>
                                                                     </#if>
                                                                 <#else>
                                                                     <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
                                                                         <td colspan="3"><a
                                                                                     href="${relativeLink}${brokenReport}"><i
-                                                                                        class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                        class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                         </td>
                                                                     <#else>
                                                                         <td colspan="3"><i
-                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                         </td>
                                                                     </#if>
                                                                 </#if>
@@ -425,13 +447,11 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("failure") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${failureReport}"><i
-                                                                                    class='fa fa-times-circle failure-icon'></i>&nbsp;Failed</a>
+                                                                        <a href="${failureReport}"><i class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count indented-error-category">
-                                                                        <i
-                                                                                class='fa fa-times-circle failure-icon'></i>&nbsp;Failed
+                                                                        <i class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("failure")}</td>
@@ -446,12 +466,12 @@
                                                                 <#if (resultCounts.getOverallTestCount("error") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
                                                                         <a href="${errorReport}"><i
-                                                                                    class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken</a>
+                                                                                    class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count indented-error-category">
                                                                         <i
-                                                                                class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken
+                                                                                class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("error")}</td>
@@ -466,12 +486,12 @@
                                                                 <#if (resultCounts.getOverallTestCount("compromised") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
                                                                         <a href="${compromisedReport}"><i
-                                                                                    class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised</a>
+                                                                                    class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count indented-error-category">
                                                                         <i
-                                                                                class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised
+                                                                                class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised
                                                                     </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("compromised")}</td>
@@ -569,7 +589,7 @@
                                                                                 <td>${tagCoverage.successRate}</td>
                                                                                 <td>
                                                                                     <#if tagCoverage.testCount = 0>
-                                                                                        <i class="fa fa-stop-circle-o pending-icon"></i>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
                                                                                     <#else>
                                                                                         ${tagCoverage.resultIcon}
                                                                                     </#if>
@@ -658,7 +678,7 @@
                                                                                 <a href="${tagResult.report}">
                                                                         <span class="badge"
                                                                               style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
-                                                                                    class="fa fa-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
+                                                                                    class="bi bi-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
                                                                                 </a>
                                                                             </#list>
                                                                         </div>
@@ -674,7 +694,7 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <h3><i class="fas fa-cogs"></i> Automated Tests</h3>
+                                                        <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                         <#if (automatedTestCases?has_content)>
                                                             <table class="scenario-result-table table"
@@ -723,7 +743,7 @@
 
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <h3><i class="fas fa-edit"></i> Manual Tests</h3>
+                                                        <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                         <#if (manualTestCases?has_content)>
                                                             <table class="scenario-result-table table"
@@ -775,7 +795,7 @@
                                                 <div class="container-fluid">
                                                     <div class="row">
                                                         <div class="col-sm-12">
-                                                            <h3><i class="far fa-file"></i> Evidence</h3>
+                                                            <h3><i class="bi bi-download"></i> Evidence</h3>
                                                             <table id="evidence-table" class="table table-bordered">
                                                                 <thead>
                                                                 <tr>

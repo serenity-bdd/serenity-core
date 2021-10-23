@@ -22,8 +22,8 @@
     <#include "components/test-outcomes.ftl">
     <#include "components/requirements-list.ftl">
 
-    <#assign testResultData = resultCounts.byTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
-    <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
+    <#assign testResultData =             resultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
+    <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <#assign graphType="automated-and-manual-results" >
 
     <script>
@@ -75,11 +75,11 @@
             $('#tree').treeview({
                 data: requirementsTree,
                 enableLinks: true,
-                levels:10,
+                levels: 10,
                 showTags: true,
-                expandIcon: "glyphicon glyphicon-folder-close",
-                collapseIcon: "glyphicon glyphicon-folder-open",
-                emptyIcon: "glyphicon glyphicon-book"
+                expandIcon: "bi bi-journal-plus",
+                collapseIcon: "bi bi-journal-minus",
+                emptyIcon: "bi bi-journal"
             });
 
         });
@@ -191,7 +191,7 @@
                                     <div class="col-sm-12">
                                         </#if>
                                         <span>
-                                            <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
+                                            <h2><i class="bi bi-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
                                         </span>
                                     </div>
                                     <#if isLeafRequirement && filteredTags?has_content >
@@ -203,7 +203,7 @@
                                                 <p class="tag">
                                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                                     <span class="badge tag-badge" style="${tagStyle}">
-                                                        <i class="fa fa-tag"></i>&nbsp;<a class="tagLink"
+                                                        <i class="bi bi-tag"></i>&nbsp;<a class="tagLink"
                                                                                           style="${tagStyle}"
                                                                                           href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                                         (${tag.type})</a>
@@ -226,7 +226,7 @@
                             <#if parentRequirement.getCustomField(customField).present>
                                 <div>
                                     <a href="javaScript:void(0)" class="read-more-link">
-                                        <i class="fa fa-plus-square-o"></i>
+                                        <i class="bi bi-plus-square"></i>
                                         <span class="custom-field-title">${customField}</span>
                                     </a>
 
@@ -259,7 +259,7 @@
                                 <a data-toggle="tab" href="#specs"><i class="fas fa-comments"></i> Specifications</a>
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#results"><i class="fas fa-tachometer-alt"></i> Test Results</a>
+                                <a data-toggle="tab" href="#results"><i class="bi bi-speedometer"></i> Test Results</a>
                             </li>
                         </ul>
 
@@ -287,8 +287,9 @@
                                                                     <#assign scenarioInRule = true />
                                                                     <tr>
                                                                         <td class="rule-toc-entry" colspan="2">
-                                                                            <a href="#${scenarioGroup.id}" title="View scenario details for this rule">
-                                                                            Rule: ${scenarioGroup.ruleName}
+                                                                            <a href="#${scenarioGroup.id}"
+                                                                               title="View scenario details for this rule">
+                                                                                Rule: ${scenarioGroup.ruleName}
                                                                         </td>
                                                                     </tr>
                                                                 </#if>
@@ -303,8 +304,9 @@
                                                                                     <#assign scenarioClass = "orphan-scenario-toc-entry"/>
                                                                                 </#if>
                                                                                 <span class="${scenarioClass}">
-                                                                                    <a href="#${scenario.id}" title="View scenario details">
-                                                                                        <i class="far fa-comment-dots"></i> ${scenario.type}: ${formatter.renderTitle(scenario.simplifiedName)}
+                                                                                    <a href="#${scenario.id}"
+                                                                                       title="View scenario details">
+                                                                                        <i class="bi bi-chat-dots"></i> ${scenario.type}: ${formatter.renderTitle(scenario.simplifiedName)}
                                                                                     </a>
                                                                                     <#if scenario.hasExamples() >
                                                                                         (${scenario.numberOfExamples})
@@ -314,7 +316,7 @@
                                                                             <td style="width:5%;">
                                                                                 <table>
                                                                                     <tr>
-                                                                                        <td>
+                                                                                        <td class="icons-bar">
                                                                                             <#if outcome_icon?has_content>
                                                                                             <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                                href="${scenario.scenarioReport}"
@@ -324,18 +326,16 @@
                                                                                                 <#if outcome_icon?has_content></a></#if>
 
                                                                                             <#if (scenario.isManual())>
-                                                                                                <i class="fa fa-user manual"
+                                                                                                <i class="bi bi-person manual"
                                                                                                    title="Manual test"></i></#if>
-                                                                                        </td>
-                                                                                        <#if outcome_icon?has_content>
-                                                                                            <td>
+                                                                                            <#if outcome_icon?has_content>
                                                                                                 <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                                    href="${scenario.scenarioReport}"
                                                                                                    title="View test results">
-                                                                                                    <i class="fas fa-search-plus"></i>
+                                                                                                    <i class="bi bi-eyeglasses"></i>
                                                                                                 </a>
-                                                                                            </td>
-                                                                                        </#if>
+                                                                                            </#if>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 </table>
                                                                             </td>
@@ -350,13 +350,14 @@
                                                     <h3>Scenarios</h3>
 
                                                     <#list scenarioGroups as scenarioGroup>
-                                                        <a name="${scenarioGroup.id}" ></a>
+                                                        <a name="${scenarioGroup.id}"></a>
                                                         <#if scenarioGroup.ruleName?has_content>
-                                                            <div class="rule-title">Rule: ${scenarioGroup.ruleName}</div>
+                                                            <div class="rule-title">
+                                                                Rule: ${scenarioGroup.ruleName}</div>
                                                         </#if>
                                                         <#if scenarioGroup.ruleDescription?has_content>
                                                             <div class="scenario-comments">
-                                                                <i class="fas fa-info-circle"></i>${formatter.renderText(scenarioGroup.ruleDescription)}
+                                                                <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.ruleDescription)}
                                                             </div>
                                                         </#if>
                                                         <#if scenarioGroup.hasBackground()>
@@ -365,11 +366,11 @@
                                                                      style="min-height:1.5em;">
                                                                     <span class="scenario-heading">
                                                                     Background: <#if scenarioGroup.backgroundTitle?has_content>${formatter.renderText(scenarioGroup.backgroundTitle)}</#if></span>
-                                                                     </span>
+                                                                    </span>
                                                                     <#if scenarioGroup.backgroundDescription?has_content>
-                                                                    <div class="scenario-comments">
-                                                                        <i class="fas fa-info-circle"></i>${formatter.renderText(scenarioGroup.backgroundDescription)}
-                                                                    </div>
+                                                                        <div class="scenario-comments">
+                                                                            <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.backgroundDescription)}
+                                                                        </div>
                                                                     </#if>
                                                                 </div>
                                                                 <div class="scenario-docs card-body">
@@ -392,13 +393,14 @@
                                                                    title="View test results">${scenario.type}: ${formatter.renderTitle(scenario.title)}</a>
                                                             </span>
                                                                         <span class="scenario-result-icon">
-                                                                <#if (scenario.isManual())> <i class="fa fa-user manual"
-                                                                                               title="Manual test"></i></#if>
+                                                                <#if (scenario.isManual())> <i
+                                                                        class="bi bi-person manual"
+                                                                        title="Manual test"></i></#if>
 
                                                                             <#if outcome_icon?has_content>
                                                                                 ${outcome_icon}
                                                                             <#else>
-                                                                                <i class="fas fa-pause"
+                                                                                <i class="bi bi-pause-circle"
                                                                                    title="No test has been implemented yet"></i>
                                                                             </#if>
                                                             </span>
@@ -414,7 +416,7 @@
                                                                 <div class="scenario-docs card-body">
                                                                     <#if scenario.description?has_content>
                                                                         <div class="scenario-text">
-                                                                            <i class="fa fa-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}
+                                                                            <i class="bi bi-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}
                                                                         </div>
                                                                     </#if>
                                                                     <#list scenario.steps as step>
@@ -484,6 +486,7 @@
                                                     <#assign compromisedReport = reportName.withPrefix(currentTag).forTestResult("compromised") >
                                                     <#assign pendingReport = reportName.withPrefix(currentTag).forTestResult("pending") >
                                                     <#assign skippedReport = reportName.withPrefix(currentTag).forTestResult("skipped") >
+                                                    <#assign abortedReport = reportName.withPrefix(currentTag).forTestResult("aborted") >
                                                     <#assign ignoredReport = reportName.withPrefix(currentTag).forTestResult("ignored") >
 
                                                     <table class="table">
@@ -509,11 +512,11 @@
                                                             <#if (resultCounts.getOverallTestCount("success") != 0)>
                                                                 <td class="aggregate-result-count">
                                                                     <a href="${successReport}"><i
-                                                                                class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing</a>
+                                                                                class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count"><i
-                                                                            class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing
+                                                                            class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("success")}</td>
@@ -529,11 +532,11 @@
                                                             <#if (resultCounts.getOverallTestCount("pending") != 0)>
                                                                 <td class="aggregate-result-count">
                                                                     <a href="${pendingReport}"><i
-                                                                                class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending</a>
+                                                                                class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count"><i
-                                                                            class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending
+                                                                            class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("pending")}</td>
@@ -549,11 +552,11 @@
                                                             <#if (resultCounts.getOverallTestCount("ignored") != 0)>
                                                                 <td class="aggregate-result-count">
                                                                     <a href="${ignoredReport}"><i
-                                                                                class='fa fa-ban ignored-icon'></i>&nbsp;Ignored</a>
+                                                                                class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count"><i
-                                                                            class='fa fa-ban ignored-icon'></i>&nbsp;Ignored
+                                                                            class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("ignored")}</td>
@@ -569,11 +572,11 @@
                                                             <#if (resultCounts.getOverallTestCount("skipped") != 0)>
                                                                 <td class="aggregate-result-count">
                                                                     <a href="${skippedReport}"><i
-                                                                                class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped</a>
+                                                                                class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count"><i
-                                                                            class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped
+                                                                            class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("skipped")}</td>
@@ -586,24 +589,44 @@
                                                             </#if>
                                                         </tr>
                                                         <tr>
+                                                            <#if (resultCounts.getOverallTestCount("aborted") != 0)>
+                                                                <td class="aggregate-result-count">
+                                                                    <a href="${abortedReport}"><i
+                                                                                class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted</a>
+                                                                </td>
+                                                            <#else>
+                                                                <td class="aggregate-result-count"><i
+                                                                            class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted
+                                                                </td>
+                                                            </#if>
+                                                            <td class="automated-stats">${resultCounts.getAutomatedTestCount("aborted")}</td>
+                                                            <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("aborted")}</td>
+                                                            <#if resultCounts.hasManualTests() >
+                                                                <td class="manual-stats">${resultCounts.getManualTestCount("aborted")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("aborted")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestCount("aborted")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("aborted")}</td>
+                                                            </#if>
+                                                        </tr>
+                                                        <tr>
                                                             <#if resultCounts.hasManualTests() >
                                                                 <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
                                                                     <td colspan="7"><a href="${brokenReport}"><i
-                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                     </td>
                                                                 <#else>
                                                                     <td colspan="7"><i
-                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                     </td>
                                                                 </#if>
                                                             <#else>
                                                                 <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
                                                                     <td colspan="3"><a href="${brokenReport}"><i
-                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                     </td>
                                                                 <#else>
                                                                     <td colspan="3"><i
-                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                                class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
                                                                     </td>
                                                                 </#if>
                                                             </#if>
@@ -614,12 +637,12 @@
                                                             <#if (resultCounts.getOverallTestCount("failure") != 0)>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <a href="${failureReport}"><i
-                                                                                class='fa fa-times-circle failure-icon'></i>&nbsp;Failed</a>
+                                                                                class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <i
-                                                                            class='fa fa-times-circle failure-icon'></i>&nbsp;Failed
+                                                                            class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("failure")}</td>
@@ -634,12 +657,12 @@
                                                             <#if (resultCounts.getOverallTestCount("error") != 0)>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <a href="${errorReport}"><i
-                                                                                class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken</a>
+                                                                                class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <i
-                                                                            class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken
+                                                                            class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("error")}</td>
@@ -654,12 +677,12 @@
                                                             <#if (resultCounts.getOverallTestCount("compromised") != 0)>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <a href="${compromisedReport}"><i
-                                                                                class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised</a>
+                                                                                class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised</a>
                                                                 </td>
                                                             <#else>
                                                                 <td class="aggregate-result-count indented-error-category">
                                                                     <i
-                                                                            class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised
+                                                                            class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised
                                                                 </td>
                                                             </#if>
                                                             <td class="automated-stats">${resultCounts.getAutomatedTestCount("compromised")}</td>
@@ -721,7 +744,7 @@
 
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <h3><i class="fas fa-clipboard-check"></i> Functional Coverage
+                                                        <h3><i class="bi bi-check-circle-fill"></i> Functional Coverage
                                                         </h3>
 
                                                         <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="req-results-table"/>
@@ -732,7 +755,7 @@
 
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <h3><i class="fas fa-cogs"></i> Automated Tests</h3>
+                                                    <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                     <#if (automatedTestCases?has_content)>
                                                         <table class="scenario-result-table table"
@@ -778,7 +801,7 @@
                                                                             ${outcome_icon} <span
                                                                                 style="display:none">${scenario.result}</span>
                                                                         <#else>
-                                                                            <i class="fas fa-pause"
+                                                                            <i class="bi bi-pause-circle"
                                                                                title="No test has been implemented yet"></i>
                                                                         </#if>
                                                                     </td>
@@ -795,7 +818,7 @@
 
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <h3><i class="fas fa-edit"></i> Manual Tests</h3>
+                                                    <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                     <#if (manualTestCases?has_content)>
                                                         <table class="scenario-result-table table"
@@ -847,7 +870,7 @@
                                             <#if evidence?has_content>
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <h3><i class="far fa-file"></i> Evidence</h3>
+                                                        <h3><i class="bi bi-download"></i> Evidence</h3>
                                                         <table id="evidence-table" class="table table-bordered">
                                                             <thead>
                                                             <tr>

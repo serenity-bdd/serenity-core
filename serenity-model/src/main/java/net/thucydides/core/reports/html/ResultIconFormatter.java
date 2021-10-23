@@ -10,14 +10,14 @@ public class ResultIconFormatter {
 
     private final Map<TestResult, String> resultIcons = new HashMap();
     {
-        resultIcons.put(TestResult.COMPROMISED, "<a href='${report}#beforetable'><i class='fa fa-chain-broken ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.ERROR,  "<a href='${report}#beforetable'><i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.FAILURE, "<a href='${report}#beforetable'><i class='fa fa-times-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.SUCCESS, "<a href='${report}#beforetable'><i class='fa fa-check-circle-o ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.PENDING, "<a href='${report}#beforetable'><i class='far fa-stop-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-
-        resultIcons.put(TestResult.IGNORED, "<a href='${report}#beforetable'><i class='fa fa-ban ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.SKIPPED, "<a href='${report}#beforetable'><i class='fa fa-fast-forward ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.COMPROMISED, "<a href='${report}#beforetable'><i class='bi bi-slash-circle-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.ERROR,  "<a href='${report}#beforetable'><i class='bi bi-exclamation-triangle-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.FAILURE, "<a href='${report}#beforetable'><i class='bi bi-x-circle-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.SUCCESS, "<a href='${report}#beforetable'><i class='bi bi-check-circle-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.PENDING, "<a href='${report}#beforetable'><i class='bi bi-hourglass-top ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.ABORTED, "<a href='${report}#beforetable'><i class='bi bi-exclamation-octagon-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.IGNORED, "<a href='${report}#beforetable'><i class='bi bi-slash-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
+        resultIcons.put(TestResult.SKIPPED, "<a href='${report}#beforetable'><i class='bi bi-skip-forward ${iconStyle} ${qualifier}' title='${result}'></i></a>");
         resultIcons.put(TestResult.UNDEFINED, "");
     }
 
@@ -28,6 +28,7 @@ public class ResultIconFormatter {
         resultIconStyles.put(TestResult.FAILURE, "failure-icon");
         resultIconStyles.put(TestResult.SUCCESS, "success-icon");
         resultIconStyles.put(TestResult.PENDING, "pending-icon");
+        resultIconStyles.put(TestResult.ABORTED, "aborted-icon");
         resultIconStyles.put(TestResult.IGNORED, "ignored-icon");
         resultIconStyles.put(TestResult.SKIPPED, "skipped-icon");
         resultIconStyles.put(TestResult.UNDEFINED, "undefined-icon");

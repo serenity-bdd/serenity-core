@@ -32,6 +32,11 @@ public enum TestResult {
     FAILURE(3, true, "Failing"),
 
     /**
+     * Test is skipped due to a failing assumption
+     */
+    ABORTED(2, false, "Aborted"),
+
+    /**
      * The test step was not executed because a previous step in this test case failed.
      * A whole test case can be skipped using tags or annotations to indicate that it is currently "work-in-progress"
      */
@@ -84,6 +89,10 @@ public enum TestResult {
 
     public boolean isMoreSevereThan(TestResult otherResult) {
         return ordinal() > otherResult.ordinal();
+    }
+
+    public boolean isLessSevereThan(TestResult otherResult) {
+        return ordinal() < otherResult.ordinal();
     }
 
     public String getLabel() {

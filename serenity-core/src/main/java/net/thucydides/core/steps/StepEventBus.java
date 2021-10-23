@@ -611,6 +611,8 @@ public class StepEventBus {
             case SKIPPED:
                 testSkipped();
                 break;
+            case ABORTED:
+                testAborted();
         }
 
     }
@@ -639,6 +641,13 @@ public class StepEventBus {
     public void testSkipped() {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSkipped();
+        }
+        suspendTest();
+    }
+
+    public void testAborted() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testAborted();
         }
         suspendTest();
     }

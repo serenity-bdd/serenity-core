@@ -66,6 +66,7 @@ public class TestCoverageFormatter {
         }
 
         protected abstract double percentageDeterminedResult();
+
         protected abstract double percentageWithResult(TestResult expectedResult);
 
         public String withResult(TestResult expectedResult) {
@@ -83,11 +84,14 @@ public class TestCoverageFormatter {
         public String withFailureOrError() {
             return formatter.percentage(percentageWithResult(TestResult.FAILURE)
                     + percentageWithResult(TestResult.ERROR)
+                    + percentageWithResult(TestResult.ABORTED)
                     + percentageWithResult(TestResult.COMPROMISED), precision);
         }
 
         public String withSkippedOrIgnored() {
-            return formatter.percentage(percentageWithResult(TestResult.SKIPPED) + percentageWithResult(TestResult.IGNORED),precision);
+            return formatter.percentage(percentageWithResult(TestResult.SKIPPED)
+                            + percentageWithResult(TestResult.IGNORED),
+                    precision);
         }
     }
 

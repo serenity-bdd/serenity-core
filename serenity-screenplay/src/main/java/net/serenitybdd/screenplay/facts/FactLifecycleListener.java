@@ -110,6 +110,11 @@ public class FactLifecycleListener implements StepListener, Droppable {
     }
 
     @Override
+    public void testAborted() {
+
+    }
+
+    @Override
     public void testPending() {
 
     }

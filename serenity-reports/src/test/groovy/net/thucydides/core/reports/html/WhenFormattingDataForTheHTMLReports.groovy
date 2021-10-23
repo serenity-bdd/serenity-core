@@ -432,9 +432,9 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
             formatter.resultIcon().forResult(result).contains(expectedIcon)
         where:
             result              | expectedIcon
-            TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i>"
-            TestResult.FAILURE      | "<i class='fa fa-times-circle failure-icon ' title='FAILURE'></i>"
-            TestResult.SUCCESS      | "<i class='fa fa-check-circle-o success-icon ' title='SUCCESS'></i>"
+            TestResult.ERROR        | "<i class='bi bi-exclamation-triangle-fill error-icon ' title='ERROR'></i>"
+            TestResult.FAILURE      | "<i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i>"
+            TestResult.SUCCESS      | "<i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i>"
     }
 
     @Unroll
@@ -445,9 +445,9 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         formatter.resultIcon().inLarge().forResult(result).contains(expectedIcon)
         where:
         result              | expectedIcon
-        TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon fa-2x' title='ERROR'></i>"
-        TestResult.FAILURE      | "<i class='fa fa-times-circle failure-icon fa-2x' title='FAILURE'></i>"
-        TestResult.SUCCESS      | "<i class='fa fa-check-circle-o success-icon fa-2x' title='SUCCESS'></i>"
+        TestResult.ERROR        | "<i class='bi bi-exclamation-triangle-fill error-icon fa-2x' title='ERROR'></i>"
+        TestResult.FAILURE      | "<i class='bi bi-x-circle-fill failure-icon fa-2x' title='FAILURE'></i>"
+        TestResult.SUCCESS      | "<i class='bi bi-check-circle-fill success-icon fa-2x' title='SUCCESS'></i>"
     }
 
 

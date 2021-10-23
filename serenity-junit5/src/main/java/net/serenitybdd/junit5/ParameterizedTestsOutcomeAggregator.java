@@ -41,7 +41,7 @@ public class ParameterizedTestsOutcomeAggregator {
                     List<DataTableRow> scenarioRows = scenarioOutcome.getDataTable().getRows();
                     List<DataTableRow> outcomeRows = testOutcome.getDataTable().getRows();
                     for (DataTableRow row : outcomeRows) {
-                        if (!scenarioRows.contains(row)) {
+                        if (!containRow(scenarioRows, row)) {
                             scenarioOutcome.addRow(row);
                         }
                     }
@@ -55,6 +55,10 @@ public class ParameterizedTestsOutcomeAggregator {
         aggregatedScenarioOutcomes.addAll(scenarioOutcomes.values());
         return aggregatedScenarioOutcomes;
 
+    }
+
+    private boolean containRow(List<DataTableRow> scenarioRows, DataTableRow expectedRow) {
+        return scenarioRows.stream().anyMatch( row -> row.equalsIgnoringTheResult(expectedRow));
     }
 
     private void recordTestOutcomeAsSteps(TestOutcome testOutcome, TestOutcome scenarioOutcome) {

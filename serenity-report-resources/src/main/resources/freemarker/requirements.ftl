@@ -256,7 +256,7 @@
                         <!-- Requirements result tabs -->
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a data-toggle="tab" href="#specs"><i class="fas fa-comments"></i> Specifications</a>
+                                <a data-toggle="tab" href="#specs"><i class="bi bi-journal-text"></i> Specifications</a>
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#results"><i class="bi bi-speedometer"></i> Test Results</a>

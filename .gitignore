@@ -21,3 +21,6 @@ bin
 *.versionsBackup
 serenity-cli/dependency-reduced-pom.xml
 .flattened-pom.xml
+node_modules
+package-lock.json
+package.json

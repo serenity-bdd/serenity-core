@@ -115,7 +115,7 @@
                                     <#assign issueNumber = "">
                                 </#if>
                                 <h3 class="discreet-story-header">
-                                    <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
+                                    <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
@@ -130,7 +130,7 @@
                                 <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().displayName).asATitle())>
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
-                                    <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
+                                    <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
                                     <span class="story-header-title">${parentTitle}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>

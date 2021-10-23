@@ -81,7 +81,7 @@
                                         <#assign issueNumber = "">
                                     </#if>
                                     <h3 class="discreet-story-header">
-                                        <i class="fs-2 bi bi-chat-left-quote"></i>
+                                        <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
@@ -94,7 +94,7 @@
                                     <#assign parentTitle = inflection.of(featureOrStory.get().displayName).asATitle() >
                                     <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                     <h3 class="discreet-story-header">
-                                        <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
+                                        <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
                                     <#if showDetailedStoryDescription!false>

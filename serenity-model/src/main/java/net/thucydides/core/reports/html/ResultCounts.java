@@ -109,7 +109,7 @@ public class ResultCounts {
     }
 
     private String labeledValue(String resultType, TestType testType) {
-        int resultCount = 0;
+        int resultCount;
         if (testType == TestType.AUTOMATED)  {
             resultCount = this.getAutomatedTestCount(resultType);
         } else if (testType == TestType.MANUAL) {

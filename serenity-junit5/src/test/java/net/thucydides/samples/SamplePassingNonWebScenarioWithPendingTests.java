@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit5.SerenityBDD;
-import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 @SerenityBDD
 public class SamplePassingNonWebScenarioWithPendingTests {
     

@@ -57,6 +57,7 @@
     <#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
     <#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
     <#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
+    <#elseif testOutcome.result == "ABORTED"><#assign outcome_text = "aborted-color">
     <#elseif testOutcome.result == "COMPROMISED"><#assign outcome_text = "compromised-color">
     <#else><#assign outcome_text = "ignore-color">
     </#if>
@@ -80,7 +81,7 @@
                                         <#assign issueNumber = "">
                                     </#if>
                                     <h3 class="discreet-story-header">
-                                        <i class="fa fa-2x fa-comments-o"></i>
+                                        <i class="fs-2 bi bi-chat-left-quote"></i>
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
@@ -93,7 +94,7 @@
                                     <#assign parentTitle = inflection.of(featureOrStory.get().displayName).asATitle() >
                                     <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                     <h3 class="discreet-story-header">
-                                        <i class="fa fa-2x fa-comments-o"></i>
+                                        <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
                                     <#if showDetailedStoryDescription!false>
@@ -119,7 +120,7 @@
                                 <p class="tag">
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
+                                    <i class="bi bi-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
                                                                       href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
@@ -149,14 +150,14 @@
                                 <#-- Last tested and up to date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
-                                            <i class="fas fa-user-check"></i> Last tested version: ${testOutcome.lastTested}
+                                            <i class="bi bi-person-check"></i> Last tested version: ${testOutcome.lastTested}
                                         </span>
                                         <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
                                             <#list testOutcome.renderedManualTestEvidence as manualEvidence>
                                                 <a target="_blank" href="${manualEvidence.link}">
                                                 <span class="badge badge-pill badge-primary">
-                                                    <i class="fas fa-external-link-alt"></i> ${manualEvidence.label}
+                                                    <i class="bi bi-box-arrow-up-right"></i> ${manualEvidence.label}
                                                 </span>
                                                 </a>
                                             </#list>
@@ -167,13 +168,13 @@
                                 <#-- Last tested out of date-->
                                     <div class="manual-test-result">
                                         <span class="badge badge-pill badge-info">
-                                            <i class="fas fa-user-clock"></i> Awaiting new manual test. Last tested version: ${testOutcome.lastTested}</span>
+                                            <i class="bi bi-calendar4-week"></i> Awaiting new manual test. Last tested version: ${testOutcome.lastTested}</span>
                                         <#if (testOutcome.manualTestEvidence?has_content)>
                                             <br/>
                                             <#list testOutcome.renderedManualTestEvidence as manualEvidence>
                                                 <a target="_blank" href="${manualEvidence.link}}">
                                                     <span class="badge badge-pill badge-primary">
-                                                        <i class="fas fa-external-link-alt"></i> Test Evidence for previous test
+                                                        <i class="bi bi-box-arrow-up-right"></i> Test Evidence for previous test
                                                     </span>
                                                 </a>
                                             </#list>
@@ -181,12 +182,12 @@
                                     </div>
                                 <#else>
                                 <#-- No last tested version specified -->
-                                    <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
+                                    <i class="bi bi-person manual" alt="Manual test" title="Manual test"></i>
                                 </#if>
                             </#if>
 
                             <#list testOutcome.flags as flag>
-                                <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}"
+                                <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}"
                                    title="${flag.message}"></i>
                             </#list>
                             <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
@@ -200,7 +201,7 @@
                             <td valign="top">
                                 <a href="${testOutcome.externalLink.url}" class="tag"
                                    title="${testOutcome.externalLink.type}">
-                                    <i class="fa fa-video-camera fa-2x"></i>
+                                    <i class="fs-2 bi bi-camera-reels"></i>
                                 </a>
                             </td>
                         </#if>
@@ -220,7 +221,7 @@
                             <td>
                                 <div>
                                     <h3 class="discreet-story-header">
-                                        <i class="fa fa-2x fa-users"></i>
+                                        <i class="fs-2 bi bi-people"></i>
                                         <span class="story-header-title">
                                             <a class="btn btn-primary" data-toggle="collapse" href="#castDetails"
                                                role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
@@ -233,7 +234,7 @@
                                                 <#list testOutcome.actors as castMember>
                                                     <td width="${cellWidth}%">
                                                         <h4>
-                                                            <i class="fa fa-2x fa-user-o"></i>&nbsp;<span>${castMember.name}</span>
+                                                            <i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name}</span>
                                                             <h4>
                                                                 <p>${formatter.renderDescription(castMember.description!"")}</p>
                                                                 <ul>
@@ -302,7 +303,7 @@
                         <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
                         <#assign tagStyle = styling.tagStyleFor(tag) >
                         <span class="badge tag-badge" style="${tagStyle}">
-                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle} style="${tagStyle}"
+                    <i class="bi bi-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle} style="${tagStyle}"
                                                       href="${exampleTagReport}">${formatter.htmlCompatible(exampleTagTitle)}
                     (${exampleTag.type})</a>
                 </span>
@@ -351,7 +352,7 @@
                 <tr class="step-titles">
                     <th width="65">
                         <#if (testOutcome.manual)>
-                            <i class="fa fa-user fa-2x" title="Manual test"></i>
+                            <i class="bi bi-person fa-2x" title="Manual test"></i>
                         </#if>
                     </th>
                     <th class="step-description-column greentext"><#if (testOutcome.manual)>Manual </#if>
@@ -362,7 +363,7 @@
                         <th width="150" class="greentext">Screenshots</th>
                     </#if>
                     <th width="130" class="greentext">Outcome</th>
-                    <th width="100" class="greentext"><i title="Duration" class="far fa-clock"></i></th>
+                    <th width="100" class="greentext"><i title="Duration" class="bi bi-stopwatch"></i></th>
                 </tr>
                 <tr class="step-table-separator">
                     <td colspan="5"></td>
@@ -472,7 +473,7 @@
                                 <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                    style="display:block">
                                     <#--${step_outcome_icon}-->
-                                    <i class="fa fa-plus-square-o imgstepSection${step_number} ${step_outcome_style}"
+                                    <i class="bi bi-plus-square imgstepSection${step_number} ${step_outcome_style}"
                                        style="margin-left: ${step_indent}px; float:left; padding-right:5px"></i>
                                     <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
                                     <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
@@ -522,7 +523,7 @@
                                 </span>
                                 <#if (step.externalLink)?? && (step.externalLink.url)??>
                                     <a href="${step.externalLink.url}" class="tag" title="${step.externalLink.type}">
-                                        <i class="fa fa-video-camera fa-1x"></i>
+                                        <i class="bi bi-camera-video"></i>
                                     </a>
                                 </#if>
                             </div>
@@ -538,7 +539,7 @@
                                              class="screenshot"
                                              width="48" height="48"/>
                                     </a>
-                                    <i class="fas fa-arrow-right"></i>
+                                    <i class="bi bi-arrow-right"></i>
                                 </#if>
 
                                 <#if step.latestScreenshot?has_content>

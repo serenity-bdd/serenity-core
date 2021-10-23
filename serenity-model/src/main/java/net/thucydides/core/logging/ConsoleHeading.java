@@ -78,6 +78,16 @@ public class ConsoleHeading {
                         "   |_|   |___| |___/   |_|     |___/ |_|\\_\\ |___| |_|   |_|   |___| |___/ \n")
         );
 
+        HEADINGS.put(ConsoleEvent.TEST_ABORTED,
+                NewList.of(
+                        "",
+                        titleWithBorder(ConsoleEvent.TEST_COMPROMISED),
+                        "\n  _____   ___   ___   _____     ___   _  __  ___   ___   ___   ___   ___  \n" +
+                                " |_   _| | __| / __| |_   _|   / __| | |/ / |_ _| | _ \\ | _ \\ | __| |   \\ \n" +
+                                "   | |   | _|  \\__ \\   | |     \\__ \\ | ' <   | |  |  _/ |  _/ | _|  | |) |\n" +
+                                "   |_|   |___| |___/   |_|     |___/ |_|\\_\\ |___| |_|   |_|   |___| |___/ \n")
+        );
+
         HEADINGS.put(ConsoleEvent.TEST_PENDING,
                 NewList.of(
                         "",

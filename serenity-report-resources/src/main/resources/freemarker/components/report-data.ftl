@@ -21,7 +21,7 @@
     <#else>
                 <span>
                     <a role="button" class="btn btn-success btn-sm" href="${(reportData.path)!}">
-                        <i class="fas fa-download"></i>&nbsp;${reportData.title}
+                        <i class="bi bi-download"></i>&nbsp;${reportData.title}
                     </a>
                 </span>
     </#if>

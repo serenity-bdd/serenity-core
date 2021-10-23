@@ -91,6 +91,11 @@ public abstract class AbstractStepListener implements StepListener {
     }
 
     @Override
+    public void testAborted() {
+
+    }
+
+    @Override
     public void testSkipped() {
 
     }

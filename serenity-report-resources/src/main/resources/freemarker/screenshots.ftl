@@ -115,7 +115,7 @@
                                     <#assign issueNumber = "">
                                 </#if>
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
@@ -130,7 +130,7 @@
                                 <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().displayName).asATitle())>
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <h2><i class="fs-2 bi bi-chat-left-quote"></i></h2>
                                     <span class="story-header-title">${parentTitle}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
@@ -157,7 +157,7 @@
                             <p class="tag">
                                 <#assign tagStyle = styling.tagStyleFor(tag) >
                                 <span class="badge tag-badge" style="${tagStyle}"
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
+                                    <i class="bi bi-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
                             </p>

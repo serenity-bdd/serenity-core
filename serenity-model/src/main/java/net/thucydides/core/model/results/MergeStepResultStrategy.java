@@ -7,6 +7,7 @@ public class MergeStepResultStrategy {
         switch (nextStepResult) {
             case SKIPPED: return new NextStepWasSkippedStrategy(nextStepResult);
             case FAILURE: return new NextStepFailedStrategy(nextStepResult);
+            case ABORTED: return new NextStepCompromisedStrategy(nextStepResult);
             case COMPROMISED: return new NextStepCompromisedStrategy(nextStepResult);
             default: return new NextStepStatusTakesPriorityStrategy(nextStepResult);
         }

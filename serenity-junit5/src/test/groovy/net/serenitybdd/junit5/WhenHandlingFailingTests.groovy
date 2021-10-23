@@ -5,7 +5,6 @@ package net.serenitybdd.junit5
 import net.thucydides.core.annotations.Steps
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.StepEventBus
-import org.junit.Rule
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import spock.lang.Ignore
@@ -27,7 +26,7 @@ class WhenHandlingFailingTests extends Specification {
         }
     }
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     static class ATestWithAnExpectedExceptionInAStep {
 
         @Steps
@@ -50,7 +49,7 @@ class WhenHandlingFailingTests extends Specification {
             StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0).result == TestResult.SUCCESS
     }
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     static class ATestWithAnUnexpectedExceptionInAStep {
 
         @Steps
@@ -73,7 +72,7 @@ class WhenHandlingFailingTests extends Specification {
             StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0).result == TestResult.FAILURE
     }
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     static class ATestWithAnExpectedException {
 
         @Test

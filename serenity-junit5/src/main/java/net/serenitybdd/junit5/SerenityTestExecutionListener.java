@@ -15,8 +15,6 @@ import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
@@ -73,7 +71,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private boolean isDataDrivenTest = false;
 
-    private boolean isSerenityTest = false;
+//    private boolean isSerenityTest = false;
 
     public SerenityTestExecutionListener() {
         File outputDirectory = getOutputDirectory();
@@ -97,14 +95,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             for (TestIdentifier child : children) {
                 if (isClassSource(child) ) {
                     Class<?> javaClass = ((ClassSource) child.getSource().get()).getJavaClass();
-                    if(isSerenityTestClass(javaClass)) {
+//                    if(isSerenityTestClass(javaClass)) {
                         logger.debug("->TestPlanExecutionStarted:JavaClass " + javaClass);
                         logger.trace(" Root " + root.getUniqueId() + root.getDisplayName() + root.getSource());
                         Map<String, DataTable> parameterTablesForClass = JUnit5DataDrivenAnnotations.forClass(javaClass).getParameterTables();
                         if (!parameterTablesForClass.isEmpty()) {
                             dataTables.putAll(parameterTablesForClass);
                         }
-                    }
+//                    }
                 }
             }
         }
@@ -112,7 +110,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        if(!isSerenityTest) return;
+        //if(!isSerenityTest) return;
         logger.debug("->TestPlanExecutionFinished " + testPlan);
     }
 
@@ -131,7 +129,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void executionSkipped(TestIdentifier testIdentifier, String reason) {
-        if(!isSerenityTest) return;
+       // if(!isSerenityTest) return;
         processTestMethodAnnotationsFor(testIdentifier);
     }
 
@@ -213,11 +211,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
         if (isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             testClass = ((ClassSource) testIdentifier.getSource().get()).getJavaClass();
-            isSerenityTest = isSerenityTestClass(testClass);
-            if(!isSerenityTestClass(testClass)) {
-                logger.trace("-->Execution started but no SerenityClass " + testClass);
-                return;
-            }
+//            isSerenityTest = isSerenityTestClass(testClass);
+//            if(!isSerenityTestClass(testClass)) {
+//                logger.trace("-->Execution started but no SerenityClass " + testClass);
+//                return;
+//            }
             logger.trace("-->Execution started " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
             logger.trace("-->TestSuiteStarted " + testClass);
             baseStepListener.clearTestOutcomes();
@@ -253,7 +251,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        if(!isSerenityTestClass(testClass)) return;
+//        if(!isSerenityTestClass(testClass)) return;
         logger.trace("-->Execution finished " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource() + " with result " + testExecutionResult.getStatus());
         if (!testIdentifier.getSource().isPresent()) {
             logger.info("No action done at executionFinished because testIdentifier is null");
@@ -268,7 +266,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             if (isMethodSource(testIdentifier)) {
                 MethodSource methodSource = ((MethodSource) testIdentifier.getSource().get());
                 String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
-                testFinished(testIdentifier, methodSource);
+                testFinished(testIdentifier, methodSource, testExecutionResult);
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if (dataTable != null) {
                     logger.info("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
@@ -324,12 +322,26 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
     }
 
-    private void testFinished(TestIdentifier testIdentifier, MethodSource methodSource) {
+    private void testFinished(TestIdentifier testIdentifier, MethodSource methodSource, TestExecutionResult testExecutionResult) {
         logger.info("Test finished " + testIdentifier);
-        //if (testingThisTest(description)) {
         updateResultsUsingTestAnnotations(methodSource);
+        TestResult result = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getResult();
+        if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED && result == TestResult.SUCCESS) {
+            updateResultsUsingTestExecutionResult(testExecutionResult);
+        } else if (testExecutionResult.getStatus() == TestExecutionResult.Status.FAILED && result.isLessSevereThan(TestResult.FAILURE)) {
+            updateResultsUsingTestExecutionResult(testExecutionResult);
+        }
         StepEventBus.getEventBus().testFinished();
         StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
+    }
+
+    private void updateResultsUsingTestExecutionResult(TestExecutionResult testExecutionResult) {
+        testExecutionResult.getThrowable().ifPresent(
+            cause -> StepEventBus.getEventBus().getBaseStepListener().updateCurrentStepFailureCause(cause)
+        );
+        if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED) {
+            StepEventBus.getEventBus().getBaseStepListener().overrideResultTo(TestResult.ABORTED);
+        }
     }
 
     private void updateResultsUsingTestAnnotations(MethodSource methodSource) {
@@ -357,7 +369,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {
-        if(!isSerenityTestClass(testClass)) return;
+//        if(!isSerenityTestClass(testClass)) return;
         logger.info("-->ReportingEntryPublished " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
     }
 
@@ -473,8 +485,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         expectedExceptions.add(exceptionClass);
     }
 
-    private boolean isSerenityTestClass(Class<?> testClass) {
-        return testClass.getAnnotation(SerenityBDD.class) != null;
-    }
-
+//    private boolean isSerenityTestClass(Class<?> testClass) {
+//        return (testClass != null) && (testClass.getAnnotation(SerenityBDD.class) != null);
+//    }
 }

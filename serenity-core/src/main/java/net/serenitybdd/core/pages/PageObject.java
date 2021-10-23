@@ -1306,7 +1306,7 @@ public abstract class PageObject {
     }
 
     private Boolean jqueryIntegrationIsActivated() {
-        return SERENITY_JQUERY_INTEGRATION.booleanFrom(environmentVariables, true);
+        return SERENITY_JQUERY_INTEGRATION.booleanFrom(environmentVariables, false);
     }
 
     public RadioButtonGroup inRadioButtonGroup(String name) {

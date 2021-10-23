@@ -104,7 +104,7 @@ class CoverageByTagResult(val tagName: String,
     fun countForResult(result: TestResult): Int = if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
 
     fun getCoverageSegments(): List<CoverageSegment> =
-            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, FAILURE, ERROR, COMPROMISED)
+            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
                     .filter { percentageForResult(it) > 0 }
                     .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
 
@@ -124,7 +124,7 @@ class CoverageByTag(val tagName: String,
     fun countForResult(result: TestResult): Int = if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
 
     fun getCoverageSegments(): List<CoverageSegment> =
-            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, FAILURE, ERROR, COMPROMISED)
+            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
                     .filter { percentageForResult(it) > 0 }
                     .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
 

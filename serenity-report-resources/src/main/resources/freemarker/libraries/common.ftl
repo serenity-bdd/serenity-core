@@ -1,4 +1,4 @@
-<#include "font-awesome.ftl">
+<#include "bootstrap-icons.ftl">
 <#include "jquery.ftl">
 <#include "chartist.ftl">
 <#include "treeview.ftl">

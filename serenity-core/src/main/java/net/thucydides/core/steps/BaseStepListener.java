@@ -140,7 +140,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void overrideResultTo(TestResult result) {
-        getCurrentTestOutcome().overrideAnnotatedResult(result);
+        getCurrentTestOutcome().overrideResult(result);
     }
 
     public void recordManualTestResult(TestResult result,
@@ -548,9 +548,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void updateCurrentStepFailureCause(Throwable failure) {
-        if (currentStepExists()) {
-            getCurrentStep().failedWith(failure);
-        }
+//        if (currentStepExists()) {
+//            getCurrentStep().failedWith(failure);
+//        } else {
+            this.currentTestOutcome.lastStepFailedWith(failure);
+//        }
     }
 
     public class StepMutator {
@@ -1150,6 +1152,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
+    }
+
+    @Override
+    public void testAborted() {
+        if (!testOutcomeRecorded()) {
+            return;
+        }
+
+        getCurrentTestOutcome().setAnnotatedResult(ABORTED);
     }
 
     public void testPending() {

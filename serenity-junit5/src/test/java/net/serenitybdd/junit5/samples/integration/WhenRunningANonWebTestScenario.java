@@ -3,7 +3,8 @@ package net.serenitybdd.junit5.samples.integration;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
-import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
+import net.serenitybdd.junit5.SerenityBDD;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.junit5.extensions.TemporaryFolderExtension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.guice.ThucydidesModule;
@@ -13,6 +14,9 @@ import net.thucydides.core.model.TestStep;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.samples.*;
+import org.hamcrest.Matchers;
+import org.junit.Assume;
+import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -61,31 +65,29 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         //assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("My Custom Display Name For Edge Case 2").getTitle(), is("My Custom Display Name For Edge Case 2"));
     }
 
-    @Test
-    public void tests_with_failing_assumptions_should_be_ignored()  {
+   @SerenityBDD
+   @ExtendWith(SerenityJUnit5Extension.class)
+    public static final class HasAFailingAssumptionInATest {
+        @Test
+        public void test_with_failing_assumption() {
+            Assume.assumeThat(true, is(false));
+        }
 
-        TestLauncher.runTestForClass(SampleScenarioWithFailingAssumption.class);
-
-        List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        assertThat(executedSteps.size(), is(3));
-
-        assertThat(inTheTestOutcomes(executedSteps).theResultFor("happy_day_scenario"), is(TestResult.IGNORED));
+        @Test
+        public void following_test() {}
     }
 
-//
-//    @Test
-//    public void tests_marked_as_ignored_should_be_skipped()  {
-//
-//        TestLauncher.runTestForClass(SamplePassingNonWebScenarioWithIgnoredTests.class);
-//
-//        List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-//        assertThat(executedSteps.size(), is(3));
-//
-//        assertThat(inTheTestOutcomes(executedSteps).theResultFor("happy_day_scenario"), is(TestResult.SUCCESS));
-//        assertThat(inTheTestOutcomes(executedSteps).theResultFor("edge_case_1"), is(TestResult.IGNORED));
-//        assertThat(inTheTestOutcomes(executedSteps).theResultFor("edge_case_2"), is(TestResult.IGNORED));
-//
-//    }
+    @Test
+    public void tests_with_failing_assumptions_should_be_aborted()  {
+
+        TestLauncher.runTestForClass(HasAFailingAssumptionInATest.class);
+
+        List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+
+        assertThat(inTheTestOutcomes(executedSteps).theResultFor("test_with_failing_assumption"), is(TestResult.ABORTED));
+        assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("test_with_failing_assumption").getTestFailureCause().asException(), Matchers.instanceOf(AssumptionViolatedException.class));
+    }
+
 
     @Test
     public void tests_marked_as_manual_should_be_flagged_as_manual_tests()  {
@@ -109,7 +111,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("a_manual_test").isManual(), equalTo(true));
     }
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     public static final class ATestWithNoSteps {
         @Test
         public void test_with_no_steps() {}
@@ -125,7 +127,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(inTheTestOutcomes(executedSteps).theResultFor("test_with_no_steps"), is(TestResult.SUCCESS));
     }
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     public static final class ADisabledTest {
         @Test
         public void previous_test() {}
@@ -149,7 +151,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     public static boolean pendingTestWasSuspended = false;
 
-    @ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+    @ExtendWith(SerenityJUnit5Extension.class)
     public static final class APendingTest {
         @Test
         public void previous_test() {}
@@ -232,16 +234,16 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     }
 
-    @Test
-    public void the_test_runner_records_each_step_of_the_test_scenario()  {
-        TestLauncher.runTestForClass(SamplePassingNonWebScenario.class);
-        List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-        assertThat(executedScenarios.size(), is(3));
-
-        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("happy_day_scenario").getTestSteps().size(), is(4));
-        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("edge_case_1").getTestSteps().size(), is(3));
-        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("edge_case_2").getTestSteps().size(), is(2));
-    }
+//    @Test
+//    public void the_test_runner_records_each_step_of_the_test_scenario()  {
+//        TestLauncher.runTestForClass(SamplePassingNonWebScenario.class);
+//        List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+//        assertThat(executedScenarios.size(), is(3));
+//
+//        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("happy_day_scenario").getTestSteps().size(), is(4));
+//        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("edge_case_1").getTestSteps().size(), is(3));
+//        assertThat(inTheTestOutcomes(executedScenarios).theOutcomeFor("edge_case_2").getTestSteps().size(), is(2));
+//    }
 
     @Test
     public void the_test_runner_distinguishes_between_ignored_skipped_and_pending_steps()  {
@@ -289,17 +291,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         assertThat(firstStep.getDescription(), containsString("Step with a parameter:"));
         assertThat(firstStep.getDescription(), containsString("proportionOf"));
-    }
-
-    @Test
-    public void should_not_fail_test_if_an_exception_is_expected()  {
-
-        TestLauncher.runTestForClass(NonWebTestScenarioWithParameterizedSteps.class);
-        List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
-
-        TestOutcome testOutcome = testOutcomeWithTitle("Should throw correct exception", executedScenarios);
-        TestStep firstStep = testOutcome.getTestSteps().get(0);
-        assertThat(firstStep.getResult(), is(TestResult.SUCCESS));
     }
 
     @Test

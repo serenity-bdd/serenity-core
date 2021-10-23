@@ -6,8 +6,8 @@
                     <span class="error-message error-message-title">${title}</span>
                 </div>
                 <div class="col-sm-2">
-                    <a class="btn btn-warning details-button" data-toggle="collapse" href="#stacktraceModal-${id}""
-                       role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><i class="far fa-eye"></i> More details</a>
+                    <a class="btn btn-warning details-button" data-toggle="collapse" href="#stacktraceModal-${id}"
+                       role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><i class="bi bi-eye"></i> More details</a>
                 </div>
              </div>
         </div>

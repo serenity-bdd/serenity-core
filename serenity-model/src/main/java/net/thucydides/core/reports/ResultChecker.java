@@ -83,7 +83,11 @@ public class ResultChecker {
         );
         logger.info(
                 resultLine(purple(
-                  "Tests compromised      "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED))))
+                        "Tests compromised      "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED))))
+        );
+        logger.info(
+                resultLine(purple(
+                        "Tests aborted      "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ABORTED))))
         );
         logger.info(
                 resultLine(cyan(

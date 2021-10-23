@@ -914,7 +914,7 @@ public class TestOutcomes {
             return (getTotal() == 0) ? 0 : ((pendingCount + skippedCount + ignoredCount) / (double) getTotal());
         }
         public Double withFailureOrError() {
-            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
+            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED) + withResult(TestResult.ABORTED);
         }
     }
 

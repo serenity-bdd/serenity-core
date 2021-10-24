@@ -3,7 +3,6 @@ package net.serenitybdd.junit5.samples.integration;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.junit5.extensions.TemporaryFolderExtension;
 import net.thucydides.core.annotations.Pending;
@@ -65,7 +64,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         //assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("My Custom Display Name For Edge Case 2").getTitle(), is("My Custom Display Name For Edge Case 2"));
     }
 
-   @SerenityBDD
    @ExtendWith(SerenityJUnit5Extension.class)
     public static final class HasAFailingAssumptionInATest {
         @Test

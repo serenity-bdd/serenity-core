@@ -1,6 +1,5 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
@@ -13,7 +12,6 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
 
 @ExtendWith(SerenityJUnit5Extension.class)
-@SerenityBDD
 public class ScenarioWithNestedTestSpecificDataSample {
 
     @Managed(driver = "htmlunit")

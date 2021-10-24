@@ -1,6 +1,5 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
@@ -13,7 +12,6 @@ import java.util.stream.Stream;
 
 
 @ExtendWith(SerenityJUnit5Extension.class)
-@SerenityBDD
 public class SampleDataDrivenPendingScenario {
 
     @Steps

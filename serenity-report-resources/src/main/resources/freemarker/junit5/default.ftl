@@ -81,7 +81,7 @@
                                         <#assign issueNumber = "">
                                     </#if>
                                     <h3 class="discreet-story-header">
-                                        <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
+                                        <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
@@ -94,7 +94,7 @@
                                     <#assign parentTitle = inflection.of(featureOrStory.get().displayName).asATitle() >
                                     <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                     <h3 class="discreet-story-header">
-                                        <i class="fs-2 bi bi-chat-left-quote fa-2x"></i>
+                                        <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
                                         <span class="story-header-title">${parentTitle}</span>
                                     </h3>
                                     <#if showDetailedStoryDescription!false>
@@ -221,7 +221,7 @@
                             <td>
                                 <div>
                                     <h3 class="discreet-story-header">
-                                        <i class="fs-2 bi bi-people"></i>
+                                        <i class="fs-2 bi bi-people large-icon"></i>
                                         <span class="story-header-title">
                                             <a class="btn btn-primary" data-toggle="collapse" href="#castDetails"
                                                role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
@@ -233,10 +233,7 @@
                                             <tr>
                                                 <#list testOutcome.actors as castMember>
                                                     <td width="${cellWidth}%">
-                                                        <h4>
-                                                            <i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name}</span>
-                                                            <h4>
-                                                                <p>${formatter.renderDescription(castMember.description!"")}</p>
+                                                        <h4><i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name} is ${formatter.renderDescription(castMember.description!"")}</span></h4>
                                                                 <ul>
                                                                     <#if (castMember.hasFacts())>
                                                                         <li><strong>${castMember.name} has:</strong>

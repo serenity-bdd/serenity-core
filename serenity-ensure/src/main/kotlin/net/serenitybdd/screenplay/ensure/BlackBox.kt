@@ -55,6 +55,8 @@ object BlackBox {
             endSoftAssertions()
             takeScreenshot()
             throw AssertionError(renderedErrorMessages)
+        } else {
+            endSoftAssertions()
         }
     }
 

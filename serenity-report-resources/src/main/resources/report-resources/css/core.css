@@ -2499,10 +2499,14 @@ div.scenario-text:empty {
     background-color: rgba(238, 224, 152, 0.2);
 }
 .card-header.aborted {
-    background-color: rgb(255, 153, 102);
+    background-color: rgb(255, 219, 199);
 }
 .card-header.aborted a:link, .card-header.aborted a:visited {
-    color: rgb(255, 153, 102);
+    color: rgb(79, 35, 7);
+}
+
+.large-icon {
+    font-size: 2.5rem;
 }
 
 

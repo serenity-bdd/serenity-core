@@ -29,10 +29,14 @@ public class WebCapableActorInjector implements DependencyInjector {
     private void injectActor(Field field, Object object) {
         CastMember castMember = field.getAnnotation(CastMember.class);
         String name = castMember.name();
+        String description = castMember.description();
+
         if (name.isEmpty()) {
             name = StringUtils.capitalize(field.getName());
         }
-        Actor actor = Actor.named(name);
+
+        Actor actor = Actor.named(name)
+                           .describedAs(description);
 
         try {
             browserFor(object, castMember).ifPresent(

@@ -1,6 +1,5 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ExtendWith(SerenityJUnit5Extension.class)
-@SerenityBDD
 public class SamplePassingNonWebScenarioWithPendingTests {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplePassingNonWebScenarioWithPendingTests.class);

@@ -1,6 +1,5 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.samples.SampleScenarioSteps;
@@ -10,7 +9,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SerenityBDD
 @ExtendWith(SerenityJUnit5Extension.class)
 public class SimpleDataDrivenTestScenarioWithValueSource {
 

@@ -1,6 +1,5 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.SerenityBDD;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.samples.SampleScenarioSteps;
@@ -11,11 +10,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @ExtendWith(SerenityJUnit5Extension.class)
-@SerenityBDD
 public class SimpleDataDrivenTestScenarioWithMethodSource {
 
     @Steps

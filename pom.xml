@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>${revision}</version>
+    <version>3.0.0-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -39,7 +39,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>3.0.0-SNAPSHOT</revision>
 
         <junit.version>4.13.1</junit.version>
         <groovy.version>3.0.9</groovy.version>

@@ -1982,6 +1982,31 @@ h3 {
     fill: rgba(255, 104, 255, 0.5);
 }
 
+tr.SUCCESS td {
+    background-color: rgba(153, 204, 51, 0.025);
+}
+tr.PENDING td {
+    background-color: rgba(165, 199, 238, 0.05);
+}
+tr.IGNORED td {
+    background-color: rgba(165, 165, 165, 0.05);
+}
+tr.SKIPPED td {
+    background-color: rgba(238, 224, 152, 0.05);
+}
+tr.ABORTED td {
+    background-color: rgba(229, 206, 73, 0.1);
+}
+tr.FAILURE td {
+    background-color: rgba(255, 22, 49, 0.15);
+}
+tr.ERROR td {
+    background-color: rgba(255, 97, 8, 0.15);
+}
+tr.COMPROMISED td {
+    background-color: rgba(255, 104, 255, 0.05);
+}
+
 .scenario-heading {padding-left: 1em;}
 .scenario-details p { line-height: 0.8;}
 

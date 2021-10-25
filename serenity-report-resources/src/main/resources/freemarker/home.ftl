@@ -563,8 +563,7 @@
                                                                     <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
                                                                     <h4>${sectionTitle}</h4>
 
-                                                                    <table class="table ${coverageTableClass}"
-                                                                           id="${tagCoverageByType.tagType}">
+                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>

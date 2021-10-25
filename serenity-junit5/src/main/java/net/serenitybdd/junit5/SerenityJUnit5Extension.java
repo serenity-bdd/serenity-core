@@ -9,6 +9,9 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
+/**
+ * Use this extension to run Serenity BDD tests using JUnit 5
+ */
 public class SerenityJUnit5Extension implements TestInstancePostProcessor, AfterEachCallback {
 
     @Override

@@ -75,7 +75,7 @@
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-model</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 

@@ -487,10 +487,20 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     static boolean isSerenityTestClass(Class<?> testClass) {
-        ExtendWith annotation = testClass.getAnnotation(ExtendWith.class);
-        if(annotation == null) {
-            return false;
+        return classNestStructure(testClass).stream()
+                .filter(clazz -> clazz.getAnnotation(ExtendWith.class) != null)
+                .map(clazz -> clazz.getAnnotation(ExtendWith.class))
+                .anyMatch(annotation -> Arrays.asList(annotation.value()).contains(SerenityJUnit5Extension.class));
+    }
+
+    static private List<Class<?>> classNestStructure(Class<?> testClass) {
+        List<Class<?>> nestedStructure = new ArrayList<>();
+        nestedStructure.add(testClass);
+        Class<?> declaringClass = testClass.getDeclaringClass();
+        while(declaringClass != null) {
+            nestedStructure.add(declaringClass);
+            declaringClass = declaringClass.getDeclaringClass();
         }
-        return Arrays.asList(annotation.value()).contains(SerenityJUnit5Extension.class);
+        return nestedStructure;
     }
 }

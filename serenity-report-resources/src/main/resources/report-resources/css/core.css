@@ -161,11 +161,10 @@ footer {
 .middlebg
 {
     min-width:1007px;
-    max-width:1007px;
     height:3.5em;
     padding: 0px;
     padding-left: 10px;
-    float:left;
+    clear:left;
 }
 
 .rightbg
@@ -2853,4 +2852,8 @@ div.code {
 
 .icons-bar {
     white-space: nowrap;
+}
+
+.dataTables_filter input {
+    font-weight: normal;
 }

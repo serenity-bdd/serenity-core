@@ -926,4 +926,10 @@ public class StepEventBus {
     }
 
 
+    public void wrapUpCurrentCucumberStep() {
+            if (CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome())
+            && getBaseStepListener().currentStepDepth() == 1) {
+                getBaseStepListener().currentStepDone(TestResult.UNDEFINED);
+            }
+    }
 }

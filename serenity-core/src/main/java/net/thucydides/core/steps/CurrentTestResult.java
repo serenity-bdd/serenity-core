@@ -20,7 +20,7 @@ public class CurrentTestResult {
         }
     }
 
-    private static boolean isCucumber(TestOutcome testOutcome) {
+    public static boolean isCucumber(TestOutcome testOutcome) {
         return "Cucumber".equalsIgnoreCase(testOutcome.getTestSource());
     }
 }

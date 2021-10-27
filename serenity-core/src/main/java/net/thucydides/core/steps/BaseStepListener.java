@@ -262,6 +262,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         );
     }
 
+    public int currentStepDepth() {
+        return currentStepStack.size();
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;
@@ -796,10 +800,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private void finishGroup() {
+    public void finishGroup() {
 //        currentGroupStack.get().pop();
-        currentGroupStack.pop();
-        getCurrentTestOutcome().endGroup();
+        if (!currentGroupStack.isEmpty()) {
+            currentGroupStack.pop();
+            getCurrentTestOutcome().endGroup();
+        }
     }
 
     private void pauseIfRequired() {
@@ -906,7 +912,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         closeDarkroom();
     }
 
-    private void currentStepDone(TestResult result) {
+    public void currentStepDone(TestResult result) {
         if (!currentStepMethodStack.isEmpty()) {
             currentStepMethodStack.pop();
         }

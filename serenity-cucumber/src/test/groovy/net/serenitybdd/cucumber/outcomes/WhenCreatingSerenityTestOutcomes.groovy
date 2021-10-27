@@ -21,6 +21,22 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         outputDirectory = Files.newTemporaryFolder()
     }
 
+
+    def "should record failures for a failing scenario"() {
+        given:
+        def runtime = serenityRunnerForCucumberTestRunner(FailingScenario.class, outputDirectory);
+
+        when:
+        runtime.run();
+        List<TestOutcome>  recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        TestOutcome testOutcome = recordedTestOutcomes[0]
+        List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
+
+        then:
+        testOutcome.result == TestResult.FAILURE
+        and:
+        stepResults == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS,TestResult.FAILURE, TestResult.SKIPPED]
+    }
     /*
     Feature: A simple feature
 
@@ -62,24 +78,6 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         and:
         testOutcome.testSteps.collect { step -> step.result } == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS]
-    }
-
-    def "should record failures for a failing scenario"() {
-        given:
-        def runtime = serenityRunnerForCucumberTestRunner(FailingScenario.class, outputDirectory);
-
-        when:
-        runtime.run();
-        List<TestOutcome>  recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
-        TestOutcome testOutcome = recordedTestOutcomes[0]
-        List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
-
-        then:
-        testOutcome.result == TestResult.FAILURE
-        and:
-        stepResults == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS,TestResult.FAILURE, TestResult.SKIPPED]
-        and:
-        testOutcome.testSteps[3].errorMessage.contains("expected:<[2]0> but was:<[1]0>")
     }
 
     def "should record failures for failing scenario outlines"() {

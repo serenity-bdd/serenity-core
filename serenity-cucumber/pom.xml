@@ -87,6 +87,12 @@
             <artifactId>cucumber-java8</artifactId>
             <version>6.10.4</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.cucumber:cucumber-java8</groupId>
+                    <artifactId>apiguardian-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -94,28 +100,6 @@
             <version>3.5.0</version>
             <scope>test</scope>
         </dependency>
-<!--
-    compile("commons-logging:commons-logging:${commonsLoggingVersion}")
-    compile("org.apache.commons:commons-csv:${commonsCsvVersion}")
-    compile "junit:junit:${junitVersion}"
-    compile "com.google.code.gson:gson:${gsonVersion}"
-
-    testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
-        exclude module: "slf4j-api"
-    }
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
-    testCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
-        exclude group: "junit"
-        exclude module: "groovy-all"
-    }
-    testCompile("com.github.goldin:spock-extensions:${spockExtensionsVersion}") {
-        exclude module: "spock-core"
-        exclude module: "slf4j-api"
-    }
-    testCompile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
-    testCompile "io.cucumber:cucumber-java8:${cucumberJVMVersion}"
--->
 
         <!-- TEST DEPENDENCIES -->
         <dependency>

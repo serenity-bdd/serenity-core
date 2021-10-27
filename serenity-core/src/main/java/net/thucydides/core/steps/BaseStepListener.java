@@ -1106,10 +1106,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public boolean aStepHasFailed() {
-        return ((!getTestOutcomes().isEmpty()) &&
-                (getCurrentTestOutcome().getResult() == TestResult.FAILURE
-                        || getCurrentTestOutcome().getResult() == TestResult.ERROR
-                        || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
+        TestResult currentResult = CurrentTestResult.forTestOutcome(getCurrentTestOutcome(), currentExample);
+        return ((!getTestOutcomes().isEmpty()) && currentResult.isUnsuccessful());
     }
 
     public Optional<TestStep> firstFailingStep() {

@@ -2,8 +2,6 @@ package net.thucydides.core.reports.adaptors
 
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.TestOutcomeAdaptorReporter
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Files

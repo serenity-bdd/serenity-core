@@ -119,4 +119,8 @@ public enum TestResult {
     public String getAdjective() {
         return adjective;
     }
+
+    public boolean isUnsuccessful() {
+        return (this == FAILURE || this == ERROR || this == COMPROMISED);
+    }
 }

@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Thucydides Test Site</title>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript">
+<!--
+
+    function initFields() {
+        document.demo.lastname.focus()
+        hide('city')
+        displayFieldsAfterDelay();
+    }
+
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    }
+
+    function hide(id) {
+       var e = document.getElementById(id);
+       e.style.display = 'none';
+    }
+
+    function show(id) {
+        var e = document.getElementById(id);
+       e.style.display = 'block';
+    }
+    function activate(id) {
+       var e = document.getElementById(id);
+       e.disabled = false;
+    }
+    function deactivate(id) {
+       var e = document.getElementById(id);
+       e.disabled = true;
+    }
+
+    function displayCityField() {
+        show('city')
+    }
+    function hideLocationTitle() {
+        hide('placetitle')
+    }
+
+    function activateDisabledButton() {
+        activate('buttonThatIsInitiallyDisabled')
+    }
+    function deactivateEnabledButton() {
+        deactivate('buttonThatIsInitiallyEnabled')
+    }
+
+    function removeDisappearingText() {
+        document.getElementById('dissapearingtextcell').textContent = '';
+
+    }
+    function loadElementsSelect() {
+        var elementSelect = document.demo.elements.options;
+        elementSelect[0] = new Option('Earth',1);
+        elementSelect[1] = new Option('Air',2);
+        elementSelect[2] = new Option('Fire',3);
+        elementSelect[3] = new Option('Water',4);
+    }
+    
+    function displayFieldsAfterDelay() {
+        setTimeout("loadElementsSelect()", 500);
+        setTimeout("displayCityField()", 500);
+        setTimeout("hideLocationTitle()", 500);
+        setTimeout("activateDisabledButton()", 500);
+        setTimeout("deactivateEnabledButton()", 500);
+        setTimeout("removeDisappearingText()", 500);
+
+    }
+
+    function focusOn(field) {
+         document.getElementById('focusmessage').textContent = '';
+    }
+
+    function focusOff(field) {
+        document.getElementById('focusmessage').textContent = 'focus left ' + field;
+    }
+
+//-->
+</script>
+</head>
+<body onLoad="initFields()">
+<h2 id="visible">A visible title</h2>
+<div style="visibility:hidden;">
+    <h2 id="invisible">An invisible title</h2>
+</div>
+<p>Some test pages for the Thucydides tests</p>
+<form name="demo" action="index.html">
+    <p>
+    <h3 id="nametitle">Name</h3>
+    <input name="firstname" id="firstname" value="<enter first name>" onblur="focusOff('firstname')" onfocus="focusOn('firstname')"/>
+    <input name="lastname" id="lastname"/>
+    </p>
+    <p>
+    <h3 id="placetitle">Location</h3>
+    <input name="city" id="city"/>
+    <input name="country" id="country"/>
+    </p>
+    <input id="buttonThatIsInitiallyDisabled" type="submit" value="Initially disabled" disabled="true"/>
+    <input id="buttonThatIsInitiallyEnabled" type="submit" value="Initially enabled"/>
+
+    <input name="hiddenfield" type="hidden"/>
+
+    <input name="csshiddenfield" style="display: none"/>
+
+    <select id="multiselect" multiple="true">
+        <option value="1">Label 1</option>
+        <option value="2">Label 2</option>
+        <option value="3">Label 3</option>
+        <option value="4">Label 4</option>
+        <option value="5">Label 5</option>
+    </select>
+
+    <select id="color">
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+    </select>
+
+    <select id="emptylist"/>
+    <input id="checkbox" type="checkbox" value="checkbox_value">
+
+    <input id="selectedCheckbox" type="checkbox" value="selected_checkbox_value" checked>
+
+    <input id="readonlyField" type="input" value="readonly_value" disabled=true>
+
+    <input id="radioButton1" name="radio" type="radio" value="1" checked>
+    <input id="radioButton2" name="radio" type="radio" value="2">
+
+    <select id="elements">
+    </select>
+
+    <input type="file" name="upload"/>
+
+    <textarea rows="2" cols="20" name="textField">text value</textarea>
+
+</form>
+
+<table id="dissapearingtext" border="1" >
+    <tr><th>Text below should disappear</th></tr>
+    <tr><td id="dissapearingtextcell">Dissapearing text</td></tr>
+    <tr><td id="focusmessage"></td></tr>
+</table>
+
+<table id="grid">
+    <tr><th>name</th><th>age</th></tr>
+    <tr><td>joe</td><td>42</td></tr>
+    <tr><td>mary</td><td>39</td></tr>
+</table>
+
+<table id="data">
+    <tr><td>A</td><td>B</td><td>C</td></tr>
+    <tr><td>A</td><td>B</td><td>C</td></tr>
+    <tr><td>A</td><td>B</td><td>C</td></tr>
+    <tr><td>A</td><td>B</td><td>C</td></tr>
+    <tr><td>A</td><td>B</td><td>C</td></tr>
+</table>
+
+<a id="togglevisibility" href="#" onclick="toggle_visibility('toggledtext');">Click here to toggle visibility</a>
+<div id="toggledtext">Visible Text</div>
+</div>
+
+<a title="Click Me" href="#">Click Me</a>
+<div>
+    <p>Below is an empty div tag</p>
+    <div  id="emptyLabelID"></div>
+
+    <p>Below is a div tag that is not empty</p>
+    <div id="nonEmptyLabelID">This div tag has text</div>
+</div>
+</body>
+</html>

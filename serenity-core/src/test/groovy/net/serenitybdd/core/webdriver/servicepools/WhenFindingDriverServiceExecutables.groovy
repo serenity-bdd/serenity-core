@@ -4,7 +4,6 @@ import net.serenitybdd.core.CurrentOS
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import java.nio.file.Path

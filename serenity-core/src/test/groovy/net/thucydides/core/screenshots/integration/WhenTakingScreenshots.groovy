@@ -12,7 +12,6 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.DesiredCapabilities

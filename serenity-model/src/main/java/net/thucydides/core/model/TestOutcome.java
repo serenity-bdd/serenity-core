@@ -1387,7 +1387,7 @@ public class TestOutcome {
     }
 
     private TestResult testResultFromFailureClassname() {
-        if (testFailureClassname != null) {
+        if (StringUtils.isNotEmpty(testFailureClassname)) {
             try {
                 return new FailureAnalysis().resultFor(Class.forName(testFailureClassname));
             } catch (ReflectiveOperationException e) {
@@ -1624,7 +1624,6 @@ public class TestOutcome {
             this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
             this.setAnnotatedResult(TestResultComparison.overallResultFor(this.getAnnotatedResult(), failureCause.getAnnotatedResult()));
         }
-
     }
 
     private boolean isMoreSevereThanPreviousErrors(TestFailureCause failureCause) {
@@ -2782,6 +2781,18 @@ public class TestOutcome {
     public Integer getOrder() {
         if (order == null) { return 0; }
         return order;
+    }
+
+    public TestOutcome fromStep(int index) {
+        List<TestStep> specifiedSteps = Arrays.asList(testSteps.get(index));
+        TestOutcome specifiedOutcome = this.copy().withSteps(specifiedSteps);
+        Optional<TestFailureCause> failureCause = TestFailureCause.from(specifiedOutcome.getFlattenedTestSteps());
+        if (failureCause.isPresent()) {
+            specifiedOutcome.appendTestFailure(failureCause.get());
+        } else {
+            specifiedOutcome.noTestFailureIsDefined();
+        }
+        return specifiedOutcome;
     }
 
     public List<String> getNestedTestPath(){

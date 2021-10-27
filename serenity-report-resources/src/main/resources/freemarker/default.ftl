@@ -234,29 +234,28 @@
                                                 <#list testOutcome.actors as castMember>
                                                     <td width="${cellWidth}%">
                                                         <h4>
-                                                            <i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name}</span>
-                                                            <h4>
-                                                                <p>${formatter.renderDescription(castMember.description!"")}</p>
-                                                                <ul>
-                                                                    <#if (castMember.hasFacts())>
-                                                                        <li><strong>${castMember.name} has:</strong>
-                                                                            <ul>
-                                                                                <#list castMember.getHas() as fact>
-                                                                                    <li>${fact}</li>
-                                                                                </#list>
-                                                                            </ul>
-                                                                        </li>
-                                                                    </#if>
-                                                                    <#if (castMember.hasAbilities())>
-                                                                        <li><strong>${castMember.name} can:</strong>
-                                                                            <ul>
-                                                                                <#list castMember.can as ability>
-                                                                                    <li>${ability}</li>
-                                                                                </#list>
-                                                                            </ul>
-                                                                        </li>
-                                                                    </#if>
-                                                                </ul>
+                                                            <i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name} is ${formatter.renderDescription(castMember.description!"")}</span>
+                                                        </h4>
+                                                        <ul>
+                                                            <#if (castMember.hasFacts())>
+                                                                <li><strong>${castMember.name} has:</strong>
+                                                                    <ul>
+                                                                        <#list castMember.getHas() as fact>
+                                                                            <li>${fact}</li>
+                                                                        </#list>
+                                                                    </ul>
+                                                                </li>
+                                                            </#if>
+                                                            <#if (castMember.hasAbilities())>
+                                                                <li><strong>${castMember.name} can:</strong>
+                                                                    <ul>
+                                                                        <#list castMember.can as ability>
+                                                                            <li>${ability}</li>
+                                                                        </#list>
+                                                                    </ul>
+                                                                </li>
+                                                            </#if>
+                                                        </ul>
                                                     </td>
                                                 </#list>
                                             </tr>

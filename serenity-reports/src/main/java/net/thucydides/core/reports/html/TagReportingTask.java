@@ -67,7 +67,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     private void generateTagReport(TestOutcomes testOutcomes, ReportNameProvider reportNameProvider, TestTag tag) throws IOException {
 
-        LOGGER.debug("GENERATE TAG REPORTS FOR " + tag);
+        LOGGER.trace("GENERATE TAG REPORTS FOR " + tag);
 
         TestOutcomes testOutcomesForTag = testOutcomes.withTag(tag);
         Map<String, Object> context = freemarker.getBuildContext(testOutcomesForTag, reportNameProvider, true);

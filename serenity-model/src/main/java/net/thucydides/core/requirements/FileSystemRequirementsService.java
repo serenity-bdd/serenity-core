@@ -27,7 +27,7 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
             requirements = fileSystemRequirementsTagProvider.getRequirements();
             requirements = RequirementAncestry.addParentsTo(requirements);
             indexRequirements();
-            LOGGER.info("\nREQUIREMENTS HIERARCHY LOADED FROM THE FILE SYSTEM:\n" + RequirementsTree.from(requirements));
+            LOGGER.trace("\nREQUIREMENTS HIERARCHY LOADED FROM THE FILE SYSTEM:\n" + RequirementsTree.from(requirements));
         }
         return requirements;
 

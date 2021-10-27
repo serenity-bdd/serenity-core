@@ -7,9 +7,8 @@ Feature: Buying things - with tables and failures
     Then I should pay $<total>
     Examples:
       | amount | cost | total |
-      | 0      | 10   | 2   |
-      | 1      | 10   | 10    |
       | 2      | 11   | 20    |
-      | 2      | 0    | 0     |
-      | 20     | 1    | 20     |
+      | 0      | 10   | 0     |
+      | 1      | 10   | 10    |
+      | 20     | 1    | 20    |
 

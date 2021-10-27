@@ -34,7 +34,6 @@ public class RpnCalculatorStepdefs {
 
     @Then("^the result is (\\d+)$")
     public void the_result_is(Integer expected) {
-        System.out.println("Expecting a result of " + expected);
         assertEquals(expected, calc.value());
     }
 

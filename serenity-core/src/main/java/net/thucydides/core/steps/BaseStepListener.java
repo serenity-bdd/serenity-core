@@ -621,11 +621,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
                 ThucydidesWebDriverSupport.clearDefaultDriver();
             }
-
         }
 
-//        currentStepStack.get().clear();
         currentStepStack.clear();
+        while(!currentGroupStack.isEmpty()) {
+            finishGroup();
+        }
         LifecycleRegister.clear();
     }
 

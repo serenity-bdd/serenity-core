@@ -422,7 +422,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
                         StepEventBus.getEventBus().notifyFailure();
-                        StepEventBus.getEventBus().testFinished();
+                        StepEventBus.getEventBus().testFinished(StepEventBus.getEventBus().currentTestOutcomeIsDataDriven());
                         if (cause.isCompromised()) {
                             throw cause.asCompromisedException();
                         } else if (cause.isAnError()) {

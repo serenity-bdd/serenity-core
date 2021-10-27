@@ -45,6 +45,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-model</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
@@ -89,7 +95,7 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>io.cucumber:cucumber-java8</groupId>
+                    <groupId>org.apiguardian</groupId>
                     <artifactId>apiguardian-api</artifactId>
                 </exclusion>
             </exclusions>
@@ -99,6 +105,12 @@
             <artifactId>datatable-matchers</artifactId>
             <version>3.5.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apiguardian</groupId>
+                    <artifactId>apiguardian-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
@@ -114,6 +126,11 @@
             <artifactId>junit</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>

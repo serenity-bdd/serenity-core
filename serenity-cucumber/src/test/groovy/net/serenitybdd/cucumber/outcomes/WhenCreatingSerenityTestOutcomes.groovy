@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
 import net.thucydides.core.steps.TestSourceType
+import org.assertj.core.util.Files
 import spock.lang.Specification
 
 import static io.cucumber.junit.CucumberRunner.serenityRunnerForCucumberTestRunner

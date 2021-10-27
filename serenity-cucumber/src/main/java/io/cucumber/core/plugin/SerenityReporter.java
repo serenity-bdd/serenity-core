@@ -892,8 +892,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             return false;
         }
         Optional<TestStep> matchingTestStep = latestTestOutcome().get().testStepWithDescription(stepTitle);
-        if (matchingTestStep.isPresent() && matchingTestStep.get().getException() != null) {
-            return (matchingTestStep.get().getException().getOriginalCause() == cause);
+        if (matchingTestStep.isPresent() && matchingTestStep.get().getNestedException() != null) {
+            return (matchingTestStep.get().getNestedException().getOriginalCause() == cause);
         }
 
         return false;

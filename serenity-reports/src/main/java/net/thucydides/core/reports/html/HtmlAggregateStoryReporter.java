@@ -124,18 +124,18 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
 
-        LOGGER.debug("Copied screenshots after {}", stopwatch.lapTimeFormatted());
+        LOGGER.trace("Copied screenshots after {}", stopwatch.lapTimeFormatted());
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
         if (!isEmpty(tags)) {
             allTestOutcomes = allTestOutcomes.withTags(getTags());
         }
-        LOGGER.debug("Loaded test outcomes after {}", stopwatch.lapTimeFormatted());
+        LOGGER.trace("Loaded test outcomes after {}", stopwatch.lapTimeFormatted());
 
         generateReportsForTestResultsIn(allTestOutcomes);
 
-        LOGGER.debug("Generated reports after {}", stopwatch.lapTimeFormatted());
+        LOGGER.trace("Generated reports after {}", stopwatch.lapTimeFormatted());
 
         return allTestOutcomes;
     }

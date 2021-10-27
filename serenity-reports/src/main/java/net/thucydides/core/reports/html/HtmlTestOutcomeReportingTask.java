@@ -63,7 +63,7 @@ public class HtmlTestOutcomeReportingTask implements ReportingTask {
 
             Set<ReportingTask> reportingTasks = new HashSet<>();
 
-            LOGGER.debug("GENERATE TEST OUTCOME REPORTS FOR " + testOutcomes.getOutcomes());
+            LOGGER.trace("GENERATE TEST OUTCOME REPORTS FOR " + testOutcomes.getOutcomes());
 
             for(TestOutcome outcome : testOutcomes.getOutcomes()) {
                 reportingTasks.add(new HtmlTestOutcomeReportingTask(outcome, outputDirectory, requirementsService, environmentVariables, issueTracking));

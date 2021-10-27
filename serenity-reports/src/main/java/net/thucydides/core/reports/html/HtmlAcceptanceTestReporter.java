@@ -165,7 +165,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
             writer.flush();
         }
 
-        LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
+        LOGGER.trace("Generated report {} in {} ms", outputFile, stopwatch.stop());
         return outputPath.toFile();
     }
 

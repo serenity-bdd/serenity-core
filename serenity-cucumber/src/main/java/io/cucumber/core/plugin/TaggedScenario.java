@@ -1,16 +1,15 @@
 package io.cucumber.core.plugin;
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
+import io.cucumber.messages.types.Tag;
 import net.thucydides.core.model.TestResult;
 
 import java.util.*;
-
 
 public class TaggedScenario {
     private static final List<String> SKIPPED_TAGS = Arrays.asList("@skip", "@wip");
     private static final List<String> IGNORED_TAGS = Arrays.asList("@ignore", "@ignored");
 
-    private static Map<String, TestResult> MANUAL_TEST_RESULTS;
+    private static final Map<String, TestResult> MANUAL_TEST_RESULTS;
 
     static {
         MANUAL_TEST_RESULTS = new HashMap<>();

@@ -28,9 +28,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Boolean manual;
     private final Set<TestTag> tags;
     private final Map<String, Collection<TestTag>> exampleTags;
-    private Rule rule;
-    private Long duration;
-    private ZonedDateTime startTime;
+    private final Rule rule;
+    private final Long duration;
+    private final ZonedDateTime startTime;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,

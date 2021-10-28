@@ -58,7 +58,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberSerenityRunner.class);
 
-    private List<ParentRunner<?>> children = new ArrayList<ParentRunner<?>>();
+    private List<ParentRunner<?>> children;
     private final EventBus bus;
     private static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>();
 
@@ -94,7 +94,6 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
         RuntimeOptions runtimeOptions = new CucumberPropertiesParser()
                 .parse(CucumberProperties.fromSystemProperties())
-                .addDefaultSummaryPrinterIfAbsent()
                 .build(environmentOptions);
 
         RuntimeOptionsBuilder runtimeOptionsBuilder = new RuntimeOptionsBuilder();

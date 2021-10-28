@@ -2,9 +2,9 @@ package net.thucydides.core.requirements.model.cucumber;
 
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
+import io.cucumber.messages.types.Examples;
+import io.cucumber.messages.types.Feature;
+import io.cucumber.messages.types.Scenario;
 import net.thucydides.core.digest.Digest;
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
@@ -24,9 +24,6 @@ public class ExampleTableInMarkdown {
     }
 
     public String renderedFormOf(Examples exampleTable, int exampleRow, ScenarioDisplayOption displayOption) {
-
-//        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName(), exampleRow);
-//        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName());
         ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName());
 
         StringBuilder renderedExampleTable = new StringBuilder();

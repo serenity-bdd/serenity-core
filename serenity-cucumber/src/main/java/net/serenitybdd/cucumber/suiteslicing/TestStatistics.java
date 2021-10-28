@@ -14,8 +14,7 @@ public interface TestStatistics {
 
     List<TestScenarioResult> records();
 
-    
-    public static TestStatistics from(EnvironmentVariables environmentVariables, List<URI> featurePaths) {
+    static TestStatistics from(EnvironmentVariables environmentVariables, List<URI> featurePaths) {
         String directory = environmentVariables.getProperty(SERENITY_TEST_STATISTICS_DIR);
         if (directory == null) {
             return ScenarioLineCountStatistics.fromFeaturePaths(featurePaths);

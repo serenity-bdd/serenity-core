@@ -127,7 +127,8 @@ class ScenarioContext {
     }
 
     public boolean isAScenarioOutline() {
-        return currentScenarioDefinition.getExamplesCount() > 0;
+        return (!currentScenarioDefinition.getExamplesList().isEmpty());
+//        return (currentScenarioDefinition != null) && (currentScenarioDefinition.getExamplesList().isEmpty());
     }
 
     public void startNewExample() {

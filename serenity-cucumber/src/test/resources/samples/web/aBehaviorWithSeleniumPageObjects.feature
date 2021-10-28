@@ -1,4 +1,5 @@
-@driver:htmlunit
+@driver:chrome
+@driver-options:--headless
 Feature: Use page objects
 
 Scenario Outline:  A scenario that uses selenium

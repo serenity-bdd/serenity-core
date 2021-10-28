@@ -4,6 +4,7 @@ package cucumber.runtime;
 
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
+import io.cucumber.core.plugin.ConfigureDriverFromTags;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
@@ -23,12 +24,11 @@ import java.util.*;
 
 public class SerenityObjectFactory implements ObjectFactory {
 
-    private final Set<Class<?>> classes = Collections.synchronizedSet(new HashSet<Class<?>>());
+    private final Set<Class<?>> classes = Collections.synchronizedSet(new HashSet<>());
 
-    private final Map<Class<?>, Object> instances = Collections.synchronizedMap(new HashMap<Class<?>, Object>());
+    private final Map<Class<?>, Object> instances = Collections.synchronizedMap(new HashMap<>());
 
-    public void start() {
-    }
+    public void start() {}
 
     public void stop() {
         instances.clear();
@@ -43,6 +43,7 @@ public class SerenityObjectFactory implements ObjectFactory {
     }
 
     public <T> T getInstance(Class<T> type) {
+        ConfigureDriverFromTags.inTheCurrentTestOutcome();
         T instance = type.cast(instances.get(type));
         if (instance == null) {
             instance = cacheNewInstance(type);

@@ -1,4 +1,4 @@
-@driver:htmlunit
+@driver:chrome
 @driver-options:--headless
 Feature: A scenario that uses selenium
 

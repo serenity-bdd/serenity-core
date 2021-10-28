@@ -1,4 +1,5 @@
-@driver:htmlunit
+@driver:chrome
+@driver-options:--headless
 Feature: A failing scenario that uses selenium
 
   Scenario Outline: A failing scenario that uses selenium

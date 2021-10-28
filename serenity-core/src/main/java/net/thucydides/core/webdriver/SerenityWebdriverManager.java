@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -213,7 +214,9 @@ public class SerenityWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver(final String driverName) {
-        return getWebdriver(driverName, options);
+        String defaultDriverOptions = ThucydidesWebDriverSupport.getDefaultDriverOptions().orElse("");
+        String activeOptions = (StringUtils.isEmpty(options)) ? defaultDriverOptions : options;
+        return getWebdriver(driverName, activeOptions);
     }
 
     public WebDriver getCurrentDriver() {

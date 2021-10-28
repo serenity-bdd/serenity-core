@@ -902,7 +902,7 @@ public class StepEventBus {
         mergeActivitiesToDefaultStepListener("{0}", agents);
     }
 
-        public void mergeActivitiesToDefaultStepListener(String stepName, Agent... agents) {
+    public void mergeActivitiesToDefaultStepListener(String stepName, Agent... agents) {
         stream(agents)
                 .map(agent -> Agency.getInstance().baseListenerFor(agent))
                 .filter(Optional::isPresent)
@@ -912,7 +912,7 @@ public class StepEventBus {
                 .map(testOutcomes -> testOutcomes.get(0))
                 .forEach(outcome -> recordOutcomeAsSteps(stepName, outcome, baseStepListener));               // Record the steps of this outcome in the main test outcome
 
-        stream(agents).forEach( agent -> Agency.getInstance().dropAgent(agent));
+        stream(agents).forEach(agent -> Agency.getInstance().dropAgent(agent));
     }
 
     private void recordOutcomeAsSteps(String topLevelStepName, TestOutcome testOutcome, BaseStepListener stepListener) {
@@ -927,9 +927,16 @@ public class StepEventBus {
 
 
     public void wrapUpCurrentCucumberStep() {
-            if (CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome())
-            && getBaseStepListener().currentStepDepth() == 1) {
-                getBaseStepListener().currentStepDone(TestResult.UNDEFINED);
-            }
+        if (CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome()) && getBaseStepListener().currentStepDepth() == 1) {
+            getBaseStepListener().currentStepDone(TestResult.UNDEFINED);
+        }
+    }
+
+    public boolean currentTestHasTag(TestTag tag) {
+        if (isBaseStepListenerRegistered()) {
+            return getBaseStepListener().getCurrentTestOutcome().getTags().contains(tag);
+        } else {
+            return false;
+        }
     }
 }

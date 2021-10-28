@@ -1,4 +1,4 @@
-@driver:htmlunit
+@driver:chrome
 @driver-options:--headless
 Feature: Looking up a scenario suite
 

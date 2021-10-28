@@ -4,7 +4,9 @@ import com.google.inject.Inject;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.junit.SerenityJUnitTestCase;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.statistics.TestCount;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -37,6 +39,9 @@ public class WebdriverCloseBrowser implements CloseBrowser {
     }
 
     private boolean restartBrowserForANew(RestartBrowserForEach event) {
+        if (StepEventBus.getEventBus().isUniqueSession() || (StepEventBus.getEventBus().currentTestHasTag(TestTag.withValue("uniquesession")))) {
+            return false;
+        }
         return RestartBrowserForEach.configuredIn(environmentVariables).restartBrowserForANew(event);
     }
 

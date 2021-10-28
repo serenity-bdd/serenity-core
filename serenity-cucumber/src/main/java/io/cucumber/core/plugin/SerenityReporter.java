@@ -153,7 +153,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         featureFrom(featurePath).ifPresent(
                 feature -> {
                     getContext().setFeatureTags(feature.getTagsList());
-
                     resetEventBusFor(featurePath);
                     initialiseListenersFor(featurePath);
                     configureDriver(feature, featurePath);
@@ -226,6 +225,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void handleTestCaseStarted(TestCaseStarted event) {
+
+        ConfigureDriverFromTags.forTags(event.getTestCase().getTags());
 
         URI featurePath = event.getTestCase().getUri();
         getContext().currentFeaturePathIs(featurePath);
@@ -374,13 +375,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private void configureDriver(Feature feature, URI featurePath) {
         getStepEventBus(featurePath).setUniqueSession(systemConfiguration.shouldUseAUniqueBrowser());
-        List<String> tags = getTagNamesFrom(feature.getTagsList());
-        String requestedDriver = getDriverFrom(tags);
-        String requestedDriverOptions = getDriverOptionsFrom(tags);
-        if (isNotEmpty(requestedDriver)) {
-            ThucydidesWebDriverSupport.useDefaultDriver(requestedDriver);
-            ThucydidesWebDriverSupport.useDriverOptions(requestedDriverOptions);
-        }
+        ConfigureDriverFromTags.forTags(getTagNamesFrom(feature.getTagsList()));
     }
 
     private List<String> getTagNamesFrom(List<Tag> tags) {
@@ -389,26 +384,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             tagNames.add(tag.getName());
         }
         return tagNames;
-    }
-
-    private String getDriverFrom(List<String> tags) {
-        String requestedDriver = null;
-        for (String tag : tags) {
-            if (tag.startsWith("@driver:")) {
-                requestedDriver = tag.substring(8);
-            }
-        }
-        return requestedDriver;
-    }
-
-    private String getDriverOptionsFrom(List<String> tags) {
-        String requestedDriver = null;
-        for (String tag : tags) {
-            if (tag.startsWith("@driver-options:")) {
-                requestedDriver = tag.substring(16);
-            }
-        }
-        return requestedDriver;
     }
 
     private void handleExamples(Feature currentFeature, List<Tag> scenarioOutlineTags, String id, List<Examples> examplesList) {

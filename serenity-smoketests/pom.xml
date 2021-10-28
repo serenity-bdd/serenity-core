@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-smoketests</artifactId>
     <packaging>jar</packaging>
@@ -41,6 +41,11 @@
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-screenplay-webdriver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-cucumber</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

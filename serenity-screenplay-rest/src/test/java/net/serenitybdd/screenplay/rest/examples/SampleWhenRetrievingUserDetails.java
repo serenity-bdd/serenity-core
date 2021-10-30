@@ -10,7 +10,9 @@ import net.serenitybdd.screenplay.rest.interactions.Delete;
 import net.serenitybdd.screenplay.rest.interactions.Get;
 import net.serenitybdd.screenplay.rest.interactions.Post;
 import net.serenitybdd.screenplay.rest.interactions.Put;
-import net.serenitybdd.screenplay.rest.questions.*;
+import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
+import net.serenitybdd.screenplay.rest.questions.RestQuestionBuilder;
+import net.serenitybdd.screenplay.rest.questions.TheResponse;
 import net.thucydides.core.annotations.Step;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +21,7 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SerenityRunner.class)
 public class SampleWhenRetrievingUserDetails {
@@ -100,25 +100,28 @@ public class SampleWhenRetrievingUserDetails {
                     .returning(response -> response.path("data.first_name"));
         }
 
-        public static Question<String> nameForUserWithIdViaPathParams(Long userId) {
-            return new RestQuestionBuilder<String>().about("user name")
-                    .to("/api/users/{userId}")
-                    .withPathParameters("userId", userId)
-                    .returning(response -> response.path("data.first_name"));
-        }
-
         public static Question<Integer> totalPagesForPage(Integer page) {
             return new RestQuestionBuilder<Integer>().about("user name")
                     .to("/api/users")
-                    .withQueryParameters("page", 2)
+                    .withQueryParameters("page", page)
                     .returning(response -> response.path("total_pages"));
         }
 
-        public static Question<Integer> totalPagesForPages(Integer page) {
-            return new RestQuestionBuilder<Integer>().about("user name")
-                    .to("/api/users")
-                    .withQueryParameters("page", page, "count", 1)
-                    .returning(response -> response.path("total_pages"));
+    }
+
+    static class Echo {
+        public static Question<String> queryParameters(String arg) {
+            return new RestQuestionBuilder<String>()
+                    .to("/get")
+                    .withQueryParameters("foo1", "bar1", "foo2", arg)
+                    .returning(response -> response.path("args.foo2"));
+        }
+
+        public static Question<String> pathParameters(String arg) {
+            return new RestQuestionBuilder<String>()
+                    .to("/mock/rest/{path1}/{path2}")
+                    .withPathParameters("path1", "85cefea040e1a761f9ddfd2b921d05e2", "path2", arg)
+                    .returning(response -> response.path("message"));
         }
     }
 
@@ -139,10 +142,12 @@ public class SampleWhenRetrievingUserDetails {
     }
 
     @Test
-    public void question_an_individual_user_via_path_params() {
+    public void question_via_path_params() {
 
-        sam.should(
-                seeThat(TheUser.nameForUserWithIdViaPathParams(1L), equalTo("George"))
+        Actor lucas = Actor.named("Lucas").whoCan(CallAnApi.at("https://extendsclass.com"));
+
+        lucas.should(
+                seeThat(Echo.pathParameters("test1"), equalTo("success"))
         );
     }
 
@@ -150,7 +155,7 @@ public class SampleWhenRetrievingUserDetails {
     public void question_via_query_param() {
 
         sam.should(
-                seeThat(TheUser.totalPagesForPage(2), equalTo(4))
+                seeThat(TheUser.totalPagesForPage(2), equalTo(2))
         );
     }
 
@@ -164,11 +169,14 @@ public class SampleWhenRetrievingUserDetails {
                 seeThat(TheResponse.statusCode(), equalTo(200))
         );
     }
+
     @Test
     public void question_via_query_params() {
 
-        sam.should(
-                seeThat(TheUser.totalPagesForPages(2), equalTo(4))
+        Actor lucas = Actor.named("Lucas").whoCan(CallAnApi.at("https://postman-echo.com"));
+
+        lucas.should(
+                seeThat(Echo.queryParameters("bar2"), equalTo("bar2"))
         );
     }
 
@@ -243,12 +251,12 @@ public class SampleWhenRetrievingUserDetails {
         sam.attemptsTo(
                 Post.to("/api/login")
                         .with(request -> request.header("Content-Type", "application/json")
-                                .body("{\"email\": \"peter@klaven\",\"password\": \"cityslicka\"}")
+                                .body("{\"email\": \"eve.holt@reqres.in\",\"password\": \"cityslicka\"}")
                         )
         );
 
         String token = SerenityRest.lastResponse().jsonPath().get("token");
 
-        assertThat(token).isEqualTo("QpwL5tke4Pnpja7X");
+        assertThat(token).isEqualTo("QpwL5tke4Pnpja7X4");
     }
 }

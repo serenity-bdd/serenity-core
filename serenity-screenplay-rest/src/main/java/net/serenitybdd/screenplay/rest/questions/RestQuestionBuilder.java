@@ -43,7 +43,7 @@ public class RestQuestionBuilder<T> implements To<T>, Returning<T> {
         int paramIndex = 0;
         while (paramIndex < otherParams.length) {
             String param = otherParams[paramIndex].toString();
-            Object value = otherParams[paramIndex];
+            Object value = otherParams[paramIndex + 1];
             paramIndex = paramIndex + 2;
             RestQueryFunction restQueryFunction = request -> request.pathParam(param, value);
             this.queries.add(restQueryFunction);
@@ -68,7 +68,7 @@ public class RestQuestionBuilder<T> implements To<T>, Returning<T> {
         int paramIndex = 0;
         while (paramIndex < otherParams.length) {
             String param = otherParams[paramIndex].toString();
-            Object value = otherParams[paramIndex];
+            Object value = otherParams[paramIndex + 1];
             paramIndex = paramIndex + 2;
             this.queries.add(request -> request.queryParam(param, value));
         }

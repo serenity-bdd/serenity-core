@@ -47,19 +47,15 @@ public class WebdriverCloseBrowser implements CloseBrowser {
 
     @Override
     public void closeWhenTheTestsAreFinished(final WebDriver driver) {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                if (driver != null) {
-                    try {
-                        driver.quit();
-                    } catch (WebDriverException mostLikelyLostContactWithTheBrowser) {
-                        LOGGER.debug("Failed to close a browser: {}", mostLikelyLostContactWithTheBrowser.getMessage());
-                    }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (driver != null) {
+                try {
+                    driver.quit();
+                } catch (WebDriverException mostLikelyLostContactWithTheBrowser) {
+                    LOGGER.debug("Failed to close a browser: {}", mostLikelyLostContactWithTheBrowser.getMessage());
                 }
             }
-        });
+        }));
     }
 
     @Override

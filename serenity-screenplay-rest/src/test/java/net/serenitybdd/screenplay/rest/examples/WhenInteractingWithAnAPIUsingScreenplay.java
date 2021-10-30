@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SerenityRunner.class)
-public class SampleWhenRetrievingUserDetails {
+public class WhenInteractingWithAnAPIUsingScreenplay {
 
     Actor sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at("https://reqres.in"));
 

@@ -13,6 +13,8 @@ import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.FEATURE;
+
 public class WebdriverCloseBrowser implements CloseBrowser {
 
     private final EnvironmentVariables environmentVariables;
@@ -39,9 +41,14 @@ public class WebdriverCloseBrowser implements CloseBrowser {
     }
 
     private boolean restartBrowserForANew(RestartBrowserForEach event) {
-        if (StepEventBus.getEventBus().isUniqueSession() || (StepEventBus.getEventBus().currentTestHasTag(TestTag.withValue("uniquesession")))) {
-            return false;
+
+        // The @singlebrowser tag overrides global config
+        // For @singlebrowser features scenarios don't restart the browser here - we will restart only if this is a new feature event
+        if (StepEventBus.getEventBus().isUniqueSession() || (StepEventBus.getEventBus().currentTestHasTag(TestTag.withValue("singlebrowser")))) {
+            return event == FEATURE;
         }
+
+        // If there is no @singlebrowser tag, use the default configuration
         return RestartBrowserForEach.configuredIn(environmentVariables).restartBrowserForANew(event);
     }
 

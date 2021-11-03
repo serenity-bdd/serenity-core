@@ -81,7 +81,7 @@
                                         <#assign issueNumber = "">
                                     </#if>
                                     <h3 class="discreet-story-header">
-                                        <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
+                                        <i class="fs-2 bi bi-chat-left-quote title-icon"></i>
                                         <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     </h3>
 
@@ -223,16 +223,15 @@
                                     <h3 class="discreet-story-header">
                                         <i class="fs-2 bi bi-people large-icon"></i>
                                         <span class="story-header-title">
-                                            <a class="btn btn-primary" data-toggle="collapse" href="#castDetails"
-                                               role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#castDetails" role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
                                         </span>
                                     </h3>
 
-                                    <div class="cast-member collapse" id="castDetails">
+                                    <div class="collapse multi-collapse" id="castDetails">
                                         <table class="cast">
                                             <tr>
                                                 <#list testOutcome.actors as castMember>
-                                                    <td width="${cellWidth}%">
+                                                    <td style="width:${cellWidth}%">
                                                         <h4>
                                                             <i class="fs-2 bi bi-person"></i>&nbsp;<span>${castMember.name}
                                                                 <#if castMember.description?has_content> is ${formatter.renderDescription(castMember.description!"")}</#if>

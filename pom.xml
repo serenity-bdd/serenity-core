@@ -85,7 +85,7 @@
         <jimfs.version>1.1</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <opentest4j.version>1.2.0</opentest4j.version>
-        <ant.version>1.10.8</ant.version>
+        <ant.version>1.10.12</ant.version>
         <restassured.version>4.3.3</restassured.version>
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>

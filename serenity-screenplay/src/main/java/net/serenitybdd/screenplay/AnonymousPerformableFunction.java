@@ -1,17 +1,12 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.serenitybdd.markers.CanBeSilent;
 import net.thucydides.core.annotations.Step;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class AnonymousPerformableFunction implements Performable, CanBeSilent {
     private final String title;
-    private final Map<String, Object> fieldValues = new HashMap();
     private final Consumer<Actor> actions;
     private boolean isSilent = false;
 

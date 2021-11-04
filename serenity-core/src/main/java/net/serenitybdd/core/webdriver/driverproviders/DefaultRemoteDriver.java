@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 
 import java.net.MalformedURLException;
@@ -20,6 +21,9 @@ class DefaultRemoteDriver extends RemoteDriverBuilder {
 
     WebDriver buildWithOptions(String options) throws MalformedURLException {
         String remoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables);
+        if (remoteUrl == null) {
+            throw new InvalidArgumentException("A webdriver.remote.url property must be defined when using a Remote driver.");
+        }
         Capabilities capabilities = buildRemoteCapabilities(options);
         return newRemoteDriver(new URL(remoteUrl), capabilities, options);
     }

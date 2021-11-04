@@ -194,7 +194,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Optional<Feature> featureFrom(URI featureFileUri) {
 
-        LOGGER.info("Running feature from " + featureFileUri.toString());
+        LOGGER.debug("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
             LOGGER.warn("Feature from " + featureFileUri + " is not under the 'features' directory. Requirements report will not be correctly generated!");
         }
@@ -778,7 +778,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void cleanupTestResourcesForURI(URI uri) {
-        LOGGER.info("Cleanup test resources for URI " + uri);
+        LOGGER.debug("Cleanup test resources for URI " + uri);
         getStepEventBus(uri).testSuiteFinished();
         getStepEventBus(uri).dropAllListeners();
         getStepEventBus(uri).clear();

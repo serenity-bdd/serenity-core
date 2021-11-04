@@ -18,7 +18,7 @@ public class TagFilter {
     private final RequirementsService requirementsService;
 
     private final List<String> ALWAYS_HIDDEN_TAGS
-            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested");
+            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser");
 
     public TagFilter(EnvironmentVariables environmentVariables) {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
@@ -106,11 +106,29 @@ public class TagFilter {
     public Set<TestTag> removeHiddenTagsFrom(Set<TestTag> filteredTags) {
         List<String> hiddenTypes = requirementsService.getRequirementTypes();
         hiddenTypes.addAll(ALWAYS_HIDDEN_TAGS);
+        Collection<TestTag> hiddenTags = hiddenTags();
 
         return filteredTags.stream()
-                .filter(
-                        tag -> !hiddenTypes.contains(tag.getType())
-                ).collect(Collectors.toSet());
+                .filter(tag -> !hiddenTypes.contains(tag.getType()))
+                .filter(tag -> !contains(hiddenTags,tag))
+                .collect(Collectors.toSet());
+    }
+
+    private boolean contains(Collection<TestTag> tags, TestTag expectedTag) {
+        return tags.stream().anyMatch(
+                tag -> tag.getCompleteName().equalsIgnoreCase(expectedTag.getCompleteName())
+        );
+    }
+    private Collection<TestTag> hiddenTags() {
+        return Splitter.on(",")
+                .splitToList(environmentVariables.optionalProperty("hidden.tags").orElse(""))
+                .stream()
+                .map(TestTag::withValue)
+                .collect(Collectors.toList());
+    }
+
+    private Collection<String> hiddenTagTypes() {
+        return null;
     }
 
     public Set<String> rawTagTypes() {

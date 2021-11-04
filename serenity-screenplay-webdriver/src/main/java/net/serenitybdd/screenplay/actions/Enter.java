@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
@@ -18,7 +19,15 @@ public class Enter {
     private final CharSequence[] theText;
 
     public Enter(CharSequence... theText) {
-        this.theText = theText;
+        if (containsOnlyNullValues(theText)) {
+            this.theText = new CharSequence[]{""};
+        } else {
+            this.theText = theText;
+        }
+    }
+
+    private boolean containsOnlyNullValues(CharSequence[] theText) {
+        return theText.length == 1 && theText[0] == null;
     }
 
     public static Enter theValue(CharSequence... text) {

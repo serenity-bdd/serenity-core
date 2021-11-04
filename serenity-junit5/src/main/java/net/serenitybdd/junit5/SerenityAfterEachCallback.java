@@ -2,7 +2,6 @@ package net.serenitybdd.junit5;
 
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -10,7 +9,6 @@ public class SerenityAfterEachCallback implements AfterEachCallback {
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        System.out.println("SerenityAfterEachCallback: " + context);
         if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
             System.out.println("NO BASE STEP LISTENER FOUND IN THREAD " + Thread.currentThread());
         }

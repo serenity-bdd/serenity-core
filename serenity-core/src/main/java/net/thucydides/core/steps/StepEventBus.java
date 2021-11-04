@@ -939,4 +939,8 @@ public class StepEventBus {
             return false;
         }
     }
+
+    public boolean isASingleBrowserScenario() {
+        return uniqueSession || currentTestHasTag(TestTag.withValue("singlebrowser"));
+    }
 }

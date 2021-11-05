@@ -266,6 +266,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return currentStepStack.size();
     }
 
+    public boolean previousScenarioWasASingleBrowserScenario() {
+        if (getTestOutcomes().size() > 1) {
+            TestOutcome previousOutcome = getTestOutcomes().get(getTestOutcomes().size() - 2);
+            return previousOutcome.hasTag(TestTag.withValue("singlebrowser"));
+        } else {
+            return false;
+        }
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;

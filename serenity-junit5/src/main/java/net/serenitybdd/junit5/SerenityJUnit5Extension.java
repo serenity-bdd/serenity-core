@@ -1,12 +1,9 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFactory;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -14,7 +11,6 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.launcher.TestIdentifier;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

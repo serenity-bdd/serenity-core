@@ -6,7 +6,7 @@ public class Link {
 
     private final static String[] BY_LINK_TEXT_OR_CLASS = {
             ".//a[translate(normalize-space(.),\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=translate(\"{0}\",\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")]",
-            "css:a[id='{0}'],a[data-test='{0}'],a.{0}"
+            "css:a[id='{0}'],a[data-test='{0}'],a[class*='{0}']"
     };
     private final static String BY_PARTIAL_LINK_TEXT = ".//a[contains(translate(normalize-space(.),\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\"),translate(\"{0}\",\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\"))]";
     private final static String BY_LINK_TITLE = "css:a[title='{0}' i]";

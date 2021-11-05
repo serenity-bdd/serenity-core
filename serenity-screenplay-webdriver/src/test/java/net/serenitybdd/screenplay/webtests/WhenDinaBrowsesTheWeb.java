@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.InTheBrowser;
 import net.serenitybdd.screenplay.questions.*;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.Wait;
@@ -424,6 +425,19 @@ public class WhenDinaBrowsesTheWeb {
                 seeThat(Client.color(), is(equalTo("Red"))),
                 seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))),
                 seeThat(Client.country(), is(equalTo("France"))));
+
+    }
+
+    @Test
+    public void performActionsDirectlyWithTheBrowserAPI() {
+        Actor dina = new Actor("dina");
+        dina.can(BrowseTheWeb.with(firstBrowser));
+
+        dina.has(openedTheApplication);
+
+        dina.attemptsTo(
+                InTheBrowser.perform( browser -> browser.getDriver().getCurrentUrl() ).withNoReporting()
+        );
 
     }
 

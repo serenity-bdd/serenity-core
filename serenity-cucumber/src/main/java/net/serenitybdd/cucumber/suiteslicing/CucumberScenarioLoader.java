@@ -101,7 +101,7 @@ public class CucumberScenarioLoader {
             return scenario.getTags();
         } else {
             return Stream.of(scenario.getTags(), scenario.getExamples()
-                .stream().flatMap(e -> e.getTableBody().stream()).collect(toList())).flatMap(Collection::stream)
+                .stream().flatMap(e -> e.getTags().stream()).collect(toList())).flatMap(Collection::stream).map(tag->tag.getName())
                 .collect(Collectors.toList());
         }
     }

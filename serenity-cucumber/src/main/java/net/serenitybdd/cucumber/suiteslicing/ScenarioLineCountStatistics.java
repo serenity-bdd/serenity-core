@@ -9,6 +9,7 @@ import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
 import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.FeatureChild;
+import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Scenario;
 import net.thucydides.core.util.Inflector;
 
@@ -41,10 +42,9 @@ public class ScenarioLineCountStatistics implements TestStatistics {
         List<io.cucumber.core.gherkin.Feature> gherkinFeatures = supplier.get();
         for(io.cucumber.core.gherkin.Feature gherkinFeature  : gherkinFeatures) {
             Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IdGenerator.UUID()));
-            Parser.Builder builder = (Parser.Builder)gherkinParser.parse(gherkinFeature.getSource(), matcher);
-            features.add(builder.build().getFeature());
+            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(), matcher);
+            features.add(gherkinDocument.getFeature());
         }
-        //List<Feature> features = supplier.get().stream().map(feature -> gherkinParser.parse(feature.getSource(), matcher).getFeature()).collect(Collectors.toList());
         this.results = features.stream()
             .map(featureToScenarios())
             .flatMap(List::stream)

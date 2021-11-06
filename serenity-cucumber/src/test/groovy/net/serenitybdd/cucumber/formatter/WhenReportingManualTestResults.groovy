@@ -2,8 +2,6 @@ package net.serenitybdd.cucumber.formatter
 
 import io.cucumber.core.plugin.ManualScenarioChecker
 import io.cucumber.core.plugin.TaggedScenario
-import io.cucumber.messages.Messages
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification

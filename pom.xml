@@ -40,7 +40,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <junit.version>4.13.1</junit.version>
+        <junit.version>4.13.2</junit.version>
         <groovy.version>3.0.9</groovy.version>
         <spock.version>2.0-M3-groovy-3.0</spock.version>
         <byte-buddy.version>1.11.22</byte-buddy.version>

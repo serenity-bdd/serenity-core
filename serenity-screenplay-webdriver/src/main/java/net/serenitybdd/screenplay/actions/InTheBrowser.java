@@ -8,7 +8,19 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import java.util.function.Consumer;
 
 /**
- * Perform an action directly with the Serenity WebDriver API
+ * Perform an action directly with the Serenity WebDriver API.
+ * For example:
+ * <pre>
+ *     <code>
+ *         actor.attemptsTo(
+ *             InTheBrowser.perform(
+ *                 browser -> browser.evaluateJavascript("window.localStorage.clear()")
+ *             )
+ *         );
+ *     </code>
+ * </pre>
+ *
+ * You can access the Driver instance directly using browser.getDriver().
  */
 public class InTheBrowser implements Performable, CanBeSilent {
 

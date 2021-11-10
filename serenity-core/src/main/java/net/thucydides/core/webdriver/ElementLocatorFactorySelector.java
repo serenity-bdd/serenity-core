@@ -38,16 +38,17 @@ public class ElementLocatorFactorySelector {
         } else if (locatorType.equals("DefaultElementLocatorFactory")) {
             return new DefaultElementLocatorFactory(searchContext);
         } else if (locatorType.equals("SmartElementLocatorFactory")){
-        	return new SmartElementLocatorFactory(searchContext, platformFor(driver));
+        	if (appiumConfiguration.isDefined()) {
+                return new SmartElementLocatorFactory(searchContext, platformFor(driver));
+            } else {
+                return new SmartElementLocatorFactory(searchContext,MobilePlatform.NONE);
+            }
         } else {
             throw new IllegalArgumentException("Unsupported ElementLocatorFactory implementation: " + locatorType);
         }
     }
     
     private MobilePlatform platformFor(WebDriver driver) {
-        if (!WebDriverType.isMobile(driver)) {
-            return MobilePlatform.NONE;
-        }
         return appiumConfiguration.getTargetPlatform(driver);
     }
 

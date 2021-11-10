@@ -1,20 +1,21 @@
 package net.serenitybdd.rest.instantiation;
 
-import io.restassured.RestAssured;
 import io.restassured.specification.FilterableRequestSpecification;
-import io.restassured.specification.RequestSender;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("When you use RestAssured with Serenity BDD")
-class WhenInstantiatingARestAssuredRequest {
+class ExperimentalWhenInstantiatingARestAssuredRequest {
 
     @BeforeEach
     void resetRestListeners() {
@@ -63,6 +64,4 @@ class WhenInstantiatingARestAssuredRequest {
             assertThat(((FilterableRequestSpecification) generated).getProxySpecification().getPort()).isEqualTo(10);
         }
     }
-
-
 }

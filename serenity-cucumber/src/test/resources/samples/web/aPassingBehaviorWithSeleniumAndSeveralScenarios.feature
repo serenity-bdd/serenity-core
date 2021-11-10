@@ -1,4 +1,4 @@
-@driver:phantomjs
+@driver:chrome
 @driver-options:--headless
 @UniqueBrowser
 Feature: A feature that uses two selenium scenarios

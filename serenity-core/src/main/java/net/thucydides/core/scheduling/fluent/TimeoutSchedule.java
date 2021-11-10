@@ -2,6 +2,7 @@ package net.thucydides.core.scheduling.fluent;
 
 import net.thucydides.core.scheduling.SerenityFluentWait;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class TimeoutSchedule<T> extends TimeSchedule<T> {
@@ -12,6 +13,6 @@ public class TimeoutSchedule<T> extends TimeSchedule<T> {
 
     @Override
     protected SerenityFluentWait updateWaitBy(int amount, TimeUnit unit) {
-        return (SerenityFluentWait) fluentWait.withTimeout(amount, unit);
+        return (SerenityFluentWait) fluentWait.withTimeout(Duration.ofMillis(unit.toMillis(amount)));
     }
 }

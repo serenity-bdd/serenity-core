@@ -1,3 +1,5 @@
+@driver:chrome
+@driver-options:--headless
 Feature: Using Fixture Methods
 
   @start-at-two

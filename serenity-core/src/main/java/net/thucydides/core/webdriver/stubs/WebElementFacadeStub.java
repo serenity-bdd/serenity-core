@@ -594,27 +594,6 @@ public class WebElementFacadeStub implements WebElementFacade, WebElementState {
         };
     }
 
-
-    @Override
-    public WebElement findElementByAccessibilityId(String using) {
-        return this;
-    }
-
-    @Override
-    public List<WebElement> findElementsByAccessibilityId(String using) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public WebElement findElementByAndroidUIAutomator(String using) {
-        return this;
-    }
-
-    @Override
-    public List<WebElement> findElementsByAndroidUIAutomator(String using) {
-        return new ArrayList<>();
-    }
-
     @Override
     public void setImplicitTimeout(Duration implicitTimeout) {
 

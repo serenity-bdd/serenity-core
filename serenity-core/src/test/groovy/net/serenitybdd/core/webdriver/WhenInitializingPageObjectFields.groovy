@@ -8,12 +8,13 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification
 
 class WhenInitializingPageObjectFields extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-    def driver = Mock(WebDriver)
+    def driver = Mock(RemoteWebDriver)
 
     class SamplePageObject extends PageObject {
 

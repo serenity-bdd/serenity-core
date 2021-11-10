@@ -62,7 +62,8 @@
         <commons.net.version>3.6</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <selenium.version>3.141.59</selenium.version>
+<!--        <selenium.version>3.141.59</selenium.version>-->
+        <selenium.version>4.0.0</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <jsoup.version>1.13.1</jsoup.version>
         <joda-time.version>2.8.2</joda-time.version>
@@ -73,13 +74,13 @@
         <awaitility.version>4.1.0</awaitility.version>
         <freemarker.version>2.3.31</freemarker.version>
         <asciidoctor.version>2.5.1</asciidoctor.version>
-        <appium.version>7.5.1</appium.version>
+        <appium.version>8.0.0-beta</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-        <phantomjs.version>1.4.4</phantomjs.version>
+<!--        <phantomjs.version>1.4.4</phantomjs.version>-->
+<!--        <htmlunit.version>2.54.0</htmlunit.version>-->
         <webdrivermanager.version>4.4.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
-        <htmlunit.version>2.47.1</htmlunit.version>
         <spring.version>5.3.3</spring.version>
         <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
         <jimfs.version>1.1</jimfs.version>
@@ -336,11 +337,11 @@
                 <version>${jsonassert.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-server</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.seleniumhq.selenium</groupId>-->
+<!--                <artifactId>selenium-server</artifactId>-->
+<!--                <version>${selenium.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
@@ -440,11 +441,11 @@
                 <artifactId>fluentlenium-core</artifactId>
                 <version>${fluentlenium.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.codeborne</groupId>
-                <artifactId>phantomjsdriver</artifactId>
-                <version>${phantomjs.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.codeborne</groupId>-->
+<!--                <artifactId>phantomjsdriver</artifactId>-->
+<!--                <version>${phantomjs.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>io.github.bonigarcia</groupId>
                 <artifactId>webdrivermanager</artifactId>
@@ -459,11 +460,6 @@
                 <groupId>com.paulhammant</groupId>
                 <artifactId>ngwebdriver</artifactId>
                 <version>${ngwebdriver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sourceforge.htmlunit</groupId>
-                <artifactId>htmlunit</artifactId>
-                <version>${htmlunit.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
@@ -531,12 +527,20 @@
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <!-- put your configurations here -->
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>1.12.1</version>
+                    <version>1.13.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -552,6 +556,10 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <debug>true</debug>
+                        <verbose>true</verbose>
+                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.codehaus.groovy</groupId>
@@ -578,9 +586,9 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-                        <parallel>all</parallel>
-                        <threadCount>16</threadCount>
-                        <perCoreThreadCount>true</perCoreThreadCount>
+<!--                        <parallel>all</parallel>-->
+<!--                        <threadCount>16</threadCount>-->
+<!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -651,9 +659,9 @@
                                 <dependencyConvergence />
                             </rules>
                         </configuration>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
+<!--                        <goals>-->
+<!--                            <goal>enforce</goal>-->
+<!--                        </goals>-->
                     </execution>
                 </executions>
             </plugin>

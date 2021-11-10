@@ -62,7 +62,6 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
-
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
         AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
 
@@ -103,7 +102,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     }
 
     private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
-        DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
+        DesiredCapabilities defaults = new DesiredCapabilities();
 
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
                                IE_OPTIONS_IGNORE_ZOOM_LEVEL.booleanFrom(environmentVariables, true));

@@ -54,7 +54,6 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        System.out.println("BEFORE EACH: " + context.getTestMethod().get());
         context.getTestMethod().ifPresent(
                 method -> {
                     final BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();

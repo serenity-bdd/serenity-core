@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 @ExtendWith(SerenityJUnit5Extension.class)
 public class ScenarioWithTestSpecificDataSample {
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "http://www.google.com")

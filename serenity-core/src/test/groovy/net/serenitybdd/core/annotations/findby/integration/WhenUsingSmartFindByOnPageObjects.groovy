@@ -4,11 +4,13 @@ import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import net.thucydides.core.pages.integration.StaticSitePageWithFacades
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -32,12 +34,18 @@ class WhenUsingSmartFindByOnPageObjects extends Specification {
 	}
 
 	@Shared
-	def driver =  new WebDriverFacade(PhantomJSDriver, new WebDriverFactory());
+	def driver
 
 	@Shared
-	StaticSitePageWithFindBy page =  new StaticSitePageWithFindBy(driver);
+	StaticSitePageWithFindBy page
 
 	def setupSpec() {
+		ChromeOptions opts = new ChromeOptions();
+		opts.setHeadless(true);
+		driver = new ChromeDriver(opts);
+		page = new StaticSitePageWithFindBy(driver);
+
+		page.enableJQuery();
 		new DefaultPageObjectInitialiser(driver, 2000).apply(page);
 		page.open()
 	}
@@ -71,5 +79,4 @@ class WhenUsingSmartFindByOnPageObjects extends Specification {
 			driver.quit()
 		}
 	}
-
 }

@@ -40,18 +40,6 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     }
 
     @Test
-    public void theBrowserNameShouldBeAddedDirectlyToTheCapability() {
-
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)
-                .to(capabilities);
-
-        assertThat(capabilities.getBrowserName()).isEqualTo("chrome");
-    }
-
-    @Test
     public void theBuildNameCanBeSpecifiedInTheCrossBrowserTestingConfiguration() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
@@ -67,7 +55,7 @@ public class WhenAddingCrossBrowserTestingCapabilities {
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
 
         AddCustomDriverCapabilities.from(environmentVariables)
                 .withTestDetails(SupportedWebDriver.REMOTE, SAMPLE_TEST_OUTCOME)

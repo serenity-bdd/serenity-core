@@ -2,9 +2,6 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.FindsByAccessibilityId;
-import io.appium.java_client.FindsByAndroidUIAutomator;
-import io.appium.java_client.MobileElement;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
@@ -370,41 +367,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return webElementFacadesFrom(nestedElements);
     }
 
-    @Override
-    public WebElement findElementByAccessibilityId(String id) {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
-        return ((FindsByAccessibilityId) getElement()).findElementByAccessibilityId(id);
-    }
-
-    @Override
-    public List<WebElement> findElementsByAccessibilityId(String id) {
-        if (driverIsDisabled()) {
-            return new ArrayList<>();
-        }
-
-        return ((FindsByAccessibilityId) getElement()).findElementsByAccessibilityId(id);
-    }
-
-    @Override
-    public WebElement findElementByAndroidUIAutomator(String using) {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
-        return ((FindsByAndroidUIAutomator) getElement()).findElementByAndroidUIAutomator(using);
-    }
-
-    @Override
-    public List<WebElement> findElementsByAndroidUIAutomator(String using) {
-        if (driverIsDisabled()) {
-            return new ArrayList<>();
-        }
-
-        return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(using);
-    }
 
     @Override
     public long getImplicitTimeoutInMilliseconds() {
@@ -1368,30 +1330,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public WebElement findElement(By by) {
         return getElement().findElement(by);
-    }
-
-    @Override
-    public WebElement findElement(String by, String using) {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
-        if (getElement() instanceof MobileElement) {
-            return ((MobileElement) getElement()).findElement(by, using);
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List findElements(String by, String using) {
-        if (driverIsDisabled()) {
-            return new ArrayList();
-        }
-
-        if (getElement() instanceof MobileElement) {
-            return ((MobileElement) getElement()).findElements(by, using);
-        }
-        throw new UnsupportedOperationException();
     }
 
     /**

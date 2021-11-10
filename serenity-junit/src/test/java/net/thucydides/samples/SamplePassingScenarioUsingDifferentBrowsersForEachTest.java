@@ -33,7 +33,7 @@ public class SamplePassingScenarioUsingDifferentBrowsersForEachTest {
     }
 
     @Test
-    @WithDriver("htmlunit")
+    @WithDriver("chrome")
     public void edge_case_1() {
         steps.stepThatUsesABrowser();
         steps.stepThatSucceeds();

@@ -1,34 +1,33 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static java.util.Arrays.stream;
 import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_PAGE_LOAD_STRATEGY;
-import static net.thucydides.core.webdriver.CapabilityValue.*;
 
 public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
 
-    public EdgeDriverCapabilities(EnvironmentVariables environmentVariables){
+    public EdgeDriverCapabilities(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
 
     public DesiredCapabilities getCapabilities() {
 
         DesiredCapabilities edgeCaps = new DesiredCapabilities();
-        edgeCaps.setCapability("ms:edgeChrominum",true);
+        edgeCaps.setCapability("ms:edgeChrominum", true);
 
         Map<String, Object> edgeOptions = new HashMap<>();
         edgeOptions.put("prefs", preferencesConfiguredIn(environmentVariables));
@@ -37,7 +36,7 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
         if ((args != null) && (!args.isEmpty())) {
             edgeOptions.put("args", argsConfiguredIn(environmentVariables));
         }
-        edgeCaps.setCapability("ms:edgeOptions",edgeOptions);
+        edgeCaps.setCapability("ms:edgeOptions", edgeOptions);
 
         DesiredCapabilities capabilities = new DesiredCapabilities(edgeCaps);
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
@@ -84,8 +83,9 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     private void addPageLoadStrategyTo(EdgeOptions options) {
-        String pageLoadStrategy = SERENITY_DRIVER_PAGE_LOAD_STRATEGY.from(environmentVariables);
-        if (pageLoadStrategy != null) {
+        String pageLoadStrategyValue = SERENITY_DRIVER_PAGE_LOAD_STRATEGY.from(environmentVariables);
+        if (pageLoadStrategyValue != null) {
+            PageLoadStrategy pageLoadStrategy = PageLoadStrategy.valueOf(pageLoadStrategyValue.toUpperCase());
             options.setPageLoadStrategy(pageLoadStrategy);
         }
     }

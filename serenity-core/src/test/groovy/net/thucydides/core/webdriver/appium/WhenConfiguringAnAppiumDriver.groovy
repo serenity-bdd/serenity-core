@@ -87,16 +87,6 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         "ANDROID" | MobilePlatform.ANDROID
     }
 
-    def "should provide meaningful message if the platform is not specified"() {
-        given:
-        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
-        when:
-        appiumConfiguration.targetPlatform
-        then:
-        ThucydidesConfigurationException invalidConfiguration = thrown()
-        invalidConfiguration.message.contains("appium.platformName needs to be specified (either IOS or ANDROID)")
-    }
-
     def "default URL should be 'http://127.0.0.1:4723/wd/hub'"() {
         given:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)

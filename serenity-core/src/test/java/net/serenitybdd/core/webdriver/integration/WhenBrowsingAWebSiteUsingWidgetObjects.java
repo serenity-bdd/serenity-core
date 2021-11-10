@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
@@ -80,14 +79,14 @@ public class WhenBrowsingAWebSiteUsingWidgetObjects {
     }
     
     @ImplementedBy(CardContainerImpl.class)
-    public static interface CardContainer extends WidgetObject {
-    	public List<Card> getCards();
+    public interface CardContainer extends WidgetObject {
+    	List<Card> getCards();
     }
 
     @ImplementedBy(CardImpl.class)
-    public static interface Card extends WidgetObject {
-    	public String getTitle();
-    	public String getContent();
+    public interface Card extends WidgetObject {
+    	String getTitle();
+    	String getContent();
     }
     
     public static class CardContainerImpl extends WidgetObjectImpl implements CardContainer {

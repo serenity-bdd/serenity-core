@@ -20,7 +20,7 @@ import java.util.Optional;
 public enum ThucydidesSystemProperty {
 
     /**
-     * The WebDriver driver - firefox, chrome, iexplorer, htmlunit, safari.
+     * The WebDriver driver - firefox, chrome, iexplorer, safari.
      */
     WEBDRIVER_DRIVER,
 
@@ -49,7 +49,7 @@ public enum ThucydidesSystemProperty {
      * What port to run PhantomJS on (used in conjunction with webdriver.remote.url to
      * register with a Selenium hub, e.g. -Dphantomjs.webdriver=5555 -Dwebdriver.remote.url=http://localhost:4444
      */
-    PHANTOMJS_WEBDRIVER_PORT,
+    // PHANTOMJS_WEBDRIVER_PORT,
 
     /**
      * Sets a number of common chrome options useful for automated testing.
@@ -1103,7 +1103,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Path to PhantomJS executable
      */
-    PHANTOMJS_BINARY_PATH,
+    //PHANTOMJS_BINARY_PATH,
 
     /**
      * Path to the Gecko driver binary
@@ -1281,7 +1281,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Path to PhantomJS SSL support
      */
-    PHANTOMJS_SSL_PROTOCOL,
+    //PHANTOMJS_SSL_PROTOCOL,
 
     /**
      * Comma-separated list of exception classes that should produce a compromised test in the reports.

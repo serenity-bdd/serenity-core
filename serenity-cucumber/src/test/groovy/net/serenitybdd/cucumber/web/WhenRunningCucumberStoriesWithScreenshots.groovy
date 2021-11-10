@@ -25,7 +25,7 @@ class WhenRunningCucumberStoriesWithScreenshots extends Specification {
         outputDirectory = Files.createTempDirectory("cukes").toFile();
         outputDirectory.deleteOnExit();
 
-        environmentVariables.setProperty("webdriver.driver", "htmlunit")
+        environmentVariables.setProperty("webdriver.driver", "chrome")
     }
 
 

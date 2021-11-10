@@ -62,7 +62,6 @@ class WhenBuildingATitle extends Specification {
         "opera"     | "<span class='context-icon'><i class='fa fa-opera' aria-hidden='true'></i></span>"
         "ie"        | "<span class='context-icon'><i class='fa fa-internet-explorer' aria-hidden='true'></i></span>"
         "edge"      | "<span class='context-icon'><i class='fa fa-edge' aria-hidden='true'></i></span>"
-        "phantomjs" | "<span class='context-icon'><i class='fa fa-snapchat-ghost' aria-hidden='true'></i></span>"
         "linux"     | "<span class='context-icon'><i class='fa fa-linux' aria-hidden='true'></i></span>"
         "mac"       | "<span class='context-icon'><i class='fa fa-apple' aria-hidden='true'></i></span>"
         "windows"   | "<span class='context-icon'><i class='fa fa-windows' aria-hidden='true'></i></span>"

@@ -16,8 +16,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
-
 public abstract class Target {
 
     protected final String targetElementName;

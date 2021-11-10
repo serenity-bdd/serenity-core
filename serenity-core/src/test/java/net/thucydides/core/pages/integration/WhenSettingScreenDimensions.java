@@ -39,7 +39,7 @@ public class WhenSettingScreenDimensions {
 
     @Test
     public void should_remove_timeout_on_close() {
-        driver = factory.newInstanceOf(SupportedWebDriver.HTMLUNIT);
+        driver = factory.newInstanceOf(SupportedWebDriver.CHROME);
         Duration implicitTimeout = Duration.ofMillis(1000L);
         factory.setTimeouts(driver, implicitTimeout);
 
@@ -51,21 +51,10 @@ public class WhenSettingScreenDimensions {
     @Test
     public void should_not_resize_browser_if_dimension_are_not_provided() {
         StubbedWebDriverFactory stubbedFactory = new StubbedWebDriverFactory(environmentVariables);
-        driver = stubbedFactory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        driver = stubbedFactory.newInstanceOf(SupportedWebDriver.CHROME);
         page = new StaticSitePage(driver, 1000);
         page.open();
         assertThat(stubbedFactory.screenWasResized, is(false));
-    }
-
-    @Test
-    public void should_not_resize_htmlunit_automatically() {
-        environmentVariables.setProperty("thucydides.browser.height", "200");
-        environmentVariables.setProperty("thucydides.browser.width", "400");
-        environmentVariables.setProperty("headless.mode","true");
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
-        page = new StaticSitePage(driver, 1024);
-        page.open();
-
     }
 
     @Test
@@ -74,7 +63,7 @@ public class WhenSettingScreenDimensions {
         environmentVariables.setProperty("thucydides.browser.width", "500");
         environmentVariables.setProperty("headless.mode", "true");
 
-        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.PHANTOMJS);
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
         page = new StaticSitePage(driver, 1024);
 
         int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();

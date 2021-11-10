@@ -44,7 +44,7 @@ public class SampleDataDrivenScenarioWithExternalFailure {
         this.option2 = option2;
     }
 
-    @Managed(driver="htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

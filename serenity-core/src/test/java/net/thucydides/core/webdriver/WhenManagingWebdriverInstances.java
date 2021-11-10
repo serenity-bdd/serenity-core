@@ -73,10 +73,10 @@ public class WhenManagingWebdriverInstances {
     }
 
     @Test
-    public void the_default_driver_should_be_the_firefox_driver() {
+    public void the_default_driver_should_be_the_chrome_driver() {
 
         WebDriverFacade defaultDriver = (WebDriverFacade) webdriverManager.getWebdriver();
-        WebDriverFacade firefoxDriver = (WebDriverFacade) webdriverManager.getWebdriver("firefox");
+        WebDriverFacade firefoxDriver = (WebDriverFacade) webdriverManager.getWebdriver("chrome");
 
         assertThat(firefoxDriver, is(defaultDriver));
     }
@@ -89,16 +89,6 @@ public class WhenManagingWebdriverInstances {
 
         assertThat(firefoxDriver, is(uppercaseFirefoxDriver));
     }
-
-    @Test
-    public void driver_names_for_non_default_drivers_should_be_case_insensitive() {
-
-        WebDriverFacade uppercaseFirefoxDriver = (WebDriverFacade) webdriverManager.getWebdriver("htmlUnit");
-        WebDriverFacade firefoxDriver = (WebDriverFacade) webdriverManager.getWebdriver("htmlunit");
-
-        assertThat(firefoxDriver, is(uppercaseFirefoxDriver));
-    }
-
 
     @Test
     public void the_default_output_directory_can_be_overrided_via_a_system_property() {
@@ -114,10 +104,9 @@ public class WhenManagingWebdriverInstances {
     public void should_close_drivers_in_current_thread() {
         SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
-        aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
 
-        assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(3));
+        assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(2));
         aWebdriverManager.closeAllDrivers();
         assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(0));
     }
@@ -126,10 +115,9 @@ public class WhenManagingWebdriverInstances {
     public void should_close_drivers_in_all_threads() {
         SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
-        aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
 
-        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(3));
+        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(2));
         aWebdriverManager.closeAllDrivers();
         assertThat(aWebdriverManager.getActiveWebdriverCount(), is(0));
     }
@@ -138,10 +126,9 @@ public class WhenManagingWebdriverInstances {
     public void should_close_drivers_in_all_threads_after_driver_resets() {
         SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
-        aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
 
-        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(3));
+        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(2));
         aWebdriverManager.resetDriver();
         aWebdriverManager.closeAllDrivers();
         assertThat(aWebdriverManager.getActiveWebdriverCount(), is(0));

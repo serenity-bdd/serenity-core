@@ -10,12 +10,12 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(SerenityRunner.class)
-public class LongSamplePassingScenarioUsingHTMLUnit {
+public class LongSamplePassingScenarioUsingChrome {
 
-    @Managed(uniqueSession = true, driver="htmlunit")
+    @Managed(uniqueSession = true, driver="chrome", options = "--headless")
     public WebDriver webdriver;
 
-    @ManagedPages(defaultUrl = "http://www.wikipedia.org")
+    @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
 
     @Steps

@@ -3,7 +3,8 @@ package net.thucydides.core.requirements.reportpages
 import net.serenitybdd.core.pages.PageObject
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 
 /**
  * Models the requirements progress report page for testing purposes
@@ -11,7 +12,9 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 class ProgressReport extends PageObject {
 
     static ProgressReport inDirectory(File directory) {
-        def driver = new PhantomJSDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+        def driver = new ChromeDriver(options);
         def report = new ProgressReport(driver)
         report.openAt("file:///" +  directory.getAbsolutePath() + "/progress-report.html");
         return report

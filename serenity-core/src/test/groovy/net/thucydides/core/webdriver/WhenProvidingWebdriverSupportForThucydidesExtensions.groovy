@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.Managed
 import net.thucydides.core.annotations.ManagedPages
 import net.thucydides.core.pages.Pages
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Specification
 
 class WhenProvidingWebdriverSupportForThucydidesExtensions extends Specification {
@@ -97,9 +97,9 @@ class WhenProvidingWebdriverSupportForThucydidesExtensions extends Specification
 
     def "should be able to define the driver"() {
         when: "we initialize Thucydides support with a specified driver"
-        ThucydidesWebDriverSupport.initialize("htmlunit")
+        ThucydidesWebDriverSupport.initialize("chrome")
         then: "the provided driver should be of the specified type"
-        ThucydidesWebDriverSupport.driver.driverClass == HtmlUnitDriver
+        ThucydidesWebDriverSupport.driver.driverClass == ChromeDriver.class
     }
 
 

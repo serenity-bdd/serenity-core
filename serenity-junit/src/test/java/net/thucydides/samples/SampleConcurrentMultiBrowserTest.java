@@ -102,7 +102,7 @@ public class SampleConcurrentMultiBrowserTest {
     }
 
     @Test
-    @WithDriver("phantomjs")
+    @WithDriver("chrome")
     public void edge_case_6() {
         steps.stepThatUsesABrowser();
         steps.stepThatSucceeds();
@@ -111,7 +111,7 @@ public class SampleConcurrentMultiBrowserTest {
     }
 
     @Test
-    @WithDriver("phantomjs")
+    @WithDriver("chrome")
     public void edge_case_7() {
         steps.stepThatUsesABrowser();
         steps.stepThatSucceeds();
@@ -120,7 +120,7 @@ public class SampleConcurrentMultiBrowserTest {
     }
 
     @Test
-    @WithDriver("htmlunit")
+    @WithDriver("chrome")
     public void edge_case_8() {
         steps.stepThatUsesABrowser();
         steps.stepThatSucceeds();
@@ -129,7 +129,7 @@ public class SampleConcurrentMultiBrowserTest {
     }
 
     @Test
-    @WithDriver("htmlunit")
+    @WithDriver("chrome")
     public void edge_case_9() {
         steps.stepThatUsesABrowser();
         steps.stepThatSucceeds();

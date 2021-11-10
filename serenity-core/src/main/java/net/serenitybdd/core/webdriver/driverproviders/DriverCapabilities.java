@@ -67,14 +67,7 @@ public class DriverCapabilities {
         selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(SAFARI, DesiredCapabilities::safari);
-        selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
-        selectors.put(OPERA, DesiredCapabilities::operaBlink);
-        selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
         selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
-        selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
-        selectors.put(IPHONE, DesiredCapabilities::iphone);
-        selectors.put(ANDROID, DesiredCapabilities::android);
         return selectors;
     }
 

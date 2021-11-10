@@ -37,6 +37,7 @@ public class TargetBuilder<T> {
     public Target locatedByFirstMatching(String... cssOrXPathSelectors) {
         return new MultiXPathOrCssTarget(targetElementName, iFrame, Optional.empty(), cssOrXPathSelectors);
     }
+
     public Target located(By locator) {
         return new ByTarget(targetElementName, locator, iFrame);
     }

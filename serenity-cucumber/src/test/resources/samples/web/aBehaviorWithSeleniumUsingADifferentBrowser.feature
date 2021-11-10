@@ -1,4 +1,5 @@
 @driver:chrome
+@driver-options:--headless
 Feature: Use other browser
 
   Scenario Outline: A scenario that uses selenium

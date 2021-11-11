@@ -78,7 +78,7 @@
         <fluentlenium.version>0.10.2</fluentlenium.version>
 <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
 <!--        <htmlunit.version>2.54.0</htmlunit.version>-->
-        <webdrivermanager.version>4.4.1</webdrivermanager.version>
+        <webdrivermanager.version>5.0.3</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
         <spring.version>5.3.3</spring.version>

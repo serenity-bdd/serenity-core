@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -45,7 +45,7 @@ public class FirefoxDriverProvider implements DriverProvider {
 
         if(isDriverAutomaticallyDownloaded(environmentVariables)) {
             logger.info("Using automatically driver download");
-            WebDriverManager.firefoxdriver().setup();
+            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forFirefox();
         } else {
             logger.info("Not using automatically driver download");
         }

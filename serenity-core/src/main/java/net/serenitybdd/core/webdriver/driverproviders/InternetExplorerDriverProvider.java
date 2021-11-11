@@ -1,9 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
@@ -53,7 +53,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
         if(isDriverAutomaticallyDownloaded(environmentVariables)) {
             logger.info("Using automatically driver download");
-            WebDriverManager.iedriver().setup();
+            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forIE();
         } else {
             logger.info("Not using automatically driver download");
         }

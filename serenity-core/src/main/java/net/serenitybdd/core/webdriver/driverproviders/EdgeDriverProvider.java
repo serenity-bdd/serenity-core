@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -41,7 +41,7 @@ public class EdgeDriverProvider implements DriverProvider {
         }
 
         if(isDriverAutomaticallyDownloaded(environmentVariables)) {
-            WebDriverManager.edgedriver().setup();
+            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forEdge();
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);

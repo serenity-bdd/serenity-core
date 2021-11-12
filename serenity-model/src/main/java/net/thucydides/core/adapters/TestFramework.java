@@ -27,8 +27,10 @@ public class TestFramework {
         availableStrategies.sort((o1, o2) -> o2.priority().compareTo(o1.priority()));
         if (availableStrategies.size() > 1) {
             selectedTestStrategyAdapter =  new MultiStrategyAdapter(availableStrategies);
-        } else {
+        } else if (availableStrategies.size() == 1) {
             selectedTestStrategyAdapter = availableStrategies.get(0);
+        } else {
+            throw new IllegalStateException("No Test Strategy Adapter found: To run JUnit tests in Serenity make sure that either the Serenity JUnit 4 (serenity-junit) or JUnit 5 (serenity-junit5) dependency is available.");
         }
     }
 

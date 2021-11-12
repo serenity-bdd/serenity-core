@@ -19,6 +19,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class FirefoxDriverProvider implements DriverProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -54,18 +58,29 @@ public class FirefoxDriverProvider implements DriverProvider {
         SetProxyConfiguration.from(environmentVariables).in(capabilities);
         AddLoggingPreferences.from(environmentVariables).to(capabilities);
 
-        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables);
+        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables, options);
 
         driverProperties.registerCapabilities("firefox", capabilitiesToProperties(capabilities));
 
         return driver;
     }
 
-    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
+    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables, String specifiedOptions) {
         capabilities.setCapability("marionette", true);
-        capabilities.setCapability("headless", ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false));
+        boolean headlessMode = ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false);
+        if (headlessMode) {
+            capabilities.setCapability("headless", headlessMode);
+        }
+
+//        List<String> args = DriverArgs.fromValue(specifiedOptions);
+//        Map<String, List<String>> firefoxOptions = new HashMap<>();
+//        firefoxOptions.put("args", args);
+//        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
+
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
+        options.addArguments(DriverArgs.fromValue(specifiedOptions));
+
         DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
 
         return ProvideNewDriver.withConfiguration(environmentVariables,

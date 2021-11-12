@@ -55,6 +55,7 @@ public class EdgeDriverProvider implements DriverProvider {
         AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
 
         EdgeOptions edgeOptions = new EdgeOptions();
+        edgeOptions.addArguments(DriverArgs.fromValue(options));
         addPreferencesTo(edgeOptions);
         EdgeOptions enhancedOptions = edgeOptions.merge(desiredCapabilities);
 

@@ -30,21 +30,11 @@ class BackgroundColor {
             TestResult.PENDING to "#a5c7ed",
             TestResult.IGNORED to "#a8a8a8",
             TestResult.SKIPPED to "#e3c281",
-            TestResult.FAILURE to "#fa5c5b",
+            TestResult.FAILURE to "#fd938e",
             TestResult.ABORTED to "#ff9966",
             TestResult.ERROR to "#fe6c2d",
             TestResult.COMPROMISED to "#fe6eec",
-//
-//            TestResult.SUCCESS to "#89b72d",
-//            TestResult.PENDING to "#6884A6",
-//            TestResult.IGNORED to "#777777",
-//            TestResult.SKIPPED to "#B2A671c",
-//            TestResult.ABORTED to "#e5895b",
-//            TestResult.FAILURE to "#f8001f",
-//            TestResult.ERROR to "darkorange",
-//            TestResult.COMPROMISED to "fuchsia"
         )
-
     }
     fun forResult(result : TestResult) : String = RESULT_BACKGROUND_COLORS[result]!!
     fun forResult(result : String) : String = RESULT_BACKGROUND_COLORS[TestResult.valueOf(result.uppercase())]!!

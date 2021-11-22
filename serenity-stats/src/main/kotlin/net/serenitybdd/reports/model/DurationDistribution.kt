@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.model
 
+import jnr.constants.platform.Local
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.model.TestOutcome
@@ -7,6 +8,8 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
 import java.time.Duration
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
 class DurationDistribution(
     val environmentVariables: EnvironmentVariables,
@@ -37,7 +40,7 @@ class DurationDistribution(
             durationBuckets.add(
                 DurationBucket(
                     bucketLabels.get(index),
-                    durationLimit.toSeconds(),
+                    durationLimit.get(ChronoUnit.SECONDS),
                     mutableListOf()
                 )
             )
@@ -97,34 +100,34 @@ class DurationDistribution(
     fun asFormattedList(labels: List<Any>) = "[${labels.map { duration -> "'${duration}'" }.joinToString(",")}]"
 
     fun unitOf(duration: Duration): String {
-        if (duration.toHours() > 0) return "HOURS";
-        if (duration.toMinutes() > 0) return "MINUTES";
-        if (duration.toSeconds() > 0) return "SECONDS";
+        if (toHoursPart(duration)  > 0) return "HOURS";
+        if (toMinutesPart(duration) > 0) return "MINUTES";
+        if (duration.seconds > 0) return "SECONDS";
         return "MILLISECONDS"
     }
 
     fun formattedWithUnit(duration: Duration, unit: String): String {
         return when(unit) {
-            "SECONDS" ->  seconds(duration.toSeconds()).trim()
-            "MINUTES" -> minutes(duration.toMinutes()).trim()
-            "HOURS" -> hours(duration.toHours()).trim()
+            "SECONDS" ->  seconds(duration.get(ChronoUnit.SECONDS)).trim()
+            "MINUTES" -> minutes(duration.get(ChronoUnit.MINUTES)).trim()
+            "HOURS" -> hours(duration.get(ChronoUnit.HOURS)).trim()
             else -> "${duration.toMillis()} ms"
         }
     }
 
     fun valueOf(duration: Duration, unit: String): String {
         return when(unit) {
-            "SECONDS" ->  duration.toSeconds().toString()
-            "MINUTES" -> duration.toMinutes().toString()
-            "HOURS" -> duration.toHours().toString()
+            "SECONDS" ->  duration.seconds.toString()
+            "MINUTES" -> (duration.seconds / 60).toString()
+            "HOURS" -> (duration.seconds / 3600).toString()
             else -> duration.toMillis().toString()
         }
     }
 
     fun formatted(duration: Duration): String {
         val hours = duration.toHours()
-        val minutes = duration.toMinutesPart()
-        val seconds = duration.toSecondsPart();
+        val minutes = toMinutesPart(duration)
+        val seconds = toSecondsPart(duration);
         return "${hours(hours)} ${minutes(minutes.toLong())} ${seconds(seconds.toLong())}".trim()
     }
 
@@ -141,6 +144,18 @@ class DurationDistribution(
     fun hours(value: Long): String {
         if (value == 0L) return "";
         return if (value == 1L) "${value} hour" else "${value} hours"
+    }
+
+    fun toHoursPart(duration: Duration): Int {
+        return (duration.toHours() % 24).toInt();
+    }
+
+    fun toMinutesPart(duration: Duration): Int {
+        return (duration.toMinutes() % 60).toInt();
+    }
+
+    fun toSecondsPart(duration: Duration): Int {
+        return (duration.seconds % 60).toInt();
     }
 
     private fun durationLimitsDefinedIn(environmentVariables: EnvironmentVariables): List<Duration> {

@@ -15,7 +15,6 @@ class TagResults(val testOutcomes: TestOutcomes) {
 
     val requirementsService = getInjector().getInstance(RequirementsService::class.java)
     val environmentVariables = getInjector().getInstance(EnvironmentVariables::class.java)
-
     val tagFilter = TagFilter(environmentVariables)
     var ignoredValues : MutableList<String> = mutableListOf()
     var ignoredTypes : MutableList<String> = mutableListOf()

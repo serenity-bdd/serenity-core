@@ -3,7 +3,6 @@ package net.thucydides.core.reports.html.accessibility;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1024,9 +1024,12 @@ a.tagLink:visited, a.tagLink:link {
 }
 
 .tag-badge {
-    font-weight: normal;
-    color: #ffffff;
-    background-color: #388bbb;
+    font-weight: 400 !important;
+    font-size: 0.9em !important;
+    color: floralwhite !important;
+    border-color: #aaaaaa;
+    border-style: solid;
+    border-width: 1px;
 }
 .story-title
 {
@@ -2078,135 +2081,6 @@ div.scenario-text:empty {
     margin-bottom: 1em;
 }
 
-.card-header {
-    border-bottom: solid gray 0.5px;
-    padding: 0.5em;
-    font-weight: bold;
-}
-
-.card-body {
-    padding: 0.5em;
-}
-
-.scenario-result-icon {
-    float: right;
-}
-
-.scenario-docs table {
-    margin-left: 3em;
-    margin-top: 0.5em;
-}
-
-.scenario-docs th {
-    font-weight: bold;
-    color: grey;
-    font-size: 12px;
-    padding: 4px;
-    border: 0.5px solid grey;
-}
-.scenario-docs td {
-    padding: 4px;
-    border: 0.5px solid grey;
-}
-
-.scenario-docs .dataTable {
-    border-bottom-color: white;
-}
-
-.examples {
-    padding-top: 0.5em;
-}
-
-.automated-stats {
-    background-color: rgba(38, 38, 38, 0.06);
-    width: 8%;
-}
-
-.manual-stats {
-    background-color: rgba(38, 38, 38, 0.03);
-    width: 8%;
-}
-
-.total-stats {
-    font-weight: bold;
-    width: 8%;
-}
-
-.scenario-result-table th {
-    text-transform: capitalize;
-}
-
-.treeview .badge {
-    background-color: white;
-}
-
-.toc-title {
-    width: 90%;
-}
-
-.top-list-title {
-    min-width: 25em;
-}
-
-.failure-badge {
-    background-color: red !important;
-}
-
-.feature-tags {
-    float:right;
-    padding:4px;
-}
-
-.stacktrace-details {
-    width: 99%;
-    margin-left: 0px !important;
-    background-color: bisque;
-    font-family: monospace;
-}
-
-.rest-query-details {
-    width: 99%;
-    margin-left: 0px !important;
-    background-color: #EEEEE0;
-    font-family: monospace;
-}
-
-.details-button  {
-    float: right;
-    margin-top: 4px !important;
-    margin-bottom: 4px !important;
-    margin-right: 5px; !important;
-    font-size: 1em;
-    background-color: rgba(238,0,0,0.3);
-}
-
-.missing-scenario-warning {
-    color:#ff1631
-}
-
-div.progress {
-    height:20px;
-    margin:0px !important;
-}
-
-.feature-count {
-    font-weight: normal;
-    color: dimgrey;
-}
-
-.requirements-overview img {width: 100%;}
-
-td.indented-error-category i {
-    margin-left: 20px;
-}
-
-.report-info {
-    font-style: italic;
-    font-size: 0.9em;
-    padding-top: 0.5em;
-    padding-left: 1em;
-}
-
 .example-table {
     overflow-x:auto;
 }
@@ -2623,6 +2497,7 @@ div.scenario-text:empty {
 
 .failure-badge {
     background-color: red !important;
+    color: white;
 }
 
 .feature-tags {
@@ -2696,9 +2571,6 @@ td.indented-error-category i {
 .test-report td.test-SUCCESS {
     background-color: white;
 }
-
-
-
 
 .example-table-in-scenario {
     overflow-x:auto;

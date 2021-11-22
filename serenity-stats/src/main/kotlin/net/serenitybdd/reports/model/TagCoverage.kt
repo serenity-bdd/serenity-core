@@ -166,7 +166,7 @@ class CoverageByTag(
 }
 
 class CoverageSegment(val percentage: Double, val count: Int, val result: TestResult) {
-    val color = BackgroundColor().forResult(result)
+    val color = BackgroundColor().inDarkforResult(result)
     val roundedPercentage = Math.round(percentage);
     val title = "${roundedPercentage}% ${result.toString().lowercase()}"
 }

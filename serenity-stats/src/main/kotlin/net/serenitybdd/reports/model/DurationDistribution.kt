@@ -125,20 +125,20 @@ class DurationDistribution(
         val hours = duration.toHours()
         val minutes = duration.toMinutesPart()
         val seconds = duration.toSecondsPart();
-        return "${hours(hours)} ${minutes(minutes)} ${seconds(seconds)}".trim()
+        return "${hours(hours)} ${minutes(minutes.toLong())} ${seconds(seconds.toLong())}".trim()
     }
 
-    fun seconds(value: Number): String {
-        if (value == 0) return "";
-        return if (value == 1) "${value} second" else "${value} seconds"
+    fun seconds(value: Long): String {
+        if (value == 0L) return "";
+        return if (value == 1L) "${value} second" else "${value} seconds"
     }
 
-    fun minutes(value: Number): String {
-        if (value == 0) return "";
-        return if (value == 1) "${value} minute" else "${value} minutes"
+    fun minutes(value: Long): String {
+        if (value == 0L) return "";
+        return if (value == 1L) "${value} minute" else "${value} minutes"
     }
 
-    fun hours(value: Number): String {
+    fun hours(value: Long): String {
         if (value == 0L) return "";
         return if (value == 1L) "${value} hour" else "${value} hours"
     }

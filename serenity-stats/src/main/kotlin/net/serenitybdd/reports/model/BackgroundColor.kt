@@ -18,7 +18,7 @@ class BackgroundColor {
                 TestResult.SUCCESS to "#c5df91",
                 TestResult.PENDING to "#cbddea",
                 TestResult.IGNORED to "#cccdc7",
-                TestResult.SKIPPED to "#eee5ad",
+                TestResult.SKIPPED to "#e3c281",
                 TestResult.FAILURE to "#fd938e",
                 TestResult.ABORTED to "#f9c7a7",
                 TestResult.ERROR to "#fab186",

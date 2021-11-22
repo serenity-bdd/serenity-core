@@ -941,7 +941,9 @@ public class StepEventBus {
     }
 
     public boolean isASingleBrowserScenario() {
-        return uniqueSession || currentTestHasTag(TestTag.withValue("singlebrowser"));
+        return uniqueSession
+                || currentTestHasTag(TestTag.withValue("singlebrowser"))
+                ||  baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
     }
 
     public boolean isNewSingleBrowserScenario() {

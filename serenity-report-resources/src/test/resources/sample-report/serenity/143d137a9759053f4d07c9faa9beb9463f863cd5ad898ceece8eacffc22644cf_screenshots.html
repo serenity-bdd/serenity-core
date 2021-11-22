@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Screenshots</title>
+
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css"><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><link rel="stylesheet" type="text/css" href="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.css">
+<link rel="stylesheet" type="text/css" href="chartist/dist/chartist.min.css">
+<script src="chartist/dist/chartist.min.js"></script>
+<script src="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
+<!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- Nivo Slider -->
+<link rel="stylesheet" href="nivo-slider/3.2/nivo-slider.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="nivo-slider/3.2/themes/default/default.css" type="text/css" media="screen" />
+<script src="nivo-slider/3.2/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+
+        var screenshotIndex = getUrlVars()["screenshot"];
+
+        $(window).load(function () {
+            $('#slider').nivoSlider({
+                startSlide: screenshotIndex,
+                effect: 'fade',
+                animSpeed: 200,
+                manualAdvance: true
+            });
+        });
+
+        $(window).keydown(function(e) {
+            switch(e.which) {
+                case 37:
+                    $('a.nivo-prevNav').click();
+                    break;
+                case 39:
+                    $('a.nivo-nextNav').click();
+                    break;
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle"></span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs">
+                <a href="index.html">Home</a>
+                > <span class="truncate-40"><a
+                    href="3e4ec4b80916c4f6d10b483e56ed497d81083b551a5d8558dad9a6076a0fdb74.html">Registering As A New Frequent Flyer</a></span>
+                > <span class="truncate-60"><a
+                    href="143d137a9759053f4d07c9faa9beb9463f863cd5ad898ceece8eacffc22644cf.html">Candy fails to enter to enter a mandatory field </a></span>
+                > Screenshots
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="7ea0a5e2d679b9deeda9910ae4a9bcd3a281e0d908303a9e16e486103e98880c.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="576946480b52ad056d6f5bddf874399c83582ecf90963cc074a14c70580e7d9f.html"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 13-11-2021 11:06</span>
+    <br style="clear:left"/>
+</div>
+
+    <div class="clr"></div>
+
+
+    <div id="contentbody">
+        <div class="titlebar">
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td>
+                            <div>
+                                <h3 class="discreet-story-header">
+                                    <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
+                                    <span class="story-header-title">Registering As A New Frequent Flyer </span>
+                                    <span class="badge tag-badge" style="">Feature</span>
+                                </h3>
+
+                                <div class="discreet-requirement-narrative-title">
+                                New Frequent Flyer members need to register in order to book a flight.
+                                </div>
+                            </div>
+
+                        </td>
+                        <td valign="top" align="right">
+                            <p class="tag">
+                                <span class="badge tag-badge" style="background:default;"
+                                    <i class="bi bi-tag"></i>&nbsp;<a class="tagLink" style="background:default;" href="4ca851fa2ddf63c32d57d83cd86b601a6f80d04213a4e46be6833d0a655c243a.html">Current
+                                    (tag)</a>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon fa-2x' title='SUCCESS'></i></a></span>
+                            <span class="test-case-title">
+                                <span class="success-color">Candy fails to enter to enter a mandatory field
+                                    <span class="related-issue-title"></span>
+                                </span>
+                            </span>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="clr"></div>
+
+
+    <div id="beforetable"></div>
+    <div id="contenttilttle">
+        <div class="slider-wrapper theme-default">
+            <div id="slider">
+                <img src="4f6c1a673533823c2bd85aade7cb95c6371fc439d0e5743df15542a0a6c1e95c.png" title=" When Candy wants to register a new Frequent Flyer account" width="1600"/>
+                <img src="4f6c1a673533823c2bd85aade7cb95c6371fc439d0e5743df15542a0a6c1e95c.png" title=" Candy navigates to the registration page" width="1600"/>
+                <img src="4f6c1a673533823c2bd85aade7cb95c6371fc439d0e5743df15542a0a6c1e95c.png" title=" Candy opens the pages.home page" width="1600"/>
+                <img src="4f6c1a673533823c2bd85aade7cb95c6371fc439d0e5743df15542a0a6c1e95c.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="9851c18e5da8c1fe1ba1e4d85b50d0aad67a877ee2bfb30ba218892653c55de2.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="9851c18e5da8c1fe1ba1e4d85b50d0aad67a877ee2bfb30ba218892653c55de2.png" title=" Candy navigates to the registration page (completed)" width="1600"/>
+                <img src="9851c18e5da8c1fe1ba1e4d85b50d0aad67a877ee2bfb30ba218892653c55de2.png" title=" When Candy wants to register a new Frequent Flyer account (completed)" width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" Then the following information should be mandatory to register:
+| Field | Error Message If Missing |
+| email | Please enter your email |
+| password | Please enter your password |
+| firstName | Please enter your first name |
+| lastName | Please enter your last name |
+| address | Please enter your address |
+| country | Please enter a valid country |" width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" Candy checks each entry in the collection:" width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" For item {Field=email, Error Message If Missing=Please enter your email}" width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" Candy registers for a new Frequent Flyer account with email " width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="9f8bad6731a09a2e3ac20a6ba199277d154751a5b401746e7789757bf09dd77e.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="ba5f8d284f2df094f845111f354e55f13745d15511481a5b5802b89a4be957fc.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="ba5f8d284f2df094f845111f354e55f13745d15511481a5b5802b89a4be957fc.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="ba5f8d284f2df094f845111f354e55f13745d15511481a5b5802b89a4be957fc.png" title=" Candy enters '' into Email field" width="1600"/>
+                <img src="2e578f04278c7a28a61d3a92a168fdea0b8d45de614dfdb8a4f486ab4c72d22d.png" title=" Candy enters '' into Email field (completed)" width="1600"/>
+                <img src="2e578f04278c7a28a61d3a92a168fdea0b8d45de614dfdb8a4f486ab4c72d22d.png" title=" Candy enters 'cand1' into Password field" width="1600"/>
+                <img src="caf2f77bbd27bb32adcbdfdb1785a39511b3e0c8b89aeb87f7e5f5a56fda64db.png" title=" Candy enters 'cand1' into Password field (completed)" width="1600"/>
+                <img src="caf2f77bbd27bb32adcbdfdb1785a39511b3e0c8b89aeb87f7e5f5a56fda64db.png" title=" Candy enters 'Candy' into First name field" width="1600"/>
+                <img src="779e371c914118c94a4e3d286b2d3f4541d508a07969b5ccd29d1b203a77a451.png" title=" Candy enters 'Candy' into First name field (completed)" width="1600"/>
+                <img src="779e371c914118c94a4e3d286b2d3f4541d508a07969b5ccd29d1b203a77a451.png" title=" Candy enters 'Traveller' into Last name field" width="1600"/>
+                <img src="83be02216fe878495f31a37452cd58c05c044540ef71490e84c9d18f066be3d9.png" title=" Candy enters 'Traveller' into Last name field (completed)" width="1600"/>
+                <img src="83be02216fe878495f31a37452cd58c05c044540ef71490e84c9d18f066be3d9.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field" width="1600"/>
+                <img src="95700cf209db5fa71f805892bcacadd48fab4c9a3157788cf2052198dc17ccc8.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field (completed)" width="1600"/>
+                <img src="95700cf209db5fa71f805892bcacadd48fab4c9a3157788cf2052198dc17ccc8.png" title=" Candy enters 'Australia' then hits [TAB] into Country field" width="1600"/>
+                <img src="c723c891a01609f749105b8454d462be07a86aab29d2d034a0aaef29317919b4.png" title=" Candy enters 'Australia' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="c723c891a01609f749105b8454d462be07a86aab29d2d034a0aaef29317919b4.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="c723c891a01609f749105b8454d462be07a86aab29d2d034a0aaef29317919b4.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="0d04284bf8ef4e8949c9fc640f4c33178af24dbd36c9f87a2ab6cb6faec184e0.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="693c5b82d5c35e8648c5956f9e039d5e7b2742df5581cf8a0a019585309b757c.png" title=" Candy clicks on option" width="1600"/>
+                <img src="9808ce850e91514db398b38ce047db4e56388666fe879c9721cd189827118006.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="9808ce850e91514db398b38ce047db4e56388666fe879c9721cd189827118006.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="9808ce850e91514db398b38ce047db4e56388666fe879c9721cd189827118006.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="5f5c33f579c9eb96e3cf180e9eb050406ab4434ccb4e66fd3f388935b6c0350e.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="5f5c33f579c9eb96e3cf180e9eb050406ab4434ccb4e66fd3f388935b6c0350e.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="b260e8c3200fd9836b994582eaf677ef690402be76c6d5133835cf3bd234c8f9.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="b260e8c3200fd9836b994582eaf677ef690402be76c6d5133835cf3bd234c8f9.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="20084833dd6387dbf1de495344347ad44d217f8a4cd1495fffaf9992ca1a42be.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="20084833dd6387dbf1de495344347ad44d217f8a4cd1495fffaf9992ca1a42be.png" title=" Candy registers for a new Frequent Flyer account with email  (completed)" width="1600"/>
+                <img src="2d4d26ad8d4bd8d559553e65ff7c0657cb64dc7ed8112505a426603dd64cc425.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your email]&gt;" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your email]&gt; (completed)" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" For item {Field=email, Error Message If Missing=Please enter your email} (completed)" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" For item {Field=password, Error Message If Missing=Please enter your password}" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="1fb973989177c886b96906f0fd4c1f34b0ca7356feb614e72d2296c3b49912d3.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="65c2a5132543d7c7032e4134cecb41a4d51e3dca779055a45a118c23248c615b.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="65c2a5132543d7c7032e4134cecb41a4d51e3dca779055a45a118c23248c615b.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="65c2a5132543d7c7032e4134cecb41a4d51e3dca779055a45a118c23248c615b.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field" width="1600"/>
+                <img src="93508f99e5652a3841e91f083cf63ae850b0a3c556b94f2de97e470d4c006b4e.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field (completed)" width="1600"/>
+                <img src="93508f99e5652a3841e91f083cf63ae850b0a3c556b94f2de97e470d4c006b4e.png" title=" Candy enters '' into Password field" width="1600"/>
+                <img src="c65a8d207604b0e05ce595fa9a1bee4d946813ace739f03615b135da650de156.png" title=" Candy enters '' into Password field (completed)" width="1600"/>
+                <img src="c65a8d207604b0e05ce595fa9a1bee4d946813ace739f03615b135da650de156.png" title=" Candy enters 'Candy' into First name field" width="1600"/>
+                <img src="76475ad07360d468868b18b9d6eb35a5e66b7b8b4957be3dc75a14692347cf11.png" title=" Candy enters 'Candy' into First name field (completed)" width="1600"/>
+                <img src="76475ad07360d468868b18b9d6eb35a5e66b7b8b4957be3dc75a14692347cf11.png" title=" Candy enters 'Traveller' into Last name field" width="1600"/>
+                <img src="bdb1d6dd3116ccc1ba61abe46db901bc279ee355d0fd175663f8f12386135580.png" title=" Candy enters 'Traveller' into Last name field (completed)" width="1600"/>
+                <img src="bdb1d6dd3116ccc1ba61abe46db901bc279ee355d0fd175663f8f12386135580.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field" width="1600"/>
+                <img src="ee212f52c0363d052168e6da832a9bec148adf2d937de849478016c76f9f229c.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field (completed)" width="1600"/>
+                <img src="ee212f52c0363d052168e6da832a9bec148adf2d937de849478016c76f9f229c.png" title=" Candy enters 'Australia' then hits [TAB] into Country field" width="1600"/>
+                <img src="238321dbdb3540877713188502be17d431916a969e09a137c6ebc402e3429e4d.png" title=" Candy enters 'Australia' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="238321dbdb3540877713188502be17d431916a969e09a137c6ebc402e3429e4d.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="238321dbdb3540877713188502be17d431916a969e09a137c6ebc402e3429e4d.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="fd721976942af8584109a2321764b9bcdb3e96cb9e9abff6bf98d36acc5f7a0e.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="a88d7888e71de6692c8ebb2996dd84f68531d2e927ae26748d3c1cc4bc2274e7.png" title=" Candy clicks on option" width="1600"/>
+                <img src="f456a069f65cb79801f065adb5542c5b0fd2476346ad17993c7574fc2b918303.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="f456a069f65cb79801f065adb5542c5b0fd2476346ad17993c7574fc2b918303.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="f456a069f65cb79801f065adb5542c5b0fd2476346ad17993c7574fc2b918303.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="a777e29f259e528edcaa60da406ebbb55cabdd0726ac5efa1d89d05624e80159.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="a777e29f259e528edcaa60da406ebbb55cabdd0726ac5efa1d89d05624e80159.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="0e3ddc78fa165add177d467f6ffbbe2e3fd633dc53e3ef8df94504db5b89beff.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="0e3ddc78fa165add177d467f6ffbbe2e3fd633dc53e3ef8df94504db5b89beff.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="02198f4004c22dc50305d6ad2e75533dce7f108e040767d5a224b3df3b5a0ef0.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="02198f4004c22dc50305d6ad2e75533dce7f108e040767d5a224b3df3b5a0ef0.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com (completed)" width="1600"/>
+                <img src="e8cfdbefc9e732af0ec49c6b466a546f0fcc222b68ba0df2eb2e6254b79b46af.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your password]&gt;" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your password]&gt; (completed)" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" For item {Field=password, Error Message If Missing=Please enter your password} (completed)" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" For item {Field=firstName, Error Message If Missing=Please enter your first name}" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="54d3f8120df9b211f83e6c0885a97ad6664fa458254caba2e39e36b87d1af5ab.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field (completed)" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'cand1' into Password field" width="1600"/>
+                <img src="1a72f391910211a4d3ce58e7e09c5f43ae4577ef397c43c480e378d9279cc12a.png" title=" Candy enters 'cand1' into Password field (completed)" width="1600"/>
+                <img src="1a72f391910211a4d3ce58e7e09c5f43ae4577ef397c43c480e378d9279cc12a.png" title=" Candy enters '' into First name field" width="1600"/>
+                <img src="48751cab561a14120dcaa62eb1dfa575074b821d809d3d4efd81eaaa3443a32d.png" title=" Candy enters '' into First name field (completed)" width="1600"/>
+                <img src="48751cab561a14120dcaa62eb1dfa575074b821d809d3d4efd81eaaa3443a32d.png" title=" Candy enters 'Traveller' into Last name field" width="1600"/>
+                <img src="98b407d0884afd058a7c8954bd4c289ad585ccd3e66e9c209b9270333bf36f2c.png" title=" Candy enters 'Traveller' into Last name field (completed)" width="1600"/>
+                <img src="98b407d0884afd058a7c8954bd4c289ad585ccd3e66e9c209b9270333bf36f2c.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field" width="1600"/>
+                <img src="520e180ddd36d729ff7fa5cf32fd9b4ccd07a19aa7a40fc6c5b05cc58aba30ad.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field (completed)" width="1600"/>
+                <img src="520e180ddd36d729ff7fa5cf32fd9b4ccd07a19aa7a40fc6c5b05cc58aba30ad.png" title=" Candy enters 'Australia' then hits [TAB] into Country field" width="1600"/>
+                <img src="29142833bd174e7ded6225af5668b251f91a479a466b5aa41e9b326e204f1f8c.png" title=" Candy enters 'Australia' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="29142833bd174e7ded6225af5668b251f91a479a466b5aa41e9b326e204f1f8c.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="29142833bd174e7ded6225af5668b251f91a479a466b5aa41e9b326e204f1f8c.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="f9e72919c5d42a236389bd903b2adfe306f3991e442f6fcb939d0b369d235c28.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="dba6ed6b349df9f11650201f4156d0167d657205a105105c4cf948056e18ee47.png" title=" Candy clicks on option" width="1600"/>
+                <img src="ae8e36cd9fb27e8eb673ee770e110355fb88f97ee8fe3fbc0ca3a312ea2407ad.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="ae8e36cd9fb27e8eb673ee770e110355fb88f97ee8fe3fbc0ca3a312ea2407ad.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="395cb51fbe29cf2a5e45e08225fa56712e0f27355cef554e67c9e774e7eaaef3.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="bc8b7a5347ba5f10ae4bd495b65965aa33d2e2f137668b49c9e9d64c33c4b541.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="bc8b7a5347ba5f10ae4bd495b65965aa33d2e2f137668b49c9e9d64c33c4b541.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="f775220aa9048dec10886e8efcd835976118af2ca9b2d9c533505812e5074082.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="f775220aa9048dec10886e8efcd835976118af2ca9b2d9c533505812e5074082.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="34ca28d7bd74bb976f9d51c0006ab348b05ac19dc3f93dbee64633be42d56f5f.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="34ca28d7bd74bb976f9d51c0006ab348b05ac19dc3f93dbee64633be42d56f5f.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com (completed)" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your first name]&gt;" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your first name]&gt; (completed)" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" For item {Field=firstName, Error Message If Missing=Please enter your first name} (completed)" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" For item {Field=lastName, Error Message If Missing=Please enter your last name}" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="d5fbe581918852720ac2cbd8218756f66a4529d8191993f6a5447052ecf4c30c.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field (completed)" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'cand1' into Password field" width="1600"/>
+                <img src="026ce165c2f6a016b8c920a85709d9a2a14b840f50cbf848e895ed1c1d664906.png" title=" Candy enters 'cand1' into Password field (completed)" width="1600"/>
+                <img src="026ce165c2f6a016b8c920a85709d9a2a14b840f50cbf848e895ed1c1d664906.png" title=" Candy enters 'Candy' into First name field" width="1600"/>
+                <img src="40430d552a29e239cbf2b30b986fa9607c73f19eb33a9a2b27ac62a024b63b74.png" title=" Candy enters 'Candy' into First name field (completed)" width="1600"/>
+                <img src="40430d552a29e239cbf2b30b986fa9607c73f19eb33a9a2b27ac62a024b63b74.png" title=" Candy enters '' into Last name field" width="1600"/>
+                <img src="c7b59ba6aeac8992cb4163b386b97c8645335a071ad6a652bce77d093a6755a5.png" title=" Candy enters '' into Last name field (completed)" width="1600"/>
+                <img src="c7b59ba6aeac8992cb4163b386b97c8645335a071ad6a652bce77d093a6755a5.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field" width="1600"/>
+                <img src="1a17ff3d329ef6b2248518cd04ce6bc00233fd2c6288700f35b5829b0a9d3929.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field (completed)" width="1600"/>
+                <img src="1a17ff3d329ef6b2248518cd04ce6bc00233fd2c6288700f35b5829b0a9d3929.png" title=" Candy enters 'Australia' then hits [TAB] into Country field" width="1600"/>
+                <img src="6d19fe19a3eb3822d732c5b1d22e7f14bb79044da9831401f9d7cbd2f138d4ec.png" title=" Candy enters 'Australia' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="6d19fe19a3eb3822d732c5b1d22e7f14bb79044da9831401f9d7cbd2f138d4ec.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="6d19fe19a3eb3822d732c5b1d22e7f14bb79044da9831401f9d7cbd2f138d4ec.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="91ac5a838b85f7d348f65b6025205348e2952e467bbfc4d2a7ec2adc8bd3ca87.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="4efbbd2d4df456b56cd9558a022aacdfd538096ae6c6903fde74d813fc53ab77.png" title=" Candy clicks on option" width="1600"/>
+                <img src="95a3c71dcd2610b91aa2a2affe94f6643ebc876fb7c64849314feef0c7126c75.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="95a3c71dcd2610b91aa2a2affe94f6643ebc876fb7c64849314feef0c7126c75.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="95a3c71dcd2610b91aa2a2affe94f6643ebc876fb7c64849314feef0c7126c75.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="7f220138bb5df8f9267710c421da54048797e1244480d9a7579ce40f1721619e.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="7f220138bb5df8f9267710c421da54048797e1244480d9a7579ce40f1721619e.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="12b25c25f1ed4245c71f4136402bfa7858e25957274e9b43c04c30bb712df717.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="12b25c25f1ed4245c71f4136402bfa7858e25957274e9b43c04c30bb712df717.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="e7a7650d500e727f98b90b21859014caef144473a42d17f33c9ab866697b3636.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="e7a7650d500e727f98b90b21859014caef144473a42d17f33c9ab866697b3636.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com (completed)" width="1600"/>
+                <img src="aea1f544d2057e9c4b1f3f934ffcea3c6d035fd6774ef4154c9dfb6e4c879530.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your last name]&gt;" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your last name]&gt; (completed)" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" For item {Field=lastName, Error Message If Missing=Please enter your last name} (completed)" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" For item {Field=address, Error Message If Missing=Please enter your address}" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="05feb0a8a3e09ce5a92f8a3a1228c7a434053381cd05c2670da27e21637f45df.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field (completed)" width="1600"/>
+                <img src="78387db95ae998c340837ab1567e34a4f6f3eadbf30e6a51fc565f8853e1ab73.png" title=" Candy enters 'cand1' into Password field" width="1600"/>
+                <img src="0d07b42ba1d8a33c9cd35e34d1c07b131fb6f999b8e65e1cff1e5cf1ed9e4764.png" title=" Candy enters 'cand1' into Password field (completed)" width="1600"/>
+                <img src="0d07b42ba1d8a33c9cd35e34d1c07b131fb6f999b8e65e1cff1e5cf1ed9e4764.png" title=" Candy enters 'Candy' into First name field" width="1600"/>
+                <img src="231b617c34cc63ee9a577ae834735a30b0fdf7a5699a0072dcdcd245b22c839e.png" title=" Candy enters 'Candy' into First name field (completed)" width="1600"/>
+                <img src="231b617c34cc63ee9a577ae834735a30b0fdf7a5699a0072dcdcd245b22c839e.png" title=" Candy enters 'Traveller' into Last name field" width="1600"/>
+                <img src="0d0cdd947bbac0f68dbce768fc46bf9ec99ab9d9a501cc1f084f23056a7497ac.png" title=" Candy enters 'Traveller' into Last name field (completed)" width="1600"/>
+                <img src="0d0cdd947bbac0f68dbce768fc46bf9ec99ab9d9a501cc1f084f23056a7497ac.png" title=" Candy enters '' into Address field" width="1600"/>
+                <img src="f36ac5360c00d3eb4e186cb5e7c08487fe4bb11adc1185b37d46f3e19d5b48b5.png" title=" Candy enters '' into Address field (completed)" width="1600"/>
+                <img src="f36ac5360c00d3eb4e186cb5e7c08487fe4bb11adc1185b37d46f3e19d5b48b5.png" title=" Candy enters 'Australia' then hits [TAB] into Country field" width="1600"/>
+                <img src="6f6db21ee4fb1311d8db6e2b6ebf094189c60bebad3163da0d1d3bc74b6027bb.png" title=" Candy enters 'Australia' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="6f6db21ee4fb1311d8db6e2b6ebf094189c60bebad3163da0d1d3bc74b6027bb.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="6f6db21ee4fb1311d8db6e2b6ebf094189c60bebad3163da0d1d3bc74b6027bb.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="68b65f705f4a1415e3df8238485e67932713505cba638ede19638a88b74734d2.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="e3465d78e2e7345c38f738c34bc8fab5ca5636b80203ee0c9ecf27934a6e7edb.png" title=" Candy clicks on option" width="1600"/>
+                <img src="c592c16792a260518dc72b6e84e16acda2868700d0202d0e4c6375ce7d9d4d87.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="c592c16792a260518dc72b6e84e16acda2868700d0202d0e4c6375ce7d9d4d87.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="c592c16792a260518dc72b6e84e16acda2868700d0202d0e4c6375ce7d9d4d87.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="64b8f71d1b423ed2888e6660f7ff57c558d5163ce27f42d3b240061799d0d31e.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="64b8f71d1b423ed2888e6660f7ff57c558d5163ce27f42d3b240061799d0d31e.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="f7fa77bf7519797dafa4dfd7faca804d3175c855e65f2c8bfe26096d30a14b60.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="f7fa77bf7519797dafa4dfd7faca804d3175c855e65f2c8bfe26096d30a14b60.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="6edd6d168b2ee11da6259ab2a11b9b517f48872c0d91def975c1313940ccce8f.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="6edd6d168b2ee11da6259ab2a11b9b517f48872c0d91def975c1313940ccce8f.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com (completed)" width="1600"/>
+                <img src="5f414f2062a7768a3df5be81fc5399f8b8ae0c7983c7f3c50b28464648e80c67.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your address]&gt;" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter your address]&gt; (completed)" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" For item {Field=address, Error Message If Missing=Please enter your address} (completed)" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" For item {Field=country, Error Message If Missing=Please enter a valid country}" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" Candy anonymous performable" width="1600"/>
+                <img src="23fb5548ff6c3011dbf93808dcd3f5e95620d4e4884c0b3e87f95452fea5df47.png" title=" Candy opens the pages.registration page" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy opens the pages.registration page (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy anonymous performable (completed)" width="1600"/>
+                <img src="b809ab029247f3f0a33ec7b86b7482970c9fbaa47a57a09c85039c1bea49660c.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field" width="1600"/>
+                <img src="9d3ae62f1cb6f712aac5252d430558340ff25a77dd6c682e3df58b2749e4ff5f.png" title=" Candy enters 'candy-3331135@traveller.com' into Email field (completed)" width="1600"/>
+                <img src="9d3ae62f1cb6f712aac5252d430558340ff25a77dd6c682e3df58b2749e4ff5f.png" title=" Candy enters 'cand1' into Password field" width="1600"/>
+                <img src="0d07b42ba1d8a33c9cd35e34d1c07b131fb6f999b8e65e1cff1e5cf1ed9e4764.png" title=" Candy enters 'cand1' into Password field (completed)" width="1600"/>
+                <img src="0d07b42ba1d8a33c9cd35e34d1c07b131fb6f999b8e65e1cff1e5cf1ed9e4764.png" title=" Candy enters 'Candy' into First name field" width="1600"/>
+                <img src="a4fe77c9418befba20ed6277074e25d094f0f6739d652dc2cd9aecd4dd1b671e.png" title=" Candy enters 'Candy' into First name field (completed)" width="1600"/>
+                <img src="a4fe77c9418befba20ed6277074e25d094f0f6739d652dc2cd9aecd4dd1b671e.png" title=" Candy enters 'Traveller' into Last name field" width="1600"/>
+                <img src="5d06037551590b91a802603e9ef72958240a264c48851106f27dd5fa2fdd13e5.png" title=" Candy enters 'Traveller' into Last name field (completed)" width="1600"/>
+                <img src="5d06037551590b91a802603e9ef72958240a264c48851106f27dd5fa2fdd13e5.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field" width="1600"/>
+                <img src="d3f6930ac45d7c8e800ef1b6241c8b0b566e14003d3daab9a43595c1285e0b44.png" title=" Candy enters '10 Partridge Street, Dandenong' into Address field (completed)" width="1600"/>
+                <img src="d3f6930ac45d7c8e800ef1b6241c8b0b566e14003d3daab9a43595c1285e0b44.png" title=" Candy enters '' then hits [TAB] into Country field" width="1600"/>
+                <img src="57f1ad39fc5e1dc29a20ad4cca9ad57bc67f84a4364103449d9aff0d4334e1ae.png" title=" Candy enters '' then hits [TAB] into Country field (completed)" width="1600"/>
+                <img src="57f1ad39fc5e1dc29a20ad4cca9ad57bc67f84a4364103449d9aff0d4334e1ae.png" title=" Candy selects  'Mrs' from Title dropdown" width="1600"/>
+                <img src="57f1ad39fc5e1dc29a20ad4cca9ad57bc67f84a4364103449d9aff0d4334e1ae.png" title=" Candy clicks on Title dropdown" width="1600"/>
+                <img src="cbf9c441272721de6c5a8b479fe4b62d1226c5faddc61e510d777014bf057ca3.png" title=" Candy clicks on Title dropdown (completed)" width="1600"/>
+                <img src="7cc23013f2a34c2ad9d43daaf95d4d0605315a7dd86820aa7fc4d92d0607aad5.png" title=" Candy clicks on option" width="1600"/>
+                <img src="2566dc3ae2169932a865d3798acc38567920378d3914271344ffd0c951c0dc91.png" title=" Candy clicks on option (completed)" width="1600"/>
+                <img src="2566dc3ae2169932a865d3798acc38567920378d3914271344ffd0c951c0dc91.png" title=" Candy selects  'Mrs' from Title dropdown (completed)" width="1600"/>
+                <img src="2566dc3ae2169932a865d3798acc38567920378d3914271344ffd0c951c0dc91.png" title=" Candy clicks on Seat preference" width="1600"/>
+                <img src="683095fa4aaf99f69abca55b34474199a5def39dce8a5220c5b0f165247dd72d.png" title=" Candy clicks on Seat preference (completed)" width="1600"/>
+                <img src="683095fa4aaf99f69abca55b34474199a5def39dce8a5220c5b0f165247dd72d.png" title=" Candy clicks on Terms and conditions" width="1600"/>
+                <img src="2ae65cf9f13ce865274accbcbcfccb7a1c3dfabc8d4a6c65ba46f04a2d65fe55.png" title=" Candy clicks on Terms and conditions (completed)" width="1600"/>
+                <img src="2ae65cf9f13ce865274accbcbcfccb7a1c3dfabc8d4a6c65ba46f04a2d65fe55.png" title=" Candy clicks on Register button" width="1600"/>
+                <img src="bb0daf0cb4128ae3c432028818fb88d669a244ae88c26c0eedf4e75bbb6b2f9b.png" title=" Candy clicks on Register button (completed)" width="1600"/>
+                <img src="bb0daf0cb4128ae3c432028818fb88d669a244ae88c26c0eedf4e75bbb6b2f9b.png" title=" Candy registers for a new Frequent Flyer account with email candy-3331135@traveller.com (completed)" width="1600"/>
+                <img src="50077d19a86dffadd405f497162c799a2fee18e90eb1ebaa569f71b7fb55b4ba.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter a valid country]&gt;" width="1600"/>
+                <img src="2f65b6577c3fa5425aca257a4750801d32bd4f146d9b5c50128b47ee445a8e76.png" title=" Candy should see Error messages with text values that contains: &lt;[Please enter a valid country]&gt; (completed)" width="1600"/>
+                <img src="2f65b6577c3fa5425aca257a4750801d32bd4f146d9b5c50128b47ee445a8e76.png" title=" For item {Field=country, Error Message If Missing=Please enter a valid country} (completed)" width="1600"/>
+                <img src="2f65b6577c3fa5425aca257a4750801d32bd4f146d9b5c50128b47ee445a8e76.png" title=" Candy checks each entry in the collection: (completed)" width="1600"/>
+                <img src="2f65b6577c3fa5425aca257a4750801d32bd4f146d9b5c50128b47ee445a8e76.png" title=" Then the following information should be mandatory to register:
+| Field | Error Message If Missing |
+| email | Please enter your email |
+| password | Please enter your password |
+| firstName | Please enter your first name |
+| lastName | Please enter your last name |
+| address | Please enter your address |
+| country | Please enter a valid country | (completed): <span class='success-color'>SUCCESS</span>" width="1600"/>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div id="beforefooter"></div>
+<div id="bottomfooter">
+    <span class="version">Serenity BDD version 3.0.5</span>
+</div>
+</body>
+</html>

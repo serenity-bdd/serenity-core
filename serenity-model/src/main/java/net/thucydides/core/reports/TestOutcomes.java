@@ -710,6 +710,13 @@ public class TestOutcomes {
                 .withRootOutcomes(getRootOutcomes());
     }
 
+    public TestOutcomes getAbortedTests() {
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ABORTED))
+                .withLabel(labelForTestsWithStatus("aborted tests"))
+                .withResultFilter(TestResult.ABORTED)
+                .withRootOutcomes(getRootOutcomes());
+    }
+
     public TestOutcomes getErrorTests() {
         return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
                 .withLabel(labelForTestsWithStatus("tests with errors"))

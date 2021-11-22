@@ -15,6 +15,7 @@ import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -24,7 +25,7 @@ public class EdgeDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
     private final EnvironmentVariables environmentVariables;
-    private final DriverServicePool driverServicePool = new EdgeServicePool();
+    private final DriverServicePool<EdgeDriverService>  driverServicePool = new EdgeServicePool();
 
     private final FixtureProviderService fixtureProviderService;
 

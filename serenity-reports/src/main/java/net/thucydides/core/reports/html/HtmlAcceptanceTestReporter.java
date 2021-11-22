@@ -181,6 +181,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private void addTestOutcomeToContext(final TestOutcome testOutcome, final Map<String, Object> context) {
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
+        context.put("reportNameInContext", getReportNameProvider());
         context.put("inflection", Inflector.getInstance());
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         context.put("tagInflector", new TagInflector(environmentVariables));

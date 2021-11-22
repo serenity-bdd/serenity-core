@@ -29,9 +29,9 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
         return displayedTagTypes.map { displayedTagType ->
             CoverageByTagType(
                 displayedTagType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
-                    humanize(displayedTagType),
-                    testOutcomes.withTagType(displayedTagType),
-                    tagsToDisplay.filter{ t -> t.type.equals(displayedTagType) })
+                humanize(displayedTagType),
+                testOutcomes.withTagType(displayedTagType),
+                tagsToDisplay.filter { t -> t.type.equals(displayedTagType) })
         }.filter { coverage -> coverage.tagCoverage.isNotEmpty() }
     }
 
@@ -40,12 +40,30 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
     }
 }
 
-class CoverageByTagType(val tagType: String, val tagTitle : String, val testOutcomes: TestOutcomes, tagsToDisplay: Collection<TestTag>) {
+class CoverageByTagType(
+    val tagType: String,
+    val tagTitle: String,
+    val testOutcomes: TestOutcomes,
+    tagsToDisplay: Collection<TestTag>
+) {
     val tagCoverage = coverageForEachTagOfType(tagType, testOutcomes, tagsToDisplay)
+    val featureNames = coverageForEachTagOfType(tagType, testOutcomes, tagsToDisplay)
 
-    private fun coverageForEachTagOfType(tagType: String,
-                                         testOutcomes: TestOutcomes,
-                                         tagsToDisplay: Collection<TestTag>): Collection<CoverageByTag> {
+    fun renderedTestCountsWithStatus(result: String): String {
+        val featureNames = tagCoverage.map { coverage -> coverage.tagName }
+
+        val resultCounts = tagCoverage.map { coverageByTag ->
+            coverageByTag.getCoverageSegments().find { segment -> segment.result.isEqualTo(result) }?.count
+        }
+
+        return "[" + resultCounts.joinToString(",") + "]"
+    }
+
+    private fun coverageForEachTagOfType(
+        tagType: String,
+        testOutcomes: TestOutcomes,
+        tagsToDisplay: Collection<TestTag>
+    ): Collection<CoverageByTag> {
         val coverageFromTestOutcomes = testOutcomes.getTagsOfType(tagType).map { testTag -> coverageFor(testTag) }
 
         val zeroCoverageForUncoveredTags = uncoveredTags(tagsToDisplay, coverageFromTestOutcomes)
@@ -54,79 +72,96 @@ class CoverageByTagType(val tagType: String, val tagTitle : String, val testOutc
         completeCoverage.addAll(coverageFromTestOutcomes)
 
         zeroCoverageForUncoveredTags.filter { zeroCoverage -> coverageNotIncludedIn(zeroCoverage, completeCoverage) }
-                                    .forEach { newCoverage -> completeCoverage.add(newCoverage) }
+            .forEach { newCoverage -> completeCoverage.add(newCoverage) }
 
         return completeCoverage
     }
 
-    private fun coverageNotIncludedIn(newCoverage: CoverageByTag, completeCoverage: MutableList<CoverageByTag>): Boolean {
+    private fun coverageNotIncludedIn(
+        newCoverage: CoverageByTag,
+        completeCoverage: MutableList<CoverageByTag>
+    ): Boolean {
         return completeCoverage.count { coverage -> coverage.tagName == newCoverage.tagName } == 0
     }
 
-    private fun uncoveredTags(tagsToDisplay: Collection<TestTag>, coverageFromTestOutcomes: List<CoverageByTag>): List<CoverageByTag> {
+    private fun uncoveredTags(
+        tagsToDisplay: Collection<TestTag>,
+        coverageFromTestOutcomes: List<CoverageByTag>
+    ): List<CoverageByTag> {
         val uncoveredTags = tagsToDisplay.filter { tag -> noCoverageFor(tag, coverageFromTestOutcomes) }
         val zeroCoverageForUncoveredTags = uncoveredTags.map { tag -> coverageFor(tag) }
         return zeroCoverageForUncoveredTags
     }
 
     private fun noCoverageFor(tag: TestTag, coverageFromTestOutcomes: List<CoverageByTag>): Boolean =
-            coverageFromTestOutcomes.count { coverage -> StringUtils.equalsIgnoreCase(coverage.tagName, tag.name) } == 0
+        coverageFromTestOutcomes.count { coverage -> StringUtils.equalsIgnoreCase(coverage.tagName, tag.name) } == 0
 
     private fun coverageFor(testTag: TestTag): CoverageByTag {
         val testOutcomesForTag = testOutcomes.withTag(testTag)
         val successRate = testOutcomesForTag.formattedPercentage.withResult(SUCCESS, 0)
 
         return CoverageByTag(
-                humanize(shortened(testTag.name)),
-                testOutcomesForTag.testCount,
-                successRate,
-                testOutcomesForTag.result,
-                ReportNameProvider().forTag(testTag),
-                countByResultLabelFrom(testOutcomesForTag),
-                percentageByResultFrom(testOutcomesForTag)
+            humanize(shortened(testTag.name)),
+            testOutcomesForTag.testCount,
+            successRate,
+            testOutcomesForTag.result,
+            ReportNameProvider().forTag(testTag),
+            countByResultLabelFrom(testOutcomesForTag),
+            percentageByResultFrom(testOutcomesForTag)
         )
     }
 
     private fun shortened(name: String): String = name.substringAfterLast("/")
 }
 
-class CoverageByTagResult(val tagName: String,
-                          val testCount: Int,
-                          val successRate: String,
-                          val result: TestResult,
-                          val report: String,
-                          val countByResult: Map<String, Int>,
-                          val percentageByResult: Map<String, Double>) {
+class CoverageByTagResult(
+    val tagName: String,
+    val testCount: Int,
+    val successRate: String,
+    val result: TestResult,
+    val report: String,
+    val countByResult: Map<String, Int>,
+    val percentageByResult: Map<String, Double>
+) {
     val resultClass = result.name.lowercase()
     val resultIcon = ResultIconFormatter().forResult(result)
 
-    fun percentageForResult(result: TestResult): Double = if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
-    fun countForResult(result: TestResult): Int = if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
+    fun percentageForResult(result: TestResult): Double =
+        if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
+
+    fun countForResult(result: TestResult): Int =
+        if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
 
     fun getCoverageSegments(): List<CoverageSegment> =
-            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
-                    .filter { percentageForResult(it) > 0 }
-                    .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
+        listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
+            .filter { percentageForResult(it) > 0 }
+            .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
 
 }
 
-class CoverageByTag(val tagName: String,
-                    val testCount: Int,
-                    val successRate: String,
-                    val result: TestResult,
-                    val report: String,
-                    val countByResult: Map<String, Int>,
-                    val percentageByResult: Map<String, Double>) {
+class CoverageByTag(
+    val tagName: String,
+    val testCount: Int,
+    val successRate: String,
+    val result: TestResult,
+    val report: String,
+    val countByResult: Map<String, Int>,
+    val percentageByResult: Map<String, Double>
+) {
     val resultClass = result.name.lowercase()
     val resultIcon = ResultIconFormatter().forResult(result)
+    val resultName = result.name
 
-    fun percentageForResult(result: TestResult): Double = if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
-    fun countForResult(result: TestResult): Int = if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
+    fun percentageForResult(result: TestResult): Double =
+        if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
+
+    fun countForResult(result: TestResult): Int =
+        if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
 
     fun getCoverageSegments(): List<CoverageSegment> =
-            listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
-                    .filter { percentageForResult(it) > 0 }
-                    .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
+        listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
+            .filter { percentageForResult(it) > 0 }
+            .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
 
 }
 

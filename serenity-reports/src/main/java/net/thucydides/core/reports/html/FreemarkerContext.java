@@ -5,7 +5,6 @@ import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
@@ -14,12 +13,13 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.accessibility.ChartColorScheme;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
+import net.thucydides.core.tags.OutcomeTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.TagInflector;
@@ -27,19 +27,16 @@ import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
+import static net.thucydides.core.reports.html.HtmlReporter.READABLE_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
-import static net.thucydides.core.reports.html.HtmlReporter.ZONED_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
@@ -87,11 +84,14 @@ public class FreemarkerContext {
 
         // WIP
 
-        TestOutcomes testOutcomes =  completeTestOutcomes.filteredByEnvironmentTags();
+        TestOutcomes testOutcomes = completeTestOutcomes.filteredByEnvironmentTags();
 
         // EWIP
 
+        context.put("colorScheme", new ChartColorScheme(environmentVariables));
         context.put("testOutcomes", testOutcomes);
+        context.put("durations", new DurationDistribution(environmentVariables, testOutcomes));
+
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());
         if (useFiltering) {
             context.put("tagTypes", tagFilter.filteredTagTypes(testOutcomes.getTagTypes()));
@@ -101,6 +101,7 @@ public class FreemarkerContext {
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("parentTag", parentTag);
         context.put("reportName", reportName);
+        context.put("reportNameInContext", reportName);
 
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements));
 
@@ -113,8 +114,8 @@ public class FreemarkerContext {
         ZonedDateTime startTime = startTimeOf(testOutcomes.getOutcomes());
         ZonedDateTime endTime = endTimeOf(testOutcomes.getOutcomes());
 
-        context.put("startTimestamp", zonedTimestampFrom(startTime));
-        context.put("endTimestamp", zonedTimestampFrom(endTime));
+        context.put("startTimestamp", readableTimestampFrom(startTime));
+        context.put("endTimestamp", readableTimestampFrom(endTime));
         context.put("totalTestDuration", formattedDuration(totalDurationOf(testOutcomes.getOutcomes())));
         context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
         context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
@@ -157,22 +158,24 @@ public class FreemarkerContext {
                 .map(Requirement::asTag)
                 .collect(Collectors.toSet());
 
-//        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
-//                .filter( tag -> testOutcomes.containsMatchingTag(tag) || (requirements.containsEmptyRequirementWithTag(tag)))
-//                .filter(this::inDisplayOnlyTags)
-//                .collect(Collectors.toSet());
-
-        context.put("coverage", TagCoverage.from(testOutcomes)
+        List<CoverageByTagType> coverage = TagCoverage.from(testOutcomes)
                 .showingTags(requirements.getTagsOfType(tagTypes))
                 .showingTags(coveredTags)
-                .forTagTypes(tagTypes));
+                .forTagTypes(tagTypes);
+
+        context.put("coverage", coverage);
+
         context.put("backgroundColor", new BackgroundColor());
 
         testOutcomes.getOutcomes().forEach(
                 testOutcome -> addTags(testOutcome, context, null)
         );
 
-        context.put("tagResults", TagResults.from(testOutcomes).groupedByType());
+        context.put("tagResults",
+                TagResults.from(testOutcomes)
+                        .ignoringValues("ignore","pending","skip","error","compromised","fail")
+                        .ignoringTypes("Duration")
+                        .groupedByType());
 
         CustomReportFields customReportFields = new CustomReportFields(environmentVariables);
         context.put("customFields", customReportFields.getFieldNames());
@@ -221,8 +224,8 @@ public class FreemarkerContext {
         context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 
-    protected String zonedTimestampFrom(ZonedDateTime time) {
-        return time == null ? "" : time.format(DateTimeFormatter.ofPattern(ZONED_TIMESTAMP_FORMAT));
+    protected String readableTimestampFrom(ZonedDateTime time) {
+        return time == null ? "" : time.format(DateTimeFormatter.ofPattern(READABLE_TIMESTAMP_FORMAT));
     }
 
     protected String timestampFrom(ReadableDateTime startTime) {

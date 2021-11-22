@@ -288,6 +288,16 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REPORT_SHOW_RELEASES,
 
+    /**
+     * Use patterns as well as colors for the graphs and charts.
+     */
+    SERENITY_REPORT_ACCESIBILITY,
+
+    /**
+     *
+     */
+    SERENITY_REPORT_DURATIONS,
+
     @Deprecated
     THUCYDIDES_REPORT_SHOW_PROGRESS,
 

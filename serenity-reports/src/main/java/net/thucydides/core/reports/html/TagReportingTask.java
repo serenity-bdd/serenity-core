@@ -67,13 +67,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     private void generateTagReport(TestOutcomes testOutcomes, ReportNameProvider reportNameProvider, TestTag tag) throws IOException {
 
-        LOGGER.trace("GENERATE TAG REPORTS FOR " + tag);
-
         TestOutcomes testOutcomesForTag = testOutcomes.withTag(tag);
         Map<String, Object> context = freemarker.getBuildContext(testOutcomesForTag, reportNameProvider, true);
         context.put("report", ReportProperties.forTagResultsReport());
         context.put("currentTagType", tag.getType());
         context.put("currentTag", tag);
+        context.put("reportName", reportNameProvider);
+        context.put("reportNameInContext", reportNameProvider.inContext(tag.getCompleteName()));
 
         String csvReport = reportNameProvider.forCSVFiles().forTag(tag);
         context.put("csvReport", csvReport);

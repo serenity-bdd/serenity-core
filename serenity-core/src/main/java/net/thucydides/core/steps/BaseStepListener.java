@@ -275,6 +275,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+    public boolean currentStoryHasTag(TestTag tag) {
+        return storywideTags != null && storywideTags.contains(tag);
+    }
     public class StepMerger {
 
         final int maxStepsToMerge;

@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.csv.CSVReporter;
 import net.thucydides.core.util.EnvironmentVariables;

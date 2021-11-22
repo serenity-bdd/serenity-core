@@ -13,10 +13,12 @@ import org.apache.commons.lang3.StringUtils
 
 class TagResults(val testOutcomes: TestOutcomes) {
 
-    val requirementsService = getInjector().getInstance<RequirementsService>(RequirementsService::class.java)
-    val environmentVariables = getInjector().getInstance<EnvironmentVariables>(EnvironmentVariables::class.java)
+    val requirementsService = getInjector().getInstance(RequirementsService::class.java)
+    val environmentVariables = getInjector().getInstance(EnvironmentVariables::class.java)
 
     val tagFilter = TagFilter(environmentVariables)
+    var ignoredValues : MutableList<String> = mutableListOf()
+    var ignoredTypes : MutableList<String> = mutableListOf()
 
     companion object {
         @JvmStatic
@@ -37,12 +39,25 @@ class TagResults(val testOutcomes: TestOutcomes) {
     fun forAllTags(): List<TagResult> =
             testOutcomes.tags
                     .filter { tag -> !requirementsService.requirementTypes.contains(tag.type) }
+                    .filter { tag -> !ignoredValues.contains(tag.name) }
+                    .filter { tag -> !ignoredTypes.contains(tag.type) }
                     .map { tag ->
                         TagResult(tag,
                                 ReportNameProvider().forTag(tag),
                                 testOutcomes.withTag(tag).total,
                                 testOutcomes.withTag(tag).result)
                     }
+
+    fun ignoringValues(vararg valuesToIgnore: String): TagResults {
+        ignoredValues.addAll(valuesToIgnore)
+        return this
+    }
+
+    fun ignoringTypes(vararg typesToIgnore: String): TagResults {
+        ignoredTypes.addAll(typesToIgnore)
+        return this
+    }
+
 }
 
 class TagResult(val tag: TestTag, val report: String, val count: Int, val result: TestResult) {

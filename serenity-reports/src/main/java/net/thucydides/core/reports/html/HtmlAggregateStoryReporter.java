@@ -2,16 +2,18 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
+import net.serenitybdd.reports.model.DurationBucket;
+import net.serenitybdd.reports.model.DurationDistribution;
 import net.serenitybdd.reports.model.FrequentFailure;
 import net.serenitybdd.reports.model.FrequentFailures;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
-import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -149,6 +151,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         Stopwatch stopwatch = Stopwatch.started();
         LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
 
+        enhanceWithDurationTags(testOutcomes);
+
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
@@ -158,7 +162,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
 
         LOGGER.debug("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
-
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
@@ -172,6 +175,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
+
+        // CUSTOM TAG REPORTS
         reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes).using(context,
                 environmentVariables,
                 getOutputDirectory(),
@@ -179,8 +184,16 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 testOutcomes.getTags(),
                 knownRequirementReportNames));
 
+        // NESTED TAGS
         reportingTasks.addAll(nestedTagReports(testOutcomes, context, knownRequirementReportNames));
 
+        // ADD DURATION REPORTS
+        reportingTasks.addAll(durationReports(testOutcomes, context, knownRequirementReportNames));
+
+        // ADD DURATION REPORTS FOR EACH REQUIREMENT (NEEDED?)
+        // reportingTasks.addAll(nestedDurationTagReports(testOutcomes, context, knownRequirementReportNames));
+
+        // REPORTS FOR EACH RESULT
         reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
 
         reportingTasks.addAll(RequirementsReports.requirementsReportsFor(
@@ -212,12 +225,36 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
+    private Set<ReportingTask> durationReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
+        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
+
+        return TagReportingTask.tagReportsFor(testOutcomes).using(context,
+                environmentVariables,
+                getOutputDirectory(),
+                reportNameProvider,
+                durationDistribution.getDurationTags(),
+                knownRequirementReportNames);
+    }
+
+    private void enhanceWithDurationTags(TestOutcomes testOutcomes) {
+        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
+        testOutcomes.getOutcomes()
+                .parallelStream()
+                .forEach(testOutcome -> enhanceWithDuraction(testOutcome, durationDistribution));
+    }
+
+    private void enhanceWithDuraction(TestOutcome testOutcome, DurationDistribution durationDistribution) {
+        DurationBucket bucket = durationDistribution.bucketFor(testOutcome);
+        testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
+    }
+
 
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
         Set<ReportingTask> reportingTasks = new HashSet<>();
 
         testOutcomes.getTags().stream()
                 .filter(tag -> !requirements.getTypes().contains(tag.getType()))
+                .filter(tag -> !tag.getType().equals("Duration"))
                 .forEach(
                         knownTag -> reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
                                 context.withParentTag(knownTag),
@@ -226,6 +263,32 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                 reportNameProvider.inContext(knownTag.getCompleteName()),
                                 testOutcomes.getTags(),
                                 knownRequirementReportNames))
+                );
+        return reportingTasks;
+    }
+
+    private Set<ReportingTask> nestedDurationTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
+        Set<ReportingTask> reportingTasks = new HashSet<>();
+        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
+
+        testOutcomes.getTags().parallelStream()
+                .filter(tag -> requirements.getTypes().contains(tag.getType()))
+                .forEach(
+                        requirementTag -> {
+                            TestOutcomes requirementsOutcomes = testOutcomes.withTag(requirementTag);
+                            durationDistribution.getDurationTags().forEach(
+                                    durationTag -> {
+                                        reportingTasks.addAll(
+                                                TagReportingTask.tagReportsFor(requirementsOutcomes.withTag(durationTag))
+                                                        .using(context.withParentTag(requirementTag),
+                                                                environmentVariables,
+                                                                getOutputDirectory(),
+                                                                reportNameProvider.withPrefix(requirementTag.getCompleteName()),
+                                                                testOutcomes.getTags(),
+                                                                knownRequirementReportNames));
+                                    }
+                            );
+                        }
                 );
         return reportingTasks;
     }
@@ -276,7 +339,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     public void setTags(String tags) {
-        this.tags = (tags != null) ? tags.replaceAll("\\s+((or)|(OR)|(and)|(AND))\\s+",",") : null;
+        this.tags = (tags != null) ? tags.replaceAll("\\s+((or)|(OR)|(and)|(AND))\\s+", ",") : null;
     }
 
     public void setJiraPassword(String jiraPassword) {

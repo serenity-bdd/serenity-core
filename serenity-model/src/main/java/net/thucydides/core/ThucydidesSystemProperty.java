@@ -1499,6 +1499,10 @@ public enum ThucydidesSystemProperty {
      * What tag types should be listed in the report summary
      */
     REPORT_TAGTYPES,
+    /**
+     * Alternative to report.tagtypes
+     */
+    SERENITY_REPORT_TAGTYPES,
 
     MAX_FREQUENT_FAILURES,
 

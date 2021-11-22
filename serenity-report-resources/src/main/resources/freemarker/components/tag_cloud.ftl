@@ -14,7 +14,7 @@
                                 <#list tagResultGroup.tagResults as tagResult >
                                     <a href="${tagResult.report}">
                                     <span class="tag-badge badge" style="background-color:${tagResult.color}; margin:1em;padding:4px;">
-                                        <i class="bi bi-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}
+                                        <i class="bi bi-tag-fill"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}
                                     </span>
                                     </a>
                                 </#list>

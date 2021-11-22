@@ -33,7 +33,7 @@ sealed class JsonSummaryReport {
 
         fun showFullTestResults() : ReportProperty<Boolean> = BooleanReportProperty(SHOW_FULL_TEST_RESULTS, true)
 
-        fun tagTypes() : ReportProperty<List<String>> = StringListReportProperty(REPORT_TAGTYPES, listOf("feature"))
+        fun tagTypes() : ReportProperty<List<String>> = ReportTagTypeProperty()
 
     }
 }

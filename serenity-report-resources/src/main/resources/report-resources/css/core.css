@@ -1027,9 +1027,6 @@ a.tagLink:visited, a.tagLink:link {
     font-weight: 400 !important;
     font-size: 0.9em !important;
     color: floralwhite !important;
-    border-color: #aaaaaa;
-    border-style: solid;
-    border-width: 1px;
 }
 .story-title
 {
@@ -2497,7 +2494,8 @@ div.scenario-text:empty {
 
 .failure-badge {
     background-color: red !important;
-    color: white;
+    color: white !important;
+    font-weight: bold !important;
 }
 
 .feature-tags {

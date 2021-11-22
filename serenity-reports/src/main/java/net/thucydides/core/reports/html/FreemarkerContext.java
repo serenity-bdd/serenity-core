@@ -33,7 +33,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.READABLE_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
@@ -143,9 +142,8 @@ public class FreemarkerContext {
                 .withRequirementsFrom(requirementsService)
                 .withMaxOf(5));
 
-        List<String> tagTypes = Splitter.on(",")
-                .trimResults()
-                .splitToList(REPORT_TAGTYPES.from(environmentVariables, "feature"));
+
+        List<String> tagTypes = new ReportTags(environmentVariables).getDisplayedTagTypes();
 
         context.put("inflection", Inflector.getInstance());
         context.put("tagInflector", new TagInflector(environmentVariables));

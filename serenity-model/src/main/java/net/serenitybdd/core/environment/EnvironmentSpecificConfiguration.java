@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -50,7 +51,7 @@ public class EnvironmentSpecificConfiguration {
         return Splitter.on(",")
                 .trimResults()
                 .omitEmptyStrings()
-                .splitToList(environmentVariables.getProperty("environment",""));
+                .splitToList(environmentVariables.getProperty("environment", ""));
     }
 
     private boolean isEnvironmentSpecific(String key) {
@@ -99,7 +100,7 @@ public class EnvironmentSpecificConfiguration {
     private Function<String, String> propertyForADefinedEnvironment = property -> {
         String environmentProperty = null;
 
-        for(String environment : activeEnvironments()) {
+        for (String environment : activeEnvironments()) {
             environmentProperty = override(environmentProperty, environmentVariables.getProperty("environments." + environment + "." + property));
         }
 
@@ -158,11 +159,29 @@ public class EnvironmentSpecificConfiguration {
         return Integer.parseInt(getProperty(propertyName));
     }
 
-    public Optional<String> getOptionalProperty(String... propertyNames) {
-
+    public Optional<String> getOptionalProperty(List<String> possiblePropertyNames) {
         String propertyValue = null;
-        for (String propertyName : propertyNames) {
+        for (String propertyName : possiblePropertyNames) {
             propertyValue = getPropertyValue(propertyName);
+            if (propertyValue != null) {
+                break;
+            }
+        }
+
+        if (propertyValue == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(substituteProperties(propertyValue));
+    }
+
+    public Optional<String> getOptionalProperty(String... propertyNames) {
+        return getOptionalProperty(Arrays.asList(propertyNames));
+    }
+
+    public Optional<String> getOptionalProperty(ThucydidesSystemProperty... properties) {
+        String propertyValue = null;
+        for (ThucydidesSystemProperty property : properties) {
+            propertyValue = getPropertyValue(property.getPropertyName());
             if (propertyValue != null) {
                 break;
             }

@@ -30,7 +30,6 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -465,7 +464,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         }
     }
 
-    @NotNull
+    
     private List<TestTag> tagsIn(Examples examples) {
         return examples.getTagsList().stream().map(tag -> TestTag.withValue(tag.getName().substring(1))).collect(Collectors.toList());
     }

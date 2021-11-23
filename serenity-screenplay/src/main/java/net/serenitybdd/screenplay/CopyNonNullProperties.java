@@ -1,7 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +31,7 @@ class CopyNonNullProperties {
 //        );
     }
 
-    @NotNull
+    
     public static List<Field> getFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         Class<?> classToInspect = clazz;

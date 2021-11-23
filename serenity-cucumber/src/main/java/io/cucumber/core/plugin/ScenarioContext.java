@@ -10,7 +10,6 @@ import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.DataTableRow;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.steps.StepEventBus;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.util.*;
@@ -208,7 +207,6 @@ class ScenarioContext {
         exampleCount = table.getSize();
     }
 
-    @NotNull
     private DataTableRow newRow(List<String> headers,
                                 Map<Integer, Integer> lineNumbersOfEachRow,
                                 int rowNumber,

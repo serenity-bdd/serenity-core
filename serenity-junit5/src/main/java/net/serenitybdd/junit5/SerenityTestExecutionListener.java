@@ -12,7 +12,6 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.util.SystemEnvironmentVariables;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -175,7 +174,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
     }
 
-    @NotNull
+    
     private Method getProcessedMethod(String className, String methodName, List<Class> methodParameterClasses) throws NoSuchMethodException, ClassNotFoundException {
         if (methodParameterClasses != null) {
             Class[] classesArray = new Class[methodParameterClasses.size()];

@@ -4,7 +4,6 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -59,7 +58,7 @@ public class LambdaTarget extends Target {
         return resolvedElement.get();
     }
 
-    @NotNull
+    
     private Optional<WebElementFacade> resolveElementFor(PageObject page) {
         this.lastThrownException = null;
         try {

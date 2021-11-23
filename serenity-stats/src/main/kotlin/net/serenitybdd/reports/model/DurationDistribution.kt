@@ -1,6 +1,5 @@
 package net.serenitybdd.reports.model
 
-import jnr.constants.platform.Local
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.model.TestOutcome
@@ -8,7 +7,6 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
 import java.time.Duration
-import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
 class DurationDistribution(

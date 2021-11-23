@@ -73,7 +73,6 @@
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.1.0</awaitility.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <asciidoctor.version>2.5.1</asciidoctor.version>
         <appium.version>8.0.0-beta</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
 <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
@@ -411,25 +410,6 @@
                 <groupId>org.awaitility</groupId>
                 <artifactId>awaitility</artifactId>
                 <version>${awaitility.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctorj</artifactId>
-                <version>${asciidoctor.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>javax.annotation-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-engine</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>javax.annotation</groupId>

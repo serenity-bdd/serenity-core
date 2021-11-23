@@ -67,7 +67,7 @@ public class DriverCapabilities {
         selectors.put(FIREFOX, new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM, new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED, new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables));
+        selectors.put(EDGE, new EdgeDriverCapabilities(environmentVariables, options));
         return selectors;
     }
 

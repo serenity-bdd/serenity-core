@@ -60,6 +60,19 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
             applesFeatureOutcomes.subrequirements.total == 2
     }
 
+    def "should show only outcomes containing tests if so configured"() {
+        given: "there are two stories with passing tests in the 'Apples' feature"
+        def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
+        def environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("serenity.report.hide.empty.requirements","true")
+        and: "we read the requirements from the directory structure"
+        RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
+        when: "we generate the capability outcomes"
+        RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
+        then:
+        outcomes.visibleOutcomes.size() == 1
+    }
+
     def "should count zero if there are no nested requirements"() {
         given: "there are two stories with passing tests in the 'Apples' feature"
             def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())

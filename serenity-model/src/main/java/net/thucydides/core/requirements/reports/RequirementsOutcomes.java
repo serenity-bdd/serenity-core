@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.*;
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -93,7 +95,7 @@ public class RequirementsOutcomes {
         long requirementsWithoutTests = countRequirementsWithoutTestsIn(requirement);
         long estimatedUnimplementedTests = requirementsWithoutTests * estimatedTestsPerRequirement();
         return new RequirementOutcome(requirement, outcomesForRequirement, requirementsWithoutTests,
-                                      estimatedUnimplementedTests, issueTracking);
+                estimatedUnimplementedTests, issueTracking);
     }
 
     public List<Requirement> getRequirements() {
@@ -130,12 +132,14 @@ public class RequirementsOutcomes {
 
     private long countRequirementsWithoutTestsIn(Requirement rootRequirement) {
         return getFlattenedRequirements(rootRequirement).stream()
-                .filter( requirement -> testOutcomes.forRequirement(requirement).getTotal() == 0)
+                .filter(requirement -> testOutcomes.forRequirement(requirement).getTotal() == 0)
                 .count();
     }
 
     public int getFlattenedRequirementCount() {
-        if (totalIsCachedFor("FlattenedRequirementCount")) { return cachedTotalOf("FlattenedRequirementCount"); }
+        if (totalIsCachedFor("FlattenedRequirementCount")) {
+            return cachedTotalOf("FlattenedRequirementCount");
+        }
 
         int requirementCount = requirementOutcomes.stream()
                 .mapToInt(RequirementOutcome::getFlattenedRequirementCount)
@@ -153,7 +157,9 @@ public class RequirementsOutcomes {
         return totalCountCache.get(key);
     }
 
-    private boolean totalIsCachedFor(String key) { return totalCountCache.containsKey(key); }
+    private boolean totalIsCachedFor(String key) {
+        return totalCountCache.containsKey(key);
+    }
 
     private List<Requirement> getFlattenedRequirements(Requirement rootRequirement) {
         List<Requirement> flattenedRequirements = new ArrayList<>();
@@ -167,8 +173,12 @@ public class RequirementsOutcomes {
     }
 
     public java.util.Optional<Requirement> getGrandparentRequirement() {
-        if (!parentRequirement.isPresent()) { return java.util.Optional.empty(); }
-        if (isEmpty(parentRequirement.get().getParent())) { return java.util.Optional.empty(); }
+        if (!parentRequirement.isPresent()) {
+            return java.util.Optional.empty();
+        }
+        if (isEmpty(parentRequirement.get().getParent())) {
+            return java.util.Optional.empty();
+        }
 
         return parentRequirementOf(parentRequirement.get());
     }
@@ -187,7 +197,17 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getRequirementOutcomes() {
-        return NewList.copyOf(requirementOutcomes);
+        return requirementOutcomes;//NewList.copyOf(requirementOutcomes);
+    }
+
+    public List<RequirementOutcome> getVisibleOutcomes() {
+        return requirementOutcomes.stream()
+                .filter(outcome -> (includeEmptyRequirements() || !outcome.getTestOutcomes().isEmpty()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean includeEmptyRequirements() {
+        return !EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
     }
 
     public String getType() {
@@ -238,7 +258,9 @@ public class RequirementsOutcomes {
     }
 
     public int getCompletedRequirementsCount() {
-        if (totalIsCachedFor("CompletedRequirementsCount")) { return cachedTotalOf("CompletedRequirementsCount"); }
+        if (totalIsCachedFor("CompletedRequirementsCount")) {
+            return cachedTotalOf("CompletedRequirementsCount");
+        }
 
         int completedRequirements = 0;
         for (RequirementOutcome requirementOutcome : requirementOutcomes) {
@@ -254,7 +276,9 @@ public class RequirementsOutcomes {
     }
 
     public int getErrorRequirementsCount() {
-        if (totalIsCachedFor("ErrorRequirementsCount")) { return cachedTotalOf("ErrorRequirementsCount"); }
+        if (totalIsCachedFor("ErrorRequirementsCount")) {
+            return cachedTotalOf("ErrorRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isError)
@@ -264,7 +288,9 @@ public class RequirementsOutcomes {
     }
 
     public int getFailingRequirementsCount() {
-        if (totalIsCachedFor("FailingRequirementsCount")) { return cachedTotalOf("FailingRequirementsCount"); }
+        if (totalIsCachedFor("FailingRequirementsCount")) {
+            return cachedTotalOf("FailingRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isFailure)
@@ -274,7 +300,9 @@ public class RequirementsOutcomes {
     }
 
     public int getPendingRequirementsCount() {
-        if (totalIsCachedFor("PendingRequirementsCount")) { return cachedTotalOf("PendingRequirementsCount"); }
+        if (totalIsCachedFor("PendingRequirementsCount")) {
+            return cachedTotalOf("PendingRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isPending)
@@ -284,7 +312,9 @@ public class RequirementsOutcomes {
     }
 
     public int getCompromisedRequirementsCount() {
-        if (totalIsCachedFor("CompromisedRequirementsCount")) { return cachedTotalOf("CompromisedRequirementsCount"); }
+        if (totalIsCachedFor("CompromisedRequirementsCount")) {
+            return cachedTotalOf("CompromisedRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isCompromised)
@@ -294,7 +324,9 @@ public class RequirementsOutcomes {
     }
 
     public int getIgnoredRequirementsCount() {
-        if (totalIsCachedFor("IgnoredRequirementsCount")) { return cachedTotalOf("IgnoredRequirementsCount"); }
+        if (totalIsCachedFor("IgnoredRequirementsCount")) {
+            return cachedTotalOf("IgnoredRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isIgnored)
@@ -305,7 +337,9 @@ public class RequirementsOutcomes {
     }
 
     public int getSkippedRequirementsCount() {
-        if (totalIsCachedFor("SkippedRequirementsCount")) { return cachedTotalOf("SkippedRequirementsCount"); }
+        if (totalIsCachedFor("SkippedRequirementsCount")) {
+            return cachedTotalOf("SkippedRequirementsCount");
+        }
 
         int matchingRequirements = (int) requirementOutcomes.stream()
                 .filter(RequirementOutcome::isSkipped)
@@ -316,7 +350,9 @@ public class RequirementsOutcomes {
     }
 
     public int getRequirementsWithoutTestsCount() {
-        if (totalIsCachedFor("RequirementsWithoutTestsCount")) { return cachedTotalOf("RequirementsWithoutTestsCount"); }
+        if (totalIsCachedFor("RequirementsWithoutTestsCount")) {
+            return cachedTotalOf("RequirementsWithoutTestsCount");
+        }
 
         int requirementsWithNoTests = 0;
         for (Requirement requirement : getTopLevelRequirements()) {
@@ -328,21 +364,11 @@ public class RequirementsOutcomes {
     }
 
     private boolean isPending(Requirement requirement) {
-        for (RequirementOutcome requirementOutcome : requirementOutcomes) {
-            if (requirementOutcome.getRequirement().equals(requirement) && requirementOutcome.isPending()) {
-                return true;
-            }
-        }
-        return false;
+        return requirementOutcomes.stream().anyMatch(req -> req.getRequirement().equals(requirement) && req.isPending());
     }
 
     private boolean testsRecordedFor(Requirement requirement) {
-        for (RequirementOutcome outcome : requirementOutcomes) {
-            if (outcome.testsRequirement(requirement) && outcome.getTestCount() > 0) {
-                return true;
-            }
-        }
-        return false;
+        return requirementOutcomes.stream().anyMatch(req -> req.getRequirement().equals(requirement) && req.getTestCount() > 0);
     }
 
     private List<Requirement> getAllRequirements() {
@@ -354,11 +380,7 @@ public class RequirementsOutcomes {
     }
 
     private List<Requirement> getTopLevelRequirements() {
-        List<Requirement> requirements = new ArrayList<>();
-        for (RequirementOutcome outcome : requirementOutcomes) {
-            requirements.add(outcome.getRequirement());
-        }
-        return requirements;
+        return requirementOutcomes.stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
     }
 
     public int getTotalRequirements() {
@@ -402,11 +424,11 @@ public class RequirementsOutcomes {
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
 
                 requirement.getChildren().forEach(
-                        childRequirement ->  {
+                        childRequirement -> {
                             TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
                             RequirementsOutcomes childOutcomes
                                     = new RequirementsOutcomes(Arrays.asList(childRequirement), testOutcomesForChildRequirement, issueTracking,
-                                            environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+                                    environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
                             flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
                         }
 
@@ -546,8 +568,8 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {
-        if (SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,"none").equalsIgnoreCase("none")) {
-        //if ("none".equalsIgnoreCase(SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
+        if (SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables, "none").equalsIgnoreCase("none")) {
+            //if ("none".equalsIgnoreCase(SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
             return this;
         }
         return new RequirementsOutcomes(
@@ -582,7 +604,7 @@ public class RequirementsOutcomes {
 
     public boolean shouldPrune(RequirementOutcome requirementOutcome) {
         return ((requirementOutcome.getTestCount() == 0)
-                 && ExcludedUnrelatedRequirementTypes.definedIn(environmentVariables)
+                && ExcludedUnrelatedRequirementTypes.definedIn(environmentVariables)
                 .excludeUntestedRequirementOfType(requirementOutcome.getRequirement().getType()));
     }
 

@@ -11,7 +11,7 @@ ${formatted.asAsciidoc(requirementsOutcomes.overview)}
 </#if>
 
 = Features
-<#list requirementsOutcomes.requirementOutcomes as requirementOutcome>
+<#list requirementsOutcomes.visibleOutcomes as requirementOutcome>
 <@requirement_section requirementsOutcomes=requirementsOutcomes requirementOutcome=requirementOutcome level=2/>
 </#list>
 

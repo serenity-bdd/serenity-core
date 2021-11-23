@@ -328,6 +328,12 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_RESTART_BROWSER_FREQUENCY,
 
     /**
+     * Set to true to only display requirements that contain test outcomes.
+     * Useful when running a test suite with a filter.
+     */
+    SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS,
+
+    /**
      * Restart the browser every so often during data-driven tests.
      */
     SERENITY_RESTART_BROWSER_FREQUENCY,

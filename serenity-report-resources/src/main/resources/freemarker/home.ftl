@@ -392,6 +392,7 @@
                                                                         <#assign tagCoverageEntries = tagCoverageByType.tagCoverage />
                                                                         <tbody>
                                                                         <#list tagCoverageEntries as tagCoverage>
+                                                                            <#if (!hideEmptyRequirements || tagCoverage.testCount != 0)>
                                                                             <tr>
                                                                                 <td>
                                                                                     <#if tagCoverage.testCount = 0>
@@ -424,6 +425,7 @@
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
+                                                                            </#if>
                                                                         </#list>
                                                                         </tbody>
                                                                     </table>

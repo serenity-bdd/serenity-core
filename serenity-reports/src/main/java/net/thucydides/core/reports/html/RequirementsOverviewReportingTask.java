@@ -113,8 +113,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(toList());
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
-                requirementsOutcomes.filteredByDisplayTag());
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements), requirementsOutcomes.filteredByDisplayTag());
         if (asParentRequirement) {
             requirementsTree = requirementsTree.asAParentRequirement();
         }

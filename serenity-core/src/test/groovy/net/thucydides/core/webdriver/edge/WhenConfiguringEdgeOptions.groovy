@@ -20,11 +20,30 @@ class WhenConfiguringEdgeOptions extends Specification {
             environmentVariables.setProperty("edge.args", edgeOptions)
             environmentVariables.setProperty("edge.preferences.download.default_directory", "some-directory")
 
-            EdgeDriverCapabilities capabilities = new EdgeDriverCapabilities(environmentVariables)
+            EdgeDriverCapabilities capabilities = new EdgeDriverCapabilities(environmentVariables,"")
         when:
             def desiredCapabilities = capabilities.getCapabilities()
         then:
             desiredCapabilities.getCapability("ms:edgeOptions")["args"] == ["headless", "start-maximized", "window-size=100,100", "disable-gpu"]
             desiredCapabilities.getCapability("ms:edgeOptions")["prefs"]["download.default_directory"] == "some-directory"
+    }
+
+    def "should add Edge-specific options from the text context"() {
+        given:
+
+        def edgeOptions = """[
+                              "window-size=100,100"
+                              "disable-gpu"
+                              ]
+        """
+        environmentVariables.setProperty("edge.args", edgeOptions)
+        environmentVariables.setProperty("edge.preferences.download.default_directory", "some-directory")
+
+        EdgeDriverCapabilities capabilities = new EdgeDriverCapabilities(environmentVariables,"headless;start-maximized")
+        when:
+        def desiredCapabilities = capabilities.getCapabilities()
+        then:
+        desiredCapabilities.getCapability("ms:edgeOptions")["args"] == ["window-size=100,100", "disable-gpu", "headless", "start-maximized"]
+        desiredCapabilities.getCapability("ms:edgeOptions")["prefs"]["download.default_directory"] == "some-directory"
     }
 }

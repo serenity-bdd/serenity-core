@@ -159,6 +159,15 @@ public class EnvironmentSpecificConfiguration {
         return Integer.parseInt(getProperty(propertyName));
     }
 
+    public boolean getBooleanProperty(final ThucydidesSystemProperty propertyName) {
+        return getBooleanProperty(propertyName, false);
+    }
+
+    public boolean getBooleanProperty(final ThucydidesSystemProperty propertyName, boolean defaultValue) {
+        String value = getOptionalProperty(propertyName).orElse(Boolean.toString(defaultValue));
+        return Boolean.parseBoolean(value);
+    }
+
     public Optional<String> getOptionalProperty(List<String> possiblePropertyNames) {
         String propertyValue = null;
         for (String propertyName : possiblePropertyNames) {

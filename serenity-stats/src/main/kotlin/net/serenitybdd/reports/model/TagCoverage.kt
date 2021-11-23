@@ -1,5 +1,8 @@
 package net.serenitybdd.reports.model
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
+import net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.model.TestTag
@@ -16,13 +19,22 @@ class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcom
 
     companion object {
         @JvmStatic
-        fun from(testOutcomes: TestOutcomes) = TagCoverageBuilder(testOutcomes)
+        fun from(testOutcomes: TestOutcomes) =
+            TagCoverageBuilder(testOutcomes, Injectors.getInjector().getInstance(EnvironmentVariables::class.java))
     }
 }
 
-class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Collection<TestTag>) {
+class TagCoverageBuilder(
+    val testOutcomes: TestOutcomes,
+    val tagsToDisplay: Collection<TestTag>,
+    val environmentVariables: EnvironmentVariables
+) {
 
-    constructor(testOutcomes: TestOutcomes) : this(testOutcomes, setOf())
+    constructor(testOutcomes: TestOutcomes, environmentVariables: EnvironmentVariables) : this(
+        testOutcomes,
+        setOf(),
+        environmentVariables
+    )
 
     fun forTagTypes(displayedTagTypes: List<String>): List<CoverageByTagType> {
 
@@ -32,11 +44,17 @@ class TagCoverageBuilder(val testOutcomes: TestOutcomes, val tagsToDisplay: Coll
                 humanize(displayedTagType),
                 testOutcomes.withTagType(displayedTagType),
                 tagsToDisplay.filter { t -> t.type.equals(displayedTagType) })
-        }.filter { coverage -> coverage.tagCoverage.isNotEmpty() }
+        }.filter { coverage -> shouldShow(coverage) }
+    }
+
+    private fun shouldShow(coverage: CoverageByTagType): Boolean {
+        val hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true)
+        val hideThis = hideEmptyRequirements && coverage.testOutcomes.isEmpty
+        return !hideThis
     }
 
     fun showingTags(tagsOfType: Collection<TestTag>): TagCoverageBuilder {
-        return TagCoverageBuilder(testOutcomes, tagsOfType)
+        return TagCoverageBuilder(testOutcomes, tagsOfType, environmentVariables)
     }
 }
 
@@ -64,7 +82,9 @@ class CoverageByTagType(
         testOutcomes: TestOutcomes,
         tagsToDisplay: Collection<TestTag>
     ): Collection<CoverageByTag> {
-        val coverageFromTestOutcomes = testOutcomes.getTagsOfType(tagType).map { testTag -> coverageFor(testTag) }
+        val coverageFromTestOutcomes = testOutcomes.getTagsOfType(tagType)
+                                                   .map { testTag -> coverageFor(testTag) }
+                                                   .filter { coverage -> shouldShow(coverage) }
 
         val zeroCoverageForUncoveredTags = uncoveredTags(tagsToDisplay, coverageFromTestOutcomes)
 
@@ -75,6 +95,10 @@ class CoverageByTagType(
             .forEach { newCoverage -> completeCoverage.add(newCoverage) }
 
         return completeCoverage
+    }
+
+    private fun shouldShow(coverage : CoverageByTag) : Boolean {
+        return coverage.testCount > 0
     }
 
     private fun coverageNotIncludedIn(

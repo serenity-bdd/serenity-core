@@ -1120,4 +1120,8 @@ public class TestOutcomes {
         }
     }
 
+    public boolean isEmpty() {
+        return getOutcomes().isEmpty();
+    }
+
 }

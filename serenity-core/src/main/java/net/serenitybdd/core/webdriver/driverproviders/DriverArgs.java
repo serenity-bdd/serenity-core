@@ -36,6 +36,9 @@ public class DriverArgs {
     }
 
     public static List<String> fromValue(String value) {
+        if (value.isEmpty()) {
+            return new ArrayList<>();
+        }
         Object argsValue = asObject(value);
         if (argsValue instanceof List) {
             return ((List<Object>) argsValue).stream().map(Object::toString).collect(Collectors.toList());

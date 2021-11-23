@@ -3,7 +3,7 @@
 <#include "feature-coverage.ftl">
 <#include "test-coverage.ftl">
 
-<#if requirements.requirementOutcomes?size gt 10>
+<#if requirements.visibleOutcomes?size gt 10>
 <script>
     $(document).ready(function () {
 
@@ -34,7 +34,7 @@
         </tr>
     </thead>
     <tbody>
-    <#foreach requirementOutcome in requirements.requirementOutcomes>
+    <#foreach requirementOutcome in requirements.visibleOutcomes>
         <#assign totalAutomated = requirementOutcome.tests.count("AUTOMATED").withAnyResult()/>
         <#assign automatedPassedPercentage = requirementOutcome.tests.getFormattedPercentage("AUTOMATED").withResult("SUCCESS")/>
         <#assign automatedFailedPercentage = requirementOutcome.tests.getFormattedPercentage("AUTOMATED").withFailureOrError()/>

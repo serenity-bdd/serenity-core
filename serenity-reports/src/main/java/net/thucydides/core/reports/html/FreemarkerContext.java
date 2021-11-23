@@ -3,6 +3,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
 import net.thucydides.core.guice.Injectors;
@@ -33,6 +34,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.READABLE_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
@@ -156,11 +158,15 @@ public class FreemarkerContext {
                 .map(Requirement::asTag)
                 .collect(Collectors.toSet());
 
-        List<CoverageByTagType> coverage = TagCoverage.from(testOutcomes)
+        boolean hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
+
+        List<CoverageByTagType> coverage = new ArrayList<>(TagCoverage.from(testOutcomes)
                 .showingTags(requirements.getTagsOfType(tagTypes))
                 .showingTags(coveredTags)
-                .forTagTypes(tagTypes);
+                .forTagTypes(tagTypes)
+        );
 
+        context.put("hideEmptyRequirements", hideEmptyRequirements);
         context.put("coverage", coverage);
 
         context.put("backgroundColor", new BackgroundColor());

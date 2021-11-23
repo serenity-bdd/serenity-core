@@ -27,7 +27,7 @@
     <#include "components/functional-coverage-chart.ftl">
     <#include "components/tag_cloud.ftl">
 
-    <#assign testResultData =             resultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
+    <#assign testResultData = resultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <#assign graphType="automated-and-manual-results" >
 

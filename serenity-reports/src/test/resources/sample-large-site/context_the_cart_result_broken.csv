@@ -1,0 +1,4 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Managing the cart","Colin adds an item to the cart","FAILURE","2021-11-24T13:27:40.257857Z[Europe/London]","0.0","31.13"
+"Managing the cart","Colin adds an unknown item to the cart","ERROR","2021-11-24T13:28:11.633953Z[Europe/London]","0.0","28.48"
+"Managing the cart","Colin adds a compromised item to the cart","COMPROMISED","2021-11-24T13:28:40.159201Z[Europe/London]","0.0","7.51"

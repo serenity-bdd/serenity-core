@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Serenity Reports</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css"><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><link rel="stylesheet" type="text/css" href="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.css">
+<link rel="stylesheet" type="text/css" href="chartist/dist/chartist.min.css">
+<script src="chartist/dist/chartist.min.js"></script>
+<script src="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
+<!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- JQuery-UI -->
+<link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+<script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+
+
+
+
+    <script class="code" type="text/javascript">$(document).ready(function () {
+
+            $('.scenario-result-table').DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
+                "pageLength": 10,
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    { type: 'time-elapsed-dhms', targets: 4 }
+                ]
+            });
+
+            // Results table
+            $('#test-results-table').DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
+            });
+
+            $('#evidence-table').DataTable({
+                searching: false,
+                paging: false,
+                info: false
+            });
+
+            $(".feature-coverage-table").DataTable({
+                searching: false,
+                paging: false,
+                info: false
+            });
+
+            $(".feature-coverage-table-with-pagination").DataTable({
+                order: [[0, "asc",]],
+                pageLength: 10,
+                language: {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                }
+            });
+        });
+    </script>
+</head>
+
+<body class="results-page">
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle">Serenity and Cucumber Quick Start</span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+
+
+    <div id="contenttop">
+        <div class="middlebg">
+        <span class="breadcrumbs"><a href="index.html">Home</a>
+                    > Error  (with Tag Singlebrowser)
+                > <span class="truncate-60">
+                    Test Compromised Exception
+            </span>
+        </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="requirement_type_capability.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="requirement_type_feature.html"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 24-11-2021 15:44:10</span>
+    <br style="clear:left"/>
+</div>
+    <div class="clr"></div>
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="middlb">
+            <div class="table">
+
+                <h2><i class='bi bi-tags'></i> Error: Test Compromised Exception</h2>
+                <table class='overview'>
+                    <tr>
+                        <td width="375px" valign="top">
+                            <div class="test-count-summary">
+                                <div class="test-count-title">
+                                    1 test scenarios 
+                                     |
+                                        <a href="context_tag_singlebrowser_error_test_compromised_exception.csv" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
+                                                                                        title="Download CSV"></i></a>
+
+
+                                </div>
+                            </div>
+
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#summary"><i class="bi bi-house-door"></i> Summary</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#tests"><i class="bi bi-speedometer"></i> Test
+                                            Results</a>
+                                    </li>
+                                </ul>
+
+
+                                <div class="card border">
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div id="summary" class="tab-pane fade in active">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                            <div style="width:300px;" class="chart-container automated-and-manual-results">
+                                                                <div class="ct-chart ct-square"></div>
+                                                            </div>
+                                                            <script>
+
+                                                                var labels = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '100%', ' '];
+                                                                // Our series array that contains series objects or in this case series data arrays
+
+                                                                var series = [{meta: 'Passing tests (automated)', value: 0}, {meta: 'Passing tests (manual)', value: 0}, {meta: 'Pending tests (automated)', value: 0}, {meta: 'Pending tests (manual)', value: 0}, {meta: 'Ignored tests (automated)', value: 0}, {meta: 'Ignored tests (manual)', value: 0}, {meta: 'Skipped tests (automated)', value: 0}, {meta: 'Skipped tests (manual)', value: 0}, {meta: 'Aborted tests (automated)', value: 0}, {meta: 'Aborted tests (manual)', value: 0}, {meta: 'Failing tests (automated)', value: 0}, {meta: 'Failing tests (manual)', value: 0}, {meta: 'Broken tests (automated)', value: 0}, {meta: 'Broken tests (manual)', value: 0}, {meta: 'Compromised tests (automated)', value: 1}, {meta: 'Compromised tests (manual)', value: 0}];
+
+                                                                // As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
+                                                                // as you saw in the previous example
+                                                                var options = {
+                                                                    width: 350,
+                                                                    height: 300
+                                                                };
+
+
+                                                                new Chartist.Pie('.ct-chart', {
+                                                                    series: series,
+                                                                    labels: labels
+                                                                }, {
+                                                                    plugins: [Chartist.plugins.tooltip()],
+                                                                    donut: true,
+                                                                    donutWidth: 60,
+                                                                    donutSolid: true,
+                                                                    startAngle: 270,
+                                                                    showLabel: true
+                                                                }, options);
+
+
+                                                                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                                                                    new Chartist.Pie('.ct-chart', {
+                                                                        series: series,
+                                                                        labels: labels
+                                                                    }, {
+                                                                        plugins: [Chartist.plugins.tooltip()],
+                                                                        donut: true,
+                                                                        donutWidth: 60,
+                                                                        donutSolid: true,
+                                                                        startAngle: 270,
+                                                                        showLabel: true
+                                                                    }, options);
+                                                                });
+
+
+                                                            </script>
+                                                    </div>
+                                                    <div class="col-sm-8">
+
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">Scenario Results (including rows of test
+                                                                    data)
+                                                                </th>
+                                                                <th scope="col" colspan="2" class="automated-stats">
+                                                                    Automated
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count"><i
+                                                                                class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                        <td colspan="3"><a
+                                                                                    href="context_error_cl_test_compromised_exception_result_broken.html"><i
+                                                                                        class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                        </td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count indented-error-category">
+                                                                        <i class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count indented-error-category">
+                                                                        <i
+                                                                                class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken
+                                                                    </td>
+                                                                <td class="automated-stats">0</td>
+                                                                <td class="automated-stats"> </td>
+                                                            <tr>
+                                                                    <td class="aggregate-result-count indented-error-category">
+                                                                        <a href="context_error_cl_test_compromised_exception_result_compromised.html"><i
+                                                                                    class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised</a>
+                                                                    </td>
+                                                                <td class="automated-stats">1</td>
+                                                                <td class="automated-stats">100%</td>
+                                                            </tr>
+                                                            <tr class="summary-stats">
+                                                                <td class="aggregate-result-count">Total</td>
+                                                                <td class="automated-stats">1</td>
+                                                                <td class="automated-stats"></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Tests Started</th>
+                                                                <th>Tests Finished</th>
+                                                                <th>Total Duration</th>
+                                                                <th>Fastest Test</th>
+                                                                <th>Slowest Test</th>
+                                                                <th>Average Execution Time</th>
+                                                                <th>Total Execution Time</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>24-11-2021 13:28:40 +0000</td>
+                                                                <td>24-11-2021 13:28:47 +0000</td>
+                                                                <td>7s</td>
+                                                                <td>7s</td>
+                                                                <td>7s</td>
+                                                                <td>7s</td>
+                                                                <td>7s</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <h3>Functional Coverage Overview</h3>
+
+
+                                                                    <h4>Features</h4>
+
+                                                                    <table class="table feature-coverage-table-with-pagination" id="Feature">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Feature</th>
+                                                                            <th style="width:7.5em;">Scenarios</th>
+                                                                            <th style="width:7.5em;">% Pass</th>
+                                                                            <th style="width:7.5em;">Result</th>
+                                                                            <th>Coverage</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        <a href="feature_cart_sl_managing_the_cart.html">Managing the cart</a>
+                                                                                </td>
+                                                                                <td>1</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon ' title='COMPROMISED'></i></a>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                            <div class="progress-bar"
+                                                                                                 role="progressbar"
+                                                                                                 style="width: 100%; background-color: #ff68ff"
+                                                                                                 aria-valuenow="1"
+                                                                                                 title="100% compromised"
+                                                                                                 aria-valuemin="0"
+                                                                                                 aria-valuemax="100">
+                                                                                            </div>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Login
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 7.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 9.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 3.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 5.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 2.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 3
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 9
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 8.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 5
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 6.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 7
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 4.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 2.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 8.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 6.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 4.1
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 4
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 7.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Calculating sales tax
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 6
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Completing a purchase
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 9.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 8
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 3.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                        Browse the catalog 5.2
+                                                                                </td>
+                                                                                <td>0</td>
+                                                                                <td>0%</td>
+                                                                                <td>
+                                                                                        <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="progress">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <h3>Test Failure Overview</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <h4>Most Frequent Failures</h4>
+                                                            <table class="table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="compromised-color top-list-title">
+                                                                            <a href="errortype_net.serenitybdd.core.exceptions.testcompromisedexception.html"><a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon ' title='COMPROMISED'></i></a> Test compromised exception</a>
+                                                                        </td>
+                                                                        <td><span
+                                                                                    class="badge failure-badge">1</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <h4>Most Unstable Features</h4>
+                                                            <table class="table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="failure-color top-list-title"><a
+                                                                                    href="feature_cart_sl_managing_the_cart.html">Managing the cart</a>
+                                                                        </td>
+                                                                        <td><span
+                                                                                    class="badge failure-badge">100%</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <h3>Tags</h3>
+
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div>
+                                                                                <a href="tag_singlebrowser.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> Singlebrowser&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                                <a href="tag_smoketest.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> Smoketest&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                                <a href="tag_resetappstate.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> Resetappstate&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                                <a href="tag_the_cart.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> The Cart&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                                <a href="tag_broken.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> Broken&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                            <h5 class="card-title">Error</h5>
+                                                                        <div>
+                                                                                <a href="error_test_compromised_exception.html">
+                                                                        <span class="badge"
+                                                                              style="background-color:fuchsia; margin:1em;padding:4px;"><i
+                                                                                    class="bi bi-tag"></i> Test Compromised Exception&nbsp;&nbsp;&nbsp;1</span>
+                                                                                </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div id="tests" class="tab-pane fade">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <h3><i class="bi bi-gear"></i> Automated Tests</h3>
+
+                                                            <table class="scenario-result-table table"
+                                                                   id="scenario-results">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>feature</th>
+                                                                    <th class="test-name-column">Scenario</th>
+                                                                    <th>Steps</th>
+                                                                    <th>Started</th>
+                                                                    <th>Duration</th>
+                                                                    <th>Result</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr class="scenario-result COMPROMISED">
+                                                                        <td>
+                                                                                <a href="feature_cart_sl_managing_the_cart.html">Managing the cart</a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="managing_the_cart_colin_adds_a_compromised_item_to_the_cart.html">Colin adds a compromised item to the cart</a>
+                                                                        </td>
+                                                                        <td>3</td>
+                                                                        <td>13:28:40</td>
+                                                                        <td>7s 511ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon ' title='COMPROMISED'></i></a> <span
+                                                                                    style="display:none">COMPROMISED</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
+
+                                                            No manual tests were recorded
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="beforefooter"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="version">Serenity BDD version 3.0.5</span>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

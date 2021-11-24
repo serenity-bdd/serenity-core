@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Browse the catalog 8.2","Colin reviews our range of products and fails","FAILURE","2021-11-24T13:31:17.281637Z[Europe/London]","0.0","5.07"
+"Browse the catalog 8.2","Colin views information about each product","SUCCESS","2021-11-24T13:31:22.4831Z[Europe/London]","0.0","5.04"
+"Browse the catalog 8.2","Colin views the details for specific products","SUCCESS","2021-11-24T13:31:27.541788Z[Europe/London]","0.0","6.83"
+"Browse the catalog 8.2","Sort products","SUCCESS","2021-11-24T13:31:34.394462Z[Europe/London]","0.0","5.17"

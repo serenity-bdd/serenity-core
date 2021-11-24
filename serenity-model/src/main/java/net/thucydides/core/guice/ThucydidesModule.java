@@ -44,7 +44,6 @@ public class ThucydidesModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SystemClock.class).to(InternalSystemClock.class).in(Singleton.class);
-        bind(TemplateManager.class).to(FreeMarkerTemplateManager.class).in(Singleton.class);
         bind(Configuration.class).to(SystemPropertiesConfiguration.class).in(Singleton.class);
         bind(IssueTracking.class).to(SystemPropertiesIssueTracking.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);

@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.Splitter;
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
@@ -52,7 +51,16 @@ public class FreemarkerContext {
     private final BuildProperties buildProperties;
     private final TestTag parentTag;
     private final RequirementsService requirementsService;
-
+    private final List<String> requirementTypes;
+    private final String version;
+    private final String buildNumber;
+    private final List<String> tagTypes;
+    private final ReportOptions reportOptions;
+    private final CustomReportFields customReportFields;
+    private final Collection<Requirement> requirementsWithTag;
+    private final Collection<TestTag> tagsOfType;
+    private final List<String> customFields;
+    private final List<String> customFieldValues;
 
     public FreemarkerContext(EnvironmentVariables environmentVariables,
                              RequirementsService requirements,
@@ -66,6 +74,18 @@ public class FreemarkerContext {
         buildProperties = new BuildInfoProvider(environmentVariables).getBuildProperties();
         this.parentTag = parentTag;
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementTypes = requirements.getRequirementTypes();
+
+        VersionProvider versionProvider = new VersionProvider(environmentVariables);
+        this.version = versionProvider.getVersion();
+        this.buildNumber = versionProvider.getBuildNumberText();
+        this.tagTypes = new ReportTags(environmentVariables).getDisplayedTagTypes();
+        this.reportOptions = new ReportOptions(environmentVariables);
+        this.customReportFields = new CustomReportFields(environmentVariables);
+        this.requirementsWithTag = requirements.getRequirementsWithTagsOfType(tagTypes);
+        this.tagsOfType = requirements.getTagsOfType(tagTypes);
+        this.customFields = customReportFields.getFieldNames();
+        this.customFieldValues = customReportFields.getValues();
     }
 
 
@@ -106,10 +126,10 @@ public class FreemarkerContext {
 
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements));
 
-        context.put("reportOptions", new ReportOptions(environmentVariables));
+        context.put("reportOptions", reportOptions);
         context.put("timestamp", timestampFrom(new DateTime()));
-        context.put("requirementTypes", requirements.getRequirementTypes());
-        context.put("leafRequirementType", last(requirements.getRequirementTypes()));
+        context.put("requirementTypes", requirementTypes);
+        context.put("leafRequirementType", last(requirementTypes));
         addFormattersToContext(context);
 
         ZonedDateTime startTime = startTimeOf(testOutcomes.getOutcomes());
@@ -123,20 +143,20 @@ public class FreemarkerContext {
         context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
         context.put("minTestDuration", formattedDuration(minDurationOf(testOutcomes.getOutcomes())));
 
-        VersionProvider versionProvider = new VersionProvider(environmentVariables);
-        context.put("serenityVersionNumber", versionProvider.getVersion());
-        context.put("buildNumber", versionProvider.getBuildNumberText());
+        context.put("serenityVersionNumber", version);
+        context.put("buildNumber", buildNumber);
         context.put("build", buildProperties);
 
         context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
 
         List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes));
+        List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
 
         context.put("scenarios", scenarios);
         context.put("filteredScenarios", scenarios);
-        context.put("testCases", executedScenariosIn(scenarios));
-        context.put("automatedTestCases", automated(executedScenariosIn(scenarios)));
-        context.put("manualTestCases", manual(executedScenariosIn(scenarios)));
+        context.put("testCases", executedScenarios);
+        context.put("automatedTestCases", automated(executedScenarios));
+        context.put("manualTestCases", manual(executedScenarios));
         context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(testOutcomes.getOutcomes())));
 
         context.put("frequentFailures", FrequentFailures.from(testOutcomes).withMaxOf(5));
@@ -144,15 +164,13 @@ public class FreemarkerContext {
                 .withRequirementsFrom(requirementsService)
                 .withMaxOf(5));
 
-
-        List<String> tagTypes = new ReportTags(environmentVariables).getDisplayedTagTypes();
-
         context.put("inflection", Inflector.getInstance());
         context.put("tagInflector", new TagInflector(environmentVariables));
 
         RequirementsFilter requirementsFilter = new RequirementsFilter(environmentVariables);
 
-        Collection<TestTag> coveredTags = requirements.getRequirementsWithTagsOfType(tagTypes).stream()
+        Collection<TestTag> coveredTags = requirementsWithTag
+                .stream()
                 .filter(requirement -> testOutcomes.containTestFor(requirement) || requirement.containsNoScenarios())
                 .filter(requirementsFilter::inDisplayOnlyTags)
                 .map(Requirement::asTag)
@@ -161,7 +179,7 @@ public class FreemarkerContext {
         boolean hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
 
         List<CoverageByTagType> coverage = new ArrayList<>(TagCoverage.from(testOutcomes)
-                .showingTags(requirements.getTagsOfType(tagTypes))
+                .showingTags(tagsOfType)
                 .showingTags(coveredTags)
                 .forTagTypes(tagTypes)
         );
@@ -177,13 +195,13 @@ public class FreemarkerContext {
 
         context.put("tagResults",
                 TagResults.from(testOutcomes)
-                        .ignoringValues("ignore","pending","skip","error","compromised","fail")
+                        .ignoringValues("ignore", "pending", "skip", "error", "compromised", "fail")
                         .ignoringTypes("Duration")
-                        .groupedByType());
+                        .groupedByType()
 
-        CustomReportFields customReportFields = new CustomReportFields(environmentVariables);
-        context.put("customFields", customReportFields.getFieldNames());
-        context.put("customFieldValues", customReportFields.getValues());
+        );
+        context.put("customFields", customFields);
+        context.put("customFieldValues", customFieldValues);
 
         return context;
     }

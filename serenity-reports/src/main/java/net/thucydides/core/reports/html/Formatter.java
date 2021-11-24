@@ -219,8 +219,8 @@ public class Formatter {
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table-in-scenario");
     }
 
-    private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)\\[(\\d*)]}'?");
+    private static final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
+    private static final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)\\[(\\d*)]}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 

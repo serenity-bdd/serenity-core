@@ -6,9 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,9 +38,9 @@ public abstract class BaseReportingTask implements ReportingTask {
                                       final String outputFile) throws IOException {
 
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
+
         try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
-            writer.flush();
         }
     }
 

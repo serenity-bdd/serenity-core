@@ -54,11 +54,12 @@ public class EnvironmentSpecificConfiguration {
                 .splitToList(environmentVariables.getProperty("environment", ""));
     }
 
-    private boolean isEnvironmentSpecific(String key) {
-        return Pattern.compile(ENVIRONMENT_PREFIX).matcher(key).find();
-    }
-
     private static final String ENVIRONMENT_PREFIX = "environments\\.([^.]*)\\.";
+    private final Pattern ENV_PREFIX_REGEX = Pattern.compile(ENVIRONMENT_PREFIX);
+
+    private boolean isEnvironmentSpecific(String key) {
+        return ENV_PREFIX_REGEX.matcher(key).find();
+    }
 
     private String stripEnvironmentPrefixFrom(String key) {
         return key.replaceFirst(ENVIRONMENT_PREFIX, "");
@@ -161,6 +162,10 @@ public class EnvironmentSpecificConfiguration {
 
     public boolean getBooleanProperty(final ThucydidesSystemProperty propertyName) {
         return getBooleanProperty(propertyName, false);
+    }
+
+    public List<String> getListOfValues(final ThucydidesSystemProperty propertyName) {
+        return Arrays.asList(getOptionalProperty(propertyName).orElse("").split(","));
     }
 
     public boolean getBooleanProperty(final ThucydidesSystemProperty propertyName, boolean defaultValue) {

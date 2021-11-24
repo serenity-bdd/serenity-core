@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
+import com.google.common.collect.Streams;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -17,7 +18,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -81,12 +84,7 @@ public class RequirementsOutcomes {
     }
 
     private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements) {
-
-        List<Requirement> distinctRequirements = requirements.stream().distinct().collect(Collectors.toList());
-
-        return distinctRequirements.parallelStream()
-                .map(this::requirementOutcomeFor)
-                .collect(Collectors.toList());
+        return requirements.stream().distinct().map(this::requirementOutcomeFor).collect(Collectors.toList());
     }
 
     public RequirementOutcome requirementOutcomeFor(Requirement requirement) {
@@ -112,14 +110,12 @@ public class RequirementsOutcomes {
         List<Requirement> matchingRequirements = new ArrayList<>();
         List<TestOutcome> matchingTests = new ArrayList<>();
 
-        getFlattenedRequirementOutcomes().stream()
-                .filter(requirementOutcome -> requirementOutcome.getRequirement().getType().equalsIgnoreCase(type))
-                .forEach(
-                        requirementOutcome -> {
-                            matchingRequirements.add(requirementOutcome.getRequirement());
-                            matchingTests.addAll(requirementOutcome.getTestOutcomes().getOutcomes());
-                        }
-                );
+        for (RequirementOutcome requirementOutcome : getFlattenedRequirementOutcomes()) {
+            if (requirementOutcome.getRequirement().getType().equalsIgnoreCase(type)) {
+                matchingRequirements.add(requirementOutcome.getRequirement());
+                matchingTests.addAll(requirementOutcome.getTestOutcomes().getOutcomes());
+            }
+        }
 
         return new RequirementsOutcomes(matchingRequirements,
                 TestOutcomes.of(matchingTests),
@@ -223,7 +219,7 @@ public class RequirementsOutcomes {
     }
 
     public List<String> getTypes() {
-        return getAllRequirements().stream()
+        return getAllRequirementsStream()
                 .map(Requirement::getType)
                 .distinct()
                 .collect(Collectors.toList());
@@ -371,20 +367,25 @@ public class RequirementsOutcomes {
         return requirementOutcomes.stream().anyMatch(req -> req.getRequirement().equals(requirement) && req.getTestCount() > 0);
     }
 
-    private List<Requirement> getAllRequirements() {
-        List<Requirement> allRequirements = new ArrayList<>();
-        for (RequirementOutcome outcome : requirementOutcomes) {
-            addFlattenedRequirements(outcome.getRequirement(), allRequirements);
-        }
-        return allRequirements;
+    private Stream<Requirement> getAllRequirementsStream() {
+        return requirementOutcomes.stream().flatMap(
+                outcome -> flattenedRequirementsOf(outcome.getRequirement())
+        );
     }
 
     private List<Requirement> getTopLevelRequirements() {
         return requirementOutcomes.stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
     }
 
-    public int getTotalRequirements() {
-        return getAllRequirements().size();
+    public long getTotalRequirements() {
+        return getAllRequirementsStream().count();
+    }
+
+    private Stream<Requirement> flattenedRequirementsOf(Requirement requirement) {
+        return Streams.concat(
+                Stream.of(requirement),
+                requirement.getChildren().stream().flatMap(this::flattenedRequirementsOf)
+        );
     }
 
     private void addFlattenedRequirements(Requirement requirement, List<Requirement> allRequirements) {
@@ -413,7 +414,7 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {
-        Set<RequirementOutcome> flattenedOutcomes = new HashSet<>();
+        List<RequirementOutcome> flattenedOutcomes = new ArrayList<>();
 
         for (RequirementOutcome requirementOutcome : outcomes) {
             flattenedOutcomes.add(requirementOutcome);
@@ -423,25 +424,16 @@ public class RequirementsOutcomes {
 
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
 
-                requirement.getChildren().forEach(
-                        childRequirement -> {
-                            TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
-                            RequirementsOutcomes childOutcomes
-                                    = new RequirementsOutcomes(Arrays.asList(childRequirement), testOutcomesForChildRequirement, issueTracking,
-                                    environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
-                            flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
-                        }
-
-                );
-//                List<Requirement> childRequirements = requirement.getChildren();
-//                RequirementsOutcomes childOutcomes =
-//                        new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
-//                                environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
-//                flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
+                for (Requirement childRequirement : requirement.getChildren()) {
+                    TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
+                    RequirementsOutcomes childOutcomes
+                            = new RequirementsOutcomes(singletonList(childRequirement), testOutcomesForChildRequirement, issueTracking,
+                            environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+                    flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
+                }
             }
         }
-
-        return NewList.copyOf(flattenedOutcomes);
+        return flattenedOutcomes;
     }
 
     public OutcomeCounter getTotal() {

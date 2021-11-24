@@ -1,37 +1,30 @@
 package net.thucydides.core.reports.templates;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.Version;
+import net.serenitybdd.core.time.Stopwatch;
 
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Manages velocity templates.
- *
+ * Manages Freemarker templates.
  */
-public class FreeMarkerTemplateManager implements TemplateManager {
+public class FreeMarkerTemplateManager {
 
     public static final Version FREEMARKER_VERSION = new Version(2, 3, 23);
-    Configuration cfg;
+    private Configuration configuration;
 
-    Map<String, ReportTemplate> templateCache = new ConcurrentHashMap();
-
-    public FreeMarkerTemplateManager() {
-        cfg = new Configuration(FREEMARKER_VERSION);
-        cfg.setNumberFormat("0.######");
-        cfg.setLocale(Locale.UK);
-        cfg.setClassForTemplateLoading(getClass(), "/");
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
+    FreeMarkerTemplateManager() {
+        configuration = new Configuration(FREEMARKER_VERSION);
+        configuration.setNumberFormat("0.######");
+        configuration.setLocale(Locale.UK);
+        configuration.setClassForTemplateLoading(getClass(), "/");
+        configuration.setTemplateUpdateDelayMilliseconds(1000 * 60 * 60);
+        configuration.setObjectWrapper(new DefaultObjectWrapperBuilder(FREEMARKER_VERSION).build());
     }
 
     public ReportTemplate getTemplateFrom(final String template) throws Exception {
-        if (!templateCache.containsKey(template)) {
-            templateCache.put(template, new FreemarkerReportTemplate(cfg, template));
-        }
-        return templateCache.get(template);
+        return new FreemarkerReportTemplate(configuration, template);
     }
-
 }

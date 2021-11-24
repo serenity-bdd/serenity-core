@@ -31,6 +31,11 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
                 .forEach(this::copyToTarget);
     }
 
+    @Override
+    public String reportName() {
+        return "CopyProjectSpecificResourcesTask";
+    }
+
     private boolean notCopied(Path imageFile) {
         return !transferred(imageFile).toFile().exists();
     }

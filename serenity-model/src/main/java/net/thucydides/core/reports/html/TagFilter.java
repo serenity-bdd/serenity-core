@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestTag;
@@ -12,10 +13,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_EXCLUDE_TAGS;
+
 public class TagFilter {
 
     private final EnvironmentVariables environmentVariables;
     private final RequirementsService requirementsService;
+    private final List<String> excludedTags;
 
     private final List<String> ALWAYS_HIDDEN_TAGS
             = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser");
@@ -23,6 +27,7 @@ public class TagFilter {
     public TagFilter(EnvironmentVariables environmentVariables) {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
         this.environmentVariables = environmentVariables;
+        this.excludedTags = EnvironmentSpecificConfiguration.from(environmentVariables).getListOfValues(SERENITY_REPORT_EXCLUDE_TAGS);
     }
 
     public List<String> filteredTagTypes(List<String> tagTypes) {
@@ -42,6 +47,11 @@ public class TagFilter {
 
     public boolean shouldDisplayTagWithType(String tagType) {
         return !filteredTagTypes(Collections.singletonList(tagType)).isEmpty();
+    }
+
+    public boolean shouldDisplayTag(TestTag tag) {
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        return exclusions.doNotExclude(tag);
     }
 
 

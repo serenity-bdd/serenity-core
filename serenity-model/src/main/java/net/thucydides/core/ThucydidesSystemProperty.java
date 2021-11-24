@@ -280,6 +280,13 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REPORT_SHOW_MANUAL_TESTS,
 
+    /**
+     * A comma-separated list of tags which should not be included the reports.
+     * This can be helpful for technical tags which are not relevant to documentation,
+     * and can reduce the size and time taken to produce the reports.
+     */
+    SERENITY_REPORT_EXCLUDE_TAGS,
+
     @Deprecated
     THUCYDIDES_REPORT_SHOW_RELEASES,
 

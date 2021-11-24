@@ -73,6 +73,11 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
     }
 
     @Override
+    public String reportName() {
+        return reportName;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

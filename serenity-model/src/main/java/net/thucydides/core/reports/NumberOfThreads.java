@@ -12,15 +12,14 @@ import static net.thucydides.core.ThucydidesSystemProperty.REPORT_THREADS;
 
 public class NumberOfThreads {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfThreads.class);
-
-    static final Double DEFAULT_BLOCKING_COEFFICIENT_FOR_IO = 0.8;
+    static final Double DEFAULT_BLOCKING_COEFFICIENT_FOR_IO = 0.9;
 
     private final EnvironmentVariables environmentVariables;
     private final double blockingCoefficientForIO;
 
     public static int forIOOperations() {
-        return new NumberOfThreads().forIO();
+        int threadCount = new NumberOfThreads().forIO();
+        return threadCount;
     }
 
     protected NumberOfThreads() {
@@ -34,8 +33,7 @@ public class NumberOfThreads {
 
     public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
-        int reportThreads = configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
-        return reportThreads;
+        return configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
     }
 
     private Optional<Integer> configuredReportThreads() {

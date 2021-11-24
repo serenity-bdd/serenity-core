@@ -66,11 +66,10 @@ public class WhenUsingAReportService {
         List<TestOutcome> testOutcomeResults = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
             TestOutcome outcome = TestOutcome.forTest("test" + i, ATestCase.class);
-            //TestOutcome outcome = TestOutcome.forTestInStory("test" + i, Story.withId("s1", "Story 1"));
             testOutcomeResults.add(outcome);
         }
 
-        ReportService reportService = new ReportService(outputDirectory, new ArrayList<AcceptanceTestReporter>());
+        ReportService reportService = new ReportService(outputDirectory, new ArrayList<>());
 
         reportService.subscribe(reporter);
 
@@ -85,7 +84,7 @@ public class WhenUsingAReportService {
         List<TestOutcome> testOutcomeResults = new ArrayList<TestOutcome>();
         testOutcomeResults.add(testOutcome);
 
-        ReportService reportService = new ReportService(outputDirectory, new ArrayList<AcceptanceTestReporter>());
+        ReportService reportService = new ReportService(outputDirectory, new ArrayList<>());
 
         reportService.subscribe(reporter);
 

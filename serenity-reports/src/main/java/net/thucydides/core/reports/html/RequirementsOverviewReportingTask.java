@@ -86,6 +86,12 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.requirementsFilter = new RequirementsFilter(environmentVariables);
     }
 
+    @Override
+    public String reportName() {
+        return reportName;
+    }
+
+
     public RequirementsOverviewReportingTask asParentRequirement() {
         this.asParentRequirement = true;
         return this;

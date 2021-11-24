@@ -38,7 +38,11 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
         this.tag = tag;
         this.testResult = testResult;
         this.reportName = reportNameProvider.withPrefix(tag).forTestResult(testResult);
+    }
 
+    @Override
+    public String reportName() {
+        return reportName;
     }
 
     @Override

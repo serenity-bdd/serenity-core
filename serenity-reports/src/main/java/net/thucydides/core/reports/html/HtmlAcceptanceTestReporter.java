@@ -24,9 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -162,10 +160,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         Path outputPath = getOutputDirectory().toPath().resolve(outputFile);
         try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
-            writer.flush();
         }
 
-        LOGGER.trace("Generated report {} in {} ms", outputFile, stopwatch.stop());
+        LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
         return outputPath.toFile();
     }
 

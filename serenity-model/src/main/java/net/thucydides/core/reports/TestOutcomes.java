@@ -130,7 +130,6 @@ public class TestOutcomes {
         List<? extends TestOutcome> filteredOutcomes = outcomeFilter.outcomesFilteredByTagIn(getOutcomes());
 
         return TestOutcomes.of(filteredOutcomes).withLabel(label);
-//        return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label);
     }
 
 

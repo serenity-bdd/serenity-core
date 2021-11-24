@@ -38,6 +38,11 @@ public class TextSummaryReportTask extends BaseReportingTask implements Reportin
     }
 
     @Override
+    public String reportName() {
+        return "summary.txt";
+    }
+
+    @Override
     public String toString() {
         return "Test Summary Report";
     }

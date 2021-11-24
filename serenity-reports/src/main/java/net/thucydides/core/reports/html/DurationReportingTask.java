@@ -74,4 +74,9 @@ public class DurationReportingTask extends BaseReportingTask implements Reportin
         sb.append('}');
         return sb.toString();
     }
+
+    @Override
+    public String reportName() {
+        return reportName;
+    }
 }

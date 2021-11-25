@@ -30,20 +30,15 @@ import static org.mockito.Mockito.mock;
 public class WhenGeneratingALargerAggregateHtmlReportSet {
 
     private static File outputDirectory;
+    HtmlAggregateStoryReporter reporter;
 
     private static EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
     @BeforeClass
     public static void generateReports() throws IOException {
-        IssueTracking issueTracking = mock(IssueTracking.class);
         environmentVariables.setProperty("output.formats", "json");
         environmentVariables.setProperty("report.customfields.env", "testenv");
-        HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking, environmentVariables);
-        outputDirectory = newTemporaryDirectory();
-        reporter.setOutputDirectory(outputDirectory);
 
-        File sourceDirectory = directoryInClasspathCalled("/sample-large-site");
-        reporter.generateReportsForTestResultsFrom(sourceDirectory);
     }
 
     @AfterClass
@@ -65,6 +60,12 @@ public class WhenGeneratingALargerAggregateHtmlReportSet {
 
     @Test
     public void should_generate_an_aggregate_dashboard() throws Exception {
+        IssueTracking issueTracking = mock(IssueTracking.class);
+        HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking, environmentVariables);
+        outputDirectory = newTemporaryDirectory();
+        reporter.setOutputDirectory(outputDirectory);
+        File sourceDirectory = directoryInClasspathCalled("/sample-large-site");
+        reporter.generateReportsForTestResultsFrom(sourceDirectory);
         assertThat(new File(outputDirectory, "index.html"), exists());
     }
 }

@@ -252,35 +252,29 @@
                                     <div class="tab-content" id="pills-tabContent">
                                         <div id="summary" class="tab-pane fade in active">
                                             <div class="container-fluid">
-                                                <div class="row">
-                                                    <div class="col-sm-4">
+                                                <div class="dashboard-charts row">
+                                                    <div class="col-lg-4 col-md-6 col-sm-12">
                                                         <!-- PIE CHART -->
+                                                        <h4><i class="bi bi-pie-chart"></i> Overview</h4>
                                                         <#if testOutcomes.total != 0>
-                                                            <div class="chart-container"
-                                                                 style="position: relative; width:30vw">
-                                                                <canvas id="resultChart" width="300"
-                                                                        height="300"></canvas>
+                                                            <div class="chart-container">
+                                                                <canvas id="resultChart" height="200px"></canvas>
                                                             </div>
                                                         </#if>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-lg-4 col-md-6 col-sm-12">
                                                         <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
                                                         <!-- Severity bar chart -->
-                                                        <div class="chart-container"
-                                                             style="position: relative; width:30vw">
-                                                            <canvas id="severityChart" width="300"
-                                                                    height="300"></canvas>
+                                                        <div class="chart-container">
+                                                            <canvas id="severityChart" height="200px"></canvas>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-sm-4">
+                                                    <div class="col-lg-4 col-md-6 col-sm-12">
                                                         <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
 
                                                         <!-- Duration bar chart -->
-                                                        <div class="chart-container"
-                                                             style="position: relative; width:30vw">
-                                                            <canvas id="durationChart" width="300"
-                                                                    height="300"></canvas>
+                                                        <div class="chart-container">
+                                                            <canvas id="durationChart" height="200px"></canvas>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -289,18 +283,16 @@
                                                 <div class="row">
                                                     <#if coverage?has_content>
                                                         <#assign featureType = inflection.of(coverage[0].tagType).inPluralForm().asATitle()/>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-lg-8 col-md-8 col-sm-12">
                                                             <!-- High level coverage bar chart -->
-                                                            <div class="chart-container"
-                                                                 style="position: relative; width:60vw">
-                                                                <h3><i class="bi bi-reception-3"></i> Functional
-                                                                    Coverage Overview</h3>
+                                                            <div class="chart-container">
+                                                                <h3><i class="bi bi-reception-3"></i> Functional Coverage Overview</h3>
                                                                 <h4>${featureType}</h4>
                                                                 <canvas id="coverageChart"></canvas>
                                                             </div>
                                                         </div>
                                                     </#if>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-lg-4 col-md-4 col-sm-8">
                                                         <div>
                                                             <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
                                                             <div>
@@ -361,10 +353,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
+                                            <div class="container-fluid">
                                                 <#if coverage?has_content>
                                                     <div class="row">
-                                                        <div class="col-sm-12">
+                                                        <div class="col-sm-11">
                                                             <h3>Functional Coverage Details</h3>
 
                                                             <#list coverage as tagCoverageByType>
@@ -383,9 +375,9 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
-                                                                            <th style="width:7.5em;">Scenarios</th>
-                                                                            <th style="width:7.5em;">% Pass</th>
-                                                                            <th style="width:7.5em;">Result</th>
+                                                                            <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">% Pass</th>
+                                                                            <th style="width:1em;">Result</th>
                                                                             <th>Coverage</th>
                                                                         </tr>
                                                                         </thead>
@@ -437,14 +429,14 @@
 
                                                 <#if badTestCount != 0>
                                                     <div class="row">
-                                                        <div class="col-sm-6">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                                             <h3>Test Failure Overview</h3>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                                             <h4>Most Frequent Failures</h4>
-                                                            <table class="table">
+                                                            <table class="table" style="width:40vw;">
                                                                 <tbody>
                                                                 <#list frequentFailures as frequentFailure>
                                                                     <tr>
@@ -459,17 +451,17 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                                             <h4>Most Unstable Features</h4>
-                                                            <table class="table">
+                                                            <table class="table" style="width:40vw;">
                                                                 <tbody>
                                                                 <#list unstableFeatures as unstableFeature>
                                                                     <tr>
-                                                                        <td class="failure-color top-list-title"><a
-                                                                                    href="${unstableFeature.report}">${unstableFeature.name}</a>
+                                                                        <td class="failure-color top-list-title">
+                                                                            <a href="${unstableFeature.report}">${unstableFeature.name}</a>
                                                                         </td>
-                                                                        <td><span
-                                                                                    class="badge failure-badge">${unstableFeature.failurePercentage}%</span>
+                                                                        <td>
+                                                                            <span class="badge failure-badge">${unstableFeature.failurePercentage}%</span>
                                                                         </td>
                                                                     </tr>
                                                                 </#list>
@@ -478,6 +470,8 @@
                                                         </div>
                                                     </div>
                                                 </#if>
+                                            </div>
+                                            <div class="container-fluid">
                                                 <@tag_cloud />
                                             </div>
                                         </div>

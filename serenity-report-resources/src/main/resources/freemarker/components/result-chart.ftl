@@ -48,8 +48,8 @@
                         dataArr.map(data => {
                             sum += data;
                         });
-                        let percentage = (value * 100 / sum).toFixed(2) + "%";
-                        if (percentage === '0.00%') {
+                        let percentage = (value * 100 / sum).toFixed(0) + "%";
+                        if (percentage === '0%') {
                             return '';
                         } else {
                             return percentage;
@@ -72,7 +72,7 @@
                             ctx = chart.ctx;
 
                         ctx.restore();
-                        var fontSize = (height / 200).toFixed(2);
+                        var fontSize = (height / 200).toFixed(1);
                         ctx.font = fontSize + "em sans-serif";
                         ctx.textBaseline = "middle";
 

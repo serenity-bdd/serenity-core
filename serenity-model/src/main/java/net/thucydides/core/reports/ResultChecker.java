@@ -55,7 +55,7 @@ public class ResultChecker {
 
     public TestResult checkTestResults(TestOutcomes outcomes) {
 
-        if (!outcomes.isEmpty()) {
+        if ((outcomes != null) && (!outcomes.isEmpty())) {
             logOutcomesFrom(outcomes);
             return outcomes.getResult();
         }

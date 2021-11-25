@@ -675,6 +675,11 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
     background-color: #DDD;
 }
 
+
+.dashboard-charts {
+    width:95vw;
+}
+
 #progress-gradient {
     background: #e6f4ff; /* Old browsers */
     background: -moz-linear-gradient(left, #e6f4ff 0%, #0065ff 80%, #0023e1 100%); /* FF3.6+ */

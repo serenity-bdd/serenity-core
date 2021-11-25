@@ -239,8 +239,7 @@
                                                         <!-- PIE CHART -->
                                                             <div class="chart-container"
                                                                  style="position: relative; width:30vw">
-                                                                <canvas id="resultChart" width="300"
-                                                                        height="300"></canvas>
+                                                                <canvas id="resultChart" class="chart-container-small" width="300" height="300"></canvas>
                                                             </div>
                                                     </div>
                                                     <div class="col-sm-4">
@@ -248,8 +247,7 @@
                                                         <!-- Severity bar chart -->
                                                         <div class="chart-container"
                                                              style="position: relative; width:30vw">
-                                                            <canvas id="severityChart" width="300"
-                                                                    height="300"></canvas>
+                                                            <canvas id="severityChart" class="chart-container-small" width="300" height="300"></canvas>
                                                         </div>
                                                     </div>
 
@@ -259,8 +257,7 @@
                                                         <!-- Duration bar chart -->
                                                         <div class="chart-container"
                                                              style="position: relative; width:30vw">
-                                                            <canvas id="durationChart" width="300"
-                                                                    height="300"></canvas>
+                                                            <canvas id="durationChart"  class="chart-container-small" width="300" height="300"></canvas>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -274,7 +271,7 @@
                                                                 <h3><i class="bi bi-reception-3"></i> Functional
                                                                     Coverage Overview</h3>
                                                                 <h4>Capabilities</h4>
-                                                                <canvas id="coverageChart"></canvas>
+                                                                <canvas id="coverageChart" class="chart-container-wide" width="600" height="300"></canvas>
                                                             </div>
                                                         </div>
                                                     <div class="col-sm-4">
@@ -4266,7 +4263,9 @@
             }]
         }
         const outcomeOptions = {
-            responsive: true,
+            // responsive: true,
+            // maintainAspectRatio: false,
+            // aspectRatio: 1,
             plugins: {
                 legend: {
                     display: true,
@@ -4282,8 +4281,8 @@
                         dataArr.map(data => {
                             sum += data;
                         });
-                        let percentage = (value * 100 / sum).toFixed(2) + "%";
-                        if (percentage === '0.00%') {
+                        let percentage = (value * 100 / sum).toFixed(0) + "%";
+                        if (percentage === '0%') {
                             return '';
                         } else {
                             return percentage;
@@ -4374,7 +4373,8 @@
             ]
         }
         const severityOptions = {
-            responsive: true,
+            // responsive: true,
+            // maintainAspectRatio: false,
             skipNull: true,
             scales: {
                 x: {
@@ -4447,7 +4447,8 @@
             }]
         }
         const durationOptions = {
-            responsive: true,
+            // responsive: true,
+            // maintainAspectRatio: false,
             plugins: {
                 // Change options for ALL labels of THIS CHART
                 datalabels: {
@@ -4599,7 +4600,8 @@
             ]
         }
         const coverageOptions = {
-            responsive: true,
+            // responsive: true,
+            // maintainAspectRatio: false,
             indexAxis: 'y',
             // barPercentage: ,
             barThickness: 'flex',

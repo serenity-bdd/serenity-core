@@ -3,7 +3,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <h3>Tags</h3>
-
                 <#list tagResults as tagResultGroup >
                     <div class="card">
                         <div class="card-body">

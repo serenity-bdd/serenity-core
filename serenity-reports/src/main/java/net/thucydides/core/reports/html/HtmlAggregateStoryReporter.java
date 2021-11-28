@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
@@ -174,6 +172,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
 
+        List<String> requirementTypes =  requirementsConfiguration.getRequirementTypes();
         // CUSTOM TAG REPORTS
         reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes)
                 .using(context,
@@ -181,6 +180,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                         getOutputDirectory(),
                         reportNameProvider,
                         testOutcomes.getTags(),
+                        requirementTypes,
                         knownRequirementReportNames));
 
         // NESTED TAGS
@@ -189,7 +189,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 //        logReports("NEXTED REPORTS", nestedReports);
 
         // ADD DURATION REPORTS
-        reportingTasks.addAll(durationReports(testOutcomes, context, knownRequirementReportNames));
+        reportingTasks.addAll(durationReports(testOutcomes, context, requirementTypes, knownRequirementReportNames));
 
         // REPORTS FOR EACH RESULT
         reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
@@ -224,7 +224,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
-    private List<ReportingTask> durationReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
+    private List<ReportingTask> durationReports(TestOutcomes testOutcomes,
+                                                FreemarkerContext context,
+                                                List<String> requirementTypes,
+                                                List<String> knownRequirementReportNames) {
         DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
 
         return TagReportingTask.tagReportsFor(testOutcomes).using(context,
@@ -232,6 +235,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 getOutputDirectory(),
                 reportNameProvider,
                 durationDistribution.getDurationTags(),
+                requirementTypes,
                 knownRequirementReportNames);
     }
 
@@ -247,29 +251,29 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
     }
 
-    private List<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
-        List<ReportingTask> reportingTasks = new ArrayList<>();
-
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
-
-        testOutcomes.getTags().stream()
-                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
-                .filter(tag -> !tag.getType().equals("Duration"))
-                .filter(exclusions::doNotExclude)
-                .forEach(
-                        knownTag -> {
-                            List<ReportingTask> nested = TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag))
-                                    .using(context.withParentTag(knownTag),
-                                            environmentVariables,
-                                            getOutputDirectory(),
-                                            reportNameProvider.inContext(knownTag.getCompleteName()),
-                                            testOutcomes.getTags(),
-                                            knownRequirementReportNames);
-                            reportingTasks.addAll(nested);
-                        }
-                );
-        return reportingTasks;
-    }
+//    private List<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
+//        List<ReportingTask> reportingTasks = new ArrayList<>();
+//
+//        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+//
+//        testOutcomes.getTags().stream()
+//                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
+//                .filter(tag -> !tag.getType().equals("Duration"))
+//                .filter(exclusions::doNotExclude)
+//                .forEach(
+//                        knownTag -> {
+//                            List<ReportingTask> nested = TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag))
+//                                    .using(context.withParentTag(knownTag),
+//                                            environmentVariables,
+//                                            getOutputDirectory(),
+//                                            reportNameProvider.inContext(knownTag.getCompleteName()),
+//                                            testOutcomes.getTags(),
+//                                            knownRequirementReportNames);
+//                            reportingTasks.addAll(nested);
+//                        }
+//                );
+//        return reportingTasks;
+//    }
 
     private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes,
                                                     ReportNameProvider reportNameProvider) {

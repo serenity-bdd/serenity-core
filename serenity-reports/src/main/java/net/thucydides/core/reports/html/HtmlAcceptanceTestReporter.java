@@ -148,7 +148,6 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         }
     }
 
-
     private File generateReportPage(final Map<String, Object> context,
                                       final String template,
                                       final String outputFile) throws IOException {

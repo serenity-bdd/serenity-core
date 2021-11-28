@@ -8,7 +8,6 @@ import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.ui.Checkbox;
-import net.serenitybdd.screenplay.ui.RadioButton;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -56,6 +55,13 @@ public class CheckBoxExamples {
         assertThat(SelectedStatus.of("#vehicle1").answeredBy(sarah)).isTrue();
     }
 
+    @Test
+    public void identifyingACheckBoxWithANestedLabel() {
+        sarah.attemptsTo(Click.on(Checkbox.withLabel("I have a motorbike")));
+        assertThat(SelectedStatus.of("#vehicle4").answeredBy(sarah)).isTrue();
+    }
+
+    @Test
     public void identifyingACheckBoxByClass() {
         sarah.attemptsTo(Click.on(Checkbox.called("field-style")));
         assertThat(SelectedStatus.of("#vehicle2").answeredBy(sarah)).isTrue();
@@ -66,5 +72,4 @@ public class CheckBoxExamples {
         sarah.attemptsTo(Click.on(Checkbox.withValue("Car")));
         assertThat(SelectedStatus.of("#vehicle2").answeredBy(sarah)).isTrue();
     }
-
 }

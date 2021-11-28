@@ -139,9 +139,7 @@
                 </#if>
             </#if>
             <#if testOutcomes.label?has_content>
-            <#--> ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),60)}-->
                 > <span class="truncate-60">
-<#--                    ${formatter.htmlCompatibleStoryTitle(formatter.renderTitle(inflection.of(testOutcomes.label).asATitle()))}-->
                 ${formatter.htmlCompatibleStoryTitle(formatter.renderHeaders(inflection.of(testOutcomes.label).asATitle()))}
             </span>
             </#if>
@@ -253,7 +251,7 @@
                                         <div id="summary" class="tab-pane fade in active">
                                             <div class="container-fluid">
                                                 <div class="dashboard-charts row">
-                                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                                    <div class="col-lg-4 col-md-6 col-sm-9">
                                                         <!-- PIE CHART -->
                                                         <h4><i class="bi bi-pie-chart"></i> Overview</h4>
                                                         <#if testOutcomes.total != 0>
@@ -262,14 +260,14 @@
                                                             </div>
                                                         </#if>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                                    <div class="col-lg-4 col-md-6 col-sm-9">
                                                         <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
                                                         <!-- Severity bar chart -->
                                                         <div class="chart-container">
                                                             <canvas id="severityChart" height="200px"></canvas>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                                    <div class="col-lg-4 col-md-6 col-sm-9">
                                                         <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
 
                                                         <!-- Duration bar chart -->
@@ -283,7 +281,7 @@
                                                 <div class="row">
                                                     <#if coverage?has_content>
                                                         <#assign featureType = inflection.of(coverage[0].tagType).inPluralForm().asATitle()/>
-                                                        <div class="col-lg-8 col-md-8 col-sm-12">
+                                                        <div class="col-lg-8 col-md-8 col-sm-9">
                                                             <!-- High level coverage bar chart -->
                                                             <div class="chart-container">
                                                                 <h3><i class="bi bi-reception-3"></i> Functional Coverage Overview</h3>
@@ -292,7 +290,7 @@
                                                             </div>
                                                         </div>
                                                     </#if>
-                                                    <div class="col-lg-4 col-md-4 col-sm-8">
+                                                    <div class="col-lg-4 col-md-4 col-sm-6">
                                                         <div>
                                                             <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
                                                             <div>

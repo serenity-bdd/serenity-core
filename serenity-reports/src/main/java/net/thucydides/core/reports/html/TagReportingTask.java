@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
@@ -67,7 +68,6 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     }
 
     private void generateTagReport(TestOutcomes testOutcomes, ReportNameProvider reportNameProvider, TestTag tag) throws IOException {
-        Stopwatch stopwatch = Stopwatch.started();
         TestOutcomes testOutcomesForTag = testOutcomes.withTag(tag);
         Map<String, Object> context = freemarker.getBuildContext(testOutcomesForTag, reportNameProvider, true);
         context.put("report", ReportProperties.forTagResultsReport());
@@ -129,11 +129,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                          final File outputDirectory,
                                          final ReportNameProvider reportName,
                                          final List<TestTag> allTags,
+                                         final List<String> requirementTypes,
                                          final List<String> knownRequirementReportNames) {
 
             TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
             Set<TestTag> reportedTags = testOutcomes.getTags().stream()
                     .filter(exclusions::doNotExclude)
+                    .filter(tag -> !requirementTag(requirementTypes, tag))
                     .filter(tag -> !tag.getType().equals("Duration"))
                     .collect(Collectors.toSet());
 
@@ -158,6 +160,12 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                     .collect(Collectors.toList());
 
         }
+
+        private boolean requirementTag(List<String> requirementTypes, TestTag tag) {
+            return requirementTypes.contains(tag.getType());
+        }
+
+
     }
 
     @Override

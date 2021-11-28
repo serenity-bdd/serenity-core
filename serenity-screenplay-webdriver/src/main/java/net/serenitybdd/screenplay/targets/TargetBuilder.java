@@ -30,6 +30,10 @@ public class TargetBuilder<T> {
         return new XPathOrCssTarget(targetElementName, cssOrXPathSelector, iFrame, Optional.empty());
     }
 
+    /**
+     * Locate an element using a location strategy function.
+     * The function takes a Serenity Page Object representing the current web page, and returns a list of matching WebElementFacade objects.
+     */
     public Target locatedBy(Function<PageObject, List<WebElementFacade>> locationStrategy) {
         return new LambdaTarget(targetElementName, locationStrategy, iFrame, Optional.empty());
     }

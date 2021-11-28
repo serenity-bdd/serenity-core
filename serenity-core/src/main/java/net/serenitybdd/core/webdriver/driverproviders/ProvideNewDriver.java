@@ -2,8 +2,8 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +16,10 @@ public class ProvideNewDriver {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProvideNewDriver.class);
 
     public static WebDriver withConfiguration(EnvironmentVariables environmentVariables,
-                                        DesiredCapabilities capabilities,
-                                        DriverServicePool pool,
-                                        InstantiateDriver servicePoolStrategy,
-                                        InstantiateDriver defaultStrategy) {
+                                              Capabilities capabilities,
+                                              DriverServicePool pool,
+                                              InstantiateDriver servicePoolStrategy,
+                                              InstantiateDriver defaultStrategy) {
 
         if (useServicePoolIfConfigueredIn(environmentVariables)) {
             LOGGER.info("Instantiating driver using a service pool");

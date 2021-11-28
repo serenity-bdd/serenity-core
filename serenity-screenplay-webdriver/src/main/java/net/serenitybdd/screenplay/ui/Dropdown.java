@@ -7,7 +7,7 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
 
 public class Dropdown {
 
-    private static final String BY_ID_OR_NAME = "css:select[id='{0}' i],select[name='{0}' i],select[data-test='{0}' i],select.{0}";
+    private static final String BY_ID_OR_NAME = "css:select[id='{0}' i],select[name='{0}' i],select[data-test='{0}' i],select[class*='{0}']";
     private static final String BY_DEFAULT_OPTION = "//select[option[1][normalize-space(.)='{0}']]";
 
     public static SearchableTarget called(String name) {

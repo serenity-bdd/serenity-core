@@ -13,7 +13,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ACCES
 import static net.thucydides.core.model.TestResult.*;
 
 /**
- * We can switch between color schemes using the
+ * We can switch between color schemes by setting the serenity.report.accessibility property to true.
  */
 public class ChartColorScheme {
     private final EnvironmentVariables environmentVariables;
@@ -40,7 +40,7 @@ public class ChartColorScheme {
             "pattern.draw('diagonal-right-left', 'rgba(255, 153, 102, 0.5)')", // ABORTED
             "pattern.draw('zigzag-vertical', 'rgba(255, 22, 49, 0.5)')",   // FAILED
             "pattern.draw('zigzag', 'rgba(255, 97, 8, 0.5)')",    // ERROR
-            "pattern.draw('triangle', 'rgba(255, 104, 255, 0.5)')"  // COMPROMISED
+            "pattern.draw('square', 'rgba(255, 104, 255, 0.5)')"  // COMPROMISED
     );
     private static final List<String> STANDARD_MANUAL_COLORS = Arrays.asList(
             "'rgba(153,204,51,0.25)'",      // PASSING

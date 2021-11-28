@@ -277,7 +277,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public void quit() {
         if (proxyInstanciated()) {
             try {
-                getDriverInstance().close();
                 getDriverInstance().quit();
                 webDriverFactory.shutdownFixtureServices();
                 webDriverFactory.releaseTimoutFor(getDriverInstance());

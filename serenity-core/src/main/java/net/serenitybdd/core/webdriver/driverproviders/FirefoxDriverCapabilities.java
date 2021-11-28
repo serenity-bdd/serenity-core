@@ -13,6 +13,8 @@ import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +42,10 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     public DesiredCapabilities getCapabilities() {
+        return new DesiredCapabilities(getOptions());
+    }
+
+    public FirefoxOptions getOptions() {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
 
         Map<String, Object> firefoxCapabilities = BrowserPreferences.startingWith("firefox.").from(environmentVariables);
@@ -65,12 +71,29 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         //
         // Arguments are defined in firefox.arguments
         //
+        List<String> registeredArguments = new ArrayList<>();
         Object firefoxArguments = firefoxCapabilities.remove("arguments");
         if (firefoxArguments instanceof List) {
             List<String> argValues = ((List<?>) firefoxArguments).stream().map(Object::toString).collect(Collectors.toList());
             firefoxOptions.addArguments(argValues);
+            registeredArguments.addAll(argValues);
         } else if (firefoxArguments != null) {
-            firefoxOptions.addArguments(listOfArgumentsIn(firefoxArguments.toString()));
+            List<String> argValues = listOfArgumentsIn(firefoxArguments.toString());
+            firefoxOptions.addArguments(argValues);
+            registeredArguments.addAll(argValues);
+        }
+        //
+        // Add argments from the options parameter
+        //
+        List<String> argValues = Arrays.asList(options.split(";"));
+        firefoxOptions.addArguments(argValues);
+        registeredArguments.addAll(argValues);
+
+        //
+        // Special case for the headless mode
+        //
+        if(registeredArguments.contains("headless")) {
+            firefoxOptions.setHeadless(true);
         }
 
         firefoxCapabilities.forEach(
@@ -100,7 +123,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             firefoxOptions.setProfile(buildFirefoxProfile());
         }
 
-        return new DesiredCapabilities(firefoxOptions);
+        return firefoxOptions;
     }
 
     private List<String> listOfArgumentsIn(String argumentsValue) {

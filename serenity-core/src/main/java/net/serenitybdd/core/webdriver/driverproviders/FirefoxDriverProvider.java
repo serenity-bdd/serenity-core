@@ -47,22 +47,29 @@ public class FirefoxDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
-        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+        if (isDriverAutomaticallyDownloaded(environmentVariables)) {
             logger.info("Using automatically driver download");
             WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forFirefox();
         } else {
             logger.info("Not using automatically driver download");
         }
 
-        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
-        SetProxyConfiguration.from(environmentVariables).in(capabilities);
-        AddLoggingPreferences.from(environmentVariables).to(capabilities);
+//        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
 
-        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables, options);
+        FirefoxOptions firefoxOptions = new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
+        SetProxyConfiguration.from(environmentVariables).in(firefoxOptions);
+        AddLoggingPreferences.from(environmentVariables).to(firefoxOptions);
 
-        driverProperties.registerCapabilities("firefox", capabilitiesToProperties(capabilities));
+//        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables, options);
 
-        return driver;
+        driverProperties.registerCapabilities("firefox", capabilitiesToProperties(firefoxOptions));
+
+        return ProvideNewDriver.withConfiguration(environmentVariables,
+                firefoxOptions,
+                driverServicePool,
+                DriverServicePool::newDriver,
+                (pool, caps) -> new FirefoxDriver(firefoxOptions)
+        );
     }
 
     private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables, String specifiedOptions) {
@@ -72,14 +79,19 @@ public class FirefoxDriverProvider implements DriverProvider {
             capabilities.setCapability("headless", headlessMode);
         }
 
-//        List<String> args = DriverArgs.fromValue(specifiedOptions);
-//        Map<String, List<String>> firefoxOptions = new HashMap<>();
-//        firefoxOptions.put("args", args);
-//        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
+        List<String> args = DriverArgs.fromValue(specifiedOptions);
+        Map<String, List<String>> firefoxOptions = new HashMap<>();
+        firefoxOptions.put("args", args);
+        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
         options.addArguments(DriverArgs.fromValue(specifiedOptions));
+
+
+        if (headlessMode) {
+            options.setHeadless(true);
+        }
 
         DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
 

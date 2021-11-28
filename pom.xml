@@ -64,7 +64,7 @@
         <freemarker.version>2.3.31</freemarker.version>
         <selenium.version>4.0.0</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
-        <jsoup.version>1.13.1</jsoup.version>
+        <jsoup.version>1.14.3</jsoup.version>
         <joda-time.version>2.8.2</joda-time.version>
         <xstream.version>1.4.18</xstream.version>
         <opencsv.version>2.0</opencsv.version>
@@ -753,7 +753,7 @@
         <module>serenity-shutterbug1x</module>
         <module>serenity-saucelabs</module>
         <module>serenity-cucumber</module>
-        <!--        <module>serenity-screenplay-playwright</module>-->
+                <module>serenity-screenplay-playwright</module>
     </modules>
     <profiles>
         <profile>

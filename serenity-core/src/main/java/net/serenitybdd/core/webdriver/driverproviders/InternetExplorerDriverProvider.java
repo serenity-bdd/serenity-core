@@ -13,6 +13,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -75,7 +76,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         );
     }
 
-    private WebDriver retryCreateDriverOnNoSuchSession(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
+    private WebDriver retryCreateDriverOnNoSuchSession(DriverServicePool pool, Capabilities desiredCapabilities) {
         return new TryAtMost(3).toStartNewDriverWith(pool, desiredCapabilities);
     }
 
@@ -86,7 +87,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             this.maxTries = maxTries;
         }
 
-        public WebDriver toStartNewDriverWith(DriverServicePool pool, DesiredCapabilities desiredCapabilities) {
+        public WebDriver toStartNewDriverWith(DriverServicePool pool, Capabilities desiredCapabilities) {
             try {
                 return pool.newDriver(desiredCapabilities);
             } catch (NoSuchSessionException e) {

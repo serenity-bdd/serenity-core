@@ -73,5 +73,5 @@
 
         durationChartCtx.onclick = durationClickHandler;
     </script>
-    <!-- END SUMMARY CHART -->
+    <!-- END DURATION CHART -->
 </#macro>

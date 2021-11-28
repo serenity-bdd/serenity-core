@@ -45,7 +45,6 @@
         <#assign automatedError = requirementOutcome.tests.count("AUTOMATED").withResult("ERROR")/>
         <#assign automatedCompromised = requirementOutcome.tests.count("AUTOMATED").withResult("COMPROMISED")/>
         <#assign totalManual = requirementOutcome.tests.count("MANUAL").withAnyResult()/>
-
         <#assign manualPassedPercentage = requirementOutcome.tests.getFormattedPercentage("MANUAL").withResult("SUCCESS")/>
         <#assign manualFailedPercentage = requirementOutcome.tests.getFormattedPercentage("MANUAL").withFailureOrError()/>
         <#assign manualPending = requirementOutcome.tests.count("MANUAL").withIndeterminateResult()/>
@@ -53,8 +52,6 @@
         <#assign manualPassed = requirementOutcome.tests.count("MANUAL").withResult("SUCCESS")/>
         <#assign manualFailed = requirementOutcome.tests.count("MANUAL").withResult("FAILURE")/>
         <#assign manualError = requirementOutcome.tests.count("MANUAL").withResult("ERROR")/>
-
-
         <#assign status_icon = formatter.resultIcon().forResult(requirementOutcome.testOutcomes.result) />
         <#assign status_rank = formatter.resultRank().forResult(requirementOutcome.testOutcomes.result) />
         <#assign background_bar_style = 'percentagebar'>
@@ -65,10 +62,7 @@
         </#if>
 
         <#assign requirementReport = reportName.forRequirement(requirementOutcome.requirement) >
-
         <tr>
-
-
             <td> <#-- NAME -->
                 <a href="${requirementReport}">${formatter.htmlCompatibleStoryTitle(requirementOutcome.requirement.displayName)}</a></span>
             </td>
@@ -87,11 +81,8 @@
             <td width="165px">
                 <@test_coverage requirementOutcome=requirementOutcome barWidth=125 />
             </td>
-
         </tr>
     </#foreach>
     </tbody>
 </table>
-
-
 </#macro>

@@ -438,7 +438,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (testOutcomes.isEmpty()) {
             return java.util.Optional.empty();
         } else {
-//        	return java.util.Optional.ofNullable(currentTestOutcome.get());
         	return java.util.Optional.ofNullable(currentTestOutcome);
         }
     }

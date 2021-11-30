@@ -287,6 +287,11 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REPORT_EXCLUDE_TAGS,
 
+    /**
+     * Legacy form of "serenity.report.exclude.tags"
+     */
+    HIDDEN_TAGS,
+
     @Deprecated
     THUCYDIDES_REPORT_SHOW_RELEASES,
 

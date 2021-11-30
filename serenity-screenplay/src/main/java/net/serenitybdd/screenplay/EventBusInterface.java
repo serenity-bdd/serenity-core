@@ -11,12 +11,14 @@ import java.util.Optional;
 public class EventBusInterface {
 
     public static void castActor(String name) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            return;
+        }
         StepEventBus.getEventBus().castActor(name);
     }
 
     public void reportStepFailureFor(Performable todo, Throwable e) {
-        ExecutedStepDescription taskDescription =  ExecutedStepDescription.of(todo.getClass(),"attemptsTo");
+        ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "attemptsTo");
         StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
     }
 
@@ -56,33 +58,50 @@ public class EventBusInterface {
     }
 
     public void reportStepSkippedFor(Performable todo) {
-        ExecutedStepDescription taskDescription =  ExecutedStepDescription.of(todo.getClass(),"performAs");
+        ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "performAs");
         StepEventBus.getEventBus().stepStarted(taskDescription);
         StepEventBus.getEventBus().stepIgnored();
     }
 
-    public boolean isBaseStepListenerRegistered() { return StepEventBus.getEventBus().isBaseStepListenerRegistered(); }
+    public boolean isBaseStepListenerRegistered() {
+        return StepEventBus.getEventBus().isBaseStepListenerRegistered();
+    }
 
-    public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
-    public boolean aStepHasFailedInTheCurrentExample() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample(); }
+    public boolean aStepHasFailed() {
+        return isBaseStepListenerRegistered() && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed();
+    }
+
+    public boolean aStepHasFailedInTheCurrentExample() {
+        return isBaseStepListenerRegistered() && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample();
+    }
 
     public FailureCause getFailureCause() {
         return StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause();
     }
 
     public Optional<FailureCause> failureCause() {
-        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            if (StepEventBus.getEventBus().getBaseStepListener() != null && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed()) {
-                return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause());
-            }
+        if ((StepEventBus.getEventBus() == null)
+                || (!StepEventBus.getEventBus().isBaseStepListenerRegistered())
+                || (StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome() == null)) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        if (StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed()) {
+            if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().isPresent()) {
+                return Optional.ofNullable(StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause());
+            } else {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     public boolean shouldIgnoreConsequences() {
-        if (StepEventBus.getEventBus().isDryRun()) { return true; }
+        if (StepEventBus.getEventBus().isDryRun()) {
+            return true;
+        }
 
-        if (StepEventBus.getEventBus().softAssertsActive() && !StepEventBus.getEventBus().currentTestIsSuspended() ) {
+        if (StepEventBus.getEventBus().softAssertsActive() && !StepEventBus.getEventBus().currentTestIsSuspended()) {
             return false;
         }
         return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
@@ -101,15 +120,21 @@ public class EventBusInterface {
     }
 
     public void assignFactToActor(Actor actor, String fact) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            return;
+        }
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignFact(actor.getName(), fact)
         );
     }
 
     public void assignAbilityToActor(Actor actor, String ability) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
-        if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome() == null) { return; }
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            return;
+        }
+        if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome() == null) {
+            return;
+        }
 
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignAbility(actor.getName(), ability)

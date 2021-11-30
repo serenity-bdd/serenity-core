@@ -266,7 +266,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             return;
         }
         if (isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
-            logger.info("-->EventBus.TestSuiteFinished " + ((ClassSource) testIdentifier.getSource().get()).getJavaClass());
+            logger.trace("-->EventBus.TestSuiteFinished " + ((ClassSource) testIdentifier.getSource().get()).getJavaClass());
             StepEventBus.getEventBus().testSuiteFinished();
             generateReportsForTest();
         }
@@ -277,7 +277,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 testFinished(testIdentifier, methodSource, testExecutionResult);
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if (dataTable != null) {
-                    logger.info("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
+                    logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
                     StepEventBus.getEventBus().exampleFinished();
                     parameterSetNumber++;
                 }
@@ -331,7 +331,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     private void testFinished(TestIdentifier testIdentifier, MethodSource methodSource, TestExecutionResult testExecutionResult) {
-        logger.info("Test finished " + testIdentifier);
         updateResultsUsingTestAnnotations(methodSource);
         TestResult result = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getResult();
         if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED && result == TestResult.SUCCESS) {
@@ -378,7 +377,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     @Override
     public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {
         if (!isSerenityTest) return;
-        logger.info("-->ReportingEntryPublished " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
+        logger.trace("-->ReportingEntryPublished " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
     }
 
     private boolean isClassSource(TestIdentifier testId) {

@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.DurationBucket;
 import net.serenitybdd.reports.model.DurationDistribution;
@@ -29,6 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -251,30 +253,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
     }
 
-//    private List<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
-//        List<ReportingTask> reportingTasks = new ArrayList<>();
-//
-//        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
-//
-//        testOutcomes.getTags().stream()
-//                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
-//                .filter(tag -> !tag.getType().equals("Duration"))
-//                .filter(exclusions::doNotExclude)
-//                .forEach(
-//                        knownTag -> {
-//                            List<ReportingTask> nested = TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag))
-//                                    .using(context.withParentTag(knownTag),
-//                                            environmentVariables,
-//                                            getOutputDirectory(),
-//                                            reportNameProvider.inContext(knownTag.getCompleteName()),
-//                                            testOutcomes.getTags(),
-//                                            knownRequirementReportNames);
-//                            reportingTasks.addAll(nested);
-//                        }
-//                );
-//        return reportingTasks;
-//    }
-
     private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes,
                                                     ReportNameProvider reportNameProvider) {
 
@@ -364,6 +342,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         System.setProperty("serenity.project.directory", projectDirectory);
     }
 
+    public void setTestRoot(String testRoot) {
+        if (testRoot != null) {
+            setEnvironmentProperty(SERENITY_TEST_ROOT, testRoot);
+        }
+    }
+
     private class CopyResourcesTask implements ReportingTask {
         @Override
         public void generateReports() throws IOException {
@@ -386,7 +370,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         public String reportName() {
             return "CopyTestResultsTask";
         }
-
     }
 
 }

@@ -22,8 +22,8 @@ public class ProvideNewDriver {
                                               InstantiateDriver defaultStrategy) {
 
         if (useServicePoolIfConfigueredIn(environmentVariables)) {
-            LOGGER.info("Instantiating driver using a service pool");
-            LOGGER.info("Driver capabilities: {}", capabilities);
+            LOGGER.debug("Instantiating driver using a service pool");
+            LOGGER.debug("Driver capabilities: {}", capabilities);
             try {
                 pool.ensureServiceIsRunning();
                 return servicePoolStrategy.newDriver(pool, capabilities);
@@ -35,8 +35,8 @@ public class ProvideNewDriver {
             }
 
         } else {
-            LOGGER.info("Instantiating driver");
-            LOGGER.info("Driver capabilities: {}", capabilities);
+            LOGGER.debug("Instantiating driver");
+            LOGGER.debug("Driver capabilities: {}", capabilities);
             return defaultStrategy.newDriver(pool, capabilities);
         }
     }

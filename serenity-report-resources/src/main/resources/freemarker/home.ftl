@@ -53,6 +53,14 @@
                 ]
             });
 
+            $('.manual-scenario-result-table').DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
+                "pageLength": 10,
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+            });
             // Results table
             $('#test-results-table').DataTable({
                 "order": [[0, "asc",], [3, "asc",]],
@@ -480,7 +488,7 @@
                                                         <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                         <#if (automatedTestCases?has_content)>
-                                                            <table class="scenario-result-table table"
+                                                            <table class="manual-scenario-result-table table"
                                                                    id="scenario-results">
                                                                 <thead>
                                                                 <tr>

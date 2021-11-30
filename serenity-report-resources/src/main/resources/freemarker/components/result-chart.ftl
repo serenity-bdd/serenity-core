@@ -3,9 +3,6 @@
     <!-- PIE CHART -->
     <script>
 
-        // Register the plugin to all charts:
-        Chart.register(ChartDataLabels);
-
         // The results pie chart
         const outcomeChartCtx = document.getElementById('${id}');
 

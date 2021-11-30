@@ -5,9 +5,6 @@
     <!-- SUMMARY BAR CHART -->
     <script>
 
-        // Register the plugin to all charts:
-        Chart.register(ChartDataLabels);
-
         // The Severity bar chart
         const severityChartCtx = document.getElementById('${id}');
 

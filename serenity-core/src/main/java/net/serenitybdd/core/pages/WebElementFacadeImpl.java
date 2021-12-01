@@ -1237,7 +1237,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         switch (clickStrategy) {
             case WAIT_UNTIL_ENABLED:
-                waitUntilElementAvailable();
+                waitUntilClickable();
                 break;
             case WAIT_UNTIL_PRESENT:
                 waitUntilElementPresent();

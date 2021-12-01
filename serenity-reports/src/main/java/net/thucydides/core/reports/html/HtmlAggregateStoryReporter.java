@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.DurationBucket;
 import net.serenitybdd.reports.model.DurationDistribution;
@@ -345,6 +344,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public void setTestRoot(String testRoot) {
         if (testRoot != null) {
             setEnvironmentProperty(SERENITY_TEST_ROOT, testRoot);
+            requirements.getRequirementsService().resetRequirements();
         }
     }
 

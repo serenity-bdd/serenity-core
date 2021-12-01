@@ -1459,6 +1459,4 @@ public abstract class PageObject {
         return inflection.of(getClass().getSimpleName())
                 .inHumanReadableForm().toString();
     }
-
-
 }

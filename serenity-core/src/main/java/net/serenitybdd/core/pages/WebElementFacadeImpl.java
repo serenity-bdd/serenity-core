@@ -1413,4 +1413,5 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElement getWrappedElement() {
         return getResolvedElement();
     }
+
 }

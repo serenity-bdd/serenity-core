@@ -18,7 +18,9 @@ import java.util.List;
  *
  * Based on implementation from https://github.com/Georgegriff/query-selector-shadow-dom
  * QuerySelector that can pierce Shadow DOM roots without knowing the path through nested shadow roots.
+ * This class is now deprecated: Use the Selenium 4 implementation ByShadow
  */
+@Deprecated
 public class ByShadowDom extends By {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ByShadowDom.class);

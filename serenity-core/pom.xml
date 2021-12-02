@@ -173,63 +173,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>htmlunit-driver</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>net.bytebuddy</groupId>-->
-<!--                    <artifactId>byte-buddy</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>net.bytebuddy</groupId>-->
-<!--                    <artifactId>byte-buddy-agent</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.projectlombok</groupId>-->
-<!--                    <artifactId>lombok</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>htmlunit-driver</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.codeborne</groupId>-->
-<!--            <artifactId>phantomjsdriver</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>xml-apis</groupId>-->
-<!--                    <artifactId>xml-apis</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>commons-codec</groupId>-->
-<!--                    <artifactId>commons-codec</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.seleniumhq.selenium</groupId>-->
-<!--                    <artifactId>selenium-api</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.seleniumhq.selenium</groupId>-->
-<!--                    <artifactId>selenium-remote-driver</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>net.bytebuddy</groupId>-->
-<!--                    <artifactId>byte-buddy</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>net.bytebuddy</groupId>-->
-<!--                    <artifactId>byte-buddy-agent</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>

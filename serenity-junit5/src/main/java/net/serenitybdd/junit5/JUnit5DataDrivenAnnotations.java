@@ -83,7 +83,7 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfEnumSourceObjectsFrom(testDataMethod);
-        logger.info("GetParameterTablesEnumSource: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        logger.debug("GetParameterTablesEnumSource: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
@@ -91,7 +91,7 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromValueSource(testDataMethod);
-        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        logger.debug("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
@@ -117,7 +117,7 @@ public class JUnit5DataDrivenAnnotations {
 
         String testData = csvSource.textBlock();
         List<List<Object>> rows = listOfCsvObjectsFrom(testData.split("\\R"),deliminator);
-        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + rows);
+        logger.debug("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + rows);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, rows));
     }
 
@@ -125,7 +125,7 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfCsvObjectsFrom(testDataMethod);
-        logger.info("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
+        logger.debug("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
@@ -145,7 +145,7 @@ public class JUnit5DataDrivenAnnotations {
                 }
                 rows.add(dataRow);
             }
-            logger.info("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
+            logger.debug("GetParameterTablesCSV: Put parameter dataTableName " + dataTableName);
             dataTables.put(dataTableName, createParametersTableFrom(columnNamesString,rows));
         } catch (IOException e) {
             logger.error("Cannot load csv resource ",e);

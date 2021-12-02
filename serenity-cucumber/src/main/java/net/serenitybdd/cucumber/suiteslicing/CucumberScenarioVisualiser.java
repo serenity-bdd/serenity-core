@@ -44,7 +44,7 @@ public class CucumberScenarioVisualiser {
             String jsonFile = String.format("%s/%s-slice-config-%s-forks-in-each-of-%s-slices-using-%s.json", outputDirectory(), PathUtils
                 .getAsFile(rootFolderURI).getPath().replaceAll("[:/]", "-"), forkCount, sliceCount, testStatistics);
             Files.write(Paths.get(jsonFile), new GsonBuilder().setPrettyPrinting().create().toJson(visualisedSlices).getBytes());
-            LOGGER.info("Wrote visualisation as JSON for {} slices -> {}", visualisedSlices.size(), jsonFile);
+            LOGGER.debug("Wrote visualisation as JSON for {} slices -> {}", visualisedSlices.size(), jsonFile);
         } catch (Exception e) {
             throw new RuntimeException("failed to visualise scenarios", e);
         }

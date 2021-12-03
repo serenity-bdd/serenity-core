@@ -197,7 +197,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         then:
         appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
         appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
     }
 
     def "should get properties defined in all environments plus default environment properties"() {
@@ -210,7 +210,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         then:
         appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
         appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
 
     }
 
@@ -241,8 +241,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
         appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
         !appiumConfiguration.capabilities.capabilityNames.contains("showChromedriverLog")
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
-
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
     }
 
     def "should be able to build appium mobile driver capabilities using only browserName without app, appPackage or appActivity"() {

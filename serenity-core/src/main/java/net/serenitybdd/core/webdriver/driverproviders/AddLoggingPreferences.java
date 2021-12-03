@@ -30,14 +30,16 @@ public class AddLoggingPreferences {
         LoggingPreferences logPrefs = new LoggingPreferences();
 
         Properties logPrefProperties = environmentVariables.getPropertiesWithPrefix("webdriver.logprefs");
-        logPrefProperties.entrySet().stream().forEach(
-                (entry) -> {
-                    String logType = unprefixed(entry .getKey().toString()).toLowerCase();
-                    Level logLevel = Level.parse(entry.getValue().toString().toUpperCase());
-                    logPrefs.enable(logType, logLevel);
-                }
-        );
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        if (!logPrefProperties.isEmpty()) {
+            logPrefProperties.entrySet().forEach(
+                    (entry) -> {
+                        String logType = unprefixed(entry.getKey().toString()).toLowerCase();
+                        Level logLevel = Level.parse(entry.getValue().toString().toUpperCase());
+                        logPrefs.enable(logType, logLevel);
+                    }
+            );
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        }
     }
 
     private String unprefixed(String propertyName) {

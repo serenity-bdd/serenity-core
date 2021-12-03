@@ -1,14 +1,12 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -33,14 +31,17 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
 
         DesiredCapabilities edgeCaps = new DesiredCapabilities();
-        edgeCaps.setCapability("ms:edgeChrominum", true);
+        edgeCaps.setCapability("ms:edgeChromium", true);
 
         Map<String, Object> edgeOptions = new HashMap<>();
-        edgeOptions.put("prefs", preferencesConfiguredIn(environmentVariables));
+        Map<String, Object> prefs = preferencesConfiguredIn(environmentVariables);
+        if (!prefs.isEmpty()) {
+            edgeOptions.put("prefs", prefs);
+        }
 
         List<String> args = argsConfiguredIn(environmentVariables);
         args.addAll(DriverArgs.fromValue(driverOptions));
-        if ((args != null) && (!args.isEmpty())) {
+        if (!args.isEmpty()) {
             edgeOptions.put("args", args);
         }
         edgeCaps.setCapability("ms:edgeOptions", edgeOptions);

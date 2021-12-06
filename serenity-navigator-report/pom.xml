@@ -40,7 +40,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.serenitybdd.serenitysinglepagereport</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.serenitybdd.serenitynavigatorreport</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

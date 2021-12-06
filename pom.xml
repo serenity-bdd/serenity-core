@@ -43,7 +43,7 @@
         <junit.version>4.13.2</junit.version>
         <groovy.version>3.0.9</groovy.version>
         <spock.version>2.0-M3-groovy-3.0</spock.version>
-        <byte-buddy.version>1.11.22</byte-buddy.version>
+        <byte-buddy.version>1.12.3</byte-buddy.version>
         <guava.version>31.0.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -742,6 +742,7 @@
         <module>serenity-zalenium</module>
         <module>serenity-single-page-report</module>
         <module>serenity-json-summary-report</module>
+        <module>serenity-navigator-report</module>
         <module>serenity-spring</module>
         <module>serenity-browsermob-plugin</module>
         <module>serenity-browserstack</module>

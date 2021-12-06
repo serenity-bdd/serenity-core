@@ -518,8 +518,14 @@
                                                                         <td>${scenario.stepCount}</td>
                                                                         <td>${scenario.formattedStartTime}</td>
                                                                         <td>${scenario.formattedDuration}</td>
-                                                                        <td>${outcome_icon} <span
-                                                                                    style="display:none">${scenario.result}</span>
+                                                                        <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                                            <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                                &nbsp;
+                                                                                <a href="${scenario.externalLink.url}" class="tag"
+                                                                               title="${scenario.externalLink.type}">
+                                                                                <i class="fs-2 bi bi-camera-reels"></i>
+                                                                            </a>
+                                                                            </#if>
                                                                         </td>
                                                                     </tr>
                                                                 </#list>

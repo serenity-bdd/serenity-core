@@ -66,7 +66,6 @@ public class ScenarioOutcomes {
 
         return new SingleScenarioOutcome(
                 testOutcome.getQualified().withContext().getTitleWithLinks(),
-//                testOutcome.getName(),
                 testOutcome.getTitle(),
                 "Scenario",
                 testOutcome.getResult(),
@@ -81,7 +80,8 @@ public class ScenarioOutcomes {
                 userStoryName,
                 userStoryReportName,
                 testOutcome.getTags(),
-                testOutcome.getRule());
+                testOutcome.getRule(),
+                testOutcome.getExternalLink());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

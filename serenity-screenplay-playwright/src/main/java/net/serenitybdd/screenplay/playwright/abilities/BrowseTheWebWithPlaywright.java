@@ -42,6 +42,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     Playwright playwright;
 
     BrowserType.LaunchOptions options;
+    Browser.NewContextOptions contextOptions;
 
     private Optional<String> browserType;
 
@@ -76,8 +77,13 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions options, String browserType) {
+        this(environmentVariables, options, null, browserType);
+    }
+
+    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions options, Browser.NewContextOptions contextOptions, String browserType) {
         this.environmentVariables = environmentVariables;
         this.options = options;
+        this.contextOptions = contextOptions;
         this.browserType = Optional.ofNullable(browserType);
         registerForEventNotification();
     }
@@ -105,9 +111,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      * A BrowserContext is an isolated incognito-alike session within a browser instance.
      */
     private BrowserContext getCurrentContext() {
-        // TODO: Add the ability to allow options for a context
         if (currentContext == null) {
-            currentContext = getBrowser().newContext();
+            currentContext = getBrowser().newContext(contextOptions);
         }
         return currentContext;
     }
@@ -282,6 +287,11 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public static BrowseTheWebWithPlaywright withOptions(BrowserType.LaunchOptions options) {
         return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), options);
+    }
+
+    public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {
+        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), options,
+                contextOptions, browserType.orElse(null));
     }
 
     public BrowseTheWebWithPlaywright withBrowserType(String browserType) {

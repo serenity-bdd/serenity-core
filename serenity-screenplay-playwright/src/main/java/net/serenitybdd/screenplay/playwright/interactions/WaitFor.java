@@ -4,7 +4,6 @@ import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
 import net.thucydides.core.annotations.Step;
@@ -13,7 +12,7 @@ import java.util.function.Consumer;
 
 /**
  * Wait for some element or state.
- *
+ * <p>
  * Sample usage:
  * <pre>
  *     WaitFor.selector("#searchbutton");
@@ -24,7 +23,8 @@ public class WaitFor implements Performable {
     /**
      * Default constructor required by Screenplay
      */
-    public WaitFor() {}
+    public WaitFor() {
+    }
 
     private Target target;
     private Page.WaitForSelectorOptions options;
@@ -40,7 +40,6 @@ public class WaitFor implements Performable {
 
     /**
      * Wait for an element to be in a given state.
-     *
      */
     public static WaitFor selector(Target target) {
         return new WaitFor(target);
@@ -52,7 +51,7 @@ public class WaitFor implements Performable {
     }
 
     @Override
-    @Step("{0} clicks on #target")
+    @Step("{0} waits for #target")
     public <T extends Actor> void performAs(T actor) {
         ElementHandle resolvedElement = BrowseTheWebWithPlaywright.as(actor).getCurrentPage().waitForSelector(target.asSelector(), options);
         if (nextAction != null) {

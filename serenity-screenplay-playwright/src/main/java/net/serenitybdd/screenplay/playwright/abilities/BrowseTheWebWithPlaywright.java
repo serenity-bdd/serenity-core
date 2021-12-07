@@ -9,12 +9,16 @@ import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.PageObjectDependencyInjector;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.steps.BaseStepListener;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SerenityWebdriverManager;
-import org.openqa.selenium.WebDriver;
+import org.assertj.core.api.Assertions;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -200,7 +204,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         return (T) this;
     }
 
-    @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
+    @Subscribe
+    public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
         if (messageIsForThisActor(performanceEvent)) {
             System.out.println("BEGIN " + performanceEvent.getClass());
         }
@@ -214,13 +219,15 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
 
-    @Subscribe public void perform(ActorPerforms performAction) {
+    @Subscribe
+    public void perform(ActorPerforms performAction) {
         if (messageIsForThisActor(performAction)) {
             System.out.println("Perform " + performAction.getPerformable());
         }
     }
 
-    @Subscribe public void prepareQuestion(ActorAsksQuestion questionEvent) {
+    @Subscribe
+    public void prepareQuestion(ActorAsksQuestion questionEvent) {
         if (messageIsForThisActor(questionEvent)) {
             System.out.println("Question " + questionEvent.getQuestion());
         }
@@ -232,6 +239,29 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
         if (playwright != null) {
+
+            // Take screenshot for failed test
+            BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+            if (baseStepListener.currentTestFailed()) {
+                Page currentPage = getCurrentPage();
+                byte[] screenshot = currentPage.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+
+                try {
+                    Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
+                    Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
+                    Path screenshotFile = Files.createTempFile(outputDirectory, "screenshot", ".png");
+                    Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
+                    Files.write(screenshotFile, screenshot);
+
+                    ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFile.toFile(), pageSourceFile.toFile());
+                    baseStepListener.firstFailingStep().ifPresent(
+                            step -> step.addScreenshot(screenshotAndHtmlSource)
+                    );
+                } catch (IOException e) {
+                    Assertions.fail("Failed to take Playwright screenshot", e);
+                }
+            }
+
             playwright.close();
             playwright = null;
         }

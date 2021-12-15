@@ -2,14 +2,15 @@ package net.serenitybdd.screenplay.playwright;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.microsoft.playwright.options.BrowserChannel;
 import com.microsoft.playwright.options.Proxy;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -72,6 +73,8 @@ public enum PlayWrightConfigurationProperties {
      */
     HEADLESS("playwright.headless"),
 
+    TRACING("playwright.tracing"),
+
     /**
      * If {@code true}, Playwright does not pass its own configurations args and only uses the ones from {@code args}. Dangerous option;
      * use with care. Defaults to {@code false}.
@@ -95,8 +98,9 @@ public enum PlayWrightConfigurationProperties {
      */
     TIMEOUT("playwright.timeout"),
 
-    /** Network proxy settings.
-     *  You define the proxy settings using the following four properties (server, bypass, username, password)
+    /**
+     * Network proxy settings.
+     * You define the proxy settings using the following four properties (server, bypass, username, password)
      */
     PROXY("playwright.proxy"),
 
@@ -109,14 +113,6 @@ public enum PlayWrightConfigurationProperties {
 
     PlayWrightConfigurationProperties(String property) {
         this.property = property;
-    }
-
-    public Optional<BrowserChannel> asBrowserChannelFrom(EnvironmentVariables environmentVariables) {
-        if (environmentVariables.optionalProperty(property).isPresent()) {
-            return Optional.of(BrowserChannel.valueOf(environmentVariables.getProperty(property)));
-        } else {
-            return Optional.empty();
-        }
     }
 
     public Optional<String> asStringFrom(EnvironmentVariables environmentVariables) {
@@ -141,13 +137,13 @@ public enum PlayWrightConfigurationProperties {
 
             final Proxy proxy = new Proxy(server);
             environmentVariables.optionalProperty(PROXY_USERNAME.property).ifPresent(
-                    proxy::setUsername
+                proxy::setUsername
             );
             environmentVariables.optionalProperty(PROXY_PASSWORD.property).ifPresent(
-                    proxy::setPassword
+                proxy::setPassword
             );
             environmentVariables.optionalProperty(PROXY_BYPASS.property).ifPresent(
-                    proxy::setBypass
+                proxy::setBypass
             );
             return Optional.of(proxy);
         } else {
@@ -158,9 +154,9 @@ public enum PlayWrightConfigurationProperties {
     public Optional<List<String>> asListOfStringsFrom(EnvironmentVariables environmentVariables) {
         if (environmentVariables.optionalProperty(property).isPresent()) {
             return Optional.of(stream(environmentVariables.getProperty(property)
-                    .split(","))
-                    .map(String::trim)
-                    .collect(Collectors.toList()));
+                .split(","))
+                .map(String::trim)
+                .collect(Collectors.toList()));
         } else {
             return Optional.empty();
         }
@@ -169,7 +165,8 @@ public enum PlayWrightConfigurationProperties {
     public Optional<Map<String, String>> asJsonMapFrom(EnvironmentVariables environmentVariables) {
         if (environmentVariables.optionalProperty(property).isPresent()) {
             Gson gson = new Gson();
-            Type mapOfStringsType = new TypeToken<Map<String, String>>() {}.getType();
+            Type mapOfStringsType = new TypeToken<Map<String, String>>() {
+            }.getType();
             return Optional.of(gson.fromJson(environmentVariables.getProperty(property), mapOfStringsType));
         } else {
             return Optional.empty();

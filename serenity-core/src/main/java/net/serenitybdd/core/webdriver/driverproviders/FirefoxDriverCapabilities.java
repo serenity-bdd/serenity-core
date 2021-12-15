@@ -9,14 +9,12 @@ import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,6 +42,10 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     public DesiredCapabilities getCapabilities() {
+        return new DesiredCapabilities(getOptions());
+    }
+
+    public FirefoxOptions getOptions() {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
 
         Map<String, Object> firefoxCapabilities = BrowserPreferences.startingWith("firefox.").from(environmentVariables);
@@ -59,9 +61,9 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
                         String instantiatedValue = FilePathParser.forEnvironmentVariables(environmentVariables).getInstanciatedPath(value.toString());
                         firefoxOptions.addPreference(key, instantiatedValue);
                     } else if (value instanceof Boolean) {
-                        firefoxOptions.addPreference(key, (Boolean) value);
+                        firefoxOptions.addPreference(key, value);
                     } else if (value instanceof Integer) {
-                        firefoxOptions.addPreference(key, (Integer) value);
+                        firefoxOptions.addPreference(key, value);
                     }
                 }
         );
@@ -69,12 +71,29 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         //
         // Arguments are defined in firefox.arguments
         //
+        List<String> registeredArguments = new ArrayList<>();
         Object firefoxArguments = firefoxCapabilities.remove("arguments");
         if (firefoxArguments instanceof List) {
             List<String> argValues = ((List<?>) firefoxArguments).stream().map(Object::toString).collect(Collectors.toList());
             firefoxOptions.addArguments(argValues);
+            registeredArguments.addAll(argValues);
         } else if (firefoxArguments != null) {
-            firefoxOptions.addArguments(listOfArgumentsIn(firefoxArguments.toString()));
+            List<String> argValues = listOfArgumentsIn(firefoxArguments.toString());
+            firefoxOptions.addArguments(argValues);
+            registeredArguments.addAll(argValues);
+        }
+        //
+        // Add argments from the options parameter
+        //
+        List<String> argValues = Arrays.asList(options.split(";"));
+        firefoxOptions.addArguments(argValues);
+        registeredArguments.addAll(argValues);
+
+        //
+        // Special case for the headless mode
+        //
+        if(registeredArguments.contains("headless")) {
+            firefoxOptions.setHeadless(true);
         }
 
         firefoxCapabilities.forEach(
@@ -104,7 +123,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             firefoxOptions.setProfile(buildFirefoxProfile());
         }
 
-        return new DesiredCapabilities(firefoxOptions);
+        return firefoxOptions;
     }
 
     private List<String> listOfArgumentsIn(String argumentsValue) {
@@ -117,9 +136,9 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     private FirefoxProfile buildFirefoxProfile() {
         String profileName = ThucydidesSystemProperty.WEBDRIVER_FIREFOX_PROFILE.from(environmentVariables);
         FilePathParser parser = new FilePathParser(environmentVariables);
-        DesiredCapabilities firefoxCapabilities = DesiredCapabilities.firefox();
+        DesiredCapabilities firefoxCapabilities = new DesiredCapabilities();
         if (StringUtils.isNotEmpty(profileName)) {
-            firefoxCapabilities.setCapability(FirefoxDriver.PROFILE, parser.getInstanciatedPath(profileName));
+            firefoxCapabilities.setCapability(FirefoxDriver.Capability.PROFILE, parser.getInstanciatedPath(profileName));
         }
 
         FirefoxProfile profile;

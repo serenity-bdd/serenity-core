@@ -7,6 +7,7 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.SamplePassingScenario;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,8 +24,8 @@ import static org.hamcrest.Matchers.is;
 
 public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
 
-    @Mock
-    FirefoxDriver firefoxDriver;
+//    @Mock
+//    FirefoxDriver firefoxDriver;
 
     MockEnvironmentVariables environmentVariables;
 
@@ -35,12 +36,17 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
 
     @Before
     public void createATestableDriverFactory() throws Exception {
-        MockitoAnnotations.initMocks(this);
+//        MockitoAnnotations.initMocks(this);
 
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
 
+    }
+
+    @After
+    public void teardown() {
+        StepEventBus.getEventBus().clear();
     }
 
     @Test

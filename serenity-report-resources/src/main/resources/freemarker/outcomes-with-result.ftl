@@ -16,7 +16,11 @@
 
     <#include "components/tag-list.ftl">
     <#include "components/test-outcomes.ftl">
-
+    <#include "components/result-chart.ftl">
+    <#include "components/result-summary.ftl">
+    <#include "components/duration-chart.ftl">
+    <#include "components/functional-coverage-chart.ftl">
+    <#include "components/tag_cloud.ftl">
 
 <#assign manualTests = testOutcomes.count("manual")>
 <#assign automatedTests = testOutcomes.count("automated")>
@@ -141,8 +145,7 @@
                                     across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
 
                                     <#if (csvReport! != '')> |
-                                        <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
-                                                                                        title="Download CSV"></i></a>
+                                        <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down" title="Download CSV"></i></a>
                                     </#if>
 
                                     <#if testOutcomes.resultFilterName != 'SUCCESS'>
@@ -200,355 +203,125 @@
                                     </li>
                                 </ul>
 
-
                                 <div class="card border">
                                     <div class="tab-content" id="pills-tabContent">
                                         <div id="summary" class="tab-pane fade in active">
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-sm-4">
-                                                        <#if testOutcomes.total != 0>
-                                                            <div style="width:300px;"
-                                                                 class="chart-container ${graphType}">
-                                                                <div class="ct-chart ct-square"></div>
-                                                            </div>
-                                                            <script>
-
-                                                                var labels = ${testLabels};
-                                                                // Our series array that contains series objects or in this case series data arrays
-
-                                                                var series = ${testResultData};
-
-                                                                // As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
-                                                                // as you saw in the previous example
-                                                                var options = {
-                                                                    width: 350,
-                                                                    height: 300
-                                                                };
-
-
-                                                                new Chartist.Pie('.ct-chart', {
-                                                                    series: series,
-                                                                    labels: labels
-                                                                }, {
-                                                                    plugins: [Chartist.plugins.tooltip()],
-                                                                    donut: true,
-                                                                    donutWidth: 60,
-                                                                    donutSolid: true,
-                                                                    startAngle: 270,
-                                                                    showLabel: true
-                                                                }, options);
-
-
-                                                                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                                                                    new Chartist.Pie('.ct-chart', {
-                                                                        series: series,
-                                                                        labels: labels
-                                                                    }, {
-                                                                        plugins: [Chartist.plugins.tooltip()],
-                                                                        donut: true,
-                                                                        donutWidth: 60,
-                                                                        donutSolid: true,
-                                                                        startAngle: 270,
-                                                                        showLabel: true
-                                                                    }, options);
-                                                                });
-
-
-                                                            </script>
-                                                        </#if>
-                                                    </div>
-                                                    <div class="col-sm-8">
-
-                                                        <table class="table">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col">Scenarios</th>
-                                                                <th scope="col" colspan="2" class="automated-stats">
-                                                                    Automated
-                                                                </th>
-                                                    <#if resultCounts.hasManualTests() >
-                                                        <th scope="col" colspan="2" class="manual-stats"> Manual</th>
-                                                        <th scope="col" colspan="2" class="total-stats"> Total</th>
-                                                    </#if>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("success") != 0)>
-                                                                    <td class="aggregate-result-count">
-                                                                        <a href="${successReport}"><i
-                                                                                class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing</a>
-                                                                    </td>
-                                                                <#else>
-                                                                    <td class="aggregate-result-count"><i
-                                                                            class='bi bi-check-circle-fill success-icon'></i>&nbsp;Passing
-                                                                    </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("success")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("success")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("success")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("success")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("success")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("success")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("pending") != 0)>
-                                                                    <td class="aggregate-result-count">
-                                                                        <a href="${pendingReport}"><i
-                                                                                class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending</a>
-                                                                    </td>
-                                                                <#else>
-                                                                    <td class="aggregate-result-count"><i
-                                                                            class='bi bi-hourglass-top pending-icon'></i>&nbsp;Pending
-                                                                    </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("pending")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("pending")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("pending")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("pending")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("pending")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("pending")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("ignored") != 0)>
-                                                                    <td class="aggregate-result-count">
-                                                                        <a href="${ignoredReport}"><i
-                                                                                class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored</a>
-                                                                    </td>
-                                                                <#else>
-                                                                <td class="aggregate-result-count"><i
-                                                                        class='bi bi-slash-circle ignored-icon'></i>&nbsp;Ignored
-                                                                </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("ignored")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("ignored")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("ignored")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("ignored")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("ignored")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("ignored")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("skipped") != 0)>
-                                                                    <td class="aggregate-result-count">
-                                                                        <a href="${skippedReport}"><i
-                                                                                    class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped</a>
-                                                                    </td>
-                                                                <#else>
-                                                                    <td class="aggregate-result-count"><i
-                                                                                class='bi bi-skip-forward skip-icon'></i>&nbsp;Skipped
-                                                                    </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("skipped")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("skipped")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("skipped")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("skipped")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("skipped")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("skipped")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("aborted") != 0)>
-                                                                    <td class="aggregate-result-count">
-                                                                        <a href="${abortedReport}"><i
-                                                                                    class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted</a>
-                                                                    </td>
-                                                                <#else>
-                                                                    <td class="aggregate-result-count"><i
-                                                                                class='bi bi-exclamation-octagon-fill aborted-icon'></i>&nbsp;Aborted
-                                                                    </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("aborted")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("aborted")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                    <td class="manual-stats">${resultCounts.getManualTestCount("aborted")}</td>
-                                                                    <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("aborted")}</td>
-                                                                    <td class="total-stats">${resultCounts.getOverallTestCount("aborted")}</td>
-                                                                    <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("aborted")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
-                                                                            <td colspan="7"><a
-                                                                                    href="${relativeLink}${brokenReport}"><i
-                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                            </td>
-                                                                        <#else>
-                                                                            <td colspan="7"><i
-                                                                                class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                            </td>
-                                                                        </#if>
-                                                                <#else>
-                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
-                                                                            <td colspan="3"><a
-                                                                                    href="${relativeLink}${brokenReport}"><i
-                                                                                    class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                            </td>
-                                                                        <#else>
-                                                                            <td colspan="3"><i
-                                                                                class='bi bi-x-circle failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                            </td>
-                                                                        </#if>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("failure") != 0)>
-                                                                    <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${failureReport}"><i
-                                                                                class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed</a>
-                                                                    </td>
-                                                                <#else>
-                                                                <td class="aggregate-result-count indented-error-category">
-                                                                    <i
-                                                                            class='bi bi-x-circle-fill failure-icon'></i>&nbsp;Failed
-                                                                </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("failure")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("failure")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("failure")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("failure")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("failure")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("failure")}</td>
-                                                                </#if>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("error") != 0)>
-                                                                    <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${errorReport}"><i
-                                                                                class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken</a>
-                                                                    </td>
-                                                                <#else>
-                                                                <td class="aggregate-result-count indented-error-category">
-                                                                    <i
-                                                                            class='bi bi-exclamation-triangle-fill error-icon'></i>&nbsp;Broken
-                                                                </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("error")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("error")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("error")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("error")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("error")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("error")}</td>
-                                                                </#if>
-                                                            <tr>
-                                                                <#if (resultCounts.getOverallTestCount("compromised") != 0)>
-                                                                    <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${compromisedReport}"><i
-                                                                                class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised</a>
-                                                                    </td>
-                                                                <#else>
-                                                                <td class="aggregate-result-count indented-error-category">
-                                                                    <i
-                                                                            class='bi bi-slash-circle-fill compromised-icon'></i>&nbsp;Compromised
-                                                                </td>
-                                                                </#if>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestCount("compromised")}</td>
-                                                                <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("compromised")}</td>
-                                                                <#if resultCounts.hasManualTests() >
-                                                                <td class="manual-stats">${resultCounts.getManualTestCount("compromised")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("compromised")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestCount("compromised")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("compromised")}</td>
-                                                                </#if>
-                                                            </tr>
-                                                            <tr class="summary-stats">
-                                                                <td class="aggregate-result-count">Total</td>
-                                                                <td class="automated-stats">${resultCounts.getTotalAutomatedTestCount()}</td>
-                                                                <td class="automated-stats"></td>
-                                                            <#if resultCounts.hasManualTests() >
-                                                            <td class="manual-stats">${resultCounts.getTotalManualTestCount()}</td>
-                                                            <td class="manual-stats"></td>
-                                                            <td class="total-stats">${resultCounts.getTotalOverallTestCount()}</td>
-                                                            <td class="total-stats"></td>
-                                                            </#if>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <#if badTestCount != 0>
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <h3>Test Failure Overview</h3>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <h4>Most Frequent Failures</h4>
-                                                        <table class="table">
-                                                            <tbody>
-                                                            <#list frequentFailures as frequentFailure>
-                                                            <tr>
-                                                                <td class="${frequentFailure.resultClass}-color top-list-title">
-                                                                    <a href="${frequentFailure.report}">${frequentFailure.resultIcon} ${frequentFailure.name}</a>
-                                                                </td>
-                                                                <td><span
-                                                                        class="badge failure-badge">${frequentFailure.count}</span>
-                                                                </td>
-                                                            </tr>
-                                                            </#list>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <h4>Most Unstable Features</h4>
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <#list unstableFeatures as unstableFeature>
-                                                                <tr>
-                                                                    <td class="failure-color top-list-title"><a
-                                                                            href="${unstableFeature.report}">${unstableFeature.name}</a>
-                                                                    </td>
-                                                                    <td><span
-                                                                            class="badge failure-badge">${unstableFeature.failurePercentage}%</span>
-                                                                    </td>
-                                                                </tr>
-                                                                </#list>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                </#if>
-
-                                                <#if tagResults?has_content >
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h3>Tags</h3>
-
-                                                        <#list tagResults as tagResultGroup >
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                              <#if tagResultGroup.tagType?has_content>
-                                                                <h5 class="card-title">${inflection.of(tagResultGroup.tagType).asATitle()}</h5>
-                                                              </#if>
-                                                                <div>
-                                                                <#list tagResultGroup.tagResults as tagResult >
-                                                                    <a href="${tagResult.report}">
-                                                                        <span class="badge"
-                                                                              style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
-                                                                                class="bi bi-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
-                                                                    </a>
-                                                                </#list>
-                                                                </div>
+                                                        <div>
+                                                            <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+                                                            <div>
+                                                                <table class="table table-striped table-hover">
+                                                                    <tbody>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-flag-fill"></i> Tests Started
+                                                                        </td>
+                                                                        <td>${startTimestamp}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-stop-circle"></i> Tests Finished
+                                                                        </td>
+                                                                        <td>${endTimestamp}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-stopwatch"></i> Total Duration
+                                                                        </td>
+                                                                        <td>${totalClockDuration}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-trophy"></i> Fastest Test
+                                                                        </td>
+                                                                        <td>${minTestDuration}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-skip-start"></i> Slowest Test
+                                                                        </td>
+                                                                        <td>${maxTestDuration}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-stopwatch"></i> Average Execution Time
+                                                                        </td>
+                                                                        <td>${averageTestDuration}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-stopwatch-fill"></i> Total Execution Time
+                                                                        </td>
+                                                                        <td>${totalTestDuration}</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
                                                         </div>
-                                                        </#list>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
+                                                        <!-- Severity bar chart -->
+                                                        <div class="chart-container" style="position: relative; width:30vw">
+                                                            <canvas id="severityChart" width="300" height="300"></canvas>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
+
+                                                        <!-- Duration bar chart -->
+                                                        <div class="chart-container" style="position: relative; width:30vw">
+                                                            <canvas id="durationChart" width="300" height="300"></canvas>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <#if coverage?has_content>
+                                                        <#assign featureType = inflection.of(coverage[0].tagType).inPluralForm().asATitle()/>
+                                                        <div class="col-sm-12">
+                                                            <!-- High level coverage bar chart -->
+                                                            <div class="chart-container" style="position: relative; width:60vw">
+                                                                <h3><i class="bi bi-reception-3"></i> Functional Coverage Overview</h3>
+                                                                <h4>${featureType}</h4>
+                                                                <canvas id="coverageChart"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </#if>
+                                                </div>
+                                                <#if tagResults?has_content >
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <h3>Tags</h3>
+
+                                                            <#list tagResults as tagResultGroup >
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <#if tagResultGroup.tagType?has_content>
+                                                                            <h5 class="card-title">${inflection.of(tagResultGroup.tagType).asATitle()}</h5>
+                                                                        </#if>
+                                                                        <div>
+                                                                            <#list tagResultGroup.tagResults as tagResult >
+                                                                                <a href="${tagResult.report}">
+                                                                                    <span class="badge" style="background-color:${tagResult.color}; margin:1em;padding:4px;">
+                                                                                        <i class="bi bi-tag"></i> ${tagInflector.ofTag(tagResult.tag.type, tagResult.tag.name).toFinalView()}&nbsp;&nbsp;&nbsp;${tagResult.count}
+                                                                                    </span>
+                                                                                </a>
+                                                                            </#list>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </#list>
+                                                        </div>
+                                                    </div>
                                                 </#if>
                                             </div>
                                         </div>
-                                        <div id="tests" class="tab-pane fade">
+                                        <div id="tests" class="tab-pane fade in">
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -640,12 +413,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <@tag_cloud />
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
 
                     </tr>
                 </table>
-
             </div>
         </div>
     </div>
@@ -660,6 +436,14 @@
     </div>
 </div>
 
+<!-- Chart data -->
+<@result_chart id='resultChart' />
+<@result_summary id='severityChart' />
+<@duration_chart id='durationChart' />
+
+<#if coverage?has_content>
+    <@coverage_chart id='coverageChart' feature=coverage[0]  />
+</#if>
 
 </body>
 </html>

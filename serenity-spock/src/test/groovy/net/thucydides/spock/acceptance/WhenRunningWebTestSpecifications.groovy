@@ -26,7 +26,7 @@ class WebSteps extends ScenarioSteps {
     def step2() {}
 }
 
-@ThucydidesEnabled(driver="htmlunit")
+@ThucydidesEnabled(driver="chrome")
 class WhenRunningWebTestSpecifications extends Specification {
 
     @Steps

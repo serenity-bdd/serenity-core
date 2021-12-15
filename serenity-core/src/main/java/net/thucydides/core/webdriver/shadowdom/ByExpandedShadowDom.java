@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  * Based on implementation from https://github.com/Georgegriff/query-selector-shadow-dom
  * QuerySelector that can pierce Shadow DOM roots without knowing the path through nested shadow roots.
  */
+@Deprecated
 public class ByExpandedShadowDom extends By {
 
     private final String shadowDomSelector;

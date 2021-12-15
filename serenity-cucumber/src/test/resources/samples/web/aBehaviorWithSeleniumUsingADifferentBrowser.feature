@@ -1,5 +1,6 @@
-@driver:htmlunit
-Feature: Use other browser
+@driver:chrome
+@driver-options:--headless
+Feature: Use specified browser
 
   Scenario Outline: A scenario that uses selenium
 
@@ -7,7 +8,7 @@ Feature: Use other browser
     When I type in the first name <firstname>
     And I type in the last name <lastname>
     Then I should see entered values of <expectedFirstname> and <expectedLastname>
-    And I should be using HtmlUnit
+    And I should be using Chrome
 
     Examples:
       |firstname|lastname| expectedFirstname | expectedLastname |

@@ -3,16 +3,18 @@ package net.serenitybdd.screenplay.targets;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.ui.LocatorStrategies;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class Target {
 
@@ -83,4 +85,23 @@ public abstract class Target {
     }
 
     public abstract List<By> selectors(WebDriver driver);
+
+    /**
+     * Is the target element currently visible for this actor?
+     */
+    public boolean isVisibleFor(Actor actor) {
+        List<WebElementFacade> matchingElements = resolveAllFor(actor);
+        return (!matchingElements.isEmpty() && matchingElements.get(0).isCurrentlyVisible());
+    }
+
+    public <T> Question<T> mapFirst(Function<WebElementFacade, T> transformation) {
+        return actor -> transformation.apply(this.resolveFor(actor));
+    }
+
+    public <T> Question<Collection<T>> mapAll(Function<WebElementFacade, T> transformation) {
+        return actor -> this.resolveAllFor(actor)
+                .stream()
+                .map(transformation)
+                .collect(Collectors.toList());
+    }
 }

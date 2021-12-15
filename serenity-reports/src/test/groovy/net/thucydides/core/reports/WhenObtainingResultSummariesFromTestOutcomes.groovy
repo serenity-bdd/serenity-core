@@ -235,7 +235,10 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             testOutcomes.formatted.percentTests.withIndeterminateResult() == "33.3%"
         and:
             testOutcomes.formatted.percentTests.withFailureOrError() == "33.3%"
+        and:
+            testOutcomes.formatted.percentTests.withPass() == "33.3%"
     }
+
 
     def "should return 0% passing coverage if there are no steps"() {
         when:
@@ -333,7 +336,9 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
     }
 
 
-    def "should calulcate the average test size in steps"() {
+
+
+    def "should calculate the average test size in steps"() {
         when:
         def aTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
         aTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))

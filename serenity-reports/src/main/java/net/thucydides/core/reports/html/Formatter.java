@@ -12,8 +12,6 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.renderer.AsciidocMarkupRenderer;
-import net.thucydides.core.reports.renderer.MarkupRenderer;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -48,7 +46,6 @@ public class Formatter {
 
 
     private static final String ELIPSE = "&hellip;";
-    private static final String ASCIIDOC = "asciidoc";
     private static final String MARKDOWN = "markdown";
     private static final String TEXT = "";
     private static final String STANDARD_NEW_LINE = "\n";
@@ -67,7 +64,6 @@ public class Formatter {
     public static String[][] UNICODE_CHARS_ESCAPE = new String[][]{{"\\u", "&#92;"}};
 
     private final EnvironmentVariables environmentVariables;
-    private final MarkupRenderer asciidocRenderer;
     Configuration markdownEncodingConfiguration;
 
     Parser parser;
@@ -76,7 +72,6 @@ public class Formatter {
     @Inject
     public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        this.asciidocRenderer = new AsciidocMarkupRenderer(); //Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
 
         String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables, "UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
@@ -98,10 +93,6 @@ public class Formatter {
 
     public Formatter() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
-    }
-
-    public String renderAsciidoc(String text) {
-        return stripNewLines(asciidocRenderer.render(text));
     }
 
     public String renderMarkdown(String text) {
@@ -189,8 +180,6 @@ public class Formatter {
 
         if (isRenderedHtml(text)) {
             return text;
-        } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
-            return renderAsciidoc(text.trim());
         } else if (format.equalsIgnoreCase(MARKDOWN) || (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative))) {
             return renderMarkdown(text.trim());
         } else {
@@ -230,8 +219,8 @@ public class Formatter {
         return wrapTablesInDivs(renderDescription(textWithResults), "example-table-in-scenario");
     }
 
-    private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)\\[(\\d*)]}'?");
+    private static final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)}'?");
+    private static final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)\\[(\\d*)]}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 
@@ -444,8 +433,6 @@ public class Formatter {
 
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         String firstLine = fieldValue.toString().split("\\n")[0];
-
-        String htmlCompatibleFirstLine = BASIC_XML.translate(stringFormOf(firstLine));
 
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.story)) ?
                 (htmlCompatible(renderMarkdown(firstLine))) : htmlCompatible(firstLine);

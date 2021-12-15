@@ -56,7 +56,7 @@
         <div class="middlb">
             <div class="table">
 
-            <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
+            <#if (requirements.visibleOutcomes?has_content || testOutcomes.total > 0)>
                 <#assign workingRequirementsTitle = inflection.of(requirementType).inPluralForm().asATitle() >
 
                 <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="requirements-table"/>

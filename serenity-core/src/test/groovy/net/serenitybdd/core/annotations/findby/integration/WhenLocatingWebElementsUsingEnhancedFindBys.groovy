@@ -31,7 +31,7 @@ class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
     def setup() {
         StepEventBus.eventBus.clear()
 
-        def desiredCapabilities = DesiredCapabilities.chrome();
+        def desiredCapabilities = new DesiredCapabilities();
         def chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);

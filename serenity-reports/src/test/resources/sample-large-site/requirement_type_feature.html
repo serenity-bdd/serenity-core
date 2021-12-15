@@ -1,0 +1,4327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Features</title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css"><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><link rel="stylesheet" type="text/css" href="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.css">
+<link rel="stylesheet" type="text/css" href="chartist/dist/chartist.min.css">
+<script src="chartist/dist/chartist.min.js"></script>
+<script src="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
+<!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
+<!--CHART.JS-->
+<script src="chartjs/chart.js"></script>
+<script src="chartjs/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="chartjs/chartjs-plugin-doughnutlabel.min.js"></script>
+<script src="chartjs/patternomaly.min.js"></script>
+<!-- JQuery-UI -->
+<link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+<script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+
+
+</head>
+
+<body class="results-page">
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle">Serenity and Cucumber Quick Start</span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+        <span class="breadcrumbs"><a href="index.html">Home</a>
+            > <span class="truncate-60">Features</span>
+        </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li >
+            <a href="index.html"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="requirement_type_capability.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li class="active">
+            <a href="#"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 24-11-2021 16:04:55</span>
+    <br style="clear:left"/>
+</div>
+
+    <div class="clr"></div>
+
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="middlb">
+            <div class="table">
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#requirements-table').DataTable({
+
+            "order": [],
+            "language": {
+                searchPlaceholder: "Filter",
+                search: ""
+            }
+        });
+    });
+</script>
+<h4 class="requireent-type-heading">Features</h4>
+
+<table class="scenario-result table" id="requirements-table">
+    <thead>
+        <tr>
+            <th class="requirement-name-column" width="60%">Feature</th>
+            <th>ID</th>
+            <th>Automated Tests</th>
+                <th>Manual Tests</th>
+            <th>Results</th>
+            <th>Coverage</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_cart_sl_managing_the_cart.html">Managing the cart</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>13</td>
+            <td>0</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon ' title='COMPROMISED'></i></a></span>
+                <span style="display:none">5</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">53.8%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 53.846154%; background-color:#c5df91;"
+                     aria-valuenow="7"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#cccdc7;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#e3c281;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#fab186;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 7.692308%; background-color:#fab0f3;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="13"
+                     title="  - Total tests: 13
+  - Passing tests: 7 (53.8%)
+  - Failing tests: 1 (7.7%)
+  - Tests with errors: 1 (7.7%)
+  - Compromised tests 1 (7.7%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (7.7%)
+  - Ignored or skipped tests: 1 (7.7%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_7.1.html">Browse the catalog 7.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_6.2.html">Browse the catalog 6.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_authentication_sl_login.html">Login</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>5</td>
+            <td>0</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a></span>
+                <span style="display:none">1</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">100%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 100%; background-color:#c5df91;"
+                     aria-valuenow="5"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cbddea;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fd938e;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_5.1.html">Browse the catalog 5.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_4.2.html">Browse the catalog 4.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_8.html">Browse the catalog 8</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_purchases_sl_completing_a_purchase.html">Completing a purchase</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>5</td>
+            <td>0</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a></span>
+                <span style="display:none">1</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">100%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 100%; background-color:#c5df91;"
+                     aria-valuenow="5"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cbddea;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fd938e;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="5"
+                     title="  - Total tests: 5
+  - Passing tests: 5 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_3.1.html">Browse the catalog 3.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_2.2.html">Browse the catalog 2.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_9.1.html">Browse the catalog 9.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_8.2.html">Browse the catalog 8.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_4.html">Browse the catalog 4</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_6.html">Browse the catalog 6</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog_sl_browse_the_catalog.html">Browse the catalog</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_sales_tax_sl_calculating_sales_tax.html">Calculating sales tax</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>3</td>
+            <td>0</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a></span>
+                <span style="display:none">1</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">100%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 100%; background-color:#c5df91;"
+                     aria-valuenow="3"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cbddea;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fd938e;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="3"
+                     title="  - Total tests: 3
+  - Passing tests: 3 (100%)
+  - Failing tests: 0 (0%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 0 (0%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_6.1.html">Browse the catalog 6.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_5.2.html">Browse the catalog 5.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_4.1.html">Browse the catalog 4.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_7.html">Browse the catalog 7</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_9.html">Browse the catalog 9</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_2.1.html">Browse the catalog 2.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_3.html">Browse the catalog 3</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_3.2.html">Browse the catalog 3.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog3_sl_browse_the_catalog_8.1.html">Browse the catalog 8.1</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog2_sl_browse_the_catalog_5.html">Browse the catalog 5</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_7.2.html">Browse the catalog 7.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+
+            <td> 
+                <a href="feature_catalog4_sl_browse_the_catalog_9.2.html">Browse the catalog 9.2</a></span>
+            </td>
+            <td> 
+                
+            </td>
+            <td>11</td>
+            <td>1</td>
+            <td>
+                <span class="status_icon"><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a></span>
+                <span style="display:none">3</span>
+            </td>
+
+            <td width="165px">
+
+
+<table>
+    <tr>
+        <td width="40px" style="padding-top:4px;">
+            <div class="small" style="text-align:right;">83.3%</div>
+        </td>
+        <td style="min-width:12.5em;">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: 83.333333%; background-color:#c5df91;"
+                     aria-valuenow="10"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#cbddea;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#cccdc7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#e3c281;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#f9c7a7;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 8.333333%; background-color:#fd938e;"
+                     aria-valuenow="1"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab186;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+                <div class="progress-bar" role="progressbar"
+                     style="width: 0%; background-color:#fab0f3;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="12"
+                     title="  - Total tests: 12
+  - Passing tests: 10 (83.3%)
+  - Failing tests: 1 (8.3%)
+  - Tests with errors: 0 (0%)
+  - Compromised tests 0 (0%)
+  - Aborted tests: 0 (0%)
+  - Pending tests: 1 (8.3%)
+  - Ignored or skipped tests: 0 (0%)">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="beforefooter"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="version">Serenity BDD version 3.1.0-SNAPSHOT</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

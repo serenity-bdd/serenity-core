@@ -29,7 +29,7 @@ public class SampleCSVDataDrivenScenario {
         return name;
     }
 
-    @Managed(driver="htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

@@ -1,0 +1,3 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"View account status","Trevor has just joined the program","SUCCESS","2021-11-13T11:03:39.870264Z[Europe/London]","0.0","43.26"
+"View account status","Trevor views his flight history for a single flight","SUCCESS","2021-11-13T11:04:23.668697Z[Europe/London]","0.0","26.11"

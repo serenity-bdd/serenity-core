@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.thucydides.core.steps.StepEventBus;
@@ -33,7 +32,7 @@ public class FluentElementAPITestsBaseClass {
         chromeService.start();
         StepEventBus.getEventBus().clear();
 
-        final DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
+        final DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         final ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);

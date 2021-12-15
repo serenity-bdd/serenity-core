@@ -7,6 +7,8 @@ import net.serenitybdd.screenplay.targets.Target
 import org.joda.time.DateTime
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
+import org.openqa.selenium.interactions.Coordinates
+import org.openqa.selenium.interactions.Locatable
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -278,8 +280,8 @@ class WhenReadingUIValues extends Specification {
             TheLocation.ofEach(target).answeredBy(actor) == [new Point(10,10), new Point(20,20)]
     }
 
-    def coordinates1 = Mock(org.openqa.selenium.interactions.internal.Coordinates);
-    def coordinates2 = Mock(org.openqa.selenium.interactions.internal.Coordinates);
+    def coordinates1 =  Mock(Coordinates)
+    def coordinates2 = Mock(Coordinates)
 
     def "should read coordinated value"() {
         when:

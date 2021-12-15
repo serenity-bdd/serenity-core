@@ -22,9 +22,6 @@ import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
 import net.thucydides.core.reports.remoteTesting.LinkGenerator;
 import net.thucydides.core.reports.remoteTesting.RemoteTestingLinkManager;
-import net.thucydides.core.reports.renderer.Asciidoc;
-import net.thucydides.core.reports.renderer.AsciidocMarkupRenderer;
-import net.thucydides.core.reports.renderer.MarkupRenderer;
 import net.thucydides.core.reports.templates.FreeMarkerTemplateManager;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.requirements.ClasspathRequirementsProviderService;
@@ -47,7 +44,6 @@ public class ThucydidesModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SystemClock.class).to(InternalSystemClock.class).in(Singleton.class);
-        bind(TemplateManager.class).to(FreeMarkerTemplateManager.class).in(Singleton.class);
         bind(Configuration.class).to(SystemPropertiesConfiguration.class).in(Singleton.class);
         bind(IssueTracking.class).to(SystemPropertiesIssueTracking.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);
@@ -64,8 +60,6 @@ public class ThucydidesModule extends AbstractModule {
         bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
 
         bind(TestCount.class).to(AtomicTestCount.class).in(Singleton.class);
-
-        bind(MarkupRenderer.class).annotatedWith(Asciidoc.class).to(AsciidocMarkupRenderer.class).in(Singleton.class);
 
         bind(FlagProvider.class).to(HistoricalFlagProvider.class).in(Singleton.class);
         bind(TestOutcomeSummaryRecorder.class).to(FileSystemTestOutcomeSummaryRecorder.class).in(Singleton.class);

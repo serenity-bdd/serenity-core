@@ -11,10 +11,10 @@ import java.nio.file.Files
 
 class WhenGeneratingReportsUsingTheReportService extends Specification {
 
-    File outputDir;
+    File outputDir
 
-    def environmentVariables = new MockEnvironmentVariables();
-    def configuration = new SystemPropertiesConfiguration(environmentVariables);
+    def environmentVariables = new MockEnvironmentVariables()
+    def configuration = new SystemPropertiesConfiguration(environmentVariables)
 
     def setup() {
         outputDir = Files.createTempDirectory("reports").toFile()

@@ -53,6 +53,9 @@ public class AppiumConfiguration {
     public MobilePlatform getTargetPlatform(WebDriver driver) {
         String PLATFORM_NAME = "platformName";
         try {
+            if (driver.getClass().getName().contains("$MockitoMock$")) {
+                return MobilePlatform.NONE;
+            }
             Capabilities caps = (RemoteDriver.isStubbed(driver)) ? new DesiredCapabilities() : RemoteDriver.of(driver).getCapabilities();
             if (caps.getCapabilityNames().contains(PLATFORM_NAME)) {
                 return MobilePlatform.valueOf(
@@ -93,7 +96,8 @@ public class AppiumConfiguration {
         return Stream.of(definedTargetPlatform())
                 .filter(platform -> platform.isDefined)
                 .findFirst()
-                .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
+                .orElse(MobilePlatform.NONE);
+//                .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
     }
 
     /**

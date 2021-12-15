@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.annotations.Shared;
@@ -11,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -48,18 +50,19 @@ public class StepsAnnotatedField {
      * Find the fields in the class annotated with the <b>Step</b> annotation.
      */
     public static List<StepsAnnotatedField> findOptionalAnnotatedFields(final Class<?> clazz) {
+        return Fields.of(clazz).allFields()
+                .stream()
+                .filter(field -> (fieldIsAnnotated(field) || isAUIInteraction(field)))
+                .map(StepsAnnotatedField::new)
+                .collect(Collectors.toList());
+    }
 
-        List<StepsAnnotatedField> annotatedFields = new ArrayList<StepsAnnotatedField>();
-        for (Field field : Fields.of(clazz).allFields()) {
-            if (fieldIsAnnotated(field)) {
-                annotatedFields.add( new StepsAnnotatedField(field));
-            }
-        }
-        return annotatedFields;
+    private static boolean isAUIInteraction(Field field) {
+        return (UIInteractionSteps.class.isAssignableFrom(field.getType()));
     }
 
     private static boolean fieldIsAnnotated(final Field field) {
-        return fieldIsAnnotatedCorrectly(field);// annotationFrom(aField) != null;
+        return fieldIsAnnotatedCorrectly(field);
     }
 
     private static boolean fieldIsAnnotatedCorrectly(final Field field) {
@@ -97,7 +100,11 @@ public class StepsAnnotatedField {
     }
 
     public boolean isSharedInstance() {
-        return (field.getAnnotation(Shared.class) != null) ||  field.getAnnotation(Steps.class).shared();
+        return (field.getAnnotation(Shared.class) != null) || isSharedStep();
+    }
+
+    private boolean isSharedStep() {
+        return ((field.getAnnotation(Steps.class) != null) && (field.getAnnotation(Steps.class).shared()));
     }
 
     public boolean isUniqueInstance() {

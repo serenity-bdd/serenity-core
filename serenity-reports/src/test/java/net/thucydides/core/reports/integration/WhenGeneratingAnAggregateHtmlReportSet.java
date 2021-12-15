@@ -79,23 +79,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     }
 
     @Test
-    public void should_display_overall_passed_failed_and_pending_report_links_in_home_page() throws Exception {
-        ReportNameProvider reportName = new ReportNameProvider();
-        String expectedSuccessReport = reportName.forTestResult("success");
-        String expectedPendingReport = reportName.forTestResult("pending");
-
-        File report = new File(outputDirectory, "index.html");
-
-        Document reportHomePage = Jsoup.parse(report, "UTF-8");
-
-        Elements successReports = reportHomePage.select("a[href='" + expectedSuccessReport + "']");
-        Elements pendingReports = reportHomePage.select("a[href='" + expectedPendingReport + "']");
-
-        assertThat(successReports.size(), equalTo(1));
-        assertThat(pendingReports.size(), equalTo(1));
-    }
-
-    @Test
     public void should_display_the_date_and_time_of_tests_on_the_home_page() throws Exception {
 
         File report = new File(outputDirectory, "index.html");
@@ -146,20 +129,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     public void should_display_links_to_test_result_reports_in_top_level_reports() {
         ReportProperties reportProperties = ReportProperties.forAggregateResultsReport();
         assertThat(reportProperties.getShouldDisplayResultLink(), is(true));
-    }
-
-    @Test
-    public void errors_are_present() {
-        File reports = directoryInClasspathCalled("/test-outcomes/containing-errors");
-        ResultChecker resultChecker = new ResultChecker(reports);
-        assertThat(resultChecker.checkTestResults(), is(TestResult.ERROR));
-    }
-
-    @Test
-    public void failures_are_present() {
-        File reports = directoryInClasspathCalled("/test-outcomes/containing-failure");
-        ResultChecker resultChecker = new ResultChecker(reports);
-        assertThat(resultChecker.checkTestResults(), is(TestResult.FAILURE));
     }
 
     @Test

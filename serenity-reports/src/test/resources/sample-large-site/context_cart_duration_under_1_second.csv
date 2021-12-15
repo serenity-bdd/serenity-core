@@ -1,0 +1,4 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Managing the cart","Colin adds ignored items to the cart","IGNORED","2021-11-24T13:28:47.71113Z[Europe/London]","0.0","0.15"
+"Managing the cart","Colin adds pending items to the cart","PENDING","2021-11-24T13:28:47.895186Z[Europe/London]","0.0","0.16"
+"Managing the cart","Colin adds skipped items to the cart","SKIPPED","2021-11-24T13:28:48.095261Z[Europe/London]","0.0","0.13"

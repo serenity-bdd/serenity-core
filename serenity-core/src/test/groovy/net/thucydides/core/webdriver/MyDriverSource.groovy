@@ -1,13 +1,16 @@
 package net.thucydides.core.webdriver
 
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 
-public class MyDriverSource implements DriverSource {
+class MyDriverSource implements DriverSource {
 
     @Override
-    public WebDriver newDriver() {
-        return new HtmlUnitDriver()
+    WebDriver newDriver() {
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+        return new ChromeDriver(options)
     }
 
     @Override

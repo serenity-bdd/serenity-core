@@ -47,12 +47,12 @@ abstract class RemoteDriverBuilder {
 
                 case IOS:
                     Capabilities iosCapabilities = AppiumConfiguration.from(environmentVariables).getCapabilities(options);
-                    driver = new IOSDriver<>(remoteUrl, iosCapabilities.merge(remoteCapabilities));
+                    driver = new IOSDriver(remoteUrl, iosCapabilities.merge(remoteCapabilities));
                     break;
 
                 case ANDROID:
                     Capabilities androidCapabilities = AppiumConfiguration.from(environmentVariables).getCapabilities(options);
-                    driver = new AndroidDriver<>(remoteUrl, androidCapabilities.merge(remoteCapabilities));
+                    driver = new AndroidDriver(remoteUrl, androidCapabilities.merge(remoteCapabilities));
                     break;
 
                 case NONE:

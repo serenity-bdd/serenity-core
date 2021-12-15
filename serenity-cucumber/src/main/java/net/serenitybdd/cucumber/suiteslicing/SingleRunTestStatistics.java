@@ -31,7 +31,7 @@ public class SingleRunTestStatistics implements TestStatistics {
         this.fileName = fileName;
         this.headers = new String[]{STORY, TITLE, RESULT, DATE, STABILITY, DURATION};
         this.records = records();
-        LOGGER.info("Loaded {} records from {} in {}", records.size(), fileName, timer.executionTimeFormatted());
+        LOGGER.debug("Loaded {} records from {} in {}", records.size(), fileName, timer.executionTimeFormatted());
     }
 
     public static TestStatistics fromFileName(String fileName) {

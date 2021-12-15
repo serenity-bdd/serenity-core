@@ -38,7 +38,11 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
         this.tag = tag;
         this.testResult = testResult;
         this.reportName = reportNameProvider.withPrefix(tag).forTestResult(testResult);
+    }
 
+    @Override
+    public String reportName() {
+        return reportName;
     }
 
     @Override
@@ -47,6 +51,7 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
         context.put("report", ReportProperties.forTestResultsReport());
         context.put("currentTagType", tag.getType());
         context.put("currentTag", tag);
+        context.put("reportNameInContext", reportNameProvider.inContext(tag.getCompleteName()));
 
         String csvReport = reportNameProvider.forCSVFiles().forTestResult(testResult);
         context.put("csvReport", csvReport);

@@ -6,6 +6,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.ExtendedReports;
 import net.thucydides.core.reports.ResultChecker;
+import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.UserStoryTestReporter;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -193,7 +194,6 @@ public class SerenityAggregatorMojo extends AbstractMojo {
             generateHtmlStoryReports();
             generateExtraReports();
             generateCustomReports();
-
         } catch (IOException e) {
             throw new MojoExecutionException("Error generating aggregate serenity reports", e);
         }
@@ -248,8 +248,8 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         if (generateOutcomes) {
             getReporter().setGenerateTestOutcomeReports();
         }
-        getReporter().generateReportsForTestResultsFrom(sourceDirectory);
-        new ResultChecker(outputDirectory).checkTestResults();
+        TestOutcomes outcomes = getReporter().generateReportsForTestResultsFrom(sourceDirectory);
+        new ResultChecker(outputDirectory).checkTestResults(outcomes);
     }
 
     private void generateExtraReports() {

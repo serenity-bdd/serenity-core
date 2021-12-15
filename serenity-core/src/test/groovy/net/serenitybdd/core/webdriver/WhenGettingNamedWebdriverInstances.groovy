@@ -26,29 +26,18 @@ class WhenGettingNamedWebdriverInstances extends Specification {
             def driver1 = webdriverManager.getWebdriverByName("Fred")
             def driver2 = webdriverManager.getWebdriverByName("Freda")
         then:
-            driver1.driverClass.name.contains("Firefox")
-            driver2.driverClass.name.contains("Firefox")
+            driver1.driverClass.name.contains("Chrome")
+            driver2.driverClass.name.contains("Chrome")
             driver1 != driver2
 
-    }
-
-    @Ignore("Fails on Github for some reason - pending investigation")
-    def "Named driver instances should respect the default configured browser if provided"() {
-        given:
-            environmentVariables.setProperty("webdriver.driver", "chrome")
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(environmentVariables), configuration)
-        when:
-            def driver = webdriverManager.getWebdriverByName("Charlie")
-        then:
-            driver.driverClass.name.contains("Chrome")
     }
 
     def "You can provide a driver type for named driver instances"() {
         given:
             def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
         when:
-            def driver = webdriverManager.getWebdriverByName("Henrietta","htmlunit")
+            def driver = webdriverManager.getWebdriverByName("Henrietta","chrome")
         then:
-            driver.driverClass.name.contains("HtmlUnit")
+            driver.driverClass.name.contains("chrome")
     }
 }

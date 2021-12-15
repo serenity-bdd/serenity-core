@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.hasProperty;
 @RunWith(SerenityRunner.class)
 public class WhenDinaInteractsWithAPageObject {
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     WebDriver herBrowser;
 
     ProfileQuestion herProfile = new ProfileQuestion();

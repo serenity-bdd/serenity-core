@@ -1,25 +1,22 @@
 package net.serenitybdd.rest.decorators;
 
 import io.restassured.common.mapper.TypeRef;
-import io.restassured.config.DecoderConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
-import io.restassured.internal.ResponseParserRegistrar;
-import io.restassured.internal.RestAssuredResponseOptionsGroovyImpl;
 import io.restassured.internal.RestAssuredResponseOptionsImpl;
-import io.restassured.internal.log.LogRepository;
-import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
+import io.restassured.mapper.ObjectMapperType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.path.xml.config.XmlPathConfig;
-import io.restassured.response.*;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.response.ValidatableResponse;
 
-import java.lang.reflect.Type;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -94,7 +91,7 @@ public class ResponseDecorated extends RestAssuredResponseOptionsImpl<Response> 
     public <T> T as(final Type cls, final ObjectMapper mapper) {
         return core.as(cls, mapper);
     }
-    
+
     @Override
     public JsonPath jsonPath() {
         return core.jsonPath();

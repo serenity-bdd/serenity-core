@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SerenityRunner.class)
 public class SamplePassingScenarioWithPageObjects {
     
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     IndexPage indexPage;

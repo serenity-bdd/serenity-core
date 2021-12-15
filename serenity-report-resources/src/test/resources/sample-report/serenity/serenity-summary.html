@@ -1,0 +1,1508 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Serenity BDD Test Results - L1 Controls Navigator</title>
+    <style media="all" type="text/css">
+        body {
+            font-family: Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.4;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        table {
+            border-collapse: separate;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            width: 100%;
+        }
+
+        table td {
+            font-family: Helvetica, sans-serif;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .container {
+            margin: 0 auto !important;
+            max-width: 600px;
+            padding: 0;
+            padding-top: 24px;
+            width: 90%;
+        }
+
+        .content {
+            box-sizing: border-box;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .main {
+            background: #fff;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .wrapper {
+            box-sizing: border-box;
+            padding: 24px;
+        }
+
+        .compact-wrapper {
+            box-sizing: border-box;
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        .content-block {
+            padding-top: 0;
+            padding-bottom: 24px;
+        }
+
+        .flush-top {
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .flush-bottom {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .header {
+            margin-bottom: 24px;
+            margin-top: 0;
+            width: 100%;
+        }
+
+        .header > table {
+            min-width: 100%;
+        }
+
+        .footer {
+            clear: both;
+            padding-top: 24px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer td,
+        .footer p,
+        .footer span,
+        .footer a {
+            color: #999999;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .section-callout {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+
+        .section-callout h1,
+        .section-callout h2,
+        .section-callout h3,
+        .section-callout h4,
+        .section-callout p,
+        .section-callout li,
+        .section-callout td {
+            color: #ffffff;
+        }
+
+        .section-callout-subtle {
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #e9e9e9;
+            border-top: 1px solid #e9e9e9;
+        }
+
+        .span-2,
+        .span-3 {
+            display: inline-block;
+            margin-bottom: 24px;
+            vertical-align: top;
+            width: 100%;
+        }
+
+        .span-2 > table,
+        .span-3 > table {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .span-3 {
+            max-width: 298px;
+        }
+
+        .span-3 > table {
+            max-width: 298px;
+        }
+
+        .span-2 {
+            max-width: 197px;
+        }
+
+        .span-2 > table {
+            max-width: 197px;
+        }
+
+
+        @media only screen and (max-width: 640px) {
+            .span-2,
+            .span-3 {
+                float: none !important;
+                max-width: none !important;
+                width: 100% !important;
+            }
+
+            .span-2 > table,
+            .span-3 > table {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+        }
+
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #222222;
+            font-family: Helvetica, sans-serif;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 24px;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .alert {
+            min-width: 100%;
+        }
+
+        .alert td {
+            border-radius: 4px 4px 0 0;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .alert a {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 400;
+            text-decoration: none;
+        }
+
+        .alert.alert-warning td {
+            background-color: #f39c12;
+        }
+
+        .alert.alert-danger td {
+            background-color: #c0392b;
+        }
+
+        .alert.alert-success td {
+            background-color: #5FB0E0;
+        }
+
+        .last {
+            margin-bottom: 0;
+        }
+
+        .first {
+            margin-top: 0;
+        }
+
+        .align-center {
+            text-align: center;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+
+        .align-left {
+            text-align: left;
+        }
+
+        .text-link {
+            color: #3498db !important;
+            text-decoration: underline !important;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .mt0 {
+            margin-top: 0;
+        }
+
+        .mb0 {
+            margin-bottom: 0;
+        }
+
+        .preheader {
+            color: transparent;
+            display: none;
+            height: 0;
+            max-height: 0;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            mso-hide: all;
+            visibility: hidden;
+            width: 0;
+        }
+
+        .powered-by a {
+            text-decoration: none;
+        }
+
+        .hr tr:first-of-type td,
+        .hr tr:last-of-type td {
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .hr tr:nth-of-type(2) td {
+            background-color: #f6f6f6;
+            height: 1px;
+            line-height: 1px;
+            width: 100%;
+        }
+
+
+        @media only screen and (max-width: 640px) {
+            h1 {
+                font-size: 36px !important;
+                margin-bottom: 16px !important;
+            }
+
+            h2 {
+                font-size: 28px !important;
+                margin-bottom: 8px !important;
+            }
+
+            h3 {
+                font-size: 22px !important;
+                margin-bottom: 8px !important;
+            }
+
+            .main p,
+            .main ul,
+            .main ol,
+            .main td,
+            .main span {
+                font-size: 16px !important;
+            }
+
+            .wrapper {
+                padding: 8px !important;
+            }
+
+            .complact-wrapper {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+                padding-top: 2px !important;
+                padding-bottom: 2px !important;
+            }
+
+            .article {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+
+            .content {
+                padding: 0 !important;
+            }
+
+            .container {
+                padding: 0 !important;
+                padding-top: 8px !important;
+                width: 100% !important;
+            }
+
+            .header {
+                margin-bottom: 8px !important;
+                margin-top: 0 !important;
+            }
+
+            .main {
+                border-left-width: 0 !important;
+                border-radius: 0 !important;
+                border-right-width: 0 !important;
+            }
+
+            .btn table {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            .btn a {
+                font-size: 16px !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            .img-responsive {
+                height: auto !important;
+                max-width: 100% !important;
+                width: auto !important;
+            }
+
+            .alert td {
+                border-radius: 0 !important;
+                font-size: 16px !important;
+                padding-bottom: 16px !important;
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+                padding-top: 16px !important;
+            }
+
+            .receipt,
+            .receipt-container {
+                width: 100% !important;
+            }
+
+            .hr tr:first-of-type td,
+            .hr tr:last-of-type td {
+                height: 16px !important;
+                line-height: 16px !important;
+            }
+        }
+
+
+        @media all {
+            .ExternalClass {
+                width: 100%;
+            }
+
+            .ExternalClass,
+            .ExternalClass p,
+            .ExternalClass span,
+            .ExternalClass font,
+            .ExternalClass td,
+            .ExternalClass div {
+                line-height: 100%;
+            }
+
+            .apple-link a {
+                color: inherit !important;
+                font-family: inherit !important;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                text-decoration: none !important;
+            }
+        }
+
+
+        .block {
+            margin: 0px 25px 0 0;
+            border-radius: 5px;
+            float: left;
+            width: 300px;
+            overflow: hidden;
+        }
+
+        .donut-chart-block {
+            overflow: hidden;
+        }
+
+        .donut-chart {
+            position: relative;
+            background: white;
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+            border-radius: 100%;
+        }
+
+        .donut-chart .center {
+            background: white;
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            height: 130px;
+            width: 130px;
+            border-radius: 70px;
+        }
+
+        .clip {
+            border-radius: 50%;
+            clip: rect(0px, 200px, 200px, 100px);
+            height: 100%;
+            position: absolute;
+            width: 100%;
+        }
+
+        .item {
+            border-radius: 50%;
+            clip: rect(0px, 100px, 200px, 0px);
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            font-family: monospace;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .test-suite-title {
+            font-size: 1.3em;
+            color: white;
+            font-weight: bold;
+        }
+
+
+        #passing_test {
+            transform: rotate(00deg);
+        }
+
+        #passing_test .item {
+            background-color: #61bd76;
+            transform: rotate(60deg);
+        }
+
+        #pending_test {
+            transform: rotate(60deg);
+        }
+
+        #pending_test .item {
+            background-color: #92dcce;
+            transform: rotate(60deg);
+        }
+
+        #ignored_tests {
+            transform: rotate(120deg);
+        }
+
+        #ignored_tests .item {
+            background-color: #acb1b9;
+            transform: rotate(60deg);
+        }
+
+        #failing_tests {
+            transform: rotate(180deg);
+        }
+
+        #failing_tests .item {
+            background-color: #f33446;
+            transform: rotate(60deg);
+        }
+
+        #error_tests {
+            transform: rotate(240deg);
+        }
+
+        #error_tests .item {
+            background-color: #FCB150;
+            transform: rotate(60deg);
+        }
+
+        #compromised_tests {
+            transform: rotate(300deg);
+        }
+
+        #compromised_tests .item {
+            background-color: #a4528b;
+            transform: rotate(60deg);
+        }
+
+        .legend {
+            border-color: #acb1b9;
+            border-style: solid;
+            border-width: 1px;
+            margin-top: 20px;
+        }
+
+        .legend .overview {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #515151;
+            background-color: #EBEBEB;
+            padding-bottom: 4px;
+            padding-top: 4px;
+            padding-left: 5px;
+        }
+
+        .legend td {
+            vertical-align: middle;
+        }
+
+        .legend-key {
+            font-weight: bold;
+            padding-left: 4px;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        .legend-result {
+            font-weight: bold;
+            font-size: 0.9em;
+            padding-left: 4px;
+        }
+
+        .legend-result span {
+            border-radius: 4px;
+            padding: 2px;
+            padding-left: 4px;
+            padding-right: 4px;
+            white-space: nowrap;
+        }
+
+        td.legend-key {
+            border-top: solid 0.5px #DDDDDD;
+            border-bottom: solid 0.5px #DDDDDD;
+            border-left: solid 0.5px #DDDDDD;
+        }
+
+        td.legend-result {
+            border-top: solid 0.5px #DDDDDD;
+            border-bottom: solid 0.5px #DDDDDD;
+            border-right: solid 0.5px #DDDDDD;
+            text-align: right;
+        }
+
+        .environment {
+            border-style: solid;
+            border-width: 1px;
+            border-color: #acb1b9;
+            background-color: #EBEBEB;
+        }
+
+        .environment td {
+            color: #69727f;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .result-bar td {
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .success-background {
+            background-color: #52B255;
+            color: white;
+        }
+
+        .pending-background {
+            background-color: #5FB0E0;
+            color: white;
+        }
+
+        .ignored-background {
+            background-color: #C9C9C9;
+            color: black;
+        }
+
+        .failure-background {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .error-background {
+            background-color: #ECA43A;
+            color: white;
+        }
+
+        .compromised-background {
+            background-color: #9C77AD;
+            color: white;
+        }
+
+
+        .for-success {
+            color: #52B255;
+        }
+
+        .for-passing {
+            color: #52B255;
+        }
+
+        .for-failure {
+            color: #f44336;
+        }
+
+        .for-error {
+            color: #ECA43A;
+        }
+
+        .for-pending {
+            color: #5FB0E0;
+        }
+
+        .for-ignored {
+            color: #acb1b9;
+        }
+
+        .for-compromised {
+            color: #9C77AD;
+        }
+
+        .failure-scoreboard {
+            border-style: solid;
+            border-width: 1px;
+            border-color: #acb1b9;
+        }
+
+        .failure-scoreboard th {
+            text-align: left;
+        }
+
+        .failure-scoreboard tr:nth-child(even) {
+            background: #f5f5f5
+        }
+
+        table.count-badge {
+            padding: 0px;
+            width: 25px;
+            text-align: center;
+        }
+
+        .summary-bar {
+            width: 100%;
+        }
+
+        .summary {
+            height: 30px;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            padding-top: 10px;
+            vertical-align: center;
+            white-space: nowrap;
+        }
+
+        .timings {
+            border-style: solid;
+            border-width: 0px;
+            border-color: #acb1b9;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .timings th {
+            color: grey;
+            text-align: right;
+            font-size: 0.9em;
+        }
+
+        .timings td {
+            color: grey;
+            text-align: right;
+            font-size: 0.9em;
+        }
+
+        .custom-title {
+            text-transform: capitalize;
+        }
+
+        .tag-title {
+            text-transform: capitalize;
+        }
+
+        .tag-subtitle {
+            text-transform: capitalize;
+            width: 50%;
+        }
+
+        .tag-coverage {
+            text-align: left;
+        }
+
+        th.tag-coverage {
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .test-results-table {
+            border: 1px solid grey;
+            margin-bottom: 26px;
+            border-collapse: collapse;
+        }
+
+        td.test-results-table {
+            border: 1px solid red;
+        }
+
+        .categories tr td {
+            border: 0.5px solid #dddddd;
+        }
+
+        tr.categories, th.categories, td.categories {
+            border: 0.5px solid grey;
+        }
+
+        .failure-list {
+            border: 1px solid grey;
+        }
+
+        .feature {
+            font-style: italic;
+
+        }
+
+        .scenarioName {
+            padding-left: 8px;
+            min-width: 4em;
+            width: 55%;
+        }
+
+        h4 {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .summary-bar-cell {
+            height: 2em;
+            vertical-align: middle;
+        }
+
+    </style>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+</head>
+<body style="font-family:Helvetica, sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.4;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;background-color:#f6f6f6;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;width:100%;">
+<table border="0" cellpadding="0" cellspacing="0" class="body"
+       style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:90%;" align="center">
+    <tr>
+        <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">&nbsp;</td>
+        <td class="container"
+            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px;padding-top:24px;padding-bottom:0;padding-right:0;padding-left:0;width:100%;">
+            <div class="content"
+                 style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:100%;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;">
+                <!-- START CENTERED WHITE CONTAINER -->
+                <table border="0" cellpadding="0" cellspacing="0" class="main"
+                       style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;background-color:#fff;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;border-radius:4px;width:100%;">
+                    <!-- START NOTIFICATION BANNER -->
+                    <tr>
+                        <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                            <table border="0" cellpadding="0" cellspacing="0" class="alert alert-success"
+                                   style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;min-width:100%;">
+                                <tr>
+                                    <td align="center"
+                                        style="font-family:Helvetica, sans-serif;vertical-align:top;border-radius:4px 4px 0 0;color:#ffffff;background-color:#5FB0E0;font-size:1.3em;font-weight:400;padding-top:24px;padding-bottom:24px;padding-right:24px;padding-left:24px;text-align:center;">
+                                        <span class="test-suite-title"
+                                              style="font-size:1.3em;color:white;font-weight:bold;">
+                                            <span>Serenity Summary Report</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- END NOTIFICATION BANNER -->
+                    <!-- START MAIN CONTENT AREA -->
+                    <tr>
+                        <td class="wrapper"
+                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-top:24px;padding-bottom:24px;padding-right:24px;padding-left:24px;">
+                            <table border="0" cellpadding="0" cellspacing="0"
+                                   style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        <table style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table cellspacing="0" cellpadding="0" class="summary-bar"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                                        <td class="success-background summary summary-bar-cell"
+                                                            width="100%"
+                                                            valign="middle"
+                                                            align="center"
+                                                            style="background-color: #52B255;color: white;padding:8px;white-space: nowrap;">
+                                                                <span class="summary" title="37 passing tests">100%</span>
+                                                        </td>
+                                                        <td class="pending-background summary summary-bar-cell"
+                                                            width=0% valign="middle" align="center"
+                                                            style="padding:0px;">
+                                                                
+                                                        </td>
+                                                        <td class="ignored-background summary summary-bar-cell" width=0%
+                                                            valign="middle" align="center" style="padding:0px;">
+                                                                
+                                                        </td>
+                                                        <td class="failure-background summary summary-bar-cell"
+                                                            width=0% valign="middle" align="center"
+                                                            style="padding:0px;">
+                                                                
+                                                        </td>
+                                                        <td class="error-background summary summary-bar-cell" width=0%
+                                                            valign="middle" align="center" style="padding:0px;">
+                                                                
+                                                        </td>
+                                                        <td class="compromised-background summary summary-bar-cell"
+                                                            width=0% valign="middle" align="center"
+                                                            style="padding:0px;">
+                                                                
+                                                        </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table cellspacing="0" cellpadding="2" class="legend"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-color:#acb1b9;border-style:solid;border-width:1px;margin-top:20px;">
+                                                        <tr>
+                                                            <td class="overview" colspan="6"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:middle;font-weight:bold;font-size:1.1em;color:#515151;background-color:#EBEBEB;padding-bottom:4px;padding-top:4px;padding-left:5px;"><span>37 tests executed on</span>
+                                                                <span>Saturday November 13 2021 at 11:03</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table cellspacing="0" cellpadding="2"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                                        <tr>
+                                                            <td class="for-passing legend-key legend-label" width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#52B255;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Passing
+                                                            </td>
+                                                            <td class="for-passing legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#52B255;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="success-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">37</span>
+                                                            </td>
+
+                                                            <td class="for-pending legend-key legend-label" width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#5FB0E0;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Pending
+                                                            </td>
+                                                            <td class="for-pending legend-result legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#5FB0E0;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="pending-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">0</span>
+                                                            </td>
+
+                                                            <td class="for-ignored legend-key legend-label" width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#acb1b9;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Ignored
+                                                            </td>
+                                                            <td class="for-ignored legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#acb1b9;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="ignored-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">0</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="for-failure legend-key legend-label" width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#f44336;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Failing
+                                                            </td>
+                                                            <td class="for-failure legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#f44336;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="failure-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">0</span>
+                                                            </td>
+
+                                                            <td class="for-error legend-key legend-label" width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#ECA43A;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Broken
+                                                            </td>
+                                                            <td class="for-error legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#ECA43A;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="error-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">0</span>
+                                                            </td>
+
+                                                            <td class="for-compromised legend-key legend-label"
+                                                                width="30%"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;padding-left:4px;font-size:0.9em;white-space:nowrap;color:#9C77AD;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-left-width:0.5px;border-left-style:solid;border-left-color:#DDDDDD;">
+                                                                Compromised
+                                                            </td>
+                                                            <td class="for-compromised legend-result"
+                                                                style="font-family:Helvetica, sans-serif;vertical-align:top;font-weight:bold;font-size:0.9em;padding-left:4px;color:#9C77AD;border-top-width:0.5px;border-top-style:solid;border-top-color:#DDDDDD;border-bottom-width:0.5px;border-bottom-style:solid;border-bottom-color:#DDDDDD;border-right-width:0.5px;border-right-style:solid;border-right-color:#DDDDDD;text-align:right;">
+                                                                <span class="compromised-badge"
+                                                                      style="border-radius:4px;padding-top:2px;padding-bottom:2px;padding-right:4px;padding-left:4px;white-space:nowrap;">0</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        <table class="timings" cellpadding="0" cellspacing="0" border="0"
+                                               style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:0px;border-color:#acb1b9;padding-left:5px;padding-right:5px;">
+                                            <tr>
+                                                <th style="color:grey;text-align:right;font-size:0.9em;">Total test
+                                                    execution time
+                                                </th>
+                                                <th style="color:grey;text-align:right;font-size:0.9em;">Total clock
+                                                    time
+                                                </th>
+                                                <th style="color:grey;text-align:right;font-size:0.9em;">Average test
+                                                    execution time
+                                                </th>
+                                                <th style="color:grey;text-align:right;font-size:0.9em;">Max test
+                                                    execution time
+                                                </th>
+                                                <th style="color:grey;text-align:right;font-size:0.9em;">Min test
+                                                    execution time
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:grey;text-align:right;font-size:0.9em;"> 12m 9s</td>
+                                                <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:grey;text-align:right;font-size:0.9em;"> 4m 34s</td>
+                                                <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:grey;text-align:right;font-size:0.9em;">36s</td>
+                                                <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:grey;text-align:right;font-size:0.9em;"> 1m 24s</td>
+                                                <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:grey;text-align:right;font-size:0.9em;">1s</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Test Failure Overview</h3></td>
+                                </tr>
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <table style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table class="failure-scoreboard"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
+                                                        <tr>
+                                                            <th colspan="2" style="text-align:left;">Most Frequent Failures</th>
+                                                        </tr>
+                                                        
+                                                    </table>
+                                                </td>
+                                                <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <table class="failure-scoreboard"
+                                                           style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;border-style:solid;border-width:1px;border-color:#acb1b9;">
+                                                        <tr>
+                                                            <th style="text-align:left;">Most Unstable Features</th>
+                                                            <th style="text-align:left;">Fails</th>
+                                                        </tr>
+                                                        
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- TEST RESULT LIST -->
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Full Failure List</h3>
+                                        <table class="failure-list failure-scoreboard"
+                                               style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <th style="text-align:left;">Requirement</th>
+                                                <th style="text-align:left;">Failure</th>
+                                            </tr>
+                                            
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="compact-wrapper"
+                                        style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
+                                            Full Test Results</h3>
+                                        <table class="failure-list failure-scoreboard"
+                                               style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+                                            <tr>
+                                                <th style="text-align:left;">Requirement</th>
+                                                <th style="text-align:left;">Result</th>
+                                            </tr>
+                                            <span>
+											<tr>
+												<td colspan="2" class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">Authentication</td>
+											</tr>
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor successfully logs on to the Frequent Flyer app</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                </span><span>
+											<tr>
+												<td colspan="2" class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">Earning Points</td>
+											</tr>
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Tracy goes from Standard to Bronze after she makes several trips</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Tracy asks her assistants to book flights for her</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Earning status levels from points earned for status level &lt;Status Level&gt;</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>The region for &lt;City&gt; should be &lt;Region&gt;</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Stan books a single economy flight from London to Sydney</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Stan books a return economy flight from London to Sydney</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Flights within the &lt;Region&gt; region earn &lt;Points Earned&gt; points</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Travellers with &lt;Status&gt; level should earn &lt;Bonus&gt; bonus points</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Travellers travelling in &lt;Travel Class&gt; class should earn &lt;Bonus&gt; bonus points</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                </span><span>
+											<tr>
+												<td colspan="2" class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">Registering as a new Frequent Flyer</td>
+											</tr>
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor registers as a Frequent Flyer member</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Someone tries to register with an email that is already used</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Only correctly structured emails should be accepted</a>
+                                        </td>
+                                        <td>
+                                          <span class="frequent-failure for-success"
+                                                style="font-weight: bold; text-transform: uppercase;">success</span>
+
+	                                        
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Email addresses need to be well formed</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Candy fails to enter to enter a mandatory field</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Candy forgets to agree to the Terms and Conditions</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                </span><span>
+											<tr>
+												<td colspan="2" class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">View account status</td>
+											</tr>
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor has just joined the program</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor views his flight history for a single flight</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                </span><span>
+											<tr>
+												<td colspan="2" class="feature feature-title"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">View account status after several return trips</td>
+											</tr>
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor views his flight history for a return flight</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                
+											<tr>
+                                        <td class="scenarioName"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+	                                        
+	                                        <a>Trevor views his flight history after several flights</a>
+                                        </td>
+                                        <td>
+                                          
+
+	                                        <div>
+                                                <div>
+                                                    <span class="frequent-failure for-success"
+                                                          style="font-weight: bold; text-transform: uppercase;">success</span>
+                                                    
+                                                </div>
+                                                <div class="frequent-failure for-success"
+                                                     style="padding-left: 1em; padding-bottom: 0.5em;"></div>
+                                            </div>
+
+	                                    </td>
+                                </span>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr class="footer" style="clear:both;padding-top:24px;text-align:center;width:100%;">
+                                    <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:#999999;font-size:12px;text-align:center;">
+                                        Report produced by Serenity BDD
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END MAIN CONTENT AREA -->
+                        </td>
+                    </tr>
+                </table>
+                <!-- END CENTERED WHITE CONTAINER -->
+            </div>
+        </td>
+        <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">&nbsp;</td>
+    </tr>
+</table>
+</body>
+</html>

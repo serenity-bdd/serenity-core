@@ -2,17 +2,23 @@ package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.StepAnnotations;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFactory;
 import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.junit.platform.engine.TestTag;
+import org.junit.platform.launcher.TestIdentifier;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Use this extension to run Serenity BDD tests using JUnit 5
  */
-public class SerenityJUnit5Extension implements TestInstancePostProcessor, AfterEachCallback {
+public class SerenityJUnit5Extension implements TestInstancePostProcessor, AfterEachCallback, BeforeEachCallback {
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
@@ -45,4 +51,23 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
                 }
         );
     }
+
+    @Override
+    public void beforeEach(ExtensionContext context) throws Exception {
+        context.getTestMethod().ifPresent(
+                method -> {
+                    final BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+                    baseStepListener.addTagsToCurrentStory(JUnit5Tags.forMethod(method));
+                }
+        );
+    }
+
+    private void configureTagsFor(TestIdentifier serenityTest) {
+        Set<TestTag> testTags = serenityTest.getTags();
+        List<net.thucydides.core.model.TestTag> tags = testTags.stream()
+                .map(tag -> net.thucydides.core.model.TestTag.withValue(tag.getName()))
+                .collect(Collectors.toList());
+        StepEventBus.getEventBus().getBaseStepListener().addTagsToCurrentStory(tags);
+    }
+
 }

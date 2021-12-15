@@ -56,7 +56,7 @@ public class SerenityTags {
     }
 
     public void addTagWith(TestTag tag) {
-        LOGGER.info("adding tag to {} scenario", tag);
+        LOGGER.debug("adding tag to {} scenario", tag);
         StepEventBus.getEventBus().addTagsToCurrentStory(newArrayList(tag));
     }
 

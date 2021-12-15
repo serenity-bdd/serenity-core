@@ -1,0 +1,3 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Managing the cart","Colin adds <Items> to the cart","SUCCESS","2021-11-24T13:26:56.24807Z[Europe/London]","0.0","43.96"
+"Managing the cart","Colin adds an item to the cart","FAILURE","2021-11-24T13:27:40.257857Z[Europe/London]","0.0","31.13"

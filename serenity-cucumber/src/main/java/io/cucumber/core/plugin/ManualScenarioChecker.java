@@ -4,8 +4,7 @@ package io.cucumber.core.plugin;
 
 import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.eclipse.jetty.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
+import org.jsoup.internal.StringUtil;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -55,7 +54,6 @@ public class ManualScenarioChecker {
         return lastTestedVersion.get().equalsIgnoreCase(currentTargetVersion.get());
     }
 
-    @NotNull
     public Optional<String> lastTestedVersionFromTags(List<Tag> scenarioTags) {
         return scenarioTags.stream()
                 .filter(tag -> tag.getName().startsWith("@manual-last-tested:"))
@@ -68,7 +66,6 @@ public class ManualScenarioChecker {
 
     }
 
-    @NotNull
     public Optional<String> testEvidenceFromTags(List<Tag> scenarioTags) {
         return scenarioTags.stream()
                 .filter(tag -> tag.getName().startsWith("@manual-test-evidence:"))

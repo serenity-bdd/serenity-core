@@ -1,6 +1,6 @@
 package net.thucydides.core.util;
 
-import org.apache.commons.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 
 import java.util.Map;
 import java.util.Properties;
@@ -22,9 +22,9 @@ public class PropertiesUtil {
         for (String name : names) {
             String value = properties.getProperty(name);
             // Replace System Property References ${sys.property.any}
-            String expandedValue = StrSubstitutor.replaceSystemProperties(value);
+            String expandedValue = StringSubstitutor.replaceSystemProperties(value);
             // Replace Environment  References ${A_DEFINED_ENVIRONMENT_VARIABLE}
-            expandedValue = StrSubstitutor.replace(expandedValue, runnerEnvironmentVariables);
+            expandedValue = StringSubstitutor.replace(expandedValue, runnerEnvironmentVariables);
             properties.setProperty(name, expandedValue);
         }
     }

@@ -10,8 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class HtmlTestOutcomeReportingTask implements ReportingTask {
 
@@ -33,6 +36,11 @@ public class HtmlTestOutcomeReportingTask implements ReportingTask {
 
 
     @Override
+    public String reportName() {
+        return testOutcome.getReportName();
+    }
+
+    @Override
     public void generateReports() throws IOException {
 
 
@@ -43,6 +51,7 @@ public class HtmlTestOutcomeReportingTask implements ReportingTask {
         reporter.setOutputDirectory(outputDirectory);
         reporter.generateReportFor(testOutcome);
     }
+
 
 
     public static TestOutcomeReportBuilder testOutcomeReportsFor(TestOutcomes testOutcomes) {
@@ -56,19 +65,13 @@ public class HtmlTestOutcomeReportingTask implements ReportingTask {
             this.testOutcomes = testOutcomes;
         }
 
-        public Set<ReportingTask> using(final EnvironmentVariables environmentVariables,
-                                        final RequirementsService requirementsService,
-                                        final File outputDirectory,
-                                        final IssueTracking issueTracking) {
-
-            Set<ReportingTask> reportingTasks = new HashSet<>();
-
-            LOGGER.trace("GENERATE TEST OUTCOME REPORTS FOR " + testOutcomes.getOutcomes());
-
-            for(TestOutcome outcome : testOutcomes.getOutcomes()) {
-                reportingTasks.add(new HtmlTestOutcomeReportingTask(outcome, outputDirectory, requirementsService, environmentVariables, issueTracking));
-            }
-            return reportingTasks;
+        public List<ReportingTask> using(final EnvironmentVariables environmentVariables,
+                                         final RequirementsService requirementsService,
+                                         final File outputDirectory,
+                                         final IssueTracking issueTracking) {
+            return testOutcomes.getOutcomes().parallelStream()
+                    .map(outcome -> new HtmlTestOutcomeReportingTask(outcome, outputDirectory, requirementsService, environmentVariables, issueTracking))
+                    .collect(Collectors.toList());
         }
     }
 }

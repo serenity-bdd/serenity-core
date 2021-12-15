@@ -1,6 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
@@ -22,13 +23,13 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 
 @SuppressWarnings("serial")
-public class SampleScenarioSteps extends ScenarioSteps {
+public class SampleScenarioSteps extends UIInteractionSteps {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleScenarioSteps.class);
 
-    public SampleScenarioSteps(Pages pages) {
-        super(pages);
-    }
+//    public SampleScenarioSteps(Pages pages) {
+//        super(pages);
+//    }
 
     @Steps
     public SampleScenarioNestedSteps nestedSteps;
@@ -37,6 +38,12 @@ public class SampleScenarioSteps extends ScenarioSteps {
     public void stepThatSucceeds() {
 
     }
+
+    @Step
+    public void stepThatOpensAPage() {
+        openUrl("https://www.wikipedia.org/");
+    }
+
 
     @Step
     public void stepWithFailedAssumption() {
@@ -55,16 +62,18 @@ public class SampleScenarioSteps extends ScenarioSteps {
         assertThat(indexPage.getTitle(), not(isEmptyString()));
     }
 
+    WikipediaPage wikipediaPage;
+
     @Step
     public void stepThatOpensWikipedia() {
-        WikipediaPage page = pages().get(WikipediaPage.class);
-        page.open();
-        page.getTitle();
+        wikipediaPage.open();
+        wikipediaPage.getTitle();
     }
+
+    IndexPage page;
 
     @Step
     public void anotherStepThatUsesABrowser() {
-        IndexPage page = pages().get(IndexPage.class);
         page.enterValue("some value");
         page.enterValue("some value");
         page.enterValue("some other different value");
@@ -72,7 +81,6 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     @Step
     public void aStepThatAlsoUsesABrowser() {
-        IndexPage page = pages().get(IndexPage.class);
         page.enterValue("some other value");
         page.enterValue("some other value");
         page.enterValue("some other value");
@@ -165,8 +173,6 @@ public class SampleScenarioSteps extends ScenarioSteps {
         int thisShouldFail = nullString.length();
 
     }
-
-    IndexPage page;
 
     @Step
     public void failsToFindElement() {

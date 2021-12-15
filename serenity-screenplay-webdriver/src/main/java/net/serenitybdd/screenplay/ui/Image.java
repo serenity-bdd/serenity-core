@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
  */
 public class Image {
 
-    private static final String BY_ID_OR_NAME = "css:img[id='{0}' i],img[name='{0}' i],img[data-test='{0}' img.{0}]";
+    private static final String BY_ID_OR_NAME = "css:img[id='{0}' i],img[name='{0}' i],img[data-test='{0}' i],img[class*='{0}' i]";
 
     /**
      * Locate a field with a given name or id.

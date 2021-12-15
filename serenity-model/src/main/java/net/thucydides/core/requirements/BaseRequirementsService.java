@@ -284,4 +284,9 @@ public abstract class BaseRequirementsService implements RequirementsService {
                         requirement -> (requirement.hasTag(tag) && requirement.containsNoScenarios())
                 );
     }
+
+    @Override
+    public void resetRequirements() {
+        requirements = null;
+    }
 }

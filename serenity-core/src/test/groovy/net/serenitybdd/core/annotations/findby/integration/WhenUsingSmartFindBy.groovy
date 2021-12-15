@@ -3,19 +3,26 @@ package net.serenitybdd.core.annotations.findby.integration
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.pages.integration.StaticSitePageWithFacades
 import org.openqa.selenium.NoSuchElementException
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import spock.lang.Shared
 import spock.lang.Specification
 
 class WhenUsingSmartFindBy extends Specification {
 
     @Shared
-    def driver = new PhantomJSDriver();
+    def driver;
 
     @Shared
-    def page = new StaticSitePageWithFacades(driver, 1000)
+    def page
 
     def setupSpec() {
+        ChromeOptions opts = new ChromeOptions();
+        opts.setHeadless(true);
+        driver = new ChromeDriver(opts);
+        page = new StaticSitePageWithFacades(driver, 1000)
+
+        page.enableJQuery()
         page.open()
         page.waitFor(1).second()
 
@@ -111,7 +118,4 @@ class WhenUsingSmartFindBy extends Specification {
             driver.quit()
         }
     }
-
-
-
 }

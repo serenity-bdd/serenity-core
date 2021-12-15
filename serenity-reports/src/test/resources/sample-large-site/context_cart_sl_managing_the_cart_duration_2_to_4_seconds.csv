@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Managing the cart","Colin adds several items to the cart","SUCCESS","2021-11-24T13:28:48.270529Z[Europe/London]","0.0","3.89"
+"Managing the cart","Colin removes an item from the cart on the product catalog page 2","SUCCESS","2021-11-24T13:28:52.209388Z[Europe/London]","0.0","2.99"
+"Managing the cart","Colin views the details of a product and adds it to his cart 2","SUCCESS","2021-11-24T13:28:56.966948Z[Europe/London]","0.0","3.43"
+"Managing the cart","Colin sees every item he has added in the cart","SUCCESS","2021-11-24T13:29:00.429447Z[Europe/London]","0.0","2.1"

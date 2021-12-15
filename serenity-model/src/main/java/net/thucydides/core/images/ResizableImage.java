@@ -107,7 +107,7 @@ public class ResizableImage {
         int targetHeight = Math.min(height, MAX_SUPPORTED_HEIGHT);
         try {
             waitForCreationOfFile();
-            return resizeImage(getWidth(), targetHeight, ImageIO.read(screenshotFile));
+            return resizeImageVertically(targetHeight, ImageIO.read(screenshotFile));
         } catch (Throwable e) {
             getLogger().warn("Could not resize screenshot, so leaving original version: " + screenshotFile, e);
             return this;
@@ -119,16 +119,18 @@ public class ResizableImage {
     }
 
     private Callable<Boolean> screenshotIsProcessed() {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                return (screenshotFile.exists() && screenshotFile.length() > 0);
-            }
-        };
+        return () -> (screenshotFile.exists() && screenshotFile.length() > 0);
     }
 
-    protected ResizableImage resizeImage(int width, int targetHeight, BufferedImage image) throws IOException {
-        BufferedImage resizedImage = Scalr.resize(image, Scalr.Method.SPEED,Scalr.Mode.FIT_TO_WIDTH, width, targetHeight, Scalr.OP_ANTIALIAS);
+    protected ResizableImage resizeImage(int newWidth, int newHeight, BufferedImage image) throws IOException {
+        BufferedImage resizedImage = Scalr.resize(image, Scalr.Method.SPEED,Scalr.Mode.AUTOMATIC, newWidth, newHeight, Scalr.OP_ANTIALIAS);
 	    return new ResizedImage(resizedImage, screenshotFile);
+    }
+
+    protected ResizableImage resizeImageVertically(int newHeight, BufferedImage image) throws IOException {
+
+        BufferedImage resizedImage = Refit.image(image, getWidth(), newHeight);
+        return new ResizedImage(resizedImage, screenshotFile);
     }
 
     private boolean skipRescale(int height) {

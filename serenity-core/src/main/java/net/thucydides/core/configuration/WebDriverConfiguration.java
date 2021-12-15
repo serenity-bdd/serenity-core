@@ -9,9 +9,9 @@ import java.util.Optional;
 public class WebDriverConfiguration<T extends DriverConfiguration> extends SystemPropertiesConfiguration implements DriverConfiguration  {
 
     /**
-     * The default browser is Firefox.
+     * The default browser is Chrome.
      */
-    public static final String DEFAULT_WEBDRIVER_DRIVER = "firefox";
+    public static final String DEFAULT_WEBDRIVER_DRIVER = "chrome";
 
 
     @Inject

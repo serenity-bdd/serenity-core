@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.csv.CSVReporter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -43,7 +42,6 @@ public abstract class BaseReportingTask implements ReportingTask {
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
         try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
-            writer.flush();
         }
     }
 

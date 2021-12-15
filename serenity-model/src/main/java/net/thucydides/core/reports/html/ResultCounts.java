@@ -5,6 +5,7 @@ import net.thucydides.core.model.TestType;
 import net.thucydides.core.reports.TestOutcomes;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ResultCounts {
     private TestOutcomes testOutcomes;
@@ -18,7 +19,7 @@ public class ResultCounts {
 
     public ResultCounts(TestOutcomes testOutcomes) {
         this.testOutcomes = testOutcomes;
-        for(TestResult result : TestResult.values()) {
+        for (TestResult result : TestResult.values()) {
             automatedTests.put(result, testOutcomes.ofType(TestType.AUTOMATED).scenarioCountWithResult(result));
             manualTests.put(result, testOutcomes.ofType(TestType.MANUAL).scenarioCountWithResult(result));
             totalTests.put(result, automatedTests.get(result) + manualTests.get(result));
@@ -33,20 +34,20 @@ public class ResultCounts {
     }
 
     public Integer getAutomatedTestCount(String result) {
-        return automatedTests.getOrDefault(TestResult.valueOf(result.toUpperCase()),0);
+        return automatedTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
     }
 
     public Integer getManualTestCount(String result) {
-        return manualTests.getOrDefault(TestResult.valueOf(result.toUpperCase()),0);
+        return manualTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
     }
 
     public Integer getOverallTestCount(String result) {
-        return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()),0);
+        return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
     }
 
     public Integer getOverallTestsCount(String... results) {
         int allTestsCount = 0;
-        for(String result : results) {
+        for (String result : results) {
             allTestsCount += getOverallTestCount(result);
         }
         return allTestsCount;
@@ -85,11 +86,11 @@ public class ResultCounts {
     }
 
     public Integer getOverallTestPercentage(String result) {
-        return  (int) Math.round(getOverallTestCount(result) * 100.0 / totalTestCount);
+        return (int) Math.round(getOverallTestCount(result) * 100.0 / totalTestCount);
     }
 
     public Double getPreciseTestPercentage(String result) {
-        return  getOverallTestCount(result) * 100.0 / totalTestCount;
+        return getOverallTestCount(result) * 100.0 / totalTestCount;
     }
 
     public static ResultCounts forOutcomesIn(TestOutcomes testOutcomes) {
@@ -101,16 +102,37 @@ public class ResultCounts {
      */
     public String byTypeFor(String... testResultTypes) {
         List<String> resultCounts = new ArrayList<>();
-        for(String resultType : testResultTypes) {
+        for (String resultType : testResultTypes) {
             resultCounts.add(labeledValue(resultType, TestType.AUTOMATED));
             resultCounts.add(labeledValue(resultType, TestType.MANUAL));
         }
         return Arrays.toString(resultCounts.toArray());
     }
 
+    public String allResultValuesFor(String... testResultTypes) {
+        return "[" + Arrays.stream(testResultTypes)
+                .map(this::getOverallTestCount)
+                .map(value -> Integer.toString(value))
+                .collect(Collectors.joining(",")) + "]";
+    }
+
+    public String automatedResultValuesFor(String... testResultTypes) {
+        return "[" + Arrays.stream(testResultTypes)
+                .map(this::getAutomatedTestCount)
+                .map(value -> Integer.toString(value))
+                .collect(Collectors.joining(",")) + "]";
+    }
+
+    public String manualResultValuesFor(String... testResultTypes) {
+        return "[" + Arrays.stream(testResultTypes)
+                .map(this::getManualTestCount)
+                .map(value -> Integer.toString(value))
+                .collect(Collectors.joining(",")) + "]";
+    }
+
     private String labeledValue(String resultType, TestType testType) {
         int resultCount;
-        if (testType == TestType.AUTOMATED)  {
+        if (testType == TestType.AUTOMATED) {
             resultCount = this.getAutomatedTestCount(resultType);
         } else if (testType == TestType.MANUAL) {
             resultCount = this.getManualTestCount(resultType);
@@ -124,7 +146,7 @@ public class ResultCounts {
     public String percentageLabelsByTypeFor(String... testResultTypes) {
         List<String> resultLabels = new ArrayList<>();
         int totalTestCount = testOutcomes.getTestCount();
-        for(String resultType : testResultTypes) {
+        for (String resultType : testResultTypes) {
             double percentageAutomated = automatedTests.get(TestResult.valueOf(resultType.toUpperCase())) * 100.0 / totalTestCount;
             double percentageManual = manualTests.get(TestResult.valueOf(resultType.toUpperCase())) * 100.0 / totalTestCount;
 

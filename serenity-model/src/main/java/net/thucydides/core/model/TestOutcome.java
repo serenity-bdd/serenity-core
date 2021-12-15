@@ -1564,7 +1564,6 @@ public class TestOutcome {
     }
 
     public void setUserStory(Story story) {
-        LOGGER.info("SetUserStory " + story.getStoryName());
         this.userStory = story;
         this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }

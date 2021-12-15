@@ -51,7 +51,7 @@ public class Check implements Performable {
     @Override
     @Step("{0} checks #target")
     public <T extends Actor> void performAs(T actor) {
-        System.out.println("Check " + target.getName());
+        System.out.println("Check " + target.toString());
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().check(target.asSelector(), options);
     }
 }

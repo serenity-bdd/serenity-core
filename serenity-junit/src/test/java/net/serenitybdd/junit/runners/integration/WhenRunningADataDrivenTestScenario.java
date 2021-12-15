@@ -432,7 +432,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -451,7 +451,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithNestedTestSpecificDataSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -471,7 +471,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithDeeplyNestedTestSpecificDataSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -491,7 +491,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndAFailingTestSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -510,7 +510,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndASkippedTestSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -529,7 +529,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndABreakingTestSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")

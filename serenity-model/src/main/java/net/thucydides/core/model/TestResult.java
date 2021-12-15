@@ -123,4 +123,8 @@ public enum TestResult {
     public boolean isUnsuccessful() {
         return (this == FAILURE || this == ERROR || this == COMPROMISED);
     }
+
+    public boolean isEqualTo(String name) {
+        return this.name().equalsIgnoreCase(name) || this.adjective.equalsIgnoreCase(name);
+    }
 }

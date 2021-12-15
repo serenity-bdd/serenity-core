@@ -117,18 +117,18 @@ class WhenUsingTheSmartAnnotations extends Specification {
 
         private final String reactSelector;
 
-        public ByReact(String reactSelector){
+        ByReact(String reactSelector){
             this.reactSelector = reactSelector;
         }
 
         @Override
-        public WebElement findElement(SearchContext context) {
+        WebElement findElement(SearchContext context) {
             String jquery = "return __retractor(" + quoted(reactSelector) + ")[0];";
             return (WebElement) ((JavascriptExecutor) context).executeScript(jquery);
         }
 
         @Override
-        public List<WebElement> findElements(SearchContext context) {
+        List<WebElement> findElements(SearchContext context) {
             String jquery = "return __retractor(" + quoted(reactSelector) + ");";
             return (List<WebElement>) ((JavascriptExecutor) context).executeScript(jquery);
         }

@@ -81,6 +81,10 @@ public class TestCoverageFormatter {
             return formatter.percentage(1 - percentageDeterminedResult(), precision);
         }
 
+        public String withPass() {
+            return formatter.percentage(percentageWithResult(TestResult.SUCCESS), precision);
+        }
+
         public String withFailureOrError() {
             return formatter.percentage(percentageWithResult(TestResult.FAILURE)
                     + percentageWithResult(TestResult.ERROR)
@@ -117,7 +121,6 @@ public class TestCoverageFormatter {
         protected double percentageWithResult(String expectedResult) {
             return percentageWithResult(TestResult.valueOf(expectedResult.toUpperCase()));
         }
-
     }
 
     public class FormattedPercentageStepCoverage extends FormattedCoverage {

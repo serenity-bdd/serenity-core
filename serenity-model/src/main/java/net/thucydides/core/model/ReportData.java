@@ -24,7 +24,7 @@ public class ReportData {
         this.contents = contents;
         this.path = path;
         this.isEvidence = isEvidence;
-        this.id = "report-data-" + UUID.randomUUID().toString();
+        this.id = "report-data-" + UUID.randomUUID();
     }
 
     public static ReportDataBuilder withTitle(String title) {

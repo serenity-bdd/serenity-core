@@ -62,7 +62,7 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
         environmentVariables.setProperty("driver_capabilities.common.takesScreenshot", "true")
         environmentVariables.setProperty("driver_capabilities.iexplorer.ie.ensureCleanSession", "true")
         and:
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome()
+        DesiredCapabilities capabilities = new DesiredCapabilities()
         when:
         capabilities = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(capabilities)
         then:

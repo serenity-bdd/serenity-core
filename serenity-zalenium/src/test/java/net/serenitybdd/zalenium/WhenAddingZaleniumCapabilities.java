@@ -19,7 +19,7 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddTheNameOfTheTest() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
         AddCustomDriverCapabilities.from(environmentVariables)
@@ -33,7 +33,7 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddZaleniumPropertiesFromTheEnvironmentConfiguration() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.screenResolution","1280x720");
 
@@ -46,7 +46,7 @@ public class WhenAddingZaleniumCapabilities {
     public void shouldAddZaleniumNumericalPropertiesFromTheEnvironmentConfiguration() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.idleTimeout","150");
 

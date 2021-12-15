@@ -45,9 +45,6 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 
 public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTest {
 
-    @Mock
-    FirefoxDriver firefoxDriver;
-
     MockEnvironmentVariables environmentVariables;
 
     WebDriverFactory webDriverFactory;
@@ -534,7 +531,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithDeeplyNestedTestSpecificDataSample {
 
-        @Managed(driver = "htmlunit")
+        @Managed(driver = "chrome", options="--headless")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")

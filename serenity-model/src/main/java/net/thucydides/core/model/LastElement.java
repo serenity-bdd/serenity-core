@@ -62,11 +62,12 @@ public class LastElement {
         }
     }
 
+    private static final Pattern BACKSLASH = Pattern.compile("\\.");
     private static List<String> elementsOfTestCase(String path) {
         if (path == null) {
             return new ArrayList<>();
         }
-        return  Splitter.on(Pattern.compile("\\.")).splitToList(path);
+        return  Splitter.on(BACKSLASH).splitToList(path);
     }
 
     private static List<String> elementsOfFeatureOrStory(String path) {

@@ -939,4 +939,23 @@ public class StepEventBus {
             return false;
         }
     }
+
+    public boolean isASingleBrowserScenario() {
+        return uniqueSession
+                || currentTestHasTag(TestTag.withValue("singlebrowser"))
+                ||  baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
+    }
+
+    public boolean isNewSingleBrowserScenario() {
+        return isASingleBrowserScenario() && !previousScenarioWasASingleBrowserScenario();
+    }
+
+    private boolean previousScenarioWasASingleBrowserScenario() {
+        if (isBaseStepListenerRegistered()) {
+            return getBaseStepListener().previousScenarioWasASingleBrowserScenario();
+        } else {
+            return false;
+        }
+    }
+
 }

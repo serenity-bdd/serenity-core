@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.actions;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 
 /**
  * Switch to a different frame or window.
@@ -12,6 +13,10 @@ public class Switch {
 
     public static Performable toFrame(Integer frameId) {
         return new DriverTask(driver -> driver.switchTo().frame(frameId));
+    }
+
+    public static Performable toNewWindow(WindowType windowType) {
+        return new DriverTask(driver -> driver.switchTo().newWindow(windowType));
     }
 
     public static Performable toFrame(String frameName) {

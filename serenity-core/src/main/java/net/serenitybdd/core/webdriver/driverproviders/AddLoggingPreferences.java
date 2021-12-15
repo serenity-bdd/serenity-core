@@ -1,6 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import com.vladsch.flexmark.util.Mutable;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,18 +26,20 @@ public class AddLoggingPreferences {
         return new AddLoggingPreferences(environmentVariables);
     }
 
-    public void to(DesiredCapabilities capabilities) {
+    public void to(MutableCapabilities capabilities) {
         LoggingPreferences logPrefs = new LoggingPreferences();
 
         Properties logPrefProperties = environmentVariables.getPropertiesWithPrefix("webdriver.logprefs");
-        logPrefProperties.entrySet().stream().forEach(
-                (entry) -> {
-                    String logType = unprefixed(entry .getKey().toString()).toLowerCase();
-                    Level logLevel = Level.parse(entry.getValue().toString().toUpperCase());
-                    logPrefs.enable(logType, logLevel);
-                }
-        );
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        if (!logPrefProperties.isEmpty()) {
+            logPrefProperties.entrySet().forEach(
+                    (entry) -> {
+                        String logType = unprefixed(entry.getKey().toString()).toLowerCase();
+                        Level logLevel = Level.parse(entry.getValue().toString().toUpperCase());
+                        logPrefs.enable(logType, logLevel);
+                    }
+            );
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        }
     }
 
     private String unprefixed(String propertyName) {

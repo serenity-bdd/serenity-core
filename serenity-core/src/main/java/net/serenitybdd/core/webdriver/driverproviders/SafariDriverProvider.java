@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -32,9 +32,11 @@ public class SafariDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        SafariOptions safariOptions = SafariOptions.fromCapabilities(enhancer.enhanced(DesiredCapabilities.safari(), SupportedWebDriver.SAFARI));
+        SafariOptions safariOptions = SafariOptions.fromCapabilities(enhancer.enhanced(new DesiredCapabilities(), SupportedWebDriver.SAFARI));
 
-        boolean useCleanSession = ThucydidesSystemProperty.SAFARI_USE_CLEAN_SESSION.booleanFrom(environmentVariables, false);
+        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forSafari();
+        }
 
         SafariDriver driver = new SafariDriver(safariOptions);
         driverProperties.registerCapabilities("safari", capabilitiesToProperties(driver.getCapabilities()));

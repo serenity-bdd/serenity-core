@@ -440,7 +440,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that is non-empty`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".station")).isNotEmpty(), wendy)
+                shouldPassWhenChecking(thatTheListOf(ElementsLocated.by(".station")).isNotEmpty(), wendy)
             }
 
             @Test
@@ -448,12 +448,14 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 shouldFailWithMessage("""|Expecting a collection of web elements located by .no-station that is not empty
                                          |But got: []"""
                         .trimMargin())
-                        .whenChecking(thatTheSetOf(ElementsLocated.by(".no-station")).isNotEmpty(), wendy)
+                        .whenChecking(
+                            thatTheListOf(ElementsLocated.by(".no-station")).isNotEmpty(), wendy)
             }
 
             @Test
             fun `that have a certain number of elements`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(By.cssSelector(".station"))).hasSize(3), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(By.cssSelector(".station"))).hasSize(3), wendy)
             }
 
             @Test
@@ -479,7 +481,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that all elements are displayed`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".station")).allMatch(AnElementThat.isDisplayed()), wendy)
+                shouldPassWhenChecking(thatTheListOf(ElementsLocated.by(".station")).allMatch(AnElementThat.isDisplayed()), wendy)
             }
 
             @Test
@@ -489,63 +491,73 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that no elements should be displayed`() {
-                shouldFailWhenChecking(thatTheSetOf(ElementsLocated.by(".hidden-station")).noneMatch(AnElementThat.isNotDisplayed()), wendy)
+                shouldFailWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".hidden-station")).noneMatch(AnElementThat.isNotDisplayed()), wendy)
             }
 
             @Test
             fun `that elements should be disabled`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by("#disabled-field")).allMatch(AnElementThat.isDisabled()), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by("#disabled-field")).allMatch(AnElementThat.isDisabled()), wendy)
             }
 
             @Test
             fun `that elements should not be disabled`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by("#disabled-field")).noneMatch(AnElementThat.isNotDisabled()), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by("#disabled-field")).noneMatch(AnElementThat.isNotDisabled()), wendy)
             }
 
             @Test
             fun `that elements should be enabled`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by("#firstName")).allMatch(AnElementThat.isEnabled()), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by("#firstName")).allMatch(AnElementThat.isEnabled()), wendy)
             }
 
             @Test
             fun `that elements should not be enabled`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by("#disabled-field")).allMatch(AnElementThat.isNotEnabled()), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by("#disabled-field")).allMatch(AnElementThat.isNotEnabled()), wendy)
             }
 
             @Test
             fun `that elements have css classes`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".station")).allMatch(AnElementThat.hasCssClass("station")), wendy)
+                shouldPassWhenChecking(thatTheListOf(ElementsLocated.by(".station")).allMatch(AnElementThat.hasCssClass("station")), wendy)
             }
 
             @Test
             fun `that elements do not have css classes`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".station")).allMatch(AnElementThat.doesNotHaveCssClass("bus-stop")), wendy)
+                shouldPassWhenChecking(thatTheListOf(ElementsLocated.by(".station")).allMatch(AnElementThat.doesNotHaveCssClass("bus-stop")), wendy)
             }
 
             @Test
             fun `that elements contain text`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(AnElementThat.containsText("Line")), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".train-line")).allMatch(AnElementThat.containsText("Line")), wendy)
             }
 
             @Test
             fun `that elements contain exact text`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsOnlyText("Jubilee Line")), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsOnlyText("Jubilee Line")), wendy)
             }
 
             @Test
             fun `that elements have values`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".form-field")).anyMatch(AnElementThat.hasValue("Joe")), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".form-field")).anyMatch(AnElementThat.hasValue("Joe")), wendy)
             }
 
             @Test
             fun `that elements contain other elements`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsElementsLocatedBy(By.cssSelector(".train-line-name"))), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsElementsLocatedBy(By.cssSelector(".train-line-name"))), wendy)
             }
 
 
             @Test
             fun `that elements contain other elements using XPath or CSS`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsElementsLocatedBy(".train-line-name")), wendy)
+                shouldPassWhenChecking(
+                    thatTheListOf(ElementsLocated.by(".train-line")).anyMatch(AnElementThat.containsElementsLocatedBy(".train-line-name")), wendy)
             }
         }
     }

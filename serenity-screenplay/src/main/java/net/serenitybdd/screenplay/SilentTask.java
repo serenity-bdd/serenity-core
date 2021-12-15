@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.Instrumented;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;

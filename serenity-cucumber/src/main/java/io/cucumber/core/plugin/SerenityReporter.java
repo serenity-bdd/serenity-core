@@ -13,6 +13,7 @@ import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
+import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
@@ -24,11 +25,11 @@ import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,8 @@ import java.util.stream.Collectors;
 
 import static io.cucumber.core.plugin.TaggedScenario.*;
 import static java.util.stream.Collectors.toList;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.FEATURE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Cucumber Formatter for Serenity.
@@ -83,6 +84,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return localContext.get();
     }
 
+    EnvironmentVariables environmentVariables;
+
     /**
      * Constructor automatically called by cucumber when class is specified as plugin
      * in @CucumberOptions.
@@ -92,6 +95,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
         lineFilters = LineFilters.forCurrentContext();
+        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public SerenityReporter(Configuration systemConfiguration) {
@@ -99,6 +103,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
         lineFilters = LineFilters.forCurrentContext();
+        environmentVariables = systemConfiguration.getEnvironmentVariables();
     }
 
     private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
@@ -167,7 +172,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private String relativeUriFrom(URI fullPathUri) {
-        boolean useDecodedURI = systemConfiguration.getEnvironmentVariables().getPropertyAsBoolean("use.decoded.url", false);
+        boolean useDecodedURI = environmentVariables.getPropertyAsBoolean("use.decoded.url", false);
         String pathURIAsString;
         if (useDecodedURI) {
             try {
@@ -188,7 +193,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Optional<Feature> featureFrom(URI featureFileUri) {
 
-        LOGGER.info("Running feature from " + featureFileUri.toString());
+        LOGGER.debug("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
             LOGGER.warn("Feature from " + featureFileUri + " is not under the 'features' directory. Requirements report will not be correctly generated!");
         }
@@ -225,6 +230,24 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void handleTestCaseStarted(TestCaseStarted event) {
+
+        //
+        // We are at the start of a new scenario.
+        //
+        boolean shouldRestartBrowserForNewFeatures = RestartBrowserForEach.configuredIn(environmentVariables).restartBrowserForANew(FEATURE);
+        if (FeatureTracker.isNewFeature(event) && shouldRestartBrowserForNewFeatures) {
+            //
+            // We should restart the browser if this is the first scenario of a new feature
+            //
+            ThucydidesWebDriverSupport.closeCurrentDrivers();
+            FeatureTracker.startNewFeature(event);
+        } else if (!FeatureTracker.isASingleBrowserScenario(event)) {
+            //
+            // We should also restart the browser if we are not in a @singlebrowser scenario
+            //
+            ThucydidesWebDriverSupport.closeCurrentDrivers();
+        }
+
 
         ConfigureDriverFromTags.forTags(event.getTestCase().getTags());
 
@@ -271,6 +294,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             }
         }
     }
+
+
 
     private Feature.FeatureChild.Rule getRuleForTestCase(TestSourcesModel.AstNode astNode) {
         Feature feature = getFeatureForTestCase(astNode);
@@ -439,7 +464,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         }
     }
 
-    @NotNull
+    
     private List<TestTag> tagsIn(Examples examples) {
         return examples.getTagsList().stream().map(tag -> TestTag.withValue(tag.getName().substring(1))).collect(Collectors.toList());
     }
@@ -752,7 +777,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void cleanupTestResourcesForURI(URI uri) {
-        LOGGER.info("Cleanup test resources for URI " + uri);
+        LOGGER.debug("Cleanup test resources for URI " + uri);
         getStepEventBus(uri).testSuiteFinished();
         getStepEventBus(uri).dropAllListeners();
         getStepEventBus(uri).clear();

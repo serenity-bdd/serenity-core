@@ -1,5 +1,6 @@
 package net.serenitybdd.cucumber.formatter
 
+import groovy.transform.CompileStatic
 import io.cucumber.core.plugin.ManualScenarioChecker
 import io.cucumber.core.plugin.TaggedScenario
 import net.thucydides.core.model.TestResult
@@ -7,10 +8,13 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import io.cucumber.messages.types.Location
+import io.cucumber.messages.types.Tag
+
 class WhenReportingManualTestResults extends Specification {
 
     def environmentVariables = new MockEnvironmentVariables()
-    def gherkinLocation = Messages.Location.getDefaultInstance()
+    def gherkinLocation = new Location();
     def dateChecker = new ManualScenarioChecker(environmentVariables)
 
     @Unroll
@@ -21,7 +25,7 @@ class WhenReportingManualTestResults extends Specification {
         } else {
             environmentVariables.clearProperty("current.target.version")
         }
-        def gherkinTags = tags.collect() { Tag.newBuilder().setLocation(gherkinLocation).setName(it).build() }
+        def gherkinTags = tags.collect() { new Tag(gherkinLocation,it,it) }
 
 
         then:
@@ -52,7 +56,7 @@ class WhenReportingManualTestResults extends Specification {
     @Unroll
     def "Manual test results can be defined with Cucumber tags"() {
         given:
-        def gherkinTags = tags.collect() { Tag.newBuilder().setLocation(gherkinLocation).setName(it).build() }
+        def gherkinTags = tags.collect() { new Tag(gherkinLocation,it,it) }
 
         when:
         def manualResult = TaggedScenario.manualResultDefinedIn(gherkinTags)

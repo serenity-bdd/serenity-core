@@ -51,7 +51,7 @@ public class LineFilters {
             return uriForFeaturePath.filter(
                     uri -> examples.getTableBody().stream()
                             .anyMatch(
-                                    row -> lineFilters.get(uri).contains(row.getLocation().getLine()))
+                                    row -> lineFilters.get(uri).contains(Math.toIntExact(row.getLocation().getLine())))
             ).isPresent();
         }
         return false;
@@ -63,7 +63,7 @@ public class LineFilters {
         }
         if (lineFiltersContainFeaturePath(featurePath)) {
             Optional<URI> uriForFeaturePath = getURIForFeaturePath(featurePath);
-            return uriForFeaturePath.filter(uri -> lineFilters.get(uri).contains(tableRow.getLocation().getLine())).isPresent();
+            return uriForFeaturePath.filter(uri -> lineFilters.get(uri).contains(Math.toIntExact(tableRow.getLocation().getLine()))).isPresent();
         }
         return false;
     }

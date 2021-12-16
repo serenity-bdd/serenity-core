@@ -261,7 +261,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                 getContext().currentScenario = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(getContext().currentScenarioDefinition.getName()));
             } else {
                 if (getContext().isAScenarioOutline()) {
-                    startExample(event.getTestCase().getLocation().getLine(), scenarioName);
+                    startExample(Long.valueOf(event.getTestCase().getLocation().getLine()), scenarioName);
                 }
             }
             TestSourcesModel.getBackgroundForTestCase(astNode).ifPresent(this::handleBackground);
@@ -607,7 +607,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             } else {
                 getContext().stepEventBus().addNewExamplesFrom(getContext().getTable());
             }
-            startExample(currentLine, scenarioName);
+            startExample(Long.valueOf(currentLine), scenarioName);
         } else {
             startScenario(feature, scenario, scenarioName);
         }
@@ -720,7 +720,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return issues;
     }
 
-    private void startExample(Integer lineNumber, String scenarioName) {
+    private void startExample(Long lineNumber, String scenarioName) {
         Map<String, String> data = exampleRows().get(lineNumber);
         getContext().stepEventBus().clearStepFailures();
         getContext().stepEventBus().exampleStarted(data, scenarioName);

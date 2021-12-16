@@ -4,7 +4,6 @@ package net.thucydides.core.logging;
 import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.strings.Joiner;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -307,9 +306,11 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    private void stepOut() {
-        if (!nestedSteps.isEmpty()) {
-            nestedSteps.pop();
+    private synchronized void stepOut() {
+        synchronized(this) {
+            if (!nestedSteps.isEmpty()) {
+                nestedSteps.pop();
+            }
         }
     }
 
@@ -358,6 +359,13 @@ public class ConsoleLoggingListener implements StepListener {
     public void testSkipped() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info(colored.yellow("      -> TEST SKIPPED"));
+        }
+    }
+
+    @Override
+    public void testAborted() {
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            getLogger().info(colored.yellow("      -> TEST ABORTED"));
         }
     }
 

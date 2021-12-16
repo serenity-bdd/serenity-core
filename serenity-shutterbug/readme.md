@@ -10,7 +10,7 @@ To use Shutterbug 0.9.5 with Serenity, add the Serenity Shutterbug dependency to
 ```
 
 Then set the `serenity.screenshooter` property in your Serenity config file:
-```
+```hocon
 serenity.screenshooter=shutterbug
 ```
 

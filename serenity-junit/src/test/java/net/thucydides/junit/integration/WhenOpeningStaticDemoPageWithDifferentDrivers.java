@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
 @RunWith(SerenityRunner.class)
 public class WhenOpeningStaticDemoPageWithDifferentDrivers {
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

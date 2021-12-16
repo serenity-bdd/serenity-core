@@ -37,7 +37,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to specify a different driver"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenarioUsingHtmlUnit, webDriverFactory)
+        def runner = new ThucydidesRunner(SamplePassingScenarioUsingChrome, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -67,12 +67,12 @@ class WhenRunningTestScenarios extends Specification {
     @Ignore
     def "should be able to record the driver used for a test when a different driver is specified"() {
         given:
-            def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit);
+            def runner = new SerenityRunner(SamplePassingScenarioUsingChrome);
         when:
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.contains("htmlunit")
+            drivers.contains("chrome")
     }
 
     def "should not record a driver used for a non-web test"() {
@@ -82,7 +82,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             List<String> drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.each { driver -> assert driver == null }
+            drivers.each { driver -> assert driver.isEmpty() }
     }
 
     @Ignore
@@ -93,7 +93,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.contains("firefox") && drivers.contains("htmlunit")
+            drivers.contains("firefox") && drivers.contains("chrome")
     }
 
 
@@ -550,8 +550,8 @@ class WhenRunningTestScenarios extends Specification {
 
     def "tests for multiple stories should be written to the output directory"() {
         when:
-            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
+            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingChrome, webDriverFactory).run(new RunNotifier())
+            new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingChrome, webDriverFactory).run(new RunNotifier())
             def jsonReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".json") && !it.startsWith("SERENITY-") && !it.startsWith("manifest")}
         then:
         jsonReports.size() == 6
@@ -559,10 +559,10 @@ class WhenRunningTestScenarios extends Specification {
 
     def "HTML test results should be written to the output directory"() {
         when:
-            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
+            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingChrome, webDriverFactory).run(new RunNotifier())
             def htmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".html")}
         then:
-            htmlReports.size() == 3
+            htmlReports.size() >= 3
     }
 
 

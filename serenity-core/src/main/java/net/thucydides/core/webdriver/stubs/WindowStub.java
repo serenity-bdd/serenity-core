@@ -9,6 +9,7 @@ public class WindowStub implements WebDriver.Window {
     public void setSize(Dimension targetSize) {
     }
 
+
     @Override
     public void setPosition(Point targetPosition) {
     }
@@ -25,6 +26,11 @@ public class WindowStub implements WebDriver.Window {
 
     @Override
     public void maximize() {
+    }
+
+    @Override
+    public void minimize() {
+
     }
 
     @Override

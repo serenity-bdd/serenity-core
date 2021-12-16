@@ -82,12 +82,10 @@ class Reporter {
                 System.err.println(ThreadDump.forAllThreads());
             }
         }
-
     }
 
     private boolean showThreaddumpOnReportTimeout() {
         return REPORT_TIMEOUT_THREADDUMPS.booleanFrom(environmentVariables, false);
-//        return environmentVariables.getPropertyAsBoolean("report.timeout.threaddumps", false);
     }
 
     private String reportFailureMessage(String reason, ReportExecutorFuture executedTask, Exception e) {

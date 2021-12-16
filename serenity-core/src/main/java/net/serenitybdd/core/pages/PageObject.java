@@ -29,7 +29,11 @@ import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Sleeper;
@@ -58,6 +62,7 @@ import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
+import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
 /**
  * A base class representing a WebDriver page object.
@@ -284,6 +289,32 @@ public abstract class PageObject {
             driver = Serenity.getDriver();
         }
         return driver;
+    }
+
+    /**
+     * Determines if the current driver is equipped with Chrome Dev Tools
+     */
+    public boolean hasDevTools() {
+        if (getDriver() instanceof WebDriverFacade) {
+            return (((WebDriverFacade) getDriver()).getProxiedDriver() instanceof HasDevTools);
+        } else {
+            return (getDriver() instanceof HasDevTools);
+        }
+    }
+
+    public Optional<DevTools> maybeGetDevTools() {
+       return Optional.ofNullable(getDevTools());
+    }
+
+    public DevTools getDevTools() {
+        if (!hasDevTools()) {
+            return null;
+        }
+        if (getDriver() instanceof WebDriverFacade) {
+            return ((HasDevTools) ((WebDriverFacade) getDriver()).getProxiedDriver()).getDevTools();
+        } else {
+            return ((HasDevTools) getDriver()).getDevTools();
+        }
     }
 
     public String getTitle() {
@@ -1305,8 +1336,11 @@ public abstract class PageObject {
         }
     }
 
+    private boolean enableJQuery = false;
+    public void enableJQuery() { this.enableJQuery = true; }
+
     private Boolean jqueryIntegrationIsActivated() {
-        return SERENITY_JQUERY_INTEGRATION.booleanFrom(environmentVariables, true);
+        return enableJQuery || SERENITY_JQUERY_INTEGRATION.booleanFrom(environmentVariables, false);
     }
 
     public RadioButtonGroup inRadioButtonGroup(String name) {

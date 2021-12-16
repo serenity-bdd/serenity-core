@@ -33,7 +33,7 @@ public class ExampleTable {
                 .trimResults(CharMatcher.anyOf(SQUARE_BRACKETS_OR_WHITE_SPACE))
                 .split(tableContents).iterator());
         addHeaderFrom(lines.get(0));
-        for(int row = 1; row < lines.size(); row++) {
+        for (int row = 1; row < lines.size(); row++) {
             addRowFrom(lines.get(row));
         }
     }
@@ -41,12 +41,13 @@ public class ExampleTable {
     public static String stripBracketsFromOuterPipes(String text) {
         text = StringUtils.replace(text, "[|", "|");
         text = StringUtils.replace(text, "［|", "|");
-        text = StringUtils.replace(text,"|]","|");
-        text = StringUtils.replace(text,"|］","|");
-        text = StringUtils.replace(text,LEFT_BRACKET + "|","|");
-        text = StringUtils.replace(text,"|" + RIGHT_BRACKET,"|");
+        text = StringUtils.replace(text, "|]", "|");
+        text = StringUtils.replace(text, "|］", "|");
+        text = StringUtils.replace(text, LEFT_BRACKET + "|", "|");
+        text = StringUtils.replace(text, "|" + RIGHT_BRACKET, "|");
         return text;
     }
+
     private void addRowFrom(String row) {
         rows.add(cellsFrom(row));
     }
@@ -61,7 +62,7 @@ public class ExampleTable {
             line = line.substring(1);
         }
         if (line.endsWith("|")) {
-            line = line.substring(0,line.length() - 1);
+            line = line.substring(0, line.length() - 1);
         }
 
         return toList(Splitter.on("|").trimResults().split(line).iterator());
@@ -72,7 +73,7 @@ public class ExampleTable {
             return singleRowTable();
         } else if (headers.size() == 1) {
             return tabularList();
-        }  else {
+        } else {
             return tableWithHeaderAndRows();
         }
     }
@@ -93,10 +94,11 @@ public class ExampleTable {
     }
 
     public String getHtmlHeader() {
-        StringBuffer htmlHeader = new StringBuffer();
+        StringBuilder htmlHeader = new StringBuilder();
+        String headerElement = (headers.size() > 1) ? "th" : "td";
         htmlHeader.append("<thead>");
-        for(String header : headers) {
-            htmlHeader.append("<th>").append(header).append("</th>");
+        for (String header : headers) {
+            htmlHeader.append("<").append(headerElement).append(">").append(header).append("</" + headerElement + ">");
         }
         htmlHeader.append("</thead>");
         return htmlHeader.toString();
@@ -105,9 +107,9 @@ public class ExampleTable {
     public String getHtmlBody(List<List<String>> rows) {
         StringBuffer htmlBody = new StringBuffer();
         htmlBody.append("<tbody>");
-        for(List<String> row : rows) {
+        for (List<String> row : rows) {
             htmlBody.append("<tr>");
-            for(String cell : row) {
+            for (String cell : row) {
                 htmlBody.append("<td>").append(cell).append("</td>");
             }
             htmlBody.append("</tr>");

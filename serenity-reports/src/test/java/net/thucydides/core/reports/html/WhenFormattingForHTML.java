@@ -144,24 +144,6 @@ public class WhenFormattingForHTML {
         assertThat(formattedValue, is("A big story (<a target=\"_blank\" href=\"http://my.issue.tracker/MYPROJECT/browse/MY_PROJECT_123\">#MY_PROJECT_123</a>,<a target=\"_blank\" href=\"http://my.issue.tracker/MYPROJECT/browse/MY_PROJECT_456\">#MY_PROJECT_456</a>)"));
     }
 
-
-
-    @Test
-    public void formatter_should_render_asciidoc() {
-        Formatter formatter = new Formatter();
-        String formatted = formatter.renderAsciidoc("a quick *brown* fox");
-        assertThat(formatted, is("a quick <strong>brown</strong> fox"));
-    }
-
-    @Test
-    public void formatter_should_render_asciidoc_if_configured() {
-        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("narrative.format","asciidoc");
-        Formatter formatter = new Formatter(environmentVariables);
-        String formatted = formatter.renderDescription("a quick *brown* fox\njumped over a log");
-        assertThat(formatted, is("a quick <strong>brown</strong> fox<br>jumped over a log"));
-    }
-
     @Test
     public void formatter_should_render_markdown_by_default() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();

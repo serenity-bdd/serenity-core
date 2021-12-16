@@ -66,6 +66,7 @@ public class TestCoverageFormatter {
         }
 
         protected abstract double percentageDeterminedResult();
+
         protected abstract double percentageWithResult(TestResult expectedResult);
 
         public String withResult(TestResult expectedResult) {
@@ -80,14 +81,21 @@ public class TestCoverageFormatter {
             return formatter.percentage(1 - percentageDeterminedResult(), precision);
         }
 
+        public String withPass() {
+            return formatter.percentage(percentageWithResult(TestResult.SUCCESS), precision);
+        }
+
         public String withFailureOrError() {
             return formatter.percentage(percentageWithResult(TestResult.FAILURE)
                     + percentageWithResult(TestResult.ERROR)
+                    + percentageWithResult(TestResult.ABORTED)
                     + percentageWithResult(TestResult.COMPROMISED), precision);
         }
 
         public String withSkippedOrIgnored() {
-            return formatter.percentage(percentageWithResult(TestResult.SKIPPED) + percentageWithResult(TestResult.IGNORED),precision);
+            return formatter.percentage(percentageWithResult(TestResult.SKIPPED)
+                            + percentageWithResult(TestResult.IGNORED),
+                    precision);
         }
     }
 
@@ -113,7 +121,6 @@ public class TestCoverageFormatter {
         protected double percentageWithResult(String expectedResult) {
             return percentageWithResult(TestResult.valueOf(expectedResult.toUpperCase()));
         }
-
     }
 
     public class FormattedPercentageStepCoverage extends FormattedCoverage {

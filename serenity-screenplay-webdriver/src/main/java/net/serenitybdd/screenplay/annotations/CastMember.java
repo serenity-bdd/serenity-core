@@ -22,6 +22,11 @@ public @interface CastMember {
     String name() default "";
 
     /**
+     * The description of the actor, which will appear alongside the actor name in the Cast section of the reports.
+     */
+    String description() default "";
+
+    /**
      * The name of the @Managed-annotated WebDriver field
      * This can be used if there are more than one @Managed driver in a test.
      * If you don't specify this value, a browser will be assigned automatically unless you opt-out entirely

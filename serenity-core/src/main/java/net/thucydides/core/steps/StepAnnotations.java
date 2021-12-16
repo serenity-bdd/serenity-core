@@ -102,7 +102,7 @@ public final class StepAnnotations {
         for (StepsClassResolver stepsClassResolver : stepsClassResolvers) {
             Class<?> resolvedClass = stepsClassResolver.resolveStepsClass(originalStepsClass);
             if (resolvedClass != null) {
-                LOGGER.info("Steps {} will be instantiated as {}", originalStepsClass, resolvedClass);
+                LOGGER.debug("Steps {} will be instantiated as {}", originalStepsClass, resolvedClass);
                 return resolvedClass;
             }
         }

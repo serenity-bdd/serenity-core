@@ -74,7 +74,7 @@ public class Resizer implements PhotoFilter {
         return new Dimension(image.getData().getWidth(), image.getData().getHeight());
     }
 
-    private BufferedImage resize(BufferedImage image, int width, int height) {
+    public static BufferedImage resize(BufferedImage image, int width, int height) {
         int type = image.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : image.getType();
         BufferedImage resizedImage = new BufferedImage(width, height, type);
         Graphics2D g = resizedImage.createGraphics();

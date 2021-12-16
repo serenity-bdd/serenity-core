@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="1" failures="1" name="Managing the cart" skipped="4" tests="13" time="125.63" timestamp="2021-11-24 01:26:56"><testcase name="Colin adds &lt;Items&gt; to the cart"/><testcase name="Colin adds an item to the cart"><failure message="&#10;Expecting text of the 'shopping_cart_badge' element that is equal to: &lt;42&gt;&#10;But got.............................................................: &lt;1&gt;" type="java.lang.AssertionError">
+Expecting text of the 'shopping_cart_badge' element that is equal to: &lt;42&gt;
+But got.............................................................: &lt;1&gt;</failure><system-err>
+Expecting text of the 'shopping_cart_badge' element that is equal to: &lt;42&gt;
+But got.............................................................: &lt;1&gt;
+cucumber.starter@1.0.0-SNAPSHOT/swaglabs.stepdefinitions.CartStepDefinitions.theCartItemCountShouldBe(CartStepDefinitions.java:68)
+io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+io.cucumber.java.Invoker.invoke(Invoker.java:24)
+io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+io.cucumber.core.runner.TestStep.executeStep(TestStep.java:92)
+io.cucumber.core.runner.TestStep.run(TestStep.java:64)
+io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+io.cucumber.core.runner.TestCase.run(TestCase.java:104)
+io.cucumber.core.runner.Runner.runPickle(Runner.java:73)
+io.cucumber.junit.FeatureRunner.runChild(FeatureRunner.java:135)
+io.cucumber.junit.FeatureRunner.runChild(FeatureRunner.java:27)
+io.cucumber.junit.CucumberSerenityRunner.runChild(CucumberSerenityRunner.java:259)
+io.cucumber.junit.CucumberSerenityRunner.runChild(CucumberSerenityRunner.java:58)
+</system-err></testcase><testcase name="Colin adds an unknown item to the cart"><error message="No element was found after 2s for 'Add to cart' button" type="net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError">No element was found after 2s for 'Add to cart' button</error><system-err>No element was found after 2s for 'Add to cart' button
+cucumber.starter@1.0.0-SNAPSHOT/swaglabs.stepdefinitions.CartStepDefinitions.colinAddsToTheCart(CartStepDefinitions.java:46)
+io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+io.cucumber.java.Invoker.invoke(Invoker.java:24)
+io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+io.cucumber.core.runner.TestStep.executeStep(TestStep.java:92)
+io.cucumber.core.runner.TestStep.run(TestStep.java:64)
+io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+io.cucumber.core.runner.TestCase.run(TestCase.java:104)
+io.cucumber.core.runner.Runner.runPickle(Runner.java:73)
+io.cucumber.junit.FeatureRunner.runChild(FeatureRunner.java:135)
+io.cucumber.junit.FeatureRunner.runChild(FeatureRunner.java:27)
+io.cucumber.junit.CucumberSerenityRunner.runChild(CucumberSerenityRunner.java:259)
+io.cucumber.junit.CucumberSerenityRunner.runChild(CucumberSerenityRunner.java:58)
+</system-err></testcase><testcase name="Colin adds a compromised item to the cart"><compromised message="Compromised Product exception" type="net.serenitybdd.core.exceptions.TestCompromisedException">Compromised Product exception</compromised><system-err>Compromised Product exception
+cucumber.starter@1.0.0-SNAPSHOT/swaglabs.stepdefinitions.CartStepDefinitions.colinAddsToTheCart(CartStepDefinitions.java:44)
+✽.Colin adds "Compromised Product" to the cart(file:///Users/john/Projects/SerenityDojoExpansion/swaglabs-serenity-cucumber/src/test/resources/features/cart/managing_the_cart.feature:40)
+</system-err></testcase><testcase name="Colin adds ignored items to the cart"><skipped/></testcase><testcase name="Colin adds pending items to the cart"><skipped/></testcase><testcase name="Colin adds skipped items to the cart"><skipped/></testcase><testcase name="Colin adds several items to the cart"/><testcase name="Colin removes an item from the cart on the product catalog page 2"/><testcase name="Colin removes an item from the cart overview"/><testcase name="Colin views the details of a product and adds it to his cart 2"/><testcase name="Colin sees every item he has added in the cart"/></testsuite>

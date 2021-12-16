@@ -77,7 +77,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
             java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
-                LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
+                LOGGER.trace("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
                 Optional<Requirement> matchingAncestor = matchingAncestorFor(requirement.get());
                 if (matchingAncestor.isPresent()) {
                     return getRequirementAncestors().get(matchingAncestor.get());
@@ -283,5 +283,10 @@ public abstract class BaseRequirementsService implements RequirementsService {
                 .anyMatch(
                         requirement -> (requirement.hasTag(tag) && requirement.containsNoScenarios())
                 );
+    }
+
+    @Override
+    public void resetRequirements() {
+        requirements = null;
     }
 }

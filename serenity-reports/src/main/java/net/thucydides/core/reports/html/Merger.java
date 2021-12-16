@@ -2,7 +2,6 @@ package net.thucydides.core.reports.html;
 
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.templates.TemplateManager;
-
 import java.io.Writer;
 import java.util.Map;
 
@@ -33,12 +32,10 @@ public class Merger {
 
         public void to(Writer writer) {
             try {
-                templateManager.getTemplateFrom(templateFile)
-                               .merge(context, writer);
+                TemplateManager.getTemplateFrom(templateFile).merge(context, writer);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to merge template: " + e.getMessage(), e);
             }
         }
     }
-
 }

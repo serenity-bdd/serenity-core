@@ -3,19 +3,14 @@ package net.serenitybdd.screenplay.targets;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.selectors.Selectors;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
-import org.awaitility.Awaitility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 
@@ -44,8 +39,10 @@ public class MultiXPathOrCssTarget extends SearchableTarget {
                 }
             }
         }
+        StepEventBus.getEventBus().notifyFailure();
         throw new ElementNotFoundAfterTimeoutError("No element was found after " +
-                (effectiveTimeout.toMillis() / 1000) + "s with any of the following locators: " + Arrays.toString(cssOrXPathSelectors));
+                (effectiveTimeout.toMillis() / 1000) + "s for " + getName() + System.lineSeparator()
+                +"We tried with the following locators: " + Arrays.toString(cssOrXPathSelectors));
     }
 
     private Optional<WebElementFacade> findFirstMatching(PageObject page, String... cssOrXPathSelectors) {

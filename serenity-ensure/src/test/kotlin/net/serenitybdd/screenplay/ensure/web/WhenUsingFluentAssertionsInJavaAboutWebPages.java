@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.ensure.web;
 
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -12,6 +13,7 @@ import net.thucydides.core.annotations.Managed;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.math.BigDecimal;
@@ -43,8 +45,29 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         aster.attemptsTo(
                 Open.browserOn(demoPage),
                 Ensure.that(ElementLocated.by("#firstName")).isDisplayed().orElseThrow(new Exception()),
-                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
-                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
+                Ensure.thatTheListOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
+                Ensure.thatTheListOf(By.cssSelector(".train-line")).allMatch(containsText("Line"))
+        );
+    }
+
+    @Test
+    public void weCanTransformCollectionsOfWebElements() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementsLocated.by(".train-line").mapAll(WebElementFacade::getText))
+                        .contains("Jubilee Line","Bakerloo Line","Central Line")
+        );
+    }
+
+    @Test
+    public void weCanTransformASingleWebElemens() {
+        Actor aster = Actor.named("Aster").whoCan(BrowseTheWeb.with(driver));
+
+        aster.attemptsTo(
+                Open.browserOn(demoPage),
+                Ensure.that(ElementsLocated.by(".train-line").mapFirst(WebElementFacade::getText)).isEqualTo("Jubilee Line")
         );
     }
 
@@ -55,8 +78,8 @@ public class WhenUsingFluentAssertionsInJavaAboutWebPages {
         aster.attemptsTo(
                 Open.browserOn(demoPage),
                 Ensure.that(ElementLocated.by("#notDisplayed")).isDisplayed().orElseThrow(new SomeCustomException("Oh crap")),
-                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
-                Ensure.thatTheSetOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
+                Ensure.thatTheListOf(ElementsLocated.by(".train-line")).hasSizeGreaterThanOrEqualTo(1),
+                Ensure.thatTheListOf(ElementsLocated.by(".train-line")).allMatch(containsText("Line"))
         );
     }
 

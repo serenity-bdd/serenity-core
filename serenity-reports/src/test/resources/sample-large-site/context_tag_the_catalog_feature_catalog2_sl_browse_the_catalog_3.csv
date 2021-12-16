@@ -1,0 +1,7 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Browse the catalog 3","Colin reviews our range of products","SUCCESS","2021-11-24T13:28:23.663741Z[Europe/London]","0.0","13.91"
+"Browse the catalog 3","Colin reviews our range of products and fails","FAILURE","2021-11-24T13:28:37.638827Z[Europe/London]","0.0","8.12"
+"Browse the catalog 3","Colin reviews our range of products by hand","PENDING","2021-11-24T13:28:45.815051Z[Europe/London]","0.0","0.12"
+"Browse the catalog 3","Colin views information about each product","SUCCESS","2021-11-24T13:28:45.958085Z[Europe/London]","0.0","7.04"
+"Browse the catalog 3","Colin views the details for specific products","SUCCESS","2021-11-24T13:28:53.025565Z[Europe/London]","0.0","8.31"
+"Browse the catalog 3","Sort products","SUCCESS","2021-11-24T13:29:01.361552Z[Europe/London]","0.0","8.69"

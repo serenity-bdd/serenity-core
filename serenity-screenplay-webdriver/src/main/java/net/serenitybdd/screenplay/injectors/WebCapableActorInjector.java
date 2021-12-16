@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.annotations.CastMember;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -29,10 +30,14 @@ public class WebCapableActorInjector implements DependencyInjector {
     private void injectActor(Field field, Object object) {
         CastMember castMember = field.getAnnotation(CastMember.class);
         String name = castMember.name();
+        String description = castMember.description();
+
         if (name.isEmpty()) {
             name = StringUtils.capitalize(field.getName());
         }
-        Actor actor = Actor.named(name);
+
+        Actor actor = Actor.named(name)
+                .describedAs(description);
 
         try {
             browserFor(object, castMember).ifPresent(
@@ -66,7 +71,7 @@ public class WebCapableActorInjector implements DependencyInjector {
         // If the browser field name is specified, it must match a @Managed-annotated field in the class
         //
         Field matchingBrowserField = browserFieldCalled(browserFields, castMember.browserField(), object)
-                .orElseThrow(() -> new IllegalArgumentException("Could not instantiate the actor " + castMember.name() + ": the browserField attribute was specified but no @Managed field called '" +  castMember.browserField() + "' was found in this class."));
+                .orElseThrow(() -> new IllegalArgumentException("Could not instantiate the actor " + castMember.name() + ": the browserField attribute was specified but no @Managed field called '" + castMember.browserField() + "' was found in this class."));
 
         return Optional.of(driverInField(matchingBrowserField, object));
 
@@ -81,7 +86,7 @@ public class WebCapableActorInjector implements DependencyInjector {
                     .withOptions(castMember.options())
                     .getWebdriverByName(castMember.name(), castMember.driver());
         }
-        if (driver instanceof WebDriverFacade) {
+        if ((driver instanceof WebDriverFacade) && (!StepEventBus.getEventBus().isASingleBrowserScenario())) {
             ((WebDriverFacade) driver).reset();
         }
 

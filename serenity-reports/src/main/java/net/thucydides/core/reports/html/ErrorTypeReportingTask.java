@@ -48,4 +48,10 @@ public class ErrorTypeReportingTask extends BaseReportingTask implements Reporti
 
         LOGGER.debug("Error type reports generated in {} ms ", stopwatch.stop());
     }
+
+    @Override
+    public String reportName() {
+        return filename;
+    }
+
 }

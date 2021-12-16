@@ -140,7 +140,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void overrideResultTo(TestResult result) {
-        getCurrentTestOutcome().overrideAnnotatedResult(result);
+        getCurrentTestOutcome().overrideResult(result);
     }
 
     public void recordManualTestResult(TestResult result,
@@ -155,6 +155,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     testEvidence.ifPresent( evidence -> getCurrentTestOutcome().setManualTestEvidence(testEvidenceLinksFrom(testEvidence)));
                 }
         );
+    }
+
+    public void recordManualTestResult(TestResult result) {
+        getCurrentTestOutcome().overrideAnnotatedResult(result);
     }
 
     private List<String> testEvidenceLinksFrom(Optional<String> testEvidence) {
@@ -258,6 +262,22 @@ public class BaseStepListener implements StepListener, StepPublisher {
         );
     }
 
+    public int currentStepDepth() {
+        return currentStepStack.size();
+    }
+
+    public boolean previousScenarioWasASingleBrowserScenario() {
+        if (getTestOutcomes().size() > 1) {
+            TestOutcome previousOutcome = getTestOutcomes().get(getTestOutcomes().size() - 2);
+            return previousOutcome.hasTag(TestTag.withValue("singlebrowser"));
+        } else {
+            return false;
+        }
+    }
+
+    public boolean currentStoryHasTag(TestTag tag) {
+        return storywideTags != null && storywideTags.contains(tag);
+    }
     public class StepMerger {
 
         final int maxStepsToMerge;
@@ -418,7 +438,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (testOutcomes.isEmpty()) {
             return java.util.Optional.empty();
         } else {
-//        	return java.util.Optional.ofNullable(currentTestOutcome.get());
         	return java.util.Optional.ofNullable(currentTestOutcome);
         }
     }
@@ -544,9 +563,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void updateCurrentStepFailureCause(Throwable failure) {
-        if (currentStepExists()) {
-            getCurrentStep().failedWith(failure);
-        }
+//        if (currentStepExists()) {
+//            getCurrentStep().failedWith(failure);
+//        } else {
+            this.currentTestOutcome.lastStepFailedWith(failure);
+//        }
     }
 
     public class StepMutator {
@@ -615,11 +636,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
                 ThucydidesWebDriverSupport.clearDefaultDriver();
             }
-
         }
 
-//        currentStepStack.get().clear();
         currentStepStack.clear();
+        while(!currentGroupStack.isEmpty()) {
+            finishGroup();
+        }
         LifecycleRegister.clear();
     }
 
@@ -789,10 +811,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private void finishGroup() {
+    public void finishGroup() {
 //        currentGroupStack.get().pop();
-        currentGroupStack.pop();
-        getCurrentTestOutcome().endGroup();
+        if (!currentGroupStack.isEmpty()) {
+            currentGroupStack.pop();
+            getCurrentTestOutcome().endGroup();
+        }
     }
 
     private void pauseIfRequired() {
@@ -899,7 +923,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         closeDarkroom();
     }
 
-    private void currentStepDone(TestResult result) {
+    public void currentStepDone(TestResult result) {
         if (!currentStepMethodStack.isEmpty()) {
             currentStepMethodStack.pop();
         }
@@ -1100,10 +1124,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public boolean aStepHasFailed() {
-        return ((!getTestOutcomes().isEmpty()) &&
-                (getCurrentTestOutcome().getResult() == TestResult.FAILURE
-                        || getCurrentTestOutcome().getResult() == TestResult.ERROR
-                        || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
+        TestResult currentResult = CurrentTestResult.forTestOutcome(getCurrentTestOutcome(), currentExample);
+        return ((!getTestOutcomes().isEmpty()) && currentResult.isUnsuccessful());
     }
 
     public Optional<TestStep> firstFailingStep() {
@@ -1148,6 +1170,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
     }
 
+    @Override
+    public void testAborted() {
+        if (!testOutcomeRecorded()) {
+            return;
+        }
+
+        getCurrentTestOutcome().setAnnotatedResult(ABORTED);
+    }
+
     public void testPending() {
         if (!testOutcomeRecorded()) {
             return;
@@ -1185,6 +1216,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void notifyScreenChange() {
         if (currentTestIsABrowserTest() && screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
+            take(OPTIONAL_SCREENSHOT);
+        }
+    }
+
+    public void notifyUIError() {
+        if (currentTestIsABrowserTest() && screenshots().areAllowed(TakeScreenshots.FOR_FAILURES)) {
             take(OPTIONAL_SCREENSHOT);
         }
     }

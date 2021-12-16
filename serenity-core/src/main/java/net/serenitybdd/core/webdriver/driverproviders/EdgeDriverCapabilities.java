@@ -1,43 +1,50 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import net.thucydides.core.webdriver.chrome.OptionsSplitter;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_PAGE_LOAD_STRATEGY;
-import static net.thucydides.core.webdriver.CapabilityValue.*;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
+/**
+ * Driver options are command line arguments for the browser:
+ * They are passed into the ms:edgeOptions dictionary in the "args" property.
+ */
 public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
+    private final String driverOptions;
 
-    public EdgeDriverCapabilities(EnvironmentVariables environmentVariables){
+    public EdgeDriverCapabilities(EnvironmentVariables environmentVariables, String driverOptions) {
         this.environmentVariables = environmentVariables;
+        this.driverOptions = driverOptions;
     }
 
     public DesiredCapabilities getCapabilities() {
 
         DesiredCapabilities edgeCaps = new DesiredCapabilities();
-        edgeCaps.setCapability("ms:edgeChrominum",true);
+        edgeCaps.setCapability("ms:edgeChromium", true);
 
         Map<String, Object> edgeOptions = new HashMap<>();
-        edgeOptions.put("prefs", preferencesConfiguredIn(environmentVariables));
+        Map<String, Object> prefs = preferencesConfiguredIn(environmentVariables);
+        if (!prefs.isEmpty()) {
+            edgeOptions.put("prefs", prefs);
+        }
 
         List<String> args = argsConfiguredIn(environmentVariables);
-        if ((args != null) && (!args.isEmpty())) {
-            edgeOptions.put("args", argsConfiguredIn(environmentVariables));
+        args.addAll(DriverArgs.fromValue(driverOptions));
+        if (!args.isEmpty()) {
+            edgeOptions.put("args", args);
         }
-        edgeCaps.setCapability("ms:edgeOptions",edgeOptions);
+        edgeCaps.setCapability("ms:edgeOptions", edgeOptions);
 
         DesiredCapabilities capabilities = new DesiredCapabilities(edgeCaps);
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
@@ -53,6 +60,7 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
         addProxyConfigurationTo(options);
         addPreferencesTo(options);
         addPageLoadStrategyTo(options);
+        addRuntimeOptionsTo(options);
         return options;
     }
 
@@ -84,10 +92,21 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     private void addPageLoadStrategyTo(EdgeOptions options) {
-        String pageLoadStrategy = SERENITY_DRIVER_PAGE_LOAD_STRATEGY.from(environmentVariables);
-        if (pageLoadStrategy != null) {
+        String pageLoadStrategyValue = SERENITY_DRIVER_PAGE_LOAD_STRATEGY.from(environmentVariables);
+        if (pageLoadStrategyValue != null) {
+            PageLoadStrategy pageLoadStrategy = PageLoadStrategy.valueOf(pageLoadStrategyValue.toUpperCase());
             options.setPageLoadStrategy(pageLoadStrategy);
         }
+    }
+
+
+    private void addRuntimeOptionsTo(EdgeOptions options) {
+        if (StringUtils.isNotEmpty(driverOptions)) {
+            List<String> arguments = new ArrayList<>(new OptionsSplitter().split(driverOptions));
+            options.addArguments(arguments);
+        }
+
+        options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false));
     }
 
 }

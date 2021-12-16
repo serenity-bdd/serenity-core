@@ -38,6 +38,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     protected final ConsoleColors colored;
 
     protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm:ss";
+    protected static final String READABLE_TIMESTAMP_FORMAT = "MMM dd, yyyy HH:mm:ss";
     protected static final String ZONED_TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm:ss Z";
 
     public HtmlReporter() {

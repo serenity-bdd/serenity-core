@@ -7,7 +7,6 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -54,7 +53,7 @@ public class SaucelabsRemoteDriverCapabilities {
         return capabilities;
     }
 
-    @NotNull
+    
     private MutableCapabilities saucelabsCapabilitiesDefinedIn(EnvironmentVariables environmentVariables) {
         Properties saucelabsProperties = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix("saucelabs.");
         MutableCapabilities sauceCaps = new MutableCapabilities();

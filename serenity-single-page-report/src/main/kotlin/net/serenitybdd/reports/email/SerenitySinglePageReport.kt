@@ -1,6 +1,7 @@
 package net.serenitybdd.reports.email
 
 import net.serenitybdd.reports.configuration.*
+import net.serenitybdd.reports.model.ReportTags
 import net.thucydides.core.ThucydidesSystemProperty.*
 import java.io.File
 import java.nio.file.Path
@@ -41,7 +42,7 @@ sealed class SerenitySinglePageReport {
 
         fun showFullTestResults(): ReportProperty<Boolean> = BooleanReportProperty(SHOW_FULL_TEST_RESULTS, true)
 
-        fun tagTypes(): ReportProperty<List<String>> = StringListReportProperty(REPORT_TAGTYPES, listOf("feature"))
+        fun tagTypes(): ReportProperty<List<String>> = ReportTagTypeProperty()
 
     }
 }

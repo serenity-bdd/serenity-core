@@ -21,7 +21,6 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
     private final RequirementsService requirementsService;
     private final TestOutcomes testOutcomes;
 
-
     public AggregateReportingTask(FreemarkerContext context,
                                   EnvironmentVariables environmentVariables,
                                   RequirementsService requirementsService,
@@ -50,5 +49,11 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
 
          LOGGER.debug("Aggregate reports generated in {} ms ", stopwatch.stop());
     }
+
+    @Override
+    public String reportName() {
+        return "index.html";
+    }
+
 
 }

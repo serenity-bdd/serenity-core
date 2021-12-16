@@ -1,13 +1,11 @@
 package net.thucydides.core.webdriver.stubs;
 
-import io.appium.java_client.FindsByAndroidUIAutomator;
 import io.appium.java_client.LocksDevice;
+import io.appium.java_client.PushesFiles;
 import io.appium.java_client.android.HasAndroidDeviceDetails;
 import io.appium.java_client.android.HasSupportedPerformanceDataType;
-import io.appium.java_client.android.PushesFiles;
 import io.appium.java_client.android.StartsActivity;
 import io.appium.java_client.android.connection.HasNetworkConnection;
-import io.appium.java_client.windows.PressesKeyCode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.Response;
@@ -15,8 +13,8 @@ import org.openqa.selenium.remote.Response;
 import java.time.Duration;
 import java.util.*;
 
-public class AndroidWebDriverStub extends WebDriverStub implements PressesKeyCode, HasNetworkConnection,
-        PushesFiles, StartsActivity, FindsByAndroidUIAutomator,
+public class AndroidWebDriverStub extends WebDriverStub implements HasNetworkConnection,
+        PushesFiles, StartsActivity,
         HasAndroidDeviceDetails, HasSupportedPerformanceDataType, LocksDevice {
 
     @Override
@@ -93,17 +91,6 @@ public class AndroidWebDriverStub extends WebDriverStub implements PressesKeyCod
     public Response execute(String s) {
         return new Response();
     }
-
-    @Override
-    public WebElement findElement(String s, String s1) {
-        return new WebElementFacadeStub();
-    }
-
-    @Override
-    public List findElements(String s, String s1) {
-        return new ArrayList();
-    }
-
 
     void nativeWebTap(Boolean enabled) {
 

@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.ScenarioOutcomeGroup;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.accessibility.ChartColorScheme;
 import net.thucydides.core.requirements.JSONRequirementsTree;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
@@ -85,6 +86,12 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         this.requirementsFilter = new RequirementsFilter(environmentVariables);
     }
 
+    @Override
+    public String reportName() {
+        return reportName;
+    }
+
+
     public RequirementsOverviewReportingTask asParentRequirement() {
         this.asParentRequirement = true;
         return this;
@@ -112,8 +119,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(toList());
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
-                requirementsOutcomes.filteredByDisplayTag());
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements), requirementsOutcomes.filteredByDisplayTag());
         if (asParentRequirement) {
             requirementsTree = requirementsTree.asAParentRequirement();
         }
@@ -129,6 +135,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         TestOutcomes filteredTestOutcomes = requirementsOutcomes.getTestOutcomes().filteredByEnvironmentTags();
 
+        context.put("colorScheme", new ChartColorScheme(environmentVariables));
         context.put("testOutcomes", filteredTestOutcomes);
         context.put("resultCounts", ResultCounts.forOutcomesIn(filteredTestOutcomes));
         context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));

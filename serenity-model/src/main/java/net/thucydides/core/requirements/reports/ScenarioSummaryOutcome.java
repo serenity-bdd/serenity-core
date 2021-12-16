@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
+import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
@@ -177,4 +178,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
     @Override
     public Rule getRule() { return rule; }
+
+    @Override
+    public ExternalLink getExternalLink() {
+        return null;
+    }
 }

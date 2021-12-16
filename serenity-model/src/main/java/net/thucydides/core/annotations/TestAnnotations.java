@@ -230,6 +230,14 @@ public class TestAnnotations {
         return new ArrayList<>(allTags);
     }
 
+    public static List<TestTag> getTagsForMethod(Method method) {
+
+        List<TestTag> allTags = new ArrayList<>(getClassTags(method.getDeclaringClass()));
+        allTags.addAll(TestFramework.support().getTagsFor(method));
+
+        return new ArrayList<>(allTags);
+    }
+
     public List<TestTag> getClassTags() {
         return getClassTags(testClass);
     }
@@ -253,9 +261,9 @@ public class TestAnnotations {
         return new ArrayList<>(classTags);
     }
 
-    private final List<TestTag> NO_TAGS = new ArrayList<>();
+    private static final List<TestTag> NO_TAGS = new ArrayList<>();
 
-    private List<TestTag> getClassTags(Class<?> testClass) {
+    private static List<TestTag> getClassTags(Class<?> testClass) {
         List<TestTag> tags = new ArrayList<>();
 
         if (testClass == null) { return NO_TAGS; }
@@ -306,7 +314,6 @@ public class TestAnnotations {
             return TestFramework.support().getTagsFor(testMethod.get());
         }
         return tags;
-
     }
 
     public static TestTag convertToTestTag(WithTag withTag) {

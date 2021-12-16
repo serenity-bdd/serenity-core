@@ -1,9 +1,8 @@
 package net.serenitybdd.junit5.datadriven.samples;
 
-import net.serenitybdd.junit5.StepsInjectorTestInstancePostProcessor;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.samples.SampleScenarioSteps;
@@ -21,10 +20,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@ExtendWith(StepsInjectorTestInstancePostProcessor.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 public class SampleDataDrivenScenarioWithExternalFailure {
 
-    @Managed(driver="htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

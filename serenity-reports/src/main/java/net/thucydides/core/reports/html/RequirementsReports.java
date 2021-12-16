@@ -59,7 +59,7 @@ public class RequirementsReports {
 
     }
 
-    public static Set<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
+    public static List<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
                                                             EnvironmentVariables environmentVariables,
                                                             File outputDirectory,
                                                             ReportNameProvider reportNameProvider,
@@ -69,7 +69,7 @@ public class RequirementsReports {
                                                             TestOutcomes testOutcomes,
                                                             RequirementsOutcomes requirementsOutcomes) throws IOException {
 
-        Set<ReportingTask> reportingTasks = new HashSet<>();
+        List<ReportingTask> reportingTasks = new ArrayList<>();
 
         RequirementsReports reporter = new RequirementsReports(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementsFactory, requirementsService, relativeLink, testOutcomes);
 

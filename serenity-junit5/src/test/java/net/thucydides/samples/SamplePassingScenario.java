@@ -1,18 +1,19 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTagValuesOf;
-import net.thucydides.samples.SampleScenarioSteps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 @WithTag("module:M1")
+@ExtendWith(SerenityJUnit5Extension.class)
 public class SamplePassingScenario {
     
-    @Managed(driver = "firefox")
+    @Managed(driver = "firefox",options = "headless")
     public WebDriver webdriver;
 
     @Steps
@@ -22,9 +23,10 @@ public class SamplePassingScenario {
     @WithTagValuesOf({"story:simple scenario", "iteration:I1"})
     public void happy_day_scenario() throws Throwable {
         steps.stepThatSucceeds();
-        steps.stepThatIsIgnored();
-        steps.stepThatIsPending();
-        steps.anotherStepThatSucceeds();
+        steps.stepThatOpensWikipedia();
+//        steps.stepThatIsIgnored();
+//        steps.stepThatIsPending();
+//        steps.anotherStepThatSucceeds();
     }
 
     @Test

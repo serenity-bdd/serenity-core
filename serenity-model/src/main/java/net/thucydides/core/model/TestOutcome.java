@@ -1027,6 +1027,10 @@ public class TestOutcome {
         return this;
     }
 
+    public boolean isUnsuccessful() {
+        return (getResult() == TestResult.COMPROMISED || getResult() == TestResult.ERROR || getResult() == TestResult.FAILURE);
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -1383,7 +1387,7 @@ public class TestOutcome {
     }
 
     private TestResult testResultFromFailureClassname() {
-        if (testFailureClassname != null) {
+        if (StringUtils.isNotEmpty(testFailureClassname)) {
             try {
                 return new FailureAnalysis().resultFor(Class.forName(testFailureClassname));
             } catch (ReflectiveOperationException e) {
@@ -1560,7 +1564,6 @@ public class TestOutcome {
     }
 
     public void setUserStory(Story story) {
-        LOGGER.info("SetUserStory " + story.getStoryName());
         this.userStory = story;
         this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }
@@ -1620,7 +1623,6 @@ public class TestOutcome {
             this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
             this.setAnnotatedResult(TestResultComparison.overallResultFor(this.getAnnotatedResult(), failureCause.getAnnotatedResult()));
         }
-
     }
 
     private boolean isMoreSevereThanPreviousErrors(TestFailureCause failureCause) {
@@ -1706,10 +1708,16 @@ public class TestOutcome {
 
     public void overrideAnnotatedResult(final TestResult annotatedResult) {
         this.annotatedResult = annotatedResult;
+        this.result = annotatedResult;
     }
 
     public void setResult(final TestResult annotatedResult) {
         this.annotatedResult = annotatedResult;
+    }
+
+    public void overrideResult(final TestResult result) {
+        this.result = result;
+        this.annotatedResult = result;
     }
 
     public TestOutcome withResult(final TestResult annotatedResult) {
@@ -1887,10 +1895,15 @@ public class TestOutcome {
 
     public void lastStepFailedWith(Throwable testFailureCause) {
         determineTestFailureCause(testFailureCause);
-        TestStep lastTestStep = testSteps.get(testSteps.size() - 1);
-        lastTestStep.failedWith(new StepFailureException(testFailureCause.getMessage(), testFailureCause));
+        if (!testSteps.isEmpty()) {
+            TestStep lastTestStep = testSteps.get(testSteps.size() - 1);
+            lastTestStep.failedWith(new StepFailureException(testFailureCause.getMessage(), testFailureCause));
+        }
     }
 
+    public void testFailedWith(Throwable cause) {
+        determineTestFailureCause(cause);
+    }
 
     public Set<TestTag> getTags() {
         if (tags == null) {
@@ -2312,7 +2325,7 @@ public class TestOutcome {
     }
 
     public Boolean isSkipped() {
-        return (getResult() == TestResult.SKIPPED) || (getResult() == TestResult.IGNORED);
+        return (getResult() == TestResult.SKIPPED) || (getResult() == TestResult.IGNORED) || (getResult() == TestResult.ABORTED);
     }
 
     public Story getUserStory() {
@@ -2767,6 +2780,18 @@ public class TestOutcome {
     public Integer getOrder() {
         if (order == null) { return 0; }
         return order;
+    }
+
+    public TestOutcome fromStep(int index) {
+        List<TestStep> specifiedSteps = Arrays.asList(testSteps.get(index));
+        TestOutcome specifiedOutcome = this.copy().withSteps(specifiedSteps);
+        Optional<TestFailureCause> failureCause = TestFailureCause.from(specifiedOutcome.getFlattenedTestSteps());
+        if (failureCause.isPresent()) {
+            specifiedOutcome.appendTestFailure(failureCause.get());
+        } else {
+            specifiedOutcome.noTestFailureIsDefined();
+        }
+        return specifiedOutcome;
     }
 
     public List<String> getNestedTestPath(){

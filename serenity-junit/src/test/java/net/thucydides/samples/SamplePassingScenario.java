@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 @WithTag("module:M1")
 public class SamplePassingScenario {
     
-    @Managed(driver = "firefox")
+    @Managed(driver = "chrome", options = "--headless")
     public WebDriver webdriver;
 
     @Steps

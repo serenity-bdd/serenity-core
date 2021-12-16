@@ -22,3 +22,5 @@ shutterbug {
     useDevicePixelRatio = true 
 }
 ```
+
+[Available capture strategies](https://github.com/assertthat/selenium-shutterbug#available-capture-types)

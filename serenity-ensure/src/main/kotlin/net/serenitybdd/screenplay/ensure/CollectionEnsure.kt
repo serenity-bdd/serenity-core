@@ -366,7 +366,6 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!)
-//                BlackBox.logAssertion(actualValue, expected)
                 return CollectionsComparison(comparator).areEqual(actualValue, expected)
             }
     )
@@ -407,7 +406,6 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return actualValue.size <= expected
             }
     )
-
 
     private val hasSizeGreaterThan = expectThatActualIs("of size greater than",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {

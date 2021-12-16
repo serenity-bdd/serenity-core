@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestTag;
@@ -12,17 +13,24 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_EXCLUDE_TAGS;
+
 public class TagFilter {
 
     private final EnvironmentVariables environmentVariables;
     private final RequirementsService requirementsService;
+    private final List<String> excludedTags;
 
     private final List<String> ALWAYS_HIDDEN_TAGS
-            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested");
+            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser");
 
     public TagFilter(EnvironmentVariables environmentVariables) {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
         this.environmentVariables = environmentVariables;
+        this.excludedTags = new ArrayList<>(EnvironmentSpecificConfiguration.from(environmentVariables).getListOfValues(SERENITY_REPORT_EXCLUDE_TAGS));
+        this.excludedTags.addAll(EnvironmentSpecificConfiguration.from(environmentVariables).getListOfValues(ThucydidesSystemProperty.HIDDEN_TAGS));
+        this.excludedTags.addAll(ALWAYS_HIDDEN_TAGS);
     }
 
     public List<String> filteredTagTypes(List<String> tagTypes) {
@@ -37,11 +45,16 @@ public class TagFilter {
         List<String> excludedTags = new ArrayList<>(excludedTagTypes());
         excludedTags.addAll(ALWAYS_HIDDEN_TAGS);
 
-        return removeUnwantedTags(filteredTags, excludedTags);
+        return nonExcludedTags(removeUnwantedTags(filteredTags, excludedTags));
     }
 
     public boolean shouldDisplayTagWithType(String tagType) {
-        return !filteredTagTypes(Collections.singletonList(tagType)).isEmpty();
+        return !filteredTagTypes(singletonList(tagType)).isEmpty();
+    }
+
+    public boolean shouldDisplayTag(TestTag tag) {
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        return exclusions.doNotExclude(tag);
     }
 
 
@@ -86,6 +99,13 @@ public class TagFilter {
         return tags;
     }
 
+    private List<String> nonExcludedTags(List<String> tags) {
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        return tags.stream()
+                .filter(tag -> exclusions.doNotExclude(TestTag.withValue(tag)))
+                .collect(Collectors.toList());
+    }
+
     private List<String> includedTagTypes() {
         return asLowercaseList(ThucydidesSystemProperty.DASHBOARD_TAG_LIST.from(environmentVariables));
     }
@@ -104,13 +124,17 @@ public class TagFilter {
     }
 
     public Set<TestTag> removeHiddenTagsFrom(Set<TestTag> filteredTags) {
-        List<String> hiddenTypes = requirementsService.getRequirementTypes();
-        hiddenTypes.addAll(ALWAYS_HIDDEN_TAGS);
+        List<String> hiddenTypes = requirementsService.getRequirementTypes().stream().map(type -> type + ":*").collect(Collectors.toList());
+        hiddenTypes.addAll(excludedTags);
 
         return filteredTags.stream()
-                .filter(
-                        tag -> !hiddenTypes.contains(tag.getType())
-                ).collect(Collectors.toSet());
+                .filter(tag -> doNotExclude(tag, hiddenTypes))
+                .collect(Collectors.toSet());
+    }
+
+    private boolean doNotExclude(TestTag tag, List<String> hiddenTagExpressions) {
+        return hiddenTagExpressions.stream()
+                .noneMatch(hiddenTagExpression -> TagMatch.excluding(hiddenTagExpression).matches(tag));
     }
 
     public Set<String> rawTagTypes() {

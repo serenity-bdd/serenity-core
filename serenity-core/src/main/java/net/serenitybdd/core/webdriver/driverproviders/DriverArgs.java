@@ -30,13 +30,22 @@ public class DriverArgs {
     public List<String> configuredIn(EnvironmentVariables environmentVariables) {
         Optional<String> args = (EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(property));
         if (args.isPresent()) {
-            Object argsValue = asObject(args.get());
-            if (argsValue instanceof List) {
-                return ((List<Object>) argsValue).stream().map(Object::toString).collect(Collectors.toList());
-            } else if (argsValue instanceof String) {
-                return stream(((String) argsValue).split(";")).map(String::trim).collect(Collectors.toList());
-            }
+            return fromValue(args.get());
         }
         return new ArrayList<>();
+    }
+
+    public static List<String> fromValue(String value) {
+        if (value.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Object argsValue = asObject(value);
+        if (argsValue instanceof List) {
+            return ((List<Object>) argsValue).stream().map(Object::toString).collect(Collectors.toList());
+        } else if (argsValue instanceof String) {
+            return stream(((String) argsValue).split(";")).map(String::trim).collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

@@ -1,0 +1,4 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Managing the cart","Colin adds an unknown item to the cart","ERROR","2021-11-24T13:28:11.633953Z[Europe/London]","0.0","28.48"
+"Browse the catalog 2.1","Colin reviews our range of products and fails","FAILURE","2021-11-24T13:27:33.941905Z[Europe/London]","0.0","23.09"
+"Browse the catalog 2.2","Colin reviews our range of products and fails","FAILURE","2021-11-24T13:27:34.141129Z[Europe/London]","0.0","22.77"

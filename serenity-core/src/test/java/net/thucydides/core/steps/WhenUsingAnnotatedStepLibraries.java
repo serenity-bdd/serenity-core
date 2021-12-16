@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 public class WhenUsingAnnotatedStepLibraries {
@@ -104,7 +104,7 @@ public class WhenUsingAnnotatedStepLibraries {
     @Test(expected = InvalidStepsFieldException.class)
     public void should_throw_exception_if_pages_object_field_cannot_be_accessed() throws Exception {
 
-        doThrow(new IllegalAccessException()).when(fieldSetter).to(anyObject());
+        doThrow(new IllegalAccessException()).when(fieldSetter).to(any());
 
         Field field = null; // value ignored
         TestStepsAnnotatedField testField = new TestStepsAnnotatedField(field);

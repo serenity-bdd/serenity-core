@@ -2,7 +2,7 @@ package net.thucydides.core.annotations.findby
 
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import sample.page.TestPage
 import spock.lang.Shared
 import spock.lang.Specification
@@ -11,7 +11,7 @@ import spock.lang.Specification
 class WhenFindingExtendedWebElementFacade extends Specification {
 	
 	@Shared
-	def driver =  new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory())
+	def driver =  new WebDriverFacade(ChromeDriver.class, new WebDriverFactory())
 		
 	def "WebElementFacade Extender should be found with selenium FindBy"(){
 		

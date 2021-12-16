@@ -28,9 +28,9 @@ class WhenGenerationHTMLReportsFromJSON extends Specification {
     def outputDirectory
 
     def setup() {
-        def environmentVariables = new MockEnvironmentVariables();
-        IssueTracking issueTracking = new SystemPropertiesIssueTracking(environmentVariables);
-        reporter = new HtmlAcceptanceTestReporter(environmentVariables, issueTracking);
+        def environmentVariables = new MockEnvironmentVariables()
+        IssueTracking issueTracking = new SystemPropertiesIssueTracking(environmentVariables)
+        reporter = new HtmlAcceptanceTestReporter(environmentVariables, issueTracking)
         outputDirectory = Files.newTemporaryFolder()
         reporter.setOutputDirectory(outputDirectory)
 
@@ -38,7 +38,7 @@ class WhenGenerationHTMLReportsFromJSON extends Specification {
 
     def "should generate html from JSON including screenshots"() {
         given:
-            Path directory = directoryInClasspathCalled("/serenity-js-outcomes").toPath();
+            Path directory = directoryInClasspathCalled("/serenity-js-outcomes").toPath()
         when:
             TestOutcomeStream stream = TestOutcomeStream.testOutcomesInDirectory(directory)
             def outcomes = []
@@ -53,7 +53,7 @@ class WhenGenerationHTMLReportsFromJSON extends Specification {
 
     def "failures in example tables show be reflected individually in the overall report"() {
         given:
-            Path report = directoryInClasspathCalled("/json-test-outcomes/test-outcome-with-failing-example.json").toPath();
+            Path report = directoryInClasspathCalled("/json-test-outcomes/test-outcome-with-failing-example.json").toPath()
         when:
             AcceptanceTestLoader loader = new JSONTestOutcomeReporter()
             TestOutcome outcome = loader.loadReportFrom(report).get()

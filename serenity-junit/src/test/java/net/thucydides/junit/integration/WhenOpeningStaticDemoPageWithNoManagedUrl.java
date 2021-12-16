@@ -19,7 +19,7 @@ import org.openqa.selenium.WebDriver;
 @RunWith(ThucydidesRunner.class)
 public class WhenOpeningStaticDemoPageWithNoManagedUrl {
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "chrome", options="--headless")
     public WebDriver webdriver;
 
     @ManagedPages

@@ -3,6 +3,7 @@ package net.thucydides.core.images;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,10 +16,9 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.contains;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -95,7 +95,12 @@ public class WhenResizingAScreenshot {
         }
 
         @Override
-        protected ResizableImage resizeImage(int width, int targetHeight, BufferedImage image) throws IOException {
+        protected ResizableImage resizeImage(int width, int targetHeight, BufferedImage image) {
+            throw new IllegalArgumentException();
+        }
+
+        @Override
+        protected ResizableImage resizeImageVertically(int newHeight, BufferedImage image) throws IOException {
             throw new IllegalArgumentException();
         }
 
@@ -193,15 +198,14 @@ public class WhenResizingAScreenshot {
         ResizableImage image = ResizableImage.loadFrom(screenshotFile);
         ResizedImage resizedImage = (ResizedImage) image.rescaleCanvas(newHeight);
 
-        File resizedImageFile = temporaryFolder.newFile("resized_google_page_1.png");
+        File resizedImageFile = temporaryFolder.newFile("resized_google_page_2.png");
         resizedImage.saveTo(resizedImageFile);
 
-        File expectedScreenshot = screenshotFileFrom("/screenshots/google-page-resized.png");
-
-        if (System.getProperty("File.separator") == "/") {
+        if (!SystemUtils.OS_NAME.contains("Windows")) {
             // We can only check this in non-Windows environments
             // In Windows, we have to force the image type which changes the image contents.
-            assertThat(FileUtils.contentEquals(resizedImageFile, expectedScreenshot), is(true));
+            assertThat(resizedImage.getHeight(), equalTo(1250));
+            assertThat(resizedImage.getWidth(), equalTo(image.getWidth()));
         }
     }
 
@@ -215,14 +219,12 @@ public class WhenResizingAScreenshot {
         ResizableImage image = ResizableImage.loadFrom(screenshotFile);
         ResizableImage resizedImage = image.rescaleCanvas(newHeight);
 
-        if (System.getProperty("File.separator") == "/") {
+        if (!SystemUtils.OS_NAME.contains("Windows")) {
             assertThat(resizedImage.getHeight(), is(newHeight));
         }
     }
 
     private File screenshotFileFrom(final String screenshot) {
         return FileSystemUtils.getResourceAsFile(screenshot);
-//        URL sourcePath = getClass().getResource(screenshot);
-//        return new File(sourcePath.getPath());
     }
 }

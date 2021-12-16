@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>${revision}</version>
+        <version>3.1.11-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-browsermob-plugin</artifactId>
     <packaging>jar</packaging>
@@ -72,12 +72,12 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.65.Final</version>
+            <version>4.1.69.Final</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.67</version>
+            <version>1.69</version>
         </dependency>
         <dependency>
             <groupId>org.opentest4j</groupId>

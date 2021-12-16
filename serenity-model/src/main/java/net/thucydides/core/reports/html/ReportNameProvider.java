@@ -140,4 +140,11 @@ public class ReportNameProvider {
     public ReportNameProvider inLinkableForm() {
         return new ReportNameProvider(context, reportNamer.withNoCompression(), requirementsService);
     }
+
+    @Override
+    public String toString() {
+        return "ReportNameProvider{" +
+                "context=" + context +
+                '}';
+    }
 }

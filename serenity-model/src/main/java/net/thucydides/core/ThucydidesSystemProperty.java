@@ -20,7 +20,7 @@ import java.util.Optional;
 public enum ThucydidesSystemProperty {
 
     /**
-     * The WebDriver driver - firefox, chrome, iexplorer, htmlunit, safari.
+     * The WebDriver driver - firefox, chrome, iexplorer, safari.
      */
     WEBDRIVER_DRIVER,
 
@@ -49,7 +49,7 @@ public enum ThucydidesSystemProperty {
      * What port to run PhantomJS on (used in conjunction with webdriver.remote.url to
      * register with a Selenium hub, e.g. -Dphantomjs.webdriver=5555 -Dwebdriver.remote.url=http://localhost:4444
      */
-    PHANTOMJS_WEBDRIVER_PORT,
+    // PHANTOMJS_WEBDRIVER_PORT,
 
     /**
      * Sets a number of common chrome options useful for automated testing.
@@ -280,6 +280,18 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REPORT_SHOW_MANUAL_TESTS,
 
+    /**
+     * A comma-separated list of tags which should not be included the reports.
+     * This can be helpful for technical tags which are not relevant to documentation,
+     * and can reduce the size and time taken to produce the reports.
+     */
+    SERENITY_REPORT_EXCLUDE_TAGS,
+
+    /**
+     * Legacy form of "serenity.report.exclude.tags"
+     */
+    HIDDEN_TAGS,
+
     @Deprecated
     THUCYDIDES_REPORT_SHOW_RELEASES,
 
@@ -287,6 +299,16 @@ public enum ThucydidesSystemProperty {
      * Report on releases
      */
     SERENITY_REPORT_SHOW_RELEASES,
+
+    /**
+     * Use patterns as well as colors for the graphs and charts.
+     */
+    SERENITY_REPORT_ACCESIBILITY,
+
+    /**
+     *
+     */
+    SERENITY_REPORT_DURATIONS,
 
     @Deprecated
     THUCYDIDES_REPORT_SHOW_PROGRESS,
@@ -316,6 +338,12 @@ public enum ThucydidesSystemProperty {
 
     @Deprecated
     THUCYDIDES_RESTART_BROWSER_FREQUENCY,
+
+    /**
+     * Set to true to only display requirements that contain test outcomes.
+     * Useful when running a test suite with a filter.
+     */
+    SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS,
 
     /**
      * Restart the browser every so often during data-driven tests.
@@ -691,6 +719,7 @@ public enum ThucydidesSystemProperty {
      * Enable JQuery integration.
      * If set to true, JQuery will be injected into any page that does not already have it.
      * This option is activated by default, deactivating can speed up the page loading.
+     * Set to false by default in Serenity 3.x
      */
     SERENITY_JQUERY_INTEGRATION,
 
@@ -1102,7 +1131,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Path to PhantomJS executable
      */
-    PHANTOMJS_BINARY_PATH,
+    //PHANTOMJS_BINARY_PATH,
 
     /**
      * Path to the Gecko driver binary
@@ -1280,7 +1309,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Path to PhantomJS SSL support
      */
-    PHANTOMJS_SSL_PROTOCOL,
+    //PHANTOMJS_SSL_PROTOCOL,
 
     /**
      * Comma-separated list of exception classes that should produce a compromised test in the reports.
@@ -1488,6 +1517,10 @@ public enum ThucydidesSystemProperty {
      * What tag types should be listed in the report summary
      */
     REPORT_TAGTYPES,
+    /**
+     * Alternative to report.tagtypes
+     */
+    SERENITY_REPORT_TAGTYPES,
 
     MAX_FREQUENT_FAILURES,
 

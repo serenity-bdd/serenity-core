@@ -36,7 +36,7 @@ import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment
  * @author johnsmart
  */
 public class WebDriverFactory {
-    public static final String DEFAULT_DRIVER = "firefox";
+    public static final String DEFAULT_DRIVER = "chrome";
     public static final String REMOTE_DRIVER = "remote";
 
     private final EnvironmentVariables environmentVariables;
@@ -106,8 +106,6 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HtmlDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.PHANTOMJS, new PhantomJSDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
@@ -140,7 +138,7 @@ public class WebDriverFactory {
             throw toPassThrough;
         } catch (Exception cause) {
             if (shouldRetry(cause)) {
-                LOGGER.info("Waiting to retry: " + cause.getMessage() + ")");
+                LOGGER.debug("Waiting to retry: " + cause.getMessage() + ")");
                 return waitThenRetry(driverClass, options, environmentVariables);
             } else {
                 throw new DriverConfigurationError(
@@ -175,7 +173,7 @@ public class WebDriverFactory {
                                     String options,
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
-        LOGGER.info("Remaining tries: " + remainingTries);
+        LOGGER.debug("Remaining tries: " + remainingTries);
 
         if (remainingTries == 0) {
             throw new DriverConfigurationError(

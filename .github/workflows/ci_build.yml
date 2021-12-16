@@ -22,4 +22,6 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: Unit and Integration Tests
-      run: mvn clean install -T4
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: mvn clean verify

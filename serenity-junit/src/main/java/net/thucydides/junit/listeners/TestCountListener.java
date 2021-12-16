@@ -113,6 +113,11 @@ public class TestCountListener implements StepListener {
     }
 
     @Override
+    public void testAborted() {
+
+    }
+
+    @Override
     public void testPending() {
 
     }

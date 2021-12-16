@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import sample.page.TestPage
 import spock.lang.Ignore
 import spock.lang.Shared
@@ -11,7 +10,7 @@ import spock.lang.Specification
 class WhenUsingWebElementFacadeExtender extends Specification {
 	
 	@Shared
-	def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory()) // new HtmlUnitDriver();//
+	def driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory()) // new HtmlUnitDriver();//
 
 	@Shared
 	def page = new TestPage(driver)

@@ -7,8 +7,6 @@ import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.components.FileToUploadCouldNotBeFoundException;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,7 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;

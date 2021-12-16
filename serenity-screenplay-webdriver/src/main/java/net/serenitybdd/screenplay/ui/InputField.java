@@ -12,7 +12,7 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
  */
 public class InputField {
 
-    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[data-test='{0}' i],textarea[id='{0}' i],textarea[name='{0}' i],textarea[data-test='{0}' i],input.{0}";
+    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[class*='{0}' i],input[data-test='{0}' i],textarea[id='{0}' i],textarea[name='{0}' i],textarea[data-test='{0}' i],[placeholder='{0}' i]";
 
     /**
      * Locate a field with a given name, id or class.
@@ -34,6 +34,4 @@ public class InputField {
     public static Target withLabel(String labelText) {
         return Target.the(labelText + " field").locatedBy(fieldWithLabel(labelText));
     }
-
-
 }

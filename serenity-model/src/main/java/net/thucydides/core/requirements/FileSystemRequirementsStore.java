@@ -45,7 +45,11 @@ public class FileSystemRequirementsStore implements RequirementsStore {
             }
         }
 
-        return Optional.of(requirements);
+        if (requirements.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(requirements);
+        }
     }
 
     private File jsonRequirementsFile() {

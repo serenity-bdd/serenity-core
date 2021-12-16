@@ -23,7 +23,6 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         @Managed driver;
     }
 
-
     def setup() {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new WebDriverConfiguration(environmentVariables);
@@ -31,7 +30,6 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         ThucydidesWebDriverSupport.initialize()
         ThucydidesWebDriverSupport.reset()
         ConfiguredEnvironment.reset();
-
     }
 
     def "should inject @Managed driver field with the configured browser type by default if defined"() {
@@ -46,7 +44,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
             testCase.driver && testCase.driver.driverClass.name.contains("Chrome")
     }
 
-    def "should inject @Managed driver field with a firefox instance by default"() {
+    def "should inject @Managed driver field with a chrome instance by default"() {
         given:
             WebDriverConfiguredEnvironment.setTestEnvironmentVariables(environmentVariables)
             def testCase = new WithADefaultDriver();
@@ -54,7 +52,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
-        testCase.driver && testCase.driver.driverClass.name.contains("Firefox")
+        testCase.driver && testCase.driver.driverClass.name.contains("Chrome")
     }
 
     static class WithADriverOfASpecifiedType {
@@ -83,9 +81,9 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
-            testCase.driver1.driverClass.name.contains("Firefox")
+            testCase.driver1.driverClass.name.contains("Chrome")
         and:
-            testCase.driver2.driverClass.name.contains("Firefox")
+            testCase.driver2.driverClass.name.contains("Chrome")
         and:
             testCase.driver1 != testCase.driver2
     }
@@ -110,7 +108,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
     static class WithMultipleDriversOfDifferentTypeWithADefaultValueFirst {
         @Managed driver1;
-        @Managed(driver = "chrome") driver2;
+        @Managed(driver = "firefox") driver2;
     }
 
     def "should inject a different driver for each @Managed field with a mixture of types and defaults"() {
@@ -120,11 +118,10 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         when:
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
-        testCase.driver1 && testCase.driver1.driverClass.name.contains("Firefox")
+        testCase.driver1 && testCase.driver1.driverClass.name.contains("Chrome")
         and:
-        testCase.driver2 && testCase.driver2.driverClass.name.contains("Chrome")
+        testCase.driver2 && testCase.driver2.driverClass.name.contains("Firefox")
     }
-
 
     static class WithMultipleDriversOfDifferentTypeWithADefaultValueLast {
         @Managed driver1;
@@ -140,13 +137,13 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
-            testCase.driver1 && testCase.driver1.driverClass.name.contains("Firefox")
+            testCase.driver1 && testCase.driver1.driverClass.name.contains("Chrome")
         and:
             testCase.driver2 && testCase.driver2.driverClass.name.contains("Chrome")
         and:
             testCase.driver3 && testCase.driver3.driverClass.name.contains("Firefox")
         and:
-            testCase.driver4 && testCase.driver4.driverClass.name.contains("Firefox")
+            testCase.driver4 && testCase.driver4.driverClass.name.contains("Chrome")
         and:
            testCase.driver3 != testCase.driver2
     }

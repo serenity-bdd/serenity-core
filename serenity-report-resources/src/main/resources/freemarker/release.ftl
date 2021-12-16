@@ -326,8 +326,9 @@
                                                     <th width="65px" class="test-results-heading">Fail</th>
                                                     <th width="65px" class="test-results-heading">Errors</th>
                                                     <th width="65px" class="test-results-heading">Pend</th>
-                                                    <th width="65px" class="test-results-heading">Ignore</th>
                                                     <th width="65px" class="test-results-heading">Skip</th>
+                                                    <th width="65px" class="test-results-heading">Abort</th>
+                                                    <th width="65px" class="test-results-heading">Ignore</th>
                                                 </#if>
                                                 <th width="100px" class="test-results-heading">Duration<br>(seconds)</th>
                                             </tr>
@@ -352,7 +353,7 @@
                                                         <img src="images/${testrun_outcome_icon}" title="${testOutcome.result}" class="summary-icon"/>
                                                         <span style="display:none">${testOutcome.result}</span>
                                                         <#if (testOutcome.manual)>
-                                                            <i class="fa fa-user fa-2x"  title="Manual test"></i>
+                                                            <i class="bi bi-person fa-2x"  title="Manual test"></i>
                                                         </#if>
                                                     </td>
                                                     <td class="${testOutcome.result}-text"><a href="${relativeLink!}${testOutcome.reportName}.html">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a></td>
@@ -363,6 +364,7 @@
                                                         <td class="redtext">${testOutcome.errorCount}</td>
                                                         <td class="bluetext">${testOutcome.pendingCount}</td>
                                                         <td class="bluetext">${testOutcome.skippedCount}</td>
+                                                        <td class="bluetext">${testOutcome.abortedCount}</td>
                                                         <td class="bluetext">${testOutcome.ignoredCount}</td>
                                                     </#if>
                                                     <td class="lightgreentext">${testOutcome.durationInSeconds}</td>

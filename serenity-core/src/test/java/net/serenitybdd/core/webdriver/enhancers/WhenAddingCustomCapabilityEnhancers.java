@@ -19,7 +19,7 @@ public class WhenAddingCustomCapabilityEnhancers {
     public void customEnhancersCanAddExtraCapabilitiesWhenADriverIsCreated() {
 
         // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
         AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);

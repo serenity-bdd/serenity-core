@@ -40,10 +40,10 @@ public class Shutterbug1XScreenShooter implements ScreenShooter {
     @Override
     public byte[] takeScreenshot() throws IOException {
         int betweenScrollTimeout = Integer.parseInt(
-                environmentVariables.getValue("shutterbug.betweenScrollTimeout","100")
+                environmentVariables.getProperty("shutterbug.betweenScrollTimeout","100")
         );
         boolean useDevicePixelRatio = Boolean.parseBoolean(
-                environmentVariables.getValue("shutterbug.useDevicePixelRatio","true")
+                environmentVariables.getProperty("shutterbug.useDevicePixelRatio","true")
         );
         PageSnapshot snapshot = Shutterbug.shootPage(driver, captureStrategy(), betweenScrollTimeout, useDevicePixelRatio);
         return asByteArray(snapshot.getImage());
@@ -51,7 +51,7 @@ public class Shutterbug1XScreenShooter implements ScreenShooter {
 
     private Capture captureStrategy() {
         if (environmentVariables.aValueIsDefinedFor("shutterbug.capturestrategy")) {
-            return Capture.valueOf(environmentVariables.getValue("shutterbug.capturestrategy", "VIEWPORT"));
+            return Capture.valueOf(environmentVariables.getProperty("shutterbug.capturestrategy", "VIEWPORT"));
         } else if (environmentVariables.aValueIsDefinedFor(SERENITY_SCREENSHOT_STRATEGY)) {
             return Capture.valueOf(environmentVariables.getValue(SERENITY_SCREENSHOT_STRATEGY));
         } else if (environmentVariables.aValueIsDefinedFor(SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY)) {

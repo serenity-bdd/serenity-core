@@ -419,15 +419,23 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private void endPerformance(ErrorHandlingMode mode) {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
         if (mode == THROW_EXCEPTION_ON_FAILURE) {
-            if (eventBusInterface.isBaseStepListenerRegistered() && eventBusInterface.aStepHasFailed()) {
-                if (eventBusInterface.getFailureCause().isAnError()) {
-                    throw eventBusInterface.getFailureCause().asError();
-                } else if (eventBusInterface.getFailureCause().isAnAssertionError()) {
-                    throw eventBusInterface.getFailureCause().asAssertionError();
-                } else {
-                    throw eventBusInterface.getFailureCause().asFailure();
-                }
-            }
+            eventBusInterface.failureCause().ifPresent(
+                    cause -> {
+                        StepEventBus.getEventBus().notifyFailure();
+                        StepEventBus.getEventBus().testFinished(StepEventBus.getEventBus().currentTestOutcomeIsDataDriven());
+                        if (cause.isCompromised()) {
+                            throw cause.asCompromisedException();
+                        } else if (cause.isAnError()) {
+                            throw cause.asError();
+                        } else if (cause.isAnAssertionError()) {
+                            throw cause.asAssertionError();
+                        } else if (cause.getOriginalCause() instanceof RuntimeException) {
+                            throw (RuntimeException) cause.getOriginalCause();
+                        } else {
+                            throw cause.asFailure();
+                        }
+                    }
+            );
         }
     }
 

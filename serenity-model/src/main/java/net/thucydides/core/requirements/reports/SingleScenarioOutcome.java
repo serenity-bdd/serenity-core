@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.thucydides.core.digest.Digest;
+import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
@@ -32,6 +33,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final String parentReport;
     private final Set<TestTag> tags;
     private Rule rule;
+    private ExternalLink externalLink;
 
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
@@ -48,7 +50,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  String parentName,
                                  String parentReport,
                                  Set<TestTag> tags,
-                                 Rule rule) {
+                                 Rule rule,
+                                 ExternalLink externalLink) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -66,6 +69,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.parentReport = parentReport;
         this.tags = tags;
         this.rule = rule;
+        this.externalLink = externalLink;
     }
 
     public String toString() {
@@ -180,4 +184,9 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     }
 
     public Rule getRule() { return rule;}
+
+    @Override
+    public ExternalLink getExternalLink() {
+        return externalLink;
+    }
 }

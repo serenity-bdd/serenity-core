@@ -115,7 +115,7 @@
                                     <#assign issueNumber = "">
                                 </#if>
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
@@ -130,7 +130,7 @@
                                 <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().displayName).asATitle())>
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <i class="fs-2 bi bi-chat-left-quote large-icon"></i>
                                     <span class="story-header-title">${parentTitle}</span>
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
@@ -157,7 +157,7 @@
                             <p class="tag">
                                 <#assign tagStyle = styling.tagStyleFor(tag) >
                                 <span class="badge tag-badge" style="${tagStyle}"
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
                             </p>
@@ -200,21 +200,17 @@
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
-        <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR")>
+        <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR" || testOutcome.result == "COMPROMISED")>
             <div class="screenshotFailure panel panel-danger">
-                <#--<div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage, 40)}</span></div>-->
-
-                    <#if (testOutcome.errorMessage)??>
-                        <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace title=formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage) cause=testOutcome.nestedTestFailureCause id="overall" />
-                        <#else>
-                            <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
-                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
-                            </div>
-                        </#if>
+                <#if (testOutcome.errorMessage)??>
+                    <#if (testOutcome.nestedTestFailureCause)??>
+                        <@stacktrace title=formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage) cause=testOutcome.nestedTestFailureCause id="overall" />
+                    <#else>
+                        <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
+                        </div>
                     </#if>
-
-
+                </#if>
                 <div class="panel-body">
                     <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
                 </div>

@@ -2,7 +2,6 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
@@ -12,7 +11,10 @@ import net.thucydides.core.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
@@ -26,13 +28,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     private final String reportName;
 
     TagReportingTask(final FreemarkerContext freemarker,
-                               final EnvironmentVariables environmentVariables,
-                               final File outputDirectory,
-                               final ReportNameProvider reportNameProvider,
-                               final String reportName,
-                               final TestTag tag,
-                               final List<TestTag> allTags,
-                               final TestOutcomes testOutcomes) {
+                     final EnvironmentVariables environmentVariables,
+                     final File outputDirectory,
+                     final ReportNameProvider reportNameProvider,
+                     final String reportName,
+                     final TestTag tag,
+                     final List<TestTag> allTags,
+                     final TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
         this.tag = tag;
@@ -66,14 +68,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     }
 
     private void generateTagReport(TestOutcomes testOutcomes, ReportNameProvider reportNameProvider, TestTag tag) throws IOException {
-
-        LOGGER.debug("GENERATE TAG REPORTS FOR " + tag);
-
         TestOutcomes testOutcomesForTag = testOutcomes.withTag(tag);
         Map<String, Object> context = freemarker.getBuildContext(testOutcomesForTag, reportNameProvider, true);
         context.put("report", ReportProperties.forTagResultsReport());
         context.put("currentTagType", tag.getType());
         context.put("currentTag", tag);
+        context.put("reportName", reportNameProvider);
+        context.put("reportNameInContext", reportNameProvider.inContext(tag.getCompleteName()));
 
         String csvReport = reportNameProvider.forCSVFiles().forTag(tag);
         context.put("csvReport", csvReport);
@@ -123,25 +124,30 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             this.testOutcomes = testOutcomes;
         }
 
-        public Set<ReportingTask> using(final FreemarkerContext freemarker,
-                                        final EnvironmentVariables environmentVariables,
-                                        final File outputDirectory,
-                                        final ReportNameProvider reportName,
-                                        final List<TestTag> allTags,
-                                        final List<String> knownRequirementReportNames) {
+        public List<ReportingTask> using(final FreemarkerContext freemarker,
+                                         final EnvironmentVariables environmentVariables,
+                                         final File outputDirectory,
+                                         final ReportNameProvider reportName,
+                                         final List<TestTag> allTags,
+                                         final List<String> requirementTypes,
+                                         final List<String> knownRequirementReportNames) {
 
-            Set<TestTag> reportedTags = new HashSet<>(testOutcomes.getTags());
-
-            Set<TestTag> reportedFlagTags = testOutcomes.getFlags()
-                    .stream()
-                    .map(flag -> TestTag.withName(inflection.of(flag.getMessage()).asATitle().toString()).andType("flag"))
+            TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+            Set<TestTag> reportedTags = testOutcomes.getTags().stream()
+                    .filter(exclusions::doNotExclude)
+                    .filter(tag -> !requirementTag(requirementTypes, tag))
+                    .filter(tag -> !tag.getType().equals("Duration"))
                     .collect(Collectors.toSet());
 
-            Set<TestTag> allReportedTags = concat(reportedTags, reportedFlagTags);
+            reportedTags.addAll(
+                    testOutcomes.getFlags()
+                            .stream()
+                            .map(flag -> TestTag.withName(inflection.of(flag.getMessage()).asATitle().toString()).andType("flag"))
+                            .collect(Collectors.toList())
+            );
 
-            return allReportedTags
+            return reportedTags
                     .stream()
-                    .filter(tag -> noReportHasBeenGeneratedFor(reportName, knownRequirementReportNames, tag))
                     .map(tag -> new TagReportingTask(
                             freemarker,
                             environmentVariables,
@@ -150,29 +156,20 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                             reportName.forTag(tag),
                             tag,
                             allTags,
-//                            concat(allTags, tag),
                             testOutcomes))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
 
         }
 
-        private boolean noReportHasBeenGeneratedFor(ReportNameProvider reportName, List<String> knownRequirementReportNames, TestTag tag) {
-            return !knownRequirementReportNames.contains(reportName.forTag(tag));
+        private boolean requirementTag(List<String> requirementTypes, TestTag tag) {
+            return requirementTypes.contains(tag.getType());
         }
 
-        private List<TestTag> concat(List<TestTag> allTags, TestTag tag) {
-            if (allTags.contains(tag)) {
-                return allTags;
-            }
-            List<TestTag> tags = new ArrayList(allTags);
-            tags.add(tag);
-            return tags;
-        }
 
-        private Set<TestTag> concat(Set<TestTag> setA, Set<TestTag> setB) {
-            Set<TestTag> concatenatedTags = new HashSet<>(setA);
-            concatenatedTags.addAll(setB);
-            return concatenatedTags;
-        }
+    }
+
+    @Override
+    public String reportName() {
+        return reportName;
     }
 }

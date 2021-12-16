@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit5.JUnitAdapterUnitTest;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Ignore;
 import org.junit.Test;

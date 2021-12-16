@@ -20,7 +20,7 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 public class WhenUsingTheStepEventBus {
@@ -243,8 +243,6 @@ public class WhenUsingTheStepEventBus {
 
         verify(listener).stepStarted(any(ExecutedStepDescription.class));
     }
-
-
 
     @Test
     public void should_notify_listeners_when_a_step_starts() {

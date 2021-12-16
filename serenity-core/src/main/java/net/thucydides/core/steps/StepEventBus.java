@@ -611,6 +611,8 @@ public class StepEventBus {
             case SKIPPED:
                 testSkipped();
                 break;
+            case ABORTED:
+                testAborted();
         }
 
     }
@@ -639,6 +641,13 @@ public class StepEventBus {
     public void testSkipped() {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSkipped();
+        }
+        suspendTest();
+    }
+
+    public void testAborted() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testAborted();
         }
         suspendTest();
     }
@@ -746,6 +755,10 @@ public class StepEventBus {
      */
     public void takeScreenshot() {
         getBaseStepListener().takeScreenshot();
+    }
+
+    public void notifyFailure() {
+        getBaseStepListener().notifyUIError();
     }
 
     public boolean testSuiteHasStarted() {
@@ -889,7 +902,7 @@ public class StepEventBus {
         mergeActivitiesToDefaultStepListener("{0}", agents);
     }
 
-        public void mergeActivitiesToDefaultStepListener(String stepName, Agent... agents) {
+    public void mergeActivitiesToDefaultStepListener(String stepName, Agent... agents) {
         stream(agents)
                 .map(agent -> Agency.getInstance().baseListenerFor(agent))
                 .filter(Optional::isPresent)
@@ -899,7 +912,7 @@ public class StepEventBus {
                 .map(testOutcomes -> testOutcomes.get(0))
                 .forEach(outcome -> recordOutcomeAsSteps(stepName, outcome, baseStepListener));               // Record the steps of this outcome in the main test outcome
 
-        stream(agents).forEach( agent -> Agency.getInstance().dropAgent(agent));
+        stream(agents).forEach(agent -> Agency.getInstance().dropAgent(agent));
     }
 
     private void recordOutcomeAsSteps(String topLevelStepName, TestOutcome testOutcome, BaseStepListener stepListener) {
@@ -912,5 +925,37 @@ public class StepEventBus {
         return topLevelStepName.replace("{0}", agent);
     }
 
+
+    public void wrapUpCurrentCucumberStep() {
+        if (CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome()) && getBaseStepListener().currentStepDepth() == 1) {
+            getBaseStepListener().currentStepDone(TestResult.UNDEFINED);
+        }
+    }
+
+    public boolean currentTestHasTag(TestTag tag) {
+        if (isBaseStepListenerRegistered()) {
+            return getBaseStepListener().getCurrentTestOutcome().getTags().contains(tag);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isASingleBrowserScenario() {
+        return uniqueSession
+                || currentTestHasTag(TestTag.withValue("singlebrowser"))
+                ||  baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
+    }
+
+    public boolean isNewSingleBrowserScenario() {
+        return isASingleBrowserScenario() && !previousScenarioWasASingleBrowserScenario();
+    }
+
+    private boolean previousScenarioWasASingleBrowserScenario() {
+        if (isBaseStepListenerRegistered()) {
+            return getBaseStepListener().previousScenarioWasASingleBrowserScenario();
+        } else {
+            return false;
+        }
+    }
 
 }

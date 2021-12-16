@@ -2,9 +2,13 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
+
+import java.util.List;
+import java.util.Optional;
 
 public class TestFailureCause {
     private final FailureCause rootCause;
@@ -32,6 +36,14 @@ public class TestFailureCause {
         } else {
             return new TestFailureCause(null, null, "", "", TestResult.UNDEFINED);
         }
+    }
+
+    public static Optional<TestFailureCause> from(List<TestStep> testSteps) {
+        return testSteps.stream()
+                .filter( step -> step.getResult().isUnsuccessful())
+                .filter( step -> step.getException() != null)
+                .map(step -> TestFailureCause.from(step.getException().asException()))
+                .findFirst();
     }
 
     public FailureCause getRootCause() {

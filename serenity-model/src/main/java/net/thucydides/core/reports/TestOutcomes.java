@@ -130,7 +130,6 @@ public class TestOutcomes {
         List<? extends TestOutcome> filteredOutcomes = outcomeFilter.outcomesFilteredByTagIn(getOutcomes());
 
         return TestOutcomes.of(filteredOutcomes).withLabel(label);
-//        return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label);
     }
 
 
@@ -710,6 +709,13 @@ public class TestOutcomes {
                 .withRootOutcomes(getRootOutcomes());
     }
 
+    public TestOutcomes getAbortedTests() {
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ABORTED))
+                .withLabel(labelForTestsWithStatus("aborted tests"))
+                .withResultFilter(TestResult.ABORTED)
+                .withRootOutcomes(getRootOutcomes());
+    }
+
     public TestOutcomes getErrorTests() {
         return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
                 .withLabel(labelForTestsWithStatus("tests with errors"))
@@ -914,7 +920,7 @@ public class TestOutcomes {
             return (getTotal() == 0) ? 0 : ((pendingCount + skippedCount + ignoredCount) / (double) getTotal());
         }
         public Double withFailureOrError() {
-            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
+            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED) + withResult(TestResult.ABORTED);
         }
     }
 
@@ -1111,6 +1117,10 @@ public class TestOutcomes {
         private boolean matches(String name, List<Matcher<String>> matchers) {
             return matchers.stream().anyMatch( match -> match.matches(name));
         }
+    }
+
+    public boolean isEmpty() {
+        return getOutcomes().isEmpty();
     }
 
 }

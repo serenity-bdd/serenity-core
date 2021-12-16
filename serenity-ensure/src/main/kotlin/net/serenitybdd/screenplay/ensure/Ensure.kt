@@ -93,17 +93,18 @@ fun <A> that(question: Question<Collection<A>>) = that(question.subject, questio
 fun <A> thatTheListOf(description: String, question: Question<List<A>>) =
     CollectionEnsure(KnowableListAnswer(question, description), description)
 
-fun <A> thatTheListOf(question: Question<List<A>>) = thatTheListOf(question.subject, question)
+fun <A> thatTheListOf(question: Question<List<A>>) =
+    thatTheListOf(question.subject, question)
 
 fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)
 
 // Collection matchers
-fun thatTheSetOf(value: Target) =
+fun thatTheListOf(value: Target) =
     CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 
-fun thatTheSetOf(value: By) =
+fun thatTheListOf(value: By) =
     CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
 
 fun thatAmongst(value: Target) =

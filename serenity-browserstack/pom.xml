@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>${revision}</version>
+        <version>3.1.11-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-browserstack</artifactId>
     <packaging>jar</packaging>
@@ -33,6 +33,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
         <!-- TEST DEPENDENCIES -->
         <dependency>

@@ -2,7 +2,6 @@ package net.serenitybdd.browserstack;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
-import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
@@ -13,7 +12,6 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

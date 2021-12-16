@@ -552,8 +552,13 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);
         if (shouldThrowExceptionImmediately()) {
+            finishAnyCucumberSteps();
             throw cause;
         }
+    }
+
+    private void finishAnyCucumberSteps() {
+        StepEventBus.getEventBus().wrapUpCurrentCucumberStep();
     }
 
     private boolean shouldThrowExceptionImmediately() {

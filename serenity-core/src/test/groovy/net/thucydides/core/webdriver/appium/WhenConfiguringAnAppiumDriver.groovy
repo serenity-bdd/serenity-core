@@ -87,16 +87,6 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         "ANDROID" | MobilePlatform.ANDROID
     }
 
-    def "should provide meaningful message if the platform is not specified"() {
-        given:
-        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
-        when:
-        appiumConfiguration.targetPlatform
-        then:
-        ThucydidesConfigurationException invalidConfiguration = thrown()
-        invalidConfiguration.message.contains("appium.platformName needs to be specified (either IOS or ANDROID)")
-    }
-
     def "default URL should be 'http://127.0.0.1:4723/wd/hub'"() {
         given:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
@@ -207,7 +197,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         then:
         appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
         appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
     }
 
     def "should get properties defined in all environments plus default environment properties"() {
@@ -220,7 +210,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         then:
         appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
         appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
 
     }
 
@@ -251,9 +241,46 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
         appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
         !appiumConfiguration.capabilities.capabilityNames.contains("showChromedriverLog")
-        appiumConfiguration.capabilities.capabilityNames.size() == 4
-
+        appiumConfiguration.capabilities.capabilityNames.size() == 3
     }
 
+    def "should be able to build appium mobile driver capabilities using only browserName without app, appPackage or appActivity"() {
+        given:
+        environmentVariables.setProperty("webdriver.driver", "appium")
+        environmentVariables.setProperty("appium.platformName", "Android")
+        environmentVariables.setProperty("appium.platformVersion", "9.0")
+        environmentVariables.setProperty("appium.browserName", "Chrome")
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        appiumConfiguration.capabilities
+        then:
+        appiumConfiguration.capabilities != null
+    }
 
+    def "should be able to build appium mobile driver capabilities using only app without appPackage, appActivity or browserName"() {
+        given:
+        environmentVariables.setProperty("webdriver.driver", "appium")
+        environmentVariables.setProperty("appium.platformName", "Android")
+        environmentVariables.setProperty("appium.platformVersion", "9.0")
+        environmentVariables.setProperty("appium.app", "MyCustomApp")
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        appiumConfiguration.capabilities
+        then:
+        appiumConfiguration.capabilities != null
+    }
+
+    def "should be able to build appium mobile driver capabilities using only appPackage and appActivity without app or browserName"() {
+        given:
+        environmentVariables.setProperty("webdriver.driver", "appium")
+        environmentVariables.setProperty("appium.platformName", "Android")
+        environmentVariables.setProperty("appium.platformVersion", "9.0")
+        environmentVariables.setProperty("appium.appPackage", "com.example.android.myApp")
+        environmentVariables.setProperty("appium.appActivity", "SplashActivity")
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        appiumConfiguration.capabilities
+        then:
+        appiumConfiguration.capabilities != null
+    }
 }

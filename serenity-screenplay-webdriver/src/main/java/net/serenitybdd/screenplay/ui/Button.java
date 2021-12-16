@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.targets.Target;
 
 /**
  * An HTML element representing a button.
+ * This element will match an HTML button element containing the specified text, or a button-styled input field with a matching value, id or data-test attribute.
  */
 public class Button {
 

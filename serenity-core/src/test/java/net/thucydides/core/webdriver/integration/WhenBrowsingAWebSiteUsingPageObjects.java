@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.integration;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;

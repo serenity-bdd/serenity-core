@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -42,7 +42,7 @@ public class ChromeDriverProvider implements DriverProvider {
 
         if(isDriverAutomaticallyDownloaded(environmentVariables)) {
             logger.info("Using automatically driver download");
-            WebDriverManager.chromedriver().setup();
+            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forChrome();
         } else {
             logger.info("Not using automatically driver download");
         }

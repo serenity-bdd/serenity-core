@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -37,7 +38,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private final EnvironmentVariables environmentVariables;
 
-    private final String rootPackage;
+    private String rootPackage;
 
     private List<Requirement> requirements;
 
@@ -67,7 +68,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables));
+        this(environmentVariables, SERENITY_TEST_ROOT.from(environmentVariables));
     }
 
     public PackageRequirementsTagProvider() {
@@ -87,7 +88,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     @Override
     public List<Requirement> getRequirements() {
 
-        if (rootPackage == null) {
+        if (resolvedRootPackage() == null) {
             return NO_REQUIREMENTS;
         }
 
@@ -98,8 +99,15 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return requirements;
     }
 
+    private String resolvedRootPackage() {
+        if ((rootPackage == null) && environmentVariables.aValueIsDefinedFor(SERENITY_TEST_ROOT)) {
+            rootPackage = SERENITY_TEST_ROOT.from(environmentVariables);
+        }
+        return rootPackage;
+    }
+
     private void fetchRequirements() {
-        logger.debug("Loading requirements from package requirements at: " + rootPackage);
+        logger.debug("Loading requirements from package requirements at: " + resolvedRootPackage());
 
         requirements = reloadedRequirements().orElse(requirementsReadFromClasspath()
                 .orElse(NO_REQUIREMENTS));
@@ -118,7 +126,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         List<Requirement> classpathRequirements = null;
 
         try {
-            List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
+            List<String> requirementPaths = requirementPathsStartingFrom(resolvedRootPackage());
             int requirementsDepth = longestPathIn(requirementPaths);
 
             Set<Requirement> allRequirements = new HashSet<>();
@@ -204,7 +212,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private int longestPathIn(List<String> requirementPaths) {
         int maxDepth = 0;
         for (String path : requirementPaths) {
-            String pathWithoutRootPackage = path.replace(rootPackage + ".", "");
+            String pathWithoutRootPackage = path.replace(resolvedRootPackage() + ".", "");
             int pathDepth = Splitter.on(".").splitToList(pathWithoutRootPackage).size();
             if (pathDepth > maxDepth) {
                 maxDepth = pathDepth;
@@ -218,13 +226,13 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         Requirement leafRequirement = LeafRequirementAdder.addLeafRequirementDefinedIn(path)
                 .withAMaximumRequirementsDepthOf(requirementsDepth)
                 .usingRequirementTypes(getActiveRequirementTypes())
-                .startingAt(rootPackage)
+                .startingAt(resolvedRootPackage())
                 .to(allRequirements);
 
         NonLeafRequirementsAdder.addParentsOf(leafRequirement)
                 .in(path)
                 .withAMaximumRequirementsDepthOf(requirementsDepth)
-                .startingAt(rootPackage)
+                .startingAt(resolvedRootPackage())
                 .to(allRequirements);
 
     }
@@ -297,7 +305,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     public List<String> getActiveRequirementTypes() {
         List<String> allRequirementTypes = requirementsConfiguration.getRequirementTypes();
 
-        int maxDepth = longestPathIn(requirementPathsStartingFrom(rootPackage));
+        int maxDepth = longestPathIn(requirementPathsStartingFrom(resolvedRootPackage()));
 
         return applicableRequirements(allRequirementTypes, maxDepth);
     }

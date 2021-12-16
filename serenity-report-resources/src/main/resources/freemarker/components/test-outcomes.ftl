@@ -16,6 +16,7 @@
                                 <th width="65" class="test-results-heading">Fail</th>
                                 <th width="65" class="test-results-heading">Error</th>
                                 <th width="65" class="test-results-heading">Comp</th>
+                                <th width="65" class="test-results-heading">Abort</th>
                                 <th width="65" class="test-results-heading">Pend</th>
                                 <th width="65" class="test-results-heading">Ignore</th>
                                 <th width="65" class="test-results-heading">Skip</th>
@@ -36,9 +37,9 @@
 
                             <tr class="test-${testOutcome.result}">
                                 <td><span class="summary-icon">${test_outcome_icon}</span>
-                                    <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
+                                    <#if (testOutcome.manual)><i class="bi bi-person manual" title="Manual test"></i></#if>
                                     <#list testOutcome.flags as flag>
-                                        <i class="fa fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i>
+                                        <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i>
                                     </#list>
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
@@ -62,6 +63,7 @@
                                     <td class="redtext">${testOutcome.failureCount}</td>
                                     <td class="redtext">${testOutcome.errorCount}</td>
                                     <td class="redtext">${testOutcome.compromisedCount}</td>
+                                    <td class="bluetext">${testOutcome.abortedCount}</td>
                                     <td class="bluetext">${testOutcome.pendingCount}</td>
                                     <td class="bluetext">${testOutcome.skippedCount}</td>
                                     <td class="bluetext">${testOutcome.ignoredCount}</td>

@@ -1,8 +1,7 @@
 package io.cucumber.core.plugin;
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.TableRow;
+import io.cucumber.messages.types.Examples;
+import io.cucumber.messages.types.TableRow;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 
 import java.net.URI;
@@ -13,7 +12,7 @@ import java.util.Set;
 
 public class LineFilters {
 
-    private Map<URI, Set<Integer>> lineFilters;
+    private final Map<URI, Set<Integer>> lineFilters;
 
     public LineFilters() {
         lineFilters = newLineFilters();
@@ -50,9 +49,9 @@ public class LineFilters {
         if (lineFiltersContainFeaturePath(featurePath)) {
             Optional<URI> uriForFeaturePath = getURIForFeaturePath(featurePath);
             return uriForFeaturePath.filter(
-                    uri -> examples.getTableBodyList().stream()
+                    uri -> examples.getTableBody().stream()
                             .anyMatch(
-                                    row -> lineFilters.get(uri).contains(row.getLocation().getLine()))
+                                    row -> lineFilters.get(uri).contains(Math.toIntExact(row.getLocation().getLine())))
             ).isPresent();
         }
         return false;
@@ -64,7 +63,7 @@ public class LineFilters {
         }
         if (lineFiltersContainFeaturePath(featurePath)) {
             Optional<URI> uriForFeaturePath = getURIForFeaturePath(featurePath);
-            return uriForFeaturePath.filter(uri -> lineFilters.get(uri).contains(tableRow.getLocation().getLine())).isPresent();
+            return uriForFeaturePath.filter(uri -> lineFilters.get(uri).contains(Math.toIntExact(tableRow.getLocation().getLine()))).isPresent();
         }
         return false;
     }

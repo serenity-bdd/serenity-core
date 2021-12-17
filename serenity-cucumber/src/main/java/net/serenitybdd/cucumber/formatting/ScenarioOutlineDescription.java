@@ -1,11 +1,6 @@
 package net.serenitybdd.cucumber.formatting;
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step.DataTable;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.TableRow;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.TableRow.TableCell;
+import io.cucumber.messages.types.*;
 
 import java.util.stream.Collectors;
 
@@ -21,21 +16,21 @@ public class ScenarioOutlineDescription {
     }
 
     public String getDescription() {
-        return scenario.getStepsList().stream().map(
-                step -> stepToString(step)
-        ).collect(Collectors.joining(System.lineSeparator()));
+        return scenario.getSteps().stream()
+                .map(this::stepToString)
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
     private String stepToString(Step step) {
         String phrase = step.getKeyword() + step.getText();
 
 
-        if (step.hasDataTable()) {
+        if (step.getDataTable() != null) {
             DataTable table = step.getDataTable();
             String tableAsString = "";
-            for (TableRow row : table.getRowsList()) {
+            for (TableRow row : table.getRows()) {
                 tableAsString += "|";
-                tableAsString += row.getCellsList().stream()
+                tableAsString += row.getCells().stream()
                         .map(TableCell::getValue)
                         .collect(Collectors.joining(" | "));
                 tableAsString += "|" + System.lineSeparator();

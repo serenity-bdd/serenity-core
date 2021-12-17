@@ -6,7 +6,6 @@ import io.cucumber.core.filter.Filters;
 import io.cucumber.core.gherkin.Feature;
 import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.core.options.*;
-import io.cucumber.core.plugin.ConfigureDriverFromTags;
 import io.cucumber.core.plugin.PluginFactory;
 import io.cucumber.core.plugin.Plugins;
 import io.cucumber.core.plugin.SerenityReporter;
@@ -45,6 +44,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static io.cucumber.core.runtime.SynchronizedEventBus.synchronize;
 import static io.cucumber.junit.FileNameCompatibleNames.uniqueSuffix;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.groupingBy;
@@ -59,7 +59,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberSerenityRunner.class);
 
-    private List<ParentRunner<?>> children = new ArrayList<ParentRunner<?>>();
+    private List<ParentRunner<?>> children;
     private final EventBus bus;
     private static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>();
 
@@ -95,7 +95,6 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
         RuntimeOptions runtimeOptions = new CucumberPropertiesParser()
                 .parse(CucumberProperties.fromSystemProperties())
-                .addDefaultSummaryPrinterIfAbsent()
                 .build(environmentOptions);
 
         RuntimeOptionsBuilder runtimeOptionsBuilder = new RuntimeOptionsBuilder();
@@ -123,7 +122,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
                 //.setStrict(runtimeOptions.isStrict())
                 .build(junitEnvironmentOptions);
 
-        this.bus = new TimeServiceEventBus(Clock.systemUTC(), UUID::randomUUID);
+        this.bus = synchronize(new TimeServiceEventBus(Clock.systemUTC(), UUID::randomUUID));
 
         setRuntimeOptions(runtimeOptions);
 
@@ -142,21 +141,22 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
         SerenityReporter reporter = new SerenityReporter(systemConfiguration);
         addSerenityReporterPlugin(plugins, reporter);
 
-        ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(runtimeOptions);
+        ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(classLoader,
+            runtimeOptions);
         ObjectFactorySupplier objectFactorySupplier = new ThreadLocalObjectFactorySupplier(objectFactoryServiceLoader);
         BackendSupplier backendSupplier = new BackendServiceLoader(clazz::getClassLoader, objectFactorySupplier);
-        TypeRegistryConfigurerSupplier typeRegistryConfigurerSupplier = new ScanningTypeRegistryConfigurerSupplier(classLoader, runtimeOptions);
-        ThreadLocalRunnerSupplier runnerSupplier = new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier, objectFactorySupplier, typeRegistryConfigurerSupplier);
+          ThreadLocalRunnerSupplier runnerSupplier = new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier,
+            objectFactorySupplier);
         this.context = new CucumberExecutionContext(bus, exitStatus, runnerSupplier);
         Predicate<Pickle> filters = new Filters(runtimeOptions);
 
         Map<Optional<String>, List<Feature>> groupedByName = features.stream()
                 .collect(groupingBy(Feature::getName));
 
-        children = features.stream()
+        this.children = features.stream()
                 .map(feature -> {
                     Integer uniqueSuffix = uniqueSuffix(groupedByName, feature, Feature::getName);
-                    return FeatureRunner.create(feature, uniqueSuffix, filters, runnerSupplier, junitOptions);
+                    return FeatureRunner.create(feature, uniqueSuffix, filters, context, junitOptions);
                 })
                 .filter(runner -> !runner.isEmpty())
                 .collect(toList());

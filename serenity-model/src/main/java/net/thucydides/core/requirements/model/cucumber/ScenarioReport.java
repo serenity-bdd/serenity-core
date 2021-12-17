@@ -1,8 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
+import io.cucumber.messages.types.Feature;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 

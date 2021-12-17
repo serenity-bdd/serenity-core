@@ -8,11 +8,7 @@ import io.cucumber.core.gherkin.messages.internal.gherkin.Parser;
 import io.cucumber.core.gherkin.messages.internal.gherkin.TokenMatcher;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
 import io.cucumber.messages.IdGenerator;
-import io.cucumber.messages.Messages.GherkinDocument;
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.FeatureChild;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
+import io.cucumber.messages.types.*;
 import net.serenitybdd.cucumber.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +50,10 @@ public class CucumberScenarioLoader {
         TokenMatcher matcher = new TokenMatcher();
         FeaturePathFeatureSupplier supplier =
             new FeaturePathFeatureSupplier(classLoader, featureOptions, parser);
+
         IntStream.range(0, supplier.get().size())
             .forEach(i -> mapsForFeatures.put(
-                    ((GherkinDocument.Builder)gherkinParser.parse(supplier.get().get(i).getSource(), matcher)).build().getFeature(),
+                    ((GherkinDocument)gherkinParser.parse(supplier.get().get(i).getSource(), matcher)).getFeature(),
                 supplier.get().get(i).getUri())
             );
 
@@ -69,10 +66,10 @@ public class CucumberScenarioLoader {
     private Function<Feature, List<WeightedCucumberScenario>> getScenarios() {
         return cucumberFeature -> {
             try {
-                return (cucumberFeature == null) ? Collections.emptyList() : cucumberFeature.getChildrenList()
+                return (cucumberFeature == null) ? Collections.emptyList() : cucumberFeature.getChildren()
                     .stream()
                     //.filter(child -> asList(ScenarioOutline.class, Scenario.class).contains(child.getClass()))
-                        .filter(child -> child.hasScenario()).map(FeatureChild::getScenario)
+                        .filter(child -> child.getScenario() != null).map(FeatureChild::getScenario)
                     .map(scenarioDefinition -> new WeightedCucumberScenario(
                         PathUtils.getAsFile(mapsForFeatures.get(cucumberFeature)).getName(),
                         cucumberFeature.getName(),
@@ -88,23 +85,23 @@ public class CucumberScenarioLoader {
     }
 
     private int scenarioCountFor(Scenario scenarioDefinition) {
-        if (scenarioDefinition.getExamplesCount() > 0) {
-            return (scenarioDefinition).getExamplesList().stream().map(examples -> examples.getTableBodyList().size()).mapToInt(Integer::intValue).sum();
+        if (scenarioDefinition.getExamples().size() > 0) {
+            return (scenarioDefinition).getExamples().stream().map(examples -> examples.getTableBody().size()).mapToInt(Integer::intValue).sum();
         } else {
             return 1;
         }
     }
 
     private Set<String> tagsFor(Feature feature, Scenario scenarioDefinition) {
-        return FluentIterable.concat(feature.getTagsList(), scenarioTags(scenarioDefinition)).stream().map(Feature.Tag::getName).collect(toSet());
+        return FluentIterable.concat(feature.getTags(), scenarioTags(scenarioDefinition)).stream().map(Object::toString).collect(toSet());
     }
 
-    private List<Tag> scenarioTags(Scenario scenario) {
-        if (scenario.getExamplesCount() == 0) {
-            return scenario.getTagsList();
+    private List<?> scenarioTags(Scenario scenario) {
+        if (scenario.getExamples().isEmpty()) {
+            return scenario.getTags();
         } else {
-            return Stream.of(scenario.getTagsList(), scenario.getExamplesList()
-                .stream().flatMap(e -> e.getTagsList().stream()).collect(toList())).flatMap(Collection::stream)
+            return Stream.of(scenario.getTags(), scenario.getExamples()
+                .stream().flatMap(e -> e.getTags().stream()).collect(toList())).flatMap(Collection::stream).map(tag->tag.getName())
                 .collect(Collectors.toList());
         }
     }

@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
+import io.cucumber.messages.types.Feature;
+import io.cucumber.messages.types.Scenario;
 
 /**
  * An example table that is mentioned by name in a feature narrative.
@@ -18,8 +18,8 @@ public class ReferencedExampleTable {
     }
 
     public NamedExampleTable withName(String exampleTableName) {
-        return feature.getChildrenList().stream()
-                        .filter(featureChild -> featureChild.hasScenario())
+        return feature.getChildren().stream()
+                        .filter(featureChild -> featureChild.getScenario() != null)
                         .filter(scenarioDefinition -> featureContainsExampleTableWithName(exampleTableName))
                         .map(featureChild -> NamedExampleTable.forScenarioDefinition(feature, featureChild.getScenario(), exampleTableName))
                         .findFirst()
@@ -27,16 +27,16 @@ public class ReferencedExampleTable {
     }
 
     private boolean featureContainsExampleTableWithName(String exampleTableName) {
-        return feature.getChildrenList().stream()
+        return feature.getChildren().stream()
                                     .anyMatch(
                                             featureChild -> scenarioContainsExampleTableWithName(featureChild.getScenario(), exampleTableName)
                                     );
     }
 
     private boolean scenarioContainsExampleTableWithName(Scenario scenario, String exampleTableName) {
-        if (scenario.getExamplesCount() == 0) { return false; }
+        if (scenario.getExamples().isEmpty()) { return false; }
 
-        return scenario.getExamplesList().stream()
+        return scenario.getExamples().stream()
                 .anyMatch(
                         examplesTable -> examplesTable.getName().equalsIgnoreCase(exampleTableName.trim())
                 );

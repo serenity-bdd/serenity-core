@@ -2,6 +2,7 @@ package net.serenitybdd.cucumber.integration.steps;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.DataTableType;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,6 +10,7 @@ import io.cucumber.java.en.When;
 import samples.calculator.RpnCalculator;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,6 +65,14 @@ public class RpnCalculatorStepdefs {
         calc.push(arg2);
     }
 
+
+    @DataTableType
+    public Entry entryTransformer(Map<String, String> entry) {
+        return new Entry(
+                Integer.valueOf(entry.get("first")),
+                Integer.valueOf(entry.get("second")),
+                entry.get("operation"));
+    }
 
     public static class Entry {
         Integer first;

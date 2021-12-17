@@ -734,26 +734,26 @@
         <module>serenity-stats</module>
         <module>serenity-junit</module>
         <module>serenity-junit5</module>
+        <module>serenity-cucumber</module>
+        <module>serenity-maven-plugin</module>
+        <module>serenity-single-page-report</module>
+        <module>serenity-json-summary-report</module>
+        <module>serenity-navigator-report</module>
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>
         <module>serenity-ensure</module>
-        <module>serenity-ant-task</module>
         <module>serenity-zalenium</module>
-        <module>serenity-single-page-report</module>
-        <module>serenity-json-summary-report</module>
-        <module>serenity-navigator-report</module>
-        <module>serenity-spring</module>
         <module>serenity-browsermob-plugin</module>
         <module>serenity-browserstack</module>
         <module>serenity-lambdatest</module>
         <module>serenity-crossbrowsertesting</module>
-        <module>serenity-maven-plugin</module>
-        <module>serenity-cli</module>
+        <module>serenity-spring</module>
         <module>serenity-shutterbug</module>
         <module>serenity-shutterbug1x</module>
         <module>serenity-saucelabs</module>
-        <module>serenity-cucumber</module>
+        <module>serenity-ant-task</module>
+        <module>serenity-cli</module>
 <!--                <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>

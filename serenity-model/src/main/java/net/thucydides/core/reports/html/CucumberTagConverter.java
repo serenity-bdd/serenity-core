@@ -2,7 +2,7 @@ package net.thucydides.core.reports.html;
 
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
+import io.cucumber.messages.types.Tag;
 import net.thucydides.core.model.TestTag;
 
 import java.util.Collection;

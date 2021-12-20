@@ -55,8 +55,7 @@ public class CucumberRunner {
                 .parse(testClass)
                 .build();
 
-        RuntimeOptions runtimeOptionsBuilder =  new RuntimeOptionsBuilder().
-                addDefaultSummaryPrinterIfAbsent(). build(annotationOptions);
+        RuntimeOptions runtimeOptionsBuilder =  new RuntimeOptionsBuilder().build(annotationOptions);
 
         Supplier<ClassLoader> classLoaderSupplier = ClassLoaders::getDefaultClassLoader;
         return CucumberWithSerenity.createSerenityEnabledRuntime( classLoaderSupplier,  runtimeOptionsBuilder, systemConfiguration);

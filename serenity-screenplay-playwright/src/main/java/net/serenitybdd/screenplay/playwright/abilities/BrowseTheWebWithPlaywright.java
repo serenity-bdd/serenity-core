@@ -9,12 +9,16 @@ import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import org.assertj.core.api.Assertions;
 
+import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -41,8 +45,11 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     Playwright playwright;
 
-    BrowserType.LaunchOptions options;
+    BrowserType.LaunchOptions launchOptions;
     Browser.NewContextOptions contextOptions;
+    private static final String TRACES_PATH = "target/playwright/traces";
+    boolean tracingEnabled;
+    String traceName;
 
     private Optional<String> browserType;
 
@@ -68,21 +75,21 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-                new BrowserType.LaunchOptions(),
-                BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
+            new BrowserType.LaunchOptions(),
+            BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
     }
 
-    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions options) {
-        this(environmentVariables, options, null);
+    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions) {
+        this(environmentVariables, launchOptions, BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
     }
 
-    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions options, String browserType) {
-        this(environmentVariables, options, null, browserType);
+    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions, String browserType) {
+        this(environmentVariables, launchOptions, null, browserType);
     }
 
-    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions options, Browser.NewContextOptions contextOptions, String browserType) {
+    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions, Browser.NewContextOptions contextOptions, String browserType) {
         this.environmentVariables = environmentVariables;
-        this.options = options;
+        this.launchOptions = launchOptions;
         this.contextOptions = contextOptions;
         this.browserType = Optional.ofNullable(browserType);
         registerForEventNotification();
@@ -119,6 +126,29 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public Page getCurrentPage() {
         if (currentPage == null) {
+            // Add tracing details to debug tests with trace viewer: https://playwright.dev/java/docs/trace-viewer
+            tracingEnabled = TRACING.asBooleanFrom(environmentVariables).orElse(false);
+            if (tracingEnabled) {
+                Tracing.StartOptions tracingOptions = new Tracing.StartOptions()
+                    .setScreenshots(true)
+                    .setSnapshots(true);
+
+                Optional<String> guessedTestName;
+                Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
+
+                guessedTestName = latestOutcome.map(
+                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+                ).orElseGet(RemoteTestName::fromCurrentTest);
+
+                guessedTestName.ifPresent(name -> {
+                    traceName = name;
+                    tracingOptions.setName(name);
+                    tracingOptions.setTitle(name);
+                });
+
+                getCurrentContext().tracing().start(tracingOptions);
+            }
+
             currentPage = getCurrentContext().newPage();
         }
         return currentPage;
@@ -153,55 +183,58 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     private BrowserType.LaunchOptions launchOptionsDefinedIn(EnvironmentVariables environmentVariables) {
-        if (options.args == null) {
-            ARGS.asListOfStringsFrom(environmentVariables).ifPresent(options::setArgs);
+        if (launchOptions.args == null) {
+            ARGS.asListOfStringsFrom(environmentVariables).ifPresent(launchOptions::setArgs);
         }
-//        if (options.channel == null) {
-//            BROWSER_CHANNEL.asBrowserChannelFrom(environmentVariables).ifPresent(options::setChannel);
-//        }
-        if (options.chromiumSandbox == null) {
-            CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(options::setChromiumSandbox);
+        if (launchOptions.channel == null) {
+            BROWSER_CHANNEL.asStringFrom(environmentVariables).ifPresent(launchOptions::setChannel);
         }
-        if (options.devtools == null) {
-            DEVTOOLS.asBooleanFrom(environmentVariables).ifPresent(options::setChromiumSandbox);
+        if (launchOptions.chromiumSandbox == null) {
+            CHROMIUM_SANDBOX.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setChromiumSandbox);
         }
-        if (options.downloadsPath == null) {
-            DOWNLOADS_PATH.asPathFrom(environmentVariables).ifPresent(options::setDownloadsPath);
+        if (launchOptions.devtools == null) {
+            DEVTOOLS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setChromiumSandbox);
         }
-        if (options.env == null) {
-            ENV.asJsonMapFrom(environmentVariables).ifPresent(options::setEnv);
+        if (launchOptions.downloadsPath == null) {
+            DOWNLOADS_PATH.asPathFrom(environmentVariables).ifPresent(launchOptions::setDownloadsPath);
         }
-        if (options.executablePath == null) {
-            EXECUTABLE_PATH.asPathFrom(environmentVariables).ifPresent(options::setExecutablePath);
+        if (launchOptions.env == null) {
+            ENV.asJsonMapFrom(environmentVariables).ifPresent(launchOptions::setEnv);
         }
-        if (options.handleSIGHUP == null) {
-            HANDLE_SIGHUP.asBooleanFrom(environmentVariables).ifPresent(options::setHandleSIGHUP);
+        if (launchOptions.executablePath == null) {
+            EXECUTABLE_PATH.asPathFrom(environmentVariables).ifPresent(launchOptions::setExecutablePath);
         }
-        if (options.handleSIGINT == null) {
-            HANDLE_SIGINT.asBooleanFrom(environmentVariables).ifPresent(options::setHandleSIGINT);
+        if (launchOptions.handleSIGHUP == null) {
+            HANDLE_SIGHUP.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGHUP);
         }
-        if (options.handleSIGTERM == null) {
-            HANDLE_SIGTERM.asBooleanFrom(environmentVariables).ifPresent(options::setHandleSIGTERM);
+        if (launchOptions.handleSIGINT == null) {
+            HANDLE_SIGINT.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGINT);
         }
-        if (options.headless == null || !options.headless) {
-            HEADLESS.asBooleanFrom(environmentVariables).ifPresent(options::setHeadless);
+        if (launchOptions.handleSIGTERM == null) {
+            HANDLE_SIGTERM.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHandleSIGTERM);
         }
-        if (options.ignoreAllDefaultArgs == null) {
-            IGNORE_ALL_DEFAULT_APPS.asBooleanFrom(environmentVariables).ifPresent(options::setIgnoreAllDefaultArgs);
+        if (launchOptions.headless == null || !launchOptions.headless) {
+            HEADLESS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setHeadless);
         }
-        if (options.ignoreDefaultArgs == null) {
-            IGNORE_DEFAULT_APPS.asListOfStringsFrom(environmentVariables).ifPresent(options::setIgnoreDefaultArgs);
+        if (launchOptions.ignoreAllDefaultArgs == null) {
+            IGNORE_ALL_DEFAULT_APPS.asBooleanFrom(environmentVariables).ifPresent(launchOptions::setIgnoreAllDefaultArgs);
         }
-        if (options.proxy == null) {
-            PROXY.asProxyFrom(environmentVariables).ifPresent(options::setProxy);
+        if (launchOptions.ignoreDefaultArgs == null) {
+            IGNORE_DEFAULT_APPS.asListOfStringsFrom(environmentVariables).ifPresent(launchOptions::setIgnoreDefaultArgs);
         }
-        if (options.slowMo == null) {
-            SLOW_MO.asDoubleFrom(environmentVariables).ifPresent(options::setSlowMo);
+        if (launchOptions.proxy == null) {
+            PROXY.asProxyFrom(environmentVariables).ifPresent(launchOptions::setProxy);
         }
-        if (options.timeout == null) {
-            TIMEOUT.asDoubleFrom(environmentVariables).ifPresent(options::setTimeout);
+        if (launchOptions.slowMo == null) {
+            SLOW_MO.asDoubleFrom(environmentVariables).ifPresent(launchOptions::setSlowMo);
         }
-        return options;
+        if (launchOptions.timeout == null) {
+            TIMEOUT.asDoubleFrom(environmentVariables).ifPresent(launchOptions::setTimeout);
+        }
+        if (launchOptions.tracesDir == null && TRACING.asBooleanFrom(environmentVariables).isPresent()) {
+            launchOptions.setTracesDir(Paths.get(TRACES_PATH));
+        }
+        return launchOptions;
     }
 
     public <T extends Ability> T asActor(Actor actor) {
@@ -243,6 +276,12 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      */
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
+        // Stop tracing before browser is closed
+        if (currentContext != null && tracingEnabled) {
+            currentContext.tracing().stop(
+                new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
+            );
+        }
         if (playwright != null) {
 
             // Take screenshot for failed test
@@ -268,6 +307,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             }
 
             playwright.close();
+            currentPage = null;
+            currentContext = null;
             playwright = null;
         }
     }
@@ -295,10 +336,10 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     public BrowseTheWebWithPlaywright withBrowserType(String browserType) {
-        return new BrowseTheWebWithPlaywright(environmentVariables, options, browserType);
+        return new BrowseTheWebWithPlaywright(environmentVariables, launchOptions, browserType);
     }
 
     public BrowseTheWebWithPlaywright withHeadlessMode(Boolean headless) {
-        return new BrowseTheWebWithPlaywright(environmentVariables, options.setHeadless(headless), browserType.orElse(null));
+        return new BrowseTheWebWithPlaywright(environmentVariables, launchOptions.setHeadless(headless), browserType.orElse(null));
     }
 }

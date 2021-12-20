@@ -2,7 +2,7 @@ package io.cucumber.core.plugin;
 
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
+import io.cucumber.messages.types.Tag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.jsoup.internal.StringUtil;
 import org.slf4j.LoggerFactory;

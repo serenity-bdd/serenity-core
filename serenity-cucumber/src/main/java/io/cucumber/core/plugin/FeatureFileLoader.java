@@ -1,7 +1,7 @@
 package io.cucumber.core.plugin;
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
+import io.cucumber.messages.types.Feature;
 import io.cucumber.plugin.event.TestSourceRead;
 import net.thucydides.core.util.Inflector;
 import org.slf4j.Logger;
@@ -46,15 +46,13 @@ public class FeatureFileLoader {
     }
 
     public Feature featureWithDefaultName(Feature feature, String defaultName) {
-        Feature.Builder featureBuilder = feature.newBuilderForType();
-        return featureBuilder.setName(defaultName).
-                addAllTags(feature.getTagsList()).
-                setLocation(feature.getLocation()).
-                setLanguage(feature.getLanguage()).
-                setKeyword(feature.getKeyword()).
-                setDescription(feature.getDescription()).
-                addAllChildren(feature.getChildrenList()).
-                build();
+        return new Feature(feature.getLocation(),
+                feature.getTags(),
+                feature.getLanguage(),
+                feature.getKeyword(),
+                defaultName,
+                feature.getDescription(),
+                feature.getChildren());
     }
 
     public void addTestSourceReadEvent(TestSourceRead event) {
@@ -70,6 +68,6 @@ public class FeatureFileLoader {
     }
 
     TestSourcesModel.AstNode getAstNode(URI path, int line) {
-        return testSources.getAstNode(path,line);
+        return testSources.getAstNode(path, line);
     }
 }

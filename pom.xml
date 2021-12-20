@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>3.1.11-SNAPSHOT</version>
+    <version>3.1.16-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -48,7 +48,7 @@
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>1.7.30</slf4j.version>
         <guice.version>5.0.1</guice.version>
-        <cucumber.version>6.11.0</cucumber.version>
+        <cucumber.version>7.0.0</cucumber.version>
         <gson.version>2.8.8</gson.version>
         <junit5.version>5.8.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>
@@ -62,7 +62,7 @@
         <commons.net.version>3.6</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <selenium.version>4.0.0</selenium.version>
+        <selenium.version>4.1.1</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <jsoup.version>1.14.3</jsoup.version>
         <joda-time.version>2.8.2</joda-time.version>
@@ -734,26 +734,26 @@
         <module>serenity-stats</module>
         <module>serenity-junit</module>
         <module>serenity-junit5</module>
+        <module>serenity-cucumber</module>
+        <module>serenity-maven-plugin</module>
+        <module>serenity-single-page-report</module>
+        <module>serenity-json-summary-report</module>
+        <module>serenity-navigator-report</module>
         <module>serenity-screenplay-rest</module>
         <module>serenity-screenplay-webdriver</module>
         <module>serenity-assertions</module>
         <module>serenity-ensure</module>
-        <module>serenity-ant-task</module>
         <module>serenity-zalenium</module>
-        <module>serenity-single-page-report</module>
-        <module>serenity-json-summary-report</module>
-        <module>serenity-navigator-report</module>
-        <module>serenity-spring</module>
         <module>serenity-browsermob-plugin</module>
         <module>serenity-browserstack</module>
         <module>serenity-lambdatest</module>
         <module>serenity-crossbrowsertesting</module>
-        <module>serenity-maven-plugin</module>
-        <module>serenity-cli</module>
+        <module>serenity-spring</module>
         <module>serenity-shutterbug</module>
         <module>serenity-shutterbug1x</module>
         <module>serenity-saucelabs</module>
-        <module>serenity-cucumber</module>
+        <module>serenity-ant-task</module>
+        <module>serenity-cli</module>
 <!--                <module>serenity-screenplay-playwright</module>-->
     </modules>
     <profiles>

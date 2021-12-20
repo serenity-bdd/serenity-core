@@ -53,7 +53,7 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should have a report link`() {
             assertThat(reportContents).contains("View full report")
-            assertThat(reportContents).contains("http://my.serenity.report")
+            assertThat(reportContents).contains("http://my.serenity.report/index.html")
         }
 
         @Test

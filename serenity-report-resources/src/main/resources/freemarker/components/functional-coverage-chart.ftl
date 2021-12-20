@@ -13,8 +13,8 @@
         const coverageReports = [
             <#list tagCoverageEntries as tagCoverage>
             {
-                title: '${tagCoverage.tagName}',
-                result: '${tagCoverage.resultName}',
+                title: '${formatter.javascriptCompatible(tagCoverage.tagName)}',
+                result: '${formatter.javascriptCompatible(tagCoverage.resultName)}',
 <#--                <#if tagCoverage.testCount = 0>-->
                 link: "${tagCoverage.report}"
 <#--                </#if>-->
@@ -24,7 +24,7 @@
         const coverageData = {
             labels: [
                 <#list tagCoverageEntries as tagCoverage>
-                '${tagCoverage.tagName}',
+                '${formatter.javascriptCompatible(tagCoverage.tagName)}',
                 </#list>
             ],
             datasets: [

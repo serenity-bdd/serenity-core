@@ -1,8 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
+import io.cucumber.messages.types.Feature;
+import io.cucumber.messages.types.Scenario;
 
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,12 +9,11 @@
     </parent>
 
     <artifactId>serenity-screenplay-playwright</artifactId>
-    <version>3.1.11-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Serenity Screenplay Playwright Integration</name>
 
     <properties>
-        <playwright.version>1.12.1</playwright.version>
+        <playwright.version>1.17.2</playwright.version>
     </properties>
 
     <build>
@@ -49,17 +47,17 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-core</artifactId>
-            <version>3.1.11-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-junit</artifactId>
-            <version>3.1.11-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-screenplay</artifactId>
-            <version>3.1.11-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.playwright</groupId>

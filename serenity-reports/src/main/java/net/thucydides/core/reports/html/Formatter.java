@@ -423,6 +423,13 @@ public class Formatter {
         return plainHtmlCompatible(fieldValue);
     }
 
+    public String javascriptCompatible(Object value) {
+        return value.toString()
+                .replace("\\","\\\\")
+                .replace("'","\\'")
+                .replace("\"","\\\"");
+    }
+
     public String messageBody(String message) {
         return renderText(message.trim());
     }

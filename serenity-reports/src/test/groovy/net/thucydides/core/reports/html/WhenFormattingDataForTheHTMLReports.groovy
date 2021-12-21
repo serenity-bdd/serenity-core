@@ -29,8 +29,8 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.messageBody(message) == formattedMessage
         where:
-        message         | formattedMessage
-        "Expected XML:\n<a>value</a>"   | "Expected XML:<br>&lt;a&gt;value&lt;/a&gt;"
+        message                       | formattedMessage
+        "Expected XML:\n<a>value</a>" | "Expected XML:<br>&lt;a&gt;value&lt;/a&gt;"
     }
 
     @Unroll
@@ -39,8 +39,8 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.restQuery(message) == formattedMessage
         where:
-        message         | formattedMessage
-        "https://jsonplaceholder.typicode.com?foo=1&ugrave=2"   | "https://jsonplaceholder.typicode.com?foo=1&amp;ugrave=2"
+        message                                               | formattedMessage
+        "https://jsonplaceholder.typicode.com?foo=1&ugrave=2" | "https://jsonplaceholder.typicode.com?foo=1&amp;ugrave=2"
     }
 
     @Unroll
@@ -49,22 +49,22 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
+        foreignWord                           | formattedWord
+        "Érintett Befogadása Alapadatokkal"   | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal" | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
     }
 
     @Unroll
     def "should render story titles with foreign characters when markdown disabled"() {
         expect:
         def environmentVariables = new MockEnvironmentVariables()
-        environmentVariables.setProperty("enable.markdown","not_enabled")
+        environmentVariables.setProperty("enable.markdown", "not_enabled")
         def formatter = new Formatter(environmentVariables)
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
+        foreignWord                           | formattedWord
+        "Érintett Befogadása Alapadatokkal"   | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal" | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
     }
 
 
@@ -74,22 +74,22 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
+        foreignWord                             | formattedWord
+        "Érintett **Befogadása** Alapadatokkal" | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"   | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
     }
 
     @Unroll
     def "should render story titles with foreign characters and no markdown"() {
         expect:
         def environmentVariables = new MockEnvironmentVariables()
-        environmentVariables.setProperty("enable.markdown","not_enabled")
+        environmentVariables.setProperty("enable.markdown", "not_enabled")
         def formatter = new Formatter(environmentVariables);
         formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
+        foreignWord                             | formattedWord
+        "Érintett **Befogadása** Alapadatokkal" | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"   | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
     }
 
     @Unroll
@@ -98,22 +98,22 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlCompatible(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett Befogadása"          | "&Eacute;rintett Befogad&aacute;sa"
-        "Érintett_Befogadása"          | "&Eacute;rintett_Befogad&aacute;sa"
+        foreignWord           | formattedWord
+        "Érintett Befogadása" | "&Eacute;rintett Befogad&aacute;sa"
+        "Érintett_Befogadása" | "&Eacute;rintett_Befogad&aacute;sa"
     }
-    
+
     @Unroll
     def "should render scenario titles with foreign characters and no markdown"() {
         expect:
         def environmentVariables = new MockEnvironmentVariables()
-        environmentVariables.setProperty("enable.markdown","not_enabled")
-        def formatter = new Formatter( environmentVariables);
+        environmentVariables.setProperty("enable.markdown", "not_enabled")
+        def formatter = new Formatter(environmentVariables);
         formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
-        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
+        foreignWord                             | formattedWord
+        "Érintett Befogadása Alapadatokkal"     | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett **Befogadása** Alapadatokkal" | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
     }
 
     @Unroll
@@ -122,9 +122,9 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
         where:
-        foreignWord         | formattedWord
-        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
-        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
+        foreignWord                             | formattedWord
+        "Érintett Befogadása Alapadatokkal"     | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett **Befogadása** Alapadatokkal" | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
     }
 
     @Unroll
@@ -133,9 +133,9 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlAttributeCompatible(message) == formattedMessage
         where:
-        message             | formattedMessage
-        "<expected \"a\">"  | "(expected 'a')"
-        "<expected \"a\"\nGot \"b\">"          | "(expected 'a'<br>Got 'b')"
+        message                       | formattedMessage
+        "<expected \"a\">"            | "(expected 'a')"
+        "<expected \"a\"\nGot \"b\">" | "(expected 'a'<br>Got 'b')"
 
     }
 
@@ -145,8 +145,8 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def formatter = new Formatter();
         formatter.htmlAttributeCompatible(message) == formattedMessage
         where:
-        message             | formattedMessage
-        "expected:<Sorry, we don[[]'t recognize that em...> but was:<Sorry, we don[]'t recognize that em...>"  | "expected:(Sorry, we don[[]'t recognize that em...) but was:(Sorry, we don[]'t recognize that em...)"
+        message                                                                                               | formattedMessage
+        "expected:<Sorry, we don[[]'t recognize that em...> but was:<Sorry, we don[]'t recognize that em...>" | "expected:(Sorry, we don[[]'t recognize that em...) but was:(Sorry, we don[]'t recognize that em...)"
 
     }
 
@@ -154,25 +154,25 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should abbreviate HTML messages if requested"() {
         expect:
-            def formatter = new Formatter();
-            formatter.htmlAttributeCompatible(message, 15) == formattedMessage
+        def formatter = new Formatter();
+        formatter.htmlAttributeCompatible(message, 15) == formattedMessage
         where:
-            message             | formattedMessage
-            "<expected \"a\">"  | "(expected 'a')"
-            "<expected \"a\"\nGot \"b\">"          | "(expected 'a..."
+        message                       | formattedMessage
+        "<expected \"a\">"            | "(expected 'a')"
+        "<expected \"a\"\nGot \"b\">" | "(expected 'a..."
 
     }
 
     @Unroll
     def "should display objects in string form"() {
         expect:
-        def formatter = new net.thucydides.core.reports.html.Formatter();
+        def formatter = new Formatter();
         formatter.htmlCompatible(object) == formattedObject
         where:
         object                          | formattedObject
-        [1,2,3]                         | "[1, 2, 3]"
-        ["a":"1","b":2]                 | "{a=1, b=2}"
-        ImmutableList.of("a","b","c")   | "[a, b, c]"
+        [1, 2, 3]                       | "[1, 2, 3]"
+        ["a": "1", "b": 2]              | "{a=1, b=2}"
+        ImmutableList.of("a", "b", "c") | "[a, b, c]"
     }
 
     def "should format embedded tables"() {
@@ -247,7 +247,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         def environmentVariables = new MockEnvironmentVariables()
         def formatter = new Formatter(environmentVariables);
         when:
-        environmentVariables.setProperty("ignore.embedded.tables","true")
+        environmentVariables.setProperty("ignore.embedded.tables", "true")
         and:
         def embeddedTable = formatter.convertAnyTables(singleCellTable)
         then:
@@ -427,14 +427,14 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     @Unroll
     def "should render test outcomes as Font Awesome icons"() {
         when:
-            def formatter = new Formatter();
+        def formatter = new Formatter();
         then:
-            formatter.resultIcon().forResult(result).contains(expectedIcon)
+        formatter.resultIcon().forResult(result).contains(expectedIcon)
         where:
-            result              | expectedIcon
-            TestResult.ERROR        | "<i class='bi bi-exclamation-triangle-fill error-icon ' title='ERROR'></i>"
-            TestResult.FAILURE      | "<i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i>"
-            TestResult.SUCCESS      | "<i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i>"
+        result             | expectedIcon
+        TestResult.ERROR   | "<i class='bi bi-exclamation-triangle-fill error-icon ' title='ERROR'></i>"
+        TestResult.FAILURE | "<i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i>"
+        TestResult.SUCCESS | "<i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i>"
     }
 
     @Unroll
@@ -444,10 +444,10 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         then:
         formatter.resultIcon().inLarge().forResult(result).contains(expectedIcon)
         where:
-        result              | expectedIcon
-        TestResult.ERROR        | "<i class='bi bi-exclamation-triangle-fill error-icon fa-2x' title='ERROR'></i>"
-        TestResult.FAILURE      | "<i class='bi bi-x-circle-fill failure-icon fa-2x' title='FAILURE'></i>"
-        TestResult.SUCCESS      | "<i class='bi bi-check-circle-fill success-icon fa-2x' title='SUCCESS'></i>"
+        result             | expectedIcon
+        TestResult.ERROR   | "<i class='bi bi-exclamation-triangle-fill error-icon fa-2x' title='ERROR'></i>"
+        TestResult.FAILURE | "<i class='bi bi-x-circle-fill failure-icon fa-2x' title='FAILURE'></i>"
+        TestResult.SUCCESS | "<i class='bi bi-check-circle-fill success-icon fa-2x' title='SUCCESS'></i>"
     }
 
 
@@ -458,10 +458,10 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         then:
         formatter.resultIcon().colorFor(result) == expectedStyle
         where:
-        result              | expectedStyle
-        TestResult.ERROR        | "error-icon"
-        TestResult.FAILURE      | "failure-icon"
-        TestResult.SUCCESS      | "success-icon"
+        result             | expectedStyle
+        TestResult.ERROR   | "error-icon"
+        TestResult.FAILURE | "failure-icon"
+        TestResult.SUCCESS | "success-icon"
     }
 
 }

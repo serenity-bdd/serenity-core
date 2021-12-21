@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.playwright.interactions;
 
 import com.microsoft.playwright.ElementHandle;
-import com.microsoft.playwright.Page;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;

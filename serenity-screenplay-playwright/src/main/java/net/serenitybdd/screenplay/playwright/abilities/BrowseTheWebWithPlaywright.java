@@ -10,7 +10,6 @@ import net.serenitybdd.screenplay.events.*;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
@@ -18,11 +17,11 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import org.assertj.core.api.Assertions;
 
-import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -75,8 +74,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            new BrowserType.LaunchOptions(),
-            BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
+                new BrowserType.LaunchOptions(),
+                BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
     }
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions) {
@@ -130,14 +129,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             tracingEnabled = TRACING.asBooleanFrom(environmentVariables).orElse(false);
             if (tracingEnabled) {
                 Tracing.StartOptions tracingOptions = new Tracing.StartOptions()
-                    .setScreenshots(true)
-                    .setSnapshots(true);
+                        .setScreenshots(true)
+                        .setSnapshots(true);
 
                 Optional<String> guessedTestName;
                 Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
 
                 guessedTestName = latestOutcome.map(
-                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+                        testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
                 ).orElseGet(RemoteTestName::fromCurrentTest);
 
                 guessedTestName.ifPresent(name -> {
@@ -279,7 +278,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         // Stop tracing before browser is closed
         if (currentContext != null && tracingEnabled) {
             currentContext.tracing().stop(
-                new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
+                    new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
             );
         }
         if (playwright != null) {
@@ -331,7 +330,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {
-        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), options,
+        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), launchOptions,
                 contextOptions, browserType.orElse(null));
     }
 

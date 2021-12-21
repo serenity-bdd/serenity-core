@@ -16,7 +16,7 @@ import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberWithSerenityRuntime;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
@@ -33,7 +33,6 @@ import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -491,10 +490,10 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private List<Expression> getCucumberRuntimeTags() {
-        if (CucumberWithSerenity.currentRuntimeOptions() == null) {
+        if (CucumberWithSerenityRuntime.currentRuntimeOptions() == null) {
             return new ArrayList<>();
         } else {
-            return CucumberWithSerenity.currentRuntimeOptions().getTagExpressions();
+            return CucumberWithSerenityRuntime.currentRuntimeOptions().getTagExpressions();
         }
     }
 
@@ -914,7 +913,11 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private boolean isAssumptionFailure(Throwable rootCause) {
-        return (AssumptionViolatedException.class.isAssignableFrom(rootCause.getClass()));
+    	try {
+			return (Class.forName("org.junit.internal.AssumptionViolatedException").isAssignableFrom(rootCause.getClass()));
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
     }
 
     private String stepTitleFrom(io.cucumber.messages.types.Step currentStep, TestStep testStep) {

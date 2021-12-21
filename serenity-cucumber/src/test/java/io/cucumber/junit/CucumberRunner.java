@@ -5,7 +5,7 @@ import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.options.RuntimeOptionsBuilder;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberWithSerenityRuntime;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
@@ -43,7 +43,7 @@ public class CucumberRunner {
         Configuration systemConfiguration = new SystemPropertiesConfiguration(environmentVariables);
         systemConfiguration.setOutputDirectory(outputDirectory);
         Supplier<ClassLoader> classLoaderSupplier = ClassLoaders::getDefaultClassLoader;
-        return CucumberWithSerenity.createSerenityEnabledRuntime(classLoaderSupplier, annotationOptions, systemConfiguration);
+        return CucumberWithSerenityRuntime.createSerenityEnabledRuntime(classLoaderSupplier, annotationOptions, systemConfiguration);
     }
 
     public static Runtime serenityRunnerForCucumberTestRunner(Class testClass, Configuration systemConfiguration) {
@@ -58,7 +58,7 @@ public class CucumberRunner {
         RuntimeOptions runtimeOptionsBuilder =  new RuntimeOptionsBuilder().build(annotationOptions);
 
         Supplier<ClassLoader> classLoaderSupplier = ClassLoaders::getDefaultClassLoader;
-        return CucumberWithSerenity.createSerenityEnabledRuntime( classLoaderSupplier,  runtimeOptionsBuilder, systemConfiguration);
+        return CucumberWithSerenityRuntime.createSerenityEnabledRuntime( classLoaderSupplier,  runtimeOptionsBuilder, systemConfiguration);
     }
 
 }

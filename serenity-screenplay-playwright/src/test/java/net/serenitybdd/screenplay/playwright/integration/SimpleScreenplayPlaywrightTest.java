@@ -35,8 +35,7 @@ public class SimpleScreenplayPlaywrightTest {
                 Click.on("#search_button_homepage")
         );
         daffy.should(
-                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo")),
-                seeThat(PlaywrightQuestions.textOf(".module__title__link"), Matchers.containsString("Penguin"))
+                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo"))
         );
     }
 
@@ -44,10 +43,6 @@ public class SimpleScreenplayPlaywrightTest {
     static class SearchPage {
         static final Target SEARCH_FIELD = Target.the("Search field").locatedBy("#search_form_input_homepage");
         static final Target SEARCH_BUTTON = Target.the("Search button").locatedBy("#search_button_homepage");
-    }
-
-    static class ResultsPage {
-        static final Target MODULE_TITLE = Target.the("Module title").locatedBy(".module__title__link");
     }
 
     @Test
@@ -58,8 +53,7 @@ public class SimpleScreenplayPlaywrightTest {
                 Click.on(SearchPage.SEARCH_BUTTON)
         );
         daffy.should(
-                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo")),
-                seeThat(PlaywrightQuestions.textOf(ResultsPage.MODULE_TITLE), Matchers.containsString("Penguin"))
+                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo"))
         );
     }
 }

@@ -10,10 +10,17 @@ import net.serenitybdd.screenplay.events.*;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
+import org.assertj.core.api.Assertions;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +45,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     Playwright playwright;
 
     BrowserType.LaunchOptions launchOptions;
+    Browser.NewContextOptions contextOptions;
     private static final String TRACES_PATH = "target/playwright/traces";
     boolean tracingEnabled;
     String traceName;
@@ -66,8 +74,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            new BrowserType.LaunchOptions(),
-            BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
+                new BrowserType.LaunchOptions(),
+                BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
     }
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions) {
@@ -75,8 +83,13 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions, String browserType) {
+        this(environmentVariables, launchOptions, null, browserType);
+    }
+
+    protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions, Browser.NewContextOptions contextOptions, String browserType) {
         this.environmentVariables = environmentVariables;
         this.launchOptions = launchOptions;
+        this.contextOptions = contextOptions;
         this.browserType = Optional.ofNullable(browserType);
         registerForEventNotification();
     }
@@ -104,9 +117,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      * A BrowserContext is an isolated incognito-alike session within a browser instance.
      */
     private BrowserContext getCurrentContext() {
-        // TODO: Add the ability to allow options for a context
         if (currentContext == null) {
-            currentContext = getBrowser().newContext();
+            currentContext = getBrowser().newContext(contextOptions);
         }
         return currentContext;
     }
@@ -117,14 +129,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             tracingEnabled = TRACING.asBooleanFrom(environmentVariables).orElse(false);
             if (tracingEnabled) {
                 Tracing.StartOptions tracingOptions = new Tracing.StartOptions()
-                    .setScreenshots(true)
-                    .setSnapshots(true);
+                        .setScreenshots(true)
+                        .setSnapshots(true);
 
                 Optional<String> guessedTestName;
                 Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
 
                 guessedTestName = latestOutcome.map(
-                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+                        testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
                 ).orElseGet(RemoteTestName::fromCurrentTest);
 
                 guessedTestName.ifPresent(name -> {
@@ -266,10 +278,33 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         // Stop tracing before browser is closed
         if (currentContext != null && tracingEnabled) {
             currentContext.tracing().stop(
-                new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
+                    new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
             );
         }
         if (playwright != null) {
+
+            // Take screenshot for failed test
+            BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+            if (baseStepListener.currentTestFailed()) {
+                Page currentPage = getCurrentPage();
+                byte[] screenshot = currentPage.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+
+                try {
+                    Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
+                    Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
+                    Path screenshotFile = Files.createTempFile(outputDirectory, "screenshot", ".png");
+                    Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
+                    Files.write(screenshotFile, screenshot);
+
+                    ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFile.toFile(), pageSourceFile.toFile());
+                    baseStepListener.firstFailingStep().ifPresent(
+                            step -> step.addScreenshot(screenshotAndHtmlSource)
+                    );
+                } catch (IOException e) {
+                    Assertions.fail("Failed to take Playwright screenshot", e);
+                }
+            }
+
             playwright.close();
             currentPage = null;
             currentContext = null;
@@ -292,6 +327,11 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public static BrowseTheWebWithPlaywright withOptions(BrowserType.LaunchOptions options) {
         return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), options);
+    }
+
+    public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {
+        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), launchOptions,
+                contextOptions, browserType.orElse(null));
     }
 
     public BrowseTheWebWithPlaywright withBrowserType(String browserType) {

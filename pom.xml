@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
@@ -74,8 +75,8 @@
         <freemarker.version>2.3.31</freemarker.version>
         <appium.version>8.0.0-beta</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-<!--        <phantomjs.version>1.4.4</phantomjs.version>-->
-<!--        <htmlunit.version>2.54.0</htmlunit.version>-->
+        <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
+        <!--        <htmlunit.version>2.54.0</htmlunit.version>-->
         <webdrivermanager.version>5.0.3</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.5</ngwebdriver.version>
@@ -335,11 +336,11 @@
                 <version>${jsonassert.version}</version>
                 <scope>test</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.seleniumhq.selenium</groupId>-->
-<!--                <artifactId>selenium-server</artifactId>-->
-<!--                <version>${selenium.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.seleniumhq.selenium</groupId>-->
+            <!--                <artifactId>selenium-server</artifactId>-->
+            <!--                <version>${selenium.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
@@ -420,11 +421,11 @@
                 <artifactId>fluentlenium-core</artifactId>
                 <version>${fluentlenium.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.codeborne</groupId>-->
-<!--                <artifactId>phantomjsdriver</artifactId>-->
-<!--                <version>${phantomjs.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.codeborne</groupId>-->
+            <!--                <artifactId>phantomjsdriver</artifactId>-->
+            <!--                <version>${phantomjs.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>io.github.bonigarcia</groupId>
                 <artifactId>webdrivermanager</artifactId>
@@ -565,9 +566,9 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-<!--                        <parallel>all</parallel>-->
-<!--                        <threadCount>16</threadCount>-->
-<!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
+                        <!--                        <parallel>all</parallel>-->
+                        <!--                        <threadCount>16</threadCount>-->
+                        <!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -635,12 +636,12 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
                             </rules>
                         </configuration>
-<!--                        <goals>-->
-<!--                            <goal>enforce</goal>-->
-<!--                        </goals>-->
+                        <!--                        <goals>-->
+                        <!--                            <goal>enforce</goal>-->
+                        <!--                        </goals>-->
                     </execution>
                 </executions>
             </plugin>
@@ -660,7 +661,7 @@
                 </executions>
                 <configuration>
                     <serverId>ossrh</serverId>
-<!--                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
+                    <!--                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
                     <nexusUrl>https://oss.sonatype.org</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
@@ -677,29 +678,29 @@
                 </configuration>
             </plugin>
             <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>flatten-maven-plugin</artifactId>
-              <version>1.1.0</version>
-              <configuration>
-                <updatePomFile>true</updatePomFile>
-                <flattenMode>resolveCiFriendliesOnly</flattenMode>
-              </configuration>
-              <executions>
-                <execution>
-                  <id>flatten</id>
-                  <phase>process-resources</phase>
-                  <goals>
-                    <goal>flatten</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>flatten.clean</id>
-                  <phase>clean</phase>
-                  <goals>
-                    <goal>clean</goal>
-                  </goals>
-                </execution>
-              </executions>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -754,7 +755,7 @@
         <module>serenity-saucelabs</module>
         <module>serenity-ant-task</module>
         <module>serenity-cli</module>
-<!--                <module>serenity-screenplay-playwright</module>-->
+        <module>serenity-screenplay-playwright</module>
     </modules>
     <profiles>
         <profile>

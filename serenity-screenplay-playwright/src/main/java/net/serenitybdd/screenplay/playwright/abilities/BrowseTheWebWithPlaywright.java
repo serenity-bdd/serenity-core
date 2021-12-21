@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
+import net.serenitybdd.screenplay.playwright.Photographer;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -17,6 +18,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import org.assertj.core.api.Assertions;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -41,6 +43,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      * Keep tabs on which actor is associated with this ability, so we can manage start and end performance events
      */
     private Actor actor;
+    private Photographer photographer;
 
     Playwright playwright;
 
@@ -173,7 +176,6 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         if (!OPEN_BROWSER.containsKey(configuredBrowser())) {
             throw new InvalidPlaywrightBrowserType(configuredBrowser());
         }
-        ;
         return OPEN_BROWSER.get(configuredBrowser()).apply(playwright).launch(options);
     }
 
@@ -236,6 +238,32 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         return launchOptions;
     }
 
+    public Photographer getPhotographer() {
+        if (photographer == null) {
+            photographer = new Photographer();
+        }
+        return photographer;
+    }
+
+    public void takeScreenShot() {
+        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        Page currentPage = getCurrentPage();
+
+        try {
+            Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
+            Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
+            Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
+            File screenshot = getPhotographer().takesAScreenshot(currentPage);
+
+            ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
+            baseStepListener.firstFailingStep().ifPresent(
+                    step -> step.addScreenshot(screenshotAndHtmlSource)
+            );
+        } catch (IOException e) {
+            Assertions.fail("Failed to take Playwright screenshot", e);
+        }
+    }
+
     public <T extends Ability> T asActor(Actor actor) {
         this.actor = actor;
         return (T) this;
@@ -282,27 +310,10 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             );
         }
         if (playwright != null) {
-
             // Take screenshot for failed test
             BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
             if (baseStepListener.currentTestFailed()) {
-                Page currentPage = getCurrentPage();
-                byte[] screenshot = currentPage.screenshot(new Page.ScreenshotOptions().setFullPage(true));
-
-                try {
-                    Path outputDirectory = baseStepListener.getOutputDirectory().toPath();
-                    Path pageSourceFile = Files.createTempFile(outputDirectory, "pagesource", ".txt");
-                    Path screenshotFile = Files.createTempFile(outputDirectory, "screenshot", ".png");
-                    Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
-                    Files.write(screenshotFile, screenshot);
-
-                    ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFile.toFile(), pageSourceFile.toFile());
-                    baseStepListener.firstFailingStep().ifPresent(
-                            step -> step.addScreenshot(screenshotAndHtmlSource)
-                    );
-                } catch (IOException e) {
-                    Assertions.fail("Failed to take Playwright screenshot", e);
-                }
+                takeScreenShot();
             }
 
             playwright.close();
@@ -312,11 +323,9 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         }
     }
 
-
     private boolean messageIsForThisActor(ActorPerformanceEvent event) {
         return event.getName().equals(actor.getName());
     }
-
 
     /**
      * Create a new Playwright ability using default configuration values.

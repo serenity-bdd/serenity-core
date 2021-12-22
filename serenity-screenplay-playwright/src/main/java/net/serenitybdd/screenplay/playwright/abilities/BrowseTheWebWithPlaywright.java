@@ -266,7 +266,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     public void notifyScreenChange() {
         BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
         // Take screenshot for after each UI action when SERENITY_TAKE_SCREENSHOTS is FOR_EACH_ACTION
-        if (SERENITY_TAKE_SCREENSHOTS.from(environmentVariables).equals("FOR_EACH_ACTION")) {
+        if ("FOR_EACH_ACTION".equals(SERENITY_TAKE_SCREENSHOTS.from(environmentVariables))) {
             ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
             baseStepListener.getCurrentTestOutcome().currentStep().ifPresent(
@@ -323,7 +323,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         if (playwright != null) {
             BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
             // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
-            if (baseStepListener.currentTestFailed() && SERENITY_TAKE_SCREENSHOTS.from(environmentVariables).equals("FOR_FAILURES")) {
+            if (baseStepListener.currentTestFailed() && "FOR_FAILURES".equals(SERENITY_TAKE_SCREENSHOTS.from(environmentVariables))) {
                 ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
                 baseStepListener.firstFailingStep().ifPresent(

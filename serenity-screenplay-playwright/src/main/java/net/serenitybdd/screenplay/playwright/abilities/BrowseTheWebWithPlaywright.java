@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.*;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TAKE_SCREENSHOTS;
 
 /**
  * This ability wraps the Playwright Browser object.
@@ -245,7 +246,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         return photographer;
     }
 
-    public void takeScreenShot() {
+    public ScreenshotAndHtmlSource takeScreenShot() {
         BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
         Page currentPage = getCurrentPage();
 
@@ -255,12 +256,22 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             Files.write(pageSourceFile, currentPage.content().getBytes(StandardCharsets.UTF_8));
             File screenshot = getPhotographer().takesAScreenshot(currentPage);
 
-            ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
-            baseStepListener.firstFailingStep().ifPresent(
-                    step -> step.addScreenshot(screenshotAndHtmlSource)
-            );
+            return new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
         } catch (IOException e) {
             Assertions.fail("Failed to take Playwright screenshot", e);
+            return null;
+        }
+    }
+
+    public void notifyScreenChange() {
+        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        // Take screenshot for after each UI action when SERENITY_TAKE_SCREENSHOTS is FOR_EACH_ACTION
+        if (SERENITY_TAKE_SCREENSHOTS.from(environmentVariables).equals("FOR_EACH_ACTION")) {
+            ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
+
+            baseStepListener.getCurrentTestOutcome().currentStep().ifPresent(
+                    step -> step.addScreenshot(screenshotAndHtmlSource)
+            );
         }
     }
 
@@ -310,10 +321,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             );
         }
         if (playwright != null) {
-            // Take screenshot for failed test
             BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
-            if (baseStepListener.currentTestFailed()) {
-                takeScreenShot();
+            // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
+            if (baseStepListener.currentTestFailed() && SERENITY_TAKE_SCREENSHOTS.from(environmentVariables).equals("FOR_FAILURES")) {
+                ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
+
+                baseStepListener.firstFailingStep().ifPresent(
+                        step -> step.addScreenshot(screenshotAndHtmlSource)
+                );
             }
 
             playwright.close();

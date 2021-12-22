@@ -47,7 +47,20 @@ And if you drill into the details, Serenity will give you a detailed account of 
 
 ![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
 
+## Found a bug?
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time or through a sponsoring organisation.
+    
+Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 
+You can help out by sponsoring Serenity BDD directly here:
+[:heart: Sponsor](https://github.com/sponsors/serenity-bdd)
+
+Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
+
+## Need Commercial Support?
+    
+If you are using Serenity for your company projects, and need faster or more in-depth support, including training and coaching, why not ask your company to get some [commercial support](https://by2kx88fp4k.typeform.com/to/X8sN33jP)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs, so let's chat!
+  
 ## Where can I learn more?
 
 Check out Serenity BDD in more detail here:
@@ -72,6 +85,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
 |---------------|-----------------------|-------------------|----------------------|-----------------------|
+| 3.1.15        | 3.1.15                | 4.1.1             | 4.4.0                | 8.0.0-BETA            |
 | 3.1.1         | 3.1.1                 | 4.0.0             | 4.3.3                | 8.0.0-BETA            |
 | 3.0.5         | 3.0.5                 | 3.141.59          | 4.3.3                | 7.5.1                 |
 | 2.5.8         | 2.5.8                 | 3.141.59          | 4.3.3                | 7.5.1                 |
@@ -101,10 +115,15 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 ### Serenity with Cucumber
 From version 2.3.x we will be supporting Cucumber 6 only.
 
-#### Cucumber 6 (Serenity 3.x onwards)
+#### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber  | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
-| 3.1.1         | 3.1.1                 |  3.1.1             | 6.11.0              |
+| 3.1.15         | 3.1.1                |  3.1.1             | 7.0.0               |
+   
+#### Cucumber 7 (Serenity 3.x onwards)
+| serenity-core | serenity-maven-plugin | serenity-cucumber  | Cucumber            |
+|---------------|-----------------------|--------------------|---------------------|
+| 3.1.1         | 3.1.15                |  3.1.15            | 6.11.0               |
 | 3.0.5         | 3.0.5                 |  3.0.5             | 6.10.4              |
 
 #### Cucumber 6
@@ -249,12 +268,16 @@ Also, make sure you try with the latest version of Serenity - your bug may alrea
 
 It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like [this one](https://github.com/serenity-bdd/serenity-cucumber-starter) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
 
-### Submit a Pull Request
+## Found a bug?
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time or through a sponsoring organisation.
+    
+Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 
-The fastest way to fix a defect is often to dig into the code and to submit a pull request.
-
-## Need Commercial Support?
-
-If you are using Serenity for your company projects, and need faster or more in-depth support, why not ask your company to get some [commercial support](https://johnfergusonsmart.com/serenity-bdd/)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.
+You can help out by sponsoring Serenity BDD directly here:
+[:heart: Sponsor](https://github.com/sponsors/serenity-bdd)
 
 Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
+
+## Need Commercial Support?
+    
+If you are using Serenity for your company projects, and need faster or more in-depth support, including training and coaching, why not ask your company to get some [commercial support](https://johnfergusonsmart.com/serenity-bdd/)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.

@@ -52,8 +52,8 @@ You can raise a defect here. Note that this is an open source project, so **the 
     
 Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 
-You can help out by sponsoring Serenity BDD directly here:
-[:heart: Sponsor](https://github.com/sponsors/serenity-bdd)
+**You can help out by sponsoring Serenity BDD directly here:
+[:heart: Sponsor](https://github.com/sponsors/serenity-bdd)**
 
 Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
 

@@ -104,7 +104,7 @@ public class WebElementExpectations {
 
             public Boolean apply(WebDriver driver) {
                 WebElement resolvedElement = element.getElement();
-                return ((resolvedElement != null) && (resolvedElement.isDisplayed()));
+                return ((resolvedElement != null) && (resolvedElement.isDisplayed()) && resolvedElement.isEnabled());
             }
 
             @Override

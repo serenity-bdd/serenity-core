@@ -2,7 +2,7 @@ package io.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Examples;
 import io.cucumber.messages.types.TableRow;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberWithSerenityRuntime;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class LineFilters {
     }
 
     private Map<URI, Set<Integer>> newLineFilters() {
-        Map<URI, Set<Integer>> lineFiltersFromRuntime = CucumberWithSerenity.currentRuntimeOptions().getLineFilters();
+        Map<URI, Set<Integer>> lineFiltersFromRuntime = CucumberWithSerenityRuntime.currentRuntimeOptions().getLineFilters();
         if (lineFiltersFromRuntime == null) {
             return new HashMap<>();
         } else {

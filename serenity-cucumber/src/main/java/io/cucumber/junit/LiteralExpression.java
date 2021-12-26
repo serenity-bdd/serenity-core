@@ -8,7 +8,7 @@ public class LiteralExpression implements Expression {
 
     private final String value;
 
-    LiteralExpression(String value) {
+    public LiteralExpression(String value) {
         this.value = value;
     }
 

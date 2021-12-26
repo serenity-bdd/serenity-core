@@ -4,7 +4,7 @@ import io.cucumber.core.options.CommandlineOptionsParser;
 import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
-import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.CucumberWithSerenityRuntime;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
 
@@ -42,7 +42,7 @@ public class CucumberWithSerenityRuntimeMain {
         //ResourceLoader resourceLoader = new MultiLoader(classLoader);
         Configuration systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
         //Supplier<ClassLoader> classLoader = ClassLoaders::getDefaultClassLoader;
-        Runtime serenityRuntime = CucumberWithSerenity.createSerenityEnabledRuntime(/*resourceLoader,*/
+        Runtime serenityRuntime = CucumberWithSerenityRuntime.createSerenityEnabledRuntime(/*resourceLoader,*/
                 classLoaderSupplier,
                 runtimeOptions,
                 systemConfiguration);

@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TestOutcomeTimestamp {
 
-    private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("dd-MM-YYYY HH:mm");
+    private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 
     public static String from(TestOutcomes testOutcomes) {

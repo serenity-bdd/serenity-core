@@ -37,6 +37,7 @@ import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
 import static net.thucydides.core.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 
 /**
@@ -417,14 +418,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 return false;
             }
 
-            if (!isPresent()) {
-                return false;
+            if (shouldWaitForResult()) {
+                return waitForCondition().until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+            } else {
+                return element.isDisplayed();
             }
-
-            if (element != null && shouldWaitForResult()) {
-                waitForCondition().until(ExpectedConditions.visibilityOf(element));
-            }
-            return (element != null) && (element.isDisplayed());
 
         } catch (ElementNotVisibleException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
             return false;
@@ -471,9 +469,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         try {
             return (getElement() != null) && getElement().isEnabled();
-        } catch (NoSuchElementException e) {
-            return false;
-        } catch (StaleElementReferenceException se) {
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
             return false;
         }
     }
@@ -769,8 +765,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     public boolean isClickable() {
         try {
-            if (!driverIsDisabled() && shouldWaitForResult()) {
-                waitForCondition().until(elementIsClickable(this));
+            if (!driverIsDisabled() && shouldWaitForResult() && getElement() != null) {
+                waitForCondition().until(elementToBeClickable(getElement()));
                 return true;
             }
         } catch (TimeoutException timeout) {
@@ -792,7 +788,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-//        waitUntilElementAvailable();
         clear();
         getElement().sendKeys(keysToSend);
         notifyScreenChange();
@@ -812,7 +807,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        waitUntilElementAvailable();
         clear();
         getElement().sendKeys(value, Keys.ENTER);
         notifyScreenChange();
@@ -833,7 +827,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        waitUntilElementAvailable();
         clear();
 
         getElement().sendKeys(value);
@@ -976,7 +969,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             if (getElement() == null) {
                 return false;
             }
-
             element.isDisplayed();
             return true;
         } catch (ElementNotVisibleException e) {

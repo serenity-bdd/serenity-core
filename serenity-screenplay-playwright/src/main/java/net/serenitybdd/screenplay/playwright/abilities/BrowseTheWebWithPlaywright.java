@@ -17,6 +17,8 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import org.assertj.core.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TAKE_SCREENS
  * -
  */
 public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrowseTheWebWithPlaywright.class);
 
     /**
      * Keep tabs on which actor is associated with this ability, so we can manage start and end performance events
@@ -54,7 +57,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     boolean tracingEnabled;
     String traceName;
 
-    private Optional<String> browserType;
+    private final Optional<String> browserType;
 
     private static final String DEFAULT_BROWSER_TYPE = "chromium";
 
@@ -283,14 +286,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     @Subscribe
     public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
         if (messageIsForThisActor(performanceEvent)) {
-            System.out.println("BEGIN " + performanceEvent.getClass());
+            LOGGER.debug("BEGIN " + performanceEvent.getClass());
         }
     }
 
     @Subscribe
     public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
         if (messageIsForThisActor(performanceEvent)) {
-            System.out.println("END " + performanceEvent.getClass());
+            LOGGER.debug("END " + performanceEvent.getClass());
         }
     }
 
@@ -298,14 +301,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     @Subscribe
     public void perform(ActorPerforms performAction) {
         if (messageIsForThisActor(performAction)) {
-            System.out.println("Perform " + performAction.getPerformable());
+            LOGGER.debug("Perform " + performAction.getPerformable());
         }
     }
 
     @Subscribe
     public void prepareQuestion(ActorAsksQuestion questionEvent) {
         if (messageIsForThisActor(questionEvent)) {
-            System.out.println("Question " + questionEvent.getQuestion());
+            LOGGER.debug("Question " + questionEvent.getQuestion());
         }
     }
 
@@ -339,7 +342,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     private boolean messageIsForThisActor(ActorPerformanceEvent event) {
-        return event.getName().equals(actor.getName());
+        return (actor != null) && event.getName().equals(actor.getName());
     }
 
     /**

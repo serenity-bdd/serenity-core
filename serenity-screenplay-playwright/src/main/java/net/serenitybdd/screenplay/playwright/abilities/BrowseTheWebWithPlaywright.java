@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.playwright.abilities;
 
 import com.google.common.eventbus.Subscribe;
 import com.microsoft.playwright.*;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
@@ -10,7 +11,9 @@ import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.playwright.Photographer;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.screenshots.ScreenshotPermission;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
@@ -32,7 +35,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static net.serenitybdd.screenplay.playwright.PlayWrightConfigurationProperties.*;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TAKE_SCREENSHOTS;
 
 /**
  * This ability wraps the Playwright Browser object.
@@ -81,8 +83,8 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-                new BrowserType.LaunchOptions(),
-                BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
+            new BrowserType.LaunchOptions(),
+            BROWSER_TYPE.asStringFrom(environmentVariables).orElse(null));
     }
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables, BrowserType.LaunchOptions launchOptions) {
@@ -136,14 +138,14 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             tracingEnabled = TRACING.asBooleanFrom(environmentVariables).orElse(false);
             if (tracingEnabled) {
                 Tracing.StartOptions tracingOptions = new Tracing.StartOptions()
-                        .setScreenshots(true)
-                        .setSnapshots(true);
+                    .setScreenshots(true)
+                    .setSnapshots(true);
 
                 Optional<String> guessedTestName;
                 Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
 
                 guessedTestName = latestOutcome.map(
-                        testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
+                    testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
                 ).orElseGet(RemoteTestName::fromCurrentTest);
 
                 guessedTestName.ifPresent(name -> {
@@ -268,12 +270,13 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public void notifyScreenChange() {
         BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
         // Take screenshot for after each UI action when SERENITY_TAKE_SCREENSHOTS is FOR_EACH_ACTION
-        if ("FOR_EACH_ACTION".equals(SERENITY_TAKE_SCREENSHOTS.from(environmentVariables))) {
+        if (screenshots.areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
             ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
             baseStepListener.getCurrentTestOutcome().currentStep().ifPresent(
-                    step -> step.addScreenshot(screenshotAndHtmlSource)
+                step -> step.addScreenshot(screenshotAndHtmlSource)
             );
         }
     }
@@ -320,17 +323,18 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
         // Stop tracing before browser is closed
         if (currentContext != null && tracingEnabled) {
             currentContext.tracing().stop(
-                    new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
+                new Tracing.StopOptions().setPath(Paths.get(String.format("%s/%s.zip", TRACES_PATH, traceName)))
             );
         }
         if (playwright != null) {
             BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+            ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
             // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
-            if (baseStepListener.currentTestFailed() && "FOR_FAILURES".equals(SERENITY_TAKE_SCREENSHOTS.from(environmentVariables))) {
+            if (baseStepListener.currentTestFailed() && screenshots.areAllowed(TakeScreenshots.FOR_FAILURES)) {
                 ScreenshotAndHtmlSource screenshotAndHtmlSource = takeScreenShot();
 
                 baseStepListener.firstFailingStep().ifPresent(
-                        step -> step.addScreenshot(screenshotAndHtmlSource)
+                    step -> step.addScreenshot(screenshotAndHtmlSource)
                 );
             }
 
@@ -358,7 +362,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
     public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {
         return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), launchOptions,
-                contextOptions, browserType.orElse(null));
+            contextOptions, browserType.orElse(null));
     }
 
     public BrowseTheWebWithPlaywright withBrowserType(String browserType) {

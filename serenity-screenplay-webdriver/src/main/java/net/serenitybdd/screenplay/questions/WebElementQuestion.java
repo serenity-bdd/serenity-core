@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.questions;
 
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Actor;
@@ -39,9 +40,11 @@ public class WebElementQuestion implements Question<WebElementState>, AcceptsHin
     public static Question<WebElementState> valueOf(Target target) {
         return stateOf(target);
     }
+
     public static Question<WebElementState> valueOf(String xpathOrCssSelector) {
         return stateOf(xpathOrCssSelector);
     }
+
     public static Question<WebElementState> valueOf(By byLocator) {
         return stateOf(byLocator);
     }
@@ -66,17 +69,33 @@ public class WebElementQuestion implements Question<WebElementState>, AcceptsHin
     private WebElementState checkForAbsenceBy(Actor actor) {
         List<WebElementFacade> matchingElements = target.resolveAllFor(actor);
 
-        if (matchingElements.isEmpty()) { return new MissingWebElement(target.getName()); }
+        if (matchingElements.isEmpty()) {
+            return new MissingWebElement(target.getName());
+        }
 
         return matchingElements.get(0);
     }
 
     private WebElementState checkForPresenceBy(Actor actor) {
-        try {
-            return target.resolveFor(actor);
-        } catch (NoSuchElementException unresolvedTarget) {
+        List<WebElementFacade> matchingElements = target.resolveAllFor(actor);
+
+        if (matchingElements.isEmpty()) {
             return new UnresolvedTargetWebElementState(target.getName());
+        } else {
+            return matchingElements.get(0);
         }
+//
+//        try {
+//            return target.resolveFor(actor);
+//        } catch (NoSuchElementException unresolvedTarget) {
+//            return new UnresolvedTargetWebElementState(target.getName());
+//        } catch (SerenityManagedException targetProbablyNotFound) {
+//            if (targetProbablyNotFound.getMessage().contains("No element was found")) {
+//                return new UnresolvedTargetWebElementState(target.getName());
+//            } else {
+//                throw targetProbablyNotFound;
+//            }
+//        }
     }
 
     @Override

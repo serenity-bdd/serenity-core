@@ -168,7 +168,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return;
         }
-//        openIgnoringHtmlUnitScriptErrors(url);
+
         getProxiedDriver().get(url);
         setTimeouts();
     }

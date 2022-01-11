@@ -1,23 +1,22 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
+import io.cucumber.messages.types.Examples;
+import io.cucumber.messages.types.Feature;
+import io.cucumber.messages.types.Scenario;
 
 import java.util.Optional;
 
 import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithNoTitle;
 
 public class IdentifiedExampleTable extends NamedExampleTable {
-    private Feature feature;
-    private String scenarioReport;
-    private Scenario scenarioDefinition;
-    private String exampleTableName;
-    private ExampleTableInMarkdown exampleTableInMarkdown;
+    private final Feature feature;
+    private final Scenario scenarioDefinition;
+    private final String exampleTableName;
+    private final ExampleTableInMarkdown exampleTableInMarkdown;
 
     protected IdentifiedExampleTable(Feature feature, Scenario scenarioDefinition, String exampleTableName) {
         this.feature = feature;
-        this.scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
+        String scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
         this.scenarioDefinition = scenarioDefinition;
         this.exampleTableName = exampleTableName;
         this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition);
@@ -30,12 +29,12 @@ public class IdentifiedExampleTable extends NamedExampleTable {
 
     @Override
     public Optional<String> asExampleTable(ScenarioDisplayOption withDisplayOption) {
-        if (scenarioDefinition.getExamplesCount() == 0) {
+        if (scenarioDefinition.getExamples().isEmpty()) {
             return Optional.empty();
         }
 
         int exampleRow = 0;
-        for (Examples example : scenarioDefinition.getExamplesList()) {
+        for (Examples example : scenarioDefinition.getExamples()) {
             if (example.getName().equalsIgnoreCase(exampleTableName.trim())) {
                 return Optional.of(exampleTableInMarkdown.renderedFormOf(example, exampleRow, withDisplayOption));
             }

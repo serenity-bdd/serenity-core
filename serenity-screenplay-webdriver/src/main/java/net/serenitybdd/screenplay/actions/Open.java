@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.screenplay.Interaction;
 
 public class Open {
 
@@ -21,15 +20,15 @@ public class Open {
         return new OpenAt(targetUrl);
     }
 
-    public Interaction the(PageObject targetPage) {
+    public OpenPage the(PageObject targetPage) {
         return new OpenPage(targetPage);
     }
 
-    public Interaction thePageNamed(String pageName) {
+    public OpenPageWithName thePageNamed(String pageName) {
         return new OpenPageWithName(pageName);
     }
 
-    public Interaction the(Class<? extends PageObject> targetPageClass) {
+    public OpenPageFromClass the(Class<? extends PageObject> targetPageClass) {
         return new OpenPageFromClass(targetPageClass);
     }
 

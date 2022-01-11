@@ -2,8 +2,8 @@ package net.thucydides.core.requirements.model.cucumber
 
 import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
 import io.cucumber.messages.IdGenerator
-import io.cucumber.messages.Messages.Envelope
-import io.cucumber.messages.Messages.GherkinDocument.Feature
+import io.cucumber.messages.types.Envelope
+import io.cucumber.messages.types.Feature
 import spock.lang.Specification
 
 import java.util.stream.Collectors
@@ -23,7 +23,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
         List<Envelope> envelopes = Gherkin.fromPaths(listOfFiles, includeSource, includeAst, includePickles, idGenerator).collect(Collectors.toList());
         for(Envelope envelope : envelopes )
         {
-            if(envelope.hasGherkinDocument() && envelope.getGherkinDocument().hasFeature())
+            if(envelope.gherkinDocument && envelope.gherkinDocument.feature)
             {
                 loadedFeatures.add(envelope.getGherkinDocument().getFeature());
             }

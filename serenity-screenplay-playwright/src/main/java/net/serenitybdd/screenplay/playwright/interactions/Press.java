@@ -33,5 +33,6 @@ public class Press implements Performable {
     @Step("{0} presses '#keysSequence' keys combination")
     public <T extends Actor> void performAs(T actor) {
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().keyboard().press(keysSequence, options);
+        BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

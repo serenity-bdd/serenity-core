@@ -14,7 +14,7 @@ import net.thucydides.core.annotations.Step;
  * that control will be filled instead.
  * If the element to be filled is not an <input>, <textarea> or [contenteditable] element, this method throws an error.
  * Note that you can pass an empty string to clear the input field.
- *
+ * <p>
  * Sample usage:
  * <pre>
  *     Enter.theValue("pengins").into("#searchfield");
@@ -64,5 +64,6 @@ public class Enter implements Performable {
     @Step("{0} enters #value into #target")
     public <T extends Actor> void performAs(T actor) {
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().fill(target.asSelector(), value, options);
+        BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

@@ -1,15 +1,16 @@
 package io.cucumber.core.plugin;
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Tag;
+import io.cucumber.messages.types.Examples;
+import io.cucumber.messages.types.Scenario;
+import io.cucumber.messages.types.Step;
+import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestStep;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.DataTableRow;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.steps.StepEventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.util.*;
@@ -28,10 +29,10 @@ class ScenarioContext {
     private DataTable table;
 
     //keys are line numbers, entries are example rows (key=header, value=rowValue )
-    Map<Integer, Map<String, String>> exampleRows;
+    Map<Long, Map<String, String>> exampleRows;
 
     //keys are line numbers
-    Map<Integer, List<Tag>> exampleTags;
+    Map<Long, List<Tag>> exampleTags;
 
     int exampleCount = 0;
 
@@ -69,11 +70,11 @@ class ScenarioContext {
         return examplesRunning;
     }
 
-    public Map<Integer, Map<String, String>> getExampleRows() {
+    public Map<Long, Map<String, String>> getExampleRows() {
         return exampleRows;
     }
 
-    public Map<Integer, List<Tag>> getExampleTags() {
+    public Map<Long, List<Tag>> getExampleTags() {
         return exampleTags;
     }
 
@@ -126,8 +127,7 @@ class ScenarioContext {
     }
 
     public boolean isAScenarioOutline() {
-        return (!currentScenarioDefinition.getExamplesList().isEmpty());
-//        return (currentScenarioDefinition != null) && (currentScenarioDefinition.getExamplesList().isEmpty());
+        return currentScenarioDefinition.getExamples().size() > 0;
     }
 
     public void startNewExample() {
@@ -140,7 +140,7 @@ class ScenarioContext {
     }
 
     public List<Tag> getScenarioTags() {
-        return currentScenarioDefinition.getTagsList();
+        return currentScenarioDefinition.getTags();
     }
 
     public String getScenarioName() {
@@ -148,7 +148,7 @@ class ScenarioContext {
     }
 
     public List<Examples> getScenarioExamples() {
-        return currentScenarioDefinition.getExamplesList();
+        return currentScenarioDefinition.getExamples();
     }
 
     public void clearStepQueue() {
@@ -196,7 +196,7 @@ class ScenarioContext {
                              List<Map<String, String>> rows,
                              String name,
                              String description,
-                             Map<Integer, Integer> lineNumbersOfEachRow) {
+                             Map<Integer, Long> lineNumbersOfEachRow) {
         table.startNewDataSet(name, description);
 
         AtomicInteger rowNumber = new AtomicInteger();
@@ -207,13 +207,14 @@ class ScenarioContext {
         exampleCount = table.getSize();
     }
 
+    @NotNull
     private DataTableRow newRow(List<String> headers,
-                                Map<Integer, Integer> lineNumbersOfEachRow,
+                                Map<Integer, Long> lineNumbersOfEachRow,
                                 int rowNumber,
                                 Map<String, String> row) {
         return new DataTableRow(
                 rowValuesFrom(headers, row),
-                lineNumbersOfEachRow.getOrDefault(rowNumber, 0));
+                lineNumbersOfEachRow.getOrDefault(rowNumber, 0L));
     }
 
     private List<String> rowValuesFrom(List<String> headers, Map<String, String> row) {

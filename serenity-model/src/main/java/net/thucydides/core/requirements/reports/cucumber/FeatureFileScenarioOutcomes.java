@@ -1,12 +1,13 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
 
-import io.cucumber.messages.Messages.GherkinDocument.Feature;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
+import io.cucumber.messages.types.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.*;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestResultList;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -19,8 +20,6 @@ import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioSummaryOutcome;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -33,12 +32,9 @@ import static net.thucydides.core.reports.html.CucumberTagConverter.fromGherkinT
 
 public class FeatureFileScenarioOutcomes {
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FeatureFileScenarioOutcomes.class);
-
-    private Requirement requirement;
-    private EnvironmentVariables environmentVariables;
-    private TagScanner tagScanner;
+    private final Requirement requirement;
+    private final EnvironmentVariables environmentVariables;
+    private final TagScanner tagScanner;
 
     public FeatureFileScenarioOutcomes(Requirement requirement, EnvironmentVariables environmentVariables) {
         this.requirement = requirement;
@@ -55,8 +51,9 @@ public class FeatureFileScenarioOutcomes {
     }
 
     private String normalizedFormOf(String path) {
-        return path.replace("\\","/");
+        return path.replace("\\", "/");
     }
+
     public List<ScenarioOutcome> forOutcomesIn(RequirementsOutcomes requirementsOutcomes) {
         CucumberParser parser = new CucumberParser();
         Optional<AnnotatedFeature> feature
@@ -67,27 +64,25 @@ public class FeatureFileScenarioOutcomes {
         } else {
             List<ScenarioOutcome> scenarioOutcomes = new ArrayList<>();
             Feature currentFeature = feature.get().getFeature();
-            for (Feature.FeatureChild currentChild : currentFeature.getChildrenList()) {
-                if (currentChild.hasRule()) {
-                    Feature.FeatureChild.Rule currentRule = currentChild.getRule();
-                    currentRule.getChildrenList().forEach(
-                            ruleChild -> {
-                                scenarioOutcomes.add(
-                                        scenarioOutcomeFrom(currentFeature,
-                                                ruleChild.getScenario(),
-                                                requirementsOutcomes.getTestOutcomes(),
-                                                Rule.from(currentRule)));
-                            }
+            for (FeatureChild currentChild : currentFeature.getChildren()) {
+                if (currentChild.getRule() != null) {
+                    Rule currentRule = currentChild.getRule();
+                    currentRule.getChildren().forEach(
+                            ruleChild -> scenarioOutcomes.add(
+                                    scenarioOutcomeFrom(currentFeature,
+                                            ruleChild.getScenario(),
+                                            requirementsOutcomes.getTestOutcomes(),
+                                            net.thucydides.core.model.Rule.from(currentRule)))
                     );
 
                 } else {
-                    if (currentChild.hasScenario()) {
+                    if (currentChild.getScenario() != null) {
                         scenarioOutcomes.add(
                                 scenarioOutcomeFrom(currentFeature,
                                         currentChild.getScenario(),
                                         requirementsOutcomes.getTestOutcomes()));
                     }
-                    if (currentChild.hasBackground()) {
+                    if (currentChild.getBackground() != null) {
                         scenarioOutcomes.add(
                                 scenarioBackgroundFrom(currentFeature,
                                         currentChild.getBackground(),
@@ -108,7 +103,7 @@ public class FeatureFileScenarioOutcomes {
 
 
     private ScenarioOutcome scenarioBackgroundFrom(Feature feature,
-                                                   Feature.Background scenario,
+                                                   Background scenario,
                                                    TestOutcomes testOutcomes) {
 
         List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
@@ -123,7 +118,7 @@ public class FeatureFileScenarioOutcomes {
         String featureReport = new ReportNameProvider().forRequirement(feature.getName(), "feature");
         Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
 
-        List<String> renderedSteps = scenario.getStepsList().stream()
+        List<String> renderedSteps = scenario.getSteps().stream()
                 .map(RenderCucumber::step)
                 .collect(Collectors.toList());
 
@@ -162,7 +157,8 @@ public class FeatureFileScenarioOutcomes {
 
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                                 Scenario scenario,
-                                                TestOutcomes testOutcomes, Rule rule) {
+                                                TestOutcomes testOutcomes,
+                                                net.thucydides.core.model.Rule rule) {
 
         List<TestOutcome> outcomes = testOutcomes.testOutcomesWithName(scenario.getName());
 
@@ -176,38 +172,35 @@ public class FeatureFileScenarioOutcomes {
         String featureReport = new ReportNameProvider().forRequirement(feature.getName(), "feature");
         Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
 
-        List<String> renderedSteps = scenario.getStepsList().stream()
+        List<String> renderedSteps = scenario.getSteps().stream()
                 .map(RenderCucumber::step)
                 .collect(Collectors.toList());
 
-        List<Examples> filteredExamples = new ArrayList<Examples>();
+        List<Examples> filteredExamples = new ArrayList<>();
         Map<String, Collection<TestTag>> exampleTags = new HashMap<>();
 
         if (scenarioContainsExamples(scenario)) {
-            List<Examples> examples = scenario.getExamplesList();
+            List<Examples> examples = scenario.getExamples();
             examples.stream()
-                    .filter(example -> example.getTagsList().isEmpty() || tagScanner.shouldRunForTags(fromGherkinTags(example.getTagsList())))
+                    .filter(example -> example.getTags().isEmpty() || tagScanner.shouldRunForTags(fromGherkinTags(example.getTags())))
                     .forEach(filteredExamples::add);
             Set<TestTag> scenarioOutlineTags = scenarioOutlineTagsIn(scenario);
-            examples.stream().forEach(
+            examples.forEach(
                     example -> {
-                        Collection<TestTag> testTags = CucumberTagConverter.toSerenityTags(example.getTagsList());
+                        Collection<TestTag> testTags = CucumberTagConverter.toSerenityTags(example.getTags());
                         testTags.addAll(scenarioOutlineTags);
                         exampleTags.put(example.getName() + ":" + example.getLocation(), testTags);
                     });
         }
 
-        List<Examples> examplesList = filteredExamples;
         List<String> renderedExamples = (scenarioContainsExamples(scenario)) ?
-                RenderCucumber.examples(examplesList,
-                        feature.getName(),
-                        scenario.getName()) : Collections.EMPTY_LIST;
+                RenderCucumber.examples(filteredExamples, feature.getName()) : new ArrayList<>();
 
         int exampleCount = (scenarioContainsExamples(scenario)) ?
-                examplesList.stream().mapToInt(examples -> examples.getTableBodyList().size()).sum()
+                filteredExamples.stream().mapToInt(examples -> examples.getTableBody().size()).sum()
                 : 0;
 
-        Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTagsList());
+        Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTags());
 
         Set<TestTag> scenarioTags = outcomes.stream()
                 .flatMap(outcome -> outcome.getTags().stream())
@@ -244,22 +237,21 @@ public class FeatureFileScenarioOutcomes {
     }
 
     private boolean scenarioContainsExamples(Scenario scenario) {
-        return (scenario.getExamplesCount() > 0);
+        return (!scenario.getExamples().isEmpty());
     }
 
 
     private Set<TestTag> scenarioOutlineTagsIn(Scenario scenarioOutline) {
-        Set<TestTag> testTags = scenarioOutline.getTagsList().stream()
+        return scenarioOutline.getTags().stream()
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
-        return testTags;
     }
 
     private Set<TestTag> scenarioOutlineTagsIncludingExamplesIn(Scenario scenarioOutline) {
         Set<TestTag> testTags = scenarioOutlineTagsIn(scenarioOutline);
 
-        Set<TestTag> exampleTags = scenarioOutline.getExamplesList().stream()
-                .flatMap(examples -> examples.getTagsList().stream())
+        Set<TestTag> exampleTags = scenarioOutline.getExamples().stream()
+                .flatMap(examples -> examples.getTags().stream())
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
 
@@ -268,12 +260,12 @@ public class FeatureFileScenarioOutcomes {
     }
 
     private Set<TestTag> scenarioTagsIn(Scenario scenario) {
-        return scenario.getTagsList().stream()
+        return scenario.getTags().stream()
                 .map(tag -> TestTag.withValue(tag.getName()))
                 .collect(Collectors.toSet());
     }
 
-    private Boolean hasManualTag(List<Feature.Tag> tags) {
+    private Boolean hasManualTag(List<Tag> tags) {
         return tags.stream().anyMatch(tag -> tag.getName().toLowerCase().startsWith("@manual"));
     }
 

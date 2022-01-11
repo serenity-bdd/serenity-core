@@ -2,13 +2,7 @@ package net.thucydides.core.requirements.reports.cucumber;
 
 
 
-import io.cucumber.messages.Messages;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Scenario.Examples;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step.ArgumentCase;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.Step.DataTable;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.TableRow;
-import io.cucumber.messages.Messages.GherkinDocument.Feature.TableRow.TableCell;
+import io.cucumber.messages.types.*;
 import net.thucydides.core.requirements.model.cucumber.ExampleRowResultIcon;
 
 import java.util.ArrayList;
@@ -20,45 +14,44 @@ public class RenderCucumber {
     }
 
     private static String renderedArgument(Step step) {
-        if(step.getArgumentCase().equals(ArgumentCase.DATA_TABLE)) {
+        if(step.getDataTable() != null) {
             return renderedDataTable(step.getDataTable());
-        } else if(step.getArgumentCase().equals(ArgumentCase.DOC_STRING)) {
+        } else if(step.getDocString() != null) {
             return step.getDocString().getContent();
         }
         return "";
     }
 
-    public static List<String> examples(List<Messages.GherkinDocument.Feature.Scenario.Examples> examples,
-                                        String featureName,
-                                        String scenarioName) {
+    public static List<String> examples(List<Examples> examples,
+                                        String featureName) {
 
 
         List<String> renderedExamples = new ArrayList<>();
         for (Examples exampleTable : examples) {
-            renderedExamples.add(renderedExamples(exampleTable, featureName, scenarioName));
+            renderedExamples.add(renderedExamples(exampleTable, featureName));
         }
         return renderedExamples;
     }
 
-    private static String renderedExamples(Examples examples, String featureName, String scenarioName) {
+    private static String renderedExamples(Examples examples, String featureName) {
         
         ExampleRowResultIcon exampleRowResultIcon = new ExampleRowResultIcon(featureName);
 
         StringBuffer renderedTable = new StringBuffer();
         renderExampleDescriptionOf(examples);
         renderedTable.append(renderExampleDescriptionOf(examples));
-        addRow(renderedTable, examples.getTableHeader().getCellsList(), " ");
-        addSeparatorCells(renderedTable, examples.getTableHeader().getCellsList().size());
+        addRow(renderedTable, examples.getTableHeader().getCells(), " ");
+        addSeparatorCells(renderedTable, examples.getTableHeader().getCells().size());
 
-        for (Messages.GherkinDocument.Feature.TableRow row : examples.getTableBodyList()) {
-            addRow(renderedTable, row.getCellsList(), exampleRowResultIcon.resultToken(row.getLocation().getLine()));
+        for (TableRow row : examples.getTableBody()) {
+            addRow(renderedTable, row.getCells(), exampleRowResultIcon.resultToken(row.getLocation().getLine()));
         }
 
         return renderedTable.toString();
     }
 
     private static String renderExampleDescriptionOf(Examples examples) {
-        StringBuffer renderedTable = new StringBuffer();
+        StringBuilder renderedTable = new StringBuilder();
 
         renderedTable.append(examples.getKeyword()).append(": ");
         if (examples.getName() != null) {
@@ -78,44 +71,30 @@ public class RenderCucumber {
         return renderedTable.toString();
     }
 
-
-    private static String renderedExamples(Examples examples) {
-        StringBuffer renderedTable = new StringBuffer();
-        renderedTable.append(renderExampleDescriptionOf(examples));
-        addRow(renderedTable, examples.getTableHeader().getCellsList(), null);
-        addSeparatorCells(renderedTable, examples.getTableHeader().getCellsCount());
-
-        for (TableRow row : examples.getTableBodyList()) {
-            addRow(renderedTable, row.getCellsList(), null);
-        }
-
-        return renderedTable.toString();
-    }
-
     private static String renderedDataTable(DataTable dataTable) {
         StringBuffer renderedTable = new StringBuffer();
         renderedTable.append("  ").append(System.lineSeparator());
 
         int firstRow = 0;
 
-        TableRow header = dataTable.getRowsList().get(0);
+        TableRow header = dataTable.getRows().get(0);
 
         if (thereAreMultipleColumnsIn(dataTable)) {
-            addRow(renderedTable, header.getCellsList());
-            addSeparatorCells(renderedTable, header.getCellsList().size());
+            addRow(renderedTable, header.getCells());
+            addSeparatorCells(renderedTable, header.getCells().size());
             firstRow++;
       } else {
-            addSeparatorCells(renderedTable, header.getCellsList().size());
+            addSeparatorCells(renderedTable, header.getCells().size());
         }
 
-        for (int row = firstRow; row < dataTable.getRowsList().size(); row++) {
-            addRow(renderedTable, dataTable.getRowsList().get(row).getCellsList());
+        for (int row = firstRow; row < dataTable.getRows().size(); row++) {
+            addRow(renderedTable, dataTable.getRows().get(row).getCells());
         }
         return renderedTable.toString();
     }
 
     private static boolean thereAreMultipleColumnsIn(DataTable dataTable) {
-        return dataTable.getRowsList().get(0).getCellsList().size() > 1;
+        return dataTable.getRows().get(0).getCells().size() > 1;
     }
 
     private static void addSeparatorCells(StringBuffer renderedTable, int columnCount) {
@@ -136,7 +115,7 @@ public class RenderCucumber {
             renderedTable.append(withEscapedParameterFields(cell.getValue())).append(" |");
         }
         if (statusToken != null) {
-            renderedTable.append(statusToken + " |");
+            renderedTable.append(statusToken).append(" |");
         }
         renderedTable.append("  ").append(System.lineSeparator());
     }

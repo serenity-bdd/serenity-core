@@ -21,7 +21,7 @@ public class DataTable {
     private String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
     private transient AtomicInteger currentRow = new AtomicInteger(0);
-    private transient Map<Integer, Integer> lineNumbersForEachRow = new HashMap<>();
+    private transient Map<Integer, Long> lineNumbersForEachRow = new HashMap<>();
     private final static String INFO_ICON = "<i class=\"fa fa-info-circle\"></i>";
 
     private final static List<DataTableRow> NO_ROWS = new ArrayList<>();
@@ -40,7 +40,7 @@ public class DataTable {
                         String title,
                         String description,
                         List<DataSetDescriptor> dataSetDescriptors,
-                        Map<Integer, Integer> lineNumbersForEachRow) {
+                        Map<Integer, Long> lineNumbersForEachRow) {
         this.scenarioOutline = scenarioOutline;
         this.headers = headers;
         this.rows = new CopyOnWriteArrayList<>(rows);
@@ -127,22 +127,21 @@ public class DataTable {
         addRow(new DataTableRow(new ArrayList<>(data.values()), 0));
     }
 
-    public void updateLineNumbers(Map<Integer, Integer> lineNumbersOfEachRow) {
+    public void updateLineNumbers(Map<Integer, Long> lineNumbersOfEachRow) {
         lineNumbersForEachRow().putAll(withLineNumbersIncrementedBy(lineNumbersOfEachRow.size() - 1, lineNumbersOfEachRow));
     }
 
-    private Map<Integer, Integer> lineNumbersForEachRow() {
+    private Map<Integer, Long> lineNumbersForEachRow() {
         if (lineNumbersForEachRow == null) {
             lineNumbersForEachRow = new HashMap<>();
         }
         return lineNumbersForEachRow;
     }
 
-    private Map<? extends Integer, ? extends Integer> withLineNumbersIncrementedBy(int startRow, Map<Integer, Integer> lineNumbersOfEachRow) {
+    private Map<? extends Integer, ? extends Long> withLineNumbersIncrementedBy(int startRow, Map<Integer, Long> lineNumbersOfEachRow) {
         return lineNumbersOfEachRow.entrySet()
                 .stream()
-                .collect(toMap(entry -> entry.getKey() + startRow,
-                        Map.Entry::getValue));
+                .collect(toMap(entry -> entry.getKey() + startRow, Map.Entry::getValue));
     }
 
     public void addRow(List<?> data) {
@@ -199,8 +198,7 @@ public class DataTable {
     public void startNewDataSet(String name, String description) {
         updateLatestRowCount();
 
-        List<DataSetDescriptor> descriptors = new ArrayList<>();
-        descriptors.addAll(dataSetDescriptors);
+        List<DataSetDescriptor> descriptors = new ArrayList<>(dataSetDescriptors);
         descriptors.add(new DataSetDescriptor(rows.size(), 0, name, description, Collections.emptyList()));
         dataSetDescriptors = descriptors;
     }
@@ -274,7 +272,7 @@ public class DataTable {
         int rowCount = dataSetDescriptor.getRowCount();
         int endRow = (rowCount > 0) ? startRow + rowCount - 1 : getRows().size() - 1;
         for (int row = startRow; row <= endRow; row++) {
-            int lineNumber = lineNumbersForEachRow().getOrDefault(row, 0);
+            long lineNumber = lineNumbersForEachRow().getOrDefault(row, 0L);
             renderedTable.append("| ");
             getRows().get(row).getValues().forEach(value -> renderedTable.append(value).append(" |"));
             renderedTable.append(" ")
@@ -367,8 +365,8 @@ public class DataTable {
     }
 
 
-    public int getLineNumberForRow(int row) {
-        return lineNumbersForEachRow().getOrDefault(row, 0);
+    public long getLineNumberForRow(int row) {
+        return lineNumbersForEachRow().getOrDefault(row, 0L);
     }
 
     private Collection<TestTag> getExampleTags() {
@@ -407,7 +405,7 @@ public class DataTable {
         private String description;
         private String title;
         private List<DataSetDescriptor> descriptors;
-        private Map<Integer, Integer> rowNumbers;
+        private Map<Integer, Long> rowNumbers;
 
         DataTableBuilder(List<String> headers) {
             this(null, headers, NO_ROWS, null, null, Collections.singletonList(DataSetDescriptor.DEFAULT_DESCRIPTOR));
@@ -471,14 +469,13 @@ public class DataTable {
         }
 
         public DataTableBuilder andMappedRows(List<? extends Map<String, ?>> mappedRows,
-                                              Map<Integer, Integer> lineNumbers) {
+                                              Map<Integer, Long> lineNumbers) {
 
             List<List<Object>> rowData = mappedRows.stream().map(this::rowDataFrom).collect(Collectors.toList());
 
             AtomicInteger rowNumber = new AtomicInteger();
             List<DataTableRow> dataTableRows = rowData.stream()
-                    .map(values -> new DataTableRow(values,
-                            lineNumberForRow(lineNumbers, rowNumber)))
+                    .map(values -> new DataTableRow(values, lineNumberForRow(lineNumbers, rowNumber)))
                     .collect(Collectors.toList());
 
             this.rowNumbers = new HashMap<>(lineNumbers);
@@ -486,8 +483,8 @@ public class DataTable {
             return this;
         }
 
-        private Integer lineNumberForRow(Map<Integer, Integer> lineNumbers, AtomicInteger rowNumber) {
-            return lineNumbers.getOrDefault(rowNumber.getAndIncrement(), 0);
+        private Long lineNumberForRow(Map<Integer, Long> lineNumbers, AtomicInteger rowNumber) {
+            return lineNumbers.getOrDefault(rowNumber.getAndIncrement(), 0L);
         }
 
         private List<Object> rowDataFrom(Map<String, ?> mappedRow) {

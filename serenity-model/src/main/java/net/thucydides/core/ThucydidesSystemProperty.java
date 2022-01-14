@@ -64,6 +64,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_AUTODOWNLOAD,
 
     /**
+     * If set to true, PageObject find methods will retry after a short pause when a stale element exception occurs.
+     */
+    WEBDRIVER_RETRY_ON_STALE_ELEMENT_EXCEPTION,
+
+    /**
      * The driver to be used for remote drivers
      */
     WEBDRIVER_REMOTE_DRIVER,

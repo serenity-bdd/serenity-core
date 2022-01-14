@@ -1,6 +1,8 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.SerenityListeners;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.launcher.TestIdentifier;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +29,19 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
         Serenity.injectAnnotatedPagesObjectInto(testInstance);
         Serenity.injectScenarioStepsInto(testInstance);
         Serenity.injectDependenciesInto(testInstance);
+    }
+
+    private StepEventBus eventBusFor(ExtensionContext context) {
+        System.out.println("SETTING EVENT BUS FOR TEST " + context.getUniqueId());
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            StepEventBus eventBus = StepEventBus.eventBusFor(context.getUniqueId());
+            if (!eventBus.isBaseStepListenerRegistered()) {
+                eventBus.registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
+            }
+            StepEventBus.setCurrentBusToEventBusFor(context.getTestMethod());
+        }
+        System.out.println("  ->EVENT BUS = " + StepEventBus.getEventBus());
+        return StepEventBus.getEventBus();
     }
 
     @Override
@@ -56,8 +72,10 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
     public void beforeEach(ExtensionContext context) throws Exception {
         context.getTestMethod().ifPresent(
                 method -> {
-                    final BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
-                    baseStepListener.addTagsToCurrentStory(JUnit5Tags.forMethod(method));
+                    if (!eventBusFor(context).isBaseStepListenerRegistered()) {
+                        eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
+                    }
+                    eventBusFor(context).getBaseStepListener().addTagsToCurrentStory(JUnit5Tags.forMethod(method));
                 }
         );
     }

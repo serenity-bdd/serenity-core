@@ -19,7 +19,7 @@ public class WhenFindingTestDataInADataDrivenTest {
     @Test
     public void the_parameterized_data_method_returns_the_set_of_test_data_valueSource() throws Throwable {
 
-        Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(SimpleDataDrivenTestScenarioWithValueSource.class).getParameterTables();
+        Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(MultipleDataDrivenTestScenariosWithValueSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(2));
 
         DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource.withValueSource");

@@ -26,9 +26,7 @@ import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -65,7 +63,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() {
 
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(5));
@@ -84,8 +82,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
+        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(5));
     }
 
@@ -94,7 +92,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         runTestForClass(AddDifferentSortsOfTodos.class);
 
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(4));
     }
 
@@ -124,7 +122,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
 
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
 
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(2));
@@ -220,7 +218,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
         File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
     }

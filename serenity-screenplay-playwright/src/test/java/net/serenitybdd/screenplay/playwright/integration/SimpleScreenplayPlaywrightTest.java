@@ -4,12 +4,10 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.Target;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
-import net.serenitybdd.screenplay.playwright.assertions.Ensure;
 import net.serenitybdd.screenplay.playwright.interactions.Click;
 import net.serenitybdd.screenplay.playwright.interactions.Enter;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
-import net.serenitybdd.screenplay.playwright.interactions.WaitFor;
-import net.serenitybdd.screenplay.playwright.questions.PlaywrightQuestions;
+import net.serenitybdd.screenplay.playwright.questions.TheWebPage;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +33,7 @@ public class SimpleScreenplayPlaywrightTest {
                 Click.on("#search_button_homepage")
         );
         daffy.should(
-                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo"))
+                seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
         );
     }
 
@@ -53,7 +51,7 @@ public class SimpleScreenplayPlaywrightTest {
                 Click.on(SearchPage.SEARCH_BUTTON)
         );
         daffy.should(
-                seeThat(PlaywrightQuestions.pageTitle(), Matchers.containsString("Penguins at DuckDuckGo"))
+                seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
         );
     }
 }

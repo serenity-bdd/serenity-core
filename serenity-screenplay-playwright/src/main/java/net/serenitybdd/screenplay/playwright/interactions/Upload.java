@@ -42,5 +42,6 @@ public class Upload implements Performable {
                 fileChooser.setFiles(Paths.get(path))
         );
         actor.attemptsTo(Click.on(target));
+        BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

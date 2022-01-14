@@ -37,5 +37,6 @@ public class DoubleClick implements Performable {
     @Step("{0} double clicks on #target")
     public <T extends Actor> void performAs(T actor) {
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().dblclick(target.asSelector(), options);
+        BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

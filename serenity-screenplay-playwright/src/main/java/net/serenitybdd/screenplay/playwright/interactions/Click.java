@@ -15,7 +15,7 @@ import net.thucydides.core.annotations.Step;
  * Use Page.mouse() to click in the center of the element, or the specified position.
  * Wait for initiated navigations to either succeed or fail, unless noWaitAfter option is set.
  * When all steps combined have not finished during the specified timeout, this method rejects with a TimeoutError. Passing zero timeout disables this.
- *
+ * <p>
  * Sample usage:
  * <pre>
  *     Click.on("#searchbutton");
@@ -26,7 +26,8 @@ public class Click implements Performable {
     /**
      * Default constructor required by Screenplay
      */
-    public Click() {}
+    public Click() {
+    }
 
     private Target target;
     private Page.ClickOptions options;
@@ -52,5 +53,6 @@ public class Click implements Performable {
     @Step("{0} clicks on #target")
     public <T extends Actor> void performAs(T actor) {
         BrowseTheWebWithPlaywright.as(actor).getCurrentPage().click(target.asSelector(), options);
+        BrowseTheWebWithPlaywright.as(actor).notifyScreenChange();
     }
 }

@@ -7,6 +7,7 @@ import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.devtools.HasDevTools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,13 +65,19 @@ public class WebdriverProxyFactory implements Serializable {
                                     String options) {
         if (mockDriver != null) {
             return mockDriver;
+        } else if (driverClass != null && HasDevTools.class.isAssignableFrom(driverClass)) {
+            return new DevToolsWebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
         } else {
             return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
         }
     }
 
     public WebDriverFacade proxyFor(WebDriver driver) {
-        return new WebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+        if (driver instanceof HasDevTools) {
+            return new DevToolsWebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+        } else {
+            return new WebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+        }
     }
 
 

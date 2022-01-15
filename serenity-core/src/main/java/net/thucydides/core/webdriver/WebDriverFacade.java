@@ -9,6 +9,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -168,7 +170,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return;
         }
-//        openIgnoringHtmlUnitScriptErrors(url);
+
         getProxiedDriver().get(url);
         setTimeouts();
     }
@@ -362,7 +364,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return new MouseStub();
         }
 
-
         return ((HasInputDevices) getProxiedDriver()).getMouse();
     }
 
@@ -429,4 +430,20 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         throw new UnsupportedOperationException("Underlying driver does not implement advanced"
                 + " user interactions yet.");
     }
+
+    /**
+     * Check whether the underlying driver supports DevTools
+     * @return
+     */
+    public boolean hasDevTools() {
+        return (getProxiedDriver() instanceof HasDevTools);
+    }
+
+    public DevTools getDevTools() {
+        if (hasDevTools()) {
+            return ((HasDevTools) getProxiedDriver()).getDevTools();
+        }
+        throw new DevToolsNotSupportedException("DevTools not supported for driver " + getProxiedDriver());
+    }
+
 }

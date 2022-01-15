@@ -42,14 +42,20 @@ public class ButtonExamples {
     @Test
     public void clickingOnAButtonElement() {
         sarah.attemptsTo(
-                Click.on(Button.called("Cancel"))
+                Click.on(Button.called("A Button"))
         );
     }
 
     @Test
     public void selectingAnInputFieldButtonByValue() {
         sarah.attemptsTo(
-                Click.on(Button.called("Submit"))
+                Click.on(Button.called("Press Here"))
+        );
+    }
+    @Test
+    public void selectingASubmitInputByValue() {
+        sarah.attemptsTo(
+                Click.on(Button.called("Submit Me!"))
         );
     }
 
@@ -57,6 +63,20 @@ public class ButtonExamples {
     public void selectingAnHtmlButtonByName() {
         sarah.attemptsTo(
                 Click.on(Button.called("submit-button"))
+        );
+    }
+
+    @Test
+    public void selectingAMaterialButtonByName() {
+        sarah.attemptsTo(
+                Click.on(Button.called("Material Button"))
+        );
+    }
+
+    @Test
+    public void selectingAnHtmlButtonByIcon() {
+        sarah.attemptsTo(
+                Click.on(Button.withIcon("glyphicon-home"))
         );
     }
 

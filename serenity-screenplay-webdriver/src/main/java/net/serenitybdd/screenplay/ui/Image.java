@@ -19,11 +19,32 @@ public class Image {
     }
 
     /**
-     * Locate an HTML input field with a specified placeholder name
+     * Locate a image with a specified alt text
      */
     public static Target withAltText(String altText) {
         String altTextAttribute = CSSAttributeValue.withEscapedQuotes(altText);
         return Target.the("'" + altTextAttribute + "' image")
                      .located(By.cssSelector("img[alt='" + altTextAttribute + "']"));
+    }
+
+    /**
+     * Locate a image with a specified src attribute
+     */
+    public static Target withSrc(String srcValue) {
+        String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
+        return Target.the("'" + srcValue + "' image")
+                .located(By.cssSelector("img[src='" + srcAttribute + "']"));
+    }
+
+    public static Target withSrcEndingWith(String srcValue) {
+        String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
+        return Target.the("'" + srcValue + "' image")
+                .located(By.cssSelector("img[src$='" + srcAttribute + "']"));
+    }
+
+    public static Target withSrcStartingWith(String srcValue) {
+        String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
+        return Target.the("'" + srcValue + "' image")
+                .located(By.cssSelector("img[src^='" + srcAttribute + "']"));
     }
 }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ACCESIBILITY;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ACCESSIBILITY;
 import static net.thucydides.core.model.TestResult.*;
 
 /**
@@ -132,7 +132,7 @@ public class ChartColorScheme {
 
     private boolean isInAccessibleMode() {
         return Boolean.parseBoolean(
-                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_REPORT_ACCESIBILITY).orElse("false")
+                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_REPORT_ACCESSIBILITY).orElse("false")
         );
     }
 }

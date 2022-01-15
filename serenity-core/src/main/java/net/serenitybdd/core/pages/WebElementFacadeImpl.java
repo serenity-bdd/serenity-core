@@ -1406,4 +1406,28 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return getResolvedElement();
     }
 
+    @Override
+    public String getDomProperty(String name) {
+        return getResolvedElement().getDomProperty(name);
+    }
+
+    @Override
+    public String getDomAttribute(String name) {
+        return getResolvedElement().getDomAttribute(name);
+    }
+
+    @Override
+    public String getAriaRole() {
+        return getResolvedElement().getAriaRole();
+    }
+
+    @Override
+    public String getAccessibleName() {
+        return getResolvedElement().getAccessibleName();
+    }
+
+    @Override
+    public SearchContext getShadowRoot() {
+        return getResolvedElement().getShadowRoot();
+    }
 }

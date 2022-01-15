@@ -308,7 +308,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Use patterns as well as colors for the graphs and charts.
      */
-    SERENITY_REPORT_ACCESIBILITY,
+    SERENITY_REPORT_ACCESSIBILITY,
 
     /**
      *

@@ -46,4 +46,25 @@ public class ImageExamples {
                 Click.on(Image.withAltText("Girl in a jacket"))
         );
     }
+
+    @Test
+    public void findingAnImageBySrc() {
+        sarah.attemptsTo(
+                Click.on(Image.withSrc("img_girl.jpg"))
+        );
+    }
+
+    @Test
+    public void findingAnImageBySrcEndingWith() {
+        sarah.attemptsTo(
+                Click.on(Image.withSrcEndingWith("girl.jpg"))
+        );
+    }
+
+    @Test
+    public void findingAnImageBySrcStartingWith() {
+        sarah.attemptsTo(
+                Click.on(Image.withSrcStartingWith("img_"))
+        );
+    }
 }

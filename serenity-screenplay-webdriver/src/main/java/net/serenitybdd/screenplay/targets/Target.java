@@ -1,6 +1,8 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.ResolvableElement;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
@@ -16,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class Target {
+public abstract class Target implements ResolvableElement {
 
     protected final String targetElementName;
     protected final Optional<IFrame> iFrame;
@@ -51,12 +53,12 @@ public abstract class Target {
         return resolveFor(currentPageVisibleTo(actor));
     }
 
-    public List<WebElementFacade> resolveAllFor(Actor actor) {
-        return resolveAllFor(currentPageVisibleTo(actor));
+    public ListOfWebElementFacades resolveAllFor(Actor actor) {
+        return new ListOfWebElementFacades(resolveAllFor(currentPageVisibleTo(actor)));
     }
 
     public abstract WebElementFacade resolveFor(PageObject page);
-    public abstract List<WebElementFacade> resolveAllFor(PageObject page);
+    public abstract ListOfWebElementFacades resolveAllFor(PageObject page);
 
     public abstract Target called(String name);
 

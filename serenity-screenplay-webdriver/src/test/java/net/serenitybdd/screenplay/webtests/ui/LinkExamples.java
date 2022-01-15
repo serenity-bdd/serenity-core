@@ -78,6 +78,16 @@ public class LinkExamples {
 
         assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Link 2");
     }
+
+    @Test
+    public void clickingOnAPartialLinkStartingWith() {
+        sarah.attemptsTo(
+                Click.on(Link.startingWith("Lin"))
+        );
+
+        assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Link 1");
+    }
+
     @Test
     public void clickingOnALinkWithATitleContainingAnApostrophe() {
         sarah.attemptsTo(Click.on(Link.withTitle("The link's title")));
@@ -95,7 +105,7 @@ public class LinkExamples {
     @Test
     public void clickingOnALinkWithAnIcon() {
         sarah.attemptsTo(
-                Click.on(Link.called("Link 3"))
+                Click.on(Link.withIcon("glyphicon-cloud"))
         );
 
         assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Link 3");

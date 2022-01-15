@@ -1,14 +1,18 @@
 <html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
 <body>
 <form>
-    <label for="field">Customer Name</label>
-    <input type="text" id="field" name="fieldname", data-test="field-name" placeholder="value goes here" onkeyup="update()" />
-    <div id="result"></div>
+    <button type="button">A Button</button>
+    <button type="button"><i class="glyphicon glyphicon-home"></i>A Button with an icon</button>
+    <input type="submit" value="Submit Me!" name="submit-button" data-test="submit-the-button">
+    <input type="button" value="Press Here" name="input-button" data-test="press-the-button">
+    <button mat-raised-button="" class="mat-focus-indicator mat-raised-button mat-button-base">
+        <span class="mat-button-wrapper">Material Button</span>
+        <span matripple="" class="mat-ripple mat-button-ripple"></span>
+        <span class="mat-button-focus-overlay"></span>
+    </button>
 </form>
-<script>
-    function update() {
-        document.getElementById("result").textContent = document.getElementById("field").value;
-    }
-</script>
 </body>
 </html>

@@ -580,7 +580,7 @@
                             <include>**/integration/When*</include>
                             <include>**/integration/*Test</include>
                             <include>**/integration/*TestSuite</include>
-                            <include>**/integration/*Examples</include>
+                            <include>**/*Examples</include>
                         </includes>
                         <excludes>
                             <exclude>**/*$*</exclude>

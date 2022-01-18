@@ -9,7 +9,7 @@ import net.serenitybdd.screenplay.targets.Target;
  */
 public class Button {
 
-    private static final String ARIA_LABEL = "input[type='button'][aria-label='{0}' i],input[type='button'][aria-label='{0}' i]";
+    private static final String ARIA_LABEL = "input[type='button'][aria-label='{0}' i],input[type='submit'][aria-label='{0}' i],button[aria-label='{0}' i]";
 
     private static final String[] LOCATORS = {
             "xpath:.//button[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=translate('{0}','ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')]",

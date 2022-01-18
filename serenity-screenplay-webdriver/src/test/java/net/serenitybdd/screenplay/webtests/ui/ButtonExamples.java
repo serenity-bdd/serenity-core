@@ -47,6 +47,20 @@ public class ButtonExamples {
     }
 
     @Test
+    public void clickingOnAButtonElementByARIALabel() {
+        sarah.attemptsTo(
+                Click.on(Button.called("ARIA Label"))
+        );
+    }
+
+    @Test
+    public void clickingOnAButtonElementByARIALabelByLabel() {
+        sarah.attemptsTo(
+                Click.on(Button.withLabel("ARIA Label"))
+        );
+    }
+
+    @Test
     public void selectingAnInputFieldButtonByValue() {
         sarah.attemptsTo(
                 Click.on(Button.called("Press Here"))

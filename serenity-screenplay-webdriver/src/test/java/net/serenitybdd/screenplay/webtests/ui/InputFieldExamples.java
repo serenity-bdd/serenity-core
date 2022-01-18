@@ -89,4 +89,11 @@ public class InputFieldExamples {
         sarah.attemptsTo(Type.theValue("Some value").into(InputField.withLabel("Customer Name")));
         assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Some value");
     }
+
+    @Test
+    public void identifyingATextFieldByAriaLabel() {
+        sarah.attemptsTo(Type.theValue("Some value").into(InputField.called("ARIA Label")));
+        assertThat(Text.of("#result").answeredBy(sarah)).isEqualTo("Some value");
+    }
+
 }

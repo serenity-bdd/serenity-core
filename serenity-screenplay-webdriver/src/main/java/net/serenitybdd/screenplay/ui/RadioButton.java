@@ -18,7 +18,7 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
  */
 public class RadioButton {
 
-    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[data-test='{0}' i],input[class*='{0}']";
+    private static final String BY_ID_OR_NAME = "css:input[id='{0}' i],input[name='{0}' i],input[data-test='{0}' i],input[class*='{0}'],[aria-label='{0}' i]";
     private static final String BY_VALUE = "css:input[type='radio'][value='{0}' i]";
 
     /**

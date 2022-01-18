@@ -12,7 +12,7 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.fieldWithLabel;
  */
 public class Checkbox {
 
-    private static final String BY_ID_NAME_CLASS_OR_DATA_TEST = "css:input[type='checkbox'][name='{0}' i],input[type='checkbox'][id='{0}' i],input[type='checkbox'][data-test='{0}' i],input[type='checkbox'][class*='{0}' i]";
+    private static final String BY_ID_NAME_CLASS_OR_DATA_TEST = "css:input[type='checkbox'][name='{0}' i],input[type='checkbox'][id='{0}' i],input[type='checkbox'][data-test='{0}' i],input[type='checkbox'][class*='{0}' i],[aria-label='{0}' i]";
     private static final String BY_VALUE = "css:input[type='checkbox'][value='{0}' i]";
 
     /**

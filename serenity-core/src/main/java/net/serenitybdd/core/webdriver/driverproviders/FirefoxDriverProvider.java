@@ -12,6 +12,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -56,11 +58,14 @@ public class FirefoxDriverProvider implements DriverProvider {
 
 //        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
 
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+
+        new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
         FirefoxOptions firefoxOptions = new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
         SetProxyConfiguration.from(environmentVariables).in(firefoxOptions);
         AddLoggingPreferences.from(environmentVariables).to(firefoxOptions);
 
-//        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables, options);
+        enhancer.enhanced(firefoxOptions, SupportedWebDriver.FIREFOX);
 
         driverProperties.registerCapabilities("firefox", capabilitiesToProperties(firefoxOptions));
 
@@ -93,7 +98,7 @@ public class FirefoxDriverProvider implements DriverProvider {
             options.setHeadless(true);
         }
 
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
+        MutableCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
 
         return ProvideNewDriver.withConfiguration(environmentVariables,
                 enhancedCapabilities,

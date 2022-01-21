@@ -8,6 +8,7 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -25,14 +26,14 @@ public class DriverCapabilities {
     private final EnvironmentVariables environmentVariables;
     private final CapabilityEnhancer enhancer;
 
-    private final Integer EXTRA_TIME_TO_TAKE_SCREENSHOTS = 180;
+    private final static Integer EXTRA_TIME_TO_TAKE_SCREENSHOTS = 180;
 
     public DriverCapabilities(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
         this.environmentVariables = environmentVariables;
         this.enhancer = enhancer;
     }
 
-    public DesiredCapabilities forDriver(String driverName, String options) {
+    public MutableCapabilities forDriver(String driverName, String options) {
         if (driverName == null || driverName.startsWith(":")) {
             driverName = REMOTE_DRIVER;
         }
@@ -71,7 +72,7 @@ public class DriverCapabilities {
         return selectors;
     }
 
-    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
+    public MutableCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
 
         return enhancer.enhanced(
                 driverCapabilitiesSelector(options)
@@ -85,9 +86,9 @@ public class DriverCapabilities {
         return (browser == null || browser.startsWith(":"));
     }
 
-    private DesiredCapabilities remoteCapabilities(String options) {
+    private MutableCapabilities remoteCapabilities(String options) {
 
-        DesiredCapabilities capabilities;
+        MutableCapabilities capabilities;
 
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (!isUndefined(remoteBrowser)) {

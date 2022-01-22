@@ -37,12 +37,12 @@ public class FeatureOrStoryFile {
         if (Paths.get(filename).toFile().exists()) {
             return Paths.get(filename).toFile();
         }
-        String requirementsDirectory = ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.from(environmentVariables,type.name());
+        String requirementsDirectory = ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.from(environmentVariables, type.name());
         String featureFileOnClassPath = (filename.startsWith(requirementsDirectory)) ? filename : requirementsDirectory + "/" + filename;
         try {
             return Paths.get(Resources.getResource(featureFileOnClassPath).getFile()).toFile();
         } catch (IllegalArgumentException featureFileNotOnClasspath) {
             return Paths.get(filename).toFile();
         }
-
+    }
 }

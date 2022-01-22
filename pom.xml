@@ -578,9 +578,9 @@
                         <includes>
                             <include>**/integration/*IT</include>
                             <include>**/integration/When*</include>
+                            <include>**/integration/*Examples</include>
                             <include>**/integration/*Test</include>
                             <include>**/integration/*TestSuite</include>
-                            <include>**/*Examples</include>
                         </includes>
                         <excludes>
                             <exclude>**/*$*</exclude>

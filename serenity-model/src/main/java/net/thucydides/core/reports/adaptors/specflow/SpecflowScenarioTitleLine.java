@@ -23,7 +23,7 @@ public class SpecflowScenarioTitleLine {
     private final String storyTitle;
     private final String storyPath;
     private final List<String> parameters;
-    private final Inflector inflector = new Inflector();
+    private final Inflector inflector = Inflector.getInstance();
 
     private final EnvironmentVariables environmentVariables;
 

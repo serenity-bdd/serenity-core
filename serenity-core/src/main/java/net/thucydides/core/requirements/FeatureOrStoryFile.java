@@ -44,7 +44,5 @@ public class FeatureOrStoryFile {
         } catch (IllegalArgumentException featureFileNotOnClasspath) {
             return Paths.get(filename).toFile();
         }
-    }
-
 
 }

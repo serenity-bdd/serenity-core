@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.ui;
+package net.serenitybdd.screenplay.webtests.ui.integration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -6,9 +6,9 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
-import net.serenitybdd.screenplay.questions.Text;
-import net.serenitybdd.screenplay.ui.Dropdown;
-import net.serenitybdd.screenplay.ui.Link;
+import net.serenitybdd.screenplay.annotations.CastMember;
+import net.serenitybdd.screenplay.ui.Button;
+import net.serenitybdd.screenplay.ui.Image;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,18 +16,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
- * Working with Anchors
+ * Working with HTML images
  */
 @RunWith(SerenityRunner.class)
-public class DropdownExamples {
+public class ImageExamples {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver driver;
 
-    Actor sarah = Actor.named("Sarah");
+    @CastMember(name = "Sarah")
+    Actor sarah;
 
     @BeforeClass
     public static void setupDriver() {
@@ -36,35 +35,36 @@ public class DropdownExamples {
 
     @Before
     public void openBrowser() {
-        sarah.can(BrowseTheWeb.with(driver));
-
         sarah.attemptsTo(
-                Open.url("classpath:/sample-web-site/screenplay/ui-elements/forms/selects.html")
+                Open.url("classpath:/sample-web-site/screenplay/ui-elements/elements/images.html")
         );
     }
 
     @Test
-    public void findADropdownValueByName() {
+    public void findingAnImageByAltText() {
         sarah.attemptsTo(
-                Click.on(Dropdown.called("cars"))
+                Click.on(Image.withAltText("Girl in a jacket"))
         );
     }
 
     @Test
-    public void findADropdownValueByLabel() {
+    public void findingAnImageBySrc() {
         sarah.attemptsTo(
-                Click.on(Dropdown.withLabel("Choose a car:"))
+                Click.on(Image.withSrc("img_girl.jpg"))
         );
     }
-
 
     @Test
-    public void findADropdownValueByDefaultOption() {
+    public void findingAnImageBySrcEndingWith() {
         sarah.attemptsTo(
-                Click.on(Dropdown.withDefaultOption("---Pick Your Car---"))
+                Click.on(Image.withSrcEndingWith("girl.jpg"))
         );
     }
 
-
-
+    @Test
+    public void findingAnImageBySrcStartingWith() {
+        sarah.attemptsTo(
+                Click.on(Image.withSrcStartingWith("img_"))
+        );
+    }
 }

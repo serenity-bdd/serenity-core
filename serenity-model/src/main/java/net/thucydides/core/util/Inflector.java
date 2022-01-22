@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class Inflector {
 
-    private static final Inflector INSTANCE = new Inflector();
+    private static final Inflector INSTANCE = Inflector.getInstance();
 
     public static Inflector getInstance() {
         return INSTANCE;

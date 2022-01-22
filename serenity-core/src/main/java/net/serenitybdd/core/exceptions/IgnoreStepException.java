@@ -1,3 +1,3 @@
-package net.serenitybdd.screenplay.exceptions;
+package net.serenitybdd.core.exceptions;
 
 public class IgnoreStepException extends RuntimeException {}

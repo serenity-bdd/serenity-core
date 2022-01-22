@@ -37,7 +37,7 @@ public class SaucelabsRemoteDriverCapabilities {
      * <p>
      * These are added to the 'sauce:options' capability.
      */
-    public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
+    public MutableCapabilities getCapabilities(MutableCapabilities capabilities) {
         MutableCapabilities saucelabsCapabilities = saucelabsCapabilitiesDefinedIn(environmentVariables);
 
         MutableCapabilities w3cCapabilitiesInSaucelabsSection = W3CCapabilities.definedIn(environmentVariables).withPrefix("saucelabs");
@@ -48,7 +48,7 @@ public class SaucelabsRemoteDriverCapabilities {
         configureTestName(saucelabsCapabilities);
 
         capabilities.setCapability("sauce:options", saucelabsCapabilities);
-        capabilities.setJavascriptEnabled(true);
+//        capabilities.setJavascriptEnabled(true);
 
         return capabilities;
     }

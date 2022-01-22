@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.ui;
+package net.serenitybdd.screenplay.webtests.ui.integration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.ui.Button;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
@@ -20,10 +21,11 @@ import org.openqa.selenium.WebDriver;
 @RunWith(SerenityRunner.class)
 public class ButtonExamples {
 
+    @CastMember(name = "Sarah")
+    Actor sarah;
+
     @Managed(driver = "chrome", options = "--headless")
     WebDriver driver;
-
-    Actor sarah = Actor.named("Sarah");
 
     @BeforeClass
     public static void setupDriver() {
@@ -32,8 +34,6 @@ public class ButtonExamples {
 
     @Before
     public void openBrowser() {
-        sarah.can(BrowseTheWeb.with(driver));
-
         sarah.attemptsTo(
                 Open.url("classpath:/sample-web-site/screenplay/ui-elements/forms/multi-button-form.html")
         );

@@ -7,7 +7,7 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.parallel.Agent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
-import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+import net.serenitybdd.core.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.facts.Fact;
 import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;

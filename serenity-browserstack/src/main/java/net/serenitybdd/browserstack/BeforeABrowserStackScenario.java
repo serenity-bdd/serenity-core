@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -45,10 +46,10 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
     );
 
     @Override
-    public DesiredCapabilities apply(EnvironmentVariables environmentVariables,
+    public MutableCapabilities apply(EnvironmentVariables environmentVariables,
                                      SupportedWebDriver driver,
                                      TestOutcome testOutcome,
-                                     DesiredCapabilities capabilities) {
+                                     MutableCapabilities capabilities) {
 
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
@@ -61,7 +62,9 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
                 .getOptionalProperty("remote.platform")
                 .orElse(null);
         if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+            if (capabilities instanceof DesiredCapabilities) {
+                ((DesiredCapabilities) capabilities).setPlatform(Platform.valueOf(remotePlatform));
+            }
         }
 
         Properties browserStackProperties = EnvironmentSpecificConfiguration
@@ -73,7 +76,6 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
                 .forEach((key, value) -> browserStackPropertiesWithOverrides.setProperty(key, value.toString()));
 
         setNonW3CCapabilities(capabilities, browserStackPropertiesWithOverrides);
-
         Map<String, Object> browserstackOptions = w3CPropertyMapFrom(browserStackPropertiesWithOverrides);
         String testName = testOutcome.getStoryTitle() + " - " + testOutcome.getTitle();
         browserstackOptions.put("sessionName", testName);
@@ -95,7 +97,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         return propertiesWithOverrides;
     }
 
-    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties browserStackProperties) {
+    private void setNonW3CCapabilities(MutableCapabilities capabilities, Properties browserStackProperties) {
         browserStackProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)

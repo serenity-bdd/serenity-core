@@ -146,7 +146,7 @@ public class StepsAnnotatedField {
     }
 
     private String humanReadable(String fieldName) {
-        return new Inflector().of(fieldName).asATitle().toString();
+        return Inflector.getInstance().of(fieldName).asATitle().toString();
     }
 
     private void assignValueToField(Field field, Object steps, String value) {

@@ -18,13 +18,14 @@ import java.util.regex.Pattern;
  */
 public class Inflector {
 
-    private static final Inflector INSTANCE = Inflector.getInstance();
+    private static final Inflector INSTANCE = new Inflector();
 
     public static Inflector getInstance() {
         return INSTANCE;
     }
 
     public static Inflector inflection() { return getInstance(); }
+
     public Inflection of(String word) {
         return new Inflection(word, this);
     }

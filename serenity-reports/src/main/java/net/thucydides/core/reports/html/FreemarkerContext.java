@@ -139,6 +139,8 @@ public class FreemarkerContext {
         context.put("endTimestamp", readableTimestampFrom(endTime));
         context.put("totalTestDuration", formattedDuration(totalDurationOf(testOutcomes.getOutcomes())));
         context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
+
+
         context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
         context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
         context.put("minTestDuration", formattedDuration(minDurationOf(testOutcomes.getOutcomes())));
@@ -151,6 +153,9 @@ public class FreemarkerContext {
 
         List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes));
         List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
+
+        context.put("testCount", testOutcomes.getOutcomes().size());
+        context.put("scenarioCount", testOutcomes.getTestCount());
 
         context.put("scenarios", scenarios);
         context.put("filteredScenarios", scenarios);

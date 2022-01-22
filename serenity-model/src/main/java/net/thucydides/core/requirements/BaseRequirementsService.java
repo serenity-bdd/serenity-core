@@ -229,9 +229,9 @@ public abstract class BaseRequirementsService implements RequirementsService {
     }
 
     private Stream<TestTag> tagsWithTypes(Requirement requirement, List<String> tagTypes) {
-            return requirement.getTags()
-                    .stream()
-                    .filter(tag -> tagTypes.contains(tag.getType()));
+        return requirement.getTags()
+                .stream()
+                .filter(tag -> tagTypes.contains(tag.getType()));
     }
 
     @Override

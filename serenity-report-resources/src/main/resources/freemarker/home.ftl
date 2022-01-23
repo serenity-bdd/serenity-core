@@ -192,7 +192,7 @@
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
                                 <div class="test-count-title">
-                                    ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>
+                                    ${testCount} test cases <#if (testOutcomes.hasDataDrivenTests())>
                                         (including ${testOutcomes.totalDataRows} rows of test data)</#if>
                                     <#if (csvReport! != '')> |
                                         <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"

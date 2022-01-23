@@ -14,6 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
@@ -54,7 +55,9 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }
-        if (!ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables,"").contains("browserstack")) {
+
+        String remoteUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(WEBDRIVER_REMOTE_URL).orElse("");
+        if (!remoteUrl.contains("browserstack")) {
             return  capabilities;
         }
 

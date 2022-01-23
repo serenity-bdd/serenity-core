@@ -2,8 +2,6 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 
-import java.io.Serializable;
-
 public class ErrorConvertor {
 
     public static Throwable convertToAssertion(final Throwable throwable) {

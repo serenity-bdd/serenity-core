@@ -12,6 +12,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
+import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,7 +185,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private Set<Class> findAllClassesUsingReflectionsLibrary(String packageName) {
 
-        Reflections reflections = new Reflections(packageName, Scanners.SubTypes);
+        Reflections reflections = new Reflections(packageName, Scanners.SubTypes.filterResultsBy(s -> true));
         return new HashSet<>(reflections.getSubTypesOf(Object.class));
     }
 

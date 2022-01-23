@@ -386,7 +386,7 @@
                 <artifactId>selenium-opera-driver</artifactId>
                 <version>${selenium.version}</version>
             </dependency>
-            <dependency>java-client
+            <dependency>
                 <groupId>io.appium</groupId>
                 <artifactId>java-client</artifactId>
                 <version>${appium.version}</version>

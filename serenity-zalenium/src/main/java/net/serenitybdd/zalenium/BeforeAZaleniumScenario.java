@@ -5,7 +5,7 @@ import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.util.Properties;
 
@@ -14,7 +14,7 @@ public class BeforeAZaleniumScenario implements BeforeAWebdriverScenario {
     public static final String ZALENIUM = "zalenium.";
 
     @Override
-    public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
+    public MutableCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, MutableCapabilities capabilities) {
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }

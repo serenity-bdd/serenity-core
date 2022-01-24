@@ -192,7 +192,7 @@
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
                                 <div class="test-count-title">
-                                    ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>
+                                    ${testCount} test cases <#if (testOutcomes.hasDataDrivenTests())>
                                         (including ${testOutcomes.totalDataRows} rows of test data)</#if>
                                     <#if (csvReport! != '')> |
                                         <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
@@ -304,6 +304,18 @@
                                                             <div>
                                                                 <table class="table table-striped table-hover">
                                                                     <tbody>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-card-checklist"></i> Number of Test Cases
+                                                                        </td>
+                                                                        <td>${testCount}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-caret-right"></i> Number of Scenarios
+                                                                        </td>
+                                                                        <td>${scenarioCount}</td>
+                                                                    </tr>
                                                                     <tr scope="row">
                                                                         <td>
                                                                             <i class="bi bi-flag-fill"></i> Tests

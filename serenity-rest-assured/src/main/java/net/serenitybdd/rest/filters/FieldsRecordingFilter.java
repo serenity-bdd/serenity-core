@@ -33,10 +33,10 @@ public class FieldsRecordingFilter implements Filter {
     public Response filter(final FilterableRequestSpecification requestSpec,
                            final FilterableResponseSpecification responseSpec, final FilterContext ctx) {
 
+        BlacklistFilter blacklistFilter = new BlacklistFilter(requestSpec.getConfig().getLogConfig().blacklistedHeaders());
         try (ByteArrayOutputStream output = new ByteArrayOutputStream();
              PrintStream recordingStream = new PrintStream(output, true, StandardCharsets.UTF_8.toString())) {
-            final RequestLoggingFilter filter = new RequestLoggingFilter(this.logDetail,
-                    shouldPrettyPrint, recordingStream);
+            final RequestLoggingFilter filter = new RequestLoggingFilter(this.logDetail, shouldPrettyPrint, recordingStream);
             final Response response = filter.filter(requestSpec, responseSpec, ctx);
             recordingStream.flush();
             this.recorded = new String(output.toByteArray(), StandardCharsets.UTF_8);
@@ -44,6 +44,7 @@ public class FieldsRecordingFilter implements Filter {
                     "(Proxy:)|(Body:)|(Cookies:)|(Headers:)|(Multiparts:)|(Request path:)" +
                     ")\\s*\\n*", "");
             this.recorded = this.recorded.replaceAll("^(<none>)", "");
+            this.recorded = blacklistFilter.filter(this.recorded);
             this.recorded = this.recorded.replaceAll("\n$", "");
             return response;
         } catch (UnsupportedEncodingException e) {

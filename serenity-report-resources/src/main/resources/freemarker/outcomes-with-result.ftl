@@ -216,6 +216,18 @@
                                                                     <tbody>
                                                                     <tr scope="row">
                                                                         <td>
+                                                                            <i class="bi bi-card-checklist"></i> Number of Test Cases
+                                                                        </td>
+                                                                        <td>${testCount}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-caret-right"></i> Number of Scenarios
+                                                                        </td>
+                                                                        <td>${scenarioCount}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
                                                                             <i class="bi bi-flag-fill"></i> Tests Started
                                                                         </td>
                                                                         <td>${startTimestamp}</td>

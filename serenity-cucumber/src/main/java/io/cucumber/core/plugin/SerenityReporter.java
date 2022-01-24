@@ -780,7 +780,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void cleanupTestResourcesForURI(URI uri) {
-        LOGGER.info("Cleanup test resources for URI " + uri);
         getStepEventBus(uri).testSuiteFinished();
         getStepEventBus(uri).dropAllListeners();
         getStepEventBus(uri).clear();

@@ -1,6 +1,7 @@
-package net.serenitybdd.screenplay.webtests.ui;
+package net.serenitybdd.screenplay.webtests.ui.integration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import net.serenitybdd.core.steps.WebDriverScenarios;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -8,6 +9,7 @@ import net.serenitybdd.screenplay.actions.Clear;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.SelectedValue;
 import net.serenitybdd.screenplay.questions.SelectedValues;
@@ -21,7 +23,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,22 +34,33 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Working with Select dropdown fields
  */
 @RunWith(SerenityRunner.class)
-public class SelectExamples {
+public class SelectExamples extends WebDriverScenarios {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver driver;
 
-    Actor sarah = Actor.named("Sarah");
+    @CastMember(name = "Sarah", browserField = "driver")
+    Actor sarah;
 
     @BeforeClass
     public static void setupDriver() {
         WebDriverManager.chromedriver().setup();
     }
 
+    private String selectedValueOf(String id) {
+        return find(By.id(id)).getSelectedValue();
+    }
+
+    private List<String> selectedValuesOf(String id) {
+        return find(By.id(id)).getSelectedValues();
+    }
+
+    private List<String> selectedVisibleValuesOf(String id) {
+        return find(By.id(id)).getSelectedVisibleTexts();
+    }
+
     @Before
     public void openBrowser() {
-        sarah.can(BrowseTheWeb.with(driver));
-
         sarah.attemptsTo(
                 Open.url("classpath:/sample-web-site/screenplay/ui-elements/forms/selects.html")
         );
@@ -55,7 +71,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.value("volvo").from(Dropdown.called("cars"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -63,7 +79,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.value("volvo").from(Dropdown.withLabel("Choose a car:"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -71,7 +87,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.value("volvo").from(Dropdown.withDefaultOption("---Pick Your Car---"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -79,7 +95,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.option("Volvo").from(Dropdown.called("cars"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -87,7 +103,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.options("Spitfire","Hurricane").from(Dropdown.called("planes"))
         );
-        assertThat(SelectedValues.of("#planes").answeredBy(sarah)).contains("spitfire","hurricane");
+        assertThat(selectedValuesOf("planes")).contains("spitfire","hurricane");
     }
 
     @Test
@@ -96,7 +112,7 @@ public class SelectExamples {
                 Select.options("Spitfire","Hurricane").from(Dropdown.called("planes")),
                 Deselect.allOptionsFrom(Dropdown.called("planes"))
         );
-        assertThat(SelectedValues.of("#planes").answeredBy(sarah)).isEmpty();
+        assertThat(selectedValuesOf("planes")).isEmpty();
     }
 
 
@@ -105,7 +121,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.value("volvo").from(Dropdown.called("cars"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -113,7 +129,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.values("spitfire","hurricane").from(Dropdown.called("planes"))
         );
-        assertThat(SelectedVisibleTextValues.of("#planes").answeredBy(sarah)).contains("Spitfire","Hurricane");
+        assertThat(selectedVisibleValuesOf("planes")).contains("Spitfire","Hurricane");
     }
 
     @Test
@@ -121,7 +137,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.optionNumber(1).from(Dropdown.called("cars"))
         );
-        assertThat(SelectedValue.of("#cars").answeredBy(sarah)).isEqualTo("volvo");
+        assertThat(selectedValueOf("cars")).isEqualTo("volvo");
     }
 
     @Test
@@ -129,7 +145,7 @@ public class SelectExamples {
         sarah.attemptsTo(
                 Select.optionNumbers(0,1).from(Dropdown.called("planes"))
         );
-        assertThat(SelectedVisibleTextValues.of("#planes").answeredBy(sarah)).contains("Spitfire","Hurricane");
+        assertThat(selectedVisibleValuesOf("planes")).contains("Spitfire","Hurricane");
     }
 
 }

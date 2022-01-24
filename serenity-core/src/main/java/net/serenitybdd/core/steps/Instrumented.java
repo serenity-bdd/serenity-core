@@ -7,7 +7,7 @@ public class Instrumented {
     private static StepFactory stepFactory = StepFactory.getFactory();
 
     public static <T> InstrumentedBuilder<T> instanceOf(Class<T> instanceClass) {
-        return new InstrumentedBuilder<T>(instanceClass);
+        return new InstrumentedBuilder<>(instanceClass);
     }
 
 

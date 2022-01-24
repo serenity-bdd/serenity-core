@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenity-bdd</groupId>
@@ -8,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>3.1.16-SNAPSHOT</version>
+    <version>3.1.17-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -73,7 +72,7 @@
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.1.0</awaitility.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <appium.version>8.0.0-beta</appium.version>
+        <appium.version>8.0.0-beta2</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
         <!--        <htmlunit.version>2.54.0</htmlunit.version>-->
@@ -578,9 +577,9 @@
                         <includes>
                             <include>**/integration/*IT</include>
                             <include>**/integration/When*</include>
+                            <include>**/integration/*Examples</include>
                             <include>**/integration/*Test</include>
                             <include>**/integration/*TestSuite</include>
-                            <include>**/*Examples</include>
                         </includes>
                         <excludes>
                             <exclude>**/*$*</exclude>
@@ -636,7 +635,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <dependencyConvergence/>
+                                <dependencyConvergence />
                             </rules>
                         </configuration>
                         <!--                        <goals>-->

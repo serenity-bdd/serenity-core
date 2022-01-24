@@ -47,12 +47,12 @@ public class ScreenshotPreferencesByClass {
 
     private String singularClassNameFrom(String key) {
         String simpleClassName = key.replace(SERENITY_TAKE_SCREENSHOTS_FOR,"");
-        return new Inflector().singularize(simpleClassName);
+        return Inflector.getInstance().singularize(simpleClassName);
     }
 
     private String pluralClassNameFrom(String key) {
         String simpleClassName = key.replace(SERENITY_TAKE_SCREENSHOTS_FOR,"");
-        return new Inflector().pluralize(simpleClassName);
+        return Inflector.getInstance().pluralize(simpleClassName);
     }
     public static ScreenshotPreferencesByClassBuilder forClass(Class<?> declaringClass) {
         return new ScreenshotPreferencesByClassBuilder(declaringClass);

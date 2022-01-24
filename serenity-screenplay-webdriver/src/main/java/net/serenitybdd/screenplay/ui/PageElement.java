@@ -10,7 +10,7 @@ import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAn
  */
 public class PageElement {
 
-    private static final String BY_ID_NAME_OR_CLASS = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[class*='{0}']";
+    private static final String BY_ID_NAME_OR_CLASS = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[class*='{0}'],[aria-label='{0}' i]";
     private static final String STRICTLY_CONTAINS_TEXT = "xpath:.//*[contains(text(),'{0}')]";
 
     /**

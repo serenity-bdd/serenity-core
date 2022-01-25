@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver.stubs;
 
-import net.serenitybdd.core.webdriver.RemoteDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ScriptKey;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.Response;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,5 +76,8 @@ public class WebDriverStub extends RemoteWebDriver {
         return new ManageStub();
     }
 
-
+    @Override
+    public Object executeScript(ScriptKey key, Object... args) {
+        return new Response();
+    }
 }

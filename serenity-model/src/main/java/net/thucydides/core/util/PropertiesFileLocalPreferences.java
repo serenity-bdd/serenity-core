@@ -139,7 +139,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return properties;
     }
 
-    private void updatePreferencesFrom(Properties... propertySets) throws IOException {
+    private void updatePreferencesFrom(Properties... propertySets) {
         for (Properties localPreferences : propertySets) {
             PropertiesUtil.expandPropertyAndEnvironmentReferences(System.getenv(), localPreferences);
             setUndefinedSystemPropertiesFrom(localPreferences);

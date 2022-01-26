@@ -4,9 +4,7 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ACCESSIBILITY;
@@ -74,8 +72,17 @@ public class ChartColorScheme {
             "'rgba(255, 104, 255, 1)'" // COMPROMISED
     );
 
+    private final static Map<EnvironmentVariables, ChartColorScheme> COLOR_SCHEMES = new HashMap<>();
+
     public ChartColorScheme(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+    }
+
+    public static ChartColorScheme forEnvironment(EnvironmentVariables environmentVariables) {
+        if (!COLOR_SCHEMES.containsKey(environmentVariables)) {
+            COLOR_SCHEMES.put(environmentVariables, new ChartColorScheme(environmentVariables));
+        }
+        return COLOR_SCHEMES.get(environmentVariables);
     }
 
     public String backgroundColorFor(String testStatus) {

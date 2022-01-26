@@ -5,7 +5,9 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 
@@ -27,6 +29,14 @@ public class ReportOptions {
     final private boolean displayPiechart;
     final private List<String> firstClassTagTypes;
 
+    private static final Map<EnvironmentVariables, ReportOptions> REPORT_OPTIONS = new HashMap<>();
+
+    public static ReportOptions forEnvironment(EnvironmentVariables environmentVariables) {
+        if (REPORT_OPTIONS.get(environmentVariables) == null) {
+            REPORT_OPTIONS.put(environmentVariables, new ReportOptions(environmentVariables));
+        }
+        return REPORT_OPTIONS.get(environmentVariables);
+    }
     public ReportOptions(EnvironmentVariables environmentVariables) {
         this(environmentVariables, Injectors.getInjector().getInstance(RequirementsService.class));
     }

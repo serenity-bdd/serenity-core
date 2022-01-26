@@ -135,7 +135,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         TestOutcomes filteredTestOutcomes = requirementsOutcomes.getTestOutcomes().filteredByEnvironmentTags();
 
-        context.put("colorScheme", new ChartColorScheme(environmentVariables));
+        context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", filteredTestOutcomes);
         context.put("resultCounts", ResultCounts.forOutcomesIn(filteredTestOutcomes));
         context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));
@@ -143,7 +143,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("timestamp", TestOutcomeTimestamp.from(filteredTestOutcomes));
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
-        context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
+        context.put("reportOptions", ReportOptions.forEnvironment(environmentVariables));
         context.put("relativeLink", relativeLink);
         context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(filteredTestOutcomes.getOutcomes())));
 

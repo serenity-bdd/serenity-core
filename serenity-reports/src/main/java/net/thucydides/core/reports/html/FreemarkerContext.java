@@ -80,7 +80,7 @@ public class FreemarkerContext {
         this.version = versionProvider.getVersion();
         this.buildNumber = versionProvider.getBuildNumberText();
         this.tagTypes = new ReportTags(environmentVariables).getDisplayedTagTypes();
-        this.reportOptions = new ReportOptions(environmentVariables);
+        this.reportOptions = ReportOptions.forEnvironment(environmentVariables);
         this.customReportFields = new CustomReportFields(environmentVariables);
         this.requirementsWithTag = requirements.getRequirementsWithTagsOfType(tagTypes);
         this.tagsOfType = requirements.getTagsOfType(tagTypes);
@@ -108,8 +108,7 @@ public class FreemarkerContext {
         TestOutcomes testOutcomes = completeTestOutcomes.filteredByEnvironmentTags();
 
         // EWIP
-
-        context.put("colorScheme", new ChartColorScheme(environmentVariables));
+        context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", testOutcomes);
         context.put("durations", new DurationDistribution(environmentVariables, testOutcomes));
 
@@ -139,8 +138,6 @@ public class FreemarkerContext {
         context.put("endTimestamp", readableTimestampFrom(endTime));
         context.put("totalTestDuration", formattedDuration(totalDurationOf(testOutcomes.getOutcomes())));
         context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
-
-
         context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
         context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
         context.put("minTestDuration", formattedDuration(minDurationOf(testOutcomes.getOutcomes())));
@@ -247,7 +244,7 @@ public class FreemarkerContext {
         context.put("tagInflector", new TagInflector(environmentVariables));
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
-        context.put("reportOptions", new ReportOptions(environmentVariables));
+        context.put("reportOptions", ReportOptions.forEnvironment(environmentVariables));
         context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 

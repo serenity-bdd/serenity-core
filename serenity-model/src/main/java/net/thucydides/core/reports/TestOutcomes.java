@@ -5,6 +5,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.strings.Joiner;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.flags.Flag;
@@ -187,7 +188,7 @@ public class TestOutcomes {
     }
 
     public static TestOutcomes of(Collection<? extends TestOutcome> outcomes) {
-        return new TestOutcomes(outcomes,ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
+        return new TestOutcomes(outcomes, SystemPropertiesConfiguration.DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
     private static List<TestOutcome> NO_OUTCOMES = new ArrayList<>();

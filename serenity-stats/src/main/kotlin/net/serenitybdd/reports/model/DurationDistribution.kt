@@ -19,22 +19,16 @@ class DurationDistribution(
     }
 
     val durationLimits = durationLimitsDefinedIn(environmentVariables)
-    val durationBuckets = calculateDurationBuckets()
+    val durationBuckets = durationBucketsFrom(durationLimits)
 
-    fun getNumberOfTestsPerDuration(): String {
-        val durationCounts = durationBuckets.map { bucket -> numberOfScenariosIn(bucket.outcomes) }
-        return asFormattedList(durationCounts)
+    init {
+        populateDurationBuckets()
     }
 
-    private fun numberOfScenariosIn(outcomes: MutableList<TestOutcome>) : Int {
-        return outcomes.map { outcome -> outcome.testCount}.sum()
-    }
-
-    private fun calculateDurationBuckets(): List<DurationBucket> {
-
+    fun durationBucketsFrom(durationLimits: List<Duration>): List<DurationBucket> {
         val durationBuckets: MutableList<DurationBucket> = mutableListOf()
         val bucketLabels = distributionLabels()
-        for((index, durationLimit)  in durationLimits.plus(Duration.ofSeconds(Long.MAX_VALUE)).withIndex()) {
+        for ((index, durationLimit) in durationLimits.plus(Duration.ofSeconds(Long.MAX_VALUE)).withIndex())
             durationBuckets.add(
                 DurationBucket(
                     bucketLabels.get(index),
@@ -42,25 +36,24 @@ class DurationDistribution(
                     mutableListOf()
                 )
             )
-        }
-
-        for (testOutcome in testOutcomes.tests) {
-            val bucket = bucketFor(testOutcome.durationInSeconds.toLong())
-            durationBuckets.get(bucket).addOutcome(testOutcome)
-        }
-        return durationBuckets
+        return durationBuckets;
     }
 
-    private fun bucketFor(duration: Long): Int {
-        var bucketNumber = 0;
+    fun getNumberOfTestsPerDuration(): String {
+        val durationCounts = durationBuckets.map { bucket -> numberOfScenariosIn(bucket.outcomes) }
+        return asFormattedList(durationCounts)
+    }
 
-        for (durationLimit in durationLimits) {
-            if (duration < durationLimit.seconds) {
-                return bucketNumber
-            }
-            bucketNumber++
+    private fun numberOfScenariosIn(outcomes: MutableList<TestOutcome>): Int {
+        return outcomes.map { outcome -> outcome.testCount }.sum()
+    }
+
+
+    private fun populateDurationBuckets() {
+        // Find the bucket or buckets that match the test results in each test outcome and add the test outcome to the corresponding buckets
+        for (testOutcome in testOutcomes.tests) {
+            findMatchingBucketsForTestOutcome(testOutcome).forEach { bucket -> bucket.addOutcome(testOutcome) }
         }
-        return bucketNumber
     }
 
     fun distributionLabels(): List<String> {
@@ -68,7 +61,7 @@ class DurationDistribution(
         val labels: MutableList<String> = mutableListOf()
 
         labels.add("Under ${formatted(durationLimits.first())}")
-        for( i in 0..durationLimits.size - 2) {
+        for (i in 0..durationLimits.size - 2) {
             val lowerLimit = durationLimits.get(i)
             val upperLimit = durationLimits.get(i + 1)
             if (unitOf(lowerLimit) == unitOf(upperLimit)) {
@@ -76,7 +69,14 @@ class DurationDistribution(
                 labels.add("${valueOf(lowerLimit, unitOf(lowerLimit))} to ${formatted(upperLimit)}")
             } else if ((unitOf(lowerLimit) != unitOf(upperLimit)) && (valueOf(upperLimit, unitOf(upperLimit)) == "1")) {
                 // 30 seconds to 1 minute -> 30 to 60 seconds
-                labels.add("${valueOf(lowerLimit, unitOf(lowerLimit))} to ${formattedWithUnit(upperLimit, unitOf(lowerLimit))}")
+                labels.add(
+                    "${valueOf(lowerLimit, unitOf(lowerLimit))} to ${
+                        formattedWithUnit(
+                            upperLimit,
+                            unitOf(lowerLimit)
+                        )
+                    }"
+                )
             } else {
                 // 30 seconds to 1 minute 30 seconds
                 labels.add("${formatted(lowerLimit)} to ${formatted(upperLimit)}")
@@ -98,15 +98,15 @@ class DurationDistribution(
     fun asFormattedList(labels: List<Any>) = "[${labels.map { duration -> "'${duration}'" }.joinToString(",")}]"
 
     fun unitOf(duration: Duration): String {
-        if (toHoursPart(duration)  > 0) return "HOURS";
+        if (toHoursPart(duration) > 0) return "HOURS";
         if (toMinutesPart(duration) > 0) return "MINUTES";
         if (duration.seconds > 0) return "SECONDS";
         return "MILLISECONDS"
     }
 
     fun formattedWithUnit(duration: Duration, unit: String): String {
-        return when(unit) {
-            "SECONDS" ->  seconds(duration.get(ChronoUnit.SECONDS)).trim()
+        return when (unit) {
+            "SECONDS" -> seconds(duration.get(ChronoUnit.SECONDS)).trim()
             "MINUTES" -> minutes(duration.get(ChronoUnit.MINUTES)).trim()
             "HOURS" -> hours(duration.get(ChronoUnit.HOURS)).trim()
             else -> "${duration.toMillis()} ms"
@@ -114,8 +114,8 @@ class DurationDistribution(
     }
 
     fun valueOf(duration: Duration, unit: String): String {
-        return when(unit) {
-            "SECONDS" ->  duration.seconds.toString()
+        return when (unit) {
+            "SECONDS" -> duration.seconds.toString()
             "MINUTES" -> (duration.seconds / 60).toString()
             "HOURS" -> (duration.seconds / 3600).toString()
             else -> duration.toMillis().toString()
@@ -166,15 +166,26 @@ class DurationDistribution(
         }
     }
 
-    fun bucketFor(testOutcome: TestOutcome): DurationBucket {
-        for (bucket in durationBuckets) {
-            if (testOutcome.durationInSeconds < bucket.durationInSeconds) {
-                return bucket;
-            }
+    /**
+     * Find the matching buckets for the test or tests in a given test outcome
+     */
+    fun findMatchingBucketsForTestOutcome(testOutcome: TestOutcome): MutableCollection<DurationBucket> {
+        val matchingBuckets = HashSet<DurationBucket>();
+        // Find the duration of the test outcome, or the set of durations for a scenario outline or data-driven test
+        val scenarioDurations = if ((testOutcome.isDataDriven)) {
+            testOutcome.testSteps.map { step -> step.durationInSeconds }
+        } else {
+            listOf(testOutcome.durationInSeconds)
         }
-        return durationBuckets.last()
+
+        // Find the first bucket with a minimal duration that is greater than or equal to the scenario duration for each scenario in this test outcome
+        scenarioDurations.forEach { scenarioDuration ->
+            val matchingBucket = durationBuckets.first { bucket -> scenarioDuration <= bucket.durationInSeconds }
+            matchingBuckets.add(matchingBucket)
+        }
+        return matchingBuckets;
     }
 
-    fun getDurationTags() : List<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }
+    fun getDurationTags(): List<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }
 
 }

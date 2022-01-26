@@ -248,8 +248,13 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     private void enhanceWithDuraction(TestOutcome testOutcome, DurationDistribution durationDistribution) {
-        DurationBucket bucket = durationDistribution.bucketFor(testOutcome);
-        testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
+//        DurationBucket bucket = durationDistribution.bucketFor(testOutcome);
+//        testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
+        Collection<DurationBucket> buckets = durationDistribution.findMatchingBucketsForTestOutcome(testOutcome);
+        buckets.forEach(
+                bucket -> testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"))
+        );
+
     }
 
     private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes,

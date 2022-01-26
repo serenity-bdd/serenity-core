@@ -31,8 +31,7 @@ class WhenCalculatingDurationDistributions {
 
         val distribution = DurationDistribution(environmentVariables, testOutcomes)
 
-        assertThat(distribution.getNumberOfTestsPerDuration())
-            .isEqualTo("['12','10','2','9','2','3','0']")
+        assertThat(distribution.getNumberOfTestsPerDuration()).isEqualTo("['26','7','6','7','3','0','0']")
     }
 
     fun testOutcomesIn(directory: String) : TestOutcomes {

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class LambdaTarget extends Target {
+public class LambdaTarget extends SearchableTarget {//} extends Target {
 
     private final Function<PageObject, List<WebElementFacade>> locationStrategy;
 
@@ -113,5 +113,10 @@ public class LambdaTarget extends Target {
 
     public LambdaTarget called(String name) {
         return new LambdaTarget(name, locationStrategy, iFrame, timeout);
+    }
+
+    @Override
+    public List<String> getCssOrXPathSelectors() {
+        throw new UnsupportedOperationException("The getCssOrXPathSelectors() method is not supported for lambda-type Targets");
     }
 }

@@ -19,6 +19,7 @@ import net.serenitybdd.screenplay.ui.Dropdown;
 import net.serenitybdd.screenplay.ui.RadioButton;
 import net.serenitybdd.screenplay.ui.Select;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Working with Select dropdown fields
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class SelectExamples extends WebDriverScenarios {
 
     @Managed(driver = "chrome", options = "--headless")

@@ -11,6 +11,7 @@ import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.questions.Value;
 import net.serenitybdd.screenplay.ui.InputField;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Working with Text Areas
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class TextAreaExamples extends WebDriverScenarios {
 
     @Managed(driver = "chrome", options = "--headless")

@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.ui.Button;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.openqa.selenium.WebDriver;
  * Working with HTML buttons
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class ButtonExamples {
 
     @CastMember(name = "Sarah")

@@ -10,6 +10,7 @@ import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.ui.Button;
 import net.serenitybdd.screenplay.ui.Image;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import org.openqa.selenium.WebDriver;
  * Working with HTML images
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class ImageExamples {
 
     @Managed(driver = "chrome", options = "--headless")

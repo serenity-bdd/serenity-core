@@ -72,10 +72,14 @@ public class Requirement implements Comparable {
         this.path = path;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
         this.featureFileName = featureFileName;
         this.tags = new ArrayList<>();
     }
@@ -99,10 +103,14 @@ public class Requirement implements Comparable {
         this.path = path;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
         this.featureFileName = featureFileName;
         this.tags = tags;
         this.scenarioTags = scenarioTags;
@@ -131,10 +139,14 @@ public class Requirement implements Comparable {
         this.type = type;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
         this.path = path;
         this.tags = new ArrayList<>();
     }
@@ -226,7 +238,8 @@ public class Requirement implements Comparable {
     }
 
     public void setChildren(List<Requirement> children) {
-        this.children = Collections.unmodifiableList(children);
+//        this.children = Collections.unmodifiableList(children);
+        this.children = children;
     }
 
     public Requirement withParent(String parent) {

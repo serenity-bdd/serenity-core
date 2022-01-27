@@ -54,6 +54,7 @@ public class TestOutcomes {
     private final String label;
     private final TestTag testTag;
     private final TestResult resultFilter;
+    private ZonedDateTime startTime;
 
     /**
      * Reference to the test statistics service provider, used to inject test history if required.
@@ -72,7 +73,8 @@ public class TestOutcomes {
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
 
-        this.outcomes = Collections.unmodifiableList(sorted(outcomes));
+        this.outcomes = sorted(outcomes);
+        this.startTime = startTime().orElse(null);
 
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
@@ -401,12 +403,16 @@ public class TestOutcomes {
         );
     }
 
-    public Optional<ZonedDateTime> getStartTime() {
+    private Optional<ZonedDateTime> startTime() {
         return outcomes.stream()
-                .filter(outcome -> outcome.getStartTime() != null)
                 .map(TestOutcome::getStartTime)
+                .filter(Objects::nonNull)
                 .sorted()
                 .findFirst();
+    }
+
+    public Optional<ZonedDateTime> getStartTime() {
+        return Optional.ofNullable(startTime);
     }
 
     public TestOutcomes ofType(TestType testType) {

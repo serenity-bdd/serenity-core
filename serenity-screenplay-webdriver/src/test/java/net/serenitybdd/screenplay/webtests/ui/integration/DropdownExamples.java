@@ -11,6 +11,7 @@ import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.ui.Dropdown;
 import net.serenitybdd.screenplay.ui.Link;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Working with Anchors
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class DropdownExamples {
 
     @Managed(driver = "chrome", options = "--headless")

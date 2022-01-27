@@ -8,6 +8,7 @@ import net.serenitybdd.screenplay.actions.type.Type;
 import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.ui.InputField;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Working with Input Fields
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class InputFieldExamples {
 
     @Managed(driver = "chrome", options = "--headless")

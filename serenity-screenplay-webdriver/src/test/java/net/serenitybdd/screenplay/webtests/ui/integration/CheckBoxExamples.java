@@ -10,6 +10,7 @@ import net.serenitybdd.screenplay.annotations.CastMember;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.ui.Checkbox;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.SingleBrowser;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertTrue;
  * Working with Radio Buttons
  */
 @RunWith(SerenityRunner.class)
+@SingleBrowser
 public class CheckBoxExamples {
 
     @Managed(driver = "chrome", options = "--headless")

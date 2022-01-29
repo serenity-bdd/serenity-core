@@ -29,11 +29,9 @@ import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Sleeper;
@@ -51,10 +49,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -62,7 +61,6 @@ import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
-import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
 /**
  * A base class representing a WebDriver page object.
@@ -1077,6 +1075,14 @@ public abstract class PageObject {
         return element(bySelector);
     }
 
+    public net.serenitybdd.core.pages.WebElementFacade $(ResolvableElement selector) {
+        return find(selector);
+    }
+
+    public ListOfWebElementFacades $$(ResolvableElement selector) {
+        return findAll(selector);
+    }
+
     /**
      * Return the text value of a given element
      */
@@ -1136,6 +1142,14 @@ public abstract class PageObject {
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
+    }
+
+    public net.serenitybdd.core.pages.WebElementFacade find(ResolvableElement selector) {
+        return selector.resolveFor(this);
+    }
+
+    public ListOfWebElementFacades findAll(ResolvableElement selector) {
+        return findAllWithRetry((page) -> selector.resolveAllFor(this));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithByLocator selector) {
@@ -1258,24 +1272,22 @@ public abstract class PageObject {
     }
 
     public ListOfWebElementFacades findAll(By bySelector) {
-//    public List<WebElementFacade> findAll(By bySelector) {
-
-        List<WebElement> matchingWebElements = driver.findElements(bySelector);
-
-        List<WebElementFacade> allElements = new ArrayList<>();
-        for (WebElement matchingElement : matchingWebElements) {
-            allElements.add($(matchingElement));
-        }
-
-        return new ListOfWebElementFacades(allElements);
+        return findAllWithRetry(page -> {
+            List<WebElementFacade> matchingWebElements = new ArrayList<>();
+            for (WebElement webElement : driver.findElements(bySelector)) {
+                WebElementFacade element = element(webElement);
+                matchingWebElements.add(element);
+            }
+            return new ListOfWebElementFacades(matchingWebElements);
+        });
     }
 
     public ListOfWebElementFacades findAll(WithLocator bySelector) {
-        return findAll(bySelector.getLocator());
+        return findAllWithRetry((page) -> page.findAll(bySelector.getLocator()));
     }
 
     public ListOfWebElementFacades findAll(WithByLocator bySelector) {
-        return findAll(bySelector.getLocator());
+        return findAllWithRetry((page) -> page.findAll(bySelector.getLocator()));
     }
 
     /**
@@ -1294,7 +1306,7 @@ public abstract class PageObject {
     }
 
     public ListOfWebElementFacades findAll(String xpathOrCssSelector, Object... arguments) {
-        return findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
+        return findAllWithRetry((page) -> page.findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments))));
     }
 
     public boolean containsElements(By bySelector) {
@@ -1458,5 +1470,9 @@ public abstract class PageObject {
     public String toString() {
         return inflection.of(getClass().getSimpleName())
                 .inHumanReadableForm().toString();
+    }
+
+    private ListOfWebElementFacades findAllWithRetry(Function<PageObject, ListOfWebElementFacades> finder) {
+        return new FindAllWithRetry(environmentVariables).find(finder, this);
     }
 }

@@ -16,7 +16,7 @@ public class WhenRecordingWebdriverExceptions {
         try {
             assertThat("a", is("b"));
         } catch(AssertionError error) {
-            Throwable convertedError = ErrorConvertor.forError(error).convertToAssertion();
+            Throwable convertedError = ErrorConvertor.convertToAssertion(error);
             assertThat(convertedError.getMessage(), containsString("Expected: is \"b\""));
 
         }
@@ -28,7 +28,7 @@ public class WhenRecordingWebdriverExceptions {
             assertThat("a", is("b"));
         } catch(AssertionError assertionError) {
             WebDriverException exception = new WebDriverException(assertionError);
-            Throwable convertedError = ErrorConvertor.forError(exception).convertToAssertion();
+            Throwable convertedError = ErrorConvertor.convertToAssertion(exception);
             assertThat(convertedError.getMessage(), containsString("Expected: is \"b\""));
 
         }
@@ -42,7 +42,7 @@ public class WhenRecordingWebdriverExceptions {
             assertThat(colors, hasItem("yellow"));
         } catch(AssertionError assertionError) {
             WebDriverException exception = new WebDriverException(assertionError);
-            Throwable convertedError = ErrorConvertor.forError(exception).convertToAssertion();
+            Throwable convertedError = ErrorConvertor.convertToAssertion(exception);
             assertThat(convertedError.getMessage(), allOf(containsString("red"),
                                                           containsString("blue"),
                                                           containsString("green")));

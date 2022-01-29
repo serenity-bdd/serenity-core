@@ -251,17 +251,12 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
-        Optional<String> value = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty(property.getPropertyName(),
-                        property.getLegacyPropertyName());
-        return value.map(Integer::parseInt);
+        return EnvironmentSpecificConfiguration.from(environmentVariables)
+                                               .getOptionalInteger(property.getPropertyName(), property.getLegacyPropertyName());
     }
 
     private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {
-        return Integer.parseInt(EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty(property.getPropertyName(),
-                        property.getLegacyPropertyName())
-                .orElse(Integer.toString(defaultValue)));
+        return integerPropertyNamed(property).orElse(defaultValue);
     }
 
     private String propertyNamed(ThucydidesSystemProperty propertyName) {

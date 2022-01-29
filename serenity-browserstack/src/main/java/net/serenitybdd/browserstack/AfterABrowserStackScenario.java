@@ -9,6 +9,8 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL;
+
 
 public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
@@ -17,7 +19,8 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
         if ((driver == null) || (!RemoteDriver.isARemoteDriver(driver)) || RemoteDriver.isStubbed(driver)) {
             return;
         }
-        if (!ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables,"").contains("browserstack")) {
+        String remoteUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(WEBDRIVER_REMOTE_URL).orElse("");
+        if (!remoteUrl.contains("browserstack")) {
             return;
         }
 

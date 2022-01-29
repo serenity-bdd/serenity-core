@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.ui;
 
+import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 
 import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
@@ -12,11 +13,11 @@ public class PageElementBuilder {
         this.selector = selector;
     }
 
-    public Target describedAs(String name) {
+    public SearchableTarget describedAs(String name) {
         return Target.the(name).locatedBy(selector);
     }
 
-    public Target containingText(String text) {
+    public SearchableTarget containingText(String text) {
         return Target.the("the element containing text '" + text + "'").locatedBy(containingTextAndMatchingCSS(selector, text));
     }
 }

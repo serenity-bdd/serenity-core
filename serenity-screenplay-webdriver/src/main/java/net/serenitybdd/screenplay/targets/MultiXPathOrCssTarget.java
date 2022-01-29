@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.selectors.Selectors;
@@ -66,12 +67,12 @@ public class MultiXPathOrCssTarget extends SearchableTarget {
         return new ArrayList<>();
     }
 
-    public List<WebElementFacade> resolveAllFor(PageObject page) {
+    public ListOfWebElementFacades resolveAllFor(PageObject page) {
         List<WebElementFacade> resolvedElements =  findAllMatching(page, cssOrXPathSelectors);
 
         if (timeout.isPresent()) {
             if (resolvedElements.isEmpty()) {
-                return resolvedElements;
+                return new ListOfWebElementFacades(resolvedElements);
             } else {
                 Duration effectiveTimeout = timeout.orElse(page.getImplicitWaitTimeout());
                 long maxTimeAllowed = effectiveTimeout.toMillis();
@@ -79,12 +80,12 @@ public class MultiXPathOrCssTarget extends SearchableTarget {
                 while (System.currentTimeMillis() - timeStarted < maxTimeAllowed) {
                     resolvedElements = findAllMatching(page, cssOrXPathSelectors);
                     if (!resolvedElements.isEmpty()) {
-                        return resolvedElements;
+                        return new ListOfWebElementFacades(resolvedElements);
                     }
                 }
             }
         }
-        return resolvedElements;
+        return new ListOfWebElementFacades(resolvedElements);
     }
 
     public SearchableTarget of(String... parameters) {

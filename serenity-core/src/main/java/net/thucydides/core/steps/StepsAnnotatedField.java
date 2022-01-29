@@ -146,7 +146,7 @@ public class StepsAnnotatedField {
     }
 
     private String humanReadable(String fieldName) {
-        return new Inflector().of(fieldName).asATitle().toString();
+        return Inflector.getInstance().of(fieldName).asATitle().toString();
     }
 
     private void assignValueToField(Field field, Object steps, String value) {
@@ -159,8 +159,6 @@ public class StepsAnnotatedField {
     }
 
     private Optional<Field> actorFieldIn(Object steps) {
-
-
         return Fields.of(steps.getClass()).allFields().stream()
                 .filter(field -> field.getName().equals("actor")
                         && field.getType().equals(String.class))

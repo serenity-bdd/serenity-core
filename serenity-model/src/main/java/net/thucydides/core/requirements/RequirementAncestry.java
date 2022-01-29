@@ -23,7 +23,8 @@ public class RequirementAncestry {
                     ? addParentsTo(requirement.getChildren(),requirement.getName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
         }
-        return unmodifiableList(augmentedRequirements);
+        //return unmodifiableList(augmentedRequirements);
+        return augmentedRequirements;
     }
 
 }

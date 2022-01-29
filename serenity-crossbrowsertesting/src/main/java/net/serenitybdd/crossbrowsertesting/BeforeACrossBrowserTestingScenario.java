@@ -6,6 +6,7 @@ import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -25,7 +26,7 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
             );
 
     @Override
-    public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
+    public MutableCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, MutableCapabilities capabilities) {
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }
@@ -34,8 +35,8 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
                 .getOptionalProperty("remote.platform")
                 .orElse(null);
 
-        if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform.toUpperCase()));
+        if (isNotEmpty(remotePlatform) && (capabilities instanceof DesiredCapabilities)) {
+            ((DesiredCapabilities)capabilities).setPlatform(Platform.valueOf(remotePlatform.toUpperCase()));
         }
 
         Properties cbtProperties = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertiesWithPrefix(CROSS_BROWSER_TESTING);
@@ -52,7 +53,7 @@ public class BeforeACrossBrowserTestingScenario implements BeforeAWebdriverScena
         return capabilities;
     }
 
-    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties cbtProperties) {
+    private void setNonW3CCapabilities(MutableCapabilities capabilities, Properties cbtProperties) {
         cbtProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)

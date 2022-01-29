@@ -17,8 +17,8 @@ public abstract class SearchableTarget extends Target {
 
     public abstract List<String> getCssOrXPathSelectors();
 
-    public Target containingText(String text) {
-        return Target.the(getName() + " containing text '" + text + "'")
+    public SearchableTarget containingText(String text) {
+        return (SearchableTarget) Target.the(getName() + " containing text '" + text + "'")
                 .locatedBy(containingTextAndMatchingCSS(getCssOrXPathSelectors(), text));
     }
 }

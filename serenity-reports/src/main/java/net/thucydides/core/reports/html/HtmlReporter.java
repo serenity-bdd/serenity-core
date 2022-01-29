@@ -94,9 +94,9 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         Path sourcePath = getSourceDirectoryOrDefault().toPath();
         Path destinationPath = getOutputDirectory().toPath();
         if (Files.exists(sourcePath) && !Files.isSameFile(sourcePath, destinationPath)) {
-            LOGGER.debug("Copying directory contents from {} to {}", sourcePath,destinationPath);
+            LOGGER.trace("Copying directory contents from {} to {}", sourcePath,destinationPath);
             copyDirectoryContents(sourcePath, destinationPath);
-            LOGGER.debug("Copying directory contents from {} to {} done", sourcePath,destinationPath);
+            LOGGER.trace("Copying directory contents from {} to {} done", sourcePath,destinationPath);
         }
     }
 

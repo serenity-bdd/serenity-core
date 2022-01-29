@@ -3,8 +3,6 @@ package net.thucydides.core.requirements;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
@@ -168,7 +166,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         if (requirementPaths == null) {
             readingPaths.lock();
             List<String> paths = requirementPathsFromClassesInPackage(rootPackage);
-            Collections.sort(paths, byDescendingPackageLength());
+            paths.sort(byDescendingPackageLength());
             requirementPaths = NewList.copyOf(paths);
             readingPaths.unlock();
         }
@@ -178,17 +176,16 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
         Set<Class> allClassesRecursive = findAllClassesUsingReflectionsLibrary(rootPackage);
         return allClassesRecursive.stream()
-                .filter(classInfo -> classRepresentsARequirementIn(classInfo))
-                .map(classInfo -> classInfo.getName())
+                .filter(this::classRepresentsARequirementIn)
+                .map(Class::getName)
                 .map(className -> className.replaceAll("\\$","."))
                 .collect(Collectors.toList());
     }
 
     private Set<Class> findAllClassesUsingReflectionsLibrary(String packageName) {
+
         Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
-        return reflections.getSubTypesOf(Object.class)
-                .stream()
-                .collect(Collectors.toSet());
+        return new HashSet<>(reflections.getSubTypesOf(Object.class));
     }
 
     private boolean classRepresentsARequirementIn(Class classInfo) {

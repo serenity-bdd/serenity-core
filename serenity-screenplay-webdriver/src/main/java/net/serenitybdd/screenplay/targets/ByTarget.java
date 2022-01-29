@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.RemoteDriver;
@@ -55,11 +56,11 @@ public class ByTarget extends Target {
         }
     }
 
-    public List<WebElementFacade> resolveAllFor(PageObject page) {
+    public ListOfWebElementFacades resolveAllFor(PageObject page) {
         if (timeout.isPresent()) {
-            return page.withTimeoutOf(timeout.get()).findAll(getLocatorForPlatform(page.getDriver()));
+            return new ListOfWebElementFacades(page.withTimeoutOf(timeout.get()).findAll(getLocatorForPlatform(page.getDriver())));
         } else {
-            return page.findAll(getLocatorForPlatform(page.getDriver()));
+            return new ListOfWebElementFacades(page.findAll(getLocatorForPlatform(page.getDriver())));
         }
     }
 

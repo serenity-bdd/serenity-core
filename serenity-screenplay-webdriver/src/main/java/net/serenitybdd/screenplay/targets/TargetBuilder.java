@@ -26,7 +26,7 @@ public class TargetBuilder<T> {
         return this;
     }
 
-    public Target locatedBy(String cssOrXPathSelector) {
+    public SearchableTarget locatedBy(String cssOrXPathSelector) {
         return new XPathOrCssTarget(targetElementName, cssOrXPathSelector, iFrame, Optional.empty());
     }
 
@@ -34,7 +34,7 @@ public class TargetBuilder<T> {
      * Locate an element using a location strategy function.
      * The function takes a Serenity Page Object representing the current web page, and returns a list of matching WebElementFacade objects.
      */
-    public Target locatedBy(Function<PageObject, List<WebElementFacade>> locationStrategy) {
+    public SearchableTarget locatedBy(Function<PageObject, List<WebElementFacade>> locationStrategy) {
         return new LambdaTarget(targetElementName, locationStrategy, iFrame, Optional.empty());
     }
 

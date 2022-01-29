@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.selectors.Selectors;
@@ -30,11 +31,11 @@ public class XPathOrCssTarget extends SearchableTarget {
         }
     }
 
-    public List<WebElementFacade> resolveAllFor(PageObject page) {
+    public ListOfWebElementFacades resolveAllFor(PageObject page) {
         if (timeout.isPresent()) {
-            return page.withTimeoutOf(timeout.get()).findAll(cssOrXPathSelector);
+            return new ListOfWebElementFacades(page.withTimeoutOf(timeout.get()).findAll(cssOrXPathSelector));
         } else {
-            return page.findAll(cssOrXPathSelector);
+            return new ListOfWebElementFacades(page.findAll(cssOrXPathSelector));
         }
     }
 

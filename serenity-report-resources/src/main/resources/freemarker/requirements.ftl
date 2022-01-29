@@ -534,8 +534,7 @@
                                                                         <i class="bi bi-pause-circle"
                                                                            title="No test has been implemented yet"></i>
                                                                     </#if>
-                                                                    LINK: <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
-                                                                        &nbsp;
+                                                                    <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>&nbsp;
                                                                         <a href="${scenario.externalLink.url}" class="tag" title="${scenario.externalLink.type}">
                                                                             <i class="fs-2 bi bi-camera-reels"></i>
                                                                         </a>

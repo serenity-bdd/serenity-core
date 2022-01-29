@@ -4,10 +4,7 @@ import com.google.common.base.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -188,6 +185,24 @@ public class EnvironmentSpecificConfiguration {
         return Optional.ofNullable(substituteProperties(propertyValue));
     }
 
+    public Optional<Integer> getOptionalInteger(List<String> possiblePropertyNames) {
+        String propertyValue = null;
+        for (String propertyName : possiblePropertyNames) {
+            propertyValue = getPropertyValue(propertyName);
+            if (propertyValue != null) {
+                break;
+            }
+        }
+        if (propertyValue == null) {
+            return Optional.empty();
+        }
+        return Optional.of(Integer.parseInt(propertyValue));
+    }
+
+    public Optional<Integer> getOptionalInteger(String... propertyNames) {
+        return getOptionalInteger(Arrays.asList(propertyNames));
+    }
+
     public Optional<String> getOptionalProperty(String... propertyNames) {
         return getOptionalProperty(Arrays.asList(propertyNames));
     }
@@ -249,8 +264,13 @@ public class EnvironmentSpecificConfiguration {
         return null;
     }
 
+    private static final Map<EnvironmentVariables, EnvironmentSpecificConfiguration> ENVIRONMENT_SPECIFIC_CONFIGS = new HashMap<>();
+
     public static EnvironmentSpecificConfiguration from(EnvironmentVariables environmentVariables) {
-        return new EnvironmentSpecificConfiguration(environmentVariables);
+        if (!ENVIRONMENT_SPECIFIC_CONFIGS.containsKey(environmentVariables)) {
+            ENVIRONMENT_SPECIFIC_CONFIGS.put(environmentVariables, new EnvironmentSpecificConfiguration(environmentVariables));
+        }
+        return ENVIRONMENT_SPECIFIC_CONFIGS.get(environmentVariables);
     }
 
     private static EnvironmentStrategy environmentStrategyDefinedIn(EnvironmentVariables environmentVariables) {

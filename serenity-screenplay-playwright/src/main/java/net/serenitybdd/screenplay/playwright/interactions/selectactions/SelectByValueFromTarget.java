@@ -15,7 +15,7 @@ public class SelectByValueFromTarget implements Performable {
         this.values = values;
     }
 
-    @Step("{0} selects #value in #target")
+    @Step("{0} selects #values in #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWebWithPlaywright.as(theUser).getCurrentPage().selectOption(target.asSelector(), values);
         BrowseTheWebWithPlaywright.as(theUser).notifyScreenChange();

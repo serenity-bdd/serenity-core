@@ -55,7 +55,11 @@ public class InteractingWithFormElementsTest {
     public void selectingFromDropdown() {
         fred.attemptsTo(
             Open.url("http://the-internet.herokuapp.com/dropdown"),
-            SelectFromOptions.byValue("1").from("#dropdown")
+            SelectFromOptions.byValue("1").from("#dropdown"),
+            // TODO: check that correct option is selected
+            SelectFromOptions.byVisibleText("Option 2").from("#dropdown"),
+            // TODO: check that correct option is selected
+            SelectFromOptions.byIndex(1).from("#dropdown")
             // TODO: check that correct option is selected
         );
     }

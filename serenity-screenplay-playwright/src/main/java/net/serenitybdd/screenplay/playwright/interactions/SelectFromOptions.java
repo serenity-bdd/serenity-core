@@ -22,9 +22,9 @@ import static net.serenitybdd.screenplay.playwright.interactions.SelectStrategy.
 public class SelectFromOptions {
 
     private final SelectStrategy strategy;
-    private String[] options;
+    private String option;
     private String[] values;
-    private String[] indexes;
+    private int index;
 
     public SelectFromOptions(SelectStrategy strategy) {
         this.strategy = strategy;
@@ -36,15 +36,15 @@ public class SelectFromOptions {
         return selectFromOptions;
     }
 
-    public static SelectFromOptions byVisibleText(String... visibleTexts) {
+    public static SelectFromOptions byVisibleText(String visibleText) {
         SelectFromOptions selectFromOptions = new SelectFromOptions(ByVisibleText);
-        selectFromOptions.options = visibleTexts;
+        selectFromOptions.option = visibleText;
         return selectFromOptions;
     }
 
-    public static SelectFromOptions byIndex(String... indexValues) {
+    public static SelectFromOptions byIndex(int indexValue) {
         SelectFromOptions selectFromOptions = new SelectFromOptions(ByIndex);
-        selectFromOptions.indexes = indexValues;
+        selectFromOptions.index = indexValue;
         return selectFromOptions;
     }
 
@@ -57,9 +57,9 @@ public class SelectFromOptions {
             case ByValue:
                 return new SelectByValueFromTarget(target, values);
             case ByVisibleText:
-                return new SelectByVisibleTextFromTarget(target, options);
+                return new SelectByVisibleTextFromTarget(target, option);
             case ByIndex:
-                return new SelectByIndexFromTarget(target, indexes);
+                return new SelectByIndexFromTarget(target, index);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }

@@ -75,6 +75,27 @@ public class Ensure {
     }
 
     /**
+     * Check whether the element is has expected value. Throws if the element is not an input, textarea or select.
+     */
+    public Performable currentValue(String expectedValue) {
+        return Task.where(target + " should have value " + expectedValue,
+            actor -> {
+                String currentValue;
+                Page currentPage = BrowseTheWebWithPlaywright.as(actor).getCurrentPage();
+                if (timeoutIsSpecified()) {
+                    Page.InputValueOptions options = new Page.InputValueOptions().setTimeout(timeout);
+                    currentValue = currentPage.inputValue(target.asSelector(), options);
+                } else {
+                    currentValue = currentPage.inputValue(target.asSelector());
+                }
+                assertThat(currentValue)
+                    .describedAs("Expecting <%s> to have different value", target)
+                    .isEqualTo(expectedValue);
+            }
+        );
+    }
+
+    /**
      * Check whether the element is checked. Throws if the element is not a checkbox or radio input.
      */
     public Performable isChecked() {

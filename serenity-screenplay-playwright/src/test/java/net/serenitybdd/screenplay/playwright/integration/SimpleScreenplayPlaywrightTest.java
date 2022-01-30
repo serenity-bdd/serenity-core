@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywrigh
 import net.serenitybdd.screenplay.playwright.interactions.Click;
 import net.serenitybdd.screenplay.playwright.interactions.Enter;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
+import net.serenitybdd.screenplay.playwright.questions.Attribute;
 import net.serenitybdd.screenplay.playwright.questions.TheWebPage;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -28,15 +29,16 @@ public class SimpleScreenplayPlaywrightTest {
     @Test
     public void simpleSearch() {
         daffy.attemptsTo(
-                Open.url("https://www.duckduckgo.com"),
-                Enter.theValue("Penguins").into("#search_form_input_homepage"),
-                Click.on("#search_button_homepage")
+            Open.url("https://www.duckduckgo.com"),
+            Enter.theValue("Penguins").into("#search_form_input_homepage"),
+            Click.on("#search_button_homepage")
         );
         daffy.should(
-                seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
+            seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo")),
+            // Image from wikipedia
+            seeThat(Attribute.of(".module__image", "href"), Matchers.containsStringIgnoringCase("penguin"))
         );
     }
-
 
     static class SearchPage {
         static final Target SEARCH_FIELD = Target.the("Search field").locatedBy("#search_form_input_homepage");
@@ -46,12 +48,12 @@ public class SimpleScreenplayPlaywrightTest {
     @Test
     public void searchUsingTargetSelectors() {
         daffy.attemptsTo(
-                Open.url("https://www.duckduckgo.com"),
-                Enter.theValue("Penguins").into(SearchPage.SEARCH_FIELD),
-                Click.on(SearchPage.SEARCH_BUTTON)
+            Open.url("https://www.duckduckgo.com"),
+            Enter.theValue("Penguins").into(SearchPage.SEARCH_FIELD),
+            Click.on(SearchPage.SEARCH_BUTTON)
         );
         daffy.should(
-                seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
+            seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
         );
     }
 }

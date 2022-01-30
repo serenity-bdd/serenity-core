@@ -1,7 +1,5 @@
 package net.serenitybdd.screenplay.playwright.questions;
 
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
@@ -14,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(SerenityRunner.class)
-public class WhenCheckingVisibility {
+public class WhenCheckingVisibilityTest {
 
     Actor fred;
 
@@ -24,23 +22,23 @@ public class WhenCheckingVisibility {
     }
 
     @Test
-    public void weCanCheckforHiddenAndVisibleElements() {
+    public void weCanCheckForHiddenAndVisibleElements() {
         fred.attemptsTo(
-                Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
-                Ensure.that("text='Delete'").withTimeout(0.0).isHidden(),
-                Click.on("text='Add Element'"),
-                Ensure.that("text='Delete'").isVisible()
+            Open.url("http://the-internet.herokuapp.com/add_remove_elements/"),
+            Ensure.that("text='Delete'").withTimeout(0.0).isHidden(),
+            Click.on("text='Add Element'"),
+            Ensure.that("text='Delete'").isVisible()
         );
     }
 
     @Test
-    public void weCanCheckforDisabledElements() {
+    public void weCanCheckForDisabledElements() {
         fred.attemptsTo(
-                Open.url("http://the-internet.herokuapp.com/dynamic_controls"),
-                Ensure.that("#input-example input").isDisabled(),
-                Click.on("text='Enable'"),
-                WaitFor.selector("text='It's enabled!'"),
-                Ensure.that("#input-example input").isEnabled()
+            Open.url("http://the-internet.herokuapp.com/dynamic_controls"),
+            Ensure.that("#input-example input").isDisabled(),
+            Click.on("text='Enable'"),
+            WaitFor.selector("text='It's enabled!'"),
+            Ensure.that("#input-example input").isEnabled()
         );
     }
 

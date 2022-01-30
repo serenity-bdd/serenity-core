@@ -40,16 +40,16 @@ public class TagExclusions {
     }
 
     private boolean matches(TestTag tag, String excludedTag) {
-        if (tag.equals(TestTag.withValue(excludedTag))) {
+        if (tag.equalsIgnoreCase(TestTag.withValue(excludedTag))) {
             return true;
         }
         if (excludedTag.endsWith(":*")) {
             String tagType = excludedTag.replace(":*","");
-            return tag.getType().equals(tagType);
+            return tag.getType().equalsIgnoreCase(tagType);
         }
         if (excludedTag.startsWith("*:")) {
             String tagValue = excludedTag.replace("*:","");
-            return tag.getName().equals(tagValue);
+            return tag.getName().equalsIgnoreCase(tagValue);
         }
         return false;
     }

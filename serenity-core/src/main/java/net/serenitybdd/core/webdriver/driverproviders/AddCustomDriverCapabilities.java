@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
@@ -7,10 +8,11 @@ import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddCustomDriverCapabilities {
 
@@ -34,34 +36,39 @@ public class AddCustomDriverCapabilities {
 
     public MutableCapabilities to(MutableCapabilities capabilities) {
 
-        List<Class<?>> customCapabilityEnhancers
-                = ClassFinder.loadClasses()
-                             .thatImplement(BeforeAWebdriverScenario.class)
-                             .fromPackage("net.serenitybdd");
+        List<Class<BeforeAWebdriverScenario>> capabilityEnhancers
+                = new ArrayList<>(
+                ClassFinder.loadClasses()
+                        .thatImplement(BeforeAWebdriverScenario.class)
+                        .fromPackage("net.serenitybdd")
+                        .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension)
+                        .collect(Collectors.toList()));
 
-        String extensionPackageList = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
-        if (extensionPackageList != null) {
-            List<String> extensionPackages = Arrays.asList(extensionPackageList.split(","));
-            extensionPackages.forEach(
-                    extensionPackage ->
-                            customCapabilityEnhancers.addAll(ClassFinder.loadClasses().thatImplement(BeforeAWebdriverScenario.class)
-                                    .fromPackage(extensionPackage))
-            );
-        }
+        capabilityEnhancers.addAll(customEnhancers());
 
-        customCapabilityEnhancers.forEach(
+        capabilityEnhancers.forEach(
                 enhancerType -> {
                     try {
-                        BeforeAWebdriverScenario beforeScenario = (BeforeAWebdriverScenario)enhancerType.newInstance();
+                        BeforeAWebdriverScenario beforeScenario = enhancerType.getDeclaredConstructor().newInstance();
                         if (beforeScenario.isActivated(environmentVariables)) {
-                            ((BeforeAWebdriverScenario) enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, capabilities);
+                            beforeScenario.apply(environmentVariables, driver, testOutcome, capabilities);
                         }
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
+                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                        throw new WebDriverInitialisationException("Failed to instantiate custom capability enhancer " + enhancerType.getName(), e);
                     }
                 }
         );
-
         return capabilities;
+    }
+
+    private List<Class<BeforeAWebdriverScenario>> customEnhancers() {
+        List<String> extensionPackages = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getListOfValues(ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES);
+        return extensionPackages.stream().flatMap(
+                extensionPackage -> ClassFinder.loadClasses()
+                        .thatImplement(BeforeAWebdriverScenario.class)
+                        .fromPackage(extensionPackage)
+                        .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension)
+        ).collect(Collectors.toList());
     }
 }

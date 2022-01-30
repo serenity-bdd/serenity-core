@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,6 +25,34 @@ public class ByShadow extends By {
 
     public static ByShadow cssSelector(String target, String shadowHost, String... innerShadowHosts) {
         return new ByShadow(target, shadowHost, innerShadowHosts);
+    }
+
+    public static ByShadowBuilder css(String target) {
+        return new ByShadowBuilder(target);
+    }
+
+    public ByShadow thenInHost(String nestedHost) {
+        List<String> innerHosts = new ArrayList<>(Arrays.asList(innerShadowHosts));
+
+        innerHosts.add(nestedHost);
+        return new ByShadow(target, shadowHost, innerHosts.toArray(new String[]{}));
+    }
+
+    public static class ByShadowBuilder {
+        private final String target;
+
+        public ByShadowBuilder(String target) {
+            this.target = target;
+        }
+
+        public ByShadow inHost(String shadowHost) {
+            return new ByShadow(target, shadowHost, new String[]{});
+        }
+
+        public ByShadow inHosts(String shadowHost, String... innerShadowHosts) {
+            return new ByShadow(target, shadowHost, innerShadowHosts);
+        }
+
     }
 
     @Override

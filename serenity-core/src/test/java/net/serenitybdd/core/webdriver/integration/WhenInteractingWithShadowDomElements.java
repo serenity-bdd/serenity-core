@@ -57,7 +57,7 @@ public class WhenInteractingWithShadowDomElements {
     public static void openDriver() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-    //    options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         driver = new ChromeDriver(options);
     }
 
@@ -112,6 +112,12 @@ public class WhenInteractingWithShadowDomElements {
     }
 
     @Test
+    public void locate_nested_shadow_dom_elements_using_a_more_readable_dsl() {
+        ListOfWebElementFacades shadowInputs = indexPage.findAll(ByShadow.css(".test-class").inHost("#shadow-host"));
+        assertThat(shadowInputs.size(), equalTo(2));
+    }
+
+    @Test
     public void interact_with_a_shadow_dom_element() {
         WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInShadow","#shadow-host"));
         shadowInput.sendKeys("Some value");
@@ -126,22 +132,24 @@ public class WhenInteractingWithShadowDomElements {
     }
 
     @Test
+    public void interact_with_a_nested_shadow_dom_element_using_the_dsl() {
+        WebElementFacade shadowInput = indexPage.find(ByShadow.css("#inputInInnerShadow").inHosts("#shadow-host", "#inner-shadow-host"));
+        shadowInput.sendKeys("Some value");
+        assertThat(shadowInput.getValue(), is("Some value"));
+    }
+
+    @Test
+    public void interact_with_a_nested_shadow_dom_element_using_the_dsl_with_nesting() {
+        WebElementFacade shadowInput = indexPage.find(ByShadow.css("#inputInInnerShadow").inHost("#shadow-host").thenInHost("#inner-shadow-host"));
+        shadowInput.sendKeys("Some value");
+        assertThat(shadowInput.getValue(), is("Some value"));
+    }
+
+    @Test
     public void interacting_with_a_web_component() {
         driver.get("https://mdn.github.io/web-components-examples/word-count-web-component/");
 
         WebElement wordCountComponent = driver.findElement(ByShadow.cssSelector("span","p[is='word-count']"));
         assertThat(wordCountComponent.getText(), is("Words: 212"));
     }
-
-// Exploratory: how to access a shadow dom inside an iframe inside another shadow dom
-    @Test
-    public void interacting_with_a_nested_web_component() {
-        driver.get("https://lit.dev/playground/#sample=examples/template-composition");
-
-        driver.switchTo().frame(driver.findElement(ByShadow.cssSelector("#content iframe","#preview")));
-        String title = driver.findElement(ByShadow.cssSelector("h1","my-page")).getText();
-
-        assertThat(title, is("Template composition"));
-    }
-
 }

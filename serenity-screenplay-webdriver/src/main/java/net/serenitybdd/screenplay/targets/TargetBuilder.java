@@ -38,11 +38,11 @@ public class TargetBuilder<T> {
         return new LambdaTarget(targetElementName, locationStrategy, iFrame, Optional.empty());
     }
 
-    public Target locatedByFirstMatching(String... cssOrXPathSelectors) {
+    public SearchableTarget locatedByFirstMatching(String... cssOrXPathSelectors) {
         return new MultiXPathOrCssTarget(targetElementName, iFrame, Optional.empty(), cssOrXPathSelectors);
     }
 
-    public Target located(By locator) {
+    public SearchableTarget located(By locator) {
         return new ByTarget(targetElementName, locator, iFrame);
     }
 

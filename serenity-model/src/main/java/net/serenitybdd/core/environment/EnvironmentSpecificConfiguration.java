@@ -162,7 +162,7 @@ public class EnvironmentSpecificConfiguration {
     }
 
     public List<String> getListOfValues(final ThucydidesSystemProperty propertyName) {
-        return Arrays.asList(getOptionalProperty(propertyName).orElse("").split(","));
+        return Arrays.stream(getOptionalProperty(propertyName).orElse("").split(",")).map(String::trim).collect(Collectors.toList());
     }
 
     public boolean getBooleanProperty(final ThucydidesSystemProperty propertyName, boolean defaultValue) {

@@ -67,12 +67,6 @@ public class ChromeDriverProvider implements DriverProvider {
                 DriverServicePool::newDriver,
                 (pool, capabilities) -> new ChromeDriver(enhancedChromeOptions)
         );
-
-        //
-        // Perform any custom configuration to the new driver
-        //
-        EnhanceDriver.from(environmentVariables).to(newDriver);
-
         return newDriver;
     }
 

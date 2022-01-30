@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ByTarget extends Target {
+public class ByTarget extends SearchableTarget {
 
     private By locator;
     private By androidLocator;
@@ -113,5 +113,10 @@ public class ByTarget extends Target {
 
     public ByTarget called(String name) {
         return new ByTarget(name, locator, androidLocator, iosLocator, iFrame, timeout);
+    }
+
+    @Override
+    public List<String> getCssOrXPathSelectors() {
+        throw new UnsupportedOperationException("The getCssOrXPathSelector() method is not supported for By Targets");
     }
 }

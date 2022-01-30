@@ -76,11 +76,11 @@ public abstract class Target implements ResolvableElement {
 
     public abstract Target waitingForNoMoreThan(Duration timeout);
 
-    public Target inside(String locator) {
+    public SearchableTarget inside(String locator) {
         return inside(Target.the("Containing element").locatedBy(locator));
     }
 
-    public Target inside(Target container) {
+    public SearchableTarget inside(Target container) {
         return Target.the(getName()).locatedBy(
                 LocatorStrategies.findNestedElements(container, this)
         );

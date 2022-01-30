@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 import static net.thucydides.core.reflection.ClassFinder.loadClasses;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -26,11 +27,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * A requirements Provider that reads requirement from class or package annotation.
- * The root package is defined using {@link ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT}
+ * The root package is defined using {@link ThucydidesSystemProperty#SERENITY_TEST_ROOT}
  * It is recommended to change the root package if the {@link FileSystemRequirementsTagProvider} is used.
  *
  * @see Narrative
- * @see ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT
+ * @see ThucydidesSystemProperty#SERENITY_TEST_ROOT
  */
 public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
 
@@ -49,7 +50,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     public PackageAnnotationBasedTagProvider(EnvironmentVariables vars) {
         super(vars);
         configuration = new SystemPropertiesConfiguration(environmentVariables);
-        rootPackage = THUCYDIDES_TEST_ROOT.from(environmentVariables, rootDirectory);
+        rootPackage = SERENITY_TEST_ROOT.from(environmentVariables, rootDirectory);
         persister = new RequirementPersister(getRequirementsDirectory(), rootPackage);
     }
 
@@ -63,7 +64,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     Map<Requirement, String> getRequirementPaths() {
-        Map<Requirement, String> requirementPaths = new HashMap();
+        Map<Requirement, String> requirementPaths = new HashMap<>();
         for (String path : getRequirementsByPath().keySet()) {
             requirementPaths.put(getRequirementsByPath().get(path), path);
         }
@@ -127,8 +128,8 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private void addRequirementTo(Map<String, Requirement> requirementsByPath,
-            Class candidateClass,
-            int maxDepth) {
+                                  Class<?> candidateClass,
+                                  int maxDepth) {
 
         String fullRequirementName = getFullRequirementPath(candidateClass);
 
@@ -161,9 +162,9 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     private int maximumClassDepth(List<Class<?>> classes, String rootPackage) {
         int maxDepth = 0;
-        for (Class candidateClass : classes) {
+        for (Class<?> candidateClass : classes) {
             int pathDepth = pathDepth(rootPackage, candidateClass.getPackage().getName());
-            maxDepth = (pathDepth > maxDepth) ? pathDepth : maxDepth;
+            maxDepth = Math.max(pathDepth, maxDepth);
         }
         return maxDepth;
     }
@@ -187,7 +188,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         String narrativeText = "";
         String cardNumber = "";
 
-        Class candidateClass = null;
+        Class<?> candidateClass = null;
 
         java.util.Optional<Narrative> narrative = java.util.Optional.empty();
         try {
@@ -223,7 +224,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return newRequirement;
     }
 
-    private Requirement getRequirement(Class candidateClass, String packageName, int level, String requirementTitle, String requirementType, String narrativeText, String cardNumber, java.util.Optional<Narrative> narrative) {
+    private Requirement getRequirement(Class<?> candidateClass, String packageName, int level, String requirementTitle, String requirementType, String narrativeText, String cardNumber, java.util.Optional<Narrative> narrative) {
         if (narrative.isPresent()) {
             requirementTitle = isNotEmpty(narrative.get().title()) ? narrative.get().title() : requirementTitle;
             requirementType = isNotEmpty(narrative.get().type()) ? narrative.get().type() : requirementType;
@@ -241,7 +242,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
                 .withNarrative(narrativeText);
     }
 
-    private String getRequirementType(int level, Class candidateClass) {
+    private String getRequirementType(int level, Class<?> candidateClass) {
         if ((candidateClass != null) && (candidateClass.getName().endsWith(".package-info"))) {
             return getDefaultType(level);
         } else {
@@ -289,8 +290,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     protected List<Class<?>> loadClassesFromPath() {
-        Set<Class<?>> classesWithNarratives = new HashSet<>(loadClasses().annotatedWith(Narrative.class)
-                .fromPackage(rootPackage));
+        Set<Class<?>> classesWithNarratives = new HashSet<>(loadClasses().annotatedWith(Narrative.class).fromPackage(rootPackage));
 
         Set<Class<?>> testCases = new HashSet<>(loadClasses().thatMatch(clazz ->TestFramework.support().isTestClass(clazz))
                 .fromPackage(rootPackage));
@@ -304,7 +304,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private Set<? extends Class<?>> classesThatContainSerenityTestsIn(Set<Class<?>> testCases) {
-        Set<Class<?>> matchingClasses = new HashSet();
+        Set<Class<?>> matchingClasses = new HashSet<>();
 
         SerenityTestCaseFinder serenityTestCaseFinder = new SerenityTestCaseFinder();
         for (Class<?> testClass : testCases) {

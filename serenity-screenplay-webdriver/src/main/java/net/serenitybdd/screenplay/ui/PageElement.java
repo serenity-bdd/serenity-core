@@ -31,7 +31,7 @@ public class PageElement {
     /**
      * Look for an element matching a given CSS or XPath expression that contains a given text.
      */
-    public static Target containingText(String cssOrXPathLocator, String text) {
+    public static SearchableTarget containingText(String cssOrXPathLocator, String text) {
         return Target.the("the element containing text '" + text + "'")
                         .locatedBy(containingTextAndMatchingCSS(cssOrXPathLocator, text));
     }

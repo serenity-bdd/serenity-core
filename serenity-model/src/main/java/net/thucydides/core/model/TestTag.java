@@ -150,6 +150,18 @@ public class TestTag implements Comparable<TestTag> {
         return true;
     }
 
+    public boolean equalsIgnoreCase(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TestTag testTag = (TestTag) o;
+
+        if (!normalisedName().equalsIgnoreCase(testTag.normalisedName())) return false;
+        if (!normalisedType().equalsIgnoreCase(testTag.normalisedType())) return false;
+
+        return true;
+    }
+
     @Override
     public int hashCode() {
         int result = normalisedName().hashCode();

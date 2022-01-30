@@ -75,7 +75,7 @@ public class Ensure {
     }
 
     /**
-     * Check whether the element is has expected value. Throws if the element is not an input, textarea or select.
+     * Check whether the element is has expected value. Throws for non-input elements.
      */
     public Performable currentValue(String expectedValue) {
         return Task.where(target + " should have value " + expectedValue,

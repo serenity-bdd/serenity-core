@@ -9,10 +9,8 @@ import net.serenitybdd.screenplay.playwright.interactions.selectactions.SelectBy
 import static net.serenitybdd.screenplay.playwright.interactions.SelectStrategy.*;
 
 /**
- * This method waits for an element matching selector, waits for actionability checks, waits until all specified options are present in the <select> element and selects these options.
- * If the target element is not a <select> element, this method throws an error. However, if the element is inside the <label> element that has an associated control, the control will be used instead.
- * Returns the array of option values that have been successfully selected.
- * Triggers a change and input event once all the provided options have been selected.
+ * Select an option from dropdown by text, value or index.
+ * More info: https://playwright.dev/java/docs/api/class-page/#page-select-option.
  * <p>
  * Sample usage:
  * <pre>

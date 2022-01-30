@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.playwright.interactions.Enter;
 import net.serenitybdd.screenplay.playwright.interactions.Open;
 import net.serenitybdd.screenplay.playwright.questions.Attribute;
 import net.serenitybdd.screenplay.playwright.questions.TheWebPage;
+import net.serenitybdd.screenplay.playwright.questions.Visibility;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +54,8 @@ public class SimpleScreenplayPlaywrightTest {
             Click.on(SearchPage.SEARCH_BUTTON)
         );
         daffy.should(
-            seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo"))
+            seeThat(TheWebPage.title(), Matchers.containsString("Penguins at DuckDuckGo")),
+            seeThat(Visibility.of(".header__logo"))
         );
     }
 }

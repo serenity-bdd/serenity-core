@@ -10,9 +10,7 @@ import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywrigh
 public class Attribute {
 
     public static Question<String> of(Target target, String attributeName) {
-        return Question.about(attributeName + " attribute of " + target.toString()).answeredBy(actor ->
-            BrowseTheWebWithPlaywright.as(actor).getCurrentPage().getAttribute(target.asSelector(), attributeName)
-        );
+        return of(target.asSelector(), attributeName);
     }
 
     public static Question<String> of(String locator, String attributeName) {

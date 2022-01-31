@@ -866,31 +866,26 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    @Deprecated
     public WebElementFacade deselectAll() {
         return dropdownDeselect().all();
     }
 
     @Override
-    @Deprecated
     public WebElementFacade deselectByIndex(int indexValue) {
         return dropdownDeselect().byIndex(indexValue);
     }
 
     @Override
-    @Deprecated
     public WebElementFacade deselectByVisibleText(String label) {
         return dropdownDeselect().byVisibleText(label);
     }
 
     @Override
-    @Deprecated
     public WebElementFacade deselectByValue(String value) {
         return dropdownDeselect().byValue(value);
     }
 
     @Override
-    @Deprecated
     public WebElementFacade selectByVisibleText(final String label) {
         return dropdownSelect().byVisibleText(label);
     }

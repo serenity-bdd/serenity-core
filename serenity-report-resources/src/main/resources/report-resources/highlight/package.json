@@ -59,7 +59,7 @@
       "@typescript-eslint/parser": "^4.23.0",
       "clean-css": "^5.0.1",
       "cli-table": "^0.3.1",
-      "colors": "^1.1.2",
+      "colors": "1.4.0",
       "commander": "^7.0.0",
       "css": "^3.0.0",
       "deep-freeze-es6": "^1.4.1",

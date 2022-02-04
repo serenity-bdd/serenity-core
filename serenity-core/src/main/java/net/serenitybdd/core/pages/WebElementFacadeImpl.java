@@ -1223,21 +1223,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.booleanFrom(environmentVariables);
     }
 
-    private boolean isMobileDriver() {
-        return AppiumDriver.class.isAssignableFrom(ThucydidesWebDriverSupport.getDriverClass());
-    }
-
     @Override
     public void clear() {
 
         if (driverIsDisabled()) {
             return;
         }
-
-// NO LONGER NEEDED
-//        if (!isMobileDriver()) {
-//            ClearContents.ofElement(getElement());
-//        }
         getElement().clear();
     }
 

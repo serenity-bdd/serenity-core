@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.ui;
 
+import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
@@ -9,42 +10,45 @@ import org.openqa.selenium.By;
  */
 public class Image {
 
-    private static final String BY_ID_OR_NAME = "css:img[id='{0}' i],img[name='{0}' i],img[data-test='{0}' i],img[class*='{0}' i]";
-
-    /**
-     * Locate a field with a given name or id.
-     */
-    public static Target called(String name) {
-        return Target.the("'the " + name + "' image").locatedBy(BY_ID_OR_NAME).of(name);
-    }
-
     /**
      * Locate a image with a specified alt text
      */
-    public static Target withAltText(String altText) {
+    public static SearchableTarget withAltText(String altText) {
         String altTextAttribute = CSSAttributeValue.withEscapedQuotes(altText);
         return Target.the("'" + altTextAttribute + "' image")
-                     .located(By.cssSelector("img[alt='" + altTextAttribute + "']"));
+                .located(By.cssSelector("img[alt='" + altTextAttribute + "']"));
     }
 
     /**
      * Locate a image with a specified src attribute
      */
-    public static Target withSrc(String srcValue) {
+    public static SearchableTarget withSrc(String srcValue) {
         String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
         return Target.the("'" + srcValue + "' image")
                 .located(By.cssSelector("img[src='" + srcAttribute + "']"));
     }
 
-    public static Target withSrcEndingWith(String srcValue) {
+    public static SearchableTarget withSrcEndingWith(String srcValue) {
         String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
         return Target.the("'" + srcValue + "' image")
                 .located(By.cssSelector("img[src$='" + srcAttribute + "']"));
     }
 
-    public static Target withSrcStartingWith(String srcValue) {
+    public static SearchableTarget withSrcStartingWith(String srcValue) {
         String srcAttribute = CSSAttributeValue.withEscapedQuotes(srcValue);
         return Target.the("'" + srcValue + "' image")
                 .located(By.cssSelector("img[src^='" + srcAttribute + "']"));
     }
+
+    /**
+     * Locate an image using an arbitrary CSS or XPath expression
+     */
+    public static SearchableTarget locatedBy(String selector) {
+        return TargetFactory.forElementOfType("image").locatedByXPathOrCss(selector);
+    }
+
+    public static SearchableTarget located(By selector) {
+        return TargetFactory.forElementOfType("image").locatedBy(selector);
+    }
+
 }

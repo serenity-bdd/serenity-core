@@ -3,21 +3,21 @@ package net.serenitybdd.screenplay.ui;
 import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
 
-import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
+import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndMatchingCSS;
 
 public class PageElementBuilder {
 
-    private final String selector;
+    private final String xpathOrCssSelector;
 
     PageElementBuilder(String selector) {
-        this.selector = selector;
+        this.xpathOrCssSelector = selector;
     }
 
     public SearchableTarget describedAs(String name) {
-        return Target.the(name).locatedBy(selector);
+        return Target.the(name).locatedBy(xpathOrCssSelector);
     }
 
     public SearchableTarget containingText(String text) {
-        return Target.the("the element containing text '" + text + "'").locatedBy(containingTextAndMatchingCSS(selector, text));
+        return Target.the("the element containing text '" + text + "'").locatedBy(containingTextAndMatchingCSS(xpathOrCssSelector, text));
     }
 }

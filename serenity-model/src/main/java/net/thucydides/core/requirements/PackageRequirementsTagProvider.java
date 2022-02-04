@@ -208,7 +208,10 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private Set<String> narrativePackagesIn(PackageInfo parentPackage) {
         Set<String> narrativePackages = new HashSet<>();
-        if (parentPackage.hasAnnotation(net.thucydides.core.annotations.Narrative.class)) {
+        if (parentPackage == null) {
+            return new HashSet<>();
+        }
+        if  (parentPackage.hasAnnotation(net.thucydides.core.annotations.Narrative.class)) {
             narrativePackages.add(parentPackage.getName());
         }
         for(PackageInfo childPackage : parentPackage.getChildren()) {
@@ -217,8 +220,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return narrativePackages;
 
     }
-
-
 
     private Set<String> findClassesWithNarrativeAnnotationIn(String packageName) {
         if (!SCAN_RESULT_CACHE.containsKey(packageName)) {

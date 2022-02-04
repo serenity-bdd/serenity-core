@@ -413,9 +413,17 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             //
             // Check for @Pending tests
             //
-            if (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isPending()) {
+            if (isPending(methodSource)) {
                 StepEventBus.getEventBus().testPending();
             }
+        }
+    }
+
+    private boolean isPending(MethodSource methodSource) {
+        try {
+            return (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isPending());
+        } catch (Exception ex) {
+            return false;
         }
     }
 

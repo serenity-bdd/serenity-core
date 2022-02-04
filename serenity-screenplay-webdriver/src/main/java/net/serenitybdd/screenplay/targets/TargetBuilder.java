@@ -4,6 +4,7 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class TargetBuilder<T> {
      * Locate an element using a location strategy function.
      * The function takes a Serenity Page Object representing the current web page, and returns a list of matching WebElementFacade objects.
      */
-    public SearchableTarget locatedBy(Function<PageObject, List<WebElementFacade>> locationStrategy) {
+    public SearchableTarget locatedBy(Function<SearchContext, List<WebElementFacade>> locationStrategy) {
         return new LambdaTarget(targetElementName, locationStrategy, iFrame, Optional.empty());
     }
 
@@ -63,7 +64,7 @@ public class TargetBuilder<T> {
         }
 
         public Target locatedForIOS(By iosLocator) {
-            return new ByTarget(this.targetElementName, this.androidLocator, iosLocator, this.iFrame);
+            return new ByMobileTarget(this.targetElementName, this.androidLocator, iosLocator, this.iFrame);
         }
     }
 }

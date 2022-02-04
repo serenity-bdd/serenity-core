@@ -11,24 +11,45 @@ import java.util.List;
 /**
  * Locate shadow dom elements using Selenium 4.
  */
-public class ByShadow extends By {
+public class ByShadow extends By implements By.Remotable {
 
-    private final String target;
+    private final By target;
     private final String shadowHost;
     private final String[] innerShadowHosts;
+    private final By.Remotable.Parameters params;
 
-    protected ByShadow(String target, String shadowHost, String[] innerShadowHosts) {
+
+    protected ByShadow(By target, String shadowHost, String[] innerShadowHosts) {
         this.target = target;
         this.shadowHost = shadowHost;
         this.innerShadowHosts = innerShadowHosts;
+        this.params = new By.Remotable.Parameters("shadow dom locator", target + " inside shadow dom located by " + shadowHost);
     }
 
     public static ByShadow cssSelector(String target, String shadowHost, String... innerShadowHosts) {
+        return new ByShadow(By.cssSelector(target), shadowHost, innerShadowHosts);
+    }
+
+    public static ByShadow cssSelector(By target, String shadowHost, String... innerShadowHosts) {
         return new ByShadow(target, shadowHost, innerShadowHosts);
     }
 
+    @Override
+    public String toString() {
+        List<String> allRoots = new ArrayList<>();
+        allRoots.add(shadowHost);
+        for(String innerHost : innerShadowHosts) {
+            allRoots.add(innerHost);
+        }
+        return "By Shadow DOM: find the " + target + " element inside shadow doms: " + allRoots;
+    }
+
     public static ByShadowBuilder css(String target) {
-        return new ByShadowBuilder(target);
+        return new ByShadowBuilder(By.cssSelector(target));
+    }
+
+    public static ByShadowBuilder located(By byLocator) {
+        return new ByShadowBuilder(byLocator);
     }
 
     public ByShadow thenInHost(String nestedHost) {
@@ -38,10 +59,15 @@ public class ByShadow extends By {
         return new ByShadow(target, shadowHost, innerHosts.toArray(new String[]{}));
     }
 
-    public static class ByShadowBuilder {
-        private final String target;
+    @Override
+    public Parameters getRemoteParameters() {
+        return this.params;
+    }
 
-        public ByShadowBuilder(String target) {
+    public static class ByShadowBuilder {
+        private final By target;
+
+        public ByShadowBuilder(By target) {
             this.target = target;
         }
 
@@ -57,12 +83,12 @@ public class ByShadow extends By {
 
     @Override
     public WebElement findElement(SearchContext context) {
-        return shadowHostFor(context).findElement(By.cssSelector(target));
+        return shadowHostFor(context).findElement(target);
     }
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        return shadowHostFor(context).findElements(By.cssSelector(target));
+        return shadowHostFor(context).findElements(target);
     }
 
     private SearchContext shadowHostFor(SearchContext context) {

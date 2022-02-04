@@ -1,20 +1,39 @@
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- A simple link --->
-    <a href="#" onclick="update('Link 1')">Link 1</a><br/>
-    <!-- A link with a title -->
-    <a href="#" title="Link Number 2" onclick="update('Link 2')">Link 2</a><br/>
-    <!-- A link with an icon and a text-->
-    <a href="#" onclick="update('Link 3')"><i class="glyphicon glyphicon-cloud"></i>Link 3</a><br/>
-    <!-- A link with a title with an apostrophe-->
-    <a href="#" title="The link's title" onclick="update('Link 4')">Link 4</a><br/>
-    <!-- A link with a text with an apostrophe-->
-    <a href="#" onclick="update('Link 5')">Link's 5</a><br/>
-    <a href="#" class="link-style" onclick="update('Link 6')">Link's 5</a><br/>
-    <div id="result"></div>
+<!-- A simple link --->
+<a href="#" onclick="update('Link 1')">Link 1</a><br/>
+<!-- A link with a title -->
+<a href="#" title="Link Number 2" onclick="update('Link 2')">Link 2</a><br/>
+<!-- A link with an icon and a text-->
+<a href="#" onclick="update('Link 3')"><i class="glyphicon glyphicon-cloud"></i>Link 3</a><br/>
+<!-- A link with a title with an apostrophe-->
+<a href="#" title="The link's title" onclick="update('Link 4')">Link 4</a><br/>
+<!-- A link with a text with an apostrophe-->
+<a href="#" onclick="update('Link 5')">Link's 5</a><br/>
+<a href="#" class="link-style" onclick="update('Link 6')">Link's 5</a><br/>
+<a href="#" class="link-style" aria-label="Link 7" onclick="update('Link 7')">Link 7</a><br/>
+<a href="#" class="link-style" id="link-8" onclick="update('Link 8')">Link 8</a><br/>
+<a href="#" class="link-style" name="link 9" onclick="update('Link 9')">Link 9</a><br/>
+
+<div class="section">
+    <a href="#" title="Link Number 2" onclick="update('Link 2 bis')">Link 2</a><br/>
+</div>
+
+<div class="section" id = "section2">
+    <h2>Wrong Section</h2>
+    <a href="#" title="Link Number 3" onclick="update('Link 3 tri')">Link 3</a><br/>
+</div>
+
+<div class="section" id = "section3">
+    <h2>Link Section</h2>
+    <a href="#" title="Link Number 3" onclick="update('Link 3 bis')">Link 3</a><br/>
+</div>
+
+<div id="result"></div>
+
 </body>
 <script>
     function update(value) {

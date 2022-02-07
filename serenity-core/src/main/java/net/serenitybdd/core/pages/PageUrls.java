@@ -60,11 +60,8 @@ public class PageUrls {
         DefaultUrl urlAnnotation = pageObject.getClass().getAnnotation(DefaultUrl.class);
         if (urlAnnotation != null) {
             return Optional.ofNullable(urlAnnotation.value());
-        }
-        if (pageLevelDefaultBaseUrl != null) {
-            return Optional.of(pageLevelDefaultBaseUrl);
         } else {
-            return Optional.empty();
+            return Optional.ofNullable(pageLevelDefaultBaseUrl);
         }
     }
 

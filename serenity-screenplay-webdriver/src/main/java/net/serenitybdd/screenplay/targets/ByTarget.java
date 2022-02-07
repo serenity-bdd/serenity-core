@@ -20,7 +20,6 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ByTarget extends SearchableTarget implements HasByLocator {
 

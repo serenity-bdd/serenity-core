@@ -23,11 +23,20 @@ public class Link {
     }
 
     /**
+     * Look for an element with a given CSS class
+     */
+    public static SearchableTarget withCSSClass(String className) {
+        return TargetFactory.forElementOfType("link").withCSSClass(className);
+    }
+
+
+    /**
      * Locate a link element with a given text.
      */
     public static SearchableTarget withText(String name) {
         return Target.the("the '" + name + "' link").locatedByFirstMatching(BY_LINK_TEXT).of(name);
     }
+
 
     /**
      * Locate a link element containing given text.

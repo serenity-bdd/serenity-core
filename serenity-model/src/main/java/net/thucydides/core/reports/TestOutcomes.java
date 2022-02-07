@@ -451,24 +451,30 @@ public class TestOutcomes {
         }
     }
 
+    private boolean hasResult(TestResult[] results, TestResult expectedResult) {
+        for(int i = 0; i < results.length; i++) {
+            if (results[i] == expectedResult) return true;
+        }
+        return false;
+    }
+
     private int countScenariosWithResults(TestOutcome outcome, TestResult... results) {
-        List<TestResult> expectedResults = Arrays.asList(results);
 
         if (!outcome.isDataDriven()) {
-            return (expectedResults.contains(outcome.getResult())) ? 1 : 0;
+            return (hasResult(results, outcome.getResult())) ? 1 : 0;
         }
 
         if (outcome.isManual()) {
-            return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
+            return (int) stepsWithResultIn(outcome.getTestSteps(), results);
         }
 
         if ((dataTableRowResultsAreUndefinedIn(outcome.getDataTable()) || isJUnit(outcome) || isJUnit5(outcome))
             && outcome.getTestSteps().size() >= outcome.getDataTable().getSize()) {
-            return (int) stepsWithResultIn(outcome.getTestSteps(), expectedResults);
+            return (int) stepsWithResultIn(outcome.getTestSteps(), results);
         }
 
         return (int) outcome.getDataTable().getRows().stream()
-                .filter(row -> expectedResults.contains(row.getResult()))
+                .filter(row -> hasResult(results, row.getResult()))
                 .count();
     }
 
@@ -480,9 +486,9 @@ public class TestOutcomes {
         return (outcome.getTestSource() == null) || (TestSourceType.TEST_SOURCE_JUNIT5.getValue().equalsIgnoreCase(outcome.getTestSource()));
     }
 
-    private long stepsWithResultIn(List<TestStep> steps, List<TestResult> expectedResults) {
+    private long stepsWithResultIn(List<TestStep> steps, TestResult... results) {
         return steps.stream()
-                .filter(step -> expectedResults.contains(step.getResult()))
+                .filter(step -> hasResult(results,step.getResult()))
                 .count();
     }
 

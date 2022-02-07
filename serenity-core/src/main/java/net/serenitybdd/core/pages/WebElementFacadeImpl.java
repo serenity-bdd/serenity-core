@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
@@ -10,6 +11,7 @@ import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.TemporalUnitConverter;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
@@ -164,7 +166,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public static WebElementFacade wrapWebElement(final WebDriver driver, final WebElement element) {
-        return BuildWebElementFacade.from(driver, element, driver.manage().timeouts().getImplicitWaitTimeout().toMillis());
+        return wrapWebElement(driver, element, SystemTimeouts.forTheCurrentTest().getImplicitTimeout());
     }
 
     private WebElementResolver getElementResolver() {

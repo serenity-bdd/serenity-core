@@ -67,13 +67,15 @@ public class FeatureFileScenarioOutcomes {
             for (FeatureChild currentChild : currentFeature.getChildren()) {
                 if (currentChild.getRule() != null) {
                     Rule currentRule = currentChild.getRule();
-                    currentRule.getChildren().forEach(
-                            ruleChild -> scenarioOutcomes.add(
-                                    scenarioOutcomeFrom(currentFeature,
-                                            ruleChild.getScenario(),
-                                            requirementsOutcomes.getTestOutcomes(),
-                                            net.thucydides.core.model.Rule.from(currentRule)))
-                    );
+                    currentRule.getChildren().stream()
+                            .filter(ruleChild -> ruleChild.getScenario() != null)
+                            .forEach(
+                                    ruleChild -> scenarioOutcomes.add(
+                                            scenarioOutcomeFrom(currentFeature,
+                                                    ruleChild.getScenario(),
+                                                    requirementsOutcomes.getTestOutcomes(),
+                                                    net.thucydides.core.model.Rule.from(currentRule)))
+                            );
 
                 } else {
                     if (currentChild.getScenario() != null) {

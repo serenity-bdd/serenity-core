@@ -1681,7 +1681,17 @@ public enum ThucydidesSystemProperty {
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
         Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
-//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+
+        if (isDefined(newPropertyValue)) {
+            return Integer.parseInt(newPropertyValue.get().trim());
+        } else {
+            Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
+            return (isDefined(legacyValue)) ? Integer.parseInt(legacyValue.get().trim()) : defaultValue;
+        }
+    }
+
+    public long longFrom(EnvironmentVariables environmentVariables, long defaultValue) {
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
 
         if (isDefined(newPropertyValue)) {
             return Integer.parseInt(newPropertyValue.get().trim());

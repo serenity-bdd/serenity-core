@@ -57,13 +57,12 @@ public class PageUrls {
     }
 
     public Optional<String> getDeclaredDefaultUrl() {
-        if (pageLevelDefaultBaseUrl != null) {
-            return Optional.of(pageLevelDefaultBaseUrl);
-        }
-
         DefaultUrl urlAnnotation = pageObject.getClass().getAnnotation(DefaultUrl.class);
         if (urlAnnotation != null) {
             return Optional.ofNullable(urlAnnotation.value());
+        }
+        if (pageLevelDefaultBaseUrl != null) {
+            return Optional.of(pageLevelDefaultBaseUrl);
         } else {
             return Optional.empty();
         }

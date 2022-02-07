@@ -117,6 +117,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber  | Cucumber            |
 |---------------|-----------------------|--------------------|---------------------|
+| 3.1.20         | 3.1.20               |  3.1.20            | 7.1.1               |
 | 3.1.15         | 3.1.15               |  3.1.15            | 7.0.0               |
    
 #### Cucumber 6

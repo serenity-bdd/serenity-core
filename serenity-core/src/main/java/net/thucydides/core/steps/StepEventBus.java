@@ -533,15 +533,17 @@ public class StepEventBus {
         driverReenabled = true;
     }
 
-    private boolean inFixureMethod() {
-        boolean activateWebDriverInFixtureMethods = SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS.booleanFrom(environmentVariables, true);
+    public boolean inFixtureMethod() {
+        return cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod();
+    }
 
-        return (activateWebDriverInFixtureMethods && cleanupMethodLocator.currentMethodWasCalledFromACleanupMethod());
+    private boolean activateWebDriverInFixtureMethods() {
+        return SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS.booleanFrom(environmentVariables, true);
     }
 
     public boolean webdriverCallsAreSuspended() {
 
-        if (driverReenabled || inFixureMethod()) {
+        if (driverReenabled || (inFixtureMethod() && activateWebDriverInFixtureMethods())) {
             return false;
         }
         if (softAssertsActive()) {
@@ -943,7 +945,7 @@ public class StepEventBus {
     public boolean isASingleBrowserScenario() {
         return uniqueSession
                 || currentTestHasTag(TestTag.withValue("singlebrowser"))
-                ||  baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
+                || baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
     }
 
     public boolean isNewSingleBrowserScenario() {

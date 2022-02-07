@@ -147,7 +147,7 @@ public class MultiXPathOrCssTarget extends SearchableTarget {
         throw new UnsupportedOperationException("The getCssOrXPathSelector() method is not supported for multi-locator Targets");
     }
 
-    public Target called(String name) {
+    public MultiXPathOrCssTarget called(String name) {
         return new MultiXPathOrCssTarget(name, iFrame, timeout, cssOrXPathSelectors);
     }
 

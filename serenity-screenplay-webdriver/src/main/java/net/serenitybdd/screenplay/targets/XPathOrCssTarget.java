@@ -66,7 +66,7 @@ public class XPathOrCssTarget extends SearchableTarget {
                 timeout);
     }
 
-    public Target called(String name) {
+    public XPathOrCssTarget called(String name) {
         return new XPathOrCssTarget(name, cssOrXPathSelector, iFrame, timeout);
     }
 

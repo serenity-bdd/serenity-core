@@ -9,12 +9,16 @@ import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class EnhanceDriver {
 
     private final EnvironmentVariables environmentVariables;
+    private static final List<Class<CustomDriverEnhancer>> ENHANCERS = Collections.synchronizedList(new ArrayList<>());
+    private static AtomicBoolean enhancersLoaded = new AtomicBoolean(false);
 
     private EnhanceDriver(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -26,16 +30,7 @@ public class EnhanceDriver {
 
     public WebDriver to(WebDriver driver) {
 
-        List<Class<CustomDriverEnhancer>> customDriverEnhancers
-                = new ArrayList<>(ClassFinder.loadClasses()
-                .thatImplement(CustomDriverEnhancer.class)
-                .fromPackage("net.serenitybdd")
-                .stream().map(extension -> (Class<CustomDriverEnhancer>) extension)
-                .collect(Collectors.toList()));
-
-        customDriverEnhancers.addAll(customEnhancers());
-
-        customDriverEnhancers.forEach(
+        enhancers().forEach(
                 enhancerType -> {
                     try {
                         (enhancerType.getDeclaredConstructor().newInstance()).apply(environmentVariables, driver);
@@ -46,6 +41,23 @@ public class EnhanceDriver {
         );
 
         return driver;
+    }
+
+    private List<Class<CustomDriverEnhancer>> enhancers() {
+        if (!enhancersLoaded.get()) {
+            synchronized (enhancersLoaded) {
+                ENHANCERS.addAll(
+                        ClassFinder.loadClasses()
+                                .thatImplement(CustomDriverEnhancer.class)
+                                .fromPackage("net.serenitybdd")
+                                .stream().map(extension -> (Class<CustomDriverEnhancer>) extension)
+                                .collect(Collectors.toList())
+                );
+                ENHANCERS.addAll(customEnhancers());
+                enhancersLoaded.set(true);
+            }
+        }
+        return ENHANCERS;
     }
 
     private List<Class<CustomDriverEnhancer>> customEnhancers() {

@@ -60,7 +60,7 @@ public abstract class Target implements ResolvableElement {
     public abstract WebElementFacade resolveFor(PageObject page);
     public abstract ListOfWebElementFacades resolveAllFor(PageObject page);
 
-    public abstract Target called(String name);
+    public abstract SearchableTarget called(String name);
 
     public abstract SearchableTarget of(String... parameters);
 

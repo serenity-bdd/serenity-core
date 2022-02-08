@@ -674,7 +674,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
 
         String normalizedRequirementsPath = requirementDirectory.getPath().replace("\\","/");
-        String relativePath = normalizedRequirementsPath.substring(normalizedRequirementsPath.indexOf(rootDirectory) + rootDirectory.length() + 1);
+        String normalizedRootDirectory = rootDirectory.replace("\\","/");
+        String relativePath = normalizedRequirementsPath.substring(normalizedRequirementsPath.indexOf(normalizedRootDirectory) + normalizedRootDirectory.length() + 1);
         return relativePath.split("\\/|\\\\").length - 1;
     }
 

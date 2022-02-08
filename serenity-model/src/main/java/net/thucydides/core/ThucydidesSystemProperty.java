@@ -592,35 +592,31 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_PROXY_HTTP_PORT("thucydides.proxy.http_port"),
 
-    /**
-     * HTTP Proxy port configuration for Firefox and PhantomJS
-     * Use 'thucydides.proxy.http_port'
-     */
-    SERENITY_PROXY_HTTP_PORT("serenity.proxy.http_port"),
-
     @Deprecated
     THUCYDIDES_PROXY_TYPE,
-
-    /**
-     * HTTP Proxy type configuration for Firefox and PhantomJS
-     */
-    SERENITY_PROXY_TYPE,
 
     @Deprecated
     THUCYDIDES_PROXY_USER,
 
+    @Deprecated
+    THUCYDIDES_PROXY_PASSWORD,
+
     /**
      * HTTP Proxy URL configuration
+     * Specify which proxy to use for HTTP connections. Expected format is hostname:1234
      */
     SERENITY_PROXY_HTTP,
+
+    /**
+     * HTTP Proxy port configuration
+     * Use 'thucydides.proxy.http_port'
+     */
+    SERENITY_PROXY_HTTP_PORT("serenity.proxy.http_port"),
 
     /**
      * HTTP Proxy username configuration
      */
     SERENITY_PROXY_USER,
-
-    @Deprecated
-    THUCYDIDES_PROXY_PASSWORD,
 
     /**
      * HTTP Proxy password configuration
@@ -633,22 +629,67 @@ public enum ThucydidesSystemProperty {
     SERENITY_PROXY_SSL_PORT("serenity.proxy.sslProxyPort"),
 
     /**
-     * SSL Proxy port configuration - serenity.proxy.sslProxy
+     * Specify which proxy to use for SSL connections.
+     * Expected format is hostname.com:1234
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+
+    /**
+     * Specify which proxy to use for FTP connections.
+     */
     SERENITY_PROXY_FTP,
-    SERENITY_PROXY_NOPROXY,
-    SERENITY_PROXY_AUTOCONFIG,
+
+    /**
+     * Specifies whether to autodetect proxy settings.
+     * Set to true to use proxy auto detection, false to leave proxy settings unspecified
+     */
     SERENITY_PROXY_AUTODETECT,
+
+    /**
+     * Sets proxy bypass (noproxy) addresses
+     * The proxy bypass (noproxy) addresses separated by commas
+     */
+    SERENITY_PROXY_NOPROXY,
+
+    /**
+     * Explicitly sets the proxy type, useful for forcing direct connection on Linux.
+     * Takes a value of org.openqa.selenium.Proxy.ProxyType: DIRECT, MANUAL, PAC, RESERVED_1, AUTODETECT, SYSTEM, UNSPECIFIED
+     */
+    SERENITY_PROXY_TYPE,
+
+    /**
+     * Specifies the URL to be used for proxy auto-configuration.
+     * Expected format is http://hostname.com:1234/pacfile.
+     * This is required if getProxyType() is set to Proxy.ProxyType.PAC, ignored otherwise.
+     */
+    SERENITY_PROXY_AUTOCONFIG,
+
+    /**
+     * Specifies which proxy to use for SOCKS.
+     * Expected format is hostname.com:1234
+     */
     SERENITY_PROXY_SOCKS_PROXY,
+
+    /**
+     * Specifies a username for the SOCKS proxy. Supported by SOCKS v5 and above.
+     */
     SERENITY_PROXY_SOCKS_USERNAME,
+
+    /**
+     * Gets the SOCKS proxy's password. Supported by SOCKS v5 and above.
+     */
     SERENITY_PROXY_SOCKS_PASSWORD,
+
+    /**
+     * Specifies which version of SOCKS to use (4 or 5).
+     */
     SERENITY_PROXY_SOCKS_VERSION,
 
     /**
      * Possible values are:none, eager or normal
      */
     SERENITY_DRIVER_PAGE_LOAD_STRATEGY,
+
     /**
      * Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
      */

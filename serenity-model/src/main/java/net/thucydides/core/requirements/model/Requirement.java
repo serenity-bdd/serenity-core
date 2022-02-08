@@ -69,7 +69,7 @@ public class Requirement implements Comparable {
         this.displayName = (displayName != null) ? displayName : name;
         this.cardNumber = cardNumber;
         this.type = type;
-        this.path = path;
+        this.path = normalized(path);
         this.parent = parent;
         this.narrative = narrative;
 //        this.children = Collections.unmodifiableList(children);
@@ -100,7 +100,7 @@ public class Requirement implements Comparable {
         this.displayName = (displayName != null) ? displayName : name;
         this.cardNumber = cardNumber;
         this.type = type;
-        this.path = path;
+        this.path = normalized(path);
         this.parent = parent;
         this.narrative = narrative;
 //        this.children = Collections.unmodifiableList(children);
@@ -147,8 +147,13 @@ public class Requirement implements Comparable {
         this.examples = examples;
         this.releaseVersions = releaseVersions;
         this.customFields = customFields;
-        this.path = path;
+        this.path = normalized(path);
         this.tags = new ArrayList<>();
+    }
+
+
+    private String normalized(String path) {
+        return path.replaceAll("\\\\","/");
     }
 
     public Requirement withNoScenarios() {

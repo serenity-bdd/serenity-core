@@ -615,7 +615,7 @@ public enum ThucydidesSystemProperty {
     SERENITY_PROXY_HTTP,
 
     /**
-     * HTTP Proxy username configuration for Firefox and PhantomJS
+     * HTTP Proxy username configuration
      */
     SERENITY_PROXY_USER,
 
@@ -623,17 +623,17 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_PROXY_PASSWORD,
 
     /**
-     * HTTP Proxy password configuration for Firefox and PhantomJS
+     * HTTP Proxy password configuration
      */
     SERENITY_PROXY_PASSWORD,
 
     /**
-     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxyPort
+     * SSL Proxy port configuration - serenity.proxy.sslProxyPort
      */
     SERENITY_PROXY_SSL_PORT("serenity.proxy.sslProxyPort"),
 
     /**
-     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
+     * SSL Proxy port configuration - serenity.proxy.sslProxy
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
     SERENITY_PROXY_FTP,

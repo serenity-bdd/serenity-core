@@ -30,7 +30,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
-    SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
+    public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
         Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {

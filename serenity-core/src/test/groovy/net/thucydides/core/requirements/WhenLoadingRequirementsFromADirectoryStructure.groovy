@@ -6,7 +6,7 @@ class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
 
     def "Should be able to load capabilities from the default directory structure"() {
         given: "We are using the default requirements provider"
-            RequirementsService requirementsService= new FileSystemRequirementsService("sample-story-directories" + File.separator +"capabilities_and_features");
+            RequirementsService requirementsService= new FileSystemRequirementsService("sample-story-directories/capabilities_and_features");
         when: "We load the available requirements"
 
             def capabilities = requirementsService.requirements;
@@ -19,7 +19,7 @@ class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
 
     def "Should be able to use a Requirements object to simplify requirements configuration"() {
         given: "We are using the default requirements provider"
-            Requirements requirements = new FileSystemRequirements("sample-story-directories" + File.separator +"capabilities_and_features")
+            Requirements requirements = new FileSystemRequirements("sample-story-directories/capabilities_and_features")
         when: "We load the available requirements"
 
         def capabilities = requirements.requirementsService.requirements;

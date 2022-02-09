@@ -173,6 +173,20 @@ public class Requirement implements Comparable {
         return (displayName != null) ? displayName : name;
     }
 
+    public String getDisplayName(boolean includeParent) {
+        if (includeParent) {
+            String parentName = StringUtils.isNotEmpty(getParent()) ? " (" + getParent() + ")" : "";
+            return getDisplayName() + parentName;
+        } else {
+            return getDisplayName();
+        }
+    }
+
+    public String getDisplayNameWithParent() {
+        String parentName = StringUtils.isNotEmpty(getParent()) ? getParent() + " > " : "";
+        return parentName + getDisplayName();
+    }
+
     public String getType() {
         return type;
     }

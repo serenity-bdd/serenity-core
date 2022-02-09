@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
 import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -124,7 +123,11 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             requirementsTree = requirementsTree.asAParentRequirement();
         }
 
-        context.put("requirements", requirementsOutcomes.filteredByDisplayTag());
+        RequirementsOutcomes filteredRequirementsOutcomes = requirementsOutcomes.filteredByDisplayTag();
+        context.put("requirements", filteredRequirementsOutcomes);
+        context.put("duplicateRequirementNamesPresent", DuplicateRequirementNames.presentIn(filteredRequirementsOutcomes));
+
+
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
         context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));

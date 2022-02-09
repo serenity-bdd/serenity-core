@@ -199,6 +199,7 @@ public class RequirementsOutcomes {
     public List<RequirementOutcome> getVisibleOutcomes() {
         return requirementOutcomes.stream()
                 .filter(outcome -> (includeEmptyRequirements() || !outcome.getTestOutcomes().isEmpty()))
+                .map(outcome -> outcome)
                 .collect(Collectors.toList());
     }
 

@@ -85,11 +85,14 @@ class CoverageByTagType(
     tagsToDisplay: Collection<TestTag>
 ) {
     val tagCoverage = coverageForEachTagOfType(tagType, testOutcomes, tagsToDisplay)
-    val featureNames = coverageForEachTagOfType(tagType, testOutcomes, tagsToDisplay)
+    val featureNamesAreUnique = eachFeatureNameIsUniqueIn(tagCoverage)
+
+    private fun eachFeatureNameIsUniqueIn(tagCoverage: Collection<CoverageByTag>): Any {
+        return tagCoverage.size == tagCoverage.map { coverage -> coverage.tagName }.distinct().size
+    }
+
 
     fun renderedTestCountsWithStatus(result: String): String {
-        val featureNames = tagCoverage.map { coverage -> coverage.tagName }
-
         val resultCounts = tagCoverage.map { coverageByTag ->
             coverageByTag.getCoverageSegments().find { segment -> segment.result.isEqualTo(result) }?.count
         }
@@ -146,6 +149,8 @@ class CoverageByTagType(
 
         return CoverageByTag(
             humanize(shortened(testTag.name)),
+            humanize(parent(testTag.name)),
+            testOutcomesForTag.scenarioCount,
             testOutcomesForTag.testCount,
             successRate,
             testOutcomesForTag.result,
@@ -156,35 +161,13 @@ class CoverageByTagType(
     }
 
     private fun shortened(name: String): String = name.substringAfterLast("/")
-}
-
-class CoverageByTagResult(
-    val tagName: String,
-    val testCount: Int,
-    val successRate: String,
-    val result: TestResult,
-    val report: String,
-    val countByResult: Map<String, Int>,
-    val percentageByResult: Map<String, Double>
-) {
-    val resultClass = result.name.lowercase()
-    val resultIcon = ResultIconFormatter().forResult(result)
-
-    fun percentageForResult(result: TestResult): Double =
-        if (percentageByResult[result.toString()] == null) 0.0 else percentageByResult[result.toString()]!!
-
-    fun countForResult(result: TestResult): Int =
-        if (countByResult[result.toString()] == null) 0 else countByResult[result.toString()]!!
-
-    fun getCoverageSegments(): List<CoverageSegment> =
-        listOf(SUCCESS, PENDING, IGNORED, SKIPPED, ABORTED, FAILURE, ERROR, COMPROMISED)
-            .filter { percentageForResult(it) > 0 }
-            .map { result -> CoverageSegment(percentageForResult(result), countForResult(result), result) }
-
+    private fun parent(name: String): String = name.substringBeforeLast("/")
 }
 
 class CoverageByTag(
     val tagName: String,
+    val parentName: String,
+    val scenarioCount: Int,
     val testCount: Int,
     val successRate: String,
     val result: TestResult,

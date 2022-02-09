@@ -241,7 +241,7 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
     }
 
-    private final Set<String> SECOND_CLASS_TAG_TYPES = NewSet.of("version","feature", "story");
+    private final static Set<String> SECOND_CLASS_TAG_TYPES = NewSet.of("version","feature", "story");
 
     public List<String> getFirstClassTagTypes() {
         return getTagTypes()
@@ -1045,7 +1045,19 @@ public class TestOutcomes {
         return getTotal() - totalImplementedTests();
     }
 
+    /**
+     * The test case count include all individual tests data-driven tests. A data-driven test counts as 1 test.
+     * @return
+     */
     public int getTestCount() {
+        return outcomes.size();
+    }
+
+    /**
+     * The scenario count include all individual tests and rows in data-driven tests.
+     * @return
+     */
+    public int getScenarioCount() {
         return outcomes.stream()
                 .mapToInt(TestOutcome::getTestCount)
                 .sum();

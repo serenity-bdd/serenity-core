@@ -20,10 +20,10 @@ class WhenInteractingWithNestedElements extends Specification {
     static SamplePage samplePage;
 
     def setupSpec() {
-        WebDriverManager.firefoxdriver().setup()
-        FirefoxOptions options = new FirefoxOptions()
+        WebDriverManager.chromedriver().setup()
+        ChromeOptions options = new ChromeOptions()
         options.setHeadless(true)
-        driver = new FirefoxDriver(options)
+        driver = new ChromeDriver(options)
         samplePage = new SamplePage(driver)
     }
 

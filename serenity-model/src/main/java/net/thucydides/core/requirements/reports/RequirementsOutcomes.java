@@ -96,6 +96,14 @@ public class RequirementsOutcomes {
                 estimatedUnimplementedTests, issueTracking);
     }
 
+    public int getTestCaseCount() {
+        return this.testOutcomes.getTestCaseCount();
+    }
+
+    public int getScenarioCount() {
+        return this.testOutcomes.getScenarioCount();
+    }
+
     public List<Requirement> getRequirements() {
         return requirementOutcomes.stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
     }
@@ -199,7 +207,6 @@ public class RequirementsOutcomes {
     public List<RequirementOutcome> getVisibleOutcomes() {
         return requirementOutcomes.stream()
                 .filter(outcome -> (includeEmptyRequirements() || !outcome.getTestOutcomes().isEmpty()))
-                .map(outcome -> outcome)
                 .collect(Collectors.toList());
     }
 

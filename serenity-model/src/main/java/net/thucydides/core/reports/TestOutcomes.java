@@ -1045,11 +1045,15 @@ public class TestOutcomes {
         return getTotal() - totalImplementedTests();
     }
 
+    public int getTestCount() {
+        return getScenarioCount();
+    }
+
     /**
      * The test case count include all individual tests data-driven tests. A data-driven test counts as 1 test.
      * @return
      */
-    public int getTestCount() {
+    public int getTestCaseCount() {
         return outcomes.size();
     }
 

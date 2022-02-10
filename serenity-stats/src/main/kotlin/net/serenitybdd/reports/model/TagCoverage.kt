@@ -151,7 +151,7 @@ class CoverageByTagType(
             humanize(shortened(testTag.name)),
             humanize(parent(testTag.name)),
             testOutcomesForTag.scenarioCount,
-            testOutcomesForTag.testCount,
+            testOutcomesForTag.testCaseCount,
             successRate,
             testOutcomesForTag.result,
             ReportNameProvider().forTag(testTag),

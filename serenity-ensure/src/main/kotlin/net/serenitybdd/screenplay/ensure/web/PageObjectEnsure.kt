@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.ensure.web
 
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.ensure.KnowableValue

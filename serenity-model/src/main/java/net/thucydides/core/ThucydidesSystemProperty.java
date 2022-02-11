@@ -1347,8 +1347,9 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_MAINTAIN_SESSION,
 
     /**
-     * Keep the Thucydides session data between tests.
-     * Normally, the session data is cleared between tests.
+     * Keep the Serenity session data between tests.
+     * Normally, the session data is cleared between tests, but it can sometimes be useful to preserve this data.
+     * When using @BeforeAll methods in JUnit or Cucumber, you need to set this variable to true to use values set in these methods.
      */
     SERENITY_MAINTAIN_SESSION,
 

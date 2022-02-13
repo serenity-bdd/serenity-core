@@ -10,6 +10,31 @@ import java.util.List;
 
 /**
  * Locate shadow dom elements using Selenium 4.
+ * Suppose we have the following HTML structure containing shadow DOM elements.
+ * <code>
+ *     <pre>
+ *         &lt;div id="shadow-host"&gt;
+ *           #shadow-root
+ *           &lt;input id="shadowedInput"/&gt;
+ *
+ *           &lt;div id="nested-shadow-host"&gt;
+ *               #shadow-root
+ *               &lt;input id="nestedShadowedInput"/&gt;
+ *           &lt;/div&gt;
+ *         &lt;/div&gt;
+ *     </pre>
+ * </code>
+ * <p>
+ * To find the first input element inside a single-level shadow DOM, you need to provide the locator for the nested element
+ * and the locator for the shadow host element:
+ * <code><pre>ByShadow.cssSelector("#shadowedInput","#shadow-host")</pre></code>
+ * </p>
+ *
+ * <p>
+ * To find the input element inside the nested shadow DOM, you need to provide the locator for the shadowed element,
+ * as well as the list of parent shadow dom locators, rom top to bottom:
+ * <code><pre>ByShadow.cssSelector("#shadowedInput","#shadow-host", "#inner-shadow-host")</pre></code>
+ * </p>
  */
 public class ByShadow extends By implements By.Remotable {
 

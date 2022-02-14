@@ -120,10 +120,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
         if (!isSerenityTest) return;
-
+        Set<TestIdentifier> roots = testPlan.getRoots();
         testPlan.getRoots().forEach(
                 testIdentifier -> {
-                    generateReportsForTest(testIdentifier);
+                    testPlan.getChildren(testIdentifier).forEach(this::generateReportsForTest);
+                    //generateReportsForTest(testIdentifier);
                 }
         );
 
@@ -453,6 +454,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     StepEventBus eventBusFor(String uniqueTestId) {
+        if(uniqueTestId.contains("method:")){
+            uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("method:")-2);
+        }
+        if(uniqueTestId.contains("test-template:")){
+            uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("test-template:")-2);
+        }
+
         StepEventBus currentEventBus = StepEventBus.eventBusFor(uniqueTestId);
         System.out.println("FOUND EVENT BUS FOR " + uniqueTestId + " -> " + currentEventBus);
         if (!currentEventBus.isBaseStepListenerRegistered()) {
@@ -496,9 +504,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     public List<TestOutcome> getTestOutcomes(TestIdentifier testIdentifier) {
         System.out.println("GET TEST OUTCOMES FOR " + testIdentifier);
         System.out.println(" - BASE STEP LISTENER: " + eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener());
-        System.out.println(" - EVENT TEST OUTCOMES: " + eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().getTestOutcomes());
+        List<TestOutcome> testOutcomes = eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().getTestOutcomes();
+        System.out.println(" - EVENT TEST OUTCOMES: " + testOutcomes);
         System.out.println(" - THREAD TEST OUTCOMES: " + StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes());
-        return eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().getTestOutcomes();
+
+        return testOutcomes;
     }
 
 

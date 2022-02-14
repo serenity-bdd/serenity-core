@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.ISelect;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FluentDropdown implements ISelect {
     private WebElementFacade webElementFacade;
@@ -32,6 +33,10 @@ public class FluentDropdown implements ISelect {
     @Override
     public List<WebElement> getAllSelectedOptions() {
         return select().getAllSelectedOptions();
+    }
+
+    public List<String> getAllSelectedValues() {
+        return select().getAllSelectedOptions().stream().map(element -> element.getAttribute("value")).collect(Collectors.toList());
     }
 
     @Override

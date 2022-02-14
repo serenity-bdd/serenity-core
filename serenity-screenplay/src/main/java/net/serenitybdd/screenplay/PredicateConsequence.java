@@ -2,23 +2,17 @@ package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.eventbus.Broadcaster;
-import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
-import org.assertj.core.api.Assertions;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import static org.junit.Assert.assertTrue;
 
 public class PredicateConsequence<T> extends BaseConsequence<T> {
     protected final Question<T> question;
     protected final Predicate<T> expected;
     protected final String subject;
-
-    private final static SilentPerformable DO_NOTHING = new SilentPerformable();
 
     public PredicateConsequence(Question<T> actual, Predicate<T> expected) {
         this(null, actual, expected);
@@ -42,7 +36,9 @@ public class PredicateConsequence<T> extends BaseConsequence<T> {
 
         try {
             performSetupActionsAs(actor);
-            assertTrue("predicate failed", expected.test(question.answeredBy(actor)));
+            if (!expected.test(question.answeredBy(actor))) {
+                throw new AssertionError("predicate failed");
+            }
 
         } catch (Throwable actualError) {
 

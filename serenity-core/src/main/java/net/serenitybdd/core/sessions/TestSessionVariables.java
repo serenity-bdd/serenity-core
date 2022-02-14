@@ -6,7 +6,7 @@ import net.serenitybdd.core.collect.NewMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TestSessionVariables<K,V> extends ConcurrentHashMap implements SessionMap {
+public class TestSessionVariables extends ConcurrentHashMap implements SessionMap {
 
     private final Map<String, String> metadata = new ConcurrentHashMap();
 

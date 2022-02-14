@@ -154,14 +154,14 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         Stopwatch stopwatch = Stopwatch.started();
 
-        LOGGER.debug("Generating report in {}", outputFile);
+        LOGGER.trace("Generating report in {}", outputFile);
 
         Path outputPath = getOutputDirectory().toPath().resolve(outputFile);
         try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
         }
 
-        LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
+        LOGGER.trace("Generated report {} in {} ms", outputFile, stopwatch.stop());
         return outputPath.toFile();
     }
 
@@ -228,7 +228,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter();
         ReportFormatter reportFormatter = new ReportFormatter();
-        context.put("reportOptions", new ReportOptions(getEnvironmentVariables(), requirementsService));
+        context.put("reportOptions", ReportOptions.forEnvironment(getEnvironmentVariables()));
         context.put("formatter", formatter);
         context.put("reportFormatter", reportFormatter);
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));

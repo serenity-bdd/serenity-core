@@ -157,6 +157,11 @@ public class WebDriverFactory {
         WebDriver driver = driverProviders().get(supportedDriverType).newInstance(resolvedOptions, environmentVariables);
         setImplicitTimeoutsIfSpecified(driver);
         redimensionBrowser.withDriver(driver);
+        //
+        // Perform any custom configuration to the new driver
+        //
+        EnhanceDriver.from(environmentVariables).to(driver);
+
         closeBrowser.closeWhenTheTestsAreFinished(driver);
         return driver;
     }

@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver
 
+import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.chrome.ChromeDriver
@@ -24,6 +25,7 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
     }
 
     def setup() {
+        WebDriverManager.chromedriver().setup()
         StepEventBus.eventBus.clear()
     }
 

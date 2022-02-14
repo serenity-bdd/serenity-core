@@ -49,7 +49,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting an age that is equal to: <20>
                                      |But got..........................: <30>"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("an age", age()).isEqualTo(20))
+                    .whenChecking(that("an age", age()).isEqualTo(20))
         }
 
         @Test
@@ -57,7 +57,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting a flag that is equal to: <true>
                                      |But got..........................: <false>"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("a flag", flag()).isEqualTo(true))
+                    .whenChecking(that("a flag", flag()).isEqualTo(true))
         }
 
         @Test
@@ -65,7 +65,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting a float that is equal to: <1.2>
                                      |But got...........................: <1.3>"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("a float", float()).isEqualTo(1.2f))
+                    .whenChecking(that("a float", float()).isEqualTo(1.2f))
         }
 
         @Test
@@ -73,7 +73,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting a double that is equal to: <1.2>
                                      |But got............................: <1.3>"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("a double", double()).isEqualTo(1.2))
+                    .whenChecking(that("a double", double()).isEqualTo(1.2))
         }
 
         @Test
@@ -81,7 +81,7 @@ class WhenUsingFluentAssertionsWithTheAnswersToQuestions {
             shouldFailWithMessage("""|Expecting a time that is equal to: <13:00>
                                      |But got..........................: <12:00>"""
                     .trimMargin())
-                    .whenChecking(thatTheAnswerTo("a time", time()).isEqualTo(LocalTime.of(13,0)))
+                    .whenChecking(that("a time", time()).isEqualTo(LocalTime.of(13,0)))
         }
 
     }

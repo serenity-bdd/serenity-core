@@ -281,11 +281,13 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
             }
 
             context.startTestRun();
+            context.runBeforeAllHooks();
             features.forEach(context::beforeFeature);
 
             try {
                 runFeatures.evaluate();
             } finally {
+                context.runAfterAllHooks();
                 context.finishTestRun();
                 StepEventBus.getEventBus().testRunFinished();
             }

@@ -10,13 +10,15 @@ public class RequirementsProvided {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequirementsTagProvider.class);
 
+    private static final Iterable<Requirement> NO_REQUIREMENTS = new ArrayList<>();
+
     public static Iterable<Requirement> by(RequirementsTagProvider tagProvider) {
         try {
             return tagProvider.getRequirements();
         } catch (Throwable requirementProviderFailedButDontLetThatStopUs) {
             LOGGER.warn("Failed to load requirements: " + requirementProviderFailedButDontLetThatStopUs.getMessage(),
                     requirementProviderFailedButDontLetThatStopUs);
-            return new ArrayList<>();
+            return NO_REQUIREMENTS;
         }
     }
 }

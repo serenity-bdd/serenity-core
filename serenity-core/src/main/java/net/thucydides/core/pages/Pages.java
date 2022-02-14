@@ -10,6 +10,7 @@ import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,6 +191,8 @@ public class Pages implements Serializable {
     }
 
 
+
+
     /**
      * Create a new Page Object of the given type.
      * The Page Object must have a constructor
@@ -298,8 +301,7 @@ public class Pages implements Serializable {
     private void thisIsNotThePageYourLookingFor(final Class<? extends PageObject> pageObjectClass) {
 
         String errorDetails = "This is not the page you're looking for: "
-                + "I was looking for a page compatible with " + pageObjectClass + " but "
-                + "I was at the URL " + getDriver().getCurrentUrl();
+                + "I was looking for a page compatible with " + pageObjectClass;
 
         throw new WrongPageError(errorDetails);
     }

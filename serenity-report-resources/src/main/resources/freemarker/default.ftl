@@ -37,7 +37,7 @@
 
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
-            <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
+            <#assign breadcrumbTitle = breadcrumb.displayName > <!-- inflection.of(breadcrumb.displayName).asATitle()-->
             > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
         > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}

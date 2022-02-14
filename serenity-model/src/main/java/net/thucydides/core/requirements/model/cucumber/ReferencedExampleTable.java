@@ -34,7 +34,7 @@ public class ReferencedExampleTable {
     }
 
     private boolean scenarioContainsExampleTableWithName(Scenario scenario, String exampleTableName) {
-        if (scenario.getExamples().isEmpty()) { return false; }
+        if (scenario.getExamples() != null && scenario.getExamples().isEmpty()) { return false; }
 
         return scenario.getExamples().stream()
                 .anyMatch(

@@ -255,6 +255,14 @@ public class RequirementOutcome {
                 '}';
     }
 
+    public int getTestCaseCount() {
+        return testOutcomes.getTestCaseCount();
+    }
+
+    public int getScenarioCount() {
+        return testOutcomes.getScenarioCount();
+    }
+
     public int getTestCount() {
         return testOutcomes.getTotal();
     }

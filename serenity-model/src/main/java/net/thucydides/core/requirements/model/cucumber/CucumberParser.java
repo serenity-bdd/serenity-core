@@ -103,11 +103,11 @@ public class CucumberParser {
                 .collect(Collectors.toList());
 
         for (GherkinDocument gherkinDocument : gherkinDocuments) {
-            if (gherkinDocument.getFeature() != null) {
+            if (gherkinDocument != null && gherkinDocument.getFeature() != null) {
                 loadedFeatures.add(gherkinDocument);
-                LOGGER.debug("Added feature {}", gherkinDocument.getFeature().getName());
+                LOGGER.trace("Added feature {}", gherkinDocument.getFeature().getName());
             } else {
-                LOGGER.warn("Couldn't read the feature file {} - it will be ignored", gherkinDocument.getUri());
+                LOGGER.warn("Couldn't read the feature file: {} - it will be ignored", gherkinDocument != null ? gherkinDocument.getUri() : "<null>");
             }
         }
         return loadedFeatures;

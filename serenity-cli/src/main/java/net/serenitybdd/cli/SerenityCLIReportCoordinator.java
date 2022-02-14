@@ -59,7 +59,6 @@ public class SerenityCLIReportCoordinator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Report generation done");
     }
 
     private void printStartingBanner() {

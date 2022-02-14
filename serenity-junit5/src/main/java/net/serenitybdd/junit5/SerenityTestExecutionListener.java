@@ -10,7 +10,6 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.junit.jupiter.api.Assertions;
@@ -446,7 +445,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             //
             // Check for @Pending tests
             //
-            if (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isPending()) {
+            if (isPending(methodSource)) {
                 eventBusFor(testIdentifier.getUniqueId()).testPending();
 //                StepEventBus.getEventBus().testPending();
             }
@@ -472,6 +471,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         System.out.println("SETTING EVENT BUS FOR THREAD " + Thread.currentThread() + " TO " + currentEventBus);
         StepEventBus.setCurrentBusToEventBusFor(uniqueTestId);
         return currentEventBus;
+    }
+
+    private boolean isPending(MethodSource methodSource) {
+        try {
+            return (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isPending());
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     private boolean testingThisTest(TestIdentifier testIdentifier) {

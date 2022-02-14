@@ -7,20 +7,10 @@ import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 public class StepNamer {
 
-    private final Method method;
+    public static String nameFor(Method method, Object[] args) {
 
-    public StepNamer(Method method) {
-        this.method = method;
-    }
-
-    public static StepNamer forMethod(Method method) {
-        return new StepNamer(method);
-    }
-
-    public String withArguments(Object[] args) {
-
-        if (isScreenplayPerformAs()) {
-            return screenplayStepWithArgs(args[0]);
+        if (isScreenplayPerformAs(method)) {
+            return screenplayStepWithArgs(method, args[0]);
         }
 
         if ((args == null) || (args.length == 0)) {
@@ -30,16 +20,16 @@ public class StepNamer {
         }
     }
 
-    private String screenplayStepWithArgs(Object actor) {
+    private static String screenplayStepWithArgs(Method method, Object actor) {
         String taskName = inflection().humanize(inflection().underscore(method.getDeclaringClass().getSimpleName()));
         return inflection().capitalize(actor.toString()) + " " + uncapitalize(taskName);
     }
 
-    private boolean isScreenplayPerformAs() {
+    private static boolean isScreenplayPerformAs(Method method) {
         return method.getName().equals("performAs") && method.getParameterCount() == 1;
     }
 
-    private String testNameWithArguments(final Method method,
+    private static String testNameWithArguments(final Method method,
                                          final Object[] args) {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");

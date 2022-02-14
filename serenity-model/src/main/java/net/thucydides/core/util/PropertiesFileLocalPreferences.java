@@ -139,7 +139,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return properties;
     }
 
-    private void updatePreferencesFrom(Properties... propertySets) throws IOException {
+    private void updatePreferencesFrom(Properties... propertySets) {
         for (Properties localPreferences : propertySets) {
             PropertiesUtil.expandPropertyAndEnvironmentReferences(System.getenv(), localPreferences);
             setUndefinedSystemPropertiesFrom(localPreferences);
@@ -150,7 +150,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         Properties preferenceProperties = new Properties();
         if (preferencesFile.exists()) {
             try (InputStream preferences = new FileInputStream(preferencesFile)) {
-                LOGGER.debug("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
+                LOGGER.trace("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
                 preferenceProperties.load(preferences);
             }
         }
@@ -165,7 +165,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             String currentPropertyValue = environmentVariables.getProperty(propertyName);
 
             if (isEmpty(currentPropertyValue) && isNotEmpty(localPropertyValue)) {
-                LOGGER.debug(propertyName + "=" + localPropertyValue);
+                LOGGER.trace("{} = {}",propertyName, localPropertyValue);
                 environmentVariables.setProperty(propertyName, localPropertyValue);
             }
         }

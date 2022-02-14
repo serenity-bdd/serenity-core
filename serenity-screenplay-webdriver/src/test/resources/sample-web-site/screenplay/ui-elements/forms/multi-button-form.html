@@ -1,14 +1,60 @@
 <html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
 <body>
 <form>
-    <label for="field">Customer Name</label>
-    <input type="text" id="field" name="fieldname", data-test="field-name" placeholder="value goes here" onkeyup="update()" />
-    <div id="result"></div>
+    <button type="button" name="button-name" id="button-id" data-test="button-data" aria-label="button-aria">A Simple
+        Button
+    </button>
+    <br/>
+    <input type="submit" value="A Submit Input" name="submit-button-name" id="submit-button-id"
+           data-test="submit-button-data" aria-label="submit-button-aria"><br/>
+    <input type="button" value="A Button Input" name="input-button-name" id="input-button-name"
+           data-test="input-button-data" aria-label="input-button-aria"><br/>
+
+    <button type="button" class="icon-button-class"><i class="glyphicon glyphicon-home"></i> A Button with an icon</button>
+    <br/>
+
+    <label for="separate-button">Button Label</label><input type="button" id="separate-button" value="Submit"><br/>
+    <button mat-raised-button="" class="mat-focus-indicator mat-raised-button mat-button-base"><br/>
+        <span class="mat-button-wrapper">Material Button</span><br/>
+        <span matripple="" class="mat-ripple mat-button-ripple"></span><br/>
+        <span class="mat-button-focus-overlay"></span><br/>
+    </button>
+
+    <br/>
+
+    <button name="favorite">
+        <svg aria-hidden="true" viewBox="0 0 10 10"><path d="M7 9L5 8 3 9V6L1 4h3l1-3 1 3h3L7 6z"/></svg>
+        Add to favorites
+    </button>
+    <br/>
+
+    <br/>
+
+    <div class="transfer-panel" id="transfer-panel-1">
+        <h4>Transfers 1</h4>
+        <div>
+            <div data-field-type="text">
+                <div>
+                    <label for="nested-button-1">Transaction ID</label>
+                    <input class="nested-button" id="nested-button-1" type="button" value="A Nested Button"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="transfer-panel" id="transfer-panel-2">
+        <h4>Transfers 2</h4>
+        <div>
+            <div data-field-type="text">
+                <div>
+                    <label for="nested-button-2">Transaction ID</label>
+                    <input class="nested-button" aria-label="Nested Button" id="nested-button-2" type="button" value="A Nested Button"/>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
-<script>
-    function update() {
-        document.getElementById("result").textContent = document.getElementById("field").value;
-    }
-</script>
 </body>
 </html>

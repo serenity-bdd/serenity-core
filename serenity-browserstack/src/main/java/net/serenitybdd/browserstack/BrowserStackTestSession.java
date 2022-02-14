@@ -2,6 +2,7 @@ package net.serenitybdd.browserstack;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.MalformedJsonException;
 import net.thucydides.core.model.TestOutcome;
@@ -171,7 +172,8 @@ public class BrowserStackTestSession {
         }
 
         JsonElement automationSession = sessionElement.getAsJsonObject().get("automation_session");
-        return automationSession.getAsJsonObject().get(propertyName).getAsString();
+        JsonElement element = automationSession.getAsJsonObject().get(propertyName);
+        return element.isJsonNull() ? null : element.getAsString();
     }
 
 

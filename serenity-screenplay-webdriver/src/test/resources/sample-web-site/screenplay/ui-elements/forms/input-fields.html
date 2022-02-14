@@ -1,10 +1,32 @@
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <body>
 <form>
     <label for="field">Customer Name</label>
-    <input type="text" id="field" name="fieldname" class="field-style" data-test="field-name" placeholder="value goes here" onkeyup="update()" />
-    <div id="result"></div>
+    <input type="text" id="field" name="fieldname" class="field-style" data-test="field-data" aria-label="ARIA Label"
+           placeholder="value goes here" onkeyup="update()"/>
+
+    <label for="textarea-field">Customer Address</label>
+    <textarea type="text" id="textarea-field" name="textarea-fieldname" class="textarea-field-style" data-test="textarea-field-data" aria-label="Text Area Aria Label"
+           placeholder="text area value goes here" rows="4" cols="50"/>
+    </textarea>
+
 </form>
+<div class="section">
+    <h3>Section 1</h3>
+    <input type="text" id="section1-field" class="input-field"/>
+    <textarea type="text" id="section1-textarea-field" name="textarea-fieldname" class="textarea-field-style" data-test="textarea-field-data" aria-label="ARIA Label"
+              placeholder="value goes here" rows="4" cols="50"/>
+    </textarea>
+</div>
+<div class="section">
+    <h3>Section 2</h3>
+    <input type="text" id="section2-field" class="input-field" />
+    <textarea type="text" id="section2-textarea-field" name="textarea-fieldname" class="textarea-field-style" data-test="textarea-field-data" aria-label="ARIA Label"
+              placeholder="value goes here" rows="4" cols="50"/>
+    </textarea>
+</div>
+
+<div id="result"></div>
 <script>
     function update() {
         document.getElementById("result").textContent = document.getElementById("field").value;

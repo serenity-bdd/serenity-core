@@ -2,11 +2,12 @@ package net.thucydides.core.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 /**
  * Transforms words to singular, plural, humanized (human readable), underscore, camel case, or ordinal form. This is inspired by
@@ -24,7 +25,10 @@ public class Inflector {
         return INSTANCE;
     }
 
-    public static Inflector inflection() { return getInstance(); }
+    public static Inflector inflection() {
+        return getInstance();
+    }
+
     public Inflection of(String word) {
         return new Inflection(word, this);
     }
@@ -39,8 +43,8 @@ public class Inflector {
         final Pattern expressionPattern;
         final String replacement;
 
-        protected Rule( String expression,
-                        String replacement ) {
+        protected Rule(String expression,
+                       String replacement) {
             this.expression = expression;
             this.replacement = replacement;
             this.expressionPattern = Pattern.compile(this.expression, Pattern.CASE_INSENSITIVE);
@@ -53,7 +57,7 @@ public class Inflector {
          * @param input the input string
          * @return the modified string if this rule applied, or null if the input was not modified by this rule
          */
-        protected String apply( String input ) {
+        protected String apply(String input) {
             Matcher matcher = this.expressionPattern.matcher(input);
             if (!matcher.find()) return null;
             return matcher.replaceAll(this.replacement);
@@ -78,7 +82,7 @@ public class Inflector {
 
     /**
      * Returns the plural form of the word in the string.
-     *
+     * <p>
      * Examples:
      *
      * <pre>
@@ -89,17 +93,16 @@ public class Inflector {
      *   inflector.pluralize(&quot;the blue mailman&quot;)   #=&gt; &quot;the blue mailmen&quot;
      *   inflector.pluralize(&quot;CamelOctopus&quot;)       #=&gt; &quot;CamelOctopi&quot;
      * </pre>
-     *
-     *
-     *
+     * <p>
+     * <p>
+     * <p>
      * Note that if the {@link Object#toString()} is called on the supplied object, so this method works for non-strings, too.
-     *
      *
      * @param word the word that is to be pluralized.
      * @return the pluralized form of the word, or the word itself if it could not be pluralized
      * @see #singularize(Object)
      */
-    public String pluralize( Object word ) {
+    public String pluralize(Object word) {
         if (word == null) return null;
         String wordStr = word.toString().trim();
         if (wordStr.length() == 0) return wordStr;
@@ -112,7 +115,7 @@ public class Inflector {
     }
 
     public String pluralize(Object word,
-                     int count) {
+                            int count) {
         if (word == null) return null;
         if (count == 1 || count == -1) {
             return word.toString();
@@ -122,7 +125,7 @@ public class Inflector {
 
     /**
      * Returns the singular form of the word in the string.
-     *
+     * <p>
      * Examples:
      *
      * <pre>
@@ -133,17 +136,16 @@ public class Inflector {
      *   inflector.singularize(&quot;the blue mailmen&quot;)  #=&gt; &quot;the blue mailman&quot;
      *   inflector.singularize(&quot;CamelOctopi&quot;)       #=&gt; &quot;CamelOctopus&quot;
      * </pre>
-     *
-     *
-     *
+     * <p>
+     * <p>
+     * <p>
      * Note that if the {@link Object#toString()} is called on the supplied object, so this method works for non-strings, too.
-     *
      *
      * @param word the word that is to be pluralized.
      * @return the pluralized form of the word, or the word itself if it could not be pluralized
      * @see #pluralize(Object)
      */
-    public String singularize( Object word ) {
+    public String singularize(Object word) {
         if (word == null) return null;
         String wordStr = word.toString().trim();
         if (wordStr.length() == 0) return wordStr;
@@ -161,7 +163,7 @@ public class Inflector {
      * @param words the word to be capitalized
      * @return the string with the first character capitalized and the remaining characters lowercased
      */
-    public String capitalize( String words) {
+    public String capitalize(String words) {
         if (words == null) return null;
         String result = words.trim();
         if (result.length() == 0) return "";
@@ -169,10 +171,49 @@ public class Inflector {
         return "" + Character.toUpperCase(result.charAt(0)) + result.substring(1).toLowerCase();
     }
 
+    public String firstUpperCase(String words) {
+        if (words == null) return null;
+        String result = words.trim();
+        if (result.length() == 0) return "";
+        if (result.length() == 1) return result.toUpperCase();
+
+        StringBuilder capitalisedPhrase = new StringBuilder();
+        StringBuilder currentWord = new StringBuilder();
+        if (startsWithQuote(words)) { // Starts with a non-black char
+            capitalisedPhrase.append(words.charAt(0));
+        } else {
+            currentWord.append(words.charAt(0));
+        }
+
+        for (int i = 1; i < words.length(); i++) {
+            if (!isNonBlankSeparator(words.charAt(i))) {
+                currentWord.append(words.charAt(i));
+            } else {
+                capitalisedPhrase
+                        .append(StringUtils.capitalize(currentWord.toString()))
+                        .append(words.charAt(i));
+                currentWord = new StringBuilder();
+            }
+        }
+        capitalisedPhrase.append(StringUtils.capitalize(currentWord.toString()));
+        String completeWord = capitalisedPhrase.toString();
+        return StringUtils.capitalize(completeWord);
+    }
+
+    private boolean startsWithQuote(String word) {
+        return ((word.charAt(0) == '\'') || (word.charAt(0) == '"'));
+    }
+
+    private final String NON_BLANK_SEPARATORS = "-+_/:;&()";
+
+    private boolean isNonBlankSeparator(char c) {
+        return NON_BLANK_SEPARATORS.contains(String.valueOf(c));
+    }
+
     /**
      * Capitalizes the first word and turns underscores into spaces and strips trailing "_id" and any supplied removable tokens.
      * Like {@link #titleCase(String, String[])}, this is meant for creating pretty output.
-     *
+     * <p>
      * Examples:
      *
      * <pre>
@@ -180,15 +221,13 @@ public class Inflector {
      *   inflector.humanize(&quot;author_id&quot;)             #=&gt; &quot;Author&quot;
      * </pre>
      *
-     *
-     *
      * @param lowerCaseAndUnderscoredWords the input to be humanized
-     * @param removableTokens optional array of tokens that are to be removed
+     * @param removableTokens              optional array of tokens that are to be removed
      * @return the humanized string
      * @see #titleCase(String, String[])
      */
-    public String humanize( String lowerCaseAndUnderscoredWords,
-                            String... removableTokens ) {
+    public String humanize(String lowerCaseAndUnderscoredWords,
+                           String... removableTokens) {
 
         if (isCamelCase(lowerCaseAndUnderscoredWords)) {
             lowerCaseAndUnderscoredWords = underscore(lowerCaseAndUnderscoredWords);
@@ -199,7 +238,7 @@ public class Inflector {
 
         result = result.toLowerCase();
 
-        for(Acronym acronym : acronyms) {
+        for (Acronym acronym : acronyms) {
             result = acronym.restoreIn(result);
         }
 
@@ -234,7 +273,7 @@ public class Inflector {
     /**
      * Makes an underscored form from the expression in the string method.
      * Also changes any characters that match the supplied delimiters into underscore.
-     *
+     * <p>
      * Examples:
      *
      * <pre>
@@ -246,14 +285,12 @@ public class Inflector {
      *   inflector.underscore(&quot;The.firstName&quot;)    #=&gt; &quot;the_first_name&quot;
      * </pre>
      *
-     *
-     *
-     * @param camelCaseWord the camel-cased word that is to be converted;
+     * @param camelCaseWord  the camel-cased word that is to be converted;
      * @param delimiterChars optional characters that are used to delimit word boundaries (beyond capitalization)
      * @return a lower-cased version of the input, with separate words delimited by the underscore character.
      */
-    public String underscore( String camelCaseWord,
-                              char... delimiterChars ) {
+    public String underscore(String camelCaseWord,
+                             char... delimiterChars) {
         if (camelCaseWord == null) return null;
         String result = camelCaseWord.trim();
         if (result.length() == 0) return "";
@@ -271,20 +308,20 @@ public class Inflector {
     /**
      * Makes an kebab-cased expression of a string method.
      *
-     * @param camelCaseWord the camel-cased word that is to be converted;
+     * @param camelCaseWord  the camel-cased word that is to be converted;
      * @param delimiterChars optional characters that are used to delimit word boundaries (beyond capitalization)
      * @return a kebab-cased version of the input, with separate words delimited by the hyphen character.
      */
-    public String kebabCase( String camelCaseWord,
-                              char... delimiterChars ) {
-        return underscore(camelCaseWord, delimiterChars).replaceAll("_","-");
+    public String kebabCase(String camelCaseWord,
+                            char... delimiterChars) {
+        return underscore(camelCaseWord, delimiterChars).replaceAll("_", "-");
     }
 
     /**
      * Capitalizes all the words and replaces some characters in the string to create a nicer looking title. Underscores are
      * changed to spaces, a trailing "_id" is removed, and any of the supplied tokens are removed. Like
      * {@link #humanize(String, String[])}, this is meant for creating pretty output.
-     *
+     * <p>
      * Examples:
      *
      * <pre>
@@ -292,16 +329,16 @@ public class Inflector {
      *   inflector.titleCase(&quot;x-men: the last stand&quot;)        #=&gt; &quot;X Men: The Last Stand&quot;
      * </pre>
      *
-     *
-     *
-     * @param words the input to be turned into title case
+     * @param words           the input to be turned into title case
      * @param removableTokens optional array of tokens that are to be removed
      * @return the title-case version of the supplied words
      */
     String titleCase(String words,
                      String... removableTokens) {
-        String result = humanize(words, removableTokens);
-        result = replaceAllWithUppercase(result, "\\b([a-z])", 1); // change first char of each word to uppercase
+        String humanizedForm = humanize(words,removableTokens);
+        String result = stream(humanizedForm.split("\\s"))
+                .map(this::firstUpperCase)
+                .collect(Collectors.joining(" "));
         return result.trim();
     }
 
@@ -350,14 +387,14 @@ public class Inflector {
     /**
      * Utility method to replace all occurrences given by the specific backreference with its uppercased form, and remove all
      * other backreferences.
-     *
+     * <p>
      * The Java {@link Pattern regular expression processing} does not use the preprocessing directives <code>\l</code>,
      * <code>&#92;u</code>, <code>\L</code>, and <code>\U</code>. If so, such directives could be used in the replacement string
      * to uppercase or lowercase the backreferences. For example, <code>\L1</code> would lowercase the first backreference, and
      * <code>&#92;u3</code> would uppercase the 3rd backreference.
      *
-     * @param input the input string
-     * @param regex regular expression to replace
+     * @param input                  the input string
+     * @param regex                  regular expression to replace
      * @param groupNumberToUppercase the regex group to convert to uppercase
      * @return the input string with the appropriate characters converted to upper-case
      */

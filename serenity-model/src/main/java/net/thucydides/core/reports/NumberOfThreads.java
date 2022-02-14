@@ -12,7 +12,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.REPORT_THREADS;
 
 public class NumberOfThreads {
 
-    static final Double DEFAULT_BLOCKING_COEFFICIENT_FOR_IO = 0.9;
+    static final Double DEFAULT_BLOCKING_COEFFICIENT_FOR_IO = -1.0;
 
     private final EnvironmentVariables environmentVariables;
     private final double blockingCoefficientForIO;

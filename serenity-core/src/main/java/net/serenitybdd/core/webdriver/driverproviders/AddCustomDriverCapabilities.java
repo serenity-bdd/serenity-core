@@ -1,15 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.util.Arrays;
-import java.util.List;
+import org.openqa.selenium.MutableCapabilities;
 
 public class AddCustomDriverCapabilities {
 
@@ -31,36 +26,10 @@ public class AddCustomDriverCapabilities {
         return new AddCustomDriverCapabilities(environmentVariables);
     }
 
-    public DesiredCapabilities to(DesiredCapabilities capabilities) {
-
-        List<Class<?>> customCapabilityEnhancers
-                = ClassFinder.loadClasses()
-                             .thatImplement(BeforeAWebdriverScenario.class)
-                             .fromPackage("net.serenitybdd");
-
-        String extensionPackageList = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
-        if (extensionPackageList != null) {
-            List<String> extensionPackages = Arrays.asList(extensionPackageList.split(","));
-            extensionPackages.forEach(
-                    extensionPackage ->
-                            customCapabilityEnhancers.addAll(ClassFinder.loadClasses().thatImplement(BeforeAWebdriverScenario.class)
-                                    .fromPackage(extensionPackage))
-            );
-        }
-
-        customCapabilityEnhancers.forEach(
-                enhancerType -> {
-                    try {
-                        BeforeAWebdriverScenario beforeScenario = (BeforeAWebdriverScenario)enhancerType.newInstance();
-                        if (beforeScenario.isActivated(environmentVariables)) {
-                            ((BeforeAWebdriverScenario) enhancerType.newInstance()).apply(environmentVariables, driver, testOutcome, capabilities);
-                        }
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-
+    public MutableCapabilities to(MutableCapabilities capabilities) {
+        PreScenarioFixtures.executeBeforeAWebdriverScenario().stream()
+                        .filter(beforeAWebdriverScenario -> beforeAWebdriverScenario.isActivated(environmentVariables))
+                                .forEach(beforeAWebdriverScenario -> beforeAWebdriverScenario.apply(environmentVariables, driver, testOutcome, capabilities));
         return capabilities;
     }
 }

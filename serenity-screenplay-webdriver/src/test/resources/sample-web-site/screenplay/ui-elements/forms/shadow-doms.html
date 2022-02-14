@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Shadow DOM</title>
+</head>
+<body>
+<div id="non_host"></div>
+<div id="shadow_host"></div>
+<script>
+    let shadowRoot = document.getElementById('shadow_host').attachShadow({mode: 'open'});
+    shadowRoot.innerHTML = `
+              <span class="wrapper" id="shadow_content"><span class="info">some text</span></span>
+              <div id="nested_shadow_host"></div>
+              <a href="#">Shadow Link</a>
+              <input type="text" id="shadow-text"/>
+              <input type="checkbox" id="shadow-checkbox" />
+              <img id="shadow-img" src="img_girl.jpg" alt="Girl in a jacket" width="500" height="600">
+              <select name="shadow-select">
+                  <option value="1">Shadow 1</option>
+                  <option value="2">Shadow 2</option>
+                  <option value="3">Shadow 3</option>
+              </select>
+            `;
+
+    let nestedShadowRoot = shadowRoot.getElementById('nested_shadow_host').attachShadow({mode: 'open'});
+    nestedShadowRoot.innerHTML = `
+              <div id="nested_shadow_content">
+              <div>nested text</div>
+              </div>
+            `;
+</script>
+</body>
+</html>

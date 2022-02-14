@@ -78,6 +78,9 @@ public class ResultChecker {
         logger.info(white("-----------------------------------------"));
         logger.info(
                 resultLine(white(
+                 "Test cases executed    "), white(Integer.toString(testOutcomes.getOutcomes().size()))));
+        logger.info(
+                resultLine(white(
                  "Tests executed         "), white(Integer.toString(testOutcomes.getTotal()))));
         logger.info(
                 resultLine(green(

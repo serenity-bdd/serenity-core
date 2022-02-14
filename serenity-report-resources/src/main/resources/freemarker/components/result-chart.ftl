@@ -1,5 +1,4 @@
 <#macro result_chart(id)>
-    <#assign testResultData = resultCounts.allResultValuesFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <!-- PIE CHART -->
     <script>
 

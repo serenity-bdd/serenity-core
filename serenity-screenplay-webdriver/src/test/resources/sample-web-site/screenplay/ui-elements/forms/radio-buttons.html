@@ -1,13 +1,20 @@
 <html>
 <body>
 <form>
-    <input type="radio" id="html" name="fav_language" value="HTML" class="html-radio">
-    <label for="html">Choose HTML</label><br>
-    <input type="radio" id="css" name="fav_language" value="CSS">
-    <label for="css">Choose CSS</label><br>
-    <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-    <label for="javascript">Choose JavaScript</label><br><br>
-    <input type="submit" value="Submit">
+    <div class="section">
+        <h2>Web</h2>
+        <input type="radio" id="html" name="fav_language" value="HTML" class="html-radio" data-test="html-radio-data"
+               aria-label="Aria Radio Html">
+        <label for="html">Choose HTML</label><br>
+        <input type="radio" id="css" name="fav_language" value="CSS">
+        <label for="css">Choose CSS</label><br>
+    </div>
+    <div class="section">
+        <h2>Coding</h2>
+        <input type="radio" id="javascript" name="fav_language" value="JavaScript">
+        <label for="javascript">Choose JavaScript</label><br><br>
+        <input type="submit" value="Submit">
+    </div>
 </form>
 </body>
 </html>

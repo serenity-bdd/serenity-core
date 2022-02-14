@@ -23,7 +23,7 @@ public class CleanupMethodLocator {
         return stream(stackTrace).anyMatch(this::isAnnotatedWithAFixtureMethod);
     }
 
-    private List<String> DEFAULT_CLEANUP_PACKAGES_TO_SKIP = Arrays.asList(
+    private final List<String> DEFAULT_CLEANUP_PACKAGES_TO_SKIP = Arrays.asList(
             "java.lang",
             "net.serenitybdd.core",
             "net.thucydides",
@@ -38,13 +38,10 @@ public class CleanupMethodLocator {
             Optional<Method> fixtureMethod = stream(forName(stackTraceElement.getClassName()).getMethods())
                                                             .filter(method -> method.getName().equals(stackTraceElement.getMethodName())).findFirst();
 
-            if (!fixtureMethod.isPresent()) {
-                return false;
-            }
-            return (stream(fixtureMethod.get().getAnnotations()).anyMatch(
+            return fixtureMethod.map(method -> (stream(method.getAnnotations()).anyMatch(
                     annotation -> (isAnAfterAnnotation(annotation.annotationType().getSimpleName())
                             || cleanupMethodsAnnotations.contains(annotation.toString()))
-            ));
+            ))).orElse(false);
         } catch (ClassNotFoundException ignored) {
             return false;
         }

@@ -16,6 +16,7 @@ import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
+import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
 
 import static io.cucumber.core.plugin.TaggedScenario.*;
 import static java.util.stream.Collectors.toList;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.FEATURE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -235,6 +237,15 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         getContext().currentFeaturePathIs(featurePath);
         contextURISet.add(featurePath);
         setStepEventBus(featurePath);
+
+        if (FeatureTracker.isNewFeature(event)) {
+            // Shut down any drivers remaining open from a previous feature, if @singlebrowser is used.
+            // Cucumber has no event to mark the start and end of a feature, so we need to do this here.
+            if (RestartBrowserForEach.configuredIn(systemConfiguration.getEnvironmentVariables()).restartBrowserForANew(FEATURE)) {
+                ThucydidesWebDriverSupport.closeCurrentDrivers();
+            }
+            FeatureTracker.startNewFeature(event);
+        }
 
         String scenarioName = event.getTestCase().getName();
         TestSourcesModel.AstNode astNode = featureLoader.getAstNode(getContext().currentFeaturePath(), event.getTestCase().getLocation().getLine());
@@ -780,7 +791,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void cleanupTestResourcesForURI(URI uri) {
-        LOGGER.info("Cleanup test resources for URI " + uri);
         getStepEventBus(uri).testSuiteFinished();
         getStepEventBus(uri).dropAllListeners();
         getStepEventBus(uri).clear();

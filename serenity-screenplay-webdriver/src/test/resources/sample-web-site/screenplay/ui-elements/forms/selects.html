@@ -1,9 +1,9 @@
 <html>
 <body>
 <form>
-    <label for="cars">Choose a car:</label>
+    <label for="car-dropdown-id">Choose a car:</label>
 
-    <select name="cars" id="cars">
+    <select name="cars" id="car-dropdown-id" aria-label="Car Dropdown Aria Label" data-test="car-dropdown-data">
         <option value="">---Pick Your Car---</option>
         <option value="volvo">Volvo</option>
         <option value="saab">Saab</option>
@@ -11,15 +11,51 @@
         <option value="audi">Audi</option>
     </select>
 
-    <select name="planes" id="planes" multiple="true">
-        <option value="spitfire">Spitfire</option>
-        <option value="hurricane">Hurricane</option>
-        <option value="Mustang">Mustang</option>
-        <option value="mosquito">Mosquito</option>
+    <div class="planeset" id="ww2">
+        <h2>Fighters</h2>
+        <select name="planes" multiple="true">
+            <option value="">---Pick Your Plane---</option>
+            <option value="spitfire">Spitfire</option>
+            <option value="hurricane">Hurricane</option>
+            <option value="Mustang">Mustang</option>
+            <option value="mosquito">Mosquito</option>
+        </select>
+    </div>
+
+    <div class="planeset" id="trainers">
+        <h2>Training Planes</h2>
+        <select name="planes" multiple="true">
+            <option value="">---Pick Your Plane---</option>
+            <option value="cessna172">Cessna 172</option>
+            <option value="PA28">Piper PA28</option>
+            <option value="dh82">Tigermoth</option>
+        </select>
+    </div>
+
+    <select name="new_user_country" id="new_user_country" class="country">
+        <optgroup label="nordic">
+            <option class="scandinavia" value="1">Denmark</option>
+            <option id="nor" class="scandinavia" value="2" selected="selected">Norway</option>
+            <option class="scandinavia" value="3">Sweden</option>
+        </optgroup>
+        <optgroup label="other">
+            <option value="4">United Kingdom</option>
+            <option value="5">USA</option>
+            <option label="Germany" data-locator="Berliner"/>
+        </optgroup>
     </select>
 
+    <label for="new_user_languages">Languages</label>
+    <select name="new_user_languages" id="new_user_languages" multiple="multiple" onchange="WatirSpec.addMessage('changed language');">
+        <option id="danish" value="1">Danish</option>
+        <option value="2" label="EN">English</option>
+        <option value="3" label="NO">Norwegian</option>
+        <option value="4" disabled>Russian</option>
+        <option>Swedish</option>
+        <option>Azeri - Latin</option>
+        <option>Latin</option>
+    </select>
 
-    multiple
     <input type="submit" value="Submit">
 </form>
 </body>

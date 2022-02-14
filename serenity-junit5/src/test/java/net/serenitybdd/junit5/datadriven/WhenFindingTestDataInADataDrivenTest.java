@@ -22,14 +22,14 @@ public class WhenFindingTestDataInADataDrivenTest {
         Map<String,DataTable> testDataTable = JUnit5DataDrivenAnnotations.forClass(MultipleDataDrivenTestScenariosWithValueSource.class).getParameterTables();
         assertThat(testDataTable.keySet().size(), is(2));
 
-        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource.withValueSource");
+        DataTable dataTableStrings = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource.withValueSource");
         assertThat(dataTableStrings.getRows().size(), is(2));
         assertThat(dataTableStrings.getHeaders(),contains("arg0"));
         List<DataTableRow> rows = dataTableStrings.getRows();
         assertThat(rows.get(0).getStringValues().get(0), is("Hello"));
         assertThat(rows.get(1).getStringValues().get(0), is("JUnit"));
 
-        DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.SimpleDataDrivenTestScenarioWithValueSource.withValueSourceIntegers");
+        DataTable dataTableIntegers = testDataTable.get("net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource.withValueSourceIntegers");
         assertThat(dataTableIntegers.getRows().size(), is(3));
         assertThat(dataTableIntegers.getHeaders(),contains("arg0"));
         List<DataTableRow> integersRows = dataTableIntegers.getRows();

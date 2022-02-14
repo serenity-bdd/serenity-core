@@ -12,10 +12,13 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.http.ClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,13 +57,14 @@ public class FirefoxDriverProvider implements DriverProvider {
             logger.info("Not using automatically driver download");
         }
 
-//        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
+        new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
         FirefoxOptions firefoxOptions = new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
         SetProxyConfiguration.from(environmentVariables).in(firefoxOptions);
         AddLoggingPreferences.from(environmentVariables).to(firefoxOptions);
 
-//        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables, options);
+        enhancer.enhanced(firefoxOptions, SupportedWebDriver.FIREFOX);
 
         driverProperties.registerCapabilities("firefox", capabilitiesToProperties(firefoxOptions));
 
@@ -69,37 +73,6 @@ public class FirefoxDriverProvider implements DriverProvider {
                 driverServicePool,
                 DriverServicePool::newDriver,
                 (pool, caps) -> new FirefoxDriver(firefoxOptions)
-        );
-    }
-
-    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables, String specifiedOptions) {
-        capabilities.setCapability("marionette", true);
-        boolean headlessMode = ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false);
-        if (headlessMode) {
-            capabilities.setCapability("headless", headlessMode);
-        }
-
-        List<String> args = DriverArgs.fromValue(specifiedOptions);
-        Map<String, List<String>> firefoxOptions = new HashMap<>();
-        firefoxOptions.put("args", args);
-        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
-
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
-        options.addArguments(DriverArgs.fromValue(specifiedOptions));
-
-
-        if (headlessMode) {
-            options.setHeadless(true);
-        }
-
-        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
-
-        return ProvideNewDriver.withConfiguration(environmentVariables,
-                enhancedCapabilities,
-                driverServicePool,
-                DriverServicePool::newDriver,
-                (pool, caps) -> new FirefoxDriver(options)
         );
     }
 }

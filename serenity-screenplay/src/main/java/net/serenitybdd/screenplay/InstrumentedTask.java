@@ -1,8 +1,10 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.Instrumented;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.SystemEnvironmentVariables;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

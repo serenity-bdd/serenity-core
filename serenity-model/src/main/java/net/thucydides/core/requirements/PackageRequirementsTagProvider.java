@@ -1,24 +1,24 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Splitter;
+import io.github.classgraph.*;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
 import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
 import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
+import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -47,7 +47,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     List<String> requirementPaths;
 
     private final static Logger logger = LoggerFactory.getLogger(PackageRequirementsTagProvider.class);
-
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
                                           String rootPackage,
@@ -109,8 +108,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private void fetchRequirements() {
         logger.debug("Loading requirements from package requirements at: " + resolvedRootPackage());
 
-        requirements = reloadedRequirements().orElse(requirementsReadFromClasspath()
-                .orElse(NO_REQUIREMENTS));
+        requirements = reloadedRequirements().orElse(requirementsReadFromClasspath().orElse(NO_REQUIREMENTS));
     }
 
     private java.util.Optional<List<Requirement>> reloadedRequirements() {
@@ -168,7 +166,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         if (requirementPaths == null) {
             readingPaths.lock();
             List<String> paths = requirementPathsFromClassesInPackage(rootPackage);
-            Collections.sort(paths, byDescendingPackageLength());
+            paths.sort(byDescendingPackageLength());
             requirementPaths = NewList.copyOf(paths);
             readingPaths.unlock();
         }
@@ -177,25 +175,65 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
         Set<Class> allClassesRecursive = findAllClassesUsingReflectionsLibrary(rootPackage);
-        return allClassesRecursive.stream()
-                .filter(classInfo -> classRepresentsARequirementIn(classInfo))
-                .map(classInfo -> classInfo.getName())
+        List<String> classRequirementNames = allClassesRecursive.stream()
+                .filter(this::classRepresentsARequirementIn)
+                .map(Class::getName)
                 .map(className -> className.replaceAll("\\$","."))
                 .collect(Collectors.toList());
+
+        classRequirementNames.addAll(findPackagesWithNarrativeAnnotationIn(rootPackage));
+        classRequirementNames.addAll(findClassesWithNarrativeAnnotationIn(rootPackage));
+        return classRequirementNames;
     }
 
+    private static final ConcurrentMap<String, ScanResult> SCAN_RESULT_CACHE = new ConcurrentHashMap<>();
+
     private Set<Class> findAllClassesUsingReflectionsLibrary(String packageName) {
-        Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
-        return reflections.getSubTypesOf(Object.class)
-                .stream()
+        if (!SCAN_RESULT_CACHE.containsKey(packageName)) {
+            SCAN_RESULT_CACHE.putIfAbsent(packageName, new ClassGraph().enableAllInfo().acceptPackages(packageName).scan());
+        }
+        ScanResult scanResult = SCAN_RESULT_CACHE.get(packageName);
+        return scanResult.getAllClasses().stream()
+                .map(classInfo -> classInfo.loadClass(true))
                 .collect(Collectors.toSet());
+    }
+
+    private Set<String> findPackagesWithNarrativeAnnotationIn(String packageName) {
+        if (!SCAN_RESULT_CACHE.containsKey(packageName)) {
+            SCAN_RESULT_CACHE.putIfAbsent(packageName, new ClassGraph().enableAllInfo().acceptPackages(packageName).scan());
+        }
+        ScanResult scanResult = SCAN_RESULT_CACHE.get(packageName);
+        return narrativePackagesIn(scanResult.getPackageInfo(packageName));
+    }
+
+    private Set<String> narrativePackagesIn(PackageInfo parentPackage) {
+        Set<String> narrativePackages = new HashSet<>();
+        if (parentPackage == null) {
+            return new HashSet<>();
+        }
+        if  (parentPackage.hasAnnotation(net.thucydides.core.annotations.Narrative.class)) {
+            narrativePackages.add(parentPackage.getName());
+        }
+        for(PackageInfo childPackage : parentPackage.getChildren()) {
+            narrativePackages.addAll(narrativePackagesIn(childPackage));
+        }
+        return narrativePackages;
+
+    }
+
+    private Set<String> findClassesWithNarrativeAnnotationIn(String packageName) {
+        if (!SCAN_RESULT_CACHE.containsKey(packageName)) {
+            SCAN_RESULT_CACHE.putIfAbsent(packageName, new ClassGraph().enableAllInfo().acceptPackages(packageName).scan());
+        }
+        ScanResult scanResult = SCAN_RESULT_CACHE.get(packageName);
+        return  scanResult.getPackageInfo().stream().filter(packageInfo -> packageInfo.hasAnnotation(net.thucydides.core.annotations.Narrative.class)).map(PackageInfo::getName).collect(Collectors.toSet());
     }
 
     private boolean classRepresentsARequirementIn(Class classInfo) {
         return (ClassInfoAnnotations.theClassDefinedIn(classInfo)
                 .hasAnAnnotation(net.thucydides.core.annotations.Narrative.class))
-                || (ClassInfoAnnotations.theClassDefinedIn(classInfo)
-                .hasAPackageAnnotation(net.thucydides.core.annotations.Narrative.class))
+//                || (ClassInfoAnnotations.theClassDefinedIn(classInfo)
+//                .hasAPackageAnnotation(net.thucydides.core.annotations.Narrative.class))
                 || (ClassInfoAnnotations.theClassDefinedIn(classInfo).containsTests());
     }
 

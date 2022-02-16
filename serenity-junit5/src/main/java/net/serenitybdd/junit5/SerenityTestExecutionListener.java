@@ -60,13 +60,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     //key-> "ClassName.MethodName"
     //entries-> DataTable associated with method
-    private Map<String, DataTable> dataTables = new HashMap<>();
+    private Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
 
     private int parameterSetNumber = 0;
-
-    private BaseStepListener baseStepListener;
-
-    private Class<?> testClass;
 
     private boolean isDataDrivenTest = false;
 
@@ -225,6 +221,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public void executionStarted(TestIdentifier testIdentifier) {
+        Class<?> testClass = null;
         if (!testIdentifier.getSource().isPresent()) {
             logger.trace("No action done at executionStarted because testIdentifier is null");
             return;
@@ -247,7 +244,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (isMethodSource(testIdentifier)) {
             MethodSource methodSource = ((MethodSource) testIdentifier.getSource().get());
             if (isSimpleTest(testIdentifier)) {
-                testStarted(methodSource, testIdentifier);
+                testStarted(methodSource, testIdentifier,testClass);
             }
             String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
             DataTable dataTable = dataTables.get(sourceMethod);
@@ -421,8 +418,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      * Called when a test starts. We also need to start the test suite the first
      * time, as the testRunStarted() method is not invoked for some reason.
      */
-    private void testStarted(MethodSource methodSource, TestIdentifier testIdentifier/*final Description description*/) {
-        if (testingThisTest(testIdentifier)) {
+    private void testStarted(MethodSource methodSource, TestIdentifier testIdentifier,Class<?> testClass) {
+        //if (testingThisTest(testIdentifier,testClass)) {
             startTestSuiteForFirstTest(testIdentifier);
             logger.debug(Thread.currentThread() + " Test started " + testIdentifier);
             eventBusFor(testIdentifier.getUniqueId()).clear();
@@ -449,10 +446,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 eventBusFor(testIdentifier.getUniqueId()).testPending();
 //                StepEventBus.getEventBus().testPending();
             }
-        }
+        //}
     }
 
-    StepEventBus eventBusFor(String uniqueTestId) {
+    private synchronized StepEventBus eventBusFor(String uniqueTestId) {
+        System.out.println("ASKED FOR EVENT BUS FOR " + uniqueTestId + " -> " + uniqueTestId);
         if(uniqueTestId.contains("method:")){
             uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("method:")-2);
         }
@@ -464,7 +462,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         System.out.println("FOUND EVENT BUS FOR " + uniqueTestId + " -> " + currentEventBus);
         if (!currentEventBus.isBaseStepListenerRegistered()) {
             File outputDirectory = getOutputDirectory();
-            baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
+            BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
             currentEventBus.registerListener(baseStepListener);
             System.out.println("  -> ADDED BASE LISTENER " + baseStepListener);
         }
@@ -481,7 +479,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         }
     }
 
-    private boolean testingThisTest(TestIdentifier testIdentifier) {
+    private boolean testingThisTest(TestIdentifier testIdentifier, Class<?> testClass) {
         if (isMethodSource(testIdentifier)) {
             MethodSource methodSource = (MethodSource) testIdentifier.getSource().get();
             if (testClass.equals(methodSource.getJavaClass())) {

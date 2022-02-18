@@ -32,6 +32,7 @@ import org.springframework.util.ClassUtils;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -62,11 +63,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     //entries-> DataTable associated with method
     private Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
 
-    private int parameterSetNumber = 0;
+    //private int parameterSetNumber = 0;
 
-    private boolean isDataDrivenTest = false;
+    //private boolean isDataDrivenTest = false;
 
     private boolean isSerenityTest = false;
+
+    private ConcurrentHashMap<String,Boolean> dataDrivenTestMap =  new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String,Integer> dataDrivenTestCounterMap =  new ConcurrentHashMap<>();
 
     public SerenityTestExecutionListener() {
 //        File outputDirectory = getOutputDirectory();
@@ -129,10 +133,17 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void generateReportsForTest(TestPlan testPlan,TestIdentifier testIdentifier) {
         System.out.println("->XXXGenerateReportsForTest  " + testIdentifier);
-        if (isDataDrivenTest) {
+        /*if (isDataDrivenTest) {
             generateReportsForParameterizedTest(testIdentifier);
             isDataDrivenTest = false;
-        } else {
+        } */
+        String eventBusName = getEventBusNameForDataDrivenTest(testIdentifier.getUniqueId());
+        if(dataDrivenTestMap.containsKey(eventBusName)) {
+            System.out.println("->XXXDATADRIVENTTESTMAP contains testId   " + eventBusName);
+            generateReportsForParameterizedTest(testIdentifier);
+            dataDrivenTestMap.remove(eventBusName);
+        }
+        else {
             generateReports(testIdentifier);
         }
         testPlan.getChildren(testIdentifier).forEach(ti->generateReportsForTest(testPlan,ti));
@@ -174,8 +185,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     startTestAtEventBus(testIdentifier);
 //                    StepEventBus.getEventBus().testIgnored();
 //                    StepEventBus.getEventBus().testFinished();
-                    eventBusFor(testIdentifier.getUniqueId()).testIgnored();
-                    eventBusFor(testIdentifier.getUniqueId()).testFinished();
+                    eventBusFor(testIdentifier).testIgnored();
+                    eventBusFor(testIdentifier).testFinished();
                 }
             } catch (ClassNotFoundException | NoSuchMethodException exception) {
                 logger.error("Exception when processing method annotations", exception);
@@ -200,13 +211,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void startTestAtEventBus(TestIdentifier testIdentifier) {
 //        StepEventBus.getEventBus().setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
-        eventBusFor(testIdentifier.getUniqueId()).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
+        eventBusFor(testIdentifier).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
         String displayName = removeEndBracketsFromDisplayName(testIdentifier.getDisplayName());
         if (isMethodSource(testIdentifier)) {
             String className = ((MethodSource) testIdentifier.getSource().get()).getClassName();
             try {
 //                StepEventBus.getEventBus().testStarted(
-                eventBusFor(testIdentifier.getUniqueId()).testStarted(
+                eventBusFor(testIdentifier).testStarted(
                         Optional.ofNullable(displayName).orElse("Initialisation"),
                         Class.forName(className));
             } catch (ClassNotFoundException exception) {
@@ -239,8 +250,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.trace("-->Execution started " + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
             logger.trace("-->TestSuiteStarted " + testClass);
             //TODO
-            eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().clearTestOutcomes();
-            eventBusFor(testIdentifier.getUniqueId()).testSuiteStarted(testClass);
+            eventBusFor(testIdentifier).getBaseStepListener().clearTestOutcomes();
+            eventBusFor(testIdentifier).testSuiteStarted(testClass);
         }
 
         if (isMethodSource(testIdentifier)) {
@@ -256,15 +267,22 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             DataTable dataTable = dataTables.get(sourceMethod);
             if (dataTable != null) {
                 logger.trace("FoundDataTable " + dataTable + " " + dataTable.getRows());
-                isDataDrivenTest = true;
+                String eventBusName = getEventBusNameForDataDrivenTest(testIdentifier.getUniqueId());
+                System.out.println("ADD TEST IDENTIFIER " + eventBusName + " to map " + dataDrivenTestMap);
+                dataDrivenTestMap.put(eventBusName,true);
+                //dataDrivenTestMap.put(testIdentifier.getParentId().get(),true);
+                //isDataDrivenTest = true;
                 if (isTestContainer(testIdentifier)) {
-                    parameterSetNumber = 0;
+                    //parameterSetNumber = 0;
+                    dataDrivenTestCounterMap.put(eventBusName,0);
                 } else if (isSimpleTest(testIdentifier)) {
 //                    StepEventBus.getEventBus().useExamplesFrom(dataTable);
-                    eventBusFor(testIdentifier.getUniqueId()).useExamplesFrom(dataTable);
-                    logger.trace("-->EventBus.useExamplesFrom" + dataTable);
-                    logger.trace("-->EventBus.exampleStarted " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    eventBusFor(testIdentifier.getUniqueId()).exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
+                    eventBusFor(testIdentifier).useExamplesFrom(dataTable);
+                    logger.trace("-->EventBus.useExamplesFrom" + dataTable  + " with  event bus " + eventBusName);
+                    //logger.trace("-->EventBus.exampleStarted " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
+                    int parameterSetNumber = dataDrivenTestCounterMap.get(eventBusName);
+                    logger.trace("-->EventBus.useExamplesFrom" + dataTable + " with parameter set number " + parameterSetNumber + " from " + dataDrivenTestCounterMap );
+                    eventBusFor(testIdentifier).exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
                     //StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap(),"Example #" + parameterSetNumber);
                 }
             }
@@ -289,11 +307,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
         if (isTestContainer(testIdentifier) && isClassSource(testIdentifier)) {
             System.out.println("GENERATING REPORTS FOR " + testIdentifier.getDisplayName());
-            System.out.println("EVENT BUS: " + eventBusFor(testIdentifier.getUniqueId()));
-            System.out.println("LISTENER: " + eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener());
+            System.out.println("EVENT BUS: " + eventBusFor(testIdentifier));
+            System.out.println("LISTENER: " + eventBusFor(testIdentifier).getBaseStepListener());
            //// logger.trace("-->EventBus.TestSuiteFinished " + ((ClassSource) testIdentifier.getSource().get()).getJavaClass());
            //TODO
-            eventBusFor(testIdentifier.getUniqueId()).testSuiteFinished();
+            eventBusFor(testIdentifier).testSuiteFinished();
 //            StepEventBus.getEventBus().testSuiteFinished();
 //            generateReportsForTest(testIdentifier);
         }
@@ -304,13 +322,18 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 testFinished(testIdentifier, methodSource, testExecutionResult);
                 //TODO
                 //eventBusFor(testIdentifier.getUniqueId()).testSuiteFinished();
-                logger.trace("-->EventBus.TestSuiteFinished " + ((ClassSource) testIdentifier.getSource().get()).getJavaClass());
+                //logger.trace("-->EventBus.TestSuiteFinished " + ((ClassSource) testIdentifier.getSource().get()).getJavaClass());
                 DataTable dataTable = dataTables.get(sourceMethod);
                 if (dataTable != null) {
-                    logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    eventBusFor(testIdentifier.getUniqueId()).exampleFinished();
+                    //logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
+                    eventBusFor(testIdentifier).exampleFinished();
 //                    StepEventBus.getEventBus().exampleFinished();
-                    parameterSetNumber++;
+                    String eventBusName = getEventBusNameForDataDrivenTest(testIdentifier.getUniqueId());
+                    int parameterSetNumber = dataDrivenTestCounterMap.get(eventBusName);
+                    logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
+                    dataDrivenTestCounterMap.put(eventBusName,parameterSetNumber + 1);
+
+                    //parameterSetNumber++;
                 }
             }
         }
@@ -351,7 +374,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                         this.summary.testsFailed.incrementAndGet();
                     }
                     testExecutionResult.getThrowable().ifPresent(throwable -> this.summary.addFailure(testIdentifier, throwable));
-                    eventBusFor(testIdentifier.getUniqueId()).testFailed(testExecutionResult.getThrowable().get());
+                    eventBusFor(testIdentifier).testFailed(testExecutionResult.getThrowable().get());
 //                    StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
                     break;
                 }
@@ -367,26 +390,26 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private void testFinished(TestIdentifier testIdentifier, MethodSource methodSource, TestExecutionResult testExecutionResult) {
         updateResultsUsingTestAnnotations(testIdentifier, methodSource);
 //        TestResult result = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getResult();
-        TestResult result = eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().getCurrentTestOutcome().getResult();
+        TestResult result = eventBusFor(testIdentifier).getBaseStepListener().getCurrentTestOutcome().getResult();
         if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED && result == TestResult.SUCCESS) {
             updateResultsUsingTestExecutionResult(testIdentifier,testExecutionResult);
         } else if (testExecutionResult.getStatus() == TestExecutionResult.Status.FAILED && result.isLessSevereThan(TestResult.FAILURE)) {
             updateResultsUsingTestExecutionResult(testIdentifier, testExecutionResult);
         }
 
-        eventBusFor(testIdentifier.getUniqueId()).testFinished();
-        eventBusFor(testIdentifier.getUniqueId()).setTestSource(TEST_SOURCE_JUNIT5.getValue());
+        eventBusFor(testIdentifier).testFinished();
+        eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());
 //        StepEventBus.getEventBus().testFinished();
 //        StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
     }
 
     private void updateResultsUsingTestExecutionResult(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
         testExecutionResult.getThrowable().ifPresent(
-                cause -> eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().updateCurrentStepFailureCause(cause)
+                cause -> eventBusFor(testIdentifier).getBaseStepListener().updateCurrentStepFailureCause(cause)
 //                cause -> StepEventBus.getEventBus().getBaseStepListener().updateCurrentStepFailureCause(cause)
         );
         if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED) {
-            eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().overrideResultTo(TestResult.ABORTED);
+            eventBusFor(testIdentifier).getBaseStepListener().overrideResultTo(TestResult.ABORTED);
 //            StepEventBus.getEventBus().getBaseStepListener().overrideResultTo(TestResult.ABORTED);
         }
     }
@@ -400,16 +423,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     private void setToManual(TestIdentifier testIdentifier, MethodSource methodSource) {
-        eventBusFor(testIdentifier.getUniqueId()).testIsManual();
+        eventBusFor(testIdentifier).testIsManual();
 //        StepEventBus.getEventBus().testIsManual();
         TestResult result = TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).getManualResult();
-        eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().recordManualTestResult(result);
+        eventBusFor(testIdentifier).getBaseStepListener().recordManualTestResult(result);
 //        StepEventBus.getEventBus().getBaseStepListener().recordManualTestResult(result);
     }
 
     private void updateResultsForExpectedException(TestIdentifier testIdentifier, Class<? extends Throwable> expected) {
 //        StepEventBus.getEventBus().exceptionExpected(expected);
-        eventBusFor(testIdentifier.getUniqueId()).exceptionExpected(expected);
+        eventBusFor(testIdentifier).exceptionExpected(expected);
     }
 
     private boolean isSimpleTest(TestIdentifier testIdentifier) {
@@ -429,11 +452,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      * time, as the testRunStarted() method is not invoked for some reason.
      */
     private void testStarted(MethodSource methodSource, TestIdentifier testIdentifier,Class<?> testClass) {
-        //if (testingThisTest(testIdentifier,testClass)) {
+        if (testingThisTest(testIdentifier,testClass)) {
             startTestSuiteForFirstTest(testIdentifier);
             logger.debug(Thread.currentThread() + " Test started " + testIdentifier);
-            eventBusFor(testIdentifier.getUniqueId()).clear();
-            eventBusFor(testIdentifier.getUniqueId()).setTestSource(TEST_SOURCE_JUNIT5.getValue());
+            eventBusFor(testIdentifier).clear();
+            eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());
 //            StepEventBus.getEventBus().clear();
 //            StepEventBus.getEventBus().setTestSource(TEST_SOURCE_JUNIT5.getValue());
             String testName = methodSource.getMethodName();
@@ -446,29 +469,37 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 //ignore org.junit.platform.commons.PreconditionViolationException: Could not find method with name
             }
 
-            eventBusFor(testIdentifier.getUniqueId()).testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
+            eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
 //            StepEventBus.getEventBus().testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
 
             //
             // Check for @Pending tests
             //
             if (isPending(methodSource)) {
-                eventBusFor(testIdentifier.getUniqueId()).testPending();
+                eventBusFor(testIdentifier).testPending();
 //                StepEventBus.getEventBus().testPending();
             }
-        //}
+        }
     }
 
-    private synchronized StepEventBus eventBusFor(String uniqueTestIdParam) {
+    private synchronized StepEventBus eventBusFor(TestIdentifier testIdentifier) {
 
-        String uniqueTestId = uniqueTestIdParam;
+        String uniqueTestIdParam = testIdentifier.getUniqueId();
+        String uniqueTestId = testIdentifier.getUniqueId();
         /*if(uniqueTestIdParam.contains("method:")){
             uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("method:")-2);
         }
         if(uniqueTestIdParam.contains("test-template:")){
             uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("test-template:")-2);
         }*/
-        System.out.println("ASKED FOR EVENT BUS FOR " + uniqueTestIdParam + "->" + uniqueTestId);
+
+        if(uniqueTestIdParam.contains("test-template-invocation:")){
+            uniqueTestId = getEventBusNameForDataDrivenTest(uniqueTestIdParam);
+            //uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("test-template-invocation:")-2);
+        }
+
+
+        System.out.println("ASKED FOR EVENT BUS FOR " + uniqueTestIdParam + "-> withParent " + testIdentifier.getParentId().orElse("No parent id"));
 
         StepEventBus currentEventBus = StepEventBus.eventBusFor(uniqueTestId);
         System.out.println("FOUND EVENT BUS FOR " + uniqueTestId + " -> " + currentEventBus);
@@ -481,6 +512,13 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         System.out.println("SETTING EVENT BUS FOR THREAD " + Thread.currentThread() + " TO " + currentEventBus);
         StepEventBus.setCurrentBusToEventBusFor(uniqueTestId);
         return currentEventBus;
+    }
+
+    private String getEventBusNameForDataDrivenTest(String testId) {
+        if(testId.contains("test-template-invocation:")){
+            testId = testId.substring(0,testId.indexOf("test-template-invocation:")-2);
+        }
+        return testId;
     }
 
     private boolean isPending(MethodSource methodSource) {
@@ -506,7 +544,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         System.out.println("TEST IDENTIFIER ID: " + testIdentifier.getUniqueId());
         if (isMethodSource(testIdentifier)) {
             logger.trace("-->TestSuiteStarted " + ((MethodSource) testIdentifier.getSource().get()).getJavaClass());
-            eventBusFor(testIdentifier.getUniqueId()).testSuiteStarted(((MethodSource) testIdentifier.getSource().get()).getJavaClass());
+            eventBusFor(testIdentifier).testSuiteStarted(((MethodSource) testIdentifier.getSource().get()).getJavaClass());
             //StepEventBus.getEventBus().testSuiteStarted(((MethodSource) testIdentifier.getSource().get()).getJavaClass());
         }
     }
@@ -520,8 +558,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
      */
     public List<TestOutcome> getTestOutcomes(TestIdentifier testIdentifier) {
         System.out.println("GET TEST OUTCOMES FOR " + testIdentifier);
-        System.out.println(" - BASE STEP LISTENER: " + eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener());
-        List<TestOutcome> testOutcomes = eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener().getTestOutcomes();
+        System.out.println(" - BASE STEP LISTENER: " + eventBusFor(testIdentifier).getBaseStepListener());
+        List<TestOutcome> testOutcomes = eventBusFor(testIdentifier).getBaseStepListener().getTestOutcomes();
         System.out.println(" - EVENT TEST OUTCOMES: " + testOutcomes);
         System.out.println(" - THREAD TEST OUTCOMES: " + StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes());
 
@@ -534,8 +572,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     }
 
     private void generateReportsForParameterizedTest(TestIdentifier testIdentifier) {
+        System.out.println("GENERATE REPORTS FOR PARAMETERIZED TEST " + testIdentifier.getUniqueId());
         ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator
-                = new ParameterizedTestsOutcomeAggregator(eventBusFor(testIdentifier.getUniqueId()).getBaseStepListener());
+                = new ParameterizedTestsOutcomeAggregator(eventBusFor(testIdentifier).getBaseStepListener());
 
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
     }

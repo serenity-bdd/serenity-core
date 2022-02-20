@@ -33,6 +33,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -63,7 +64,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     //entries-> DataTable associated with method
     private Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
 
-    //private int parameterSetNumber = 0;
+   // private AtomicInteger parameterSetNumber = new AtomicInteger(0);
 
     //private boolean isDataDrivenTest = false;
 
@@ -138,12 +139,12 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             isDataDrivenTest = false;
         } */
         String eventBusName = getEventBusNameForDataDrivenTest(testIdentifier.getUniqueId());
-        if(dataDrivenTestMap.containsKey(eventBusName)) {
-            System.out.println("->XXXDATADRIVENTTESTMAP contains testId   " + eventBusName);
+        if(testIdentifier.getUniqueId().contains("test-template")) {
+        //if(dataDrivenTestMap.containsKey(eventBusName)) {
+            System.out.println("->XXXFOUNDDATADRIVENREPORT " + testIdentifier.getUniqueId());
             generateReportsForParameterizedTest(testIdentifier);
             dataDrivenTestMap.remove(eventBusName);
-        }
-        else {
+        } else {
             generateReports(testIdentifier);
         }
         testPlan.getChildren(testIdentifier).forEach(ti->generateReportsForTest(testPlan,ti));
@@ -273,16 +274,20 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 //dataDrivenTestMap.put(testIdentifier.getParentId().get(),true);
                 //isDataDrivenTest = true;
                 if (isTestContainer(testIdentifier)) {
-                    //parameterSetNumber = 0;
+                    //parameterSetNumber.set(0);
                     dataDrivenTestCounterMap.put(eventBusName,0);
+                    System.out.println("YYYTESTContainer " + eventBusName  /*+ " Map " +  dataDrivenTestCounterMap*/);
+                    printCounterMap();
                 } else if (isSimpleTest(testIdentifier)) {
 //                    StepEventBus.getEventBus().useExamplesFrom(dataTable);
                     eventBusFor(testIdentifier).useExamplesFrom(dataTable);
                     logger.trace("-->EventBus.useExamplesFrom" + dataTable  + " with  event bus " + eventBusName);
                     //logger.trace("-->EventBus.exampleStarted " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    int parameterSetNumber = dataDrivenTestCounterMap.get(eventBusName);
-                    logger.trace("-->EventBus.useExamplesFrom" + dataTable + " with parameter set number " + parameterSetNumber + " from " + dataDrivenTestCounterMap );
-                    eventBusFor(testIdentifier).exampleStarted(dataTable.row(parameterSetNumber).toStringMap());
+                    int parameterSetNumberParallel = dataDrivenTestCounterMap.get(eventBusName);
+                    System.out.println("YYYSimpleContainer " + eventBusName +  " versus " + parameterSetNumberParallel /*+ " Map " +  dataDrivenTestCounterMap*/);
+                    printCounterMap();
+                    logger.trace("-->EventBus.useExamplesFrom" + dataTable + " with parameter set number " + parameterSetNumberParallel + " from " + dataDrivenTestCounterMap );
+                    eventBusFor(testIdentifier).exampleStarted(dataTable.row(parameterSetNumberParallel).toStringMap());
                     //StepEventBus.getEventBus().exampleStarted(dataTable.row(parameterSetNumber).toStringMap(),"Example #" + parameterSetNumber);
                 }
             }
@@ -329,17 +334,26 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     eventBusFor(testIdentifier).exampleFinished();
 //                    StepEventBus.getEventBus().exampleFinished();
                     String eventBusName = getEventBusNameForDataDrivenTest(testIdentifier.getUniqueId());
-                    int parameterSetNumber = dataDrivenTestCounterMap.get(eventBusName);
-                    logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
-                    dataDrivenTestCounterMap.put(eventBusName,parameterSetNumber + 1);
 
-                    //parameterSetNumber++;
+                    synchronized(dataDrivenTestCounterMap) {
+                        int parameterSetNumberParallel = dataDrivenTestCounterMap.get(eventBusName);
+                        //logger.trace("-->EventBus.exampleFinished " + parameterSetNumber + "--" + dataTable.row(parameterSetNumber).toStringMap());
+                        //dataDrivenTestCounterMap.put(eventBusName, parameterSetNumberParallel + 1);
+                        dataDrivenTestCounterMap.computeIfPresent(eventBusName, (key,value)->value+1);
+                        System.out.println("YYYUpdate " + eventBusName +  " versus " + parameterSetNumberParallel /*+ " Map " + dataDrivenTestCounterMap*/);
+                        printCounterMap();
+                        //parameterSetNumber.incrementAndGet();
+                    }
                 }
             }
         }
         recordSummaryData(testIdentifier, testExecutionResult);
 //        generateReportsForTest(testIdentifier);
 //        recordSummaryData(testIdentifier, testExecutionResult);
+    }
+
+    private void printCounterMap(){
+        dataDrivenTestCounterMap.entrySet().forEach(entry->System.out.println("YYY->" + entry.getKey() + "=" + entry.getValue()));
     }
 
     private void recordSummaryData(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {

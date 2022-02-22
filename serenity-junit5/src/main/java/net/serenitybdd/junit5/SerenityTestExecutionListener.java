@@ -151,7 +151,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             String methodParameterTypes = methodTestSource.getMethodParameterTypes();
             List<Class> methodParameterClasses = null;
 
-            if ((methodParameterTypes != null) && !methodParameterTypes.isEmpty()) {
+            if (methodParameterTypes != null && !methodParameterTypes.isEmpty()) {
                 methodParameterClasses = Arrays.asList(methodParameterTypes.split(",")).stream().map(parameterClassName -> {
                     try {
                         //ClassUtils handles also simple data type like int, char..

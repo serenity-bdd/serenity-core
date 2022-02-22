@@ -52,6 +52,7 @@ public class LocatorStrategies {
                 WebElementFacadeImpl.fromWebElements(
                         searchContext.findElements(Selectors.xpathOrCssSelector(cssOrXPathLocator))
                                 .stream()
+                                .filter(WebElement::isDisplayed)
                                 .filter(element -> element.getAttribute("textContent").contains(expectedText))
                                 .collect(Collectors.toList()));
     }
@@ -65,7 +66,36 @@ public class LocatorStrategies {
                         WebElementFacadeImpl.fromWebElements(
                                 searchContext.findElements(Selectors.xpathOrCssSelector(cssOrXPathLocator))
                                         .stream()
+                                        .filter(WebElement::isDisplayed)
                                         .filter(element -> element.getAttribute("textContent").contains(expectedText))
+                                        .collect(Collectors.toList()))
+                );
+            }
+            return WebElementFacadeImpl.fromWebElements(matchingElements);
+        };
+    }
+
+    public static Function<SearchContext, List<WebElementFacade>> containingTextAndMatchingCSSIgnoringCase(String cssOrXPathLocator, String expectedText) {
+        return searchContext ->
+                WebElementFacadeImpl.fromWebElements(
+                        searchContext.findElements(Selectors.xpathOrCssSelector(cssOrXPathLocator))
+                                .stream()
+                                .filter(WebElement::isDisplayed)
+                                .filter(element -> element.getAttribute("textContent").toLowerCase().contains(expectedText.toLowerCase()))
+                                .collect(Collectors.toList()));
+    }
+
+
+    public static Function<SearchContext, List<WebElementFacade>> containingTextAndMatchingCSSIgnoringCase(List<String> cssOrXPathLocators, String expectedText) {
+        return searchContext -> {
+            List<WebElement> matchingElements = new ArrayList<>();
+            for (String cssOrXPathLocator : cssOrXPathLocators) {
+                matchingElements.addAll(
+                        WebElementFacadeImpl.fromWebElements(
+                                searchContext.findElements(Selectors.xpathOrCssSelector(cssOrXPathLocator))
+                                        .stream()
+                                        .filter(WebElement::isDisplayed)
+                                        .filter(element -> element.getAttribute("textContent").toLowerCase().contains(expectedText.toLowerCase()))
                                         .collect(Collectors.toList()))
                 );
             }
@@ -78,13 +108,29 @@ public class LocatorStrategies {
                 WebElementFacadeImpl.fromWebElements(
                         searchContext.findElements(byLocator)
                                 .stream()
+                                .filter(WebElement::isDisplayed)
                                 .filter(element -> containsText(element,expectedText))
+                                .collect(Collectors.toList())
+                );
+    }
+
+    public static Function<SearchContext, List<WebElementFacade>> containingTextAndByIgnoringCase(By byLocator, String expectedText) {
+        return searchContext ->
+                WebElementFacadeImpl.fromWebElements(
+                        searchContext.findElements(byLocator)
+                                .stream()
+                                .filter(WebElement::isDisplayed)
+                                .filter(element -> containsTextIgnoringCase(element,expectedText))
                                 .collect(Collectors.toList())
                 );
     }
 
     private static boolean containsText(WebElement element, String expectedText) {
         return element.getText().contains(expectedText);
+    }
+
+    private static boolean containsTextIgnoringCase(WebElement element, String expectedText) {
+        return element.getText().toLowerCase().contains(expectedText.toLowerCase());
     }
 
     private static String labelsWithText(String labelText) {

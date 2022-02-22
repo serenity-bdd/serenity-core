@@ -114,6 +114,14 @@ class WhenReadingUIValues extends Specification {
         Value.ofEach(target).asListOf(Integer).answeredBy(actor) == [1,2]
     }
 
+    def "should convert collections to other types"() {
+        when:
+        element.getValue() >> "1"
+        element2.getValue() >> "2"
+        then:
+        Value.ofEach(target).asCollectionOf(Integer).answeredBy(actor) == [1,2]
+    }
+
     def "should convert lists to other types using a map"() {
         when:
         element.getValue() >> "1"

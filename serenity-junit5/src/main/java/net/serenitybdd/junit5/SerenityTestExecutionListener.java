@@ -35,6 +35,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
@@ -114,28 +115,35 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     @Override
     public synchronized void testPlanExecutionFinished(TestPlan testPlan) {
         if (!isSerenityTest) return;
-        Set<TestIdentifier> roots = testPlan.getRoots();
+        List<TestIdentifier> normalTestIdentifiers = new ArrayList<TestIdentifier>();
+        List<TestIdentifier> parameterizedTestIdentifiers = new ArrayList<TestIdentifier>();
+
         testPlan.getRoots().forEach(
                 testIdentifier -> {
-                    generateReportsForTest(testPlan,testIdentifier);
+                    generateReportsForTest(testPlan,testIdentifier,normalTestIdentifiers,parameterizedTestIdentifiers);
                     //testPlan.getChildren(testIdentifier).forEach(this::generateReportsForTest);
                     //generateReportsForTest(testIdentifier);
                 }
         );
+        normalTestIdentifiers.forEach(this::generateReports);
+        generateReportsForParameterizedTests(parameterizedTestIdentifiers);
+        //parameterizedTestIdentifiers.forEach(this::generateReportsForParameterizedTest);
 
         logger.debug("->TestPlanExecutionFinished " + testPlan);
     }
 
-    private void generateReportsForTest(TestPlan testPlan,TestIdentifier testIdentifier) {
+    private void generateReportsForTest(TestPlan testPlan,TestIdentifier testIdentifier,
+                    List<TestIdentifier> normalTestIdentifiers,  List<TestIdentifier> parameterizedTestIdentifiers  ) {
         System.out.println("->XXXGenerateReportsForTest  " + testIdentifier);
         if(testIdentifier.getUniqueId().contains("test-template-invocation")) {
             System.out.println("->XXXGenerateReportsForTestDataDriven " + testIdentifier.getUniqueId());
-            generateReportsForParameterizedTest(testIdentifier);
-            //dataDrivenTestMap.remove(eventBusName);
+            //generateReportsForParameterizedTest(testIdentifier);
+            parameterizedTestIdentifiers.add(testIdentifier);
         } else if(!testIdentifier.getUniqueId().contains("test-template")) {
-            generateReports(testIdentifier);
+            //generateReports(testIdentifier);
+            normalTestIdentifiers.add(testIdentifier);
         }
-        testPlan.getChildren(testIdentifier).forEach(ti->generateReportsForTest(testPlan,ti));
+        testPlan.getChildren(testIdentifier).forEach(ti->generateReportsForTest(testPlan,ti,normalTestIdentifiers,parameterizedTestIdentifiers));
     }
 
     @Override
@@ -473,9 +481,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             uniqueTestId = uniqueTestId.substring(0,uniqueTestId.indexOf("test-template:")-2);
         }*/
 
-        if(uniqueTestIdParam.contains("test-template-invocation:")){
+        /*if(uniqueTestIdParam.contains("test-template-invocation:")){
             uniqueTestId = getEventBusNameForDataDrivenTest(uniqueTestIdParam);
-        }
+        }*/
 
 
         System.out.println("ASKED FOR EVENT BUS FOR " + uniqueTestIdParam + "-> withParent " + testIdentifier.getParentId().orElse("No parent id"));
@@ -547,7 +555,19 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private void generateReports(TestIdentifier testIdentifier) {
+        System.out.println("GENERATE REPORTS FOR TEST " + testIdentifier.getUniqueId());
         generateReportsFor(getTestOutcomes(testIdentifier));
+    }
+
+    private void generateReportsForParameterizedTests(List<TestIdentifier> testIdentifiers) {
+        System.out.println("GENERATE REPORTS FOR PARAMETERIZED TESTs " + testIdentifiers);
+        List<TestOutcome> allTestOutcomes = testIdentifiers.stream().map(this::getTestOutcomes).flatMap(List::stream).collect(Collectors.toList());
+        //ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator
+                //= new ParameterizedTestsOutcomeAggregator(eventBusFor(testIdentifier).getBaseStepListener());
+        ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator
+                = new ParameterizedTestsOutcomeAggregator(allTestOutcomes);
+
+        generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
     }
 
     private void generateReportsForParameterizedTest(TestIdentifier testIdentifier) {

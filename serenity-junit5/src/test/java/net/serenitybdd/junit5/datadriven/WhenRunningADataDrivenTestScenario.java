@@ -85,8 +85,18 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
         runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
-        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
-        assertThat(executedScenarios.size(), is(5));
+        for(int i = 1; i<= 2; i++) {
+            StepEventBus stepEventBus = StepEventBus.eventBusFor(String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSource(java.lang.String)]/[test-template-invocation:#%s]",i));
+            List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
+            assertThat(currentOutcomes.size(), is(1));
+            System.out.println(currentOutcomes);
+        }
+        for(int i = 1; i<= 3; i++) {
+            StepEventBus stepEventBus = StepEventBus.eventBusFor(String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSourceIntegers(int)]/[test-template-invocation:#%s]",i));
+            List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
+            assertThat(currentOutcomes.size(), is(1));
+            System.out.println(currentOutcomes);
+        }
     }
 
     @Test
@@ -94,8 +104,11 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         runTestForClass(AddDifferentSortsOfTodos.class);
 
-        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
-        assertThat(executedScenarios.size(), is(4));
+        for (int i = 1; i<= 4; i++) {
+            StepEventBus stepEventBus4 = StepEventBus.eventBusFor(String.format("[engine:junit-jupiter]/[class:net.thucydides.samples.AddDifferentSortsOfTodos]/[test-template:shouldBeAbleToAddANewTodoItem()]/[test-template-invocation:#%s]",i));
+            List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus4.getBaseStepListener()).getTestOutcomesForAllParameterSets();
+            assertThat(currentOutcomes.size(), is(1));
+        }
     }
 
     /*@Test

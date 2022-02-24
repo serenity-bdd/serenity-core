@@ -64,6 +64,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         String remotePlatform = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("remote.platform")
                 .orElse(null);
+
         if (isNotEmpty(remotePlatform)) {
             if (capabilities instanceof DesiredCapabilities) {
                 ((DesiredCapabilities) capabilities).setPlatform(Platform.valueOf(remotePlatform));

@@ -123,6 +123,7 @@ class WhenInteractingWithButtons extends Specification {
         button                                                                                                               | _
         // Finding Buttons inside other elements
         Button.withLabel("Transaction ID").inside(PageElement.withCSSClass("transfer-panel").containingText("Transfers"))    | _
+        Button.withLabel("Transaction ID").inside(PageElement.withCSSClass("transfer-panel").containingTextIgnoringCase("transfers"))    | _
         Button.withLabel("Transaction ID").inside(PageElement.locatedBy(".transfer-panel"))                                  | _
         Button.withLabel("Transaction ID").inside(PageElement.locatedBy(".transfer-panel").called("Transfer Panel"))         | _
         Button.withCSSClass("nested-button").inside(PageElement.withCSSClass("transfer-panel").containingText("Transfers"))  | _

@@ -3,13 +3,9 @@ package net.serenitybdd.screenplay.webtests.ui.integration
 import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.screenplay.questions.SamplePage
 import net.serenitybdd.screenplay.ui.*
-import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.firefox.FirefoxOptions
-import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -94,16 +90,17 @@ class WhenInteractingWithNestedElements extends Specification {
         samplePage.find(element).click();
         samplePage.find("#result").getText() == expectedText
         where:
-        element                                                                                         | expectedText
-        Button.withText("Submit").inside(PageElement.containingText(".section", "Section 1"))           | "Section 1"
-        Button.withText("Submit").inside(PageElement.containingText(".section", "Section 2"))           | "Section 2"
-        InputField.withLabel("Input Field").inside(PageElement.containingText(".section", "Section 1")) | "Section 1"
-        InputField.withLabel("Input Field").inside(PageElement.containingText(".section", "Section 2")) | "Section 2"
-        Checkbox.withLabel("Checkbox").inside(PageElement.containingText(".section", "Section 1"))      | "Section 1"
-        Checkbox.withLabel("Checkbox").inside(PageElement.containingText(".section", "Section 2"))      | "Section 2"
-        Link.withText("Link").inside(PageElement.containingText(".section", "Section 1"))               | "Section 1"
-        Link.withText("Link").inside(PageElement.containingText(".section", "Section 2"))               | "Section 2"
-        RadioButton.withLabel("Radio").inside(PageElement.containingText(".section", "Section 1"))      | "Section 1"
-        RadioButton.withLabel("Radio").inside(PageElement.containingText(".section", "Section 2"))      | "Section 2"
+        element                                                                                           | expectedText
+        Button.withText("Submit").inside(PageElement.containingText(".section", "Section 1"))             | "Section 1"
+        Button.withText("Submit").inside(PageElement.containingTextIgnoringCase(".section", "section 1")) | "Section 1"
+        Button.withText("Submit").inside(PageElement.containingText(".section", "Section 2"))             | "Section 2"
+        InputField.withLabel("Input Field").inside(PageElement.containingText(".section", "Section 1"))   | "Section 1"
+        InputField.withLabel("Input Field").inside(PageElement.containingText(".section", "Section 2"))   | "Section 2"
+        Checkbox.withLabel("Checkbox").inside(PageElement.containingText(".section", "Section 1"))        | "Section 1"
+        Checkbox.withLabel("Checkbox").inside(PageElement.containingText(".section", "Section 2"))        | "Section 2"
+        Link.withText("Link").inside(PageElement.containingText(".section", "Section 1"))                 | "Section 1"
+        Link.withText("Link").inside(PageElement.containingText(".section", "Section 2"))                 | "Section 2"
+        RadioButton.withLabel("Radio").inside(PageElement.containingText(".section", "Section 1"))        | "Section 1"
+        RadioButton.withLabel("Radio").inside(PageElement.containingText(".section", "Section 2"))        | "Section 2"
     }
 }

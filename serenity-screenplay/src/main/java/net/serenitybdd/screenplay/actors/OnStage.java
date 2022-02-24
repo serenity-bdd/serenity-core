@@ -43,6 +43,13 @@ public class OnStage {
     }
 
     /**
+     * Check whether the stage has already been set.
+     */
+    public static boolean theStageIsSet() {
+        return STAGE.get() != null;
+    }
+
+    /**
      * Set the stage to a specific stage object.
      * This is rarely needed but sometimes comes in handy when running tasks in parallel.
      */

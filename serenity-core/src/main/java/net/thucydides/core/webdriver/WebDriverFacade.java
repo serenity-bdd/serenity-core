@@ -181,7 +181,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public String getCurrentUrl() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return StringUtils.EMPTY;
         }
 
@@ -189,7 +189,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public String getTitle() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return StringUtils.EMPTY;
         }
 
@@ -198,7 +198,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     @Override
     public List<WebElement> findElements(By by) {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return Collections.emptyList();
         }
         List<WebElement> elements;
@@ -213,7 +213,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     @Override
     public WebElement findElement(By by) {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return new WebElementFacadeStub();
         }
 
@@ -229,7 +229,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
    }
 
     public String getPageSource() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return StringUtils.EMPTY;
         }
         try {
@@ -295,7 +295,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Set<String> getWindowHandles() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return new HashSet<>();
         }
 
@@ -303,7 +303,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public String getWindowHandle() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return StringUtils.EMPTY;
         }
 
@@ -311,7 +311,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public TargetLocator switchTo() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return new TargetLocatorStub(this);
         }
 
@@ -352,7 +352,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Keyboard getKeyboard() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return new KeyboardStub();
         }
 
@@ -360,7 +360,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Mouse getMouse() {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return new MouseStub();
         }
 
@@ -368,14 +368,14 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Object executeScript(String script, Object... parameters) {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return null;
         }
         return ((JavascriptExecutor) getProxiedDriver()).executeScript(script, parameters);
     }
 
     public Object executeAsyncScript(String script, Object... parameters) {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isInstantiated()) {
             return null;
         }
         return ((JavascriptExecutor) getProxiedDriver()).executeAsyncScript(script, parameters);

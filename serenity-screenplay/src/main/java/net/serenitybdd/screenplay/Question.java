@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public interface Question<ANSWER> {
         );
     }
 
-    default <T> Question<List<T>> mapEach(Function<String, T> transformer) {
+    default <T> Question<Collection<T>> mapEach(Function<String, T> transformer) {
         return (actor) -> ((List<String>) this.answeredBy(actor)).stream().map(
                 value -> (T) transformer.apply(value)
         ).collect(Collectors.toList());
@@ -102,5 +103,12 @@ public interface Question<ANSWER> {
                 value -> (T) DefaultConverters.converterFor(type).convert(value)
         ).collect(Collectors.toList());
     }
+
+    default <T> Question<Collection<T>> asCollectionOf(Class<T> type) {
+        return (actor) -> ((List<T>) this.answeredBy(actor)).stream().map(
+                value -> (T) DefaultConverters.converterFor(type).convert(value)
+        ).collect(Collectors.toList());
+    }
+
 }
 

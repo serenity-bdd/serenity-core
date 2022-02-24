@@ -13,7 +13,7 @@ public class OpenUrl implements Interaction {
         this.url = url;
     }
 
-    @Step("{0} opens the #url")
+    @Step("{0} opens the browser at #url")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).openUrl(url);
     }

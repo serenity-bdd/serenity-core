@@ -160,7 +160,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             String methodParameterTypes = methodTestSource.getMethodParameterTypes();
             List<Class> methodParameterClasses = null;
 
-            if (methodParameterTypes != null) {
+            if (methodParameterTypes != null && !methodParameterTypes.isEmpty()) {
                 methodParameterClasses = Arrays.asList(methodParameterTypes.split(",")).stream().map(parameterClassName -> {
                     try {
                         //ClassUtils handles also simple data type like int, char..
@@ -185,12 +185,19 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private Method getProcessedMethod(String className, String methodName, List<Class> methodParameterClasses) throws NoSuchMethodException, ClassNotFoundException {
-        if (methodParameterClasses != null) {
+        if (!isNullOrEmpty(methodParameterClasses)) {
             Class[] classesArray = new Class[methodParameterClasses.size()];
             return Class.forName(className).getMethod(methodName, methodParameterClasses.toArray(classesArray));
-        } else {
-            return Class.forName(className).getMethod(methodName);
         }
+        return Class.forName(className).getMethod(methodName);
+
+    }
+
+    private boolean isNullOrEmpty(List<Class> methodParameterClasses) {
+        if ((methodParameterClasses == null) || (methodParameterClasses.isEmpty())) {
+            return true;
+        }
+        return (methodParameterClasses.stream().allMatch(Objects::isNull));
     }
 
     private boolean isIgnored(Method child) {

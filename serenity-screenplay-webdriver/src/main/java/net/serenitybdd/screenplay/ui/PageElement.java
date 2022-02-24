@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndMatchingCSS;
+import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndMatchingCSSIgnoringCase;
 
 /**
  * An HTML element representing any HTML element.
@@ -26,6 +27,14 @@ public class PageElement {
     public static SearchableTarget containingText(String cssOrXPathLocator, String text) {
         return Target.the("the element containing text '" + text + "'")
                 .locatedBy(containingTextAndMatchingCSS(cssOrXPathLocator, text));
+    }
+
+    /**
+     * Look for an element matching a given CSS or XPath expression that contains a given text regardless of case
+     */
+    public static SearchableTarget containingTextIgnoringCase(String cssOrXPathLocator, String text) {
+        return Target.the("the element containing text '" + text + "'")
+                .locatedBy(containingTextAndMatchingCSSIgnoringCase(cssOrXPathLocator, text));
     }
 
     /**

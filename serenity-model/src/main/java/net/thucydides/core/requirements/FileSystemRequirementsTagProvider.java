@@ -571,8 +571,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             Requirement requirement;
             if (narrative.isPresent()) {
                 requirement = leafRequirementWithNarrative(storyName,
-                                                           storyFile.getPath(),
-                                                           narrative.get()).withType(type.toString());
+                        storyFile.getPath(),
+                        narrative.get()).withType(type.toString());
 
                 if (narrative.get().background().isPresent()) {
                     requirement = requirement.withBackground(narrative.get().background().get());
@@ -673,7 +673,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             return 0;
         }
 
-        String relativePath = requirementDirectory.getPath().substring(requirementDirectory.getPath().indexOf(rootDirectory) + rootDirectory.length() + 1);
+        String normalizedRequirementsPath = requirementDirectory.getPath().replace("\\","/");
+        String normalizedRootDirectory = rootDirectory.replace("\\","/");
+        String relativePath = normalizedRequirementsPath.substring(normalizedRequirementsPath.indexOf(normalizedRootDirectory) + normalizedRootDirectory.length() + 1);
         return relativePath.split("\\/|\\\\").length - 1;
     }
 

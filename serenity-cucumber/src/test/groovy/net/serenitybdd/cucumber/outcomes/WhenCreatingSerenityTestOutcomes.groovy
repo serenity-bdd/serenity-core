@@ -28,14 +28,14 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        List<TestOutcome>  recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
 
         then:
         testOutcome.result == TestResult.FAILURE
         and:
-        stepResults == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS,TestResult.FAILURE, TestResult.SKIPPED]
+        stepResults == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.FAILURE, TestResult.SKIPPED]
     }
     /*
     Feature: A simple feature
@@ -46,13 +46,14 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         When I buy the widgets
         Then I should be billed $10
      */
+
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
         def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory);
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
         def steps = testOutcome.testSteps.collect { step -> step.description }
 
@@ -70,14 +71,14 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
         testOutcome.result == TestResult.SUCCESS
 
         and:
-        testOutcome.testSteps.collect { step -> step.result } == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS,TestResult.SUCCESS]
+        testOutcome.testSteps.collect { step -> step.result } == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS, TestResult.SUCCESS]
     }
 
     def "should record failures for failing scenario outlines"() {
@@ -86,7 +87,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        List<TestOutcome>  recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
 
@@ -105,7 +106,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -118,7 +119,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -131,7 +132,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -144,17 +145,17 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.testSteps[0].description == """Given the following customers exist:
-| Name | DOB | Mobile Phone | Home Phone | Work Phone | Address Line 1 | Address Line 2 |
-| SEAN PAUL | 30/05/1978 | 860123334 | 1234567899 | 16422132 | ONE BBI ACC | BEACON SOUTH |
-| TONY SMITH | 10/10/1975 | 86123335 | 11255555 | 16422132 | 1 MAIN STREET | BANKCENTRE |
-| PETE FORD | 12/03/1970 | 865555551 | 15555551 | 15555551 | Q6B HILL ST | BLACKROCK |
-| JOHN B JOVI | 22/08/1957 | 871274762 |  | 16422132 | BLAKBURN | TALLAGHT |
-| JOHN ANFIELD | 20/05/1970 | 876565656 | 015555551 | 214555555 | DUBLIN | DUBLIN |"""
+        testOutcome.testSteps[0].description.contains("Given the following customers exist:")
+        testOutcome.testSteps[0].description.contains("| Name | DOB | Mobile Phone | Home Phone | Work Phone | Address Line 1 | Address Line 2 |")
+        testOutcome.testSteps[0].description.contains("| SEAN PAUL | 30/05/1978 | 860123334 | 1234567899 | 16422132 | ONE BBI ACC | BEACON SOUTH |")
+        testOutcome.testSteps[0].description.contains("| TONY SMITH | 10/10/1975 | 86123335 | 11255555 | 16422132 | 1 MAIN STREET | BANKCENTRE |")
+        testOutcome.testSteps[0].description.contains("| PETE FORD | 12/03/1970 | 865555551 | 15555551 | 15555551 | Q6B HILL ST | BLACKROCK |")
+        testOutcome.testSteps[0].description.contains("| JOHN B JOVI | 22/08/1957 | 871274762 |  | 16422132 | BLAKBURN | TALLAGHT |")
+        testOutcome.testSteps[0].description.contains("| JOHN ANFIELD | 20/05/1970 | 876565656 | 015555551 | 214555555 | DUBLIN | DUBLIN |")
     }
 
 /*
@@ -166,13 +167,14 @@ Feature: A simple feature with tags
   @in-progress
   ...
  */
+
     def "should record any provided tags"() {
         given:
         def runtime = serenityRunnerForCucumberTestRunner(SimpleScenarioWithTags.class, outputDirectory);
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -190,7 +192,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -203,7 +205,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -217,14 +219,14 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        List<TestOutcome>  recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
 
         then:
         testOutcome.result == TestResult.PENDING
         and:
-        stepResults == [TestResult.SUCCESS,TestResult.SUCCESS,TestResult.PENDING,TestResult.IGNORED]
+        stepResults == [TestResult.SUCCESS, TestResult.SUCCESS, TestResult.PENDING, TestResult.IGNORED]
     }
 
     def "should generate a well-structured Thucydides test outcome for feature files with several Cucumber scenario"() {
@@ -233,7 +235,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -264,13 +266,13 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.size() == 4
 
         and:
-        recordedTestOutcomes.collect { it.name } == ["Addition", "Another Addition","Many additions","Many additions"]
+        recordedTestOutcomes.collect { it.name } == ["Addition", "Another Addition", "Many additions", "Many additions"]
         and:
         recordedTestOutcomes[0].stepCount == 3
         recordedTestOutcomes[1].stepCount == 3
@@ -284,7 +286,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.each { outcome ->
@@ -300,7 +302,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.each { outcome ->
@@ -319,7 +321,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
         recordedTestOutcomes.each { outcome ->
@@ -341,7 +343,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -373,7 +375,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -394,7 +396,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -416,7 +418,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -437,7 +439,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -462,13 +464,13 @@ Feature: A simple feature with tags
         steps2 == ['Given I want to purchase 4 widgets', 'And a widget costs $3', 'When I buy the widgets', 'Then I should be billed $12']
     }
 
-        def "throwing PendingException should be reported as Pending"() {
+    def "throwing PendingException should be reported as Pending"() {
         given:
         def runtime = serenityRunnerForCucumberTestRunner(ScenarioThrowingPendingException.class, outputDirectory);
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name}
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
 
         then:
 
@@ -487,7 +489,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -503,7 +505,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
 
         then:
@@ -516,7 +518,7 @@ Feature: A simple feature with tags
 
         when:
         runtime.run();
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort{it.name};
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def firstTestOutcome = recordedTestOutcomes[0]
         def secondTestOutcome = recordedTestOutcomes[1]
 

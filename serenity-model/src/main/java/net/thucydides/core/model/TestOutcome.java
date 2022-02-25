@@ -96,7 +96,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private List<TestStep> testSteps = new ArrayList<>();
+    private List<TestStep> testSteps = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -263,6 +263,7 @@ public class TestOutcome {
     private String scenarioOutline;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
+    private Double durationInSeconds;
 
     private TestOutcome() {
         groupStack = new Stack<>();
@@ -1434,14 +1435,16 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.add(step);
         renumberTestSteps(updatedSteps);
-        testSteps = Collections.unmodifiableList(updatedSteps);
+//        testSteps = Collections.unmodifiableList(updatedSteps);
+        testSteps = updatedSteps;
     }
 
-    private void addSteps(List<TestStep> steps) {
+    private synchronized void addSteps(List<TestStep> steps) {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.addAll(steps);
         renumberTestSteps(updatedSteps);
-        testSteps = Collections.unmodifiableList(updatedSteps);
+//        testSteps = Collections.unmodifiableList(updatedSteps);
+        testSteps = updatedSteps;
     }
 
     private void renumberTestSteps(List<TestStep> testSteps) {
@@ -1486,7 +1489,7 @@ public class TestOutcome {
         this.title = title;
     }
 
-    private List<TestResult> getCurrentTestResults() {
+    private synchronized List<TestResult> getCurrentTestResults() {
         return testSteps.stream()
                 .map(TestStep::getResult)
                 .collect(Collectors.toList());
@@ -2364,7 +2367,10 @@ public class TestOutcome {
      * @return The total duration of all of the tests in this set in milliseconds.
      */
     public double getDurationInSeconds() {
-        return TestDuration.of(getDuration()).inSeconds();
+        if (durationInSeconds == null) {
+            durationInSeconds = TestDuration.of(getDuration()).inSeconds();
+        }
+        return durationInSeconds;
     }
 
     /**
@@ -2676,7 +2682,8 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.removeAll(stepsToReplace);
         renumberTestSteps(updatedSteps);
-        testSteps = Collections.unmodifiableList(updatedSteps);
+//        testSteps = Collections.unmodifiableList(updatedSteps);
+        testSteps = updatedSteps;
 
     }
 

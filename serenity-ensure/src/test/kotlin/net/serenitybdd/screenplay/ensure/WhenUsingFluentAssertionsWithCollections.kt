@@ -54,7 +54,7 @@ class WhenUsingFluentAssertionsWithCollections {
         inner class EmptyLists {
 
             val colors = listOf("red", "green", "blue");
-            val noColors = emptyList<String>();
+            val noColors = Collections.emptyList<String>();
 
             @Test
             fun `when a list is empty`() {
@@ -64,7 +64,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when a list is null or empty`() {
                 val nullList : List<String>? = null
-                val emptyList : List<String> = emptyList()
+                val emptyList : List<String> = Collections.emptyList()
 
                 shouldPassWhenChecking(that(nullList).isNullOrEmpty())
                 shouldPassWhenChecking(that(emptyList).isNullOrEmpty())

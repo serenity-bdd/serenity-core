@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,45 +178,64 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return releases;
     }
 
-//    public List<String> getTopLevelRequirementTypes() {
-//        return getRequirements()
-//                .stream()
-//                .map(Requirement::getType)
-//                .distinct()
-//                .collect(Collectors.toList());
-//
-//
-//        List<String> requirementTypes = new ArrayList<>();
-//        for(Requirement requirement : getRequirements()) {
-//            requirementTypes.add(requirement.getType());
-//        }
-//        return requirementTypes;
-//    }
-
     public List<String> getRequirementTypes() {
 
         return requirementTypesDefinedIn(getRequirements())
                 .stream()
                 .distinct()
                 .collect(Collectors.toList());
-//
-//        List<String> requirementTypes = new ArrayList<>();
-//        for(String type : requirementTypesDefinedIn(getRequirements())) {
-//            if (!requirementTypes.contains(type)) {
-//                requirementTypes.add(type);
-//            }
-//        }
-//        return requirementTypes;
+    }
+
+    private Set<String> allTypesIn(List<Requirement> requirements) {
+        Set<String> flattenedRequirements = new HashSet<>();
+        requirements.forEach(
+                requirement -> {
+                    flattenedRequirements.add(requirement.getType());
+                    if (requirement.getChildren() != null) {
+                        flattenedRequirements.addAll(allTypesIn(requirement.getChildren()));
+                    }
+                }
+        );
+        return flattenedRequirements;
     }
 
     private Collection<String> requirementTypesDefinedIn(List<Requirement> requirements) {
+
+        RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+        List<String> configuredRequirementTypes = requirementsConfiguration.getRequirementTypes();
+
         List<String> requirementTypes = new ArrayList<>();
+        Set<String> allRequirementTypes = allTypesIn(requirements);
+        // First add the configured requirements if we can find them
+        for(String configuredRequirementType : configuredRequirementTypes) {
+            if (allRequirementTypes.contains(configuredRequirementType)) {
+                requirementTypes.add(configuredRequirementType);
+            }
+        }
+        // Add any requirement types not specified in the configuration
         for (Requirement requirement : requirements) {
             if (!requirementTypes.contains(requirement.getType())) {
                 requirementTypes.add(requirement.getType());
             }
             if (!requirement.getChildren().isEmpty()) {
-                requirementTypes.addAll(requirementTypesDefinedIn(requirement.getChildren()));
+                requirementTypes.addAll(childRequirementTypesDefinedIn(requirement.getChildren()));
+            }
+        }
+        return requirementTypes;
+    }
+
+
+    private Collection<String> childRequirementTypesDefinedIn(List<Requirement> requirements) {
+
+        List<String> requirementTypes = new ArrayList<>();
+
+        // Add any requirement types not specified in the configuration
+        for (Requirement requirement : requirements) {
+            if (!requirementTypes.contains(requirement.getType())) {
+                requirementTypes.add(requirement.getType());
+            }
+            if (!requirement.getChildren().isEmpty()) {
+                requirementTypes.addAll(childRequirementTypesDefinedIn(requirement.getChildren()));
             }
         }
         return requirementTypes;
@@ -229,9 +249,9 @@ public abstract class BaseRequirementsService implements RequirementsService {
     }
 
     private Stream<TestTag> tagsWithTypes(Requirement requirement, List<String> tagTypes) {
-            return requirement.getTags()
-                    .stream()
-                    .filter(tag -> tagTypes.contains(tag.getType()));
+        return requirement.getTags()
+                .stream()
+                .filter(tag -> tagTypes.contains(tag.getType()));
     }
 
     @Override

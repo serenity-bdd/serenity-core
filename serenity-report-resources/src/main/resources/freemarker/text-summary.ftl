@@ -1,6 +1,6 @@
 Serenity report generated ${timestamp}
-${testOutcomes.totalTestScenarios} test scenarios <#if (testOutcomes.hasDataDrivenTests())>(${testOutcomes.total} tests in all, including ${testOutcomes.totalDataRows} rows of test data)</#if>
 
+Test Cases:         ${testCount} <#if (testOutcomes.hasDataDrivenTests())> (including ${testOutcomes.totalDataRows} rows of test data)</#if>
 Passed:             ${testOutcomes.totalScenarios.withResult("success")}
 Failed:             ${testOutcomes.totalScenarios.withResult("failure")}
 Failed with errors: ${testOutcomes.totalScenarios.withResult("error")}

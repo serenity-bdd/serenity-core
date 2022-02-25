@@ -106,11 +106,11 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     def "a requirement with only passing tests is completed"() {
         given: "there are some passing tests"
-            def noTestOutcomes = TestOutcomes.of(somePassingTestResults())
+            def somePassingTestOutcomes = TestOutcomes.of(somePassingTestResults())
         and: "we read the requirements from the directory structure"
             RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
+            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(somePassingTestOutcomes)
         then: "requirements with passing tests should be completed"
             outcomes.completedRequirementsCount == 1
     }

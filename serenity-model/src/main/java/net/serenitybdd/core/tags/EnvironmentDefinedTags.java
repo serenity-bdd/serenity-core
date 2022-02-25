@@ -13,6 +13,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
 
 public class EnvironmentDefinedTags {
 
+    private static final List<TestTag> NO_TAGS = new ArrayList<>();
     public static List<TestTag> definedIn(EnvironmentVariables environmentVariables) {
         String tagListValue = TAGS.from(environmentVariables);
         if (StringUtils.isNotEmpty(tagListValue)) {
@@ -21,7 +22,7 @@ public class EnvironmentDefinedTags {
                     .map(TestTag::withValue)
                     .collect(Collectors.toList());
         } else {
-            return new ArrayList<>();
+            return NO_TAGS;
         }
     }
 }

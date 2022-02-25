@@ -11,13 +11,19 @@ import java.util.stream.Collectors;
 
 public class ParameterizedTestsOutcomeAggregator {
 
-    private BaseStepListener baseStepListener;
+    private List<TestOutcome> allTestOutcomes;
+
     public ParameterizedTestsOutcomeAggregator() {
-        baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        allTestOutcomes = baseStepListener.getTestOutcomes();
     }
 
     public ParameterizedTestsOutcomeAggregator(BaseStepListener baseStepListener) {
-        this.baseStepListener = baseStepListener;
+        allTestOutcomes = baseStepListener.getTestOutcomes();
+    }
+
+    public ParameterizedTestsOutcomeAggregator(List<TestOutcome> testOutcomes) {
+        allTestOutcomes = testOutcomes;
     }
 
     public List<TestOutcome> aggregateTestOutcomesByTestMethods() {
@@ -30,7 +36,8 @@ public class ParameterizedTestsOutcomeAggregator {
         }
     }
 
-    private List<TestOutcome> aggregatedScenarioOutcomes(List<TestOutcome> allOutcomes) {
+    private synchronized List<TestOutcome> aggregatedScenarioOutcomes(List<TestOutcome> allOutcomes) {
+
         Map<String, TestOutcome> scenarioOutcomes = new HashMap<>();
 
         for (TestOutcome testOutcome : allOutcomes) {
@@ -91,6 +98,7 @@ public class ParameterizedTestsOutcomeAggregator {
         if (nestedStep.getDuration() == 0) {
             nestedStep.setDuration(testOutcome.getDuration());
         }
+
         scenarioOutcome.recordStep(nestedStep);
     }
 
@@ -152,11 +160,11 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     public List<TestOutcome> getTestOutcomesForAllParameterSets() {
-        List<TestOutcome> allTestOutcomes = baseStepListener.getTestOutcomes();
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
             //if (!testOutcomes.contains(testOutcome)) {
                 testOutcomes.add(withParentStepsMerged(testOutcome));
+                //testOutcomes.add(testOutcome);
             //}
         }
         return testOutcomes;

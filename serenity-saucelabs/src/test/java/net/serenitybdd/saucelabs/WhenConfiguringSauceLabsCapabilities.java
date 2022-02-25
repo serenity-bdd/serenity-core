@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +25,7 @@ public class WhenConfiguringSauceLabsCapabilities {
         environmentVariables.setProperty("saucelabs.browserName", "edge");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
 
         assertThat(saucelabsCapabilities.getBrowserName()).isEqualTo("MicrosoftEdge");
     }
@@ -37,7 +36,7 @@ public class WhenConfiguringSauceLabsCapabilities {
         environmentVariables.setProperty("saucelabs.recordScreenshots", "false");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
         MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
         assertThat(saucelabsOpts.getCapability("screenResolution")).isEqualTo("800x600");
@@ -51,7 +50,7 @@ public class WhenConfiguringSauceLabsCapabilities {
         environmentVariables.setProperty("saucelabs.browserName", "Safari");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
 
         assertThat(saucelabsCapabilities.getCapability("platformName")).isEqualTo("macOS 11");
         assertThat(saucelabsCapabilities.getCapability("browserVersion")).isEqualTo("14");
@@ -64,7 +63,7 @@ public class WhenConfiguringSauceLabsCapabilities {
         environmentVariables.setProperty("saucelabs.browserVersion", "latest");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
         MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
         assertThat(saucelabsOpts.getCapability("platformName")).isEqualTo("macOS 12");
@@ -80,7 +79,7 @@ public class WhenConfiguringSauceLabsCapabilities {
         environmentVariables.setProperty("environment", "mac");
 
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
         MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
         assertThat(saucelabsOpts.getCapability("platformName")).isEqualTo("macOS 12");
@@ -92,7 +91,7 @@ public class WhenConfiguringSauceLabsCapabilities {
     @Test
     public void theSessionNameShouldBeTakenFromTheNameOfTheTest() {
         SaucelabsRemoteDriverCapabilities capabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
-        DesiredCapabilities saucelabsCapabilities = capabilities.getCapabilities(new DesiredCapabilities());
+        MutableCapabilities saucelabsCapabilities = capabilities.getCapabilities(new MutableCapabilities());
         MutableCapabilities saucelabsOpts = (MutableCapabilities) saucelabsCapabilities.getCapability("sauce:options");
 
         // Session name will be constructed from class name and method name, separated by a colon

@@ -1,5 +1,6 @@
 package net.thucydides.core.fixtureservices;
 
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class SampleFixtureService implements FixtureService {
@@ -14,6 +15,6 @@ public class SampleFixtureService implements FixtureService {
     }
 
     @Override
-    public void addCapabilitiesTo(DesiredCapabilities capabilities) {
+    public void addCapabilitiesTo(MutableCapabilities capabilities) {
     }
 }

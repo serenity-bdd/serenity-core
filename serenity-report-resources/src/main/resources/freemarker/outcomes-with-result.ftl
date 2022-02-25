@@ -216,6 +216,18 @@
                                                                     <tbody>
                                                                     <tr scope="row">
                                                                         <td>
+                                                                            <i class="bi bi-card-checklist"></i> Number of Test Cases
+                                                                        </td>
+                                                                        <td>${testCount}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
+                                                                            <i class="bi bi-caret-right"></i> Number of Scenarios
+                                                                        </td>
+                                                                        <td>${scenarioCount}</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <td>
                                                                             <i class="bi bi-flag-fill"></i> Tests Started
                                                                         </td>
                                                                         <td>${startTimestamp}</td>
@@ -320,6 +332,134 @@
                                                     </div>
                                                 </#if>
                                             </div>
+
+                                            <div class="container-fluid">
+                                                <#if coverage?has_content>
+                                                    <div class="row">
+                                                        <div class="col-sm-11">
+                                                            <h3>Functional Coverage Details</h3>
+
+                                                            <#list coverage as tagCoverageByType>
+                                                                <#if tagCoverageByType.tagCoverage?has_content>
+                                                                    <#if tagCoverageByType.tagCoverage?size <= 10>
+                                                                        <#assign coverageTableClass="feature-coverage-table">
+                                                                    <#else>
+                                                                        <#assign coverageTableClass="feature-coverage-table-with-pagination">
+                                                                    </#if>
+
+                                                                    <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
+                                                                    <h4>${inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle()}</h4>
+
+                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
+                                                                            <th style="width:1em;">Test&nbsp;Cases</th>
+                                                                            <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">%&nbsp;Pass</th>
+                                                                            <th style="width:1em;">Result</th>
+                                                                            <th>Coverage</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <#assign tagCoverageEntries = tagCoverageByType.tagCoverage />
+                                                                        <tbody>
+                                                                        <#list tagCoverageEntries as tagCoverage>
+                                                                            <#if (!hideEmptyRequirements || tagCoverage.testCount != 0)>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <#if (!tagCoverageByType.featureNamesAreUnique && tagCoverage.parentName?has_content) >
+                                                                                            <#assign displayedTagName = tagCoverage.parentName + " > " + tagCoverage.tagName />
+                                                                                        <#else>
+                                                                                            <#assign displayedTagName = tagCoverage.tagName />
+                                                                                        </#if>
+                                                                                        <#if tagCoverage.testCount = 0>
+                                                                                            ${displayedTagName}
+                                                                                        <#else>
+                                                                                            <a href="${tagCoverage.report}" > ${displayedTagName}</a>
+                                                                                        </#if>
+                                                                                    </td>
+                                                                                    <td>${tagCoverage.testCount}</td>
+                                                                                    <td>${tagCoverage.scenarioCount}</td>
+                                                                                    <td>${tagCoverage.successRate}</td>
+                                                                                    <td>
+                                                                                        <#if tagCoverage.testCount = 0>
+                                                                                            <i class="bi bi-hourglass-top pending-icon"></i>
+                                                                                        <#else>
+                                                                                            ${tagCoverage.resultIcon}
+                                                                                        </#if>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                            <#list tagCoverage.coverageSegments as coverageSegment>
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
+                                                                                                     aria-valuenow="${coverageSegment.count}"
+                                                                                                     title="${coverageSegment.title}"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                            </#list>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </#if>
+                                                                        </#list>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </#if>
+                                                            </#list>
+                                                        </div>
+                                                    </div>
+                                                </#if>
+
+                                                <#if badTestCount != 0>
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <h3>Test Failure Overview</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <h4>Most Frequent Failures</h4>
+                                                            <table class="table" style="width:40vw;">
+                                                                <tbody>
+                                                                <#list frequentFailures as frequentFailure>
+                                                                    <tr>
+                                                                        <td class="${frequentFailure.resultClass}-color top-list-title">
+                                                                            <a href="${frequentFailure.report}">${frequentFailure.resultIcon} ${frequentFailure.name}</a>
+                                                                        </td>
+                                                                        <td><span
+                                                                                    class="badge failure-badge">${frequentFailure.count}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </#list>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <h4>Most Unstable Features</h4>
+                                                            <table class="table" style="width:40vw;">
+                                                                <tbody>
+                                                                <#list unstableFeatures as unstableFeature>
+                                                                    <tr>
+                                                                        <td class="failure-color top-list-title">
+                                                                            <a href="${unstableFeature.report}">${unstableFeature.name}</a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="badge failure-badge">${unstableFeature.failurePercentage}%</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </#list>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </#if>
+                                            </div>
+                                            <div class="container-fluid">
+                                                <@tag_cloud />
+                                            </div>
                                         </div>
                                         <div id="tests" class="tab-pane fade in">
                                             <div class="container-fluid">
@@ -413,7 +553,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <@tag_cloud />
                                         </div>
                                     </div>
                                 </div>

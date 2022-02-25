@@ -308,7 +308,7 @@ public enum ThucydidesSystemProperty {
     /**
      * Use patterns as well as colors for the graphs and charts.
      */
-    SERENITY_REPORT_ACCESIBILITY,
+    SERENITY_REPORT_ACCESSIBILITY,
 
     /**
      *
@@ -592,63 +592,104 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_PROXY_HTTP_PORT("thucydides.proxy.http_port"),
 
-    /**
-     * HTTP Proxy port configuration for Firefox and PhantomJS
-     * Use 'thucydides.proxy.http_port'
-     */
-    SERENITY_PROXY_HTTP_PORT("serenity.proxy.http_port"),
-
     @Deprecated
     THUCYDIDES_PROXY_TYPE,
 
-    /**
-     * HTTP Proxy type configuration for Firefox and PhantomJS
-     */
-    SERENITY_PROXY_TYPE,
-
     @Deprecated
     THUCYDIDES_PROXY_USER,
-
-    /**
-     * HTTP Proxy URL configuration
-     */
-    SERENITY_PROXY_HTTP,
-
-    /**
-     * HTTP Proxy username configuration for Firefox and PhantomJS
-     */
-    SERENITY_PROXY_USER,
 
     @Deprecated
     THUCYDIDES_PROXY_PASSWORD,
 
     /**
-     * HTTP Proxy password configuration for Firefox and PhantomJS
+     * HTTP Proxy URL configuration
+     * Specify which proxy to use for HTTP connections. Expected format is hostname:1234
+     */
+    SERENITY_PROXY_HTTP,
+
+    /**
+     * HTTP Proxy port configuration
+     * Use 'thucydides.proxy.http_port'
+     */
+    SERENITY_PROXY_HTTP_PORT("serenity.proxy.http_port"),
+
+    /**
+     * HTTP Proxy username configuration
+     */
+    SERENITY_PROXY_USER,
+
+    /**
+     * HTTP Proxy password configuration
      */
     SERENITY_PROXY_PASSWORD,
 
     /**
-     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxyPort
+     * SSL Proxy port configuration - serenity.proxy.sslProxyPort
      */
     SERENITY_PROXY_SSL_PORT("serenity.proxy.sslProxyPort"),
 
     /**
-     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
+     * Specify which proxy to use for SSL connections.
+     * Expected format is hostname.com:1234
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+
+    /**
+     * Specify which proxy to use for FTP connections.
+     */
     SERENITY_PROXY_FTP,
-    SERENITY_PROXY_NOPROXY,
-    SERENITY_PROXY_AUTOCONFIG,
+
+    /**
+     * Specifies whether to autodetect proxy settings.
+     * Set to true to use proxy auto detection, false to leave proxy settings unspecified
+     */
     SERENITY_PROXY_AUTODETECT,
+
+    /**
+     * Sets proxy bypass (noproxy) addresses
+     * The proxy bypass (noproxy) addresses separated by commas
+     */
+    SERENITY_PROXY_NOPROXY,
+
+    /**
+     * Explicitly sets the proxy type, useful for forcing direct connection on Linux.
+     * Takes a value of org.openqa.selenium.Proxy.ProxyType: DIRECT, MANUAL, PAC, RESERVED_1, AUTODETECT, SYSTEM, UNSPECIFIED
+     */
+    SERENITY_PROXY_TYPE,
+
+    /**
+     * Specifies the URL to be used for proxy auto-configuration.
+     * Expected format is http://hostname.com:1234/pacfile.
+     * This is required if getProxyType() is set to Proxy.ProxyType.PAC, ignored otherwise.
+     */
+    SERENITY_PROXY_AUTOCONFIG,
+
+    /**
+     * Specifies which proxy to use for SOCKS.
+     * Expected format is hostname.com:1234
+     */
     SERENITY_PROXY_SOCKS_PROXY,
+
+    /**
+     * Specifies a username for the SOCKS proxy. Supported by SOCKS v5 and above.
+     */
     SERENITY_PROXY_SOCKS_USERNAME,
+
+    /**
+     * Gets the SOCKS proxy's password. Supported by SOCKS v5 and above.
+     */
     SERENITY_PROXY_SOCKS_PASSWORD,
+
+    /**
+     * Specifies which version of SOCKS to use (4 or 5).
+     */
     SERENITY_PROXY_SOCKS_VERSION,
 
     /**
      * Possible values are:none, eager or normal
      */
     SERENITY_DRIVER_PAGE_LOAD_STRATEGY,
+
     /**
      * Possible values are: accept, dismiss, accept and notify, dismiss and notify, ignore
      */
@@ -880,10 +921,11 @@ public enum ThucydidesSystemProperty {
 
     /**
      * The root package for the tests in a given project.
-     * If provided, Thucydides will log information about the total number of tests to be executed,
+     * If provided, Serenity will log information about the total number of tests to be executed,
      * and keep a tally of the executed tests. It will also use this as the root package when determining the
-     * capabilities associated with a test.
-     * If you are using the File System Requirements provider, Thucydides will expect this directory structure to exist
+     * requirements hierarchy associated with a test.
+     *
+     * Technical note: If you are using the File System Requirements provider, Thucydides will expect this directory structure to exist
      * at the top of the requirements tree. If you want to exclude packages in a requirements definition and start at a
      * lower level in the hierarchy, use the thucydides.requirement.exclusions property.
      * This is also used by the PackageAnnotationBasedTagProvider to know where to look for annotated requirements.
@@ -1306,8 +1348,9 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_MAINTAIN_SESSION,
 
     /**
-     * Keep the Thucydides session data between tests.
-     * Normally, the session data is cleared between tests.
+     * Keep the Serenity session data between tests.
+     * Normally, the session data is cleared between tests, but it can sometimes be useful to preserve this data.
+     * When using @BeforeAll methods in JUnit or Cucumber, you need to set this variable to true to use values set in these methods.
      */
     SERENITY_MAINTAIN_SESSION,
 
@@ -1681,7 +1724,17 @@ public enum ThucydidesSystemProperty {
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
         Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
-//                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+
+        if (isDefined(newPropertyValue)) {
+            return Integer.parseInt(newPropertyValue.get().trim());
+        } else {
+            Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
+            return (isDefined(legacyValue)) ? Integer.parseInt(legacyValue.get().trim()) : defaultValue;
+        }
+    }
+
+    public long longFrom(EnvironmentVariables environmentVariables, long defaultValue) {
+        Optional<String> newPropertyValue = optionalPropertyValueDefinedIn(environmentVariables);
 
         if (isDefined(newPropertyValue)) {
             return Integer.parseInt(newPropertyValue.get().trim());

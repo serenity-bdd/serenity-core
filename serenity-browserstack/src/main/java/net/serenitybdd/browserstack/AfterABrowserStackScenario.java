@@ -7,17 +7,22 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
+
+import static net.serenitybdd.browserstack.BrowserstackFilter.isDriverEnabled;
+import static net.serenitybdd.browserstack.BrowserstackFilter.isRunningAgainstBrowserstack;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL;
 
 
 public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
+    public AfterABrowserStackScenario() {
+    }
+
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
-        if ((driver == null) || (!RemoteDriver.isARemoteDriver(driver)) || RemoteDriver.isStubbed(driver)) {
-            return;
-        }
-        if (!ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables,"").contains("browserstack")) {
+        if (!isDriverEnabled(driver) || !isRunningAgainstBrowserstack(environmentVariables)) {
             return;
         }
 
@@ -36,10 +41,4 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
         String publicUrl = browserStackTestSession.getPublicUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
     }
-
-    public boolean isActivated(EnvironmentVariables environmentVariables) {
-        return !EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getPropertiesWithPrefix("browserstack").isEmpty();
-    }
-
 }

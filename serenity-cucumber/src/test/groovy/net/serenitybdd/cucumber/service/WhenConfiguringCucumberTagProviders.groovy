@@ -31,7 +31,7 @@ class WhenConfiguringCucumberTagProviders extends Specification {
             tagProviders.size() == 3
             tagProviders[0].class == FileSystemRequirementsTagProvider
             System.err.println "ROOT DIRECTORY A:" + ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory
-            ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory == "src/test/resources/features"
+            ((FileSystemRequirementsTagProvider) tagProviders[0]).rootDirectory.replace("\\","/") == "src/test/resources/features"
     }
 
     def "should be able to override the feature directory using the environment variables"() {

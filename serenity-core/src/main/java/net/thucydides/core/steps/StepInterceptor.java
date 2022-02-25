@@ -35,7 +35,6 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
-import static net.thucydides.core.steps.ErrorConvertor.forError;
 
 /**
  * Listen to step results and publish notification messages.
@@ -412,12 +411,12 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private boolean shouldRunInDryRunMode(final Method methodOrStep, final Class callingClass) {
-        return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
+        return !stepIsCalledFromCleanupMethod() && ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
     }
 
     public void reportMethodError(Throwable generalException, Object obj, Method method, Object[] args) throws Throwable {
         error = SerenityManagedException.detachedCopyOf(generalException);
-        Throwable assertionError = forError(error).convertToAssertion();
+        Throwable assertionError = ErrorConvertor.convertToAssertion(error);
         notifyStepStarted(obj, method, args);
         notifyOfStepFailure(obj, method, args, assertionError);
     }
@@ -466,7 +465,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
                 result = appropriateReturnObject(obj, method);
             } else {
                 error = SerenityManagedException.detachedCopyOf(testErrorException);
-                logStepFailure(obj, method, args, forError(error).convertToAssertion());
+                logStepFailure(obj, method, args, ErrorConvertor.convertToAssertion(error));
                 result = appropriateReturnObject(obj, method);
             }
         }
@@ -532,7 +531,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private String getTestNameFrom(final Method method, final Object[] args) {
-        return StepNamer.forMethod(method).withArguments(args);
+        return StepNamer.nameFor(method,args);
     }
 
     private void notifyStepSkippedFor(final Method method, final Object[] args) {

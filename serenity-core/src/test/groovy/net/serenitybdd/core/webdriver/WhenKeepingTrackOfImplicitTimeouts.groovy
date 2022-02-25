@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver
 
+import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.webdriver.TimeoutStack
@@ -22,6 +23,10 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     WebDriver driver = Mock()
     WebDriver anotherDriver = Mock()
     WebDriver yetAnotherDriver = Mock()
+
+    def setup() {
+        WebDriverManager.chromedriver().setup()
+    }
 
     def "stack should be initially empty"() {
         when:

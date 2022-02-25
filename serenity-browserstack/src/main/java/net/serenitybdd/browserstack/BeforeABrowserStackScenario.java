@@ -8,11 +8,13 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
@@ -45,23 +47,28 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
     );
 
     @Override
-    public DesiredCapabilities apply(EnvironmentVariables environmentVariables,
+    public MutableCapabilities apply(EnvironmentVariables environmentVariables,
                                      SupportedWebDriver driver,
                                      TestOutcome testOutcome,
-                                     DesiredCapabilities capabilities) {
+                                     MutableCapabilities capabilities) {
 
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }
-        if (!ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables,"").contains("browserstack")) {
+
+        String remoteUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(WEBDRIVER_REMOTE_URL).orElse("");
+        if (!remoteUrl.contains("browserstack")) {
             return  capabilities;
         }
 
         String remotePlatform = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty("remote.platform")
                 .orElse(null);
+
         if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+            if (capabilities instanceof DesiredCapabilities) {
+                ((DesiredCapabilities) capabilities).setPlatform(Platform.valueOf(remotePlatform));
+            }
         }
 
         Properties browserStackProperties = EnvironmentSpecificConfiguration
@@ -73,7 +80,6 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
                 .forEach((key, value) -> browserStackPropertiesWithOverrides.setProperty(key, value.toString()));
 
         setNonW3CCapabilities(capabilities, browserStackPropertiesWithOverrides);
-
         Map<String, Object> browserstackOptions = w3CPropertyMapFrom(browserStackPropertiesWithOverrides);
         String testName = testOutcome.getStoryTitle() + " - " + testOutcome.getTitle();
         browserstackOptions.put("sessionName", testName);
@@ -95,7 +101,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
         return propertiesWithOverrides;
     }
 
-    private void setNonW3CCapabilities(DesiredCapabilities capabilities, Properties browserStackProperties) {
+    private void setNonW3CCapabilities(MutableCapabilities capabilities, Properties browserStackProperties) {
         browserStackProperties.stringPropertyNames()
                 .stream()
                 .filter(this::isNonW3CProperty)

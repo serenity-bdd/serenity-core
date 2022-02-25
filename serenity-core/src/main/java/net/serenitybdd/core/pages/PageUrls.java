@@ -42,7 +42,7 @@ public class PageUrls {
 
     public PageUrls(final Object pageObject, EnvironmentVariables environmentVariables) {
         this(pageObject,
-             ConfiguredEnvironment.getConfiguration().withEnvironmentVariables(environmentVariables));
+                ConfiguredEnvironment.getConfiguration().withEnvironmentVariables(environmentVariables));
     }
 
     public String getStartingUrl() {
@@ -61,7 +61,7 @@ public class PageUrls {
         if (urlAnnotation != null) {
             return Optional.ofNullable(urlAnnotation.value());
         } else {
-            return Optional.empty();
+            return Optional.ofNullable(pageLevelDefaultBaseUrl);
         }
     }
 
@@ -96,6 +96,7 @@ public class PageUrls {
             return annotatedBaseUrl;
         }
     }
+
     private static boolean isANamedUrl(String annotatedBaseUrl) {
         return annotatedBaseUrl.startsWith(NAMED_URL_PREFIX);
     }
@@ -185,7 +186,6 @@ public class PageUrls {
 //        return addBaseUrlTo(url);
         return url;
     }
-
 
 
     public String addDefaultUrlTo(final String url) {

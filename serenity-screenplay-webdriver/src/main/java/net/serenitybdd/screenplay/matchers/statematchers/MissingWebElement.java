@@ -166,6 +166,16 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
+    public WebElementState shouldBeSelected() {
+        return this;
+    }
+
+    @Override
+    public WebElementState shouldNotBeSelected() {
+        return this;
+    }
+
+    @Override
     public boolean isSelected() {
         return false;
     }

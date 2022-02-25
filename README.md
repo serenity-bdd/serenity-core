@@ -4,6 +4,8 @@
 
 [![Gitter](https://badges.gitter.im/serenity-bdd/serenity-core.svg)](https://gitter.im/serenity-bdd/serenity-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 ![Continuous Integration](https://github.com/serenity-bdd/serenity-core/workflows/Continuous%20Integration/badge.svg)
+[![javadoc](https://javadoc.io/badge2/net.serenity-bdd/serenity-core/javadoc.svg)](https://javadoc.io/doc/net.serenity-bdd/serenity-core)
+
 
 ### That feeling you get when you know you can trust your tests
 
@@ -74,6 +76,7 @@ Check out Serenity BDD in more detail here:
 ## Release Notes
 Release notes are available for major releases:
 * [2.3.2](docs/release-notes/2.3.2.md)
+* [3.2.0](docs/release-notes/3.2.0.md)
 * [2.2.0](docs/release-notes/2.2.0.md)
 * [2.1.5](docs/release-notes/2.1.5.md)
 * [2.1.4](docs/release-notes/2.1.4.md)
@@ -85,39 +88,42 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 ### Serenity with JUnit
 
-| serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version | Appium client version |
-|---------------|-----------------------|-------------------|----------------------|-----------------------|
-| 3.1.15        | 3.1.15                | 4.1.1             | 4.4.0                | 8.0.0-BETA            |
-| 3.1.1         | 3.1.1                 | 4.0.0             | 4.3.3                | 8.0.0-BETA            |
-| 3.0.5         | 3.0.5                 | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.5.8         | 2.5.8                 | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.5.7         | 2.5.7                 | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.4.51        | 2.4.51                | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.4.34        | 2.4.34                | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.4.24        | 2.4.24                | 3.141.59          | 4.3.3                | 7.5.1                 |
-| 2.3.12        | 2.3.12                | 3.141.59          | 4.3.2                | 7.3.0                 |
-| 2.3.5         | 2.3.5                 | 3.141.59          | 4.3.1                | 7.3.0                 |
-| 2.3.4         | 2.3.4                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.2.12        | 2.2.12                | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.2.5         | 2.2.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.2.2         | 2.2.2                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.2.0         | 2.2.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.1.5         | 2.1.5                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.1.0         | 2.1.0                 | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.0.90        | 2.0.90                | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.0.84        | 2.0.84                | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.0.71        | 2.0.71                | 3.141.59          | 3.3.0                | 7.2.0                 |
-| 2.0.69        | 2.0.69                | 3.141.59          | 3.3.0                | 7.0.0                 |
-| 2.0.56        | 2.0.56                | 3.141.59          | 3.3.0                | 7.0.0                 |
-| 2.0.52        | 2.0.52                | 3.141.59          | 3.3.0                | 7.0.0                 |
-| 2.0.48        | 2.0.48                | 3.141.59          | 3.3.0                | 7.0.0                 |
+| serenity-core | serenity-maven-plugin | Selenium version |  RestAssured version | Appium client version |
+|---------------|-----------------------|------------------|----------------------|-----------------------|
+| 3.2.0         | 3.2.0                 | 4.1.2            | 4.4.0                | 8.0.0-beta2           |
+| 3.1.15        | 3.1.15                | 4.1.1            | 4.4.0                | 8.0.0-BETA            |
+| 3.1.1         | 3.1.1                 | 4.0.0            | 4.3.3                | 8.0.0-BETA            |
+| 3.0.5         | 3.0.5                 | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.5.8         | 2.5.8                 | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.5.7         | 2.5.7                 | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.4.51        | 2.4.51                | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.4.34        | 2.4.34                | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.4.24        | 2.4.24                | 3.141.59         | 4.3.3                | 7.5.1                 |
+| 2.3.12        | 2.3.12                | 3.141.59         | 4.3.2                | 7.3.0                 |
+| 2.3.5         | 2.3.5                 | 3.141.59         | 4.3.1                | 7.3.0                 |
+| 2.3.4         | 2.3.4                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.2.12        | 2.2.12                | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.2.5         | 2.2.5                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.2.2         | 2.2.2                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.2.0         | 2.2.0                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.1.5         | 2.1.5                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.1.0         | 2.1.0                 | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.0.90        | 2.0.90                | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.0.84        | 2.0.84                | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.0.71        | 2.0.71                | 3.141.59         | 3.3.0                | 7.2.0                 |
+| 2.0.69        | 2.0.69                | 3.141.59         | 3.3.0                | 7.0.0                 |
+| 2.0.56        | 2.0.56                | 3.141.59         | 3.3.0                | 7.0.0                 |
+| 2.0.52        | 2.0.52                | 3.141.59         | 3.3.0                | 7.0.0                 |
+| 2.0.48        | 2.0.48                | 3.141.59         | 3.3.0                | 7.0.0                 |
 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 
 #### Cucumber 7 (Serenity 3.1.15 onwards)
-| serenity-core | serenity-maven-plugin | serenity-cucumber  | Cucumber            |
-|---------------|-----------------------|--------------------|---------------------|
-| 3.1.15         | 3.1.15               |  3.1.15            | 7.0.0               |
+| serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
+|---------------|----------------------|----------00--------|----------|
+| 3.2.0         | 3.2.0                | 3.2.0              | 7.2.3    |
+| 3.1.20        | 3.1.20               | 3.1.20             | 7.1.1    |
+| 3.1.15        | 3.1.15               | 3.1.15             | 7.0.0    |
    
 #### Cucumber 6
   _Note:_ Cucumber 6 is no longer supported in newer versions of Serenity.
@@ -268,10 +274,13 @@ You can raise a defect here. Note that this is an open source project, so **the 
     
 Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 
+**NOTE:** From time to time, old issues that have not been active for over 6 months will be automatically closed. If one of these issues affects your project and is still reproducible with the latest version of Serenity, feel free to reopen.
+    
 You can help out by sponsoring Serenity BDD directly here:
 [:heart: Sponsor](https://github.com/sponsors/serenity-bdd)
 
 Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
+   
 
 ## Need Commercial Support?
     

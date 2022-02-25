@@ -122,6 +122,10 @@ public interface WebElementState {
 
     WebElementState shouldNotBePresent();
 
+    WebElementState shouldBeSelected();
+
+    WebElementState shouldNotBeSelected();
+
     boolean isSelected();
 
     String getTextValue();

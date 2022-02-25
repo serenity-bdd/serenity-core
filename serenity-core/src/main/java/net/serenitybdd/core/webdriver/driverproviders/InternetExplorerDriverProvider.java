@@ -14,6 +14,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -62,7 +63,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         updateIEDriverBinaryIfSpecified();
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
+        MutableCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
         AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
 
@@ -102,7 +103,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
     }
 
-    private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
+    private MutableCapabilities recommendedDefaultInternetExplorerCapabilities() {
         DesiredCapabilities defaults = new DesiredCapabilities();
 
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,
@@ -115,16 +116,10 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         defaults.setJavascriptEnabled(true);
 
 
-        /*
-        IgnoreZoomLevel = true,
-EnableNativeEvents = true, RequireWindowFocus = true};
-         */
-        defaults = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
-
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             defaults.acceptInsecureCerts();
         }
-        return defaults;
+        return AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
     }
 
     private void updateIEDriverBinaryIfSpecified() {

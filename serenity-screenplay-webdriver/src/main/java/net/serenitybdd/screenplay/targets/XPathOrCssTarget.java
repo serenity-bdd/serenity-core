@@ -1,17 +1,21 @@
 package net.serenitybdd.screenplay.targets;
 
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.serenitybdd.core.selectors.Selectors;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class XPathOrCssTarget extends SearchableTarget {
 
@@ -30,22 +34,39 @@ public class XPathOrCssTarget extends SearchableTarget {
         }
     }
 
-    public List<WebElementFacade> resolveAllFor(PageObject page) {
+    public ListOfWebElementFacades resolveAllFor(PageObject page) {
         if (timeout.isPresent()) {
-            return page.withTimeoutOf(timeout.get()).findAll(cssOrXPathSelector);
+            return new ListOfWebElementFacades(page.withTimeoutOf(timeout.get()).findAll(cssOrXPathSelector));
         } else {
-            return page.findAll(cssOrXPathSelector);
+            return new ListOfWebElementFacades(page.findAll(cssOrXPathSelector));
         }
+    }
+
+    @Override
+    public WebElementFacade resolveFor(SearchContext searchContext) {
+        return WebElementFacadeImpl.wrapWebElement(
+                Serenity.getDriver(),
+                searchContext.findElement(Selectors.xpathOrCssSelector(cssOrXPathSelector))
+        );
+    }
+
+    @Override
+    public ListOfWebElementFacades resolveAllFor(SearchContext searchContext) {
+        List<WebElement> matchingElements = searchContext.findElements(Selectors.xpathOrCssSelector(cssOrXPathSelector));
+        List<WebElementFacade> facades = matchingElements.stream()
+                .map(element -> WebElementFacadeImpl.wrapWebElement(Serenity.getDriver(),element))
+                .collect(Collectors.toList());
+        return new ListOfWebElementFacades(facades);
     }
 
     public SearchableTarget of(String... parameters) {
         return new XPathOrCssTarget(instantiated(targetElementName, parameters),
-                                    instantiated(cssOrXPathSelector, parameters),
-                                    iFrame,
-                                    timeout);
+                instantiated(cssOrXPathSelector, parameters),
+                iFrame,
+                timeout);
     }
 
-    public Target called(String name) {
+    public XPathOrCssTarget called(String name) {
         return new XPathOrCssTarget(name, cssOrXPathSelector, iFrame, timeout);
     }
 

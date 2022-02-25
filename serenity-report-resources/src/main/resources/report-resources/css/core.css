@@ -379,7 +379,7 @@ i.tag {
 
 .breadcrumbs
 {
-    font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae;
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae; text-transform: capitalize;
 }
 
 .bluetext

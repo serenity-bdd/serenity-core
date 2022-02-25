@@ -88,6 +88,18 @@ public class WhenDefiningPageUrls {
         verify(webdriver).get("http://my.application.com/#Showcase");
     }
 
+
+    @Test
+    public void the_default_url_notation_should_work_with_page_objects_with_defined_paths() {
+        PageObject page = new PageObjectWithHashNotation(webdriver);
+        PageUrls pageUrls = new PageUrls(page, configuration);
+        page.setPageUrls(pageUrls);
+        page.setDefaultBaseUrl("http://my.application.com");
+        page.open();
+
+        verify(webdriver).get("http://my.application.com/#Showcase");
+    }
+
     @Test
     public void the_url_should_use_the_annotation_url_if_the_base_url_is_empty() {
         PageObject page = new PageObjectWithHashNotation(webdriver);

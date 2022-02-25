@@ -11,21 +11,22 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 public class ChromeDriverProvider implements DriverProvider {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DriverCapabilityRecord driverProperties;
 
-    private final DriverServicePool driverServicePool = new ChromeServicePool();
+    private final DriverServicePool<ChromeDriverService> driverServicePool = new ChromeServicePool();
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -46,7 +47,7 @@ public class ChromeDriverProvider implements DriverProvider {
         } else {
             logger.info("Not using automatically driver download");
         }
-        DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
+        MutableCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 
         ChromeOptions chromeOptions = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).configuredOptions();
@@ -65,17 +66,11 @@ public class ChromeDriverProvider implements DriverProvider {
                 DriverServicePool::newDriver,
                 (pool, capabilities) -> new ChromeDriver(enhancedChromeOptions)
         );
-
-        //
-        // Perform any custom configuration to the new driver
-        //
-        EnhanceDriver.from(environmentVariables).to(newDriver);
-
         return newDriver;
     }
 
-    private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
-        DesiredCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).getCapabilities();
+    private MutableCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
+        MutableCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
     }

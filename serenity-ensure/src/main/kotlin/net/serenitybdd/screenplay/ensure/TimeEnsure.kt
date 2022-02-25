@@ -3,9 +3,7 @@ package net.serenitybdd.screenplay.ensure
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualAndActorNotNull
 
-import java.time.DayOfWeek
 import java.time.LocalTime
-import java.time.Month
 
 
 class TimeEnsure(override val value: KnowableValue<LocalTime?>, comparator: Comparator<LocalTime>) : ComparableEnsure<LocalTime>(value, comparator) {

@@ -96,7 +96,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private List<TestStep> testSteps = new ArrayList<>();
+    private List<TestStep> testSteps = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -1439,7 +1439,7 @@ public class TestOutcome {
         testSteps = updatedSteps;
     }
 
-    private void addSteps(List<TestStep> steps) {
+    private synchronized void addSteps(List<TestStep> steps) {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.addAll(steps);
         renumberTestSteps(updatedSteps);
@@ -1489,7 +1489,7 @@ public class TestOutcome {
         this.title = title;
     }
 
-    private List<TestResult> getCurrentTestResults() {
+    private synchronized List<TestResult> getCurrentTestResults() {
         return testSteps.stream()
                 .map(TestStep::getResult)
                 .collect(Collectors.toList());

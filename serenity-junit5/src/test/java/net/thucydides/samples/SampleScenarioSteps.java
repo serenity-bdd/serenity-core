@@ -40,6 +40,10 @@ public class SampleScenarioSteps extends UIInteractionSteps {
     }
 
     @Step
+    public void stepWithData(int data) {
+    }
+
+    @Step
     public void stepThatOpensAPage() {
         openUrl("https://www.wikipedia.org/");
     }

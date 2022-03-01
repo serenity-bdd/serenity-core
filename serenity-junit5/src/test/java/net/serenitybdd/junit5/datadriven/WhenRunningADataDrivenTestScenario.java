@@ -19,7 +19,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -38,6 +37,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -55,6 +55,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
+        StepEventBus.setNoCleanupForStickyBuses(true);
     }
 
     @TempDir
@@ -73,7 +74,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
             assertThat(currentOutcomes.get(0).getTestSteps().size(), is(2));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
 
         for(int i = 1; i<= 3; i++) {
@@ -82,8 +83,14 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
             assertThat(currentOutcomes.get(0).getTestSteps().size(), is(2));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
+
+        /*ConcurrentMap<Object, StepEventBus> stickyEventBuses = StepEventBus.getStickyEventBuses();
+        System.out.println("Sticky buses size " + stickyEventBuses.size());
+        stickyEventBuses.forEach((k,v)->System.out.println(k + "--" + v) );
+
+        assertTrue(StepEventBus.getStickyEventBuses().size()==0);*/
     }
 
     private void runTestForClass(Class testClass){
@@ -101,14 +108,14 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             StepEventBus stepEventBus = StepEventBus.eventBusFor(eventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
         for(int i = 1; i<= 3; i++) {
             String eventBusName = String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSourceIntegers(int)]/[test-template-invocation:#%s]",i);
             StepEventBus stepEventBus = StepEventBus.eventBusFor(eventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
     }
 
@@ -157,14 +164,14 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             StepEventBus stepEventBus = StepEventBus.eventBusFor(eventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
         for(int i = 1; i <= 3; i++) {
             String eventBusName = String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSourceIntegers(int)]/[test-template-invocation:#%s]",i);
             StepEventBus stepEventBus = StepEventBus.eventBusFor(eventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
 
 
@@ -193,14 +200,14 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             StepEventBus stepEventBus = StepEventBus.eventBusFor(stepEventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(stepEventBusName);
+            StepEventBus.forceClearEventBusFor(stepEventBusName);
         }
         for ( int i = 1; i <= 3; i++) {
             String stepEventBusName = String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.SimpleSuccessfulParameterizedTestSample]/[test-template:test2()]/[test-template-invocation:#%s]",i);
             StepEventBus stepEventBus = StepEventBus.eventBusFor(stepEventBusName);
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
-            StepEventBus.clearEventBusFor(stepEventBusName);
+            StepEventBus.forceClearEventBusFor(stepEventBusName);
         }
 
     }
@@ -216,7 +223,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
             assertThat(currentOutcomes.get(0).getResult(), is(TestResult.SUCCESS));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
     }
 
@@ -286,11 +293,11 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         for(int i = 1; i <= 2; i++) {
             String eventBusName = String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSource(java.lang.String)]/[test-template-invocation:#%s]",i);
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
         for(int i = 1; i <= 3; i++) {
             String eventBusName = String.format("[engine:junit-jupiter]/[class:net.serenitybdd.junit5.datadriven.samples.MultipleDataDrivenTestScenariosWithValueSource]/[test-template:withValueSourceIntegers(int)]/[test-template-invocation:#%s]",i);
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
     }
 
@@ -396,7 +403,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             List<TestOutcome> currentOutcomes = new ParameterizedTestsOutcomeAggregator(stepEventBus.getBaseStepListener()).getTestOutcomesForAllParameterSets();
             assertThat(currentOutcomes.size(), is(1));
             assertThat(currentOutcomes.get(0).getTestSteps().size(), is(1));
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
 
     }
@@ -441,7 +448,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
             } else {
                 assertThat(dataDrivenSteps.get(0).getResult(), is(TestResult.SUCCESS));
             }
-            StepEventBus.clearEventBusFor(eventBusName);
+            StepEventBus.forceClearEventBusFor(eventBusName);
         }
 
     }

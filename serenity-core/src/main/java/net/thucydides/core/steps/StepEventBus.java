@@ -42,8 +42,10 @@ public class StepEventBus {
     private static final ConcurrentMap<Object, StepEventBus> STICKY_EVENT_BUSES = new ConcurrentHashMap<>();
 
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
 
+    private static boolean noCleanupForStickyBuses = false;
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
      * There is a separate event bus for each thread.
@@ -79,6 +81,13 @@ public class StepEventBus {
     }
 
     public static void clearEventBusFor(Object key) {
+        if(noCleanupForStickyBuses) {
+            return;
+        }
+        STICKY_EVENT_BUSES.remove(key);
+    }
+
+    public static void forceClearEventBusFor(Object key) {
         STICKY_EVENT_BUSES.remove(key);
     }
 
@@ -115,6 +124,7 @@ public class StepEventBus {
         this.cleanupMethodLocator = new CleanupMethodLocator();
         this.outputDirectory = configuration.getOutputDirectory();
     }
+
 
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
@@ -943,9 +953,12 @@ public class StepEventBus {
     }
 
     public boolean isASingleBrowserScenario() {
+        if(isJUnit5ParallelMode()) {
+            return false;
+        }
         return uniqueSession
                 || currentTestHasTag(TestTag.withValue("singlebrowser"))
-                || baseStepListener.currentStoryHasTag(TestTag.withValue("singlebrowser"));
+                || getBaseStepListener().currentStoryHasTag(TestTag.withValue("singlebrowser"));
     }
 
     public boolean isNewSingleBrowserScenario() {
@@ -958,6 +971,14 @@ public class StepEventBus {
         } else {
             return false;
         }
+    }
+
+    private static boolean isJUnit5ParallelMode() {
+        return System.getProperty("junit.jupiter.execution.parallel.enabled", "false").equalsIgnoreCase("true");
+    }
+
+    public static void setNoCleanupForStickyBuses(boolean noCleanup) {
+        noCleanupForStickyBuses = noCleanup;
     }
 
 }

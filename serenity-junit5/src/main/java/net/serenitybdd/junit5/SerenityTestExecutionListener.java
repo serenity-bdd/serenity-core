@@ -19,7 +19,6 @@ import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.TestSource;
-import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
@@ -32,10 +31,8 @@ import org.springframework.util.ClassUtils;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
@@ -45,6 +42,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private static List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
 
+    private static final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
+
     static {
         ByteBuddyAgent.install();
         new ByteBuddy()
@@ -53,7 +52,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 .make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
     }
 
-    private final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
+
 
     private ReportService reportService;
 
@@ -69,12 +68,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private boolean isSerenityTest = false;
 
     public SerenityTestExecutionListener() {
-//        File outputDirectory = getOutputDirectory();
-//        baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
-//        StepEventBus.getEventBus().registerListener(baseStepListener);
+        //BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(getOutputDirectory());
+        //StepEventBus.eventBusFor(TEST_SOURCE_JUNIT5).registerListener(baseStepListener);
     }
 
-    private File getOutputDirectory() {
+    private static File getOutputDirectory() {
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
         return systemPropertiesConfiguration.getOutputDirectory();
     }
@@ -118,6 +116,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         List<TestIdentifier> testIdentifiers = new ArrayList<>();
         List<TestIdentifier> parameterizedTestIdentifiers = new ArrayList<>();
 
+        //TODO use getDescendants()
         testPlan.getRoots().forEach(
                 testIdentifier -> {
                     generateReportsForTest(testPlan,testIdentifier,testIdentifiers,parameterizedTestIdentifiers);
@@ -134,7 +133,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         logger.debug("->GenerateReportsForTest  " + testIdentifier);
         if(testIdentifier.getUniqueId().contains("test-template-invocation")) {
             parameterizedTestIdentifiers.add(testIdentifier);
-        } else if(!testIdentifier.getUniqueId().contains("test-template")) {
+        } else {
             testIdentifiers.add(testIdentifier);
         }
         testPlan.getChildren(testIdentifier).forEach(ti->generateReportsForTest(testPlan,ti,testIdentifiers,parameterizedTestIdentifiers));
@@ -499,6 +498,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private void generateReports(TestIdentifier testIdentifier) {
         logger.trace("GENERATE REPORTS FOR TEST " + testIdentifier.getUniqueId());
         generateReportsFor(getTestOutcomes(testIdentifier));
+
+        StepEventBus.clearEventBusFor(testIdentifier.getUniqueId());
     }
 
     private void generateReportsForParameterizedTests(List<TestIdentifier> testIdentifiers) {
@@ -508,6 +509,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 = new ParameterizedTestsOutcomeAggregator(allTestOutcomes);
 
         generateReportsFor(parameterizedTestsOutcomeAggregator.aggregateTestOutcomesByTestMethods());
+
+        testIdentifiers.stream().map(TestIdentifier::getUniqueId).forEach(StepEventBus::clearEventBusFor);
     }
 
     /**

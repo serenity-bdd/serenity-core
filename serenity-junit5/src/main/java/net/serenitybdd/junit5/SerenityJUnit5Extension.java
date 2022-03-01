@@ -1,27 +1,21 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestInstancePostProcessor;
-import org.junit.platform.engine.TestTag;
-import org.junit.platform.launcher.TestIdentifier;
+import org.junit.jupiter.api.extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Use this extension to run Serenity BDD tests using JUnit 5
  */
-public class SerenityJUnit5Extension implements TestInstancePostProcessor, AfterEachCallback, BeforeEachCallback {
+public class SerenityJUnit5Extension implements TestInstancePostProcessor,  AfterEachCallback, BeforeEachCallback {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerenityJUnit5Extension.class);
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
@@ -32,7 +26,6 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
     }
 
     private StepEventBus eventBusFor(ExtensionContext context) {
-        System.out.println("SETTING EVENT BUS FOR TEST " + context.getUniqueId());
         if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
             StepEventBus eventBus = StepEventBus.eventBusFor(context.getUniqueId());
             if (!eventBus.isBaseStepListenerRegistered()) {
@@ -40,14 +33,25 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
             }
             StepEventBus.setCurrentBusToEventBusFor(context.getTestMethod());
         }
-        System.out.println("  ->EVENT BUS = " + StepEventBus.getEventBus());
         return StepEventBus.getEventBus();
+    }
+
+    @Override
+    public void beforeEach(ExtensionContext context) throws Exception {
+        context.getTestMethod().ifPresent(
+            method -> {
+                if (!eventBusFor(context).isBaseStepListenerRegistered()) {
+                    eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
+                }
+                eventBusFor(context).getBaseStepListener().addTagsToCurrentStory(JUnit5Tags.forMethod(method));
+            }
+        );
     }
 
     @Override
     public void afterEach(ExtensionContext context) {
         if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            System.out.println("NO BASE STEP LISTENER FOUND IN THREAD " + Thread.currentThread());
+            LOGGER.warn("NO BASE STEP LISTENER FOUND IN THREAD " + Thread.currentThread());
         }
         TestOutcome outcome = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome();
         String methodName = outcome.getQualifiedMethodName();
@@ -66,26 +70,6 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor, After
                     }
                 }
         );
-    }
-
-    @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
-        context.getTestMethod().ifPresent(
-                method -> {
-                    if (!eventBusFor(context).isBaseStepListenerRegistered()) {
-                        eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
-                    }
-                    eventBusFor(context).getBaseStepListener().addTagsToCurrentStory(JUnit5Tags.forMethod(method));
-                }
-        );
-    }
-
-    private void configureTagsFor(TestIdentifier serenityTest) {
-        Set<TestTag> testTags = serenityTest.getTags();
-        List<net.thucydides.core.model.TestTag> tags = testTags.stream()
-                .map(tag -> net.thucydides.core.model.TestTag.withValue(tag.getName()))
-                .collect(Collectors.toList());
-        StepEventBus.getEventBus().getBaseStepListener().addTagsToCurrentStory(tags);
     }
 
 }

@@ -64,7 +64,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     }
 
     public static Actor named(String name) {
-        EventBusInterface.castActor(name);
+        //EventBusInterface.castActor(name);
         return new Actor(name);
     }
 
@@ -273,6 +273,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private <T extends Performable> void performTask(T todo) {
         if (!StepEventBus.getEventBus().currentTestIsSuspended()) {
+            EventBusInterface.castActor(name);
             todo.performAs(this);
         }
     }

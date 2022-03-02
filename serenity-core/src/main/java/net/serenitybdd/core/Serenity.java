@@ -158,10 +158,15 @@ public class Serenity {
      * Indicate that the test run using this object is finished, and reports can be generated.
      */
     public static void done() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        boolean restartBrowserIfNecessary = !configuredIn(environmentVariables).restartBrowserForANew(NEVER);
-
+        boolean restartBrowserIfNecessary = !configuredIn(environmentVariables()).restartBrowserForANew(NEVER);
         done(restartBrowserIfNecessary);
+    }
+
+    /**
+     * Return the current environment variables configured for this test run.
+     */
+    public static EnvironmentVariables environmentVariables() {
+        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public static boolean currentDriverIsDisabled() {

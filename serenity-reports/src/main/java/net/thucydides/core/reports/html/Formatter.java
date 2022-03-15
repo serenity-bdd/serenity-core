@@ -12,6 +12,7 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -419,6 +420,15 @@ public class Formatter {
 
     public String htmlCompatible(Object fieldValue) {
         return plainHtmlCompatible(fieldValue);
+    }
+
+    public String tagLabel(TestTag tag) {
+        String tagName = htmlCompatible(tag.getName());
+        if (!tag.equalsIgnoreCase("tag")) {
+            return tagName + " (" + tag.getType() + ")";
+        } else {
+            return tagName;
+        }
     }
 
     public String javascriptCompatible(Object value) {

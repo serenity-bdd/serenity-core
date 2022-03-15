@@ -1,9 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
-import net.serenitybdd.core.pages.ListOfWebElementFacades;
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.ResolvableElement;
-import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.*;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -93,7 +90,7 @@ public abstract class Target implements ResolvableElement {
      */
     public boolean isVisibleFor(Actor actor) {
         List<WebElementFacade> matchingElements = resolveAllFor(actor);
-        return (!matchingElements.isEmpty() && matchingElements.get(0).isCurrentlyVisible());
+        return matchingElements.stream().anyMatch(WebElementState::isCurrentlyVisible);
     }
 
     public <T> Question<T> mapFirst(Function<WebElementFacade, T> transformation) {

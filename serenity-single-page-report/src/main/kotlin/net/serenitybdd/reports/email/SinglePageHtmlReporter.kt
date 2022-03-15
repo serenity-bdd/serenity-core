@@ -90,6 +90,7 @@ class SinglePageHtmlReporter(
                         maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes)),
                         minTestDuration = formattedDuration(minDurationOf(testOutcomes.outcomes))
                 ),
+                "testFailuresPresent" to (FailuresByFeature.from(testOutcomes).size > 0),
                 "failuresByFeature" to FailuresByFeature.from(testOutcomes),
                 "resultsByFeature" to TestResultsByFeature.from(testOutcomes),
                 "frequentFailures" to FrequentFailures.from(testOutcomes).withMaxOf(scoreboardSize),

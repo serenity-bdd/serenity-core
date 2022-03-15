@@ -1213,13 +1213,13 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr th:if="${testFailuresPresent}">
                                     <td class="compact-wrapper"
                                         style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
                                         <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
                                             Test Failure Overview</h3></td>
                                 </tr>
-                                <tr>
+                                <tr th:if="${testFailuresPresent}">
                                     <td class="compact-wrapper"
                                         style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
                                         <table style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
@@ -1272,7 +1272,7 @@
                                     </td>
                                 </tr>
                                 <!-- TEST RESULT LIST -->
-                                <tr>
+                                <tr th:if="${testFailuresPresent}">
                                     <td class="compact-wrapper"
                                         style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
                                         <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
@@ -1284,52 +1284,52 @@
                                                 <th style="text-align:left;">Failure</th>
                                             </tr>
                                             <span th:each="failingFeature : ${failuresByFeature}">
-                                    <tr>
-                                        <td colspan="2" th:text=${failingFeature.featureName} class="feature"
-                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">
-	                                        A Failing Feature
-                                        </td>
-                                    </tr>
-                                    <tr th:each="failingScenario: ${failingFeature.failures}">
-                                        <td class="scenarioName"
-                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
-	                                        <a th:if="${!#strings.isEmpty(report.link)}"
-                                               th:text="${failingScenario.title}"
-                                               th:href="${#strings.concat(report.link,'/', failingScenario.reportName)}">
-		                                        Failing scenario
-		                                    </a>
-		                                    <a th:unless="${!#strings.isEmpty(report.link)}"
-                                               th:text="${failingScenario.title}"></a>
-		                                </td>
-                                        <td th:attr="class='frequent-failure for-' + ${failingScenario.result}"
-                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
-	                                        <div th:each="failingScenarioOutcome: ${failingScenario.results}">
-                                                <div>
-                                                    <span th:text="${failingScenarioOutcome.result}"
-                                                          th:attr="class='frequent-failure for-' + ${failingScenarioOutcome.result}"
-                                                          class="scenario-summary-tag for-passing"
-                                                          style="font-weight: bold; text-transform: uppercase;"><span
-                                                            th:attr="color=${failingScenarioOutcome.color}">ERROR</span>
-                                                    </span>
-                                                    <span th:if="${!#strings.isEmpty(failingScenarioOutcome.description)}">
-                                                        -
-                                                    </span>
-                                                    <span th:text="${failingScenarioOutcome.description}"
-                                                          th:attr="class='for-' + ${failingScenarioOutcome.result}"
-                                                          class="frequent-failure for-passing"><span
-                                                            th:attr="color=${failingScenarioOutcome.color}">Example #1</span>
-                                                    </span>
-                                                </div>
-                                                <div th:text="${failingScenarioOutcome.errorMessage}"
-                                                     th:attr="class='frequent-failure for-' + ${failingScenarioOutcome.result}"
-                                                     class="frequent-failure for-error"
-                                                     style="padding-left: 1em; padding-bottom: 0.5em;">
-                                                    <span th:attr="color=${failingScenarioOutcome.color}">Error Message</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </span>
+                                            <tr>
+                                                <td colspan="2" th:text=${failingFeature.featureName} class="feature"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">
+                                                    A Failing Feature
+                                                </td>
+                                            </tr>
+                                            <tr th:each="failingScenario: ${failingFeature.failures}">
+                                                <td class="scenarioName"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;">
+                                                    <a th:if="${!#strings.isEmpty(report.link)}"
+                                                       th:text="${failingScenario.title}"
+                                                       th:href="${#strings.concat(report.link,'/', failingScenario.reportName)}">
+                                                        Failing scenario
+                                                    </a>
+                                                    <a th:unless="${!#strings.isEmpty(report.link)}"
+                                                       th:text="${failingScenario.title}"></a>
+                                                </td>
+                                                <td th:attr="class='frequent-failure for-' + ${failingScenario.result}"
+                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;">
+                                                    <div th:each="failingScenarioOutcome: ${failingScenario.results}">
+                                                        <div>
+                                                            <span th:text="${failingScenarioOutcome.result}"
+                                                                  th:attr="class='frequent-failure for-' + ${failingScenarioOutcome.result}"
+                                                                  class="scenario-summary-tag for-passing"
+                                                                  style="font-weight: bold; text-transform: uppercase;"><span
+                                                                    th:attr="color=${failingScenarioOutcome.color}">ERROR</span>
+                                                            </span>
+                                                            <span th:if="${!#strings.isEmpty(failingScenarioOutcome.description)}">
+                                                                -
+                                                            </span>
+                                                            <span th:text="${failingScenarioOutcome.description}"
+                                                                  th:attr="class='for-' + ${failingScenarioOutcome.result}"
+                                                                  class="frequent-failure for-passing"><span
+                                                                    th:attr="color=${failingScenarioOutcome.color}">Example #1</span>
+                                                            </span>
+                                                        </div>
+                                                        <div th:text="${failingScenarioOutcome.errorMessage}"
+                                                             th:attr="class='frequent-failure for-' + ${failingScenarioOutcome.result}"
+                                                             class="frequent-failure for-error"
+                                                             style="padding-left: 1em; padding-bottom: 0.5em;">
+                                                            <span th:attr="color=${failingScenarioOutcome.color}">Error Message</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </span>
                                         </table>
                                     </td>
                                 </tr>

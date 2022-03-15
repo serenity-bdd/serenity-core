@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.*;
 
-public class Narrative {
+public class RequirementDefinition {
     private final Optional<String> title;
     private final Optional<String> id;
     private final Optional<String> cardNumber;
@@ -20,7 +20,7 @@ public class Narrative {
     private FeatureBackgroundNarrative background;
     private Map<String, FeatureBackgroundNarrative> ruleBackgrounds = new HashMap<>();
 
-    public Narrative(Optional<String> title, Optional<String> id, Optional<String> cardNumber, List<String> versionNumbers, String type, String text) {
+    public RequirementDefinition(Optional<String> title, Optional<String> id, Optional<String> cardNumber, List<String> versionNumbers, String type, String text) {
         Preconditions.checkNotNull(type);
         Preconditions.checkNotNull(text);
         this.title = title;
@@ -32,13 +32,13 @@ public class Narrative {
         this.tags = new ArrayList<>();
     }
 
-    public Narrative(Optional<String> title,
-                     Optional<String> id,
-                     Optional<String> cardNumber,
-                     List<String> versionNumbers,
-                     String type,
-                     String text,
-                     List<TestTag> tags) {
+    public RequirementDefinition(Optional<String> title,
+                                 Optional<String> id,
+                                 Optional<String> cardNumber,
+                                 List<String> versionNumbers,
+                                 String type,
+                                 String text,
+                                 List<TestTag> tags) {
         Preconditions.checkNotNull(type);
         Preconditions.checkNotNull(text);
         this.title = title;
@@ -53,15 +53,15 @@ public class Narrative {
     }
 
 
-    public Narrative(Optional<String> title,
-                     Optional<String> id,
-                     Optional<String> cardNumber,
-                     List<String> versionNumbers,
-                     String type,
-                     String text,
-                     List<TestTag> tags,
-                     List<String> scenarios,
-                     Map<String, Collection<TestTag>> scenarioTags) {
+    public RequirementDefinition(Optional<String> title,
+                                 Optional<String> id,
+                                 Optional<String> cardNumber,
+                                 List<String> versionNumbers,
+                                 String type,
+                                 String text,
+                                 List<TestTag> tags,
+                                 List<String> scenarios,
+                                 Map<String, Collection<TestTag>> scenarioTags) {
         Preconditions.checkNotNull(type);
         Preconditions.checkNotNull(text);
         this.title = title;
@@ -74,7 +74,7 @@ public class Narrative {
         this.scenarios = scenarios;
         this.scenarioTags = scenarioTags;
     }
-    public Narrative(String type, String text) {
+    public RequirementDefinition(String type, String text) {
         this(Optional.<String>empty(), Optional.<String>empty(), Optional.<String>empty(), NewList.<String>of(), type, text);
     }
 
@@ -123,12 +123,12 @@ public class Narrative {
         return scenarioTags;
     }
 
-    public Narrative withBackground(FeatureBackgroundNarrative background) {
+    public RequirementDefinition withBackground(FeatureBackgroundNarrative background) {
         this.background = background;
         return this;
     }
 
-    public Narrative withRuleBackgrounds(Map<String,FeatureBackgroundNarrative> ruleBackgrounds) {
+    public RequirementDefinition withRuleBackgrounds(Map<String,FeatureBackgroundNarrative> ruleBackgrounds) {
         this.ruleBackgrounds = ruleBackgrounds;
         return this;
     }

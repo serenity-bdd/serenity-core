@@ -17,7 +17,7 @@ public class LoadedNarrative {
         return new LoadedNarrative();
     }
 
-    public java.util.Optional<Narrative> fromFile(File narrativeFile, String defaultType) {
+    public java.util.Optional<RequirementDefinition> fromFile(File narrativeFile, String defaultType) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), StandardCharsets.UTF_8))) {
             List<String> lines = readPreambleFrom(reader, isMarkdown(narrativeFile));
 
@@ -35,7 +35,7 @@ public class LoadedNarrative {
 
             List<TestTag> tags = (StringUtils.isEmpty(title)) ? new ArrayList<>() : Collections.singletonList(TestTag.withName(title).andType(defaultType));
 
-            return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
+            return java.util.Optional.of(new RequirementDefinition(Optional.ofNullable(title),
                     Optional.of(narrativeFile.getPath()),
                     Optional.ofNullable(cardNumber),
                     versionNumbers,

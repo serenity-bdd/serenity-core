@@ -132,13 +132,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     }
 
     @Test
-    public void successful_tests() {
-        File reports = directoryInClasspathCalled("/test-outcomes/all-successful");
-        ResultChecker resultChecker = new ResultChecker(reports);
-        assertThat(resultChecker.checkTestResults(), is(TestResult.SUCCESS));
-    }
-
-    @Test
     public void should_check_json_results() {
         File reports = directoryInClasspathCalled("/test-outcomes/full-json");
         ResultChecker resultChecker = new ResultChecker(reports);

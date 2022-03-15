@@ -28,7 +28,8 @@ public class ChartColorScheme {
             "'rgba(255, 153, 102, 0.5)'",  // ABORTED
             "'rgba(255, 22, 49, 0.5)'",    // FAILED
             "'rgba(255, 97, 8, 0.5)'",     // ERROR
-            "'rgba(255, 104, 255, 0.5)'"   // COMPROMISED
+            "'rgba(255, 104, 255, 0.5)'",   // COMPROMISED
+            "'rgba(83, 50, 168, 0.5)'"   // UNDEFINED
     );
     private static final List<String> ACCESSIBLE_COLORS = Arrays.asList(
             "'rgba(153,204,51,0.5)'", // PASSING
@@ -38,7 +39,8 @@ public class ChartColorScheme {
             "pattern.draw('diagonal-right-left', 'rgba(255, 153, 102, 0.5)')", // ABORTED
             "pattern.draw('zigzag-vertical', 'rgba(255, 22, 49, 0.5)')",   // FAILED
             "pattern.draw('zigzag', 'rgba(255, 97, 8, 0.5)')",    // ERROR
-            "pattern.draw('square', 'rgba(255, 104, 255, 0.5)')"  // COMPROMISED
+            "pattern.draw('square', 'rgba(255, 104, 255, 0.5)')",  // COMPROMISED
+            "pattern.draw('diamond', 'rgba(83, 50, 168, 0.5)')"  // COMPROMISED
     );
     private static final List<String> STANDARD_MANUAL_COLORS = Arrays.asList(
             "'rgba(153,204,51,0.25)'",      // PASSING
@@ -48,7 +50,8 @@ public class ChartColorScheme {
             "'rgba(255, 153, 102, 0.25)'",  // ABORTED
             "'rgba(255, 22, 49, 0.25)'",    // FAILED
             "'rgba(255, 97, 8, 0.25)'",     // ERROR
-            "'rgba(255, 104, 255, 0.25)'"   // COMPROMISED
+            "'rgba(255, 104, 255, 0.25)'",  // COMPROMISED
+            "'rgba(83, 50, 168, 0.25)'"   // COMPROMISED
     );
     private static final List<String> ACCESSIBLE_MANUAL_COLORS = Arrays.asList(
             "'rgba(153,204,51,0.25)'", // PASSING
@@ -58,7 +61,8 @@ public class ChartColorScheme {
             "pattern.draw('diagonal-right-left', 'rgba(255, 153, 102, 0.25)')", // ABORTED
             "pattern.draw('zigzag-vertical', 'rgba(255, 22, 49, 0.25)')",   // FAILED
             "pattern.draw('zigzag', 'rgba(255, 97, 8, 0.25)')",    // ERROR
-            "pattern.draw('triangle', 'rgba(255, 104, 255, 0.25)')"  // COMPROMISED
+            "pattern.draw('triangle', 'rgba(255, 104, 255, 0.25)')",  // COMPROMISED
+            "pattern.draw('diamond', 'rgba(83, 50, 168, 0.25)')"  // UNDEFINED
     );
 
     private static final List<String> BORDER_COLORS = Arrays.asList(
@@ -69,7 +73,8 @@ public class ChartColorScheme {
             "'rgba(255, 153, 102, 1)'",  // ABORTED
             "'rgba(255, 22, 49, 1)'",  // FAILED
             "'rgba(255, 97, 8, 1)'",     // ERROR
-            "'rgba(255, 104, 255, 1)'" // COMPROMISED
+            "'rgba(255, 104, 255, 1)'", // COMPROMISED
+            "'rgba(83, 50, 168, 1)'" // UNDEFINED
     );
 
     private final static Map<EnvironmentVariables, ChartColorScheme> COLOR_SCHEMES = new HashMap<>();

@@ -4,7 +4,7 @@ import net.thucydides.core.requirements.model.NarrativeReader
 import net.thucydides.core.util.FileSystemUtils
 import spock.lang.Specification
 
-class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
+class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specification {
 
     def "Directories in a 1-level directory structure represent the top level of the requirements hierarchy"() {
         given: "there is a readme.md file in a single-level directory structure"

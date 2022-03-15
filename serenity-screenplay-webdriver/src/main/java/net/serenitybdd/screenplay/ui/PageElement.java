@@ -52,12 +52,15 @@ public class PageElement {
         return TargetFactory.forElementOfType("element").containingText(text);
     }
 
+    /**
+     * Locate an element using an arbitrary CSS or XPath expression
+     */
     public static SearchableTarget locatedBy(String selector) {
         return TargetFactory.forElementOfType("element").locatedByXPathOrCss(selector);
     }
 
     /**
-     * Locate a button using an arbitrary CSS or XPath expression
+     * Locate an element using a By locator
      */
     public static SearchableTarget located(By selector) {
         return TargetFactory.forElementOfType("element").locatedBy(selector);

@@ -103,8 +103,9 @@ public class ResultCounts {
     public String byTypeFor(String... testResultTypes) {
         List<String> resultCounts = new ArrayList<>();
         for (String resultType : testResultTypes) {
-            resultCounts.add(labeledValue(resultType, TestType.AUTOMATED));
-            resultCounts.add(labeledValue(resultType, TestType.MANUAL));
+            resultCounts.add(labeledValue(resultType, TestType.ANY));
+//            resultCounts.add(labeledValue(resultType, TestType.AUTOMATED));
+//            resultCounts.add(labeledValue(resultType, TestType.MANUAL));
         }
         return Arrays.toString(resultCounts.toArray());
     }
@@ -139,7 +140,10 @@ public class ResultCounts {
         } else {
             resultCount = this.getOverallTestCount(resultType);
         }
-        String label = TestResult.valueOf(resultType.toUpperCase()).getLabel() + " (" + testType.toString().toLowerCase() + ")";
+        String label = TestResult.valueOf(resultType.toUpperCase()).getLabel();
+        if (testType != TestType.ANY) {
+            label = label + " (" + testType.toString().toLowerCase() + ")";
+        }
         return "{meta: '" + label + "', value: " + resultCount + "}";
     }
 

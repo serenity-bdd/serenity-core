@@ -140,7 +140,8 @@ public class FeatureFileScenarioOutcomes {
                 new HashMap<>(),
                 null,
                 startTimeOfFirstTestIn(outcomes),
-                totalDurationOf(outcomes));
+                totalDurationOf(outcomes),
+                Collections.emptyList());
     }
 
     private ZonedDateTime startTimeOfFirstTestIn(List<TestOutcome> outcomes) {
@@ -204,11 +205,13 @@ public class FeatureFileScenarioOutcomes {
 
         Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTags());
 
-        Set<TestTag> scenarioTags = outcomes.stream()
+        Set<TestTag> outcomeTags = outcomes.stream()
                 .flatMap(outcome -> outcome.getTags().stream())
                 .collect(Collectors.toSet());
 
-        scenarioTags.addAll(scenarioTagsDefinedIn(scenario));
+        Set<TestTag> scenarioTags = scenarioTagsDefinedIn(scenario);
+
+        outcomeTags.addAll(scenarioTags);
 
         return new ScenarioSummaryOutcome(scenarioTitle,
                 scenario.getKeyword(),
@@ -222,11 +225,12 @@ public class FeatureFileScenarioOutcomes {
                 isManual,
                 feature.getName(),
                 featureReport,
-                scenarioTags,
+                outcomeTags,
                 exampleTags,
                 rule,
                 startTimeOfFirstTestIn(outcomes),
-                totalDurationOf(outcomes));
+                totalDurationOf(outcomes),
+                scenarioTags);
     }
 
 

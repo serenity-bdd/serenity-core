@@ -18,7 +18,7 @@
             });
         </script>
 <#--    </#if>-->
-    <h4 class="requirement-type-heading">${requirementType}</h4>
+    <h3 class="requirement-type-heading">Test Outcomes for ${requirementType} </h3>
 
     <table class="scenario-result table" id="${id}">
         <thead>

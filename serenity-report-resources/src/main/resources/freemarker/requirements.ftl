@@ -22,6 +22,7 @@
     <#include "components/test-outcomes.ftl">
     <#include "components/requirements-list.ftl">
     <#include "components/result-chart.ftl">
+    <#include "components/requirements-result-chart.ftl">
     <#include "components/result-summary.ftl">
     <#include "components/duration-chart.ftl">
     <#include "components/functional-coverage-chart.ftl">
@@ -201,31 +202,29 @@
                     <div>
                         <div clas="table">
                             <div class="row">
-                                <#if isLeafRequirement && filteredTags?has_content >
-                                <div class="col-sm-8">
-                                    <#else>
+
+                                <#if isLeafRequirement && requirementTags?has_content >
+                                   <div class="col-sm-8">
+                                <#else>
                                     <div class="col-sm-12">
-                                        </#if>
+                                 </#if>
                                         <span>
-                                            <h2><i class="bi bi-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
+                                            <h2><i class="bi bi-book"></i> ${parentType}: ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
                                         </span>
                                     </div>
-                                    <#if isLeafRequirement && filteredTags?has_content >
+                                    <#if isLeafRequirement && requirementTags?has_content >
                                         <div class="col-sm-4">
                                         <span class="feature-tags">
-                                            <#list filteredTags as tag>
+                                            <p class="tag">
+                                            <#list requirementTags as tag>
                                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                                                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                                                <p class="tag">
                                                     <#assign tagStyle = styling.tagStyleFor(tag) >
-                                                    <span class="badge tag-badge" style="${tagStyle}">
-                                                        <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink"
-                                                                                          style="${tagStyle}"
-                                                                                          href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
-                                                        (${tag.type})</a>
+                                                    <span class="badge feature-tag tag-badge" style="${tagStyle}">
+                                                        <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.tagLabel(tag)}</a>
                                                     </span>
-                                                </p>
                                             </#list>
+                                            </p>
                                         </span>
                                         </div>
                                     </#if>
@@ -285,41 +284,51 @@
                                 <div id="specs" class="tab-pane fade in active">
                                     <div class="container-fluid">
                                         <div class="row">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-4">
+                                                <h3>Feature Coverage By Scenario</h3>
 
+                                                <!-- REQUIREMENTS PIE CHART -->
+                                                <#if testOutcomes.total != 0>
+                                                    <div class="chart-container" style="position: relative; width:30vw">
+                                                        <canvas id="requirementChart" width="300" height="300"></canvas>
+                                                    </div>
+                                                </#if>
+
+                                            </div>
+                                            <div class="col-sm-8">
                                                 <#if !isLeafRequirement>
-                                                    <h3>Requirements Overview</h3>
+                                                <h3>Requirements Overview</h3>
 
-                                                    <div id="tree"></div>
+                                                <div id="tree"></div>
 
                                                 <#else>
-                                                    <!--- TOC --->
-                                                    <div id="toc">
-                                                        <h3>Overview</h3>
-                                                        <table class="table" id="toc-table">
-                                                            <#list scenarioGroups as scenarioGroup>
-                                                                <#assign scenarioInRule = false />
-                                                                <#if scenarioGroup.ruleName?has_content>
-                                                                    <#assign scenarioInRule = true />
+                                                <!--- TOC --->
+                                                <div id="toc">
+                                                    <h3>Overview</h3>
+                                                    <table class="table" id="toc-table">
+                                                        <#list scenarioGroups as scenarioGroup>
+                                                            <#assign scenarioInRule = false />
+                                                            <#if scenarioGroup.ruleName?has_content>
+                                                                <#assign scenarioInRule = true />
+                                                                <tr>
+                                                                    <td class="rule-toc-entry" colspan="2">
+                                                                        <a href="#${scenarioGroup.id}"
+                                                                           title="View scenario details for this rule">
+                                                                            Rule: ${scenarioGroup.ruleName}
+                                                                    </td>
+                                                                </tr>
+                                                            </#if>
+                                                            <#if scenarioGroup.hasScenarios() >
+                                                                <#list scenarioGroup.mainScenarios as scenario>
+                                                                    <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                                     <tr>
-                                                                        <td class="rule-toc-entry" colspan="2">
-                                                                            <a href="#${scenarioGroup.id}"
-                                                                               title="View scenario details for this rule">
-                                                                                Rule: ${scenarioGroup.ruleName}
-                                                                        </td>
-                                                                    </tr>
-                                                                </#if>
-                                                                <#if scenarioGroup.hasScenarios() >
-                                                                    <#list scenarioGroup.mainScenarios as scenario>
-                                                                        <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
-                                                                        <tr>
-                                                                            <td style="width:95%;" class="toc-title">
-                                                                                <#if scenarioInRule>
-                                                                                    <#assign scenarioClass = "scenario-toc-entry"/>
-                                                                                <#else>
-                                                                                    <#assign scenarioClass = "orphan-scenario-toc-entry"/>
-                                                                                </#if>
-                                                                                <span class="${scenarioClass}">
+                                                                        <td style="width:95%;" class="toc-title">
+                                                                            <#if scenarioInRule>
+                                                                                <#assign scenarioClass = "scenario-toc-entry"/>
+                                                                            <#else>
+                                                                                <#assign scenarioClass = "orphan-scenario-toc-entry"/>
+                                                                            </#if>
+                                                                            <span class="${scenarioClass}">
                                                                                     <a href="#${scenario.id}"
                                                                                        title="View scenario details">
                                                                                         <i class="bi bi-chat-dots"></i> ${scenario.type}: ${formatter.renderTitle(scenario.simplifiedName)}
@@ -328,41 +337,47 @@
                                                                                         (${scenario.numberOfExamples})
                                                                                     </#if>
                                                                                 </span>
-                                                                            </td>
-                                                                            <td style="width:5%;">
-                                                                                <table>
-                                                                                    <tr>
-                                                                                        <td class="icons-bar">
-                                                                                            <#if outcome_icon?has_content>
+                                                                        </td>
+                                                                        <td>
+
+                                                                        </td>
+                                                                        <td style="width:5%;">
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td class="icons-bar">
+                                                                                        <#if outcome_icon?has_content>
+                                                                                        <a style="margin-left:0.5em;padding-right: 1.5em;"
+                                                                                           href="${scenario.scenarioReport}"
+                                                                                           title="View test results">
+                                                                                            </#if>
+                                                                                            ${outcome_icon}
+                                                                                            <#if outcome_icon?has_content></a></#if>
+
+                                                                                        <#if (scenario.isManual())>
+                                                                                            <i class="bi bi-person manual"
+                                                                                               title="Manual test"></i></#if>
+                                                                                        <#if scenario.scenarioReport?has_content>
                                                                                             <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                                href="${scenario.scenarioReport}"
                                                                                                title="View test results">
-                                                                                                </#if>
-                                                                                                ${outcome_icon}
-                                                                                                <#if outcome_icon?has_content></a></#if>
-
-                                                                                            <#if (scenario.isManual())>
-                                                                                                <i class="bi bi-person manual"
-                                                                                                   title="Manual test"></i></#if>
-                                                                                            <#if outcome_icon?has_content>
-                                                                                                <a style="margin-left:0.5em;padding-right: 1.5em;"
-                                                                                                   href="${scenario.scenarioReport}"
-                                                                                                   title="View test results">
-                                                                                                    <i class="bi bi-eyeglasses"></i>
-                                                                                                </a>
-                                                                                            </#if>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </#list>
-                                                                </#if>
-                                                            </#list>
-                                                        </table>
-                                                    </div>
-                                                    <!--- END OF TOC --->
-
+                                                                                                <i class="bi bi-eyeglasses"></i>
+                                                                                            </a>
+                                                                                        </#if>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </#list>
+                                                            </#if>
+                                                        </#list>
+                                                    </table>
+                                                </div>
+                                                <!--- END OF TOC --->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
                                                     <h3>Scenarios</h3>
 
                                                     <#list scenarioGroups as scenarioGroup>
@@ -371,6 +386,18 @@
                                                             <div class="rule-title">
                                                                 Rule: ${scenarioGroup.ruleName}</div>
                                                         </#if>
+                                                        <p class="rule-tags inline-tag">
+                                                            <#list scenarioGroup.filteredTags as tag>
+                                                            <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
+                                                            <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
+                                                                <#assign tagStyle = styling.tagStyleFor(tag) >
+                                                                <span class="badge tag-badge" style="${tagStyle}">
+                                                                    <i class="bi bi-tag-fill"></i>&nbsp;
+                                                                    <a class="tagLink" style="${tagStyle}"
+                                                                       href="${tagReport}">${formatter.tagLabel(tag)}</a>
+                                                                </span>
+                                                            </#list>
+                                                        </p>
                                                         <#if scenarioGroup.ruleDescription?has_content>
                                                             <div class="scenario-comments">
                                                                 <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.ruleDescription)}
@@ -378,8 +405,7 @@
                                                         </#if>
                                                         <#if scenarioGroup.hasBackground()>
                                                             <div class="scenario-docs card">
-                                                                <div class="scenario-docs card-header"
-                                                                     style="min-height:1.5em;">
+                                                                <div class="scenario-docs card-header" style="min-height:1.5em;">
                                                                     <span class="scenario-heading">
                                                                     Background: <#if scenarioGroup.backgroundTitle?has_content>${formatter.renderText(scenarioGroup.backgroundTitle)}</#if></span>
                                                                     </span>
@@ -401,15 +427,29 @@
                                                             <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
 
                                                             <div class="scenario-docs card" id="${scenario.id}">
-                                                                <div class="scenario-docs card-header ${scenario.resultStyle}"
-                                                                     style="min-height:1.5em;">
+                                                                <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
                                                                     <div>
-                                                            <span class="scenario-heading">
-                                                                <a href="${scenario.scenarioReport}"
-                                                                   title="View test results">${scenario.type}: ${formatter.renderTitle(scenario.title)}</a>
-                                                            </span>
+                                                                        <span class="scenario-heading">
+                                                                            <a href="${scenario.scenarioReport}"
+                                                                               title="View test results">${scenario.type}: ${formatter.renderTitle(scenario.title)}</a>
+                                                                        </span>
+
+                                                                        <#if scenario.scenarioTags??>
+                                                                        <span class="example-tags inline-tag">
+                                                                            <#list scenario.scenarioTags as tag>
+                                                                                <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
+                                                                                <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
+                                                                                <#assign tagStyle = styling.tagStyleFor(tag) >
+                                                                                <span class="badge tag-badge" style="${tagStyle}">
+                                                                                    <i class="bi bi-tag-fill"></i>&nbsp;
+                                                                                    <a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.tagLabel(tag)}</a>
+                                                                                </span>
+                                                                            </#list>
+                                                                        </span>
+                                                                        </#if>
+
                                                                         <span class="scenario-result-icon">
-                                                                <#if (scenario.isManual())> <i
+                                                                    <#if (scenario.isManual())> <i
                                                                         class="bi bi-person manual"
                                                                         title="Manual test"></i></#if>
 
@@ -419,7 +459,7 @@
                                                                                 <i class="bi bi-pause-circle"
                                                                                    title="No test has been implemented yet"></i>
                                                                             </#if>
-                                                            </span>
+                                                                        </span>
                                                                     </div>
                                                                     <#--<#if outcome_icon?has_content>-->
                                                                     <#--<div class="scenario-report-badges">-->
@@ -428,6 +468,7 @@
                                                                     <#--</#list>-->
                                                                     <#--</div>-->
                                                                     <#--</#if>-->
+
                                                                 </div>
                                                                 <div class="scenario-docs card-body">
                                                                     <#if scenario.description?has_content>
@@ -457,7 +498,8 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-4">
-                                                <!-- PIE CHART -->
+                                                <h3>Feature Coverage By Scenario</h3>
+                                                <!-- TEST RESULT PIE CHART -->
                                                 <#if testOutcomes.total != 0>
                                                     <div class="chart-container" style="position: relative; width:30vw">
                                                         <canvas id="resultChart" width="300" height="300"></canvas>
@@ -647,6 +689,7 @@
 </div>
 <!-- Chart data -->
 <@result_chart id='resultChart' />
+<@requirements_result_chart id='requirementChart' />
 <@result_summary id='severityChart' />
 <@duration_chart id='durationChart' />
 </body>

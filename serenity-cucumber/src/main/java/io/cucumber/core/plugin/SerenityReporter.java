@@ -626,11 +626,14 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     private void startScenario(Feature currentFeature, Scenario scenarioDefinition, String scenarioName) {
         getContext().stepEventBus().setTestSource(TestSourceType.TEST_SOURCE_CUCUMBER.getValue());
 
-        getContext().stepEventBus().testStarted(scenarioName,
-                scenarioIdFrom(TestSourcesModel.convertToId(currentFeature.getName()), TestSourcesModel.convertToId(scenarioName)));
+        getContext().stepEventBus()
+                    .testStarted(scenarioName,
+                                 scenarioIdFrom(TestSourcesModel.convertToId(currentFeature.getName()),
+                                                TestSourcesModel.convertToId(scenarioName)));
+
         getContext().stepEventBus().addDescriptionToCurrentTest(scenarioDefinition.getDescription());
         getContext().stepEventBus().addTagsToCurrentTest(convertCucumberTags(currentFeature.getTags()));
-
+        getContext().stepEventBus().addTagsToCurrentTest(tagsInEnclosingRule(currentFeature, scenarioDefinition));
         if (isScenario(scenarioDefinition)) {
             getContext().stepEventBus().addTagsToCurrentTest(convertCucumberTags(scenarioDefinition.getTags()));
         } else if (isScenarioOutline(scenarioDefinition)) {
@@ -643,6 +646,22 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
         scenarioTags = tagsForScenario(scenarioDefinition);
         updateResultFromTags(scenarioTags);
+    }
+
+    private List<TestTag> tagsInEnclosingRule(Feature feature, Scenario scenario) {
+        List<io.cucumber.messages.types.Rule> nestedRules = feature.getChildren().stream()
+                .map(FeatureChild::getRule)
+                .filter(Objects::nonNull)
+                .collect(toList());
+
+        return nestedRules.stream()
+                .filter(rule -> containsScenario(rule, scenario))
+                .flatMap(rule -> convertCucumberTags(rule.getTags()).stream())
+                .collect(toList());
+    }
+
+    private boolean containsScenario(io.cucumber.messages.types.Rule rule, Scenario scenario) {
+        return rule.getChildren().stream().anyMatch(child -> child.getScenario() == scenario);
     }
 
     private List<Tag> tagsForScenario(Scenario scenarioDefinition) {

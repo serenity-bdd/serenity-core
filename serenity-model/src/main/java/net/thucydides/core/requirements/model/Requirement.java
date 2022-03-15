@@ -45,6 +45,7 @@ public class Requirement implements Comparable {
         examples = new ArrayList<>();
         releaseVersions = new ArrayList<>();
         customFields = new ArrayList<>();
+        scenarioTags = new HashMap<>();
     }
 
     protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, CustomFieldValue narrative,

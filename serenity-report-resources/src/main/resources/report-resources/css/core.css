@@ -322,6 +322,32 @@ h3.discreet-story-header {
     margin: 0 0 5px;
 }
 
+.rule-tags {
+    text-align: right;
+}
+
+.example-tags {
+    text-align: right;
+}
+
+.inline-tag {
+    padding-top: 2px;
+    padding-right: 5px;
+    margin: 0 0 5px;
+}
+
+.feature-tags .tag-badge {
+    background-color: #0d78ae;
+}
+
+.rule-tags .tag-badge {
+    background-color: #0d78ae;
+}
+
+.example-tags .tag-badge {
+    background-color: #4c963e;
+}
+
 i.tag {
     color:#ff1631
 }

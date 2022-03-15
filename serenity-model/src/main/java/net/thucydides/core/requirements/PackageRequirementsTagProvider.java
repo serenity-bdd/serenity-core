@@ -9,7 +9,6 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
 import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
 import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
-import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;

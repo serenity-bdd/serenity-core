@@ -137,6 +137,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                     .filter(exclusions::doNotExclude)
                     .filter(tag -> !requirementTag(requirementTypes, tag))
                     .filter(tag -> !tag.getType().equals("Duration"))
+                    .filter(tag -> !tag.isIssueTag())
                     .collect(Collectors.toSet());
 
             reportedTags.addAll(

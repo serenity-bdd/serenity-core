@@ -22,7 +22,7 @@ public class ClassInfoAnnotations {
 
     public boolean hasAnAnnotation(Class<? extends Annotation>... annotationClasses) {
         for (Class<? extends Annotation> annotationClass : annotationClasses) {
-            if (classInfo.getAnnotation(annotationClass) != null) {
+            if (classInfo != null && classInfo.getAnnotation(annotationClass) != null) {
                 return true;
             }
         }
@@ -31,7 +31,7 @@ public class ClassInfoAnnotations {
 
     public boolean hasAPackageAnnotation(Class<? extends Annotation>... annotationClasses) {
         for (Class<? extends Annotation> annotationClass : annotationClasses) {
-            if (classInfo.getPackage().getAnnotation(annotationClass) != null) {
+            if (classInfo != null && classInfo.getPackage().getAnnotation(annotationClass) != null) {
                 return true;
             }
         }
@@ -44,6 +44,9 @@ public class ClassInfoAnnotations {
 
     private Set<Method> allMethods() {
         Set<Method> allMethods = new HashSet<>();
+        if (classInfo == null) {
+            return new HashSet<>();
+        }
         try {
             allMethods.addAll(Arrays.asList(classInfo.getMethods()));
         } catch (java.lang.NoClassDefFoundError ignored) {}

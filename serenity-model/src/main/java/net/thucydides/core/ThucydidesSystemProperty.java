@@ -715,7 +715,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * Extension packages. This is a list of packages that will be scanned for custom TagProvider implementations.
-     * To add a custom tag provider, just implement the TagProvider interface and specify the root package for this
+     * To add a custom tag provider, just implement the TagProvider interface and specify the root package. for this
      * provider in this parameter.
      */
     SERENITY_EXT_PACKAGES,

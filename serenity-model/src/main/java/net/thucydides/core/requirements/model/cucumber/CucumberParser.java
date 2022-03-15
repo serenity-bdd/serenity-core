@@ -5,12 +5,13 @@ import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.gherkin.FeatureParserException;
 import io.cucumber.core.resource.Resource;
 import io.cucumber.messages.types.*;
+import io.cucumber.plugin.event.Node;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.requirements.model.FeatureBackgroundNarrative;
-import net.thucydides.core.requirements.model.Narrative;
+import net.thucydides.core.requirements.model.RequirementDefinition;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,9 +145,9 @@ public class CucumberParser {
     }
 
 
-    public Optional<Narrative> loadFeatureNarrative(File narrativeFile) {
+    public Optional<RequirementDefinition> loadFeatureDefinition(File featureFile) {
 
-        Optional<AnnotatedFeature> loadedFeature = loadFeature(narrativeFile);
+        Optional<AnnotatedFeature> loadedFeature = loadFeature(featureFile);
 
         if (!loadedFeature.isPresent()) {
             return Optional.empty();
@@ -167,34 +168,53 @@ public class CucumberParser {
         // Scenario Tags
         Map<String, Collection<TestTag>> scenarioTags = new HashMap<>();
 
-        feature.getChildren().forEach(
-                child -> {
-                    if (child.getScenario() != null) {
-                        Scenario scenarioDefinition = child.getScenario();
-                        if (!scenarioDefinition.getExamples().isEmpty()) {
-                            List<Tag> scenarioOutlineTags = scenarioDefinition.getTags();
-                            scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(scenarioOutlineTags));
-                            List<Examples> examples = scenarioDefinition.getExamples();
-                            for (Examples currentExample : examples) {
-                                List<Tag> allExampleTags = new ArrayList<>();
-                                allExampleTags.addAll(scenarioOutlineTags);
-                                allExampleTags.addAll(currentExample.getTags());
-                                scenarioTags.put(scenarioDefinition.getName() + "_examples_at_line:" + currentExample.getLocation().getLine(),
-                                        CucumberTagConverter.toSerenityTags(allExampleTags));
-                            }
-                        } else {
-                            scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
-                        }
-                    }
+        List<Scenario> scenarios = scenariosIn(feature);
+        scenarios.forEach(scenarioDefinition ->
+        {
+            if (!scenarioDefinition.getExamples().isEmpty()) {
+                List<Tag> scenarioOutlineTags = scenarioDefinition.getTags();
+                scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(scenarioOutlineTags));
+                List<Examples> examples = scenarioDefinition.getExamples();
+                for (Examples currentExample : examples) {
+                    List<Tag> allExampleTags = new ArrayList<>();
+                    allExampleTags.addAll(scenarioOutlineTags);
+                    allExampleTags.addAll(currentExample.getTags());
+                    scenarioTags.put(scenarioDefinition.getName() + "_examples_at_line:" + currentExample.getLocation().getLine(),
+                            CucumberTagConverter.toSerenityTags(allExampleTags));
                 }
-        );
+            } else {
+                scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
+            }
+        });
+//        feature.getChildren().forEach(
+//                child -> {
+//                    if (child.getScenario() != null) {
+//                        Scenario scenarioDefinition = child.getScenario();
+//                        if (!scenarioDefinition.getExamples().isEmpty()) {
+//                            List<Tag> scenarioOutlineTags = scenarioDefinition.getTags();
+//                            scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(scenarioOutlineTags));
+//                            List<Examples> examples = scenarioDefinition.getExamples();
+//                            for (Examples currentExample : examples) {
+//                                List<Tag> allExampleTags = new ArrayList<>();
+//                                allExampleTags.addAll(scenarioOutlineTags);
+//                                allExampleTags.addAll(currentExample.getTags());
+//                                scenarioTags.put(scenarioDefinition.getName() + "_examples_at_line:" + currentExample.getLocation().getLine(),
+//                                        CucumberTagConverter.toSerenityTags(allExampleTags));
+//                            }
+//                        } else {
+//                            scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
+//                        }
+//                    }
+//                }
+//        );
 
         // Scenario Names
-        List<String> scenarios = feature.getChildren().stream()
-                .map(FeatureChild::getScenario)
-                .filter(Objects::nonNull)
-                .map(Scenario::getName)
-                .collect(Collectors.toList());
+//        List<String> scenarios = feature.getChildren().stream()
+//                .map(FeatureChild::getScenario)
+//                .filter(Objects::nonNull)
+//                .map(Scenario::getName)
+//                .collect(Collectors.toList());
+        List<String> scenarioNames = scenarios.stream().map(Scenario::getName).collect(Collectors.toList());
 
         FeatureBackgroundNarrative background = null;
 
@@ -208,27 +228,48 @@ public class CucumberParser {
                 .forEach(
                         rule -> {
                             Optional<Background> ruleBackground = rule.getChildren()
-                                                                         .stream()
-                                                                         .map(RuleChild::getBackground)
-                                                                         .filter(Objects::nonNull)
-                                                                         .findFirst();
+                                    .stream()
+                                    .map(RuleChild::getBackground)
+                                    .filter(Objects::nonNull)
+                                    .findFirst();
                             ruleBackground.ifPresent(
                                     value -> ruleBackgrounds.put(rule.getName(), backgroundElementFrom(value))
                             );
                         }
                 );
 
-        return Optional.of(new Narrative(Optional.of(title),
+        return Optional.of(new RequirementDefinition(Optional.of(title),
                 Optional.of(id),
                 Optional.ofNullable(cardNumber),
                 versionNumbers,
                 "feature",
                 text != null ? text : "",
                 new ArrayList<>(requirementTags),
-                scenarios,
+                scenarioNames,
                 scenarioTags)
                 .withBackground(background)
                 .withRuleBackgrounds(ruleBackgrounds));
+    }
+
+    private List<Scenario> scenariosIn(Feature feature) {
+        List<Scenario> scenarios = new ArrayList<>();
+        feature.getChildren().forEach(
+                child -> {
+                    if (child.getRule() != null) {
+                        scenarios.addAll(scenariosIn(child.getRule()));
+                    } else if (child.getScenario() != null) {
+                        scenarios.add(child.getScenario());
+                    }
+                }
+        );
+        return scenarios;
+    }
+
+    private List<Scenario> scenariosIn(Rule rule) {
+        return rule.getChildren().stream()
+                .filter(child -> child.getScenario() != null)
+                .map(RuleChild::getScenario)
+                .collect(Collectors.toList());
     }
 
     private Stream<Rule> rulesIn(List<FeatureChild> childrenList) {

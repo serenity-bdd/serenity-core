@@ -9,6 +9,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.support.locators.RelativeLocator
 import spock.lang.Specification
 import spock.lang.Unroll
 

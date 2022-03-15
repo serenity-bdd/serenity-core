@@ -2,11 +2,12 @@ package net.thucydides.core.reports;
 
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.RuleBackground;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.reports.html.TagFilter;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
+import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ScenarioOutcomeGroup {
@@ -18,6 +19,7 @@ public class ScenarioOutcomeGroup {
     private String id;
     private RuleBackground background;
     private final List<ScenarioOutcome> scenarios;
+    private final List<TestTag> tags;
 
     public ScenarioOutcomeGroup(Rule rule, List<ScenarioOutcome> scenarios) {
         this(scenarios);
@@ -27,6 +29,9 @@ public class ScenarioOutcomeGroup {
             this.background = rule.getBackground();
             this.backgroundTitle = rule.getBackground().getName();
             this.backgroundDescription = rule.getBackground().getDescription();
+        }
+        if (rule.getTags() != null) {
+            this.tags.addAll(rule.getTags());
         }
         this.id = UUID.randomUUID().toString();
     }
@@ -48,6 +53,7 @@ public class ScenarioOutcomeGroup {
         if (backgroundScenariosIn(scenarios)) {
             this.background = backgroundFrom(scenarios);
         }
+        this.tags = new ArrayList<>();
     }
 
     private boolean backgroundScenariosIn(List<ScenarioOutcome> scenarios) {
@@ -123,6 +129,16 @@ public class ScenarioOutcomeGroup {
 
     public void setBackgroundDescription(String backgroundDescription) {
         this.backgroundDescription = backgroundDescription;
+    }
+
+    public List<TestTag> getTags() {
+        return tags;
+    }
+
+    public Set<TestTag> getFilteredTags() {
+        TagFilter tagFilter = new TagFilter();
+        Set<TestTag> filteredTags = new HashSet<>(tags);
+        return tagFilter.removeHiddenTagsFrom(filteredTags);
     }
 }
 

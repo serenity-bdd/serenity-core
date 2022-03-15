@@ -2,7 +2,7 @@ package net.thucydides.core.requirements.classpath;
 
 import com.google.common.io.Resources;
 import net.thucydides.core.requirements.model.LoadedNarrative;
-import net.thucydides.core.requirements.model.Narrative;
+import net.thucydides.core.requirements.model.RequirementDefinition;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class NarrativeTitle {
             if (narrativePath.isPresent()) {
 //             String narrativeFilePath = Resources.getResource(narrativePath).getFile();
 //             if (new File(narrativeFilePath).exists()) {
-                Optional<Narrative> narrative = LoadedNarrative.load().fromFile(new File(narrativePath.get()), defaultType);
+                Optional<RequirementDefinition> narrative = LoadedNarrative.load().fromFile(new File(narrativePath.get()), defaultType);
                 if (narrative.isPresent()) {
                     return (narrative.get().getTitle().orElse("") + System.lineSeparator() + narrative.get().getText()).trim();
                 }

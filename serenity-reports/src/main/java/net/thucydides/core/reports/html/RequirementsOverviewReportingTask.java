@@ -114,6 +114,8 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         List<Requirement> requirements;
         if (requirementsOutcomes.getParentRequirement().isPresent()) {
             requirements = Arrays.asList(requirementsOutcomes.getParentRequirement().get());
+            context.put("requirement", requirementsOutcomes.getParentRequirement().get());
+            context.put("requirementTags", new TagFilter().removeHiddenTagsFrom(requirementsOutcomes.getParentRequirement().get().getTags()));
         } else {
             requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(toList());
         }
@@ -190,8 +192,11 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         }
 
         List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
+        ScenarioResultCounts scenarioResultCounts = ScenarioResultCounts.forScenarios(scenarios);
 
         context.put("scenarioGroups", scenarioGroups);
+        context.put("scenarioResults", scenarioResultCounts);
+        context.put("requirementsResultData", scenarioResultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised","undefined"));
         context.put("testCases", executedScenarios);
         context.put("automatedTestCases", automated(executedScenarios));
         context.put("manualTestCases", manual(executedScenarios));

@@ -33,6 +33,13 @@ public class TestTag implements Comparable<TestTag> {
         this.displayName = displayName;
     }
 
+    /**
+     * Issue tags contain links to an external issue system, so reports are not generated for them.
+     */
+    public boolean isIssueTag() {
+        return type.equalsIgnoreCase("issue");
+    }
+
     public String normalisedName() {
         if (normalisedName == null) { normalisedName = normalised(name); }
         return normalisedName;
@@ -112,13 +119,10 @@ public class TestTag implements Comparable<TestTag> {
         if (this.equals(testTag)) {
             return true;
         }
-        if (testTag.normalisedName().replaceFirst(".*?([^\\.]+)$", "$1").equals(this.normalisedName()) && (this.getType().equals(testTag.getType()))) {
+        if (testTag.normalisedName().replaceFirst(".*?([^.]+)$", "$1").equals(this.normalisedName()) && (this.getType().equals(testTag.getType()))) {
             return true;
         }
-        if ((this.normalisedName().endsWith("/" + testTag.normalisedName())) && (this.getType().equals(testTag.getType()))) {
-            return true;
-        }
-        return false;
+        return (this.normalisedName().endsWith("/" + testTag.normalisedName())) && (this.getType().equals(testTag.getType()));
     }
 
     public static class TestTagBuilder {
@@ -145,9 +149,7 @@ public class TestTag implements Comparable<TestTag> {
         TestTag testTag = (TestTag) o;
 
         if (!normalisedName().equals(testTag.normalisedName())) return false;
-        if (!normalisedType().equals(testTag.normalisedType())) return false;
-
-        return true;
+        return normalisedType().equals(testTag.normalisedType());
     }
 
     public boolean equalsIgnoreCase(Object o) {
@@ -157,9 +159,7 @@ public class TestTag implements Comparable<TestTag> {
         TestTag testTag = (TestTag) o;
 
         if (!normalisedName().equalsIgnoreCase(testTag.normalisedName())) return false;
-        if (!normalisedType().equalsIgnoreCase(testTag.normalisedType())) return false;
-
-        return true;
+        return normalisedType().equalsIgnoreCase(testTag.normalisedType());
     }
 
     @Override

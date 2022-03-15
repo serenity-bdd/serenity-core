@@ -32,6 +32,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final Rule rule;
     private final Long duration;
     private final ZonedDateTime startTime;
+    private final Collection<TestTag> scenarioTags;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -49,7 +50,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   Map<String, Collection<TestTag>> exampleTags,
                                   Rule rule,
                                   ZonedDateTime startTime,
-                                  Long duration) {
+                                  Long duration,
+                                  Collection<TestTag> scenarioTags) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -68,6 +70,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.rule = rule;
         this.startTime = startTime;
         this.duration = duration;
+        this.scenarioTags = scenarioTags;
     }
 
     public String toString() {
@@ -169,6 +172,10 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     @Override
     public Set<TestTag> getTags() {
         return tags;
+    }
+
+    public Collection<TestTag> getScenarioTags() {
+        return scenarioTags;
     }
 
     @Override

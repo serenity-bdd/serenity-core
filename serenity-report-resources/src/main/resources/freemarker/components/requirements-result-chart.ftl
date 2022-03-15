@@ -1,12 +1,12 @@
-<#macro result_chart(id)>
+<#macro requirements_result_chart(id)>
     <!-- PIE CHART -->
     <script>
 
         // The results pie chart
-        const outcomeChartCtx = document.getElementById('${id}');
+        const requirementsChartCtx = document.getElementById('${id}');
 
         // Options define for display value on top of bars
-        const outcomeDetailsReports = [
+        const requirementsOutcomeDetailsReports = [
             { title: 'Passing Scenarios', link: "${successReport}" },
             { title: 'Pending Scenarios', link: "${pendingReport}" },
             { title: 'Ignored Scenarios', link: "${ignoredReport}" },
@@ -15,11 +15,12 @@
             { title: 'Failed Scenarios', link: "${failureReport}"  },
             { title: 'Broken Scenarios', link: "${errorReport}"    },
             { title: 'Compromised Scenarios',  link: "${compromisedReport}" },
+            { title: 'Undefined Scenarios',  link: "" },
         ]
-        const outcomeData = {
+        const requirementsOutcomeData = {
             labels: ['Passing Scenarios', 'Pending Scenarios', 'Ignored Scenarios', 'Skipped Scenarios', 'Aborted Scenarios', 'Failed Scenarios', 'Broken Scenarios', 'Compromised Scenarios','Undefined Scenarios'],
             datasets: [{
-                label: 'Test Results',
+                label: 'Feature Coverage',
                 fill: false,
                 data: ${testResultData},
                 backgroundColor: ${colorScheme.backgroundColors},
@@ -27,7 +28,7 @@
                 borderWidth: 1,
             }]
         }
-        const outcomeOptions = {
+        const requirementsOutcomeOptions = {
             responsive: true,
             plugins: {
                 legend: {
@@ -55,10 +56,10 @@
             }
         }
 
-        const outcomeChart = new Chart(outcomeChartCtx, {
+        const requirementsChart = new Chart(requirementsChartCtx, {
             type: 'doughnut',
-            data: outcomeData,
-            options: outcomeOptions,
+            data: requirementsOutcomeData,
+            options: requirementsOutcomeOptions,
             plugins: [
                 {
                     id: 'text',
@@ -82,15 +83,15 @@
                 }]
         });
 
-        function clickHandler(click) {
-            const points = outcomeChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
-            if (points.length) {
+        function reqsClickHandler(click) {
+            const points = requirementsChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length && requirementsOutcomeDetailsReports[firstPoint.index].link) {
                 const firstPoint = points[0];
-                window.open(outcomeDetailsReports[firstPoint.index].link, "_self")
+                window.open(requirementsOutcomeDetailsReports[firstPoint.index].link, "_self")
 
             }
         }
-        outcomeChartCtx.onclick = clickHandler;
+        requirementsChartCtx.onclick = reqsClickHandler;
     </script>
     <!-- END PIE CHART -->
 </#macro>

@@ -72,7 +72,7 @@
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.1.0</awaitility.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <appium.version>8.0.0-beta2</appium.version>
+        <appium.version>8.0.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
         <!--        <htmlunit.version>2.54.0</htmlunit.version>-->

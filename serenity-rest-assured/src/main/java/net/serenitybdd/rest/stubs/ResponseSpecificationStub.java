@@ -278,4 +278,9 @@ public class ResponseSpecificationStub implements ResponseSpecification {
         return this;
     }
 
+    @Override
+    public ResponseSpecification onFailMessage(String s) {
+        return this;
+    }
+
 }

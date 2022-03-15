@@ -188,13 +188,21 @@ public class JUnit5DataDrivenAnnotations {
             Method factoryMethod = testDataMethod.getDeclaringClass().getDeclaredMethod(methodName);
             factoryMethod.setAccessible(true);
             try {
-                Stream<Arguments> result = null;
+//                Stream<Arguments> result = null;
+//                if(staticMethodUsed) {
+//                    result = (Stream<Arguments>)factoryMethod.invoke(null);
+//                } else {
+//                    result = (Stream<Arguments>)factoryMethod.invoke(testDataMethod.getDeclaringClass().getConstructor().newInstance());
+//                }
+//                return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
+                Stream<?> result = null;
                 if(staticMethodUsed) {
-                    result = (Stream<Arguments>)factoryMethod.invoke(null);
+                    result = (Stream<?>)factoryMethod.invoke(null);
                 } else {
-                    result = (Stream<Arguments>)factoryMethod.invoke(testDataMethod.getDeclaringClass().getConstructor().newInstance());
+                    result = (Stream<?>)factoryMethod.invoke(testDataMethod.getDeclaringClass().getConstructor().newInstance());
                 }
-                return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
+                return result.map(argument -> convertToListOfParameters(argument)).collect(Collectors.toList());
+                //return result.map(argument->Arrays.asList(argument.get())).collect(Collectors.toList());
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 logger.error("Cannot get list of objects from method source ", e);
             }
@@ -202,6 +210,14 @@ public class JUnit5DataDrivenAnnotations {
             logger.error("No static method with the name " + methodName  + " found ",ex);
         }
         return null;
+    }
+
+    private List<Object> convertToListOfParameters(Object argument) {
+        if (argument instanceof Arguments) {
+            return Arrays.asList(((Arguments) argument).get());
+        } else {
+            return Arrays.asList(argument);
+        }
     }
 
     private boolean isStaticMethodUsed(Method testDataMethod) {

@@ -58,7 +58,6 @@ public class RequestSpecificationStub implements RequestSpecification {
     public RequestSpecification body(final Object object, final ObjectMapper mapper) {
         return this;
     }
-
     @Override
     public RequestSpecification body(final Object object, final ObjectMapperType mapperType) {
         return this;
@@ -259,6 +258,11 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public RequestSpecification contentType(final String contentType) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification noContentType() {
         return this;
     }
 

@@ -69,7 +69,7 @@ public class ReportFormatter {
     }
 
     public String asIssueLink(String issueNumber) {
-        if (issueTracking == null) {
+        if (issueTracking == null || issueTracking.getIssueTrackerUrl() == null) {
             return issueNumber;
         } else {
             return issueTracking.getIssueTrackerUrl().replace("{0}",issueNumber);

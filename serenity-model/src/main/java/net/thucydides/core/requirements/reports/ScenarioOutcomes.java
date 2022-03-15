@@ -74,8 +74,10 @@ public class ScenarioOutcomes {
 
         Optional<Requirement> requirement = requirements.getParentRequirementFor(testOutcome);
         List<TestTag> scenarioTags = new ArrayList<>();
-        if (requirement.isPresent()) {
-            scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
+        if (requirement.isPresent() && requirement.get().getScenarioTags() != null) {
+            if (requirement.get().getScenarioTags().get(testOutcome.getName()) != null) {
+                scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
+            }
         }
         return new SingleScenarioOutcome(
                 testOutcome.getQualified().withContext().getTitleWithLinks(),

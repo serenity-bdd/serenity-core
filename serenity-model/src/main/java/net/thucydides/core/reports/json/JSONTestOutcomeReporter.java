@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.DataTableRow;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
@@ -13,11 +14,13 @@ import net.thucydides.core.reports.io.SafelyMoveFiles;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.thucydides.core.model.TestStep;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -32,6 +35,8 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     private final String encoding;
 
+    private static transient ConcurrentHashMap<String,TestOutcome> testOutComeMap = new ConcurrentHashMap<>();
+
     @Override
     public String getName() {
         return "json";
@@ -42,6 +47,49 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     public JSONTestOutcomeReporter() {
         encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
+    }
+
+    // update existed testOutcome based on testOutcome
+    public TestOutcome updateTestOutcome(TestOutcome testOutcome) {
+        Preconditions.checkNotNull(outputDirectory);
+        String reportFilename = reportFor(testOutcome);
+        TestOutcome existedOutcome = testOutComeMap.get(reportFilename);
+        if (existedOutcome == null) {
+            testOutComeMap.put(reportFilename, testOutcome);
+            return testOutcome;
+        }
+        List<TestStep> existedSteps = existedOutcome.getTestSteps();
+        List<TestStep> newSteps = testOutcome.getTestSteps();
+        if (existedSteps.size() == newSteps.size()) {
+            return testOutcome;
+        }
+        // update steps list
+        for (int i = 0; i < newSteps.size(); i++) {
+            TestStep newStep = newSteps.get(i);
+            int lineNumber = newStep.getLineNumber();
+            LOGGER.info("lineNumber: {} need to updated", lineNumber);
+            for (int j = 0; j < existedSteps.size(); j++) {
+                TestStep existedStep = existedSteps.get(j);
+                newStep.setDescription(existedStep.getDescription());
+                //TODO: update number field
+                if (existedStep.getLineNumber() == lineNumber) {
+                    existedSteps.set(j, newStep);
+                    break;
+                }
+            }
+            List<DataTableRow> existedRows = existedOutcome.getDataTable().getRows();
+            // update data table result
+            for (int k = 0; k < existedRows.size(); k++) {
+                DataTableRow existedRow = existedRows.get(k);
+                if (existedRow.getLineNumber() == lineNumber) {
+                    existedRow.setResult(newStep.getResult());
+                    break;
+                }
+            }
+        }
+        // update annotatedResult
+        existedOutcome.setAnnotatedResult(testOutcome.getAnnotatedResult());
+        return existedOutcome;
     }
 
     @Override

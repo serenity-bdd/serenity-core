@@ -8,6 +8,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -129,6 +130,19 @@ public class ReportService {
      */
 
     public void generateReportsFor(final List<TestOutcome> testOutcomeResults) {
+        // update test steps to support failure retry
+        for (int i = 0; i < testOutcomeResults.size(); i ++) {
+            TestOutcome testOutcome = testOutcomeResults.get(i);
+            if (testOutcome.isDataDriven()) {
+                for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
+                    if (reporter instanceof JSONTestOutcomeReporter){
+                        JSONTestOutcomeReporter jsonTestOutcomeReporter = (JSONTestOutcomeReporter) reporter;
+                        jsonTestOutcomeReporter.setOutputDirectory(outputDirectory);
+                        testOutcomeResults.set(i, jsonTestOutcomeReporter.updateTestOutcome(testOutcome));
+                    }
+                }
+            }
+        }
         final TestOutcomes allTestOutcomes = TestOutcomes.of(testOutcomeResults);
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);

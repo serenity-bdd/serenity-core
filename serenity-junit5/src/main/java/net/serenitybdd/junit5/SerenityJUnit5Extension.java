@@ -5,6 +5,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestSourceType;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
                     eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
                 }
                 eventBusFor(context).getBaseStepListener().addTagsToCurrentStory(JUnit5Tags.forMethod(method));
+                eventBusFor(context).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
             }
         );
     }

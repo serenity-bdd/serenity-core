@@ -174,6 +174,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName);
         }
+        StepEventBus.getEventBus().setTestSource(testSource);
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
@@ -342,9 +343,15 @@ public class StepEventBus {
         return resultTally;
     }
 
+    private void recordTestSource() {
+        TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+        outcome.setTestSource(testSource);
+    }
+
     public void testFinished(boolean inDataDrivenTest) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         outcome = checkForEmptyScenarioIn(outcome);
+        recordTestSource();
 
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome, inDataDrivenTest);
@@ -577,6 +584,7 @@ public class StepEventBus {
      */
     public void testFailed(final Throwable cause) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+        recordTestSource();
         for (StepListener stepListener : getAllListeners()) {
             try {
                 stepListener.testFailed(outcome, cause);
@@ -595,6 +603,7 @@ public class StepEventBus {
             stepListener.testPending();
         }
         suspendTest();
+        recordTestSource();
     }
 
     /**
@@ -626,7 +635,6 @@ public class StepEventBus {
             case ABORTED:
                 testAborted();
         }
-
     }
 
     public void useScenarioOutline(String scenarioOutline) {
@@ -648,6 +656,7 @@ public class StepEventBus {
             stepListener.testIgnored();
         }
         suspendTest();
+        recordTestSource();
     }
 
     public void testSkipped() {
@@ -655,6 +664,7 @@ public class StepEventBus {
             stepListener.testSkipped();
         }
         suspendTest();
+        recordTestSource();
     }
 
     public void testAborted() {
@@ -662,6 +672,7 @@ public class StepEventBus {
             stepListener.testAborted();
         }
         suspendTest();
+        recordTestSource();
     }
 
     public boolean areStepsRunning() {

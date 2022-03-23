@@ -33,7 +33,8 @@ public class NumberOfThreads {
 
     public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
-        return configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
+        final int calculatedReportThreads = Math.max(1, (int) ((numberOfCores * 1.0) / (1.0 - blockingCoefficientForIO)));
+        return configuredReportThreads().orElse(calculatedReportThreads);
     }
 
     private Optional<Integer> configuredReportThreads() {

@@ -79,7 +79,7 @@
         <webdrivermanager.version>5.1.0</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
-        <spring.version>5.3.3</spring.version>
+        <spring.version>5.3.16</spring.version>
         <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
         <jimfs.version>1.2</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>

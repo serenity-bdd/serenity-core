@@ -25,7 +25,6 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.remoteTesting.LinkGenerator;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderService;
@@ -36,13 +35,11 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-//import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -64,7 +61,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * includes the narrative steps taken during the test, screenshots at each step,
  * the results of each step, and the overall result. A test getscenario
  * can be associated with a user story using the UserStory annotation.
- *
+ * <p>
  * A TestOutcome is stored after a test is executed. When the aggregate reports
  * are generated, the test outcome files are loaded into memory and processed.
  *
@@ -295,7 +292,7 @@ public class TestOutcome {
     private static String identifierFrom(String testName, Class<?> testCase, Story userStory) {
         String identifer = null;
         if (testCase != null) {
-            identifer = testCase.getName().replaceAll("\\$",".");
+            identifer = testCase.getName().replaceAll("\\$", ".");
         }
 
         if (userStory != null) {
@@ -406,7 +403,7 @@ public class TestOutcome {
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
             environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-            if(this.context==null){
+            if (this.context == null) {
                 this.context = contextFrom(environmentVariables);
             }
         }
@@ -515,7 +512,7 @@ public class TestOutcome {
                           final String projectKey,
                           final EnvironmentVariables environmentVariables,
                           final ExternalLink externalLink,
-    final String context) {
+                          final String context) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -550,15 +547,15 @@ public class TestOutcome {
         this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
         this.externalLink = externalLink;
-        this.context=context;
+        this.context = context;
     }
 
     List<String> calculateNestPath(Class<?> testCase) {
         List<String> nestPath = new ArrayList<>();
-        if(testCase != null){
+        if (testCase != null) {
             String testCaseName = testCase.getName();
-            String className =  testCaseName.substring(testCaseName.lastIndexOf(".") + 1);
-            if(className.contains("$")) {
+            String className = testCaseName.substring(testCaseName.lastIndexOf(".") + 1);
+            if (className.contains("$")) {
                 nestPath = Arrays.asList(className.split("\\$"));
             }
         }
@@ -1030,6 +1027,10 @@ public class TestOutcome {
 
     public boolean isUnsuccessful() {
         return (getResult() == TestResult.COMPROMISED || getResult() == TestResult.ERROR || getResult() == TestResult.FAILURE);
+    }
+
+    public boolean isAJUnit5Test() {
+        return testSource == null || (testSource.equalsIgnoreCase("JUnit5"));
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -2011,13 +2012,14 @@ public class TestOutcome {
 
         return context;
     }
-    
+
     /**
      * Setting the context
+     *
      * @param context
      */
     public void setContext(String context) {
-    	this.context = context;
+        this.context = context;
     }
 
     /**
@@ -2113,22 +2115,23 @@ public class TestOutcome {
 
     private int countDataRowsWithResult(TestResult expectedResult, TestType expectedType) {
         int matchingRowCount = 0;
-        if (typeCompatibleWith(expectedType)) {
-            if (resultsAreUndefinedIn(getDataTable())) {
-                for (TestStep step : getTestSteps()) {
-                    matchingRowCount += (step.getResult() == expectedResult) ? 1 : 0;
-                }
-            } else {
-                for (DataTableRow row : getDataTable().getRows()) {
-                    matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
-                }
+        if (!typeCompatibleWith(expectedType)) {
+            return 0;
+        }
+        if (resultsAreUndefinedIn(getDataTable()) || this.isAJUnit5Test()) {
+            for (TestStep step : getTestSteps()) {
+                matchingRowCount += (step.getResult() == expectedResult) ? 1 : 0;
+            }
+        } else {
+            for (DataTableRow row : getDataTable().getRows()) {
+                matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
             }
         }
         return matchingRowCount;
     }
 
     private boolean resultsAreUndefinedIn(DataTable dataTable) {
-        return dataTable.getRows().stream().allMatch( row -> row.getResult() == TestResult.UNDEFINED);
+        return dataTable.getRows().stream().allMatch(row -> row.getResult() == TestResult.UNDEFINED);
     }
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {
@@ -2557,7 +2560,7 @@ public class TestOutcome {
         StringBuilder sampleScenario = new StringBuilder();
         for (TestStep step : getStepChildren()) {
             sampleScenario.append(withPlaceholderSubstitutes(step.getDescription()))
-                          .append("\n");
+                    .append("\n");
         }
         return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
     }
@@ -2785,7 +2788,9 @@ public class TestOutcome {
     }
 
     public Integer getOrder() {
-        if (order == null) { return 0; }
+        if (order == null) {
+            return 0;
+        }
         return order;
     }
 
@@ -2801,7 +2806,7 @@ public class TestOutcome {
         return specifiedOutcome;
     }
 
-    public List<String> getNestedTestPath(){
+    public List<String> getNestedTestPath() {
         return nestedTestPath;
     }
 }

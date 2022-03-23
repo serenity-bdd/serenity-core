@@ -63,7 +63,9 @@ public class OnStage {
      * If a pronoun is used (e.g "she creates a new account") then the current actor in the spotlight will be used.
      */
     public static Actor theActorCalled(String requiredActor) {
-        if (pronouns().contains(requiredActor)) {
+        boolean theActorIsReferredToByAPronoun = pronouns().stream().anyMatch(pronoun -> pronoun.equalsIgnoreCase(requiredActor));
+
+        if (theActorIsReferredToByAPronoun) {
             return stage().theActorInTheSpotlight().usingPronoun(requiredActor);
         }
         if (anActorIsOnStage() && theActorInTheSpotlight().getName().equals(A_NEW_ACTOR)) {

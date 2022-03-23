@@ -37,7 +37,7 @@ class WhenSettingUpReportServices extends Specification {
         given:
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
         when:
-            environmentVariables.setProperty("io.blocking.coefficient", "0.5");
+            environmentVariables.setProperty("io.blocking.coefficient", "0.1");
         then:
             new NumberOfThreads().forIO() != new NumberOfThreads(environmentVariables).forIO();
 

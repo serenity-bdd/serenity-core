@@ -21,6 +21,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
@@ -32,10 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -724,6 +722,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public WebElementFacade type(CharSequence... keysToSend) {
+        keysToSend = nonNullCharSequenceFrom(keysToSend);
         logIfVerbose("Type '" + keysToSend + "'");
 
         if (driverIsDisabled()) {
@@ -736,6 +735,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return this;
     }
 
+    private CharSequence[] nonNullCharSequenceFrom(CharSequence... charSequences) {
+        return Arrays.stream(charSequences).filter(chars -> chars != null).collect(Collectors.toList()).toArray(new CharSequence[]{});
+    }
     /**
      * Type a value into a field and then press Enter, making sure that the field is empty first.
      *
@@ -1261,7 +1263,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public void sendKeys(CharSequence... keysToSend) {
-        getElement().sendKeys(keysToSend);
+        getElement().sendKeys(nonNullCharSequenceFrom(keysToSend));
     }
 
     public String getTagName() {

@@ -545,23 +545,23 @@ public class RenderedPageObjectView {
         }
         return matchingElements;
     }
-
-    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(String cssOrXPathLocator, String expectedText) {
-        return page -> page.withTimeoutOf(Duration.ZERO)
-                .findAll(cssOrXPathLocator)
-                .stream()
-                .filter(element -> element.getTextContent().contains(expectedText))
-                .collect(Collectors.toList());
-    }
-
-
-    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(List<String> cssOrXPathLocators, String expectedText) {
-        return page -> page.withTimeoutOf(Duration.ZERO)
-                .findFirstMatching(cssOrXPathLocators)
-                .stream()
-                .filter(element -> element.getTextContent().contains(expectedText))
-                .collect(Collectors.toList());
-    }
+//
+//    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(String cssOrXPathLocator, String expectedText) {
+//        return page -> page.withTimeoutOf(Duration.ZERO)
+//                .findAll(cssOrXPathLocator)
+//                .stream()
+//                .filter(element -> element.getTextContent().contains(expectedText))
+//                .collect(Collectors.toList());
+//    }
+//
+//
+//    public static Function<PageObject, List<WebElementFacade>> containingTextAndMatchingCSS(List<String> cssOrXPathLocators, String expectedText) {
+//        return page -> page.withTimeoutOf(Duration.ZERO)
+//                .findFirstMatching(cssOrXPathLocators)
+//                .stream()
+//                .filter(element -> element.getTextContent().contains(expectedText))
+//                .collect(Collectors.toList());
+//    }
 
     public WebElementFacade find(By bySelector) {
         waitFor(bySelector);

@@ -4,8 +4,10 @@ import net.serenitybdd.core.pages.ListOfWebElementFacades;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.ConfiguredTimeouts;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
@@ -13,16 +15,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class LambdaTarget extends Target {
+public class LambdaTarget extends SearchableTarget {
 
-    private final Function<PageObject, List<WebElementFacade>> locationStrategy;
+    private final Function<SearchContext, List<WebElementFacade>> locationStrategy;
 
-    public LambdaTarget(String targetElementName, Function<PageObject, List<WebElementFacade>> locationStrategy, Optional<IFrame> iFrame) {
+    public LambdaTarget(String targetElementName, Function<SearchContext, List<WebElementFacade>> locationStrategy, Optional<IFrame> iFrame) {
         super(targetElementName, iFrame);
         this.locationStrategy = locationStrategy;
     }
 
-    public LambdaTarget(String targetElementName, Function<PageObject, List<WebElementFacade>> locationStrategy, Optional<IFrame> iFrame, Optional<Duration> timeout) {
+    public LambdaTarget(String targetElementName, Function<SearchContext, List<WebElementFacade>> locationStrategy, Optional<IFrame> iFrame, Optional<Duration> timeout) {
         super(targetElementName, iFrame, timeout);
         this.locationStrategy = locationStrategy;
     }
@@ -46,24 +48,19 @@ public class LambdaTarget extends Target {
                 }
             }
         }
-        if (!resolvedElement.isPresent()) {
-            String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
-            StepEventBus.getEventBus().notifyFailure();
-            if (lastThrownException != null) {
-                throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
-            } else {
-                throw new ElementNotFoundAfterTimeoutError(errorMessage);
-            }
+        String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
+        StepEventBus.getEventBus().notifyFailure();
+        if (lastThrownException != null) {
+            throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
+        } else {
+            throw new ElementNotFoundAfterTimeoutError(errorMessage);
         }
-
-        return resolvedElement.get();
     }
 
-    
     private Optional<WebElementFacade> resolveElementFor(PageObject page) {
         this.lastThrownException = null;
         try {
-            return locationStrategy.apply(page).stream().findFirst();
+            return locationStrategy.apply(page.getDriver()).stream().findFirst();
         } catch (Throwable exception) {
             this.lastThrownException = exception;
             return Optional.empty();
@@ -72,7 +69,7 @@ public class LambdaTarget extends Target {
 
 
     public ListOfWebElementFacades resolveAllFor(PageObject page) {
-        List<WebElementFacade> resolvedElements = locationStrategy.apply(page);
+        List<WebElementFacade> resolvedElements = locationStrategy.apply(page.getDriver());
 
         if (timeout.isPresent()) {
             if (resolvedElements.isEmpty()) {
@@ -82,7 +79,55 @@ public class LambdaTarget extends Target {
                 long maxTimeAllowed = effectiveTimeout.toMillis();
                 long timeStarted = System.currentTimeMillis();
                 while (System.currentTimeMillis() - timeStarted < maxTimeAllowed) {
-                    resolvedElements = locationStrategy.apply(page);
+                    resolvedElements = locationStrategy.apply(page.getDriver());
+                    if (!resolvedElements.isEmpty()) {
+                        return new ListOfWebElementFacades(resolvedElements);
+                    }
+                }
+            }
+        }
+        return new ListOfWebElementFacades(resolvedElements);
+    }
+
+    @Override
+    public WebElementFacade resolveFor(SearchContext searchContext) {
+        Duration effectiveTimeout = timeout.orElse(ConfiguredTimeouts.implicitWait());
+
+        List<WebElementFacade> matchingElements = locationStrategy.apply(searchContext);
+        if (!matchingElements.isEmpty()) {
+            return matchingElements.get(0);
+        } else {
+            long maxTimeAllowed = effectiveTimeout.toMillis();
+            long timeStarted = System.currentTimeMillis();
+            while (System.currentTimeMillis() - timeStarted < maxTimeAllowed) {
+                matchingElements = locationStrategy.apply(searchContext);
+                if (!matchingElements.isEmpty()) {
+                    return matchingElements.get(0);
+                }
+            }
+        }
+        String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
+        StepEventBus.getEventBus().notifyFailure();
+        if (lastThrownException != null) {
+            throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
+        } else {
+            throw new ElementNotFoundAfterTimeoutError(errorMessage);
+        }
+    }
+
+    @Override
+    public ListOfWebElementFacades resolveAllFor(SearchContext searchContext) {
+        List<WebElementFacade> resolvedElements = locationStrategy.apply(searchContext);
+
+        if (timeout.isPresent()) {
+            if (resolvedElements.isEmpty()) {
+                return new ListOfWebElementFacades(resolvedElements);
+            } else {
+                Duration effectiveTimeout = timeout.orElse(ConfiguredTimeouts.implicitWait());
+                long maxTimeAllowed = effectiveTimeout.toMillis();
+                long timeStarted = System.currentTimeMillis();
+                while (System.currentTimeMillis() - timeStarted < maxTimeAllowed) {
+                    resolvedElements = locationStrategy.apply(searchContext);
                     if (!resolvedElements.isEmpty()) {
                         return new ListOfWebElementFacades(resolvedElements);
                     }
@@ -113,5 +158,10 @@ public class LambdaTarget extends Target {
 
     public LambdaTarget called(String name) {
         return new LambdaTarget(name, locationStrategy, iFrame, timeout);
+    }
+
+    @Override
+    public List<String> getCssOrXPathSelectors() {
+        throw new UnsupportedOperationException("The getCssOrXPathSelectors() method is not supported for lambda-type Targets");
     }
 }

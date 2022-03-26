@@ -18,7 +18,7 @@ public class ResultIconFormatter {
         resultIcons.put(TestResult.ABORTED, "<a href='${report}#beforetable'><i class='bi bi-exclamation-octagon-fill ${iconStyle} ${qualifier}' title='${result}'></i></a>");
         resultIcons.put(TestResult.IGNORED, "<a href='${report}#beforetable'><i class='bi bi-slash-circle ${iconStyle} ${qualifier}' title='${result}'></i></a>");
         resultIcons.put(TestResult.SKIPPED, "<a href='${report}#beforetable'><i class='bi bi-skip-forward ${iconStyle} ${qualifier}' title='${result}'></i></a>");
-        resultIcons.put(TestResult.UNDEFINED, "");
+        resultIcons.put(TestResult.UNDEFINED, "<i class='bi bi-pause-circle ${iconStyle} ${qualifier}' title='No test has been implemented yet'></i>");
     }
 
     private final Map<TestResult, String> resultIconStyles = new HashMap();

@@ -1,12 +1,17 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.core.SerenitySystemProperties;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 
 import java.util.Optional;
@@ -18,12 +23,22 @@ public class ReportNameProvider {
     private final Optional<String> context;
     private final ReportNamer reportNamer;
     private final RequirementsService requirementsService;
+    private EnvironmentVariables environmentVariables;
 
+
+    public ReportNameProvider(Optional<String> context, ReportNamer reportNamer) {
+        this(context, reportNamer,Injectors.getInjector().getInstance(RequirementsService.class));
+    }
 
     public ReportNameProvider(Optional<String> context, ReportNamer reportNamer, RequirementsService requirementsService) {
         this.context = context;
         this.reportNamer = reportNamer;
         this.requirementsService = requirementsService;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    }
+
+    public ReportNameProvider(Optional<String> context, ReportType reportType, RequirementsService requirementsService) {
+        this(context, ReportNamer.forReportType(reportType), requirementsService);
     }
 
     public ReportNameProvider getWithoutContext() {
@@ -37,7 +52,7 @@ public class ReportNameProvider {
     }
 
     public ReportNameProvider(String context) {
-       this(Optional.ofNullable(context), ReportType.HTML, Injectors.getInjector().getInstance(RequirementsService.class));
+       this(Optional.ofNullable(context), ReportNamer.forReportType(ReportType.HTML), Injectors.getInjector().getInstance(RequirementsService.class));
 
     }
 
@@ -47,13 +62,7 @@ public class ReportNameProvider {
     }
 
     protected ReportNameProvider(Optional<String> context, ReportType type) {
-        this(context, type, Injectors.getInjector().getInstance(RequirementsService.class));
-    }
-
-    public ReportNameProvider(Optional<String> context, ReportType type, RequirementsService requirementsService) {
-        this.context = context;
-        this.reportNamer = ReportNamer.forReportType(type);
-        this.requirementsService = requirementsService;
+        this(context, ReportNamer.forReportType(type), Injectors.getInjector().getInstance(RequirementsService.class));
     }
 
     public String getContext() {
@@ -77,7 +86,13 @@ public class ReportNameProvider {
     }
 
     public String forTag(TestTag tag) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
+        if (tag.getType().equalsIgnoreCase("issue")) {
+            IssueTracking issueTracking = new SystemPropertiesIssueTracking(environmentVariables);
+            ReportFormatter reportFormatter = new ReportFormatter(issueTracking, environmentVariables);
+            return reportFormatter.asIssueLink(tag.getName());
+        } else {
+            return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
+        }
     }
 
 

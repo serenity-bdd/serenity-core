@@ -185,9 +185,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                         knownRequirementReportNames));
 
         // NESTED TAGS
-//        Set<ReportingTask> nestedReports = nestedTagReports(testOutcomes, context, knownRequirementReportNames);
-//        reportingTasks.addAll(nestedReports);
-//        logReports("NEXTED REPORTS", nestedReports);
+        // Set<ReportingTask> nestedReports = nestedTagReports(testOutcomes, context, requirementTypes, knownRequirementReportNames);
+        // reportingTasks.addAll(nestedReports);
 
         // ADD DURATION REPORTS
         reportingTasks.addAll(durationReports(testOutcomes, context, requirementTypes, knownRequirementReportNames));
@@ -225,6 +224,35 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
+    private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes,
+                                                 FreemarkerContext context,
+                                                 List<String> requirementTypes,
+                                                 List<String> knownRequirementReportNames) {
+        Set<ReportingTask> reportingTasks = new HashSet<>();
+
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
+
+        testOutcomes.getTags().stream()
+                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
+                .filter(tag -> !tag.getType().equals("Duration"))
+                .filter(exclusions::doNotExclude)
+                .forEach(
+                        knownTag -> {
+                            List<ReportingTask> nested = TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag))
+                                    .using(context.withParentTag(knownTag),
+                                            environmentVariables,
+                                            getOutputDirectory(),
+                                            reportNameProvider.inContext(knownTag.getCompleteName()),
+                                            durationDistribution.getDurationTags(),
+                                            requirementTypes,
+                                            knownRequirementReportNames);
+                            reportingTasks.addAll(nested);
+                        }
+                );
+        return reportingTasks;
+    }
+
     private List<ReportingTask> durationReports(TestOutcomes testOutcomes,
                                                 FreemarkerContext context,
                                                 List<String> requirementTypes,
@@ -243,13 +271,16 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private void enhanceWithDurationTags(TestOutcomes testOutcomes) {
         DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
         for(TestOutcome testOutcome : testOutcomes.getOutcomes()) {
-            enhanceWithDuraction(testOutcome, durationDistribution);
+            enhanceWithDuration(testOutcome, durationDistribution);
         }
     }
 
-    private void enhanceWithDuraction(TestOutcome testOutcome, DurationDistribution durationDistribution) {
-        DurationBucket bucket = durationDistribution.bucketFor(testOutcome);
-        testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"));
+    private void enhanceWithDuration(TestOutcome testOutcome, DurationDistribution durationDistribution) {
+        Collection<DurationBucket> buckets = durationDistribution.findMatchingBucketsForTestOutcome(testOutcome);
+        buckets.forEach(
+                bucket -> testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"))
+        );
+
     }
 
     private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes,

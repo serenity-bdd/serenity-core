@@ -19,16 +19,16 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -65,7 +65,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() {
 
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
 
         List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(5));
@@ -84,8 +84,8 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
+        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(5));
     }
 
@@ -94,7 +94,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
         runTestForClass(AddDifferentSortsOfTodos.class);
 
-        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.getTestOutcomesForAllParameterSets();
+        List<TestOutcome> executedScenarios = new ParameterizedTestsOutcomeAggregator().getTestOutcomesForAllParameterSets();
         assertThat(executedScenarios.size(), is(4));
     }
 
@@ -124,7 +124,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     @Test
     public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
 
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
 
         List<TestOutcome> aggregatedScenarios = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(2));
@@ -220,7 +220,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
-        runTestForClass(SimpleDataDrivenTestScenarioWithValueSource.class);
+        runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
         File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
     }
@@ -274,13 +274,16 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         return Paths.get(old.getAbsolutePath()).toFile();
     }
 
+    @TempDir
+    Path jsonTempDir;
+
     @Test
+    @Disabled("Unstable on Windows: to review")
     public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable {
 
         //File outputDirectory = tempFolder.newFolder("serenity");
-        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
+        File outputDirectory = jsonTempDir.resolve("serenity").toFile();
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(), outputDirectory.getAbsolutePath());
         runTestForClass(SampleCSVDataDrivenScenario.class);
 
         List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
@@ -451,13 +454,17 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
 
     }*/
 
+    @TempDir
+    Path stepTitleTmpDir;
+
+
     @Test
+    @Disabled("Unstable on Windows: to review")
     public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
 
-        File outputDirectory = anotherTempDir.resolve("serenity").toFile();
+        File outputDirectory = stepTitleTmpDir.resolve("serenity").toFile();
         //File outputDirectory = tempFolder.newFolder("serenity");
-        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
+        System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(), outputDirectory.getAbsolutePath());
         runTestForClass(ScenarioWithTestSpecificDataSample.class);
 
         List<TestOutcome> testOutcomes = new ParameterizedTestsOutcomeAggregator().aggregateTestOutcomesByTestMethods();

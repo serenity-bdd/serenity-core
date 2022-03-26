@@ -45,7 +45,7 @@ public class NarrativeReader {
         return new NarrativeReader(this.rootDirectory, requirementTypes);
     }
 
-    public Optional<Narrative> loadFrom(File directory) {
+    public Optional<RequirementDefinition> loadFrom(File directory) {
         return loadFrom(directory, 0);// levelOf(directory));
     }
 
@@ -67,7 +67,7 @@ public class NarrativeReader {
         return 0;
 
     }
-    public Optional<Narrative> loadFrom(File directory, int requirementsLevel) {
+    public Optional<RequirementDefinition> loadFrom(File directory, int requirementsLevel) {
         File[] narrativeFiles = directory.listFiles(calledNarrativeOrOverview());
         if (narrativeFiles == null || narrativeFiles.length == 0) {
             return Optional.empty();
@@ -76,7 +76,7 @@ public class NarrativeReader {
         }
     }
 
-    public Optional<Narrative> loadFromStoryFile(File storyFile) {
+    public Optional<RequirementDefinition> loadFromStoryFile(File storyFile) {
         if (storyFile.getName().endsWith(".story")) {
             return narrativeLoadedFrom(storyFile, "story");
         } else if (storyFile.getName().endsWith(".feature")) {
@@ -86,19 +86,19 @@ public class NarrativeReader {
         }
     }
 
-    private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, int requirementsLevel) {
+    private Optional<RequirementDefinition> narrativeLoadedFrom(File narrativeFile, int requirementsLevel) {
         String defaultType = directoryLevelInRequirementsHierarchy(narrativeFile, requirementsLevel);
         return LoadedNarrative.load().fromFile(narrativeFile, defaultType);
     }
 
-    private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, String defaultType) {
+    private Optional<RequirementDefinition> narrativeLoadedFrom(File narrativeFile, String defaultType) {
         return LoadedNarrative.load().fromFile(narrativeFile, defaultType);
     }
 
 
-    private Optional<Narrative> featureNarrativeLoadedFrom(File narrativeFile)  {
+    private Optional<RequirementDefinition> featureNarrativeLoadedFrom(File narrativeFile)  {
         CucumberParser parser = new CucumberParser();
-        return parser.loadFeatureNarrative(narrativeFile);
+        return parser.loadFeatureDefinition(narrativeFile);
     }
 
     private String directoryLevelInRequirementsHierarchy(File narrativeFile, int requirementsLevel) {

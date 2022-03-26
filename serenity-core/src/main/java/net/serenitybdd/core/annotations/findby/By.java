@@ -1,6 +1,7 @@
 package net.serenitybdd.core.annotations.findby;
 
 import com.google.common.base.Preconditions;
+import net.thucydides.core.webdriver.shadow.ByShadow;
 import org.openqa.selenium.*;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public abstract class By extends org.openqa.selenium.By {
             return "By.sclocator: " + scLocator;
         }
     }
+
 
     /**
      * @param jQuerySelector The jquery to use
@@ -136,4 +138,11 @@ public abstract class By extends org.openqa.selenium.By {
         }
     }
 
+    public static ByShadow.ByShadowBuilder shadowCSS(String cssLocator) {
+        return ByShadow.css(cssLocator);
+    }
+
+    public static ByShadow.ByShadowBuilder shadowLocator(org.openqa.selenium.By shadowElementLocator) {
+        return ByShadow.located(shadowElementLocator);
+    }
 }

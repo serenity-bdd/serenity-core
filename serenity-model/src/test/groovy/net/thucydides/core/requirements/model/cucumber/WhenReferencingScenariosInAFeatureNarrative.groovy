@@ -144,7 +144,7 @@ Then her todo list should contain Walk the dog    {result:Filtering things I nee
         given:
         CucumberParser parser = new CucumberParser()
         when:
-            def narrative = parser.loadFeatureNarrative(new File(featureFile))
+            def narrative = parser.loadFeatureDefinition(new File(featureFile))
         then:
             narrative.isPresent()
     }

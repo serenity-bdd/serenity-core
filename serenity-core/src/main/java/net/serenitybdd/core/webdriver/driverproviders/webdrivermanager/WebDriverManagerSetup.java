@@ -1,7 +1,6 @@
 package net.serenitybdd.core.webdriver.driverproviders.webdrivermanager;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.enhancers.WebDriverManagerEnhancer;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.reflection.ClassFinder;
@@ -32,7 +31,7 @@ public class WebDriverManagerSetup {
             extensionPackages.forEach(
                     extensionPackage ->
                             customEnhancers.addAll(ClassFinder.loadClasses().thatImplement(WebDriverManagerEnhancer.class)
-                                           .fromPackage(extensionPackage))
+                                    .fromPackage(extensionPackage))
             );
         }
 
@@ -50,12 +49,7 @@ public class WebDriverManagerSetup {
     }
 
     public void forFirefox() {
-        boolean enabledForFirefox = Boolean.parseBoolean(
-                EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("webdrivermanager.download.firefox").orElse("false")
-        );
-        if (enabledForFirefox) {
-            enhance(WebDriverManager.firefoxdriver()).setup();
-        }
+        enhance(WebDriverManager.firefoxdriver()).setup();
     }
 
     public void forChrome() {

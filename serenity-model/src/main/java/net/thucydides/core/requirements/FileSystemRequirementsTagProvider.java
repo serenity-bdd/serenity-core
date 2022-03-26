@@ -544,7 +544,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public Requirement readRequirementFrom(File requirementDirectory) {
-        java.util.Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level - 1));
+        java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level - 1));
 
         if (requirementNarrative.isPresent()) {
             return requirementWithNarrative(requirementDirectory,
@@ -564,15 +564,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         FeatureType type = featureTypeOf(storyFile);
 
         try {
-            java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
+            java.util.Optional<RequirementDefinition> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
             String storyName = storyNameFrom(narrative, type, storyFile);
 
             Requirement requirement;
             if (narrative.isPresent()) {
                 requirement = leafRequirementWithNarrative(storyName,
-                                                           storyFile.getPath(),
-                                                           narrative.get()).withType(type.toString());
+                        storyFile.getPath(),
+                        narrative.get()).withType(type.toString());
 
                 if (narrative.get().background().isPresent()) {
                     requirement = requirement.withBackground(narrative.get().background().get());
@@ -591,7 +591,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private String storyNameFrom(java.util.Optional<Narrative> narrative, FeatureType type, File storyFile) {
+    private String storyNameFrom(java.util.Optional<RequirementDefinition> narrative, FeatureType type, File storyFile) {
         if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
             return narrative.get().getTitle().get();
         } else {
@@ -610,15 +610,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return name.contains("_");
     }
 
-    private java.util.Optional<Narrative> loadFromStoryFile(File storyFile) {
+    private java.util.Optional<RequirementDefinition> loadFromStoryFile(File storyFile) {
         return narrativeReader.loadFromStoryFile(storyFile);
     }
 
-    private java.util.Optional<Narrative> loadFromFeatureFile(File storyFile) {
+    private java.util.Optional<RequirementDefinition> loadFromFeatureFile(File storyFile) {
         String explicitLocale = readLocaleFromFeatureFile(storyFile);
         CucumberParser parser = (explicitLocale != null) ?
                 new CucumberParser(explicitLocale, environmentVariables) : new CucumberParser(environmentVariables);
-        return parser.loadFeatureNarrative(storyFile);
+        return parser.loadFeatureDefinition(storyFile);
     }
 
     private String readLocaleFromFeatureFile(File storyFile) {
@@ -673,7 +673,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             return 0;
         }
 
-        String relativePath = requirementDirectory.getPath().substring(requirementDirectory.getPath().indexOf(rootDirectory) + rootDirectory.length() + 1);
+        String normalizedRequirementsPath = requirementDirectory.getPath().replace("\\","/");
+        String normalizedRootDirectory = rootDirectory.replace("\\","/");
+        String relativePath = normalizedRequirementsPath.substring(normalizedRequirementsPath.indexOf(normalizedRootDirectory) + normalizedRootDirectory.length() + 1);
         return relativePath.split("\\/|\\\\").length - 1;
     }
 
@@ -696,7 +698,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withPath(relativeDirectoryOf(path));
     }
 
-    private Requirement leafRequirementWithNarrative(String shortName, String path, Narrative requirementNarrative) {
+    private Requirement leafRequirementWithNarrative(String shortName, String path, RequirementDefinition requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
@@ -713,7 +715,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withScenarioTags(requirementNarrative.getScenarioTags());
     }
 
-    private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {
+    private Requirement requirementWithNarrative(File requirementDirectory, String shortName, RequirementDefinition requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
@@ -790,7 +792,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return false;
     }
 
-    private String getTitleFromNarrativeOrDirectoryName(Narrative requirementNarrative, String nameIfNoNarrativePresent) {
+    private String getTitleFromNarrativeOrDirectoryName(RequirementDefinition requirementNarrative, String nameIfNoNarrativePresent) {
         if (requirementNarrative.getTitle().isPresent() && isNotBlank(requirementNarrative.getTitle().get())) {
             return requirementNarrative.getTitle().get();
         }

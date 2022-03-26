@@ -1125,10 +1125,10 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
+                    <tr th:if="${testFailuresPresent}">
                         <td class="compact-wrapper"><h3>Test Failure Overview</h3></td>
                     </tr>
-                    <tr>
+                    <tr th:if="${testFailuresPresent}">
                         <td class="compact-wrapper">
                             <table>
                                 <tr>
@@ -1171,7 +1171,7 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
+                    <tr th:if="${testFailuresPresent}">
                         <td class="compact-wrapper">
                             <h3>Full Failure List</h3>
                             <table class="failure-list failure-scoreboard" style="border:1px solid black;">

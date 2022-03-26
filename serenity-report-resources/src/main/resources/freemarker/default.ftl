@@ -37,7 +37,7 @@
 
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
-            <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
+            <#assign breadcrumbTitle = breadcrumb.displayName > <!-- inflection.of(breadcrumb.displayName).asATitle()-->
             > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
         > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}
@@ -114,18 +114,18 @@
                             </#if>
                         </td>
                         <td valign="top">
+                            <p class="tag">
                             <#list filteredTags as tag>
                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                                 <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
-                                <p class="tag">
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
-                                    <span class="badge tag-badge" style="${tagStyle}">
+                                    <span class="badge example-tag tag-badge" style="${tagStyle}">
                                     <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
                                                                       href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
-                                </p>
                             </#list>
+                            </p>
                         </td>
                     </tr>
                 </table>
@@ -303,7 +303,7 @@
                     <#assign exampleTagReport = absoluteReportName.forRequirementOrTag(exampleTag) />
                     <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
                     <#assign tagStyle = styling.tagStyleFor(tag) >
-                    <span class="badge tag-badge" style="${tagStyle}">
+                    <span class="badge example-tag tag-badge" style="${tagStyle}">
                     <i class="bi bi-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle} style="${tagStyle}"
                                                       href="${exampleTagReport}">${formatter.htmlCompatible(exampleTagTitle)}
                     (${exampleTag.type})</a>

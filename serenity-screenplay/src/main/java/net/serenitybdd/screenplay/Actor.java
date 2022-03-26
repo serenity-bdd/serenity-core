@@ -15,6 +15,8 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepFactory;
+import net.thucydides.core.steps.StepInterceptor;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.lang.reflect.Method;
@@ -62,7 +64,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     }
 
     public static Actor named(String name) {
-        EventBusInterface.castActor(name);
+        //EventBusInterface.castActor(name);
         return new Actor(name);
     }
 
@@ -271,6 +273,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private <T extends Performable> void performTask(T todo) {
         if (!StepEventBus.getEventBus().currentTestIsSuspended()) {
+            EventBusInterface.castActor(name);
             todo.performAs(this);
         }
     }
@@ -418,7 +421,8 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private void endPerformance(ErrorHandlingMode mode) {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
-        if (mode == THROW_EXCEPTION_ON_FAILURE) {
+        boolean isAFixtureMethod = StepEventBus.getEventBus().inFixtureMethod();
+        if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod) {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
                         StepEventBus.getEventBus().notifyFailure();

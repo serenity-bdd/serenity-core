@@ -1,5 +1,4 @@
 <#macro result_chart(id)>
-    <#assign testResultData = resultCounts.allResultValuesFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <!-- PIE CHART -->
     <script>
 
@@ -18,7 +17,7 @@
             { title: 'Compromised Scenarios',  link: "${compromisedReport}" },
         ]
         const outcomeData = {
-            labels: ['Passing', 'Pending', 'Ignored', 'Skipped', 'Aborted', 'Failed', 'Broken', 'Compromised'],
+            labels: ['Passing Scenarios', 'Pending Scenarios', 'Ignored Scenarios', 'Skipped Scenarios', 'Aborted Scenarios', 'Failed Scenarios', 'Broken Scenarios', 'Compromised Scenarios','Undefined Scenarios'],
             datasets: [{
                 label: 'Test Results',
                 fill: false,
@@ -46,7 +45,7 @@
                             sum += data;
                         });
                         let percentage = (value * 100 / sum).toFixed(0) + "%";
-                        if (percentage === '0%') {
+                        if (percentage === '0%' || percentage === 'NaN%') {
                             return '';
                         } else {
                             return percentage;

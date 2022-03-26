@@ -94,6 +94,10 @@ public abstract class PageObject {
 
     private EnvironmentVariables environmentVariables;
 
+    public static PageObject fromSearchContext(SearchContext searchContext) {
+        return null;
+    }
+
     public void setImplicitTimeout(int duration, TemporalUnit unit) {
 
         waitForElementTimeout = Duration.of(duration, unit);

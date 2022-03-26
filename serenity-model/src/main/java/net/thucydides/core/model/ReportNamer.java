@@ -2,6 +2,7 @@ package net.thucydides.core.model;
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.digest.Digest;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
@@ -22,11 +23,7 @@ public class ReportNamer {
     private String prefix = "";
 
     private ReportNamer(final ReportType type) {
-        this(type,
-                SERENITY_COMPRESS_FILENAMES.booleanFrom(ConfiguredEnvironment.getEnvironmentVariables(), true)
-//             ConfiguredEnvironment.getEnvironmentVariables()
-//                     .getPropertyAsBoolean(ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES.getPropertyName(), true)
-        );
+        this(type, SERENITY_COMPRESS_FILENAMES.booleanFrom(ConfiguredEnvironment.getEnvironmentVariables(), true));
     }
 
     public ReportNamer(ReportType type, boolean compressedFilename) {

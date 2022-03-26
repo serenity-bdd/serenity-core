@@ -61,6 +61,10 @@ public class FreemarkerContext {
     private final Collection<TestTag> tagsOfType;
     private final List<String> customFields;
     private final List<String> customFieldValues;
+    private final TagFilter tagFilter;
+    private final OutcomeTagFilter outcomeFilter;
+
+    private static final BackgroundColor BACKGROUND_COLORS = new BackgroundColor();
 
     public FreemarkerContext(EnvironmentVariables environmentVariables,
                              RequirementsService requirements,
@@ -80,12 +84,16 @@ public class FreemarkerContext {
         this.version = versionProvider.getVersion();
         this.buildNumber = versionProvider.getBuildNumberText();
         this.tagTypes = new ReportTags(environmentVariables).getDisplayedTagTypes();
-        this.reportOptions = new ReportOptions(environmentVariables);
+
+        this.reportOptions = ReportOptions.forEnvironment(environmentVariables);
         this.customReportFields = new CustomReportFields(environmentVariables);
         this.requirementsWithTag = requirements.getRequirementsWithTagsOfType(tagTypes);
         this.tagsOfType = requirements.getTagsOfType(tagTypes);
         this.customFields = customReportFields.getFieldNames();
         this.customFieldValues = customReportFields.getValues();
+        this.tagFilter = new TagFilter(environmentVariables);
+        this.outcomeFilter = new OutcomeTagFilter(environmentVariables);
+
     }
 
 
@@ -100,16 +108,14 @@ public class FreemarkerContext {
                                                ReportNameProvider reportName,
                                                boolean useFiltering) {
         Map<String, Object> context = new HashMap<>();
-        TagFilter tagFilter = new TagFilter(environmentVariables);
-        OutcomeTagFilter outcomeFilter = new OutcomeTagFilter(environmentVariables);
+
 
         // WIP
 
         TestOutcomes testOutcomes = completeTestOutcomes.filteredByEnvironmentTags();
 
         // EWIP
-
-        context.put("colorScheme", new ChartColorScheme(environmentVariables));
+        context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", testOutcomes);
         context.put("durations", new DurationDistribution(environmentVariables, testOutcomes));
 
@@ -139,19 +145,18 @@ public class FreemarkerContext {
         context.put("endTimestamp", readableTimestampFrom(endTime));
         context.put("totalTestDuration", formattedDuration(totalDurationOf(testOutcomes.getOutcomes())));
         context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
-
-
         context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
         context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
         context.put("minTestDuration", formattedDuration(minDurationOf(testOutcomes.getOutcomes())));
 
         context.put("serenityVersionNumber", version);
         context.put("buildNumber", buildNumber);
-        context.put("build", buildProperties);
+        context.put("build", buildProperties)
+        ;
 
         context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
 
-        List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes));
+        List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes, requirements));
         List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
 
         context.put("testCount", testOutcomes.getOutcomes().size());
@@ -174,25 +179,26 @@ public class FreemarkerContext {
 
         RequirementsFilter requirementsFilter = new RequirementsFilter(environmentVariables);
 
-        Collection<TestTag> coveredTags = requirementsWithTag
-                .stream()
-                .filter(requirement -> testOutcomes.containTestFor(requirement) || requirement.containsNoScenarios())
-                .filter(requirementsFilter::inDisplayOnlyTags)
-                .map(Requirement::asTag)
-                .collect(Collectors.toSet());
+        List<CoverageByTagType> coverage;
+        if (resultsAreFilteredByRequirementTypeBasedOn(tagTypes)) {
+            // If we are filtering for a specific type of requirement, only show coverage for this type of outcome
+            Collection<TestTag> coveredTags = requirementsWithTag
+                    .stream()
+                    .filter(requirement -> testOutcomes.containTestFor(requirement) || requirement.containsNoScenarios())
+                    .filter(requirementsFilter::inDisplayOnlyTags)
+                    .map(Requirement::asTag)
+                    .collect(Collectors.toSet());
+            coverage = TagCoverage.from(testOutcomes).showingTags(coveredTags).forTagTypes(tagTypes);
+        } else {
+            // Otherwise show coverage for all requirements
+            coverage = TagCoverage.from(testOutcomes).forTagTypes(requirements.getRequirementTypes());
+        }
 
         boolean hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
 
-        List<CoverageByTagType> coverage = new ArrayList<>(TagCoverage.from(testOutcomes)
-                .showingTags(tagsOfType)
-                .showingTags(coveredTags)
-                .forTagTypes(tagTypes)
-        );
-
         context.put("hideEmptyRequirements", hideEmptyRequirements);
         context.put("coverage", coverage);
-
-        context.put("backgroundColor", new BackgroundColor());
+        context.put("backgroundColor", BACKGROUND_COLORS);
 
         testOutcomes.getOutcomes().forEach(
                 testOutcome -> addTags(testOutcome, context, null)
@@ -211,8 +217,11 @@ public class FreemarkerContext {
         return context;
     }
 
+    private boolean resultsAreFilteredByRequirementTypeBasedOn(List<String> tagTypes) {
+        return requirements.getRequirementTypes().containsAll(tagTypes);
+    }
+
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
-        TagFilter tagFilter = new TagFilter(environmentVariables);
         Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
         filteredTags = tagFilter.removeHiddenTagsFrom(filteredTags);
         context.put("filteredTags", filteredTags);
@@ -247,7 +256,7 @@ public class FreemarkerContext {
         context.put("tagInflector", new TagInflector(environmentVariables));
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
-        context.put("reportOptions", new ReportOptions(environmentVariables));
+        context.put("reportOptions", ReportOptions.forEnvironment(environmentVariables));
         context.put("showDetailedStoryDescription", SERENITY_SHOW_STORY_DETAILS_IN_TESTS.booleanFrom(environmentVariables, false));
     }
 

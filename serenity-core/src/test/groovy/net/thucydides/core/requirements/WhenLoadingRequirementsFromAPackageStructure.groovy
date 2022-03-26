@@ -22,7 +22,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
     def "Should be able to load capabilities from the default package structure"() {
         given: "We are using the Annotation provider"
             def vars = new MockEnvironmentVariables()
-            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.propertyName, ROOT_DIRECTORY)
+            vars.setProperty(ThucydidesSystemProperty.SERENITY_TEST_ROOT.propertyName, ROOT_DIRECTORY)
             RequirementsTagProvider capabilityProvider = new PackageRequirementsTagProvider(vars)
         when: "We load the available requirements"
             def capabilities = capabilityProvider.getRequirements();

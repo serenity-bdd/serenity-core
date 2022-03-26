@@ -136,7 +136,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         def testOutcome = TestOutcome.inEnvironment(vars).forTest("Title for test 1", BuyApples.class, story)
         then:
         capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
-        capabilityProvider.getParentRequirementOf(testOutcome).get().narrative.renderedText == "A Narrative for test 1  \nMultiple lines  "
+        capabilityProvider.getParentRequirementOf(testOutcome).get().narrative.renderedText == "A Narrative for test 1  " + System.lineSeparator() + "Multiple lines  "
     }
 
     def "Should find the direct parent requirement of a test outcome for nested requirements"() {

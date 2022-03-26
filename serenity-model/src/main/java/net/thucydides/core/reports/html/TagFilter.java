@@ -23,7 +23,11 @@ public class TagFilter {
     private final List<String> excludedTags;
 
     private final List<String> ALWAYS_HIDDEN_TAGS
-            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser");
+            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser","Duration");
+
+    public TagFilter(){
+        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
 
     public TagFilter(EnvironmentVariables environmentVariables) {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
@@ -123,7 +127,7 @@ public class TagFilter {
         }
     }
 
-    public Set<TestTag> removeHiddenTagsFrom(Set<TestTag> filteredTags) {
+    public Set<TestTag> removeHiddenTagsFrom(Collection<TestTag> filteredTags) {
         List<String> hiddenTypes = requirementsService.getRequirementTypes().stream().map(type -> type + ":*").collect(Collectors.toList());
         hiddenTypes.addAll(excludedTags);
 

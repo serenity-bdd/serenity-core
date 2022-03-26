@@ -28,11 +28,11 @@ class ReportExecutor implements Callable<Void> {
     public Void call() throws Exception {
         Stopwatch reportingStopwatch = Stopwatch.started();
         if (verboseReporting()) {
-            LOGGER.info("Generating report {}...", reportingTask);
+            LOGGER.debug("Generating report {}...", reportingTask);
         }
         reportingTask.generateReports();
         if (verboseReporting()) {
-            LOGGER.info("Report {} generated in {} ms", reportingTask, reportingStopwatch.stop());
+            LOGGER.debug("Report {} generated in {} ms", reportingTask, reportingStopwatch.stop());
         }
         return null;
     }

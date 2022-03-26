@@ -388,13 +388,13 @@
                                                                     <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
                                                                     <h4>${inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle()}</h4>
 
-                                                                    <table class="table ${coverageTableClass}"
-                                                                           id="${tagCoverageByType.tagType}">
+                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
+                                                                            <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">Scenarios</th>
-                                                                            <th style="width:1em;">% Pass</th>
+                                                                            <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
                                                                             <th>Coverage</th>
                                                                         </tr>
@@ -405,13 +405,19 @@
                                                                             <#if (!hideEmptyRequirements || tagCoverage.testCount != 0)>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <#if tagCoverage.testCount = 0>
-                                                                                        ${tagCoverage.tagName}
+                                                                                    <#if (!tagCoverageByType.featureNamesAreUnique && tagCoverage.parentName?has_content) >
+                                                                                        <#assign displayedTagName = tagCoverage.parentName + " > " + tagCoverage.tagName />
                                                                                     <#else>
-                                                                                        <a href="${tagCoverage.report}">${tagCoverage.tagName}</a>
+                                                                                        <#assign displayedTagName = tagCoverage.tagName />
+                                                                                    </#if>
+                                                                                    <#if tagCoverage.testCount = 0>
+                                                                                        ${displayedTagName}
+                                                                                    <#else>
+                                                                                        <a href="${tagCoverage.report}" > ${displayedTagName}</a>
                                                                                     </#if>
                                                                                 </td>
                                                                                 <td>${tagCoverage.testCount}</td>
+                                                                                <td>${tagCoverage.scenarioCount}</td>
                                                                                 <td>${tagCoverage.successRate}</td>
                                                                                 <td>
                                                                                     <#if tagCoverage.testCount = 0>

@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class OnStage {
 
-    private final static String DEFAULT_PRONOUNS = "he,she,they,it";
+    private final static String DEFAULT_PRONOUNS = "he,she,they,it,his,her,their,its";
     private final static String A_NEW_ACTOR = "An actor";
 
     private static final ThreadLocal<Stage> STAGE = new ThreadLocal<>();
@@ -40,6 +40,13 @@ public class OnStage {
     public static Stage setTheStage(Cast cast) {
         STAGE.set(new Stage(cast));
         return stage();
+    }
+
+    /**
+     * Check whether the stage has already been set.
+     */
+    public static boolean theStageIsSet() {
+        return STAGE.get() != null;
     }
 
     /**
@@ -56,7 +63,9 @@ public class OnStage {
      * If a pronoun is used (e.g "she creates a new account") then the current actor in the spotlight will be used.
      */
     public static Actor theActorCalled(String requiredActor) {
-        if (pronouns().contains(requiredActor)) {
+        boolean theActorIsReferredToByAPronoun = pronouns().stream().anyMatch(pronoun -> pronoun.equalsIgnoreCase(requiredActor));
+
+        if (theActorIsReferredToByAPronoun) {
             return stage().theActorInTheSpotlight().usingPronoun(requiredActor);
         }
         if (anActorIsOnStage() && theActorInTheSpotlight().getName().equals(A_NEW_ACTOR)) {

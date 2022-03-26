@@ -25,7 +25,7 @@ public class ConfiguredProxy {
         String socksProxyVersionValue = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_SOCKS_VERSION).orElse(null);
         Integer socksProxyVersion = (StringUtils.isNumeric(socksProxyVersionValue)) ? Integer.parseInt(socksProxyVersionValue) : null;
 
-        Boolean autodetect = ThucydidesSystemProperty.SERENITY_PROXY_AUTODETECT.booleanFrom(environmentVariables, false);
+        Boolean autodetect = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(ThucydidesSystemProperty.SERENITY_PROXY_AUTODETECT);
 
         if ((httpProxy  != null) && (!httpProxy.isEmpty())) {
             org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();

@@ -95,6 +95,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
         RuntimeOptions runtimeOptions = new CucumberPropertiesParser()
                 .parse(CucumberProperties.fromSystemProperties())
+                .enablePublishPlugin()
                 .build(environmentOptions);
 
         RuntimeOptionsBuilder runtimeOptionsBuilder = new RuntimeOptionsBuilder();
@@ -119,7 +120,6 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
 
         JUnitOptions junitOptions = new JUnitOptionsParser()
                 .parse(fromSystemPropertiesAndOptionsAnnotationIn(clazz))
-                //.setStrict(runtimeOptions.isStrict())
                 .build(junitEnvironmentOptions);
 
         this.bus = synchronize(new TimeServiceEventBus(Clock.systemUTC(), UUID::randomUUID));
@@ -137,16 +137,15 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
         ExitStatus exitStatus = new ExitStatus(runtimeOptions);
         this.plugins.addPlugin(exitStatus);
 
+        ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(classLoader,runtimeOptions);
+        ObjectFactorySupplier objectFactorySupplier = new ThreadLocalObjectFactorySupplier(objectFactoryServiceLoader);
+        BackendSupplier backendSupplier = new BackendServiceLoader(clazz::getClassLoader, objectFactorySupplier);
+        ThreadLocalRunnerSupplier runnerSupplier = new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier, objectFactorySupplier);
+
         Configuration systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
         SerenityReporter reporter = new SerenityReporter(systemConfiguration);
         addSerenityReporterPlugin(plugins, reporter);
 
-        ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(classLoader,
-            runtimeOptions);
-        ObjectFactorySupplier objectFactorySupplier = new ThreadLocalObjectFactorySupplier(objectFactoryServiceLoader);
-        BackendSupplier backendSupplier = new BackendServiceLoader(clazz::getClassLoader, objectFactorySupplier);
-          ThreadLocalRunnerSupplier runnerSupplier = new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier,
-            objectFactorySupplier);
         this.context = new CucumberExecutionContext(bus, exitStatus, runnerSupplier);
         Predicate<Pickle> filters = new Filters(runtimeOptions);
 
@@ -281,11 +280,13 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
             }
 
             context.startTestRun();
+            context.runBeforeAllHooks();
             features.forEach(context::beforeFeature);
 
             try {
                 runFeatures.evaluate();
             } finally {
+                context.runAfterAllHooks();
                 context.finishTestRun();
                 StepEventBus.getEventBus().testRunFinished();
             }

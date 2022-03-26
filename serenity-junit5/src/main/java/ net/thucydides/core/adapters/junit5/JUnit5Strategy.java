@@ -20,18 +20,29 @@ class JUnit5Strategy implements JUnitStrategy {
 
     @Override
     public boolean isTestClass(final Class<?> testClass) {
-        for (final Method method : testClass.getDeclaredMethods()) {
-            if (isTestMethod(method)) {
-                return true;
-            }
+        if (hasTestMethods(testClass)) {
+            return true;
         }
+        if (!hasNestedTestClasses(testClass)) {
+            return false;
+        }
+        return stream(testClass.getDeclaredClasses()).anyMatch(this::isTestClass);
+
         //JUnit5 nested tests
-        for (Class innerClass : testClass.getDeclaredClasses()) {
-            if (isTestClass(innerClass) && isNestedTestClass(innerClass)) {
-                return true;
-            }
-        }
-        return false;
+//        for (Class innerClass : testClass.getDeclaredClasses()) {
+//            if (isTestClass(innerClass) && isNestedTestClass(innerClass)) {
+//                return true;
+//            }
+//        }
+//        return false;
+    }
+
+    private boolean hasNestedTestClasses(final Class<?> testClass) {
+        return stream(testClass.getDeclaredClasses()).anyMatch(this::isNestedTestClass);
+    }
+
+    private boolean hasTestMethods(final Class<?> testClass) {
+        return stream(testClass.getDeclaredMethods()).anyMatch(this::isTestMethod);
     }
 
     private boolean isNestedTestClass(Class testClass) {

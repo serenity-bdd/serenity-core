@@ -34,7 +34,6 @@ public class PhotoSession {
         this.blurLevel = blurLevel;
         this.darkroom = darkroom;
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-//        this.captureStrategy = screenshotStrategyDefinedIn(environmentVariables);
         this.screenShooterFactory = new ScreenShooterFactory(environmentVariables);
 
         darkroom.isOpenForBusiness();

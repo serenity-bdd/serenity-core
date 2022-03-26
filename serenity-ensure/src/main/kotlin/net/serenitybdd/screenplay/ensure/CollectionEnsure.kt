@@ -81,7 +81,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
     fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, hasSizeGreaterThan, expected, isNegated(),targetDescription)
 
     /**
-     * Verifies that the actual {@code Collection} has has a size greater than the given value.
+     * Verifies that the actual {@code Collection} has a size greater than the given value.
      */
     fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeGreaterThanOrEqualTo, expected, isNegated(),targetDescription)
 

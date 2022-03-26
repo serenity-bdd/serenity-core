@@ -2,22 +2,46 @@ package net.serenitybdd.screenplay.ui;
 
 import net.serenitybdd.screenplay.targets.SearchableTarget;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 
-import static net.serenitybdd.core.pages.RenderedPageObjectView.containingTextAndMatchingCSS;
+import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndMatchingCSS;
+import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndMatchingCSSIgnoringCase;
 
 /**
- * An HTML element representing a button.
+ * An HTML element representing any HTML element.
  */
 public class PageElement {
 
-    private static final String BY_ID_NAME_OR_CLASS = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[class*='{0}'],[aria-label='{0}' i]";
-    private static final String STRICTLY_CONTAINS_TEXT = "xpath:.//*[contains(text(),'{0}')]";
+    private static final String BY_NAME_ID_OR_ARIA_LABEL = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[aria-label='{0}' i]";
 
     /**
      * Locate an element with a given name.
      */
-    public static SearchableTarget called(String name) {
-        return Target.the("the '" + name + "' element").locatedBy(BY_ID_NAME_OR_CLASS).of(name);
+    public static SearchableTarget withNameOrId(String name) {
+        return Target.the("the '" + name + "' element").locatedBy(BY_NAME_ID_OR_ARIA_LABEL).of(name);
+    }
+
+    /**
+     * Look for an element matching a given CSS or XPath expression that contains a given text.
+     */
+    public static SearchableTarget containingText(String cssOrXPathLocator, String text) {
+        return Target.the("the element containing text '" + text + "'")
+                .locatedBy(containingTextAndMatchingCSS(cssOrXPathLocator, text));
+    }
+
+    /**
+     * Look for an element matching a given CSS or XPath expression that contains a given text regardless of case
+     */
+    public static SearchableTarget containingTextIgnoringCase(String cssOrXPathLocator, String text) {
+        return Target.the("the element containing text '" + text + "'")
+                .locatedBy(containingTextAndMatchingCSSIgnoringCase(cssOrXPathLocator, text));
+    }
+
+    /**
+     * Look for an element with a given CSS class
+     */
+    public static SearchableTarget withCSSClass(String className) {
+        return TargetFactory.forElementOfType("element").withCSSClass(className);
     }
 
     /**
@@ -25,20 +49,20 @@ public class PageElement {
      * This will not include text that is contained in nested elements.
      */
     public static SearchableTarget containingText(String text) {
-        return Target.the("the element containing text '" + text + "'").locatedBy(STRICTLY_CONTAINS_TEXT).of(text);
+        return TargetFactory.forElementOfType("element").containingText(text);
     }
 
     /**
-     * Look for an element matching a given CSS or XPath expression that contains a given text.
+     * Locate an element using an arbitrary CSS or XPath expression
      */
-    public static Target containingText(String cssOrXPathLocator, String text) {
-        return Target.the("the element containing text '" + text + "'")
-                        .locatedBy(containingTextAndMatchingCSS(cssOrXPathLocator, text));
+    public static SearchableTarget locatedBy(String selector) {
+        return TargetFactory.forElementOfType("element").locatedByXPathOrCss(selector);
     }
 
-
-    public static PageElementBuilder locatedBy(String selector) {
-        return new PageElementBuilder(selector);
+    /**
+     * Locate an element using a By locator
+     */
+    public static SearchableTarget located(By selector) {
+        return TargetFactory.forElementOfType("element").locatedBy(selector);
     }
-
 }

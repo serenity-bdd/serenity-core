@@ -72,5 +72,4 @@ public class CapabilityEnhancer {
             fixtureService.addCapabilitiesTo(capabilities);
         }
     }
-
 }

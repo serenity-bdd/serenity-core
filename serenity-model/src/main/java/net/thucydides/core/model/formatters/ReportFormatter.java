@@ -24,7 +24,6 @@ public class ReportFormatter {
     }
 
     public ReportFormatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
-
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
     }
@@ -67,6 +66,14 @@ public class ReportFormatter {
             formattedValue = insertShortenedIssueTrackingUrls(formattedValue);
         }
         return formattedValue;
+    }
+
+    public String asIssueLink(String issueNumber) {
+        if (issueTracking == null || issueTracking.getIssueTrackerUrl() == null) {
+            return issueNumber;
+        } else {
+            return issueTracking.getIssueTrackerUrl().replace("{0}",issueNumber);
+        }
     }
 
     private String insertShortenedIssueTrackingUrls(String value) {

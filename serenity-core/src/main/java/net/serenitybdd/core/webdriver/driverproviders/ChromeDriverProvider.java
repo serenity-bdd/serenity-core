@@ -16,7 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,12 +66,6 @@ public class ChromeDriverProvider implements DriverProvider {
                 DriverServicePool::newDriver,
                 (pool, capabilities) -> new ChromeDriver(enhancedChromeOptions)
         );
-
-        //
-        // Perform any custom configuration to the new driver
-        //
-        EnhanceDriver.from(environmentVariables).to(newDriver);
-
         return newDriver;
     }
 

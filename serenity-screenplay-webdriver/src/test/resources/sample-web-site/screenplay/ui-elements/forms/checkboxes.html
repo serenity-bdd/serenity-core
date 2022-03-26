@@ -1,7 +1,7 @@
 <html>
 <body>
 <form>
-    <input type="checkbox" id="vehicle1" value="Bike" class="bikeride">
+    <input type="checkbox" id="vehicle1" value="Bike" class="bikeride" aria-label="A Bike">
     <label for="vehicle1"> I have a bike</label><br>
     <input type="checkbox" id="vehicle2" value="Car" class="field-style">
     <label for="vehicle2"> I have a car</label><br>
@@ -10,8 +10,15 @@
     <label>
         <input type="checkbox" id="vehicle4" value="Motorbike"> I have a motorbike
     </label>
+    <input type="checkbox" id="vehicle5" value="Scooter"/><label for="vehicle5">I have a scooter</label>
     <br>
-    <input type="submit" value="Submit">
+
+    <div class="section">
+        <h3>More Scooters</h3>
+        <input type="checkbox" id="vehicle7" value="Scooter"/><label for="vehicle7">I have a scooter</label>
+        <br>
+        <input type="submit" value="Submit">
+    </div>
 
 </form>
 </body>

@@ -28,7 +28,6 @@ public class RequirementOutcome {
     private final long requirementsWithoutTests;
     private final long estimatedUnimplementedTests;
     private final EnvironmentVariables environmentVariables;
-    private ReportFormatter reportFormatter;
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes,
                               long requirementsWithoutTests, long estimatedUnimplementedTests,
@@ -57,12 +56,18 @@ public class RequirementOutcome {
         return testOutcomes;
     }
 
+    private boolean hasUndefinedScenarios() {
+        return (requirement.getScenarioTags() != null && requirement.getScenarioTags().size() > testOutcomes.getTestCaseCount());
+    }
+
     /**
      * Is this requirement complete?
      * A Requirement is considered complete if it has associated tests to all of the tests are successful.
      */
     public boolean isComplete() {
-        return (!getTestOutcomes().getTests().isEmpty()) && getTestOutcomes().getResult() == TestResult.SUCCESS && allChildRequirementsAreSuccessful();
+        return (!getTestOutcomes().getTests().isEmpty())
+                && (!hasUndefinedScenarios())
+                && getTestOutcomes().getResult() == TestResult.SUCCESS && allChildRequirementsAreSuccessful();
     }
 
     public boolean isFailure() {
@@ -78,8 +83,7 @@ public class RequirementOutcome {
     }
 
     public boolean isPending() {
-//        return (getTestOutcomes().getTestCount() == 0) || getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
-        return getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
+        return hasUndefinedScenarios() || getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
     }
 
     public boolean isIgnored() {
@@ -147,10 +151,10 @@ public class RequirementOutcome {
     }
 
     private boolean allChildRequirementsAreSuccessfulFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
-                                                                      testOutcomes.forRequirement(requirement),
-                                                                      issueTracking);
+                    testOutcomes.forRequirement(requirement),
+                    issueTracking);
             if (!childOutcomes.isComplete()) {
                 return false;
             } else if (!allChildRequirementsAreSuccessfulFor(childRequirement.getChildren())) {
@@ -161,7 +165,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsAreErrorsFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isError()) {
@@ -174,7 +178,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsAreFailuresFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isFailure()) {
@@ -187,7 +191,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsAreCompromisedFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isCompromised()) {
@@ -200,7 +204,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsArePendingFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isPending()) {
@@ -213,7 +217,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsAreIgnoredFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isIgnored()) {
@@ -226,7 +230,7 @@ public class RequirementOutcome {
     }
 
     private boolean anyChildRequirementsAreSkippedFor(List<Requirement> requirements) {
-        for(Requirement childRequirement : requirements) {
+        for (Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
                     testOutcomes.forRequirement(requirement), issueTracking);
             if (childOutcomes.isSkipped()) {
@@ -253,6 +257,14 @@ public class RequirementOutcome {
                 "requirement=" + requirement +
                 ", testOutcomes=" + testOutcomes +
                 '}';
+    }
+
+    public int getTestCaseCount() {
+        return testOutcomes.getTestCaseCount();
+    }
+
+    public int getScenarioCount() {
+        return testOutcomes.getScenarioCount();
     }
 
     public int getTestCount() {
@@ -322,7 +334,7 @@ public class RequirementOutcome {
 
     public Set<String> getReleaseVersions() {
         Set<String> releaseVersions = new HashSet();
-        for(TestOutcome outcome : getTestOutcomes().getOutcomes()) {
+        for (TestOutcome outcome : getTestOutcomes().getOutcomes()) {
             releaseVersions.addAll(outcome.getVersions());
         }
         return NewSet.copyOf(releaseVersions);
@@ -386,8 +398,8 @@ public class RequirementOutcome {
 
         public int withIndeterminateResult() {
             return testOutcomes.getTotal() - withResult(TestResult.SUCCESS)
-                                           - withResult(TestResult.FAILURE)
-                                           - withResult(TestResult.ERROR);
+                    - withResult(TestResult.FAILURE)
+                    - withResult(TestResult.ERROR);
         }
 
         public int withFailureOrError() {

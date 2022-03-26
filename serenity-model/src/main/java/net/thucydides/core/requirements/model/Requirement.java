@@ -45,6 +45,7 @@ public class Requirement implements Comparable {
         examples = new ArrayList<>();
         releaseVersions = new ArrayList<>();
         customFields = new ArrayList<>();
+        scenarioTags = new HashMap<>();
     }
 
     protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, CustomFieldValue narrative,
@@ -69,13 +70,17 @@ public class Requirement implements Comparable {
         this.displayName = (displayName != null) ? displayName : name;
         this.cardNumber = cardNumber;
         this.type = type;
-        this.path = path;
+        this.path = normalized(path);
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
         this.featureFileName = featureFileName;
         this.tags = new ArrayList<>();
     }
@@ -96,13 +101,17 @@ public class Requirement implements Comparable {
         this.displayName = (displayName != null) ? displayName : name;
         this.cardNumber = cardNumber;
         this.type = type;
-        this.path = path;
+        this.path = normalized(path);
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
         this.featureFileName = featureFileName;
         this.tags = tags;
         this.scenarioTags = scenarioTags;
@@ -131,12 +140,21 @@ public class Requirement implements Comparable {
         this.type = type;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = Collections.unmodifiableList(children);
-        this.examples = Collections.unmodifiableList(examples);
-        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
-        this.customFields = Collections.unmodifiableList(customFields);
-        this.path = path;
+//        this.children = Collections.unmodifiableList(children);
+//        this.examples = Collections.unmodifiableList(examples);
+//        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+//        this.customFields = Collections.unmodifiableList(customFields);
+        this.children = children;
+        this.examples = examples;
+        this.releaseVersions = releaseVersions;
+        this.customFields = customFields;
+        this.path = normalized(path);
         this.tags = new ArrayList<>();
+    }
+
+
+    private String normalized(String path) {
+        return path.replaceAll("\\\\","/");
     }
 
     public Requirement withNoScenarios() {
@@ -154,6 +172,20 @@ public class Requirement implements Comparable {
 
     public String getDisplayName() {
         return (displayName != null) ? displayName : name;
+    }
+
+    public String getDisplayName(boolean includeParent) {
+        if (includeParent) {
+            String parentName = StringUtils.isNotEmpty(getParent()) ? " (" + getParent() + ")" : "";
+            return getDisplayName() + parentName;
+        } else {
+            return getDisplayName();
+        }
+    }
+
+    public String getDisplayNameWithParent() {
+        String parentName = StringUtils.isNotEmpty(getParent()) ? getParent() + " > " : "";
+        return parentName + getDisplayName();
     }
 
     public String getType() {
@@ -226,7 +258,8 @@ public class Requirement implements Comparable {
     }
 
     public void setChildren(List<Requirement> children) {
-        this.children = Collections.unmodifiableList(children);
+//        this.children = Collections.unmodifiableList(children);
+        this.children = children;
     }
 
     public Requirement withParent(String parent) {

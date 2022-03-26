@@ -1,15 +1,20 @@
 package net.thucydides.core.requirements.reports;
 
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.DescriptionSplitter;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ScenarioOutcomes {
@@ -24,9 +29,9 @@ public class ScenarioOutcomes {
         }
     }
 
-    public static List<ScenarioOutcome> from(TestOutcomes testOutcomes) {
+    public static List<ScenarioOutcome> from(TestOutcomes testOutcomes, RequirementsService requirements) {
         return testOutcomes.getOutcomes().stream()
-                .map(ScenarioOutcomes::outcomeFrom)
+                .map(outcome -> outcomeFrom(outcome, requirements))
                 .collect(Collectors.toList());
     }
 
@@ -49,6 +54,10 @@ public class ScenarioOutcomes {
     }
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
+        return outcomeFrom(testOutcome, Injectors.getInjector().getInstance(RequirementsService.class));
+    }
+
+    public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome, RequirementsService requirements) {
 
         String featureName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : "";
         String scenarioName = testOutcome.getName();
@@ -63,7 +72,13 @@ public class ScenarioOutcomes {
                 testOutcome.getTestSteps()
                         .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
 
-
+        Optional<Requirement> requirement = requirements.getParentRequirementFor(testOutcome);
+        List<TestTag> scenarioTags = new ArrayList<>();
+        if (requirement.isPresent() && requirement.get().getScenarioTags() != null) {
+            if (requirement.get().getScenarioTags().get(testOutcome.getName()) != null) {
+                scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
+            }
+        }
         return new SingleScenarioOutcome(
                 testOutcome.getQualified().withContext().getTitleWithLinks(),
                 testOutcome.getTitle(),
@@ -81,7 +96,8 @@ public class ScenarioOutcomes {
                 userStoryReportName,
                 testOutcome.getTags(),
                 testOutcome.getRule(),
-                testOutcome.getExternalLink());
+                testOutcome.getExternalLink(),
+                scenarioTags);
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

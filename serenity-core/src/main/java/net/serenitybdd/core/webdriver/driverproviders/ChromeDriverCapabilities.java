@@ -41,7 +41,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
-
 //        String switches = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(CHROME_SWITCHES);
 //        capabilities.setCapability("chrome.switches", switches);
 
@@ -138,6 +137,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     public static Map<String, Object> preferencesConfiguredIn(EnvironmentVariables environmentVariables) {
         Map<String, Object> chromePreferences = BrowserPreferences.startingWith("chrome_preferences.").from(environmentVariables);
         chromePreferences.putAll(BrowserPreferences.startingWith("chrome.preferences.").from(environmentVariables));
+        chromePreferences.putAll(BrowserPreferences.startingWith("chrome.options.").from(environmentVariables));
         return SanitisedBrowserPreferences.cleanUpPathsIn(chromePreferences);
     }
 

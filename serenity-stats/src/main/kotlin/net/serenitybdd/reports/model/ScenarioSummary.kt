@@ -40,7 +40,7 @@ class ScenarioSummary(val title: String,
 
 class ScenarioSummaryResult(testResult: TestResult, conciseErrorMessage: String, val description: String, val testFailureErrorType : String) {
     val errorMessage = removeNoiseFrom(conciseErrorMessage)
-    val result = testResult.toString().toLowerCase()
+    val result = testResult.toString().lowercase()
 }
 
 private fun removeNoiseFrom(conciseErrorMessage: String): String =

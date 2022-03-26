@@ -1,7 +1,6 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.junit5.datadriven.samples.*;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,13 +10,13 @@ public class JUnit5DataDrivenAnnotationsTest {
 
     @Test
     public void testFindValueSourceAnnotatedMethods() {
-        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(SimpleDataDrivenTestScenarioWithValueSource.class);
+        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(MultipleDataDrivenTestScenariosWithValueSource.class);
         assertEquals(2,dda.findTestDataMethods().size());
     }
 
     @Test
     public void testCreateColumnNamesFromValueSource() throws Exception {
-        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(SimpleDataDrivenTestScenarioWithValueSource.class);
+        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(MultipleDataDrivenTestScenariosWithValueSource.class);
         assertEquals("arg0",dda.createColumnNamesFromParameterNames(TestClass.class.getMethod("myMethodWithOneParameter",String.class)));
         assertEquals("arg0,arg1",dda.createColumnNamesFromParameterNames(TestClass.class.getMethod("myMethodWithTwoParameters",String.class,String.class)));
     }

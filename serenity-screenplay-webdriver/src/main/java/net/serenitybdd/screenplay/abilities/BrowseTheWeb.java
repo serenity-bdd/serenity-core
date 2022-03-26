@@ -61,7 +61,7 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
     @Subscribe public void perform(ActorPerforms performAction) {
         if (messageIsForThisActor(performAction)) {
             WebDriver driver = webdriverManager.getWebdriver();
-            PageObjectDependencyInjector injector = new PageObjectDependencyInjector(new Pages(driver));
+            PageObjectDependencyInjector injector = new PageObjectDependencyInjector();
             injector.injectDependenciesInto(performAction.getPerformable());
         }
     }
@@ -69,7 +69,7 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
     @Subscribe public void prepareQuestion(ActorAsksQuestion questionEvent) {
         if (messageIsForThisActor(questionEvent)) {
             WebDriver driver = webdriverManager.getWebdriver();
-            PageObjectDependencyInjector injector = new PageObjectDependencyInjector(new Pages(driver));
+            PageObjectDependencyInjector injector = new PageObjectDependencyInjector();
             injector.injectDependenciesInto(questionEvent.getQuestion());
         }
     }

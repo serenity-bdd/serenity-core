@@ -1,9 +1,6 @@
 package net.serenitybdd.screenplay.targets;
 
-import net.serenitybdd.core.pages.ListOfWebElementFacades;
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.ResolvableElement;
-import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.*;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -60,7 +57,7 @@ public abstract class Target implements ResolvableElement {
     public abstract WebElementFacade resolveFor(PageObject page);
     public abstract ListOfWebElementFacades resolveAllFor(PageObject page);
 
-    public abstract Target called(String name);
+    public abstract SearchableTarget called(String name);
 
     public abstract SearchableTarget of(String... parameters);
 
@@ -76,11 +73,11 @@ public abstract class Target implements ResolvableElement {
 
     public abstract Target waitingForNoMoreThan(Duration timeout);
 
-    public Target inside(String locator) {
+    public SearchableTarget inside(String locator) {
         return inside(Target.the("Containing element").locatedBy(locator));
     }
 
-    public Target inside(Target container) {
+    public SearchableTarget inside(Target container) {
         return Target.the(getName()).locatedBy(
                 LocatorStrategies.findNestedElements(container, this)
         );
@@ -93,7 +90,7 @@ public abstract class Target implements ResolvableElement {
      */
     public boolean isVisibleFor(Actor actor) {
         List<WebElementFacade> matchingElements = resolveAllFor(actor);
-        return (!matchingElements.isEmpty() && matchingElements.get(0).isCurrentlyVisible());
+        return matchingElements.stream().anyMatch(WebElementState::isCurrentlyVisible);
     }
 
     public <T> Question<T> mapFirst(Function<WebElementFacade, T> transformation) {

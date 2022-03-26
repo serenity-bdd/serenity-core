@@ -100,12 +100,7 @@ public class JSONRequirementsTree {
     }
 
     private int scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
-        int scenarioCount = 0;
-        if ((requirementsOutcomes != null) && (requirementsOutcomes.requirementOutcomeFor(requirement) != null)
-                && ((requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes() != null))) {
-            scenarioCount = requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes().getOutcomes().size();
-        }
-        return scenarioCount;
+        return requirementsOutcomes.getTestOutcomes().forRequirement(requirement).getTestCount();
     }
 
     private Optional<TestResult> matchingOutcome(Requirement requirement,
@@ -118,7 +113,7 @@ public class JSONRequirementsTree {
         Optional<RequirementOutcome> matchingOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
 
         if (matchingOutcome.isPresent()) {
-            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0) {
+            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0 || (requirement.getScenarioTags().size() > matchingOutcome.get().getTestOutcomes().getTotal())) {
                 return Optional.of(TestResult.PENDING);
             } else if (unimplementedFeaturesExistFor(matchingOutcome.get(), requirementsOutcomes)) {
                 return Optional.of(TestResultList.overallResultFrom(Arrays.asList(TestResult.PENDING, matchingOutcome.get().getTestOutcomes().getResult())));
@@ -142,7 +137,8 @@ public class JSONRequirementsTree {
         }
     }
 
-    private boolean unimplementedFeaturesExistFor(RequirementOutcome matchingOutcome, RequirementsOutcomes requirementsOutcomes) {
+    private boolean unimplementedFeaturesExistFor(RequirementOutcome matchingOutcome, RequirementsOutcomes
+            requirementsOutcomes) {
         return matchingOutcome.getFlattenedRequirements(matchingOutcome.getRequirement())
                 .stream()
                 .anyMatch(requirement -> noTestsExistFor(requirement, requirementsOutcomes));
@@ -161,6 +157,7 @@ public class JSONRequirementsTree {
     public JSONRequirementsTree asAParentRequirement() {
         return new JSONRequirementsTree(nodes, true);
     }
+
     public Boolean isALeafNode() {
         return !displayAsParent && (nodes.size() == 1 && nodes.get(0).getNodes().isEmpty());
     }

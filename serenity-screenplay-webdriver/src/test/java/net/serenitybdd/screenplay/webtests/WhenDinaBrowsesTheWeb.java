@@ -3,12 +3,14 @@ package net.serenitybdd.screenplay.webtests;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.InTheBrowser;
-import net.serenitybdd.screenplay.questions.*;
+import net.serenitybdd.screenplay.questions.Presence;
+import net.serenitybdd.screenplay.questions.Value;
+import net.serenitybdd.screenplay.questions.Visibility;
+import net.serenitybdd.screenplay.questions.WebDriverQuestion;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.waits.WaitUntil;
@@ -21,23 +23,18 @@ import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Collection;
 
-import static java.time.temporal.ChronoUnit.SECONDS;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.hasValue;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -104,7 +101,7 @@ public class WhenDinaBrowsesTheWeb {
         and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
         int nameLength = Value.of(ProfilePage.NAME).map(String::length).answeredBy(dina);
-        String firstLetter = Value.of(ProfilePage.NAME).map(value -> value.substring(0,1)).answeredBy(dina);
+        String firstLetter = Value.of(ProfilePage.NAME).map(value -> value.substring(0, 1)).answeredBy(dina);
 
         assertThat(nameLength, equalTo(4));
         assertThat(firstLetter, equalTo("d"));
@@ -121,7 +118,7 @@ public class WhenDinaBrowsesTheWeb {
         when(dina).attemptsTo(viewHerProfile);
         and(dina).attemptsTo(UpdateHerProfile.withName("dina").andCountryOfResidence("France"));
 
-        List<String> firstLetters = Value.ofEach(ProfilePage.NAME).mapEach(value -> value.substring(0,1)).answeredBy(dina);
+        Collection<String> firstLetters = Value.ofEach(ProfilePage.NAME).mapEach(value -> value.substring(0, 1)).answeredBy(dina);
 
         assertThat(firstLetters, hasItems("d"));
     }
@@ -195,7 +192,7 @@ public class WhenDinaBrowsesTheWeb {
 
         and(dina).attemptsTo(
                 Wait.until(() -> theFileIsProcessed())
-                    .forNoMoreThan(Duration.ofSeconds(3))
+                        .forNoMoreThan(Duration.ofSeconds(3))
         );
 
         assertThat(the(nameField).answeredBy(dina), isVisible());
@@ -436,7 +433,7 @@ public class WhenDinaBrowsesTheWeb {
         dina.has(openedTheApplication);
 
         dina.attemptsTo(
-                InTheBrowser.perform( browser -> browser.getDriver().getCurrentUrl() ).withNoReporting()
+                InTheBrowser.perform(browser -> browser.getDriver().getCurrentUrl()).withNoReporting()
         );
 
     }

@@ -3,6 +3,7 @@ package net.serenitybdd.core.reports
 import net.serenitybdd.core.SerenityReports
 import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.reports.NumberOfThreads
+import net.thucydides.core.reports.ReporterRuntime
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
@@ -40,6 +41,23 @@ class WhenSettingUpReportServices extends Specification {
             environmentVariables.setProperty("io.blocking.coefficient", "0.1");
         then:
             new NumberOfThreads().forIO() != new NumberOfThreads(environmentVariables).forIO();
+
+    }
+
+
+    def "should work correctly for virtual environments with 1 cpu"() {
+        given:
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+            ReporterRuntime singleCPURuntime = new ReporterRuntime() {
+                @Override
+                int availableProcessors() {
+                    return 1
+                }
+            }
+        when:
+            int numberOfThreads = new NumberOfThreads(environmentVariables, singleCPURuntime).forIO();
+        then:
+            numberOfThreads == 1;
 
     }
 

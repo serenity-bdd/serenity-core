@@ -120,10 +120,10 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
-|---------------|----------------------|----------00--------|----------|
-| 3.2.0         | 3.2.0                | 3.2.0              | 7.2.3    |
-| 3.1.20        | 3.1.20               | 3.1.20             | 7.1.1    |
-| 3.1.15        | 3.1.15               | 3.1.15             | 7.0.0    |
+|---------------|-----------------------|-------------------|----------|
+| 3.2.2         | 3.2.2                 | 3.2.2             | 7.2.3    |
+| 3.1.20        | 3.1.20                | 3.1.20            | 7.1.1    |
+| 3.1.15        | 3.1.15                | 3.1.15            | 7.0.0    |
    
 #### Cucumber 6
   _Note:_ Cucumber 6 is no longer supported in newer versions of Serenity.

@@ -8,7 +8,7 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.webdriver.WebDriverFacade;
-import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -81,7 +81,7 @@ public class SomeSeleniumSteps {
 
     @Given("the scenario throws an exception")
     public void throwAnException() {
-        throw new ElementNotVisibleException("Oops");
+        throw new ElementNotInteractableException("Oops");
     }
 
 

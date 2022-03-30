@@ -658,8 +658,8 @@ public class TestStep implements Cloneable {
         if (screenshots.isEmpty()) {
             return true;
         } else {
-            ScreenshotAndHtmlSource latestScreenshotAndHtmlSource = screenshots.get(screenshots.size() - 1);
-            return !latestScreenshotAndHtmlSource.equals(screenshotAndHtmlSource);
+            ScreenshotAndHtmlSource previousScreenshot = screenshots.get(screenshots.size() - 1);
+            return !screenshotAndHtmlSource.getScreenshotName().equals(previousScreenshot.getScreenshotName());
         }
     }
 

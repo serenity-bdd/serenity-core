@@ -156,7 +156,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         try {
             return loadingElement.get().getElement();
         } catch (ElementNotVisibleAfterTimeoutError notVisible) {
-            throw new ElementNotVisibleException(
+            throw new ElementNotInteractableException(
                     String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()), notVisible.getMessage()),
                     notVisible.getCause());
         } catch (Error e) {

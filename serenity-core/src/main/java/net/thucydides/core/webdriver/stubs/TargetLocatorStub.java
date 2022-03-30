@@ -4,7 +4,7 @@ import org.openqa.selenium.*;
 
 public class TargetLocatorStub implements WebDriver.TargetLocator {
     
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
     
     public TargetLocatorStub(WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -47,7 +47,7 @@ public class TargetLocatorStub implements WebDriver.TargetLocator {
 
     @Override
     public WebElement activeElement() {
-        throw new ElementNotVisibleException("No active element found (a previous step has failed)");
+        throw new ElementNotInteractableException("No active element found (a previous step has failed)");
     }
 
     @Override

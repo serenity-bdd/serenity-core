@@ -456,7 +456,7 @@ public abstract class PageObject {
     }
 
     public WebDriverWait waitOnPage() {
-        return new WebDriverWait(driver, getWaitForTimeout().getSeconds());
+        return new WebDriverWait(driver, getWaitForTimeout());
     }
 
     public PageObject waitForTitleToDisappear(final String expectedTitle) {

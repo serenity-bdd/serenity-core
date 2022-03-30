@@ -195,7 +195,7 @@ public class RenderedPageObjectView {
      * This method will wait until an element is present on the screen, though not necessarily visible.
      */
     public WebElement waitForPresenceOf(final By byElementCriteria) {
-        WebDriverWait wait = new WebDriverWait(driver, waitForTimeout.getSeconds());
+        WebDriverWait wait = new WebDriverWait(driver, waitForTimeout);
         return wait.until(presenceOfElementLocated(byElementCriteria));
     }
 
@@ -250,7 +250,7 @@ public class RenderedPageObjectView {
     }
 
     public WebDriverWait thenWait() {
-        return new WebDriverWait(driver, getWaitForTimeout().getSeconds());
+        return new WebDriverWait(driver, getWaitForTimeout());
     }
 
 

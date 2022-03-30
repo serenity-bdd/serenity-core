@@ -89,7 +89,7 @@
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.0.M1</thymeleaf.version>
         <javassist.version>3.28.0-GA</javassist.version>
-        <jackson.version>2.13.2</jackson.version>
+        <jackson.version>2.13.2.1</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
         <!--        <kotlin.version>1.4.10</kotlin.version>-->

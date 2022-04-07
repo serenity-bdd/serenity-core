@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -157,6 +158,9 @@ public class SerenityWebdriverManager implements WebdriverManager {
     private String nameOf(WebDriver driver) {
         if (driver instanceof WebDriverFacade) {
             return ((WebDriverFacade) driver).getDriverName();
+        }
+        if(driver instanceof AppiumDriver){
+            return "appium";
         }
         if ((driver instanceof RemoteWebDriver) && ((RemoteWebDriver) driver).getCapabilities() != null) {
             return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();

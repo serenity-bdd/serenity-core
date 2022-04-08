@@ -83,7 +83,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         when: "We access the field"
             page.slowLoadingField.isDisplayed()
         then: "An error should be thrown"
-            thrown(org.openqa.selenium.ElementNotVisibleException)
+            thrown(org.openqa.selenium.ElementNotInteractableException)
     }
 
     def "Slow loading fields should not wait once a step has failed"() {
@@ -99,7 +99,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
             stopwatch.start()
             page.verySlowLoadingField.isDisplayed()
         then: "No error should be thrown"
-            notThrown(org.openqa.selenium.ElementNotVisibleException)
+            notThrown(org.openqa.selenium.ElementNotInteractableException)
         and: "the response should be returned instantly"
             stopwatch.stop() < 100
     }

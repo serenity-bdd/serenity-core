@@ -13,21 +13,24 @@ public class ScreenshotAndHtmlSource implements Comparable<ScreenshotAndHtmlSour
     private final File screenshot;
     private final File htmlSource;
     private Long timeStamp;
+    private final String screenshotName;
 
     public ScreenshotAndHtmlSource(String screenshotName, String sourcecodeName) {
         this.screenshot = new File(screenshotName);
         this.htmlSource = (sourcecodeName != null) ? new File(sourcecodeName) : null;
         this.timeStamp = System.currentTimeMillis();
+        this.screenshotName = screenshot.getName();
     }
 
     public ScreenshotAndHtmlSource(File screenshot, File sourcecode) {
         this.screenshot = screenshot;
         this.htmlSource = sourcecode;
         this.timeStamp = System.currentTimeMillis();
+        this.screenshotName = (screenshot != null) ? screenshot.getName() : "";
     }
 
     public String getScreenshotName() {
-        return screenshot.getName();
+        return screenshotName;
     }
 
     public String getHtmlSourceName() {

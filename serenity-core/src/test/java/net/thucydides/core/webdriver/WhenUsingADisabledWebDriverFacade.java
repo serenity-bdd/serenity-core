@@ -5,10 +5,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.time.Duration;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -94,7 +96,7 @@ public class WhenUsingADisabledWebDriverFacade {
         webDriverFacade.switchTo().alert().sendKeys("abc");
     }
 
-    @Test(expected = ElementNotVisibleException.class)
+    @Test(expected = ElementNotInteractableException.class)
     public void switchTo_web_element_should_throw_element_not_visible() {
         webDriverFacade.switchTo().activeElement();
     }
@@ -116,7 +118,7 @@ public class WhenUsingADisabledWebDriverFacade {
 
     @Test
     public void manage_timeouts_should_be_ignored() {
-        webDriverFacade.manage().timeouts().implicitlyWait(100, SECONDS).setScriptTimeout(100, SECONDS);
+        webDriverFacade.manage().timeouts().implicitlyWait(Duration.ofSeconds(100)).scriptTimeout(Duration.ofSeconds(100));
     }
 
     @Test

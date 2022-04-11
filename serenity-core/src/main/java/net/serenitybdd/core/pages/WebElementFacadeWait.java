@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 public class WebElementFacadeWait {
     PageObject page;
     private final long timeoutInSeconds;
@@ -37,6 +39,6 @@ public class WebElementFacadeWait {
     }
 
     public WebElementFacade until(ExpectedCondition<? extends WebElement> isTrue) {
-        return page.element(new WebDriverWait(page.getDriver(), timeoutInSeconds).until(isTrue));
+        return page.element(new WebDriverWait(page.getDriver(), Duration.ofSeconds(timeoutInSeconds)).until(isTrue));
     }
 }

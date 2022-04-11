@@ -16,7 +16,6 @@ public class TheDirectoryStructure {
     private final File rootDirectory;
 
     public TheDirectoryStructure(File rootDirectory) {
-
         this.rootDirectory = rootDirectory;
     }
 
@@ -52,7 +51,6 @@ public class TheDirectoryStructure {
     }
 
     public int maxDepth() {
-
         if (!rootDirectory.isDirectory()) { return 0; }
 
         Collection<File> directoryContents = FileUtils.listFilesAndDirs(rootDirectory,

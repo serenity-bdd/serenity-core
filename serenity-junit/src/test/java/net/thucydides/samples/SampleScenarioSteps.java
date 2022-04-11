@@ -9,7 +9,7 @@ import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
-import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -218,7 +218,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
     @Step
     public void data_driven_test_step_that_breaks() {
         if (Integer.parseInt(age) > 35) {
-            throw new ElementNotVisibleException("A webdriver issue");
+            throw new ElementNotInteractableException("A webdriver issue");
         }
     }
 

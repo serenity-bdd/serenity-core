@@ -373,7 +373,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 return element.isDisplayed();
             }
 
-        } catch (ElementNotVisibleException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
             return false;
         }
     }
@@ -910,7 +910,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             }
             element.isDisplayed();
             return true;
-        } catch (ElementNotVisibleException e) {
+        } catch (ElementNotInteractableException e) {
             return true;
         } catch (NotFoundException | ElementNotFoundAfterTimeoutError e) {
             return false;

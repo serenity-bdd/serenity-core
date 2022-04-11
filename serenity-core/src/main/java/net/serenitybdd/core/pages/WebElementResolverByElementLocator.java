@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
-import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
@@ -40,7 +40,7 @@ public class WebElementResolverByElementLocator extends WebElementResolver {
 
     private void ensureVisibilityOf(WebElement resolvedELement) {
         if (resolvedELement == null) {
-            throw new ElementNotVisibleException(locator.toString());
+            throw new ElementNotInteractableException(locator.toString());
         }
     }
 

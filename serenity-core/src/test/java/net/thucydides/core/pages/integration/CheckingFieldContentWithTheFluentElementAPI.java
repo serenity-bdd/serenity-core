@@ -167,7 +167,7 @@ public class CheckingFieldContentWithTheFluentElementAPI  {
         page.element(page.firstName).waitUntilVisible();
     }
 
-    @Test(expected = ElementNotVisibleException.class)
+    @Test(expected = ElementNotInteractableException.class)
     public void should_throw_expection_if_waiting_for_field_that_does_not_appear() {
         page.setWaitForTimeout(500);
         assertThat(page.element(page.hiddenField).isCurrentlyVisible(), is(false));

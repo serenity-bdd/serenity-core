@@ -5,22 +5,16 @@ import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
-import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Assumptions;
-import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("serial")
 public class SampleScenarioSteps extends UIInteractionSteps {
@@ -235,7 +229,7 @@ public class SampleScenarioSteps extends UIInteractionSteps {
     @Step
     public void data_driven_test_step_that_breaks(String age) {
         if (Integer.parseInt(age) > 35) {
-            throw new ElementNotVisibleException("A webdriver issue");
+            throw new ElementNotInteractableException("A webdriver issue");
         }
     }
 

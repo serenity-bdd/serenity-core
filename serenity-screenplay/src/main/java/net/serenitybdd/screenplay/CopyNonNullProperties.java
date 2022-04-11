@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.reflect.Modifier.*;
+
 class CopyNonNullProperties {
     private Object source;
 
@@ -20,18 +22,12 @@ class CopyNonNullProperties {
         getFields(source.getClass())
                 .stream()
                 .filter(field -> !field.isSynthetic())
+                .filter(field -> !isStatic(field.getModifiers()))
                 .forEach(
                         field -> copyFieldValue(field, source, target)
                 );
-//        Arrays.stream(source.getClass().getDeclaredFields()).filter(field -> !field.isSynthetic()).forEach(
-//                field -> copyFieldValue(field, source, target)
-//        );
-//        Arrays.stream(source.getClass().getFields()).filter(field -> !field.isSynthetic()).forEach(
-//                field -> copyFieldValue(field, source, target)
-//        );
     }
 
-    
     public static List<Field> getFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         Class<?> classToInspect = clazz;
@@ -52,13 +48,5 @@ class CopyNonNullProperties {
         } catch (IllegalAccessException e) {
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private Field targetField(Object target, String name) throws NoSuchFieldException {
-        Class performableClass = target.getClass().getSuperclass();
-        if (Arrays.stream(performableClass.getDeclaredFields()).anyMatch(field -> field.getName().equals(name))) {
-            return performableClass.getDeclaredField(name);
-        }
-        return performableClass.getField(name);
     }
 }

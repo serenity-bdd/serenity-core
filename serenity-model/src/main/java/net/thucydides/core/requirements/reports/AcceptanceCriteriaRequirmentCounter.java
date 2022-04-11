@@ -13,17 +13,17 @@ public class AcceptanceCriteriaRequirmentCounter implements RequirmentCalculator
         }
 
         @Override
-        public int countAllSubrequirements() {
+        public long countAllSubrequirements() {
             return testOutcomes.getOutcomes().size();
         }
 
         @Override
-        public int countSubrequirementsWithResult(TestResult result) {
+        public long countSubrequirementsWithResult(TestResult result) {
             return testOutcomes.withResult(result).getOutcomes().size();
         }
 
         @Override
-        public int countSubrequirementsWithNoTests() {
+        public long countSubrequirementsWithNoTests() {
             return testOutcomes.getOutcomes().isEmpty() ? 1 : 0;
         }
     }

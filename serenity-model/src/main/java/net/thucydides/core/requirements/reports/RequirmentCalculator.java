@@ -3,7 +3,7 @@ package net.thucydides.core.requirements.reports;
 import net.thucydides.core.model.TestResult;
 
 interface RequirmentCalculator {
-        int countAllSubrequirements();
-        int countSubrequirementsWithResult(TestResult result);
-        int countSubrequirementsWithNoTests();
+        long countAllSubrequirements();
+        long countSubrequirementsWithResult(TestResult result);
+        long countSubrequirementsWithNoTests();
     }

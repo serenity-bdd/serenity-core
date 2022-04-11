@@ -738,7 +738,6 @@ public class TestOutcome {
 
     @Override
     public String toString() {
-
         return getTitle() + ":" + testSteps.stream()
                 .map(TestStep::toString)
                 .collect(Collectors.joining(", "));
@@ -2177,7 +2176,7 @@ public class TestOutcome {
     public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
         return getAllTags().stream().anyMatch(
                 tag -> tag.isAsOrMoreSpecificThan(generalTag)
-        );// TestTags.of(getTags()).containsTagMatching(specificTag);
+        );
     }
 
     public void setStartTime(ZonedDateTime startTime) {

@@ -18,6 +18,9 @@ public interface Task extends Performable {
 
     static TaskBuilder called(String title) { return new TaskBuilder(title); }
 
+    /**
+     * Create a new Performable Task made up of a list of Performables.
+     */
     static <T extends Performable> AnonymousTask where(String title, T... steps) {
         return Instrumented.instanceOf(AnonymousTask.class).withProperties(title, Arrays.asList(steps));
     }

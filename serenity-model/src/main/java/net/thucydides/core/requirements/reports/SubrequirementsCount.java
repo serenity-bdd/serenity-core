@@ -25,13 +25,13 @@ public class SubrequirementsCount {
         return new SubrequirementsPercentageCount(this);
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return (requirement.hasChildren()) ?
                 usingChildRequirements().countAllSubrequirements() :
                 usingAcceptanceCriteria().countAllSubrequirements();
     }
 
-    public int withResult(String resultValue) {
+    public long withResult(String resultValue) {
         TestResult result = TestResult.valueOf(resultValue.toUpperCase());
 
         return (requirement.hasChildren()) ?
@@ -39,7 +39,7 @@ public class SubrequirementsCount {
                 usingAcceptanceCriteria().countSubrequirementsWithResult(result);
     }
 
-    public int withNoTests() {
+    public long withNoTests() {
         return (requirement.hasChildren()) ?
                 usingChildRequirements().countSubrequirementsWithNoTests() :
                 usingAcceptanceCriteria().countSubrequirementsWithNoTests();
@@ -53,6 +53,11 @@ public class SubrequirementsCount {
         return new AcceptanceCriteriaRequirmentCounter(testOutcomes);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "SubrequirementsCount{" +
+                "requirement=" + requirement +
+                ", testOutcomes=" + testOutcomes +
+                '}';
+    }
 }

@@ -63,8 +63,12 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         return getNameOrPronoun();
     }
 
+    /**
+     * Create a new actor with a given name.
+     * This actor will have no abilities initially, so you will need to assign some abilities
+     * using the whoCan() method.
+     */
     public static Actor named(String name) {
-        //EventBusInterface.castActor(name);
         return new Actor(name);
     }
 
@@ -95,6 +99,9 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         return this;
     }
 
+    /**
+     * Assign an ability to an actor.
+     */
     public <T extends Ability> Actor whoCan(T doSomething) {
         return can(doSomething);
     }
@@ -426,7 +433,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
                         StepEventBus.getEventBus().notifyFailure();
-                        StepEventBus.getEventBus().testFinished(StepEventBus.getEventBus().currentTestOutcomeIsDataDriven());
+                        //StepEventBus.getEventBus().testFinished(StepEventBus.getEventBus().currentTestOutcomeIsDataDriven());
                         if (cause.isCompromised()) {
                             throw cause.asCompromisedException();
                         } else if (cause.isAnError()) {

@@ -119,7 +119,7 @@ public class TestTag implements Comparable<TestTag> {
         if (this.equals(testTag)) {
             return true;
         }
-        if (testTag.normalisedName().replaceFirst(".*?([^.]+)$", "$1").equals(this.normalisedName()) && (this.getType().equals(testTag.getType()))) {
+        if ((this.getType().equals(testTag.getType()) && testTag.normalisedName().replaceFirst(".*?([^.]+)$", "$1").equals(this.normalisedName()))) {
             return true;
         }
         return (this.normalisedName().endsWith("/" + testTag.normalisedName())) && (this.getType().equals(testTag.getType()));

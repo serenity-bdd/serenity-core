@@ -53,6 +53,11 @@ public class SubrequirementsCount {
         return new AcceptanceCriteriaRequirmentCounter(testOutcomes);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "SubrequirementsCount{" +
+                "requirement=" + requirement +
+                ", testOutcomes=" + testOutcomes +
+                '}';
+    }
 }

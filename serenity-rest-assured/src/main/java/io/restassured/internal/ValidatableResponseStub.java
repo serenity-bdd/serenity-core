@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.stubs;
+package io.restassured.internal;
 
 import io.restassured.http.ContentType;
 import io.restassured.internal.RestAssuredResponseOptionsImpl;

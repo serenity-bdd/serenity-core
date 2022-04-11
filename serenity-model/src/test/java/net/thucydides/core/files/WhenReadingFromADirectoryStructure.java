@@ -1,5 +1,6 @@
 package net.thucydides.core.files;
 
+import net.serenitybdd.core.CurrentOS;
 import org.junit.Test;
 
 import java.io.File;
@@ -20,7 +21,9 @@ public class WhenReadingFromADirectoryStructure {
 
     @Test
     public void shouldReadTheDirectoryDepthOfAFeatureFolderForAWindowsPath() {
-        assertThat(TheDirectoryStructure.startingAt(singleLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(0);
+        if(CurrentOS.isWindows()) {
+            assertThat(TheDirectoryStructure.startingAt(singleLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(0);
+        }
     }
 
     @Test
@@ -30,8 +33,7 @@ public class WhenReadingFromADirectoryStructure {
 
     @Test
     public void shouldReadTheDirectoryDepthOfAMultiLevelFeatureFolderForAWindowsPath() {
-
-        assumeThat(System.getProperty("os.name").toLowerCase()).startsWith("win");
+        assumeThat(CurrentOS.isWindows()).isTrue();
         assertThat(TheDirectoryStructure.startingAt(multiLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(2);
     }
 

@@ -41,8 +41,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <junit.version>4.13.2</junit.version>
-        <groovy.version>3.0.10</groovy.version>
-        <spock.version>2.0-M3-groovy-3.0</spock.version>
+        <groovy.version>4.0.1</groovy.version>
+        <spock.version>2.2-M1-groovy-4.0</spock.version>
         <byte-buddy.version>1.12.8</byte-buddy.version>
         <guava.version>31.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
@@ -85,7 +85,7 @@
         <jbehave.version>4.8.3</jbehave.version>
         <opentest4j.version>1.2.0</opentest4j.version>
         <ant.version>1.10.12</ant.version>
-        <restassured.version>4.5.1</restassured.version>
+        <restassured.version>5.0.1</restassured.version>
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.0.M1</thymeleaf.version>
         <javassist.version>3.28.0-GA</javassist.version>
@@ -124,23 +124,23 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy.version}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-json</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-xml</artifactId>
                 <version>${groovy.version}</version>
             </dependency>
@@ -547,7 +547,7 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
+                            <groupId>org.apache.groovy</groupId>
                             <artifactId>groovy-all</artifactId>
                             <version>${groovy.version}</version>
                             <scope>runtime</scope>

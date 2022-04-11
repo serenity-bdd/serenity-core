@@ -586,12 +586,12 @@ public class TestOutcomes {
 
         Stream<TestTag> from(TestOutcome outcome) {
             return outcome.getAllTags().stream()
-                    .filter(tag -> tag.normalisedType().equals(tagType));
+                    .filter(tag -> tag.normalisedType().equalsIgnoreCase(tagType));
         }
 
         List<TestTag> in(TestOutcome testOutcome) {
             return testOutcome.getAllTags().stream()
-                    .filter(tag -> tag.normalisedType().equals(tagType))
+                    .filter(tag -> tag.normalisedType().equalsIgnoreCase(tagType))
                     .collect(Collectors.toList());
         }
     }
@@ -688,12 +688,16 @@ public class TestOutcomes {
     }
 
     private boolean hasMatchingTag(TestOutcome outcome, TestTag tag) {
-        if (isAnIssue(tag)) {
-            return outcome.hasIssue(tag.getName());
-        }
-        return outcome.hasTag(tag) || outcome.hasAMoreGeneralFormOfTag(tag);// || outcome.hasAMoreSpecificFormOfTag(tag);
-    }
+        Optional<Boolean> cachedMatch = TestTagCache.hasMatchingTag(outcome, tag);
 
+        if (cachedMatch.isPresent()) {
+            return cachedMatch.get();
+        } else {
+            boolean matchFound = isAnIssue(tag) ? outcome.hasIssue(tag.getName()) : outcome.hasTag(tag) || outcome.hasAMoreGeneralFormOfTag(tag);
+            TestTagCache.storeMatchingTagResult(outcome, tag, matchFound);
+            return matchFound;
+        }
+    }
 
     private boolean isAnIssue(TestTag tag) {
         return tag.getType().equalsIgnoreCase("issue");

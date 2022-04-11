@@ -1156,4 +1156,10 @@ public class TestOutcomes {
         return getOutcomes().isEmpty();
     }
 
+    @Override
+    public String toString() {
+        return "TestOutcomes{" +
+                "outcomes=" + outcomes +
+                '}';
+    }
 }

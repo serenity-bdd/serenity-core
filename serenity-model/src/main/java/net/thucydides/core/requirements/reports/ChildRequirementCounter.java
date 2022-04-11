@@ -16,30 +16,24 @@ public class ChildRequirementCounter implements RequirmentCalculator {
 
 
     @Override
-    public int countAllSubrequirements() {
+    public long countAllSubrequirements() {
         return requirement.getChildren().size();
     }
 
     @Override
-    public int countSubrequirementsWithResult(TestResult expectedResult) {
-        int totalSubrequirmentsWithResult = 0;
-        for (Requirement req : requirement.getChildren()) {
-            if (testResultFor(req) == expectedResult) {
-                totalSubrequirmentsWithResult++;
-            }
-        }
-        return totalSubrequirmentsWithResult;
+    public long countSubrequirementsWithResult(TestResult expectedResult) {
+        return requirement.getChildren().stream()
+                .filter(req -> testResultFor(req) == expectedResult)
+                .distinct()
+                .count();
     }
 
     @Override
-    public int countSubrequirementsWithNoTests() {
-        int totalSubrequirmentsWithNoTests = 0;
-        for (Requirement req : requirement.getChildren()) {
-            if (testOutcomes.forRequirement(req).getOutcomes().isEmpty()) {
-                totalSubrequirmentsWithNoTests++;
-            }
-        }
-        return totalSubrequirmentsWithNoTests;
+    public long countSubrequirementsWithNoTests() {
+        return requirement.getChildren().stream()
+                .filter(req -> testOutcomes.forRequirement(req).getOutcomes().isEmpty())
+                .distinct()
+                .count();
     }
 
     private TestResult testResultFor(Requirement req) {

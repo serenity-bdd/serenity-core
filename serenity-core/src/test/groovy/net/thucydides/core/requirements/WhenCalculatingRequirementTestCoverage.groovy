@@ -26,6 +26,7 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
     TagProviderService tagProviderService
     
     def setup() {
+        TestTagCache.clear()
         def vars = new MockEnvironmentVariables()
         vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_ANNOTATED_REQUIREMENTS_DIR.propertyName, ROOT_DIRECTORY)
         requirementsProviders = [new PackageAnnotationBasedTagProvider(vars)]
@@ -43,10 +44,10 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
         }
 
         reportNameProvider =  new ReportNameProvider(NO_CONTEXT, ReportType.HTML, new MultiSourceRequirementsService())
-        TestTagCache.clear()
     }
 
     def issueTracking = Mock(IssueTracking)
+
 
 
     def "should count the total number of nested requirements"() {

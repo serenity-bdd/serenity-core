@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class WhenReadingFromADirectoryStructure {
     File singleLevelFolder = new File("src/test/resources/sample-features/flat-directory-structure");
@@ -29,6 +30,8 @@ public class WhenReadingFromADirectoryStructure {
 
     @Test
     public void shouldReadTheDirectoryDepthOfAMultiLevelFeatureFolderForAWindowsPath() {
+
+        assumeThat(System.getProperty("os.name").toLowerCase()).startsWith("win");
         assertThat(TheDirectoryStructure.startingAt(multiLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(2);
     }
 

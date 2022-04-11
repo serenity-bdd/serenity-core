@@ -2177,7 +2177,7 @@ public class TestOutcome {
     public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
         return getAllTags().stream().anyMatch(
                 tag -> tag.isAsOrMoreSpecificThan(generalTag)
-        );// TestTags.of(getTags()).containsTagMatching(specificTag);
+        );
     }
 
     public void setStartTime(ZonedDateTime startTime) {

@@ -4,6 +4,7 @@ import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.ReportType
 import net.thucydides.core.model.SampleTestResults
+import net.thucydides.core.model.TestTagCache
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
@@ -42,6 +43,7 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
         }
 
         reportNameProvider =  new ReportNameProvider(NO_CONTEXT, ReportType.HTML, new MultiSourceRequirementsService())
+        TestTagCache.clear()
     }
 
     def issueTracking = Mock(IssueTracking)

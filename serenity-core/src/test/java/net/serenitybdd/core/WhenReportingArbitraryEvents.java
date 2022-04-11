@@ -40,9 +40,7 @@ public class WhenReportingArbitraryEvents {
         boolean exceptionWasThrownAsExpected = false;
         try {
             Serenity.reportThat("something bad happened",
-                    () -> {
-                        assertThat(true).isFalse();
-                    }
+                    () -> assertThat(true).isFalse()
             );
         } catch(AssertionError expectedException) {
             exceptionWasThrownAsExpected = true;

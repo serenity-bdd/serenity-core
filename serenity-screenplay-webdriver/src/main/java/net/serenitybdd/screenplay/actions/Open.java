@@ -2,6 +2,9 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.PageObject;
 
+/**
+ * Open the browser of an actor on a specified page or URL.
+ */
 public class Open {
 
     public static OpenPage browserOn(PageObject targetPage) {

@@ -738,7 +738,6 @@ public class TestOutcome {
 
     @Override
     public String toString() {
-
         return getTitle() + ":" + testSteps.stream()
                 .map(TestStep::toString)
                 .collect(Collectors.joining(", "));

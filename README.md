@@ -75,8 +75,9 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
-* [2.3.2](docs/release-notes/2.3.2.md)
+* [3.2.4](docs/release-notes/3.2.4.md)
 * [3.2.0](docs/release-notes/3.2.0.md)
+* [2.3.2](docs/release-notes/2.3.2.md)
 * [2.2.0](docs/release-notes/2.2.0.md)
 * [2.1.5](docs/release-notes/2.1.5.md)
 * [2.1.4](docs/release-notes/2.1.4.md)
@@ -90,7 +91,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version |  RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|----------------------|-----------------------|
-| 3.2.3         | 3.2.3                 | 4.1.3            | 4.5.1                | 8.0.0                 |
+| 3.2.4         | 3.2.4                 | 4.1.3            | 5.0.1                | 8.0.0                 |
 | 3.2.2         | 3.2.2                 | 4.1.2            | 4.5.1                | 8.0.0                 |
 | 3.1.15        | 3.1.15                | 4.1.1            | 4.4.0                | 8.0.0-BETA            |
 | 3.1.1         | 3.1.1                 | 4.0.0            | 4.3.3                | 8.0.0-BETA            |
@@ -122,7 +123,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|----------------------|--------------------|----------|
-| 3.2.3         | 3.2.3                | 3.2.3              | 7.2.3    |
+| 3.2.4         | 3.2.4                | 3.2.4              | 7.2.3    |
 | 3.1.20        | 3.1.20               | 3.1.20             | 7.1.1    |
 | 3.1.15        | 3.1.15               | 3.1.15             | 7.0.0    |
    

@@ -121,7 +121,7 @@ class SampleTestResults {
 
     static def withPassingTestForApplesAndZucchinis() {
 
-        TestOutcome testOutcome = TestOutcome.forTestInStory("Buying apples in the sun", Story.called("Buying apples"))
+        TestOutcome testOutcome = TestOutcome.forTestInStory("Picking zucchinis in the sun", Story.called("Picking zucchinis"))
         testOutcome.recordStep(TestStep.forStepCalled("step 1.1").withResult(TestResult.SUCCESS))
         testOutcome.addTags(Lists.asList(TestTag.withName("Nice zucchinis").andType("feature")));
         testOutcome.addTags(Lists.asList(TestTag.withName("Picking zucchinis").andType("story")));

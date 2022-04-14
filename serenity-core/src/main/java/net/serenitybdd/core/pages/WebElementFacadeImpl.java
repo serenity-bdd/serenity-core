@@ -1022,7 +1022,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private boolean hasValueAttribute(WebElement element) {
-        return element.getAttribute("value") != null;
+        try {
+            return element.getAttribute("value") != null;
+        } catch (UnsupportedCommandException exception){
+            return false;
+        }
     }
 
     @Override

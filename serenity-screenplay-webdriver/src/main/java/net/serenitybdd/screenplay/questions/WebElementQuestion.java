@@ -4,11 +4,18 @@ import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.HumanReadableTaskName;
 import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.matchers.statematchers.CheckForAbsenceHint;
 import net.serenitybdd.screenplay.matchers.statematchers.MissingWebElement;
+import net.serenitybdd.screenplay.targets.HasByLocator;
 import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.ui.LocatorStrategies;
+import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
@@ -78,9 +85,22 @@ public class WebElementQuestion implements Question<WebElementState>, AcceptsHin
 
     private WebElementState checkForPresenceBy(Actor actor) {
         List<WebElementFacade> matchingElements = target.resolveAllFor(actor);
-
+        //if nothing is found, create a UnresolvedTargetWebElementState but try to give him the selector of the target
         if (matchingElements.isEmpty()) {
-            return new UnresolvedTargetWebElementState(target.getName());
+            UnresolvedTargetWebElementState unresolvedTarget = new UnresolvedTargetWebElementState(target.getName());
+            try {
+                unresolvedTarget.setSelector(target.getCssOrXPathSelector());
+            } catch (Exception e) {
+                try {
+                    if (target instanceof HasByLocator)
+                        unresolvedTarget.setSelector(((HasByLocator) target).getLocator().toString());
+                    else {
+                        unresolvedTarget.setSelector(target.selectors(BrowseTheWeb.as(actor).getDriver()).toString());
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            return unresolvedTarget;
         } else {
             return matchingElements.get(0);
         }

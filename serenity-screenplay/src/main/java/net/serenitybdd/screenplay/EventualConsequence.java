@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
 
 public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public static final int A_SHORT_PERIOD_BETWEEN_TRIES = 100;
@@ -157,6 +158,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     protected void performSetupActionsAs(Actor actor) {
         actor.attemptsTo(
+                IGNORE_EXCEPTIONS,
                 setupActions.toArray(new Performable[]{})
         );
     }

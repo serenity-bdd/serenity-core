@@ -6,6 +6,8 @@ import net.serenitybdd.screenplay.Question;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
+
 public class QuestionWithDefinedSubject<T> implements Question<T> {
 
     private final Question<T> theQuestion;
@@ -24,7 +26,7 @@ public class QuestionWithDefinedSubject<T> implements Question<T> {
 
     @Override
     public T answeredBy(Actor actor) {
-        actor.attemptsTo(precedingTasks.toArray(new Performable[]{}));
+        actor.attemptsTo(IGNORE_EXCEPTIONS,precedingTasks.toArray(new Performable[]{}));
         return theQuestion.answeredBy(actor);
     }
 

@@ -41,7 +41,7 @@ class ErrorTally {
     private List<Throwable> errorCausesIn(List<FailedConsequence> failedConsequences) {
 //        return failedConsequences.map(FailedConsequence::getCause);
         return failedConsequences.stream()
-                .map(failedConsequence -> failedConsequence.getCause())
+                .map(FailedConsequence::getCause)
                 .collect(Collectors.toList());
     }
 

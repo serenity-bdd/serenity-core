@@ -18,7 +18,7 @@ public class DataTableRow {
     }
 
     public DataTableRow(List<?> values, long lineNumber, TestResult result) {
-        this.values = new ArrayList<>(values);
+        this.values = (values == null) ? new ArrayList<>() : new ArrayList<>(values);
         this.result = result;
         this.lineNumber = lineNumber;
     }

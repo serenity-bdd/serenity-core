@@ -428,6 +428,39 @@ public class WhenDefiningPageUrls {
         verify(webdriver).get("http://myapp.mycompany.com/issues/ISSUE-1");
     }
 
+    @DefaultUrl("/index.php?param={1}")
+    final class PageObjectWithParameterizedDefaultUrl extends PageObject {
+        public PageObjectWithParameterizedDefaultUrl(WebDriver driver) {
+            super(driver);
+        }
+    }
+
+    @Test
+    public void the_default_url_should_be_added_to_the_base_url() {
+        PageObject page = new PageObjectWithParameterizedDefaultUrl(webdriver);
+        PageUrls pageUrls = new PageUrls(page, configuration);
+        page.setPageUrls(pageUrls);
+
+        configuration.setDefaultBaseUrl("http://my.site");
+
+        page.open(withParameters("39"));
+
+        verify(webdriver).get("http://my.site/index.php?param=39");
+    }
+
+    @Test
+    public void the_default_url_should_be_added_to_the_base_url_including_parameters() {
+        PageObject page = new PageObjectWithParameterizedDefaultUrl(webdriver);
+        PageUrls pageUrls = new PageUrls(page, configuration);
+        page.setPageUrls(pageUrls);
+
+        configuration.setDefaultBaseUrl("http://my.site/base/url");
+
+        page.open(withParameters("39"));
+
+        verify(webdriver).get("http://my.site/base/url/index.php?param=39");
+    }
+
     @NamedUrls(
       {
               @NamedUrl(name = "open.issue", url = "/issues/{1}"),

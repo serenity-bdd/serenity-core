@@ -91,7 +91,7 @@ class WhenActorsEvaluateConsequences extends Specification{
         then:
         def outcome = results["shouldBeAbleToPurchaseAnItemWithAllTheRightDetailsAndContinue"]
         outcome.result == FAILURE
-        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, FAILURE]
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, FAILURE, SKIPPED]
     }
 
     def "should use all the consequences in a group of consequences to evaluate the total result"() {

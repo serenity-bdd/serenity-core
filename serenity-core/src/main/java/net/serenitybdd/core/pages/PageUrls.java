@@ -178,7 +178,7 @@ public class PageUrls {
     private String urlWithParametersSubstituted(final String template,
                                                 final String[] parameterValues) {
 
-        String url = template;
+        String url = addBaseUrlTo(template);
         for (int i = 0; i < parameterValues.length; i++) {
             String variable = String.format("{%d}", i + 1);
             url = url.replace(variable, parameterValues[i]);
@@ -193,6 +193,10 @@ public class PageUrls {
     }
 
     public String addBaseUrlTo(final String url) {
+        if (url != null && getBaseUrl() != null && url.startsWith(getBaseUrl())) {
+            return url;
+        }
+
         if (isANamedUrl(url)) {
             return namedUrlFrom(url);
         }

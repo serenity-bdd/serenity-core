@@ -82,6 +82,17 @@ public class CucumberScenarioLoaderTest {
         }
     }
 
+    @Test
+    public void shouldCorrectlyParseAllTags() throws Exception {
+        WeightedCucumberScenarios weightedCucumberScenarios = new CucumberScenarioLoader(newArrayList(new URI("classpath:samples/jira_issue.feature")), testStatistics).load();
+
+        assertThat(weightedCucumberScenarios.scenarios, contains(MatchingCucumberScenario.with()
+                .featurePath("jira_issue.feature")
+                .feature("Basic Arithmetic")
+                .scenario("Addition")
+                .tags("@issues:ISSUE-456,ISSUE-001", "@issues:ISSUE-123,ISSUE-789", "@foo")));
+    }
+
     private MatchingCucumberScenario[] buildMatchingCucumberScenario(WeightedCucumberScenarios weightedCucumberScenarios) {
         List<MatchingCucumberScenario> list = new ArrayList<>();
         weightedCucumberScenarios.scenarios.forEach(s -> {

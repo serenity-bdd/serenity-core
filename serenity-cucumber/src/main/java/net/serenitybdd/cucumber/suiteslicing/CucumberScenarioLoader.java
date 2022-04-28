@@ -93,16 +93,16 @@ public class CucumberScenarioLoader {
     }
 
     private Set<String> tagsFor(Feature feature, Scenario scenarioDefinition) {
-        return FluentIterable.concat(feature.getTags(), scenarioTags(scenarioDefinition)).stream().map(Object::toString).collect(toSet());
+        return FluentIterable.concat(feature.getTags(), scenarioTags(scenarioDefinition)).stream().map(Tag::getName).collect(toSet());
     }
 
-    private List<?> scenarioTags(Scenario scenario) {
+    private List<Tag> scenarioTags(Scenario scenario) {
         if (scenario.getExamples().isEmpty()) {
             return scenario.getTags();
         } else {
             return Stream.of(scenario.getTags(), scenario.getExamples()
-                .stream().flatMap(e -> e.getTags().stream()).collect(toList())).flatMap(Collection::stream).map(tag->tag.getName())
-                .collect(Collectors.toList());
+                            .stream().flatMap(e -> e.getTags().stream()).collect(toList())).flatMap(Collection::stream)
+                    .collect(Collectors.toList());
         }
     }
 

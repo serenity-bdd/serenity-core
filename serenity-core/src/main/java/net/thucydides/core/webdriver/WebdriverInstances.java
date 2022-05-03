@@ -68,6 +68,7 @@ public class WebdriverInstances {
             closedDriver = getCurrentDriver();
             closeAndQuit(closedDriver);
             currentDriver = null;
+            clearCurrentActiveDriver();
         }
         return closedDriver;
     }
@@ -105,6 +106,7 @@ public class WebdriverInstances {
         driverMap.clear();
         clearDriversInCurrentThread();
         currentDriver = null;
+        clearCurrentActiveDriver();
         return closedDrivers;
     }
 

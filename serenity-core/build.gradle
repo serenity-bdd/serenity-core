@@ -47,30 +47,6 @@ dependencies {
     compile "commons-codec:commons-codec:${commonsCodecVersion}"
     compile "commons-io:commons-io:${commonsIoVersion}"
 
-    compile("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
-        exclude group: 'cglib', module: 'cglib-nodep'
-        exclude group: 'guava', module: 'guava'
-        exclude group: 'commons-io', module: 'commons-io'
-        exclude group: 'commons-codec', module: 'commons-codec'
-        exclude group: 'org.apache.commons', module: 'commons-lang3'
-        exclude group: 'com.google.code.gson', module: 'gson'
-        exclude group: 'com.google.guava', module: 'guava'
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-        exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
-        exclude group: 'org.mortbay.jetty', module: 'servlet-api-2.5'
-        exclude group: 'com.codeborne', module: 'phantomjsdriver'
-        exclude group: "org.eclipse.jetty", module:"jetty-util"
-        exclude group: "org.eclipse.jetty", module:"jetty-io"
-        exclude group: "commons-codec", module:"commons-codec"
-        exclude group: "org.seleniumhq.selenium", module:"htmlunit-driver"
-        exclude group: "net.sourceforge.htmlunit", module:"neko-htmlunit"
-        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-core"
-        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-core-js"
-        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-cssparser"
-        exclude group: "net.bytebuddy", module:"byte-buddy"
-        exclude group: "net.bytebuddy", module:"byte-buddy-agent"
-    }
-
     compile("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
@@ -132,7 +108,6 @@ dependencies {
 
     compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitDriverVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-server'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-support'

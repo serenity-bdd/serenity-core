@@ -74,4 +74,6 @@ dependencies {
     }
     testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     testCompile "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+
+    compile "io.github.classgraph:classgraph:4.8.138"
 }

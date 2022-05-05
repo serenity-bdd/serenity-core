@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.6.0'
     ext.serenity_cucumber_version = '1.9.12'
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 test {
     useJUnitPlatform {

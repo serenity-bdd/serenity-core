@@ -34,14 +34,13 @@ public class WebCapableActorInjector implements DependencyInjector {
 
         CastMember castMember = field.getAnnotation(CastMember.class);
         String name = castMember.name().isEmpty() ? StringUtils.capitalize(field.getName()) : castMember.name();
-        String description = castMember.description();
 
         if (!OnStage.theStageIsSet()) {
             OnStage.setTheStage(new OnlineCast());
         }
 
         try {
-            Actor actor = OnStage.theActorCalled(name).describedAs(description);
+            Actor actor = OnStage.theActorCalled(name);
             browserFor(object, castMember).ifPresent(
                     browser -> actor.can(BrowseTheWeb.with(browser))
             );

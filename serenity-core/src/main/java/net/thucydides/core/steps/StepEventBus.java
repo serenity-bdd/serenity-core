@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import io.cucumber.core.resource.ClassLoaders;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -44,8 +46,18 @@ public class StepEventBus {
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
+    public static final String JUNIT_JUPITER_EXECUTION_PARALLEL_ENABLED = "junit.jupiter.execution.parallel.enabled";
 
     private static boolean noCleanupForStickyBuses = false;
+
+    private static String JUNIT_CONFIG_FILE_NAME = "junit-platform.properties";
+
+    private static boolean jUnit5ParallelMode = false;
+
+    static {
+        jUnit5ParallelMode =  isJUnit5ParallelMode();
+    }
+
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
      * There is a separate event bus for each thread.
@@ -964,7 +976,7 @@ public class StepEventBus {
     }
 
     public boolean isASingleBrowserScenario() {
-        if(isJUnit5ParallelMode()) {
+        if(jUnit5ParallelMode) {
             return false;
         }
         return uniqueSession
@@ -985,8 +997,30 @@ public class StepEventBus {
     }
 
     private static boolean isJUnit5ParallelMode() {
-        return System.getProperty("junit.jupiter.execution.parallel.enabled", "false").equalsIgnoreCase("true");
+        Properties junitProperties = fromClasspathResource(JUNIT_CONFIG_FILE_NAME);
+        if(junitProperties.size() > 0) {
+            return junitProperties.getProperty(JUNIT_JUPITER_EXECUTION_PARALLEL_ENABLED, "false").equalsIgnoreCase("true");
+        } else {
+            return System.getProperty("junit.jupiter.execution.parallel.enabled", "false").equalsIgnoreCase("true");
+        }
     }
+
+    private static Properties fromClasspathResource(String configFileName) {
+		Properties props = new Properties();
+		try {
+			InputStream inputStream = ClassLoaders.getDefaultClassLoader().getResourceAsStream(configFileName);
+			if (inputStream != null) {
+				LOGGER.info(String.format(
+					"Loading JUnit Platform configuration parameters from classpath resource [%s].", configFileName));
+				props.load(inputStream);
+			}
+		}
+		catch (Exception ex) {
+			LOGGER.info(String.format("Failed to load JUnit Platform configuration parameters from classpath resource [%s].", configFileName));
+		}
+
+		return props;
+	}
 
     public static void setNoCleanupForStickyBuses(boolean noCleanup) {
         noCleanupForStickyBuses = noCleanup;

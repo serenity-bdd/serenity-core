@@ -27,6 +27,7 @@ dependencies {
     compile project(':serenity-model')
     compile project(':serenity-stats')
     compile project(':serenity-reports')
+    compile project(':serenity-reports-configuration')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 

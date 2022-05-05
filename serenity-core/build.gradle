@@ -221,6 +221,9 @@ dependencies {
         exclude group:"commons-codec", module:"commons-codec"
     }
 
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
 
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.opentest4j:opentest4j:${opentest4jVersion}"

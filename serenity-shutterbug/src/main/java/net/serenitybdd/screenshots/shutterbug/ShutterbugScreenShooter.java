@@ -15,9 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SCREENSHOT_STRATEGY;
-
 /**
  * Takes screenshots using Shutterbug 0.9.5
  * You can configure Shutterbug with the following properties:
@@ -49,18 +46,6 @@ public class ShutterbugScreenShooter implements ScreenShooter {
         );
         PageSnapshot snapshot = Shutterbug.shootPage(driver, scrollStrategy, betweenScrollTimeout, useDevicePixelRatio);
         return asByteArray(snapshot.getImage());
-    }
-
-    private ScrollStrategy scrollStrategy() {
-        if (environmentVariables.aValueIsDefinedFor("shutterbug.scrollstrategy")) {
-            return ScrollStrategy.valueOf(environmentVariables.getValue("shutterbug.scrollstrategy", "WHOLE_PAGE"));
-        } else if (environmentVariables.aValueIsDefinedFor(SERENITY_SCREENSHOT_STRATEGY)) {
-            return ScrollStrategy.valueOf(environmentVariables.getValue(SERENITY_SCREENSHOT_STRATEGY));
-        } else if (environmentVariables.aValueIsDefinedFor(SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY)) {
-            return (SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY.booleanFrom(environmentVariables) ? ScrollStrategy.WHOLE_PAGE : ScrollStrategy.VIEWPORT_ONLY);
-        } else {
-            return ScrollStrategy.WHOLE_PAGE;
-        }
     }
 
     private byte[] asByteArray(BufferedImage image) throws IOException {

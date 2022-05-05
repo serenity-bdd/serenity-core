@@ -4,10 +4,10 @@ import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.exceptions.IgnoreStepException;
 import net.serenitybdd.core.parallel.Agent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
-import net.serenitybdd.core.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.facts.Fact;
 import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
@@ -15,13 +15,12 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFactory;
-import net.thucydides.core.steps.StepInterceptor;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.IGNORE_EXCEPTIONS;
 import static net.serenitybdd.screenplay.Actor.ErrorHandlingMode.THROW_EXCEPTION_ON_FAILURE;
 import static net.serenitybdd.screenplay.SilentTasks.isNestedInSilentTask;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
@@ -191,7 +190,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         THROW_EXCEPTION_ON_FAILURE, IGNORE_EXCEPTIONS
     }
 
-    protected final void attemptsTo(ErrorHandlingMode mode, Performable... tasks) {
+    public final void attemptsTo(ErrorHandlingMode mode, Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
             if (isNestedInSilentTask()) {
@@ -460,7 +459,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private void endConsequenceCheck() {
         consequenceListener.endConsequenceCheck();
         Broadcaster.getEventBus().post(new ActorEndsConsequenceCheckEvent(name));
-        endPerformance();
+        endPerformance(IGNORE_EXCEPTIONS);
     }
 
 

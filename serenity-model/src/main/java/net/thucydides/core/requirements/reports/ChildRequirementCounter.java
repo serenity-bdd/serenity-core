@@ -24,7 +24,6 @@ public class ChildRequirementCounter implements RequirmentCalculator {
     public long countSubrequirementsWithResult(TestResult expectedResult) {
         return requirement.getChildren().stream()
                 .filter(req -> testResultFor(req) == expectedResult)
-                .distinct()
                 .count();
     }
 
@@ -32,7 +31,6 @@ public class ChildRequirementCounter implements RequirmentCalculator {
     public long countSubrequirementsWithNoTests() {
         return requirement.getChildren().stream()
                 .filter(req -> testOutcomes.forRequirement(req).getOutcomes().isEmpty())
-                .distinct()
                 .count();
     }
 

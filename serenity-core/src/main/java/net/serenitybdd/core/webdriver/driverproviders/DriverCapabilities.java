@@ -107,9 +107,11 @@ public class DriverCapabilities {
             capabilities.setCapability("version", WEBDRIVER_REMOTE_BROWSER_VERSION.from(environmentVariables));
         }
 
-        AddCustomDriverCapabilities.from(environmentVariables)
-                .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
-                .to(capabilities);
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            AddCustomDriverCapabilities.from(environmentVariables)
+                    .withTestDetails(SupportedWebDriver.REMOTE, StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome())
+                    .to(capabilities);
+        }
 
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
         return capabilities;

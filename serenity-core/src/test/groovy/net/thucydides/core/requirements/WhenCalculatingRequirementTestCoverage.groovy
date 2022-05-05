@@ -125,7 +125,7 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
 
     def "should count the number of nested requirements with no tests"() {
         given: "there are two stories with passing tests in the 'Apples' feature"
-            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApplesAndZucchinis())
+            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
             def environmentVariables = new MockEnvironmentVariables()
         and: "we read the requirements from the directory structure"
             RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
@@ -133,7 +133,7 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
             def featureOutcomes = outcomes.requirementOutcomes.find { it.requirement.name == 'Nice zucchinis'}
         then:
-            featureOutcomes.subrequirements.withNoTests() == 1
+            featureOutcomes.subrequirements.withNoTests() == 2
     }
 
 //    def "For leaf requirements we count the number of acceptance criteria"() {

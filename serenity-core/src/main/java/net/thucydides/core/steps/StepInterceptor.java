@@ -411,7 +411,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private boolean shouldRunInDryRunMode(final Method methodOrStep, final Class callingClass) {
-        return !stepIsCalledFromCleanupMethod() && ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
+        return !stepIsCalledFromCleanupMethod() && ((aPreviousStepHasFailed() || testIsPending() || isDryRun()));// && declaredInSameDomain(methodOrStep, callingClass));
     }
 
     public void reportMethodError(Throwable generalException, Object obj, Method method, Object[] args) throws Throwable {

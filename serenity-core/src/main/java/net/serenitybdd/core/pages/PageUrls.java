@@ -183,7 +183,7 @@ public class PageUrls {
             String variable = String.format("{%d}", i + 1);
             url = url.replace(variable, parameterValues[i]);
         }
-//        return addBaseUrlTo(url);
+
         return url;
     }
 
@@ -193,6 +193,10 @@ public class PageUrls {
     }
 
     public String addBaseUrlTo(final String url) {
+        if (url != null && getBaseUrl() != null && url.startsWith(getBaseUrl())) {
+            return url;
+        }
+
         if (isANamedUrl(url)) {
             return namedUrlFrom(url);
         }

@@ -48,7 +48,7 @@ class WhenWaitingForDelayedResults extends Specification {
         when:
             jane.should(eventually(seeThat(TheClickerValue.of(clicker), equalTo(-1))).waitingForNoLongerThan(100).milliseconds())
         then:
-            def exception = thrown(Error)
+            //def exception = thrown(Error)
             theTestResult() == FAILURE
     }
 
@@ -59,7 +59,7 @@ class WhenWaitingForDelayedResults extends Specification {
         when:
              jane.should(eventually(seeThat(TheClickerValue.ofBroken(clicker), equalTo(1))).waitingForNoLongerThan(250).milliseconds())
         then:
-            def exception = thrown(Error)
+            //def exception = thrown(Error)
             theTestResult() == ERROR
     }
 
@@ -72,7 +72,7 @@ class WhenWaitingForDelayedResults extends Specification {
                                   orComplainWith(SomethingBadHappenedException)).
                         waitingForNoLongerThan(100).milliseconds())
         then:
-            def exception = thrown(Error)
+            //def exception = thrown(Error)
             theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 
@@ -84,7 +84,7 @@ class WhenWaitingForDelayedResults extends Specification {
         jane.should(eventually(seeThat(TheClickerValue.of(clicker), equalTo(-1))).
                 waitingForNoLongerThan(100).milliseconds().orComplainWith(SomethingBadHappenedException))
         then:
-        def exception = thrown(Error)
+      //  def exception = thrown(Error)
         theFailureClass() == SomethingBadHappenedException.getCanonicalName()
     }
 

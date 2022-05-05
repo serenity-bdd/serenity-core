@@ -10,10 +10,11 @@ test {
 dependencies {
     compile project(':serenity-model')
     compile project(':serenity-core')
-    compile "org.junit.jupiter:junit-jupiter:${junit5Version}"
-    compile "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+    compile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     compile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    compile "org.junit.platform:junit-platform-runner:${junit5Version}"
+    compile "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+    compile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    compile "org.junit.platform:junit-platform-launcher:${junitPlatformLauncher}"
 
 
 

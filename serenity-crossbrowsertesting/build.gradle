@@ -4,5 +4,9 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-    compile group: 'com.konghq', name: 'unirest-java', version: '3.11.05'
+    compile project(':serenity-model')
+    compile group: 'com.konghq', name: 'unirest-java', version: '3.11.10'
+    // TEST DEPENDENCIES
+    compile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    compile "junit:junit:${junitVersion}"
 }

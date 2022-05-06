@@ -23,34 +23,24 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
     compile project(':serenity-stats')
+    compile project(':serenity-model')
     compile project(':serenity-reports')
+    compile project(':serenity-reports-configuration')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
     compile ("org.thymeleaf:thymeleaf:${thymeleafVersion}") {
         exclude group: 'org.slf4j', module: 'slf4j-api'
         exclude group: 'org.javassist'
     }
-    compile("org.javassist:javassist:3.21.0-GA")
+    compile("org.javassist:javassist:${javassistVersion}")
     compile "org.knowm.xchart:xchart:${xchartVersion}"
-    compile ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.1.RELEASE') {
+    compile ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE') {
         exclude group: "org.thymeleaf", module:"thymeleaf"
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-
-    // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-    testCompile "org.jsoup:jsoup:1.10.3"
-
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
+    testImplementation"org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
 }
 repositories {
     mavenCentral()

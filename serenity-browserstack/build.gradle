@@ -4,4 +4,9 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
+    compile "org.apache.httpcomponents:httpcore:4.4.14"
+    compile "org.apache.httpcomponents:httpclient:4.5.13"
+    // TEST DEPENDENCIES
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testCompile "junit:junit:${junitVersion}"
 }

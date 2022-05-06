@@ -53,13 +53,15 @@ dependencies {
     compile "net.serenity-bdd:serenity-core:$serenityCoreVersion"
     compile "net.serenity-bdd:serenity-junit:$serenityCoreVersion"
     compile("net.serenity-bdd:serenity-screenplay:$serenityCoreVersion")
-    compile("net.serenity-bdd:browse-the-web:$serenityCoreVersion")
+    compile("net.serenity-bdd:serenity-screenplay-webdriver:$serenityCoreVersion")
+    compile("net.serenity-bdd:serenity-cucumber:$serenityCoreVersion")
+    compile("net.serenity-bdd:serenity-browserstack:$serenityCoreVersion")
+    compile("net.serenity-bdd:serenity-saucelabs:$serenityCoreVersion")
 
-    compile 'org.slf4j:slf4j-simple:1.7.7'
-    compile 'org.codehaus.groovy:groovy-all:2.4.11'
-    compile "junit:junit:${junitVersion}"
-    compile 'org.assertj:assertj-core:1.7.0'
-    compile 'org.hamcrest:hamcrest-all:1.3'
+    compile 'org.slf4j:slf4j-simple:1.7.30'
+    testCompile "junit:junit:4.13.1"
+    compile 'org.assertj:assertj-core:3.18.0'
+    compile 'org.hamcrest:hamcrest:2.2'
 }
 
 

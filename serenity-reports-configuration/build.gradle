@@ -26,20 +26,13 @@ test {
 dependencies {
     compile project(':serenity-model')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-
-    // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
+    // Testing Dependencies
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
 }
+
 repositories {
     mavenCentral()
 }

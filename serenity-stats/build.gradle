@@ -25,17 +25,21 @@ test {
 
 dependencies {
     compile project(':serenity-model')
-//    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-//    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    // Testing Dependencies
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testCompile("org.mockito:mockito-core:${mockitoCoreVersion}") {
+        exclude group:'org.objenesis', module:'objenesis'
+        exclude group:'net.bytebuddy', module:'byte-buddy'
+        exclude group:'net.bytebuddy', module:'byte-buddy-agent'
+    }
+    testCompile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    testCompile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+    testCompile "org.objenesis:objenesis:${objenesisVersion}"
 
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
 }
 repositories {
     mavenCentral()

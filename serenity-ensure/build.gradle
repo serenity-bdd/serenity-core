@@ -1,6 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
-//    ext.kotlin_version = '1.3.71'
+    ext.kotlin_version = '1.6.0'
     repositories {
         mavenCentral()
     }
@@ -10,7 +9,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 
 ext {
@@ -29,19 +28,14 @@ dependencies {
     compile project(':serenity-junit')
     compile project(':serenity-screenplay')
     compile project(':serenity-screenplay-webdriver')
-//    compile project(':serenity-screenplay-rest')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.assertj:assertj-core:${assertjVersion}"
-//    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
+    testCompile "junit:junit:${junitVersion}"
+    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    compile "org.assertj:assertj-core:${assertjVersion}"
 }
+
 repositories {
     mavenCentral()
 }

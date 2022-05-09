@@ -4,4 +4,9 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
+    compile project(':serenity-rest-assured')
+    compile project(':serenity-junit')
+    // TEST DEPENDENCIES
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testCompile "junit:junit:${junitVersion}"
 }

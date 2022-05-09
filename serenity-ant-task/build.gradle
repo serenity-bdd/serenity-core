@@ -7,9 +7,6 @@ dependencies {
     compile project(':serenity-core')
     compile "org.apache.ant:ant:${antVersion}"
 
-    testCompile project(':serenity-test-utils')
-    testCompile ("org.apache.ant:ant-testutil:${antVersion}"){
-        exclude group: "junit"
-    }
+    testCompile ("org.apache.ant:ant-testutil:${antVersion}")
     testCompile "org.assertj:assertj-core:${assertjVersion}"
 }

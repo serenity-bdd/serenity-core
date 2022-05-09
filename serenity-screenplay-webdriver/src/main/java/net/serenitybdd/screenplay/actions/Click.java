@@ -7,6 +7,9 @@ import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+/**
+ * Click on a button or element.
+ */
 public class Click {
 
     public static ClickInteraction on(String cssOrXpathForElement) {

@@ -8,6 +8,9 @@ import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+/**
+ * If this element is a form entry element, this will reset its value.
+ */
 public class Clear {
 
     public static Interaction field(String cssOrXpathForElement) {

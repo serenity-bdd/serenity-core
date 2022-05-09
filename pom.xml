@@ -563,6 +563,7 @@
                         <includes>
                             <include>**/When*</include>
                             <include>**/*Test</include>
+                            <include>**/*Spec</include>
                             <include>**/*TestSuite</include>
                         </includes>
                         <excludes>
@@ -586,6 +587,7 @@
                             <include>**/integration/*Examples</include>
                             <include>**/integration/*Test</include>
                             <include>**/integration/*TestSuite</include>
+                            <include>**/*Spec</include>
                         </includes>
                         <excludes>
                             <exclude>**/*$*</exclude>

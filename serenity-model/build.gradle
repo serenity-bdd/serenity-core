@@ -5,73 +5,53 @@ ext {
 
 dependencies {
 
-    compile project(':serenity-report-resources')
+    implementation project(':serenity-report-resources')
+    implementation project(':serenity-sample-alternative-resources')
 
-    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    compile group: 'commons-net', name: 'commons-net', version: '3.6'
-
-    compile "com.typesafe:config:${typesafeConfigVersion}"
-
-    compile("org.jsoup:jsoup:${jsoupVersion}") {
-        exclude group: 'junit', module: 'junit'
-    }
-
-    compile 'org.xmlunit:xmlunit-core:2.8.2'
-    compile "joda-time:joda-time:${jodaTimeVersion}"
-    compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
-    compile "commons-io:commons-io:${commonsIoVersion}"
-    compile("org.apache.commons:commons-text:${commonsTextVersion}") {
-        exclude group: 'org.apache.commons', module: 'commons-lang3'
-    }
-    compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
-        exclude group: 'commons-logging', module: 'commons-logging'
-        exclude group: 'commons-collections', module: 'commons-collections'
-    }
-//    compile "javax.validation:validation-api:${javaxValidationVersion}"
-    compile "net.sf.opencsv:opencsv:${openCsvVersion}"
-    compile "com.google.code.gson:gson:${gsonVersion}"
-    compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
-    compile "com.thoughtworks.xstream:xstream:${xstreamVersion}"
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    testImplementation "commons-lang:commons-lang:${commonsLang2Version}"
+    api "commons-io:commons-io:${commonsIoVersion}"
+    implementation "org.apache.commons:commons-text:${commonsTextVersion}"
+    implementation "commons-beanutils:commons-beanutils-core:${beanUtilsVersion}"
+    implementation "commons-net:commons-net:${commonsNetVersion}"
+    implementation "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    implementation "commons-codec:commons-codec:${commonsCodecVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    api "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    api "com.google.inject:guice:${guiceVersion}"
+    api "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    api "joda-time:joda-time:${jodaTimeVersion}"
+    api "io.cucumber:cucumber-core:${cucumberVersion}"
+    api "io.cucumber:cucumber-java:${cucumberVersion}"
+    api "com.google.code.gson:gson:${gsonVersion}"
+    api "net.sf.opencsv:opencsv:${openCsvVersion}"
+    implementation "com.typesafe:config:${typesafeConfigVersion}"
+    implementation "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
+    api "org.awaitility:awaitility:${awaitilityVersion}"
+    api "org.freemarker:freemarker:${freemarkerVersion}"
+    implementation "io.github.classgraph:classgraph:4.8.138"
+    implementation("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
         exclude group: 'log4j', module: 'log4j'
     }
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    implementation "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+    implementation "org.objenesis:objenesis:${objenesisVersion}"
 
-    compile("org.awaitility:awaitility:${awaitilityVersion}") {
-        exclude group: 'cglib', module: 'cglib-nodep'
-//        exclude group: 'org.objenesis', module: 'objenesis'
-    }
-    compile ('org.reflections:reflections:0.9.11') {
-        exclude group:"com.google.guava"
-    }
-
-    testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
-        exclude group: 'com.google.guava', module:'guava'
-        exclude group: 'org.apache.httpcomponents', module:'httpclient'
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
-    compile("org.asciidoctor:asciidoctorj:${asciidoctorVersion}"){
-        exclude group: 'com.beust', module: 'jcommander'
-    }
-    compile "org.freemarker:freemarker:${freemarkerVersion}"
-
-
-    compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
-        exclude group:"org.jsoup", module:"jsoup"
-        exclude group:"junit", module:"junit"
-    }
-    compile "junit:junit:${junitVersion}"
-    compile 'es.nitaur.markdown:txtmark:0.16'
-
-    compileOnly "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    compileOnly "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
-
-    testCompile project(':serenity-sample-alternative-resources')
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
-        exclude group: "junit"
-        exclude group: "org.codehaus.groovy"
+    // TEST DEPENDENCIES
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group: "org.junit.platform"
     }
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+    testImplementation("org.mockito:mockito-core:${mockitoCoreVersion}") {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+        exclude group: 'org.objenesis', module: 'objenesis'
+        exclude group: 'net.bytebuddy', module: 'byte-buddy'
+        exclude group: 'net.bytebuddy', module: 'byte-buddy-agent'
+    }
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }

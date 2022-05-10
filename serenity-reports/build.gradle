@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.6.0'
     repositories {
         mavenCentral()
     }
@@ -9,7 +9,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 ext {
     bintrayPackage = 'serenity-reports'
@@ -27,24 +27,39 @@ compileTestKotlin {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-stats')
-    testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
-        exclude group: 'com.google.guava', module:'guava'
-        exclude group: 'org.apache.httpcomponents', module:'httpclient'
-        exclude group: 'org.slf4j', module: 'slf4j-api'
+    implementation project(':serenity-model')
+    implementation project(':serenity-stats')
+    api project(':serenity-reports-configuration')
+    api("com.vladsch.flexmark:flexmark-all:0.34.30") {
+        exclude group:'org.jsoup', module:'jsoup'
+        exclude group:'junit', module:'junit'
     }
-    testCompile("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-    testCompile project(':serenity-test-utils')
-    testCompile project(':serenity-sample-alternative-resources')
-    testCompile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
-        exclude group: 'xml-apis', module: 'xml-apis'
-        exclude group: "commons-codec", module:"commons-codec"
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
-        exclude group: "net.bytebuddy", module:"byte-buddy"
-        exclude group: "net.bytebuddy", module:"byte-buddy-agent"
+    implementation "es.nitaur.markdown:txtmark:0.16"
+
+    // Test Dependencies
+    testImplementation project(':serenity-sample-alternative-resources')
+    // JUNIT DEPENDENCIES
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
+        exclude group:'org.junit.platform', module:'junit-platform-engine'
     }
-    testCompile "org.opentest4j:opentest4j:${opentest4jVersion}"
+
+    // SELENIUM
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+        exclude group:'net.bytebuddy', module:'byte-buddy'
+        exclude group:'net.bytebuddy', module:'byte-buddy-agent'
+    }
+    testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+    testImplementation("org.mockito:mockito-core:${mockitoCoreVersion}") {
+        exclude group:'org.hamcrest', module:'harmcrest-core'
+        exclude group:'org.objenesis', module:'oobjenesis'
+        exclude group:'net.bytebuddy', module:'byte-buddy'
+        exclude group:'net.bytebuddy', module:'byte-buddy-agent'
+    }
+    testImplementation "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    testImplementation "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+    testImplementation "org.objenesis:objenesis:${objenesisVersion}"
 }
 

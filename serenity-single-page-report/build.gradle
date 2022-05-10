@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.6.0'
     repositories {
         mavenCentral()
     }
@@ -9,7 +9,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 ext {
     bintrayPackage = 'serenity-single-page-report'
@@ -23,34 +23,24 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-stats')
-    compile project(':serenity-reports')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    compile ("org.thymeleaf:thymeleaf:${thymeleafVersion}") {
+    implementation project(':serenity-stats')
+    implementation project(':serenity-model')
+    implementation project(':serenity-reports')
+    implementation project(':serenity-reports-configuration')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation ("org.thymeleaf:thymeleaf:${thymeleafVersion}") {
         exclude group: 'org.slf4j', module: 'slf4j-api'
         exclude group: 'org.javassist'
     }
-    compile("org.javassist:javassist:3.21.0-GA")
-    compile "org.knowm.xchart:xchart:${xchartVersion}"
-    compile ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.1.RELEASE') {
+    implementation("org.javassist:javassist:${javassistVersion}")
+    implementation "org.knowm.xchart:xchart:${xchartVersion}"
+    implementation ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE') {
         exclude group: "org.thymeleaf", module:"thymeleaf"
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-
-    // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-    testCompile "org.jsoup:jsoup:1.10.3"
-
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
+    testImplementation"org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
 repositories {
     mavenCentral()

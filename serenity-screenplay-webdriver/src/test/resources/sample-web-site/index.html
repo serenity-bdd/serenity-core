@@ -23,6 +23,28 @@
 
     <input id="invisibleTextField" style="display:none">
 
+    <h2>Populated fields</h2>
+    <div>
+        <label>Populated Input</label>
+        <input type="input" name="populated-input" id="populated-input"  value="Populated">
+    </div>
+
+    <h2>Clickable Elements</h2>
+    <div>
+        <button id="button" onclick="getElementById('button-state').innerHTML = 'Clicked'">Some Button</button>
+    </div>
+    <div><span id="button-state">Unclicked</span></div>
+    <div>
+        <label>Some Checkbox</label>
+        <input type="checkbox" id="checkbox" name="checkbox">
+    </div>
+
+    <h2>Form Elements</h2>
+    <div>
+        <label>First Name</label><input type="text" id="firstName" value="Jo Grant"/>
+        <label>Last Name</label><input type="text" id="lastName" value="Name:"/>
+    </div>
+
 </div>
 
 </body>

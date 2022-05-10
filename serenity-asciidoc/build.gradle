@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.6.0'
     ext.serenity_cucumber_version = '1.9.12'
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 test {
     useJUnitPlatform {
@@ -19,20 +19,20 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation project(':serenity-model')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    compile "org.freemarker:freemarker:${freemarkerVersion}"
-    compile("ca.szc.thirdparty.nl.jworks.markdown_to_asciidoc:markdown_to_asciidoc:1.0") {
+    implementation "org.freemarker:freemarker:${freemarkerVersion}"
+    implementation("ca.szc.thirdparty.nl.jworks.markdown_to_asciidoc:markdown_to_asciidoc:1.0") {
         exclude group: "org.ow2.asm", module: "asm"
         exclude group: "org.jsoup", module: "jsoup"
     }
 
     // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-    testCompile project(':serenity-junit')
-    testCompile ("net.serenity-bdd:serenity-cucumber:$serenity_cucumber_version") {
+    testImplementation project(':serenity-core')
+    testImplementation project(':serenity-junit')
+    testImplementation ("net.serenity-bdd:serenity-cucumber:$serenity_cucumber_version") {
         exclude group:"net.serenity-bdd", module: "serenity-core"
         exclude group:"org.slf4j", module: "slf4j-api"
     }

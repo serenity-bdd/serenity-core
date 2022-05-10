@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.6.0'
     repositories {
         mavenCentral()
     }
@@ -9,7 +9,7 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
 }
 
 ext {
@@ -24,23 +24,15 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-reports')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation project(':serenity-model')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-
-    // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-
-    // JUnit 5
-    testImplementation(
-            "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    )
-    testRuntimeOnly(
-            "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    )
+    // Testing Dependencies
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
+
 repositories {
     mavenCentral()
 }

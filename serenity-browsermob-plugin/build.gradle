@@ -4,23 +4,21 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-core')
-    compile("net.lightbody.bmp:browsermob-core:${browsermobVersion}") {
-     	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
-     	exclude group: 'org.seleniumhq.selenium', module:'selenium-server'
-     	exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
-        exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
-        exclude group: 'org.apache.commons', module:'commons-lang3'
-        exclude group: 'commons-io', module:'commons-io'
-     	exclude group: 'com.google.guava'
-    	exclude group: 'com.fasterxml.jackson.core', module:'jackson-databind'
-        exclude module: "slf4j-api"
-     	exclude group: 'com.google.code.findbugs', module:'jsr305'
-        exclude group:'commons-codec' ,module:'commons-codec'
+    implementation project(':serenity-core')
+    implementation project(':serenity-model')
+    implementation("net.lightbody.bmp:browsermob-core:${browsermobVersion}") {
         exclude group:'io.netty' ,module:'netty-all'
+        exclude group: 'com.fasterxml.jackson.core', module:'jackson-annotations'
+        exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
 	}
-    compile("io.netty:netty-all:${nettyVersion}")
-    compile("org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}")
-    testCompile("org.opentest4j:opentest4j:${opentest4jVersion}")
+    implementation "io.netty:netty-all:4.1.69.Final"
+    implementation "org.bouncycastle:bcprov-jdk15on:1.69"
+    implementation "org.opentest4j:opentest4j:1.2.0"
+
+    // TEST DEPENDENCIES
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
+        exclude group:'org.junit.platform', module:'junit-platform-engine'
+    }
 }

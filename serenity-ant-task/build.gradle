@@ -4,12 +4,9 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile "org.apache.ant:ant:${antVersion}"
+    implementation project(':serenity-core')
+    implementation "org.apache.ant:ant:${antVersion}"
 
-    testCompile project(':serenity-test-utils')
-    testCompile ("org.apache.ant:ant-testutil:${antVersion}"){
-        exclude group: "junit"
-    }
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation ("org.apache.ant:ant-testutil:${antVersion}")
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }

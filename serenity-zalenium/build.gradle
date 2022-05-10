@@ -3,5 +3,10 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
+    implementation project(':serenity-core')
+    // Unit testing
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation project(':serenity-junit')
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
 }

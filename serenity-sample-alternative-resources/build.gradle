@@ -1,10 +1,7 @@
-dependencies {
-    compile("org.jbehave:jbehave-core:${jbehaveVersion}") {
-        exclude group: "org.hamcrest"
-        exclude group: "org.freemarker"
-        exclude group: "junit", module:"junit"
-        exclude group: "commons-io", module:"commons-io"
-    }
-    compile "junit:junit:${junitVersion}"
+ext {
     projectDescription = 'Serenity sample resources used for testing purposes'
+}
+
+dependencies {
+    implementation "junit:junit:${junitVersion}"
 }

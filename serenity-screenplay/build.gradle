@@ -4,8 +4,13 @@ ext {
 }
 
 dependencies {
-//    compile 'uk.com.robust-it:cloning:1.9.10'
-    compile project(':serenity-core')
-    testCompile project(':serenity-junit')
+    implementation project(':serenity-core')
+    implementation "junit:junit:${junitVersion}"
 
+    // Unit testing
+    testImplementation project(':serenity-junit')
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    implementation project(':serenity-model')
 }

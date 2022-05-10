@@ -8,6 +8,9 @@ import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+/**
+ * Double-click on a button or element
+ */
 public class DoubleClick {
 
     public static Interaction on(String cssOrXpathForElement) {

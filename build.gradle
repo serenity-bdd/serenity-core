@@ -228,70 +228,70 @@ subprojects {
     check.dependsOn -= integrationTests
 
 
-    dependencies {
-        compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
-        compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
-        compile "com.google.guava:guava:${guavaVersion}"
-
-        compile("com.google.inject:guice:${guiceVersion}") {
-            exclude group: "org.ow2.asm", module: "asm"
-            exclude group: "asm", module: "asm"
-            exclude group: "com.google.guava", module: "guava"
-            exclude group: "org.sonatype.sisu.inject", module: "cglib"
-        }
-
-        compile("org.ow2.asm:asm:${asmVersion}")
-
-        compile "commons-codec:commons-codec:${commonsCodecVersion}"
-        compile "org.objenesis:objenesis:${objenesisVersion}"
-        compile "org.slf4j:slf4j-api:${slf4jVersion}"
-        compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile("io.cucumber:cucumber-core:${cucumberVersion}") {
-            exclude group: "org.apiguardian", module: 'apiguardian-api'
-        }
-        compile("io.cucumber:cucumber-java:${cucumberVersion}") {
-            exclude group: "org.apiguardian", module: 'apiguardian-api'
-        }
-
-
-        compile("commons-logging:commons-logging:${commonsLoggingVersion}")
-        testCompile "junit:junit:${junitVersion}"
-
-        compile "io.vavr:vavr:${vavrVersion}"
-
-        /* Required for Java 9 and higher */
-        compile "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
-        compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
-        compile "com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}"
-        compile "javax.activation:activation:${activationVersion}"
-
-        testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
-            exclude group: "org.slf4j", module: 'slf4j-api'
-        }
-        compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
-            exclude group: "org.hamcrest", module: "hamcrest-core"
-            exclude group: "org.objenesis", module: "objenesis"
-            exclude group: "net.bytebuddy", module: "byte-buddy"
-            exclude group: "net.bytebuddy", module: "byte-buddy-agent"
-        }
-        testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
-        testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-        testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-
-        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
-            exclude group: "org.junit"
-            exclude group: "org.junit.jupiter"
-            exclude group: "com.google.inject"
-            exclude group: "org.junit.platform"
-        }
-        testCompile("org.spockframework:spock-core:${spockVersion}") {
-            exclude group: "org.codehaus.groovy"
-            exclude group: "org.junit.platform"
-
-        }
-        testCompile "org.jetbrains:annotations:19.0.0"
-        testCompile "org.assertj:assertj-core:${assertjVersion}"
-    }
+//    dependencies {
+//        compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+//        compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+//        compile "com.google.guava:guava:${guavaVersion}"
+//
+//        compile("com.google.inject:guice:${guiceVersion}") {
+//            exclude group: "org.ow2.asm", module: "asm"
+//            exclude group: "asm", module: "asm"
+//            exclude group: "com.google.guava", module: "guava"
+//            exclude group: "org.sonatype.sisu.inject", module: "cglib"
+//        }
+//
+//        compile("org.ow2.asm:asm:${asmVersion}")
+//
+//        compile "commons-codec:commons-codec:${commonsCodecVersion}"
+//        compile "org.objenesis:objenesis:${objenesisVersion}"
+//        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+//        compile "xml-apis:xml-apis:${xmlApisVersion}"
+//        compile("io.cucumber:cucumber-core:${cucumberVersion}") {
+//            exclude group: "org.apiguardian", module: 'apiguardian-api'
+//        }
+//        compile("io.cucumber:cucumber-java:${cucumberVersion}") {
+//            exclude group: "org.apiguardian", module: 'apiguardian-api'
+//        }
+//
+//
+//        compile("commons-logging:commons-logging:${commonsLoggingVersion}")
+//        testCompile "junit:junit:${junitVersion}"
+//
+//        compile "io.vavr:vavr:${vavrVersion}"
+//
+//        /* Required for Java 9 and higher */
+//        compile "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
+//        compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
+//        compile "com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}"
+//        compile "javax.activation:activation:${activationVersion}"
+//
+//        testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
+//            exclude group: "org.slf4j", module: 'slf4j-api'
+//        }
+//        compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
+//            exclude group: "org.hamcrest", module: "hamcrest-core"
+//            exclude group: "org.objenesis", module: "objenesis"
+//            exclude group: "net.bytebuddy", module: "byte-buddy"
+//            exclude group: "net.bytebuddy", module: "byte-buddy-agent"
+//        }
+//        testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
+//        testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+//        testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+//
+//        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}") {
+//            exclude group: "org.junit"
+//            exclude group: "org.junit.jupiter"
+//            exclude group: "com.google.inject"
+//            exclude group: "org.junit.platform"
+//        }
+//        testCompile("org.spockframework:spock-core:${spockVersion}") {
+//            exclude group: "org.codehaus.groovy"
+//            exclude group: "org.junit.platform"
+//
+//        }
+//        testCompile "org.jetbrains:annotations:19.0.0"
+//        testCompile "org.assertj:assertj-core:${assertjVersion}"
+//    }
 
 //    configurations.all {
 //        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
@@ -402,11 +402,11 @@ subprojects {
                     }
                     // Preserve compile-scope dependencies
                     asNode().dependencies.'*'.findAll() {
-                        it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        it.scope.text() == 'runtime' && project.configurations.implementation.allDependencies.find { dep ->
                             dep.name == it.artifactId.text()
                         }
                     }.each() {
-                        it.scope*.value = 'compile'
+                        it.scope*.value = 'implementation'
                     }
                 }
             }
@@ -435,7 +435,7 @@ subprojects {
     }
 
     task copyDeps(type: Copy) {
-        from configurations.runtime + configurations.testCompile
+        from configurations.runtime + configurations.testImplementation
         into project.projectDir.path + "/lib"
     }
 

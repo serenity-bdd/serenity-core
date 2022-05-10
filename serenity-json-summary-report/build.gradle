@@ -24,14 +24,14 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-stats')
-    compile project(':serenity-model')
-    compile project(':serenity-reports')
-    compile project(':serenity-reports-configuration')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':serenity-stats')
+    implementation project(':serenity-model')
+    implementation project(':serenity-reports')
+    implementation project(':serenity-reports-configuration')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
 
 repositories {

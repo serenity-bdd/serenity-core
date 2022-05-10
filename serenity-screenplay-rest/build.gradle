@@ -4,8 +4,13 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile project(':serenity-rest-assured')
-    compile project(':serenity-screenplay')
-    testCompile project(':serenity-junit')
+    implementation project(':serenity-core')
+    implementation project(':serenity-rest-assured')
+    implementation project(':serenity-screenplay')
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation project(':serenity-junit')
+
+    // Unit testing
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
 }

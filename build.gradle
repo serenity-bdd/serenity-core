@@ -402,11 +402,11 @@ subprojects {
                     }
                     // Preserve compile-scope dependencies
                     asNode().dependencies.'*'.findAll() {
-                        it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        it.scope.text() == 'runtime' && project.configurations.implementation.allDependencies.find { dep ->
                             dep.name == it.artifactId.text()
                         }
                     }.each() {
-                        it.scope*.value = 'compile'
+                        it.scope*.value = 'implementation'
                     }
                 }
             }
@@ -435,7 +435,7 @@ subprojects {
     }
 
     task copyDeps(type: Copy) {
-        from configurations.runtime + configurations.testCompile
+        from configurations.runtime + configurations.testImplementation
         into project.projectDir.path + "/lib"
     }
 

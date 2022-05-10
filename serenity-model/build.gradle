@@ -5,53 +5,53 @@ ext {
 
 dependencies {
 
-    compile project(':serenity-report-resources')
-    compile project(':serenity-sample-alternative-resources')
+    implementation project(':serenity-report-resources')
+    implementation project(':serenity-sample-alternative-resources')
 
-    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    testCompile "commons-lang:commons-lang:${commonsLang2Version}"
-    compile "commons-io:commons-io:${commonsIoVersion}"
-    compile "org.apache.commons:commons-text:${commonsTextVersion}"
-    compile "commons-beanutils:commons-beanutils-core:${beanUtilsVersion}"
-    compile "commons-net:commons-net:${commonsNetVersion}"
-    compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
-    compile "commons-codec:commons-codec:${commonsCodecVersion}"
-    compile "com.google.guava:guava:${guavaVersion}"
-    compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "org.hamcrest:hamcrest:${hamcrestVersion}"
-    compile "com.google.inject:guice:${guiceVersion}"
-    compile "org.jsoup:jsoup:${jsoupVersion}"
-    compile "com.thoughtworks.xstream:xstream:${xstreamVersion}"
-    compile "joda-time:joda-time:${jodaTimeVersion}"
-    compile "io.cucumber:cucumber-core:${cucumberVersion}"
-    compile "io.cucumber:cucumber-java:${cucumberVersion}"
-    compile "com.google.code.gson:gson:${gsonVersion}"
-    compile "net.sf.opencsv:opencsv:${openCsvVersion}"
-    compile "com.typesafe:config:${typesafeConfigVersion}"
-    compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
-    compile "org.awaitility:awaitility:${awaitilityVersion}"
-    compile "org.freemarker:freemarker:${freemarkerVersion}"
-    compile "io.github.classgraph:classgraph:4.8.138"
-    compile("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    testImplementation "commons-lang:commons-lang:${commonsLang2Version}"
+    api "commons-io:commons-io:${commonsIoVersion}"
+    implementation "org.apache.commons:commons-text:${commonsTextVersion}"
+    implementation "commons-beanutils:commons-beanutils-core:${beanUtilsVersion}"
+    implementation "commons-net:commons-net:${commonsNetVersion}"
+    implementation "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    implementation "commons-codec:commons-codec:${commonsCodecVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    api "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    api "com.google.inject:guice:${guiceVersion}"
+    api "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    api "joda-time:joda-time:${jodaTimeVersion}"
+    api "io.cucumber:cucumber-core:${cucumberVersion}"
+    api "io.cucumber:cucumber-java:${cucumberVersion}"
+    api "com.google.code.gson:gson:${gsonVersion}"
+    api "net.sf.opencsv:opencsv:${openCsvVersion}"
+    implementation "com.typesafe:config:${typesafeConfigVersion}"
+    implementation "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
+    api "org.awaitility:awaitility:${awaitilityVersion}"
+    api "org.freemarker:freemarker:${freemarkerVersion}"
+    implementation "io.github.classgraph:classgraph:4.8.138"
+    implementation("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
         exclude group: 'log4j', module: 'log4j'
     }
-    compile "org.apache.groovy:groovy:${groovyVersion}"
-    compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
-    compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
-    compile "org.objenesis:objenesis:${objenesisVersion}"
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    implementation "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+    implementation "org.objenesis:objenesis:${objenesisVersion}"
 
     // TEST DEPENDENCIES
-    testCompile "junit:junit:${junitVersion}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group: "org.junit.platform"
     }
-    testCompile("org.mockito:mockito-core:${mockitoCoreVersion}") {
+    testImplementation("org.mockito:mockito-core:${mockitoCoreVersion}") {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
         exclude group: 'org.objenesis', module: 'objenesis'
         exclude group: 'net.bytebuddy', module: 'byte-buddy'
         exclude group: 'net.bytebuddy', module: 'byte-buddy-agent'
     }
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }

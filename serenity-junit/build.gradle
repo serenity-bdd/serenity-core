@@ -17,7 +17,7 @@ configurations {
 }
 
 dependencies {
-    implementation project(':serenity-core')
+    api project(':serenity-core')
     implementation "junit:junit:${junitVersion}"
     // TEST DEPENDENCIES
     implementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"

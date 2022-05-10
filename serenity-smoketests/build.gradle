@@ -50,18 +50,18 @@ apply plugin: "net.serenity-bdd.aggregator"
 println "serenityCoreVersion= $serenityCoreVersion"
 
 dependencies {
-    compile "net.serenity-bdd:serenity-core:$serenityCoreVersion"
-    compile "net.serenity-bdd:serenity-junit:$serenityCoreVersion"
-    compile("net.serenity-bdd:serenity-screenplay:$serenityCoreVersion")
-    compile("net.serenity-bdd:serenity-screenplay-webdriver:$serenityCoreVersion")
-    compile("net.serenity-bdd:serenity-cucumber:$serenityCoreVersion")
-    compile("net.serenity-bdd:serenity-browserstack:$serenityCoreVersion")
-    compile("net.serenity-bdd:serenity-saucelabs:$serenityCoreVersion")
+    implementation "net.serenity-bdd:serenity-core:$serenityCoreVersion"
+    implementation "net.serenity-bdd:serenity-junit:$serenityCoreVersion"
+    implementation("net.serenity-bdd:serenity-screenplay:$serenityCoreVersion")
+    implementation("net.serenity-bdd:serenity-screenplay-webdriver:$serenityCoreVersion")
+    implementation("net.serenity-bdd:serenity-cucumber:$serenityCoreVersion")
+    implementation("net.serenity-bdd:serenity-browserstack:$serenityCoreVersion")
+    implementation("net.serenity-bdd:serenity-saucelabs:$serenityCoreVersion")
 
-    compile 'org.slf4j:slf4j-simple:1.7.30'
-    testCompile "junit:junit:4.13.1"
-    compile 'org.assertj:assertj-core:3.18.0'
-    compile 'org.hamcrest:hamcrest:2.2'
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
+    testImplementation "junit:junit:4.13.1"
+    implementation 'org.assertj:assertj-core:3.18.0'
+    implementation 'org.hamcrest:hamcrest:2.2'
 }
 
 
@@ -80,6 +80,6 @@ task wrapper(type: Wrapper) {
 }
 
 task copyDeps(type: Copy) {
-    from configurations.runtime + configurations.testCompile
+    from configurations.runtime + configurations.testImplementation
     into project.projectDir.path + "/lib"
 }

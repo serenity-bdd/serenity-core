@@ -4,7 +4,16 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile project(':serenity-screenplay')
-    testCompile project(':serenity-junit')
+    implementation project(':serenity-core')
+    implementation project(':serenity-screenplay')
+    // Unit testing
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation project(':serenity-junit')
+    testImplementation project(':serenity-junit5')
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    implementation("org.spockframework:spock-core:${spockVersion}") {
+        exclude group:'org.junit.platform', module:'junit-platform-engine'
+    }
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }

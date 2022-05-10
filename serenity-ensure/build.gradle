@@ -24,16 +24,16 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-junit')
-    compile project(':serenity-screenplay')
-    compile project(':serenity-screenplay-webdriver')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':serenity-model')
+    implementation project(':serenity-junit')
+    implementation project(':serenity-screenplay')
+    implementation project(':serenity-screenplay-webdriver')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testCompile "junit:junit:${junitVersion}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    compile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    implementation "org.assertj:assertj-core:${assertjVersion}"
 }
 
 repositories {

@@ -3,5 +3,5 @@ ext {
 }
 
 dependencies {
-    compile "junit:junit:${junitVersion}"
+    implementation "junit:junit:${junitVersion}"
 }

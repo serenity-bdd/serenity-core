@@ -24,13 +24,13 @@ test {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':serenity-model')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Testing Dependencies
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
 
 repositories {

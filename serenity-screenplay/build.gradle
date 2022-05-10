@@ -4,13 +4,13 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile "junit:junit:${junitVersion}"
+    implementation project(':serenity-core')
+    implementation "junit:junit:${junitVersion}"
 
     // Unit testing
-    testCompile project(':serenity-junit')
-    testCompile "org.spockframework:spock-core:${spockVersion}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    compile project(':serenity-model')
+    testImplementation project(':serenity-junit')
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    implementation project(':serenity-model')
 }

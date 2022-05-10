@@ -8,24 +8,24 @@ test {
 }
 
 configurations {
-    compile {
+    implementation {
         exclude group: 'org.junit.jupiter'
     }
-    testCompile {
+    testImplementation {
         exclude group: 'org.junit.jupiter'
     }
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile "junit:junit:${junitVersion}"
+    implementation project(':serenity-core')
+    implementation "junit:junit:${junitVersion}"
     // TEST DEPENDENCIES
-    compile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    compile("org.spockframework:spock-core:${spockVersion}") {
+    implementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    implementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group:'org.junit.platform', module:'junit-platform-engine'
     }
-    compile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    testCompile "org.springframework:spring-jdbc:${springVersion}"
-    testCompile "org.springframework:spring-aop:${springVersion}"
-    testCompile "org.springframework:spring-orm:${springVersion}"
+    implementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation "org.springframework:spring-jdbc:${springVersion}"
+    testImplementation "org.springframework:spring-aop:${springVersion}"
+    testImplementation "org.springframework:spring-orm:${springVersion}"
 }

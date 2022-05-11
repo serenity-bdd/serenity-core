@@ -38,45 +38,45 @@ integrationTests {
 //}
 dependencies {
 
-    compile project(':serenity-model')
-    compile project(':serenity-reports')
-    compile project(':serenity-report-resources')
-    compile "com.google.code.gson:gson:${gsonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-    compile "commons-codec:commons-codec:${commonsCodecVersion}"
-    compile "commons-io:commons-io:${commonsIoVersion}"
+    api project(':serenity-model')
+    api project(':serenity-reports')
+    implementation project(':serenity-report-resources')
+    api "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "commons-codec:commons-codec:${commonsCodecVersion}"
+    implementation "commons-io:commons-io:${commonsIoVersion}"
     // Selenium
-    compile("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
+    api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-api:$seleniumVersion") {
+    api("org.seleniumhq.selenium:selenium-api:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-support:$seleniumVersion") {
+    implementation("org.seleniumhq.selenium:selenium-support:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+    implementation("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
+    implementation("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-edge-driver:$seleniumVersion") {
+    implementation("org.seleniumhq.selenium:selenium-edge-driver:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile("org.seleniumhq.selenium:selenium-ie-driver:$seleniumVersion") {
+    implementation("org.seleniumhq.selenium:selenium-ie-driver:$seleniumVersion") {
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }
-    compile "org.projectlombok:lombok:1.18.20"
-    compile("io.appium:java-client:${appiumJavaClientVersion}") {
+    implementation "org.projectlombok:lombok:1.18.20"
+    api("io.appium:java-client:${appiumJavaClientVersion}") {
         exclude group: 'org.seleniumhq.selenium'
         exclude group: 'cglib', module: 'cglib'
         exclude group: 'junit', module: 'junit'
@@ -90,46 +90,46 @@ dependencies {
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
         exclude group: "org.springframework", module:"spring-context"
     }
-    compile "org.apache.groovy:groovy:${groovyVersion}"
-    compile "net.sf.opencsv:opencsv:${openCsvVersion}"
-    compile("commons-beanutils:commons-beanutils:${beanUtilsVersion}") {
+    api "org.apache.groovy:groovy:${groovyVersion}"
+    api "net.sf.opencsv:opencsv:${openCsvVersion}"
+    implementation("commons-beanutils:commons-beanutils:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
-    compile("org.fluentlenium:fluentlenium-core:${fluentleniumVersion}") {
+    implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    implementation "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    implementation("org.fluentlenium:fluentlenium-core:${fluentleniumVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'junit', module: 'junit-dep'
     }
-    compile "io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}"
-    compile "com.jhlabs:filters:${jhlabfiltersVersion}"
-    compile "com.paulhammant:ngwebdriver:${ngwebdriver}"
-    compile "joda-time:joda-time:${jodaTimeVersion}"
-    compile "org.hamcrest:hamcrest:${hamcrestVersion}"
-    compile "com.google.jimfs:jimfs:${jimfsVersion}"
-    compile "org.mockito:mockito-core:${mockitoCoreVersion}"
+    api "io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}"
+    implementation "com.jhlabs:filters:${jhlabfiltersVersion}"
+    implementation "com.paulhammant:ngwebdriver:${ngwebdriver}"
+    implementation "joda-time:joda-time:${jodaTimeVersion}"
+    api "org.hamcrest:hamcrest:${hamcrestVersion}"
+    implementation "com.google.jimfs:jimfs:${jimfsVersion}"
+    api "org.mockito:mockito-core:${mockitoCoreVersion}"
 
     // TEST DEPENDENCIES
-    testCompile "junit:junit:${junitVersion}"
+    testImplementation "junit:junit:${junitVersion}"
     api "org.assertj:assertj-core:${assertjVersion}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group: 'org.junit.platform', module:'junit-platform-engine'
     }
-    testCompile "org.springframework:spring-context:${springVersion}"
-    testCompile "org.springframework:spring-context-support:${springVersion}"
-    testCompile "org.springframework:spring-test:${springVersion}"
-    testCompile "org.skyscreamer:jsonassert:${jsonassertVersion}"
-    testCompile("org.jbehave:jbehave-core:${jbehaveVersion}") {
+    testImplementation "org.springframework:spring-context:${springVersion}"
+    testImplementation "org.springframework:spring-context-support:${springVersion}"
+    testImplementation "org.springframework:spring-test:${springVersion}"
+    testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+    testImplementation("org.jbehave:jbehave-core:${jbehaveVersion}") {
         exclude module: 'freemarker'
         exclude module: 'junit'
         exclude module: 'xstream'
     }
-    compile "javax.xml.bind:jaxb-api:2.3.1"
-    compile "com.sun.xml.bind:jaxb-core:2.3.0.1"
-    compile "com.sun.xml.bind:jaxb-impl:2.3.3"
-    compile "javax.activation:activation:1.1.1"
+    implementation "javax.xml.bind:jaxb-api:2.3.1"
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0.1"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.3"
+    implementation "javax.activation:activation:1.1.1"
 }
 
 processResources {

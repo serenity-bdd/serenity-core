@@ -3,8 +3,8 @@ ext {
 }
 
 dependencies {
-    compile 'org.assertj:assertj-core:3.12.2'
-    compile project(':serenity-core')
-    testCompile project(':serenity-screenplay')
-    testCompile project(':serenity-junit')
+    implementation 'org.assertj:assertj-core:3.12.2'
+    implementation project(':serenity-core')
+    testImplementation project(':serenity-screenplay')
+    testImplementation project(':serenity-junit')
 }

@@ -4,21 +4,21 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile project(':serenity-model')
-    compile("net.lightbody.bmp:browsermob-core:${browsermobVersion}") {
+    implementation project(':serenity-core')
+    implementation project(':serenity-model')
+    implementation("net.lightbody.bmp:browsermob-core:${browsermobVersion}") {
         exclude group:'io.netty' ,module:'netty-all'
         exclude group: 'com.fasterxml.jackson.core', module:'jackson-annotations'
         exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
 	}
-    compile "io.netty:netty-all:4.1.69.Final"
-    compile "org.bouncycastle:bcprov-jdk15on:1.69"
-    compile "org.opentest4j:opentest4j:1.2.0"
+    implementation "io.netty:netty-all:4.1.69.Final"
+    implementation "org.bouncycastle:bcprov-jdk15on:1.69"
+    implementation "org.opentest4j:opentest4j:1.2.0"
 
     // TEST DEPENDENCIES
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    testCompile "junit:junit:${junitVersion}"
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group:'org.junit.platform', module:'junit-platform-engine'
     }
 }

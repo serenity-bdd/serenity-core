@@ -27,39 +27,39 @@ compileTestKotlin {
 }
 
 dependencies {
-    compile project(':serenity-model')
-    compile project(':serenity-stats')
-    compile project(':serenity-reports-configuration')
-    compile("com.vladsch.flexmark:flexmark-all:0.34.30") {
+    implementation project(':serenity-model')
+    implementation project(':serenity-stats')
+    api project(':serenity-reports-configuration')
+    api("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:'org.jsoup', module:'jsoup'
         exclude group:'junit', module:'junit'
     }
-    compile "es.nitaur.markdown:txtmark:0.16"
+    implementation "es.nitaur.markdown:txtmark:0.16"
 
     // Test Dependencies
-    testCompile project(':serenity-sample-alternative-resources')
+    testImplementation project(':serenity-sample-alternative-resources')
     // JUNIT DEPENDENCIES
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    testCompile "junit:junit:${junitVersion}"
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group:'org.junit.platform', module:'junit-platform-engine'
     }
 
     // SELENIUM
-    testCompile("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
         exclude group:'net.bytebuddy', module:'byte-buddy'
         exclude group:'net.bytebuddy', module:'byte-buddy-agent'
     }
-    testCompile "org.skyscreamer:jsonassert:${jsonassertVersion}"
-    testCompile("org.mockito:mockito-core:${mockitoCoreVersion}") {
+    testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+    testImplementation("org.mockito:mockito-core:${mockitoCoreVersion}") {
         exclude group:'org.hamcrest', module:'harmcrest-core'
         exclude group:'org.objenesis', module:'oobjenesis'
         exclude group:'net.bytebuddy', module:'byte-buddy'
         exclude group:'net.bytebuddy', module:'byte-buddy-agent'
     }
-    testCompile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
-    testCompile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
-    testCompile "org.objenesis:objenesis:${objenesisVersion}"
+    testImplementation "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    testImplementation "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
+    testImplementation "org.objenesis:objenesis:${objenesisVersion}"
 }
 

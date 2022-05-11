@@ -4,9 +4,9 @@ ext {
 }
 
 dependencies {
-    compile project(':serenity-core')
-    compile "org.apache.httpcomponents:httpclient:4.5.13"
-    compile ("io.rest-assured:rest-assured:${restAssuredVersion}") {
+    implementation project(':serenity-core')
+    implementation "org.apache.httpcomponents:httpclient:4.5.13"
+    api ("io.rest-assured:rest-assured:${restAssuredVersion}") {
         //exclude group: 'io.rest-assured', module:'json-path'
         //exclude group: 'io.rest-assured', module:'xml-path'
 //        exclude group: 'org.apache.httpcomponents', module:'httpclient'
@@ -16,10 +16,10 @@ dependencies {
 //        exclude group: 'org.codehaus.groovy', module:'groovy-xml'
 //        exclude group: 'org.apache.commons', module:'commons-lang3'
     }
-    compile "org.apache.groovy:groovy-json:${groovyVersion}"
-    compile "org.apache.groovy:groovy-xml:${groovyVersion}"
-    compile "org.apache.groovy:groovy:${groovyVersion}"
-    compile("com.github.tomakehurst:wiremock:${wiremockVersion}") {
+    implementation "org.apache.groovy:groovy-json:${groovyVersion}"
+    implementation "org.apache.groovy:groovy-xml:${groovyVersion}"
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation("com.github.tomakehurst:wiremock:${wiremockVersion}") {
         exclude group:'com.google.guava', module:'guava'
         exclude group:'org.apache.httpcomponents', module:'httpclient'
         exclude group:'org.slf4j', module:'slf4j-api'
@@ -28,11 +28,11 @@ dependencies {
         exclude group:'org.eclipse.jetty', module:'jetty-io'
     }
     // TEST DEPENDENCIES
-    compile "org.opentest4j:opentest4j:1.2.0"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
-    testCompile ("org.spockframework:spock-core:${spockVersion}") {
+    implementation "org.opentest4j:opentest4j:1.2.0"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+    testImplementation ("org.spockframework:spock-core:${spockVersion}") {
         exclude group: 'org.junit.platform', module: 'junit-platform-engine'
     }
 }

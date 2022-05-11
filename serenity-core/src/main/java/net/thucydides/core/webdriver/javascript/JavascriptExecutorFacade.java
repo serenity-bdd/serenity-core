@@ -12,6 +12,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -102,6 +103,7 @@ public class JavascriptExecutorFacade {
     public Object executeAsyncScript(final String script, final Object... params) {
         if (javascriptIsSupportedIn(driver) && shouldExecuteJavascript()) {
             JavascriptExecutor js = getJavascriptEnabledDriver();
+            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
             return js.executeAsyncScript(script, params);
         } else {
             return null;

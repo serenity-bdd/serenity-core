@@ -14,37 +14,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SerenityRunner.class)
 public class EvaluateTest extends ScreenplayInteractionTestBase {
 
-    private final static Target INPUT_FIELD = Target.the("First name field").locatedBy("#firstName");
-
     @Test
-    public void enterAValueInAFieldUsingATarget() {
-
-        dina.attemptsTo(Evaluate.javascript());
-        assertThat(dina.asksFor(Value.of(INPUT_FIELD))).isEqualTo("Jo Grant");
-
-        dina.attemptsTo(Enter.theValue("Sarah-Jane").into(INPUT_FIELD));
-
-        assertThat(dina.asksFor(Value.of(INPUT_FIELD))).isEqualTo("Sarah-Jane");
+    public void evaluateASimpleJavascriptExpressionAsAnInteraction() {
+        dina.attemptsTo(Evaluate.javascript("2+2"));
     }
 
     @Test
-    public void enterAValueInAFieldUsingASelector() {
-
-        assertThat(dina.asksFor(Value.of("#firstName"))).isEqualTo("Jo Grant");
-
-        dina.attemptsTo(Enter.theValue("Sarah-Jane").into("#firstName"));
-
-        assertThat(dina.asksFor(Value.of(INPUT_FIELD))).isEqualTo("Sarah-Jane");
+    public void lastScriptExecutionCanBeUsedToGetTheLastResult() {
+        dina.attemptsTo(Evaluate.javascript("return 2+2"));
+        assertThat(dina.asksFor(LastScriptExecution.result().asString())).isEqualTo("4");
     }
 
     @Test
-    public void enterAValueInAFieldUsingAByLocator() {
+    public void scriptResultShouldBeClearedIfNoValueIsReturned() {
+        dina.attemptsTo(Evaluate.javascript("2+2"));
+        assertThat(dina.asksFor(LastScriptExecution.result())).isNull();
+    }
 
-        assertThat(dina.asksFor(Value.of(By.id("firstName")))).isEqualTo("Jo Grant");
-
-        dina.attemptsTo(Enter.theValue("Sarah-Jane").into(By.id("firstName")));
-
-        assertThat(dina.asksFor(Value.of(INPUT_FIELD))).isEqualTo("Sarah-Jane");
+    @Test
+    public void evaluateAJavascriptExpressionAndReturnTheResult() {
+        Object result = dina.asksFor(Evaluate.javascript("return 1 + 1").result());
+        assertThat(result.toString()).isEqualTo("2");
     }
 
 }

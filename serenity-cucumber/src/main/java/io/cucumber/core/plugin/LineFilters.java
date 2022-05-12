@@ -29,12 +29,14 @@ public class LineFilters {
     }
 
     private Map<URI, Set<Integer>> newLineFilters() {
-        Map<URI, Set<Integer>> lineFiltersFromRuntime = CucumberWithSerenity.currentRuntimeOptions().getLineFilters();
+        //TODO fix
+        return new HashMap<>();
+        /*Map<URI, Set<Integer>> lineFiltersFromRuntime = CucumberWithSerenity.currentRuntimeOptions().getLineFilters();
         if (lineFiltersFromRuntime == null) {
             return new HashMap<>();
         } else {
             return lineFiltersFromRuntime;
-        }
+        }*/
     }
 
     public Set<Integer> getLineNumbersFor(URI featurePath) {

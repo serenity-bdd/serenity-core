@@ -33,8 +33,8 @@ public class EvaluateTest extends ScreenplayInteractionTestBase {
 
     @Test
     public void evaluateAJavascriptExpressionAndReturnTheResult() {
-        Object result = dina.asksFor(Evaluate.javascript("return 1 + 1").result());
-        assertThat(result.toString()).isEqualTo("2");
+        Long result = (Long) dina.asksFor(Evaluate.javascript("return 1 + 1").result());
+        assertThat(result).isEqualTo(2);
     }
 
 }

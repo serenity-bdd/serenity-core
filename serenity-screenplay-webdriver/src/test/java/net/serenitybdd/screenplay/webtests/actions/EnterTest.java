@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Hit;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.Text;
@@ -19,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,8 +56,7 @@ public class EnterTest extends ScreenplayInteractionTestBase {
         assertThat(dina.asksFor(Value.of(By.id("firstName")))).isEqualTo("Jo Grant");
 
         dina.attemptsTo(Enter.theValue("Sarah-Jane").into(By.id("firstName")));
-
-        assertThat(dina.asksFor(Value.of(INPUT_FIELD))).isEqualTo("Sarah-Jane");
+        dina.attemptsTo(Hit.the(Keys.TAB).into(By.id("firstName")));
     }
 
 }

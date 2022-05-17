@@ -8,7 +8,7 @@ import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class Scroll {
 
-    public ScrollToTarget to(String cssOrXpathForElement) {
+    public static ScrollToTarget to(String cssOrXpathForElement) {
         return instrumented(ScrollToTarget.class, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 

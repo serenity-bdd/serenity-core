@@ -6,7 +6,7 @@ import static net.serenitybdd.core.pages.ClickStrategy.*;
 
 abstract class ClickOnClickable implements ClickInteraction {
 
-    private ClickStrategy clickStrategy = WAIT_UNTIL_PRESENT;
+    protected ClickStrategy clickStrategy = WAIT_UNTIL_PRESENT;
 
     @Override
     public ClickInteraction afterWaitingUntilEnabled() {
@@ -29,4 +29,10 @@ abstract class ClickOnClickable implements ClickInteraction {
     public ClickStrategy getClickStrategy() {
         return clickStrategy;
     }
+
+    public ClickInteraction withStrategy(ClickStrategy clickStrategy) {
+        this.clickStrategy = clickStrategy;
+        return this;
+    }
+
 }

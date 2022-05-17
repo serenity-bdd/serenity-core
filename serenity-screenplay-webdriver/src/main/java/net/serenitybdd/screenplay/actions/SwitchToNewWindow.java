@@ -31,7 +31,6 @@ public class SwitchToNewWindow implements Task {
 	WebDriver driver = BrowseTheWeb.as(actor).getDriver();
 
 	Set<String> allHandles = driver.getWindowHandles();
-	log.debug("open windows: " + allHandles.size());
 	if (allHandles.size() < 2) {
 	    log.error("Not enough windows open!");
 	    return;
@@ -40,14 +39,12 @@ public class SwitchToNewWindow implements Task {
 	String firstHandle = driver.getWindowHandle();
 	Dimension windowSize = driver.manage().window().getSize();
 
-	log.debug("current window: " + driver.getTitle() + ", at: " + driver.getCurrentUrl());
 	for (String handle : allHandles) {
 	    if (!handle.equals(firstHandle)) {
 		driver.switchTo().window(handle);
 		break;
 	    }
 	}
-	log.debug("new window: " + driver.getTitle() + ", at: " + driver.getCurrentUrl());
 
 	// new window is different size when headless
 	if (!driver.manage().window().getSize().equals(windowSize)) {

@@ -32,10 +32,6 @@ public class Evaluate implements Interaction {
         this.expression = expression;
     }
 
-    /**
-     * @param parameters
-     * @return
-     */
     public Evaluate withParameters(Object... parameters) {
         this.parameters = parameters;
         return this;

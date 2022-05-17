@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Sample web site</title>
+    <script>
+        setTimeout(function(){document.getElementById("delayed-button").disabled = false;},1500);
+        setTimeout(function(){document.getElementById("invisible-button").style.visibility = "visible";},1500);
+    </script>
 </head>
 <body>
 
@@ -31,21 +35,60 @@
 
     <h2>Clickable Elements</h2>
     <div>
-        <button id="button" onclick="getElementById('button-state').innerHTML = 'Clicked'">Some Button</button>
+        <button id="button"
+                oncontextmenu="getElementById('button-state').innerHTML = 'Right Clicked'"
+                onclick="getElementById('button-state').innerHTML = 'Clicked'">Some Button</button>
+        <button id="delayed-button" onclick="getElementById('delayed-button-state').innerHTML = 'Clicked'" disabled>A Delayed Button</button>
+        <button id="invisible-button" style="visibility: hidden" onclick="getElementById('invisible-button-state').innerHTML = 'Clicked'">An Invisible Button</button>
+        <button id="move-button"
+                onclick="getElementById('move-button-state').innerHTML = 'Clicked'"
+                onmouseover="getElementById('move-button-state').innerHTML = 'Moved'">A Button</button>
     </div>
     <div><span id="button-state">Unclicked</span></div>
+    <div><span id="delayed-button-state">Unclicked</span></div>
+    <div><span id="invisible-button-state">Unclicked</span></div>
+    <div><span id="move-button-state"></span></div>
     <div>
         <label>Some Checkbox</label>
         <input type="checkbox" id="checkbox" name="checkbox">
     </div>
+    <div>
+        <label>Condiments:</label>
+        Salt <input type="checkbox" id="salt" class="condiment" name="salt">
+        Pepper <input type="checkbox" id="pepper" class="condiment" name="pepper">
+        Sauce <input type="checkbox" id="sause" class="condiment" name="sauce">
+    </div>
 
     <h2>Form Elements</h2>
     <div>
+        <form onsubmit="return confirm('Are you sure?');">
         <label>First Name</label><input type="text" id="firstName" value="Jo Grant"/>
         <label>Last Name</label><input type="text" id="lastName" value="Name:"/>
+        <select id="color">
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+        </select>
+            <input type="submit" value="Submit" id="submit">
+        </form>
+    </div>
+
+    <div>
+        <input type="file" id="upload-file" name="filename">
+    </div>
+
+    <div>
+    <a href="profile.html" target="_blank">Open in new tab</a>
+    </div>
+    <div>
+    <a href="profile.html" target="popup" onclick="window.open('profile.html','width=600,height=400')">Open in new window</a>
     </div>
 
 </div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<h2 id="under-the-fold">Under the fold</h2>
 
 </body>
 </html>

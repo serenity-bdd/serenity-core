@@ -13,11 +13,10 @@ import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 
+/**
+ * Determine whether an element is not present on the page
+ */
 public class Absence {
-
-    private static Question<Boolean> namedQuestion(String label, Question<Boolean> questionToAsk) {
-        return Question.about(label).answeredBy(questionToAsk);
-    }
 
     public static Question<Boolean> of(Target target) {
         return answer(target.getName() + " is not present for", actor -> matches(target.resolveAllFor(actor)));

@@ -159,6 +159,7 @@ class WhenReadingUIValues extends Specification {
         element.getText() >> "some value"
         element2.getText() >> "some other value"
         then:
+        Text.ofEach(target).asListOf(Integer.class)
         Text.ofEach(target).mapEach(s -> s.length()).answeredBy(actor) == [10, 16]
     }
 

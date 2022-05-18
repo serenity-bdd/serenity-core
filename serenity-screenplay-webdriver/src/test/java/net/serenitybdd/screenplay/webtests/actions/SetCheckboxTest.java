@@ -5,6 +5,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.SetCheckbox;
+import net.serenitybdd.screenplay.questions.CheckboxValue;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
@@ -28,6 +29,7 @@ public class SetCheckboxTest extends ScreenplayInteractionTestBase {
 
         dina.attemptsTo(SetCheckbox.of(CHECKBOX).toTrue());
 
+        assertThat(dina.asksFor(CheckboxValue.of(CHECKBOX))).isEqualTo(true);
         assertThat(dina.asksFor(SelectedStatus.of(CHECKBOX))).isEqualTo(true);
     }
 
@@ -39,6 +41,7 @@ public class SetCheckboxTest extends ScreenplayInteractionTestBase {
         dina.attemptsTo(SetCheckbox.of(CHECKBOX).toTrue());
         dina.attemptsTo(SetCheckbox.of(CHECKBOX).toTrue());
 
+        assertThat(dina.asksFor(CheckboxValue.of(CHECKBOX))).isEqualTo(true);
         assertThat(dina.asksFor(SelectedStatus.of(CHECKBOX))).isEqualTo(true);
     }
 
@@ -104,6 +107,7 @@ public class SetCheckboxTest extends ScreenplayInteractionTestBase {
 
         dina.attemptsTo(SetCheckbox.of(CHECKBOX).toFalse());
 
+        assertThat(dina.asksFor(CheckboxValue.of(CHECKBOX))).isEqualTo(false);
         assertThat(dina.asksFor(SelectedStatus.of(CHECKBOX))).isEqualTo(false);
     }
 

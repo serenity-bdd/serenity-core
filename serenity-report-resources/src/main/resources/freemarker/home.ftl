@@ -192,7 +192,7 @@
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
                                 <div class="test-count-title">
-                                    ${testCount} test cases <#if (testOutcomes.hasDataDrivenTests())>
+                                    ${testCount} scenarios <#if (testOutcomes.hasDataDrivenTests())>
                                         (including ${testOutcomes.totalDataRows} rows of test data)</#if>
                                     <#if (csvReport! != '')> |
                                         <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
@@ -306,13 +306,13 @@
                                                                     <tbody>
                                                                     <tr scope="row">
                                                                         <td>
-                                                                            <i class="bi bi-card-checklist"></i> Number of Test Cases
+                                                                            <i class="bi bi-card-checklist"></i> Number of Scenarios
                                                                         </td>
                                                                         <td>${testCount}</td>
                                                                     </tr>
                                                                     <tr scope="row">
                                                                         <td>
-                                                                            <i class="bi bi-caret-right"></i> Number of Scenarios
+                                                                            <i class="bi bi-caret-right"></i> Number of Test Cases
                                                                         </td>
                                                                         <td>${scenarioCount}</td>
                                                                     </tr>

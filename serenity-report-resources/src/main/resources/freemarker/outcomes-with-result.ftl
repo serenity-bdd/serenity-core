@@ -216,13 +216,13 @@
                                                                     <tbody>
                                                                     <tr scope="row">
                                                                         <td>
-                                                                            <i class="bi bi-card-checklist"></i> Number of Test Cases
+                                                                            <i class="bi bi-card-checklist"></i> Number of Scenarios
                                                                         </td>
-                                                                        <td>${testCount}</td>
+                                                                        <td>${Scenarios}</td>
                                                                     </tr>
                                                                     <tr scope="row">
                                                                         <td>
-                                                                            <i class="bi bi-caret-right"></i> Number of Scenarios
+                                                                            <i class="bi bi-caret-right"></i> Number of Test Cases
                                                                         </td>
                                                                         <td>${scenarioCount}</td>
                                                                     </tr>

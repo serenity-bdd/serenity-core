@@ -1,11 +1,11 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.DoubleClick;
 import net.serenitybdd.screenplay.actions.RightClick;
 import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;

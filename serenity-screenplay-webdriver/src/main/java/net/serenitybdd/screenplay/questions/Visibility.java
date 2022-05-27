@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Is this web element present and visible on the screen
+ * This method will not throw an exception if the element is not on the screen at all.
+ * If the element is not visible, the method will wait a bit to see if it appears later on.
+ */
 public class Visibility {
 
     public static Question<Boolean> of(Target target) {

@@ -1,12 +1,12 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.actions.Click;
-import net.serenitybdd.screenplay.actions.JavaScriptClick;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -14,10 +14,12 @@ import org.openqa.selenium.By;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SerenityRunner.class)
-public class JavaScriptClickTest extends ScreenplayInteractionTestBase{
+public class ClickTest extends ScreenplayInteractionTestBase {
 
     private final static Target BUTTON = PageElement.withNameOrId("button");
     private final static Target BUTTON_STATE = PageElement.withNameOrId("button-state");
+    private final static Target DELAYED_BUTTON_STATE = PageElement.withNameOrId("delayed-button-state");
+    private final static Target INVISIBLE_BUTTON_STATE = PageElement.withNameOrId("invisible-button-state");
     private final static Target CHECKBOX = PageElement.withNameOrId("checkbox");
 
     @Test
@@ -25,7 +27,7 @@ public class JavaScriptClickTest extends ScreenplayInteractionTestBase{
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Unclicked");
 
-        dina.attemptsTo(JavaScriptClick.on(BUTTON));
+        dina.attemptsTo(Click.on(BUTTON));
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Clicked");
     }
@@ -35,7 +37,7 @@ public class JavaScriptClickTest extends ScreenplayInteractionTestBase{
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Unclicked");
 
-        dina.attemptsTo(JavaScriptClick.on("#button"));
+        dina.attemptsTo(Click.on("#button"));
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Clicked");
     }
@@ -45,7 +47,7 @@ public class JavaScriptClickTest extends ScreenplayInteractionTestBase{
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Unclicked");
 
-        dina.attemptsTo(JavaScriptClick.on(By.id("button")));
+        dina.attemptsTo(Click.on(By.id("button")));
 
         assertThat(dina.asksFor(Text.of(BUTTON_STATE))).isEqualTo("Clicked");
     }
@@ -55,8 +57,29 @@ public class JavaScriptClickTest extends ScreenplayInteractionTestBase{
 
         assertThat(dina.asksFor(SelectedStatus.of(CHECKBOX))).isFalse();
 
-        dina.attemptsTo(JavaScriptClick.on(CHECKBOX));
+        dina.attemptsTo(Click.on(CHECKBOX));
 
         assertThat(dina.asksFor(SelectedStatus.of(CHECKBOX))).isTrue();
     }
+
+    @Test
+    public void clickOnAButtonWaitingForItToBeEnabled() {
+
+        assertThat(dina.asksFor(Text.of(DELAYED_BUTTON_STATE))).isEqualTo("Unclicked");
+
+        dina.attemptsTo(Click.on("#delayed-button").afterWaitingUntilEnabled());
+
+        assertThat(dina.asksFor(Text.of(DELAYED_BUTTON_STATE))).isEqualTo("Clicked");
+    }
+
+    @Test
+    public void clickOnAButtonWaitingForItToBePresent() {
+
+        assertThat(dina.asksFor(Text.of(INVISIBLE_BUTTON_STATE))).isEqualTo("Unclicked");
+
+        dina.attemptsTo(Click.on("#invisible-button").afterWaitingUntilPresent());
+
+        assertThat(dina.asksFor(Text.of(INVISIBLE_BUTTON_STATE))).isEqualTo("Clicked");
+    }
+
 }

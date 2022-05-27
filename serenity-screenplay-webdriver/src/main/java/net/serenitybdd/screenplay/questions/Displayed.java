@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,9 +16,9 @@ import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
 /**
- * Check whether an element is enabled.
+ * Check whether an element is displayed.
  */
-public class Enabled {
+public class Displayed {
 
     public static Question<Boolean> of(Target target) {
         return answer(target.getName() + " is enabled for", actor -> matches(target.resolveAllFor(actor)));
@@ -56,7 +57,7 @@ public class Enabled {
     private static boolean matches(List<WebElementFacade> elements) {
         return elements.stream()
                 .findFirst()
-                .map(WebElementState::isEnabled)
+                .map(WebElement::isDisplayed)
                 .orElse(false);
     }
 }

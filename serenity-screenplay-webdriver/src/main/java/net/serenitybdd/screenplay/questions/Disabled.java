@@ -13,6 +13,9 @@ import static java.util.Collections.singletonList;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
+/**
+ * Check whether an element is disabled.
+ */
 public class Disabled {
 
     public static Question<Boolean> of(Target target) {

@@ -1,8 +1,9 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.actions.DevToolsQuery;
 import net.serenitybdd.screenplay.actions.WithDevTools;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.devtools.v100.performance.Performance;

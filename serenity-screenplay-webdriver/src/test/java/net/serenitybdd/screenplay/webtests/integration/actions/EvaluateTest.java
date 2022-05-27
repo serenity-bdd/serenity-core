@@ -1,13 +1,12 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.Evaluate;
-import net.serenitybdd.screenplay.questions.Value;
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.webtests.actions.LastScriptExecution;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +21,7 @@ public class EvaluateTest extends ScreenplayInteractionTestBase {
     @Test
     public void lastScriptExecutionCanBeUsedToGetTheLastResult() {
         dina.attemptsTo(Evaluate.javascript("return 2+2"));
-        assertThat(dina.asksFor(LastScriptExecution.result().asString())).isEqualTo("4");
+        Assertions.assertThat(dina.asksFor(LastScriptExecution.result().asString())).isEqualTo("4");
     }
 
     @Test

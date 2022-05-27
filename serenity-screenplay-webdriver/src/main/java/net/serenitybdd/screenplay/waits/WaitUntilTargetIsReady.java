@@ -38,9 +38,9 @@ public class WaitUntilTargetIsReady implements Interaction, IsSilent {
         return new SilentInteraction() {
             @Override
             public <T extends Actor> void performAs(T actor) {
-                actor.should(eventually(seeThat(the(target), expectedState))
-                        .withNoReporting()
-                        .waitingForNoLongerThan(amount.toMillis()).milliseconds());
+                actor.should(
+                        seeThat(the(target.waitingForNoMoreThan(amount)), expectedState)
+                );
             }
         };
     }

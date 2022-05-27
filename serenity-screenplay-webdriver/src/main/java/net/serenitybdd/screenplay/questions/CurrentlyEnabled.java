@@ -14,22 +14,25 @@ import static java.util.Collections.singletonList;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
+/**
+ * Check whether an element is currently enabled, without waiting.
+ */
 public class CurrentlyEnabled {
 
     public static Question<Boolean> of(Target target) {
-        return answer(target.getName() + " is curently enabled for", actor -> matches(target.resolveAllFor(actor)));
+        return answer(target.getName() + " is currently enabled for", actor -> matches(target.resolveAllFor(actor)));
     }
 
     public static Question<Boolean> of(By byLocator) {
-        return answer(byLocator + " is curently enabled for", actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
+        return answer(byLocator + " is currently enabled for", actor -> matches(BrowseTheWeb.as(actor).findAll(byLocator)));
     }
 
     public static Question<Boolean> of(String locator) {
-        return answer(locator + " is curently enabled for", actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
+        return answer(locator + " is currently enabled for", actor -> matches(BrowseTheWeb.as(actor).findAll(locator)));
     }
 
     public static Question<List<Boolean>> ofEach(Target target) {
-        return answerEach(target.getName() + " is curently enabled for",
+        return answerEach(target.getName() + " is currently enabled for",
                 actor -> target.resolveAllFor(actor)
                     .stream()
                     .map(element -> matches(singletonList(element)))
@@ -37,7 +40,7 @@ public class CurrentlyEnabled {
     }
 
     public static Question<List<Boolean>> ofEach(By byLocator) {
-        return answerEach(byLocator + " is curently enabled for",
+        return answerEach(byLocator + " is currently enabled for",
                 actor -> BrowseTheWeb.as(actor).findAll(byLocator)
                 .stream()
                 .map(element -> matches(singletonList(element)))
@@ -45,7 +48,7 @@ public class CurrentlyEnabled {
     }
 
     public static Question<List<Boolean>> ofEach(String locator) {
-        return answerEach(locator + " is curently enabled for",
+        return answerEach(locator + " is currently enabled for",
                 actor -> BrowseTheWeb.as(actor).findAll(locator)
                 .stream()
                 .map(element -> matches(singletonList(element)))

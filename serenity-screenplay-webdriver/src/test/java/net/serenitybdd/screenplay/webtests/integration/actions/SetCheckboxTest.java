@@ -1,19 +1,16 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.SetCheckbox;
 import net.serenitybdd.screenplay.questions.CheckboxValue;
 import net.serenitybdd.screenplay.questions.SelectedStatus;
-import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

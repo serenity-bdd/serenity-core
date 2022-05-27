@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.screenplay.Actor;
@@ -13,9 +13,9 @@ import org.openqa.selenium.WebDriver;
 public abstract class ScreenplayInteractionTestBase {
 
     @Managed(driver = "chrome", options = "--headless")
-    WebDriver firstBrowser;
+    protected WebDriver driver;
 
-    Actor dina;
+    protected Actor dina;
 
     @BeforeClass
     public static void setupDriver() {
@@ -25,7 +25,7 @@ public abstract class ScreenplayInteractionTestBase {
     @Before
     public void openSampleApp() {
         dina = new Actor("Dina");
-        dina.can(BrowseTheWeb.with(firstBrowser));
+        dina.can(BrowseTheWeb.with(driver));
         dina.attemptsTo(Open.browserOn().the(HomePage.class));
     }
 

@@ -1,13 +1,11 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
-import net.serenitybdd.screenplay.questions.SelectedStatus;
 import net.serenitybdd.screenplay.questions.SelectedValue;
-import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.PageElement;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -15,7 +13,7 @@ import org.openqa.selenium.By;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SerenityRunner.class)
-public class SelectTest extends ScreenplayInteractionTestBase{
+public class SelectTest extends ScreenplayInteractionTestBase {
 
     private final static Target COLOR_DROPDOWN = PageElement.withNameOrId("color");
 

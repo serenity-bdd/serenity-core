@@ -1,9 +1,10 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.actions.Upload;
 import net.serenitybdd.screenplay.questions.Value;
 import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

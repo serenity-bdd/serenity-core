@@ -1,25 +1,25 @@
 package net.serenitybdd.cucumber.outcomes.junit5
 
 import io.cucumber.junit.CucumberJUnit5Runner
-import net.serenitybdd.cucumber.integration.SimpleScenario
-import net.serenitybdd.cucumber.integration.ju5.SimpleScenarioJU5
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
+import net.thucydides.core.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification
 
-import static io.cucumber.junit.CucumberRunner.serenityRunnerForCucumberTestRunner
 
 class WhenCreatingSerenityTestOutcomes_JU5 extends Specification {
 
-    File outputDirectory
+    static File outputDirectory
 
-    def setup() {
+    def setupSpec() {
         outputDirectory = Files.newTemporaryFolder()
     }
 
-
-
+    def cleanupSpec() {
+        outputDirectory.deleteDir()
+    }
     /*
     Feature: A simple feature
 
@@ -32,19 +32,18 @@ class WhenCreatingSerenityTestOutcomes_JU5 extends Specification {
 
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
-        //def runtime = serenityRunnerForCucumberTestRunner(SimpleScenario.class, outputDirectory);
+        Configuration configuration = Injectors.getInjector().getProvider(Configuration.class).get();
+        configuration.setOutputDirectory(outputDirectory);
 
         when:
-        CucumberJUnit5Runner.run(SimpleScenarioJU5.class)
-        /*runtime.run();
+        CucumberJUnit5Runner.runFileFromClasspath("samples/simple_scenario.feature","net.serenitybdd.cucumber.integration.steps");
+
         def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         def testOutcome = recordedTestOutcomes[0]
-        def steps = testOutcome.testSteps.collect { step -> step.description }*/
+        def steps = testOutcome.testSteps.collect { step -> step.description }
 
         then:
-        //testOutcome.title == "A simple scenario"
-        int a =2;
+        testOutcome.title == "A simple scenario"
     }
-
 
 }

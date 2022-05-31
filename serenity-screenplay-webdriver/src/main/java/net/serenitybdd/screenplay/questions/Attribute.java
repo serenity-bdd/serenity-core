@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Retrieve the value of a specific attribute of an element.
+ */
 public class Attribute {
 
     public static Question<String> of(Target target, String attributeName) {

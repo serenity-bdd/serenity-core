@@ -62,7 +62,6 @@ public class SwitchToWindowTitle implements Task {
             log.error("Could not find window with title: '" + title + "'");
             driver.switchTo().window(firstHandle);
         }
-        log.debug("new window: " + driver.getTitle() + ", at: " + driver.getCurrentUrl());
 
         // new window is different size when headless
         if (!driver.manage().window().getSize().equals(windowSize)) {

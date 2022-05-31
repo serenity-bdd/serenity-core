@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.core.pages.ClickStrategy;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
@@ -16,6 +17,5 @@ public class ClickOnTarget extends ClickOnClickable {
     public ClickOnTarget(Target target) {
         this.target = target;
     }
-
 
 }

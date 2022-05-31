@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Provides coordinates of an element for advanced interactions.
+ * Note that some coordinates (such as screen coordinates) are evaluated lazily since the element may have to be scrolled into view.
+ */
 public class TheCoordinates {
 
     public static Question<Coordinates> of(Target target) {

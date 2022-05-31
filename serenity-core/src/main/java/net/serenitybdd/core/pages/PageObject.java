@@ -1327,10 +1327,22 @@ public abstract class PageObject {
         return js.executeScript(script);
     }
 
+    public Object evaluateAsyncJavascript(final String script) {
+        addJQuerySupport();
+        JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
+        return js.executeAsyncScript(script);
+    }
+
     public Object evaluateJavascript(final String script, final Object... params) {
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeScript(script, params);
+    }
+
+    public Object evaluateAsyncJavascript(final String script, final Object... params) {
+        addJQuerySupport();
+        JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
+        return js.executeAsyncScript(script, params);
     }
 
     public void addJQuerySupport() {

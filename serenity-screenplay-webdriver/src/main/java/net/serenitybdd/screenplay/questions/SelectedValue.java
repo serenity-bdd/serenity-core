@@ -15,6 +15,9 @@ import static java.util.Collections.singletonList;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
+/**
+ * Return the selected value of a SELECT dropdown list.
+ */
 public class SelectedValue {
 
     public static Question<String> of(Target target) {

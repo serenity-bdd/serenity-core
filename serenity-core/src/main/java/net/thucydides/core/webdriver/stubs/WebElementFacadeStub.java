@@ -237,6 +237,11 @@ public class WebElementFacadeStub implements WebElementFacade, WebElementState {
     }
 
     @Override
+    public List<String> getSelectOptionValues() {
+        return new ArrayList<>();
+    }
+
+    @Override
     public String getFirstSelectedOptionVisibleText() {
         return null;
     }

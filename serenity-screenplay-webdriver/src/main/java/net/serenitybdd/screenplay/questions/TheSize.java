@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * What is the width and height of the rendered element?
+ */
 public class TheSize {
 
     public static Question<Dimension> of(Target target) {

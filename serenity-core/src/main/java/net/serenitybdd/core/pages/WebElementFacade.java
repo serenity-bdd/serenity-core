@@ -62,8 +62,9 @@ public interface WebElementFacade extends WebElement, WrapsElement, WebElementSt
     <T extends WebElementFacade> T then();
 
     List<String> getSelectOptions();
+    List<String> getSelectOptionValues();
 
-    String getFirstSelectedOptionVisibleText();
+        String getFirstSelectedOptionVisibleText();
     List<String> getSelectedVisibleTexts();
 
     String getFirstSelectedOptionValue();

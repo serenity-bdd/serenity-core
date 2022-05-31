@@ -3,10 +3,12 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.devtools.DevTools;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Perform an action directly using the DevTools API
@@ -20,7 +22,6 @@ import java.util.function.Consumer;
  *         );
  *     </code>
  * </pre>
- *
  */
 public class WithDevTools implements Performable, CanBeSilent {
 
@@ -35,6 +36,12 @@ public class WithDevTools implements Performable, CanBeSilent {
         return new WithDevTools(action);
     }
 
+
+    public static Question<Object> ask(Function<DevTools, Object> question) {
+        return actor -> question.apply(BrowseTheWeb.as(actor).getDevTools());
+    }
+
+    ;
 
     @Override
     public <T extends Actor> void performAs(T actor) {

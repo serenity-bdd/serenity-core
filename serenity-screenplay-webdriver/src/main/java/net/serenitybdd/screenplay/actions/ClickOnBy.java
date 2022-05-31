@@ -43,4 +43,10 @@ public class ClickOnBy extends ByAction implements ClickInteraction {
         clickStrategy = IMMEDIATE;
         return this;
     }
+
+    @Override
+    public ClickInteraction withStrategy(ClickStrategy clickStrategy) {
+        this.clickStrategy = clickStrategy;
+        return this;
+    }
 }

@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Get the visible (i.e. not hidden by CSS) text of this element, including sub-elements.
+ */
 public class Text {
 
     public static Question<String> of(Target target) {

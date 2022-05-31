@@ -5,10 +5,16 @@ import net.serenitybdd.screenplay.matchers.statematchers.*;
 import org.hamcrest.Matcher;
 
 public class WebElementStateMatchers {
+    /**
+     * Is this element present and visible on the screen
+     */
     public static <T extends WebElementState> Matcher<T> isVisible() {
         return new IsVisibleMatcher<T>();
     }
 
+    /**
+     * Is this element not visible on the screen
+     */
     public static <T extends WebElementState> Matcher<T> isNotVisible() {
         return new IsNotVisibleMatcher<T>();
     }

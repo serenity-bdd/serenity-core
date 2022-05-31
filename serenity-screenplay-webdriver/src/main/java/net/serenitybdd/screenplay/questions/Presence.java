@@ -14,6 +14,9 @@ import static java.util.Collections.singletonList;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answer;
 import static net.serenitybdd.screenplay.questions.LabelledQuestion.answerEach;
 
+/**
+ * Check whether an element is present in the DOM. An element may be present but not visible.
+ */
 public class Presence {
 
     public static Question<Boolean> of(Target target) {

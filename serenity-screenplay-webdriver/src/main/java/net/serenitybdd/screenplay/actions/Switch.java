@@ -15,6 +15,9 @@ public class Switch {
         return new DriverTask(driver -> driver.switchTo().frame(frameId));
     }
 
+    /**
+     * Switch to a window of a specified type (WINDOW or TAB)
+     */
     public static Performable toNewWindow(WindowType windowType) {
         return new DriverTask(driver -> driver.switchTo().newWindow(windowType));
     }
@@ -61,14 +64,25 @@ public class Switch {
         );
     }
 
-    public static Performable toAlert() {
-        return new DriverTask(driver -> driver.switchTo().alert());
+    /**
+     * Switch focus to an HTML alert window
+     */
+    public static AlertAction toAlert() {
+        return new AlertAction();
     }
 
+    /**
+     * Selects either the first frame on the page, or the main document when a page contains iframes.
+     * @return
+     */
     public static Performable toDefaultContext() {
         return new DriverTask(driver -> driver.switchTo().defaultContent());
     }
 
+    /**
+     * Switches to the element that currently has focus within the document currently "switched to", or the body element if this cannot be detected. This matches the semantics of calling "document.activeElement" in Javascript.
+     * @return
+     */
     public static Performable toActiveElement() {
         return new DriverTask(driver -> driver.switchTo().activeElement());
     }

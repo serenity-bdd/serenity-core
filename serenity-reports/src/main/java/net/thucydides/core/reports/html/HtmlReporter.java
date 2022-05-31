@@ -33,7 +33,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private static final String DEFAULT_SOURCE_DIR = "target/site/serenity";
     private String resourceDirectory = DEFAULT_RESOURCE_DIRECTORY;
     private final TemplateManager templateManager;
-    private final EnvironmentVariables environmentVariables;
+    protected final EnvironmentVariables environmentVariables;
     private final Charset charset;
     protected final ConsoleColors colored;
 

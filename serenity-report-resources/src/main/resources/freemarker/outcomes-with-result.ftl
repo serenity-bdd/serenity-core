@@ -218,7 +218,7 @@
                                                                         <td>
                                                                             <i class="bi bi-card-checklist"></i> Number of Scenarios
                                                                         </td>
-                                                                        <td>${Scenarios}</td>
+                                                                        <td>${testCount}</td>
                                                                     </tr>
                                                                     <tr scope="row">
                                                                         <td>

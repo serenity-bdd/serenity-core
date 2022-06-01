@@ -53,7 +53,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final ReportNameProvider reportNameProvider;
     private final Requirements requirements;
 
-    private final EnvironmentVariables environmentVariables;
     private FormatConfiguration formatConfiguration;
     private boolean generateTestOutcomeReports = false;
 
@@ -100,11 +99,11 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                       final IssueTracking issueTracking,
                                       final EnvironmentVariables environmentVariables,
                                       final Requirements requirements) {
+        super(environmentVariables);
         this.projectName = projectName;
         this.relativeLink = relativeLink;
         this.issueTracking = issueTracking;
         this.requirementsConfiguration = new RequirementsConfiguration(getEnvironmentVariables());
-        this.environmentVariables = environmentVariables;
         this.formatConfiguration = new FormatConfiguration(environmentVariables);
         this.reportNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements.getRequirementsService());
         this.requirements = requirements;

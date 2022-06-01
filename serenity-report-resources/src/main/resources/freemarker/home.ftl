@@ -392,8 +392,8 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
-                                                                            <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
                                                                             <th>Coverage</th>

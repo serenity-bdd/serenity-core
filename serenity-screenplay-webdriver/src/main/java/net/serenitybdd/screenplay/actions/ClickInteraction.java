@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.core.pages.ClickStrategy;
 import net.serenitybdd.screenplay.Performable;
 
 public interface ClickInteraction extends Performable {
@@ -17,4 +18,9 @@ public interface ClickInteraction extends Performable {
      * Click immediately, do not check whether the element is present first.
      */
     ClickInteraction withNoDelay();
+
+    /**
+     * Specify the click strategy explicitly
+     */
+    ClickInteraction withStrategy(ClickStrategy clickStrategy);
 }

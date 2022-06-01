@@ -11,7 +11,8 @@ import org.junit.platform.suite.api.Suite;
 @IncludeEngines("cucumber")
 @CucumberOptions(
 		plugin = "io.cucumber.core.plugin.SerenityReporter",
-		glue = "net.serenitybdd.cucumber.integration.steps"
+		glue = "net.serenitybdd.cucumber.integration.steps",
+		features = {"samples/simple_scenario.feature:90"}
 )
 @SelectClasspathResource("samples/simple_scenario.feature")
 public class CucumberTestSuite {

@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Find the HTML value attribute of a given HTML element.
+ */
 public class Value {
 
     public static Question<String> of(Target target) {

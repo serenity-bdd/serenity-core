@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Sample web site</title>
+    <script>
+        setTimeout(function(){document.getElementById("delayed-button").disabled = false;},1500);
+        setTimeout(function(){document.getElementById("invisible-button").style.visibility = "visible";},2000);
+        setTimeout(function(){document.getElementById("disappearing-button").style.display = "none";},1500);
+    </script>
 </head>
 <body>
 
@@ -29,23 +34,85 @@
         <input type="input" name="populated-input" id="populated-input"  value="Populated">
     </div>
 
+    <div id="first-and-last-name">
+        Name:
+        <span id="first" class="name">Sarah-Jane</span>
+        <span id="last" class="name">Smith</span>
+    </div>
     <h2>Clickable Elements</h2>
     <div>
-        <button id="button" onclick="getElementById('button-state').innerHTML = 'Clicked'">Some Button</button>
+        <button id="button" class="button"
+                oncontextmenu="getElementById('button-state').innerHTML = 'Right Clicked'"
+                onclick="getElementById('button-state').innerHTML = 'Clicked'">Some Button</button>
+        <button id="delayed-button" onclick="getElementById('delayed-button-state').innerHTML = 'Clicked'" disabled>A Delayed Button</button>
+        <button id="invisible-button" style="visibility: hidden" onclick="getElementById('invisible-button-state').innerHTML = 'Clicked'">An Invisible Button</button>
+        <button id="move-button"
+                onclick="getElementById('move-button-state').innerHTML = 'Clicked'"
+                onmouseover="getElementById('move-button-state').innerHTML = 'Moved'">A Button</button>
+        <button id="disabled-button" disabled class="button">A Disabled Button</button>
+        <button id="hidden-button" style="display: none" class="button">A Hidden Button</button>
+        <button id="disappearing-button">A Disappearing Button</button>
     </div>
     <div><span id="button-state">Unclicked</span></div>
+    <div><span id="delayed-button-state">Unclicked</span></div>
+    <div><span id="invisible-button-state">Unclicked</span></div>
+    <div><span id="move-button-state"></span></div>
     <div>
         <label>Some Checkbox</label>
-        <input type="checkbox" id="checkbox" name="checkbox">
+        <input type="checkbox" id="checkbox" name="checkbox" class="checkbox-field">
+    </div>
+    <div>
+        <label>A Checked Checkbox</label>
+        <input type="checkbox" id="checked-checkbox" name="checkbox2" class="checkbox-field" checked>
+    </div>
+    <div>
+        <label>Condiments:</label>
+        Salt <input type="checkbox" id="salt" class="condiment" name="salt">
+        Pepper <input type="checkbox" id="pepper" class="condiment" name="pepper">
+        Sauce <input type="checkbox" id="sause" class="condiment" name="sauce">
     </div>
 
     <h2>Form Elements</h2>
     <div>
-        <label>First Name</label><input type="text" id="firstName" value="Jo Grant"/>
-        <label>Last Name</label><input type="text" id="lastName" value="Name:"/>
+        <form onsubmit="return confirm('Are you sure?');">
+        <div>><label>First Name</label><input type="text" id="firstName" value="Jo Grant" placeholder="First Name"/></div>
+            <div><label>Not Displayed</label><input type="text" id="is-not-displayed" style="display:none" class="not-displayed"/></div>
+                <div><label>Last Name</label><input type="text" id="lastName" value="Name:"/></div>
+                    <div><label>Color</label><select id="color">
+            <option value="red" class="color-option">Red</option>
+            <option value="green" class="color-option" selected>Green</option>
+            <option value="blue" class="color-option">Blue</option>
+        </select>
+
+        <select id="fruit" multiple>
+            <option value="apples" class="color-option" selected>Apples</option>
+            <option value="oranges" class="color-option" selected>Oranges</option>
+            <option value="pears" class="color-option">Pears</option>
+        </select>
+        <div><label>Also Not Displayed</label><input type="text" id="also-not-displayed" style="display:none" class="not-displayed"/></div>
+        </div>
+        <div>
+            <input type="submit" value="Submit" id="submit">
+        </div>
+        </form>
+    </div>
+
+    <div>
+        <input type="file" id="upload-file" name="filename">
+    </div>
+
+    <div>
+    <a href="profile.html" target="_blank">Open in new tab</a>
+    </div>
+    <div>
+    <a href="profile.html" target="popup" onclick="window.open('profile.html','width=600,height=400')">Open in new window</a>
     </div>
 
 </div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<h2 id="under-the-fold">Under the fold</h2>
 
 </body>
 </html>

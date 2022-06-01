@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Determine whether a checkbox has been checked or not.
+ */
 public class CheckboxValue {
 
     public static Question<Boolean> of(Target target) {

@@ -77,6 +77,9 @@ public interface Question<ANSWER> {
         );
     }
 
+    /**
+     * Convert all the matching answers to a question into another form using an arbitrary function.
+     */
     default <T> Question<Collection<T>> mapEach(Function<String, T> transformer) {
         return (actor) -> ((List<String>) this.answeredBy(actor)).stream().map(
                 value -> (T) transformer.apply(value)

@@ -555,6 +555,18 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return Collections.emptyList();
     }
 
+    @Override
+    public List<String> getSelectOptionValues() {
+        if (driverIsDisabled()) {
+            return new ArrayList<>();
+        }
+
+        if (getElement() != null) {
+            return findElements(By.tagName("option")).stream().map(elt -> elt.getAttribute("value")).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
     public ElementLocator getLocator() {
         if ((locator instanceof WithConfigurableTimeout) && (driver instanceof ConfigurableTimeouts)) {
             ((WithConfigurableTimeout) locator).setTimeOutInSeconds((int) getLocatorTimeout());

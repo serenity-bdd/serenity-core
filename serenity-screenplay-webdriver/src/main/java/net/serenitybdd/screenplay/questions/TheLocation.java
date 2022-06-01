@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Where on the page is the top left-hand corner of the rendered element?
+ */
 public class TheLocation {
 
     public static Question<Point> of(Target target) {

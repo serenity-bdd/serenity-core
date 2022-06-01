@@ -1,10 +1,10 @@
-package net.serenitybdd.screenplay.webtests.actions;
+package net.serenitybdd.screenplay.webtests.integration.actions;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.actions.SendKeys;
 import net.serenitybdd.screenplay.questions.Value;
 import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;

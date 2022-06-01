@@ -76,20 +76,22 @@
     <div>
         <form onsubmit="return confirm('Are you sure?');">
         <div>><label>First Name</label><input type="text" id="firstName" value="Jo Grant" placeholder="First Name"/></div>
-            <div><label>Not Displayed</label><input type="text" id="is-not-displayed" style="display:none" class="not-displayed"/></div>
-                <div><label>Last Name</label><input type="text" id="lastName" value="Name:"/></div>
-                    <div><label>Color</label><select id="color">
-            <option value="red" class="color-option">Red</option>
-            <option value="green" class="color-option" selected>Green</option>
-            <option value="blue" class="color-option">Blue</option>
-        </select>
+        <div><label>Not Displayed</label><input type="text" id="is-not-displayed" style="display:none" class="not-displayed"/></div>
+        <div><label>Last Name</label><input type="text" id="lastName" value="Name:"/></div>
+        <div><label>Nickname</label><input type="text" id="nickname"/></div>
+        <div><label>Color</label>
+            <select id="color">
+                <option value="red" class="color-option">Red</option>
+                <option value="green" class="color-option" selected>Green</option>
+                <option value="blue" class="color-option">Blue</option>
+            </select>
 
-        <select id="fruit" multiple>
-            <option value="apples" class="color-option" selected>Apples</option>
-            <option value="oranges" class="color-option" selected>Oranges</option>
-            <option value="pears" class="color-option">Pears</option>
-        </select>
-        <div><label>Also Not Displayed</label><input type="text" id="also-not-displayed" style="display:none" class="not-displayed"/></div>
+            <select id="fruit" multiple>
+                <option value="apples" class="color-option" selected>Apples</option>
+                <option value="oranges" class="color-option" selected>Oranges</option>
+                <option value="pears" class="color-option">Pears</option>
+            </select>
+            <div><label>Also Not Displayed</label><input type="text" id="also-not-displayed" style="display:none" class="not-displayed"/></div>
         </div>
         <div>
             <input type="submit" value="Submit" id="submit">

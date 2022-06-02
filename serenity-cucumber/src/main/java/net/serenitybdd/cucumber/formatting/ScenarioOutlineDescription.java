@@ -25,8 +25,8 @@ public class ScenarioOutlineDescription {
         String phrase = step.getKeyword() + step.getText();
 
 
-        if (step.getDataTable() != null) {
-            DataTable table = step.getDataTable();
+        if (step.getDataTable() != null && step.getDataTable().isPresent()) {
+            DataTable table = step.getDataTable().get();
             String tableAsString = "";
             for (TableRow row : table.getRows()) {
                 tableAsString += "|";

@@ -288,14 +288,15 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         List<FeatureChild> childrenList = feature.getChildren();
         for (FeatureChild featureChild : childrenList) {
             if (scenarioIsIncludedInARule(existingScenario, featureChild)) {
-                return featureChild.getRule();
+                return featureChild.getRule().get();
             }
         }
         return null;
     }
 
     private boolean scenarioIsIncludedInARule(Scenario existingScenario, FeatureChild featureChild) {
-        return featureChild.getRule() != null && featureChild.getRule().getChildren().stream().map(RuleChild::getScenario).collect(Collectors.toList()).contains(existingScenario);
+        return featureChild.getRule() != null && featureChild.getRule().isPresent()
+        && featureChild.getRule().get().getChildren().stream().map(RuleChild::getScenario).collect(Collectors.toList()).contains(existingScenario);
     }
 
     private Feature getFeatureForTestCase(TestSourcesModel.AstNode astNode) {
@@ -435,7 +436,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                         .stream()
                         .filter(tableRow -> lineFilters.tableRowIsNotExcludedBy(tableRow, getContext().currentFeaturePath()))
                         .collect(Collectors.toList());
-                List<String> headers = getHeadersFrom(examples.getTableHeader());
+                List<String> headers = getHeadersFrom(examples.getTableHeader().get());
                 List<Map<String, String>> rows = getValuesFrom(examplesTableRows, headers);
 
                 Map<Integer, Long> lineNumbersOfEachRow = new HashMap<>();
@@ -650,7 +651,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private List<TestTag> tagsInEnclosingRule(Feature feature, Scenario scenario) {
         List<io.cucumber.messages.types.Rule> nestedRules = feature.getChildren().stream()
-                .map(FeatureChild::getRule)
+                .filter(fc->fc.getRule().isPresent())
+                .map(fc->fc.getRule().get())
                 .filter(Objects::nonNull)
                 .collect(toList());
 
@@ -661,7 +663,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private boolean containsScenario(io.cucumber.messages.types.Rule rule, Scenario scenario) {
-        return rule.getChildren().stream().anyMatch(child -> child.getScenario() == scenario);
+        return rule.getChildren().stream().anyMatch(child -> child.getScenario().get() == scenario);
     }
 
     private List<Tag> tagsForScenario(Scenario scenarioDefinition) {

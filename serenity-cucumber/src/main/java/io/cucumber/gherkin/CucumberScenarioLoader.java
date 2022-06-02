@@ -1,4 +1,4 @@
-package net.serenitybdd.cucumber.suiteslicing;
+package io.cucumber.gherkin;
 
 import com.google.common.collect.FluentIterable;
 import io.cucumber.core.feature.FeatureParser;
@@ -6,12 +6,21 @@ import io.cucumber.core.feature.Options;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
 import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.*;
+import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
+import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenario;
+import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
 import net.serenitybdd.cucumber.util.PathUtils;
+import org.codehaus.groovy.ast.builder.AstBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -42,17 +51,33 @@ public class CucumberScenarioLoader {
     public WeightedCucumberScenarios load() {
         LOGGER.debug("Feature paths are {}", featurePaths);
         Options featureOptions = () -> featurePaths;
-        //Parser<GherkinDocument> gherkinParser = new Parser(new AstBuilder());
-        Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IdGenerator.UUID()));
-        TokenMatcher matcher = new TokenMatcher();
+
+        //Parser<GherkinDocument> gherkinParser = new Parser<>(new GherkinDocumentBuilder(new IncrementingIdGenerator(), "test.feature"));
+        //Parser<GherkinDocument> gherkinParser = new Parser();
+        //GherkinParser gherkinParser = GherkinParser.builder().includeGherkinDocument(true).build();
+        //Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
+
+
         FeaturePathFeatureSupplier supplier =
             new FeaturePathFeatureSupplier(classLoader, featureOptions, parser);
 
         IntStream.range(0, supplier.get().size())
-            .forEach(i -> mapsForFeatures.put(
-                    ((GherkinDocument)gherkinParser.parse(supplier.get().get(i).getSource(), matcher)).getFeature(),
-                supplier.get().get(i).getUri())
-            );
+            .forEach(i ->
+            {
+                io.cucumber.core.gherkin.Feature feature = supplier.get().get(i);
+                Parser<Feature> gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
+                mapsForFeatures.put(gherkinParser.parse(feature.getSource(),feature.getUri().toString()),
+                                    feature.getUri());
+            });
+
+
+        List<Feature> features = new ArrayList<>();
+        List<io.cucumber.core.gherkin.Feature> gherkinFeatures = supplier.get();
+        for(io.cucumber.core.gherkin.Feature gherkinFeature  : gherkinFeatures) {
+            Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
+            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(),gherkinFeature.getUri().toString());
+            features.add(gherkinDocument.getFeature().get());
+        }
 
         List<WeightedCucumberScenario> weightedCucumberScenarios = mapsForFeatures.keySet().stream()
             .map(getScenarios()).flatMap(List::stream).collect(toList());
@@ -66,14 +91,15 @@ public class CucumberScenarioLoader {
                 return (cucumberFeature == null) ? Collections.emptyList() : cucumberFeature.getChildren()
                     .stream()
                     //.filter(child -> asList(ScenarioOutline.class, Scenario.class).contains(child.getClass()))
-                        .filter(child -> child.getScenario() != null).map(FeatureChild::getScenario)
-                    .map(scenarioDefinition -> new WeightedCucumberScenario(
+                        .filter(child -> child.getScenario() != null && child.getScenario().isPresent())
+                        .map(FeatureChild::getScenario)
+                        .map(scenarioDefinition -> new WeightedCucumberScenario(
                         PathUtils.getAsFile(mapsForFeatures.get(cucumberFeature)).getName(),
                         cucumberFeature.getName(),
-                        scenarioDefinition.getName(),
-                        scenarioWeightFor(cucumberFeature, scenarioDefinition),
-                        tagsFor(cucumberFeature, scenarioDefinition),
-                        scenarioCountFor(scenarioDefinition)))
+                        scenarioDefinition.get().getName(),
+                        scenarioWeightFor(cucumberFeature, scenarioDefinition.get()),
+                        tagsFor(cucumberFeature, scenarioDefinition.get()),
+                        scenarioCountFor(scenarioDefinition.get())))
                     .collect(toList());
             } catch (Exception e) {
                 throw new IllegalStateException(String.format("Could not extract scenarios from %s", mapsForFeatures.get(cucumberFeature)), e);
@@ -105,6 +131,16 @@ public class CucumberScenarioLoader {
 
     private BigDecimal scenarioWeightFor(Feature feature, Scenario scenarioDefinition) {
         return statistics.scenarioWeightFor(feature.getName(), scenarioDefinition.getName());
+    }
+
+    private static Envelope readEnvelopeFromPath(Path path) {
+        try {
+            byte[] bytes = Files.readAllBytes(path);
+            String data = new String(bytes, StandardCharsets.UTF_8);
+            return Envelope.of(new Source(path.toString(), data, SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN));
+        } catch (IOException e) {
+            throw new GherkinException(e.getMessage(), e);
+        }
     }
 
 }

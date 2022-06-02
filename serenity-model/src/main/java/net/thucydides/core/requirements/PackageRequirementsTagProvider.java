@@ -154,7 +154,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         };
     }
 
-    private final Lock readingPaths = new ReentrantLock();
+//    private final Lock readingPaths = new ReentrantLock();
 
     private List<String> requirementPathsStartingFrom(String rootPackage) {
 
@@ -163,11 +163,11 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         }
 
         if (requirementPaths == null) {
-            readingPaths.lock();
+//            readingPaths.lock();
             List<String> paths = requirementPathsFromClassesInPackage(rootPackage);
             paths.sort(byDescendingPackageLength());
-            requirementPaths = NewList.copyOf(paths);
-            readingPaths.unlock();
+            requirementPaths = paths;
+//            readingPaths.unlock();
         }
         return requirementPaths;
     }

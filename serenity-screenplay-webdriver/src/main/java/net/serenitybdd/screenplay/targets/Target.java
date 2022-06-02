@@ -83,6 +83,13 @@ public abstract class Target implements ResolvableElement {
         );
     }
 
+    public SearchableTarget thenFind(Target nextElement) {
+        return Target.the(getName()).locatedBy(
+                LocatorStrategies.findNestedElements(this, nextElement)
+        );
+    }
+
+
     public abstract List<By> selectors(WebDriver driver);
 
     /**

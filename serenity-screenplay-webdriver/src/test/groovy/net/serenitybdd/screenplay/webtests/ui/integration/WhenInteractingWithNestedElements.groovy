@@ -49,6 +49,36 @@ class WhenInteractingWithNestedElements extends Specification {
         RadioButton.withLabel("Radio").inside("#section2")      | "Section 2"
     }
 
+    def "Nested elements from outer elements to inner ones"() {
+        expect:
+        samplePage.find(element).click();
+        samplePage.find("#result").getText() == expectedText
+        where:
+        element                                                                          | expectedText
+        PageElement.locatedBy("#section1").thenFind(Button.withText("Submit"))           | "Section 1"
+        PageElement.locatedBy("#section2").thenFind(Button.withText("Submit"))           | "Section 2"
+        PageElement.locatedBy("#section1").thenFind(InputField.withLabel("Input Field")) | "Section 1"
+        PageElement.locatedBy("#section2").thenFind(InputField.withLabel("Input Field")) | "Section 2"
+        PageElement.locatedBy("#section1").thenFind(Checkbox.withLabel("Checkbox"))      | "Section 1"
+        PageElement.locatedBy("#section2").thenFind(Checkbox.withLabel("Checkbox"))      | "Section 2"
+        PageElement.locatedBy("#section1").thenFind(Link.withText("Link"))               | "Section 1"
+        PageElement.locatedBy("#section2").thenFind(Link.withText("Link"))               | "Section 2"
+        PageElement.locatedBy("#section1").thenFind(RadioButton.withLabel("Radio"))      | "Section 1"
+        PageElement.locatedBy("#section2").thenFind(RadioButton.withLabel("Radio"))      | "Section 2"
+    }
+
+    def "Multi-layer nested elements"() {
+        when:
+        samplePage.find(
+                PageElement.locatedBy(".sections")
+                        .thenFind(PageElement.locatedBy("#section1")
+                                .thenFind(Button.withText("Submit"))))
+                .click();
+        then:
+        samplePage.find("#result").getText() == "Section 1"
+
+    }
+
     def "Elements nested inside another page element"() {
         expect:
         samplePage.find(element).click();

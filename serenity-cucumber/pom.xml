@@ -136,6 +136,8 @@
             </exclusions>
         </dependency>
 
+
+
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.assertj</groupId>
@@ -175,6 +177,11 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>gherkin</artifactId>
+            <version>24.0.0</version>
         </dependency>
     </dependencies>
 </project>

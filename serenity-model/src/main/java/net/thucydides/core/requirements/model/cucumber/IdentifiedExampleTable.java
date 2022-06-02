@@ -10,16 +10,20 @@ import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOpt
 
 public class IdentifiedExampleTable extends NamedExampleTable {
     private final Feature feature;
-    private final Scenario scenarioDefinition;
+    private final Optional<Scenario> scenarioDefinition;
     private final String exampleTableName;
     private final ExampleTableInMarkdown exampleTableInMarkdown;
 
-    protected IdentifiedExampleTable(Feature feature, Scenario scenarioDefinition, String exampleTableName) {
+    protected IdentifiedExampleTable(Feature feature, Optional<Scenario> scenarioDefinition, String exampleTableName) {
         this.feature = feature;
-        String scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
+        String scenarioReport = null;
+        if(scenarioDefinition.isPresent()) {
+            scenarioReport = ScenarioReport.forScenario(scenarioDefinition.get().getName()).inFeature(feature);
+        }
         this.scenarioDefinition = scenarioDefinition;
         this.exampleTableName = exampleTableName;
-        this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition);
+        this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport,
+                    scenarioDefinition.isPresent() ? scenarioDefinition.get().getName(): "");
     }
 
     @Override
@@ -29,16 +33,17 @@ public class IdentifiedExampleTable extends NamedExampleTable {
 
     @Override
     public Optional<String> asExampleTable(ScenarioDisplayOption withDisplayOption) {
-        if (scenarioDefinition.getExamples().isEmpty()) {
-            return Optional.empty();
-        }
-
-        int exampleRow = 0;
-        for (Examples example : scenarioDefinition.getExamples()) {
-            if (example.getName().equalsIgnoreCase(exampleTableName.trim())) {
-                return Optional.of(exampleTableInMarkdown.renderedFormOf(example, exampleRow, withDisplayOption));
+        if(scenarioDefinition.isPresent()) {
+            if (scenarioDefinition.get().getExamples().isEmpty()) {
+                return Optional.empty();
             }
-            exampleRow++;
+            int exampleRow = 0;
+            for (Examples example : scenarioDefinition.get().getExamples()) {
+                if (example.getName().equalsIgnoreCase(exampleTableName.trim())) {
+                    return Optional.of(exampleTableInMarkdown.renderedFormOf(example, exampleRow, withDisplayOption));
+                }
+                exampleRow++;
+            }
         }
         return Optional.empty();
     }

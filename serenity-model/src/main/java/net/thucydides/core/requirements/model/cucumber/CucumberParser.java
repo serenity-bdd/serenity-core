@@ -74,13 +74,18 @@ public class CucumberParser {
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
                 return Optional.empty();
             }
-            List<Scenario> scenarioList = gherkinDocument.getFeature().getChildren().stream()
-                    .map(FeatureChild::getScenario)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature(),
-                    scenarioList,
-                    descriptionInComments));
+            if(gherkinDocument.getFeature().isPresent()) {
+                List<Scenario> scenarioList = gherkinDocument.getFeature().get().getChildren().stream()
+                        .map(FeatureChild::getScenario)
+                        .filter(Objects::nonNull)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList());
+                return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature().get(),
+                        scenarioList,
+                        descriptionInComments));
+            }
+            return Optional.empty();
         } catch (Exception ex) {
             ex.printStackTrace();
             return Optional.empty();
@@ -101,12 +106,14 @@ public class CucumberParser {
                 .stream()
                 .map(o -> ((Envelope) o).getGherkinDocument())
                 .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
 
         for (GherkinDocument gherkinDocument : gherkinDocuments) {
-            if (gherkinDocument != null && gherkinDocument.getFeature() != null) {
+            if (gherkinDocument != null && gherkinDocument.getFeature() != null && gherkinDocument.getFeature().isPresent()) {
                 loadedFeatures.add(gherkinDocument);
-                LOGGER.trace("Added feature {}", gherkinDocument.getFeature().getName());
+                LOGGER.trace("Added feature {}", gherkinDocument.getFeature().get().getName());
             } else {
                 LOGGER.warn("Couldn't read the feature file: {} - it will be ignored", gherkinDocument != null ? gherkinDocument.getUri() : "<null>");
             }
@@ -231,9 +238,11 @@ public class CucumberParser {
                                     .stream()
                                     .map(RuleChild::getBackground)
                                     .filter(Objects::nonNull)
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
                                     .findFirst();
                             ruleBackground.ifPresent(
-                                    value -> ruleBackgrounds.put(rule.getName(), backgroundElementFrom(value))
+                                    value -> ruleBackgrounds.put(rule.getName(), backgroundElementFrom(Optional.ofNullable(value)))
                             );
                         }
                 );
@@ -255,10 +264,10 @@ public class CucumberParser {
         List<Scenario> scenarios = new ArrayList<>();
         feature.getChildren().forEach(
                 child -> {
-                    if (child.getRule() != null) {
-                        scenarios.addAll(scenariosIn(child.getRule()));
-                    } else if (child.getScenario() != null) {
-                        scenarios.add(child.getScenario());
+                    if (child.getRule() != null && child.getRule().isPresent()) {
+                        scenarios.addAll(scenariosIn(child.getRule().get()));
+                    } else if (child.getScenario() != null && child.getScenario().isPresent()) {
+                        scenarios.add(child.getScenario().get());
                     }
                 }
         );
@@ -269,13 +278,17 @@ public class CucumberParser {
         return rule.getChildren().stream()
                 .filter(child -> child.getScenario() != null)
                 .map(RuleChild::getScenario)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
     private Stream<Rule> rulesIn(List<FeatureChild> childrenList) {
         return childrenList.stream()
                 .map(FeatureChild::getRule)
-                .filter(Objects::nonNull);
+                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     private Optional<FeatureChild> backgroundChildIn(List<FeatureChild> featureChildren) {
@@ -284,8 +297,12 @@ public class CucumberParser {
                 .findFirst();
     }
 
-    private FeatureBackgroundNarrative backgroundElementFrom(Background background) {
-        return new FeatureBackgroundNarrative(background.getName(), background.getDescription());
+    private FeatureBackgroundNarrative backgroundElementFrom(Optional<Background> background) {
+        if(background.isPresent()) {
+            return new FeatureBackgroundNarrative(background.get().getName(), background.get().getDescription());
+        } else {
+            return new FeatureBackgroundNarrative("", "");
+        }
     }
 
     private Collection<TestTag> tagsFrom(Scenario scenarioDefinition) {
@@ -321,8 +338,8 @@ public class CucumberParser {
         return name.replaceAll("[\\s_]", "-").toLowerCase();
     }
 
-    private boolean featureFileCouldNotBeReadFor(Feature feature) {
-        return feature == null;
+    private boolean featureFileCouldNotBeReadFor(Optional<Feature> feature) {
+        return feature == null || !feature.isPresent();
     }
 
     private List<Tag> tagsDefinedIn(Feature feature) {

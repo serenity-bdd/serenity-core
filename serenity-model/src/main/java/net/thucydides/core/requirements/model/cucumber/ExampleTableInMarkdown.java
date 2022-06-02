@@ -14,13 +14,13 @@ public class ExampleTableInMarkdown {
     private final Feature feature;
     private final String scenarioReport;
     private final String scenarioId;
-    private final Scenario scenarioDefinition;
+    private final String scenarioDefinitionName;
 
-    public ExampleTableInMarkdown(Feature feature, String scenarioReport, Scenario scenarioDefinition) {
+    public ExampleTableInMarkdown(Feature feature, String scenarioReport, String scenarioDefinitionName) {
         this.feature = feature;
         this.scenarioReport = scenarioReport;
-        this.scenarioId = Digest.ofTextValue(scenarioDefinition.getName());
-        this.scenarioDefinition = scenarioDefinition;
+        this.scenarioId = Digest.ofTextValue(scenarioDefinitionName);
+        this.scenarioDefinitionName = scenarioDefinitionName;
     }
 
     public String renderedFormOf(Examples exampleTable, int exampleRow, ScenarioDisplayOption displayOption) {
@@ -30,7 +30,7 @@ public class ExampleTableInMarkdown {
 
         String tableName = RenderedExampleTable.nameFor(exampleTable);
         if (tableName.isEmpty()) {
-            tableName = scenarioDefinition.getName();
+            tableName = scenarioDefinitionName;
         }
         if (displayOption == WithTitle) {
             String exampleTitle = "### " + tableName;

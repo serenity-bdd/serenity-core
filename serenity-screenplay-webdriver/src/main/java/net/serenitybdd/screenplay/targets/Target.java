@@ -83,7 +83,7 @@ public abstract class Target implements ResolvableElement {
         );
     }
 
-    public SearchableTarget thenFind(Target nextElement) {
+    public SearchableTarget find(Target nextElement) {
         return Target.the(getName()).locatedBy(
                 LocatorStrategies.findNestedElements(this, nextElement)
         );

@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber
 
-import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
+
 import io.cucumber.messages.IdGenerator
 import io.cucumber.messages.types.Envelope
 import io.cucumber.messages.types.Feature
@@ -15,7 +15,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def filteringTodoFeature = features[0]
 
     private List<Feature> loadCucumberFeatures(List<String> listOfFiles) {
-        IdGenerator idGenerator = new IdGenerator.Incrementing();
+        IdGenerator idGenerator = new IncrementingIdGenerator();
         List<Feature> loadedFeatures = new ArrayList<>();
         boolean includeSource = false;
         boolean includeAst = true;

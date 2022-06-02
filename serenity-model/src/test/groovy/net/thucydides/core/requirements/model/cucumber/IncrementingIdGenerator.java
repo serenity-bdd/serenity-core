@@ -1,4 +1,4 @@
-package io.cucumber.gherkin;
+package net.thucydides.core.requirements.model.cucumber;
 
 import io.cucumber.messages.IdGenerator;
 

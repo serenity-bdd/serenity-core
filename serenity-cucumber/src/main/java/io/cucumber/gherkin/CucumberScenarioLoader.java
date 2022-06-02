@@ -65,8 +65,8 @@ public class CucumberScenarioLoader {
             .forEach(i ->
             {
                 io.cucumber.core.gherkin.Feature feature = supplier.get().get(i);
-                Parser<Feature> gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
-                mapsForFeatures.put(gherkinParser.parse(feature.getSource(),feature.getUri().toString()),
+                Parser<GherkinDocument> gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
+                mapsForFeatures.put(gherkinParser.parse(feature.getSource(),feature.getUri().toString()).getFeature().get(),
                                     feature.getUri());
             });
 

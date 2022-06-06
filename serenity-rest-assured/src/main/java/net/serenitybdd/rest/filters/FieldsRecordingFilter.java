@@ -36,7 +36,7 @@ public class FieldsRecordingFilter implements Filter {
         BlacklistFilter blacklistFilter = new BlacklistFilter(requestSpec.getConfig().getLogConfig().blacklistedHeaders());
         try (ByteArrayOutputStream output = new ByteArrayOutputStream();
              PrintStream recordingStream = new PrintStream(output, true, StandardCharsets.UTF_8.toString())) {
-            final RequestLoggingFilter filter = new RequestLoggingFilter(this.logDetail, shouldPrettyPrint, recordingStream);
+            final RequestLoggingFilter filter = new RequestLoggingFilter(this.logDetail, shouldPrettyPrint, recordingStream,true,requestSpec.getConfig().getLogConfig().blacklistedHeaders());
             final Response response = filter.filter(requestSpec, responseSpec, ctx);
             recordingStream.flush();
             this.recorded = new String(output.toByteArray(), StandardCharsets.UTF_8);

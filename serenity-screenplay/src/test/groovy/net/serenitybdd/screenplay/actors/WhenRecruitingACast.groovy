@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.actors
 import net.serenitybdd.screenplay.Ability
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.HasTeardown
-import net.serenitybdd.screenplay.Performable
 import net.serenitybdd.screenplay.Task
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.ExecutedStepDescription
@@ -38,7 +37,8 @@ class WhenRecruitingACast extends Specification {
     }
 
     static class Fetch implements Ability {
-        String item
+        final String item
+        private int counter = 1;
 
         Fetch(String item) {
             this.item = item
@@ -46,6 +46,10 @@ class WhenRecruitingACast extends Specification {
 
         static some(String item) {
             return new Fetch(item)
+        }
+
+        String deliverItem() {
+            return item + " #" + counter++;
         }
     }
 
@@ -56,9 +60,19 @@ class WhenRecruitingACast extends Specification {
         when:
         Actor kenneth = globeTheatreCast.actorNamed("Kenneth")
         then:
-        kenneth.abilityTo(Fetch.class).item == "Coffee"
+        kenneth.abilityTo(Fetch.class).deliverItem() == "Coffee #1"
+        kenneth.abilityTo(Fetch.class).deliverItem() == "Coffee #2"
     }
 
+    def "cast members can be trained to deliver coffee"() {
+        given:
+        Cast globeTheatreCast = Cast.whereEveryoneCan(Fetch.some("Coffee"))
+        when:
+        Actor kenneth = globeTheatreCast.actorNamed("Kenneth")
+        then:
+        kenneth.abilityTo(Fetch.class).deliverItem() == "Coffee #1"
+        kenneth.abilityTo(Fetch.class).deliverItem() == "Coffee #2"
+    }
     static class PerformHamlet implements Ability, HasTeardown {
 
         @Override

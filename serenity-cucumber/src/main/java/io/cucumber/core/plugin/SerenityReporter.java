@@ -296,7 +296,9 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private boolean scenarioIsIncludedInARule(Scenario existingScenario, FeatureChild featureChild) {
         return featureChild.getRule() != null && featureChild.getRule().isPresent()
-        && featureChild.getRule().get().getChildren().stream().map(RuleChild::getScenario).collect(Collectors.toList()).contains(existingScenario);
+        && featureChild.getRule().get().getChildren().stream().
+                filter(rc->rc.getScenario().isPresent()).
+                map(rc->rc.getScenario().get()).collect(Collectors.toList()).contains(existingScenario);
     }
 
     private Feature getFeatureForTestCase(TestSourcesModel.AstNode astNode) {

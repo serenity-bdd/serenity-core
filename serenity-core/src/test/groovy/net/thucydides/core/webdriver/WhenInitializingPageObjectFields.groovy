@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.findby.FindBy
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import spock.lang.Specification

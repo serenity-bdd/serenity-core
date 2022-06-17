@@ -8,8 +8,8 @@ import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.steps.StepFailure
-import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.util.SystemEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.core.environment.SystemEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException

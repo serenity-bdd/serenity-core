@@ -5,7 +5,7 @@ import net.serenitybdd.core.SerenitySystemProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.core.util.SystemEnvironmentVariables;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

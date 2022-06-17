@@ -8,7 +8,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

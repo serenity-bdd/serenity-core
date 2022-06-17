@@ -3,7 +3,7 @@ package net.thucydides.core.reports.styling
 import net.serenitybdd.core.reports.styling.TagStylist
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

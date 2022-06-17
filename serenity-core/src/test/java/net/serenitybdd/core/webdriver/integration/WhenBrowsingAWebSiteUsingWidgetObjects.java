@@ -8,7 +8,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WidgetObject;
 import net.serenitybdd.core.pages.WidgetObjectImpl;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.junit.After;
 import org.junit.Before;

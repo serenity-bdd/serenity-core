@@ -1,9 +1,5 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

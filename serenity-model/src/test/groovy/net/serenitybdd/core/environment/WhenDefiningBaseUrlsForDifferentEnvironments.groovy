@@ -2,7 +2,7 @@ package net.serenitybdd.core.environment
 
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenDefiningBaseUrlsForDifferentEnvironments extends Specification {

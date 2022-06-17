@@ -11,7 +11,7 @@ import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;

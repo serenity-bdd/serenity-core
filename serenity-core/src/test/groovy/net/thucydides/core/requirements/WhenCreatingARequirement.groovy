@@ -9,7 +9,7 @@ import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenCreatingARequirement extends Specification {

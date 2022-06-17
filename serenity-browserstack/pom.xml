@@ -10,6 +10,9 @@
     <artifactId>serenity-browserstack</artifactId>
     <packaging>jar</packaging>
     <name>Serenity Browserstack Integration</name>
+    <properties>
+        <browserstack.local.version>1.0.6</browserstack.local.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -37,12 +40,17 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.14</version>
+            <version>4.4.15</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.browserstack</groupId>
+            <artifactId>browserstack-local-java</artifactId>
+            <version>${browserstack.local.version}</version>
         </dependency>
         <!-- TEST DEPENDENCIES -->
         <dependency>
@@ -50,11 +58,19 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit5.version}</version>
             <optional>true</optional>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

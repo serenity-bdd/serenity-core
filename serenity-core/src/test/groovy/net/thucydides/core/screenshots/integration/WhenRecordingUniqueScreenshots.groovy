@@ -4,7 +4,7 @@ import net.thucydides.core.screenshots.BlurLevel
 import net.thucydides.core.screenshots.ScreenshotDigest
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.FileSystemUtils
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 /**

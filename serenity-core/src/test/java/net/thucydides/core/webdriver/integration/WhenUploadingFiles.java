@@ -6,7 +6,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.components.FileToUploadCouldNotBeFoundException;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

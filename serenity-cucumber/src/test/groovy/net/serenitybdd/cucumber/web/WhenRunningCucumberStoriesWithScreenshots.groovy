@@ -7,7 +7,7 @@ import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Files

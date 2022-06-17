@@ -2,7 +2,7 @@ package net.thucydides.core.reports.json.gson
 
 import net.thucydides.core.model.DataTable
 import net.thucydides.core.model.DataTableRow
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import spock.lang.Shared

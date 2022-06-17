@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Platform;

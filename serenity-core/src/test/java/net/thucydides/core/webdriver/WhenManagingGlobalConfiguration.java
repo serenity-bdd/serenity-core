@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 

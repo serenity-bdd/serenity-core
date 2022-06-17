@@ -4,11 +4,10 @@ import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.model.TestResult
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.samples.*
-import org.junit.Rule
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Ignore
 import spock.lang.Specification

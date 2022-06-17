@@ -1,7 +1,7 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.requirements.model.RequirementsConfiguration
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenBuildCucumberRequirementsConfigurationOnClasspath extends Specification {

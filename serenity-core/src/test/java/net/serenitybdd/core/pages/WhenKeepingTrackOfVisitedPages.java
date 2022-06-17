@@ -1,15 +1,13 @@
 package net.serenitybdd.core.pages;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.pages.ApacheHomePage;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebdriverManager;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +16,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

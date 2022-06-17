@@ -16,10 +16,8 @@ import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.steps.TestSourceType
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.junit.ComparisonFailure
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import spock.lang.Unroll
 

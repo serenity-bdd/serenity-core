@@ -1,7 +1,7 @@
 package net.serenitybdd.core.buildinfo
 
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.SystemEnvironmentVariables
+import net.thucydides.core.environment.SystemEnvironmentVariables
 import spock.lang.Specification
 
 class WhenReportingCustomBuildInfo extends Specification {

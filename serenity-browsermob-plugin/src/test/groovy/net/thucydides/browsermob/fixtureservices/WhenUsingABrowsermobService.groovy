@@ -2,7 +2,7 @@ package net.thucydides.browsermob.fixtureservices
 
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService
 import net.thucydides.core.fixtureservices.FixtureException
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Specification
 

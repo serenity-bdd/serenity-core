@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.servicepools
 
 import net.serenitybdd.core.CurrentOS
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Path

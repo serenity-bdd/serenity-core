@@ -7,7 +7,7 @@ import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification

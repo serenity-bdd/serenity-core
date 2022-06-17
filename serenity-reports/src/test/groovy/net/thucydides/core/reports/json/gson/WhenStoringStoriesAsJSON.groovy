@@ -2,7 +2,7 @@ package net.thucydides.core.reports.json.gson
 
 import net.thucydides.core.annotations.Feature
 import net.thucydides.core.model.Story
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.skyscreamer.jsonassert.JSONCompare
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification

@@ -1,22 +1,16 @@
 package net.serenitybdd.junit5.extensions;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.samples.SamplePassingScenario;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
-import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

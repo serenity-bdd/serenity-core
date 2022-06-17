@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory

@@ -3,7 +3,7 @@ package net.thucydides.core.webdriver;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;

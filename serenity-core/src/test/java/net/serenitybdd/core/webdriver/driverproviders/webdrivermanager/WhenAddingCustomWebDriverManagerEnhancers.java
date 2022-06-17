@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders.webdrivermanager;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

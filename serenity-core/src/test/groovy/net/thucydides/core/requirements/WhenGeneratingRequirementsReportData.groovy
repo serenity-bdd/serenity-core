@@ -9,7 +9,7 @@ import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Ignore
 import spock.lang.Specification
 

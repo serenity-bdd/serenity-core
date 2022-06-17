@@ -4,9 +4,8 @@ import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.annotations.Pending
 import net.thucydides.core.annotations.Steps
 import net.thucydides.core.model.TestResult
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.samples.SampleScenarioSteps
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier

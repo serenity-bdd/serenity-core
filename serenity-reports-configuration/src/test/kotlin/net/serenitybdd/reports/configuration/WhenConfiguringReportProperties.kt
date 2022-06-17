@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.configuration
 
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -11,7 +11,8 @@ import  org.junit.jupiter.api.BeforeEach
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenConfiguringReportProperties {
 
-    private var environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+    private var environmentVariables: EnvironmentVariables =
+        MockEnvironmentVariables()
 
 
     @Nested

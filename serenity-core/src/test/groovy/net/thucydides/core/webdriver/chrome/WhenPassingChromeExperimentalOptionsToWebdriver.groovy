@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver.chrome
 
 import net.serenitybdd.core.webdriver.driverproviders.ChromeDriverCapabilities
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 

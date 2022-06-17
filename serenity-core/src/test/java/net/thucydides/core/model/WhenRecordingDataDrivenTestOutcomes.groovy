@@ -1,10 +1,8 @@
 package net.thucydides.core.model
 
-import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.ExecutedStepDescription
+
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.steps.StepFailure
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import static net.thucydides.core.model.TestResult.*

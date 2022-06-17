@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver;
 
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.apache.commons.lang3.SystemUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;

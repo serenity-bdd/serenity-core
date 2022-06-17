@@ -7,7 +7,7 @@ import net.serenitybdd.core.model.sampleexceptions.MyFailureException
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.failures.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebdriverAssertionError
 import org.assertj.core.api.SoftAssertionError
 import org.junit.internal.ArrayComparisonFailure

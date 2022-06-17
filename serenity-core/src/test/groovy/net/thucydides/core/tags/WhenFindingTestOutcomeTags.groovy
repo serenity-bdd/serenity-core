@@ -3,7 +3,7 @@ package net.thucydides.core.tags
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 /**

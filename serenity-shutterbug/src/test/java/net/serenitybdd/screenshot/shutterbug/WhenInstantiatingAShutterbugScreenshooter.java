@@ -4,7 +4,7 @@ import net.serenitybdd.core.photography.ScreenShooterFactory;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
 import net.serenitybdd.screenshots.shutterbug.ShutterbugScreenShooter;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

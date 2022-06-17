@@ -3,9 +3,7 @@ package net.thucydides.core.reports.integration
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.reports.FormatConfiguration
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.util.MockEnvironmentVariables
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 

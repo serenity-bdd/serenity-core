@@ -19,7 +19,7 @@ import net.thucydides.core.steps.samples.NestedScenarioSteps;
 import net.thucydides.core.steps.samples.StepsDerivedFromADifferentDomain;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.junit.*;

@@ -5,7 +5,7 @@ import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.TestFailureCause
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriverException
 import spock.lang.Specification
 

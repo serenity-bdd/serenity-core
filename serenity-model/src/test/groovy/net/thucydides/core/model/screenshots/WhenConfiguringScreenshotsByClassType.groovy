@@ -1,7 +1,7 @@
 package net.thucydides.core.model.screenshots
 
 import net.thucydides.core.model.TakeScreenshots
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenConfiguringScreenshotsByClassType extends Specification {

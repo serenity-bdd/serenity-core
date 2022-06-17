@@ -4,7 +4,7 @@ import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.AScenarioHasNoNameException
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets

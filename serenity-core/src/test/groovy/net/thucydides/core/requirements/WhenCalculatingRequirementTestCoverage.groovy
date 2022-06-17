@@ -12,7 +12,7 @@ import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.statistics.service.TagProvider
 import net.thucydides.core.statistics.service.TagProviderService
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT

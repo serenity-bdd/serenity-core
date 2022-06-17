@@ -1,7 +1,10 @@
-package net.thucydides.core.util;
+package net.thucydides.core.environment;
 
 import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.LocalPreferences;
+import net.thucydides.core.util.PropertiesFileLocalPreferences;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -27,11 +30,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
      * @return
      */
     static EnvironmentVariables currentEnvironmentVariables() {
-        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
+//        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return new SystemEnvironmentVariables();
     }
 
     public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
-
         Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {
             propertyValues.put(property, systemProperties.getProperty(property));

@@ -7,7 +7,7 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.FlatScenarioStepsWithoutPages;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.junit.After;
 import org.junit.Before;

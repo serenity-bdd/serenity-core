@@ -3,7 +3,7 @@ package net.thucydides.core.tags
 import junittestcases.samples.mock.SerenityRunner
 import net.thucydides.core.annotations.WithTag
 import net.thucydides.core.annotations.WithTagValuesOf
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.junit.runner.RunWith
 import spock.lang.Specification
 import spock.lang.Unroll

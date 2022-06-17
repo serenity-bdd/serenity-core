@@ -2,7 +2,7 @@ package net.serenitybdd.junit.runners;
 
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.junit.annotations.Qualifier;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;

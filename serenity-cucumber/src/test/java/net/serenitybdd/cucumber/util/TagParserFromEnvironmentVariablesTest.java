@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.util;
 
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;

@@ -22,8 +22,6 @@ import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
 import net.thucydides.core.reports.remoteTesting.LinkGenerator;
 import net.thucydides.core.reports.remoteTesting.RemoteTestingLinkManager;
-import net.thucydides.core.reports.templates.FreeMarkerTemplateManager;
-import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.requirements.ClasspathRequirementsProviderService;
 import net.thucydides.core.requirements.MultiSourceRequirementsService;
 import net.thucydides.core.requirements.RequirementsProviderService;
@@ -36,7 +34,7 @@ import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.SystemEnvironmentVariables;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 
 public class ThucydidesModule extends AbstractModule {

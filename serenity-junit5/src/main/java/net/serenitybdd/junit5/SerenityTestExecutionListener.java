@@ -11,7 +11,7 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.util.SystemEnvironmentVariables;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;

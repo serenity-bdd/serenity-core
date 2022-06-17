@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.firefox
 
-import net.serenitybdd.core.webdriver.driverproviders.FirefoxDriverCapabilities
-import net.thucydides.core.util.MockEnvironmentVariables
+
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.firefox.FirefoxProfile
 import spock.lang.Specification
 

@@ -5,7 +5,7 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.core.statistics.service.TagProvider
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 /**
  * Created by john on 10/07/2016.

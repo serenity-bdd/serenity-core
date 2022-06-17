@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import org.junit.Before;
 import org.junit.Rule;

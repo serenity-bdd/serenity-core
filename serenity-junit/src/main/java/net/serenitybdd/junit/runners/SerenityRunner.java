@@ -110,6 +110,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     public SerenityRunner(final Class<?> klass,
                           final Injector injector) throws InitializationError {
+
         this(klass,
                 ThucydidesWebDriverSupport.getWebdriverManager(),
                 injector.getInstance(DriverConfiguration.class),

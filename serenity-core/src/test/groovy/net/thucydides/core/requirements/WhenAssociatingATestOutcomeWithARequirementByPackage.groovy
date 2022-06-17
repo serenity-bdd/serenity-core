@@ -10,7 +10,7 @@ import net.thucydides.core.requirements.stories.grow_potatoes.ASampleTestWithACa
 import net.thucydides.core.requirements.stories.grow_potatoes.grow_new_potatoes.ASampleNestedTestWithACapability
 import net.thucydides.core.requirements.stories.nocapacities.ASampleTestWithNoCapability
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification {

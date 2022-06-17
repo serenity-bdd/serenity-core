@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver
 import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities
 import net.serenitybdd.core.webdriver.driverproviders.CustomCapabilities
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities

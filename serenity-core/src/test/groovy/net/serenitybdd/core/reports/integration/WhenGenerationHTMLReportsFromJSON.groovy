@@ -10,7 +10,7 @@ import net.thucydides.core.reports.TestOutcomeStream
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.assertj.core.util.Files
 import spock.lang.Shared
 import spock.lang.Specification

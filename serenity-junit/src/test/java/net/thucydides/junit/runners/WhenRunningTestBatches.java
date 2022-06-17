@@ -3,7 +3,7 @@ package net.thucydides.junit.runners;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.SamplePassingScenario;
@@ -13,9 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.List;
 

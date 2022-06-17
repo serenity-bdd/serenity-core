@@ -1,7 +1,7 @@
 package net.thucydides.core.batches.integration;
 
 import net.thucydides.core.batches.SystemVariableBasedBatchManager;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;

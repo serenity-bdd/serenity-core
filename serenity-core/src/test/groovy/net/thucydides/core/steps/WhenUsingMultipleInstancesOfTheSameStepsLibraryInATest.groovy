@@ -1,7 +1,7 @@
 package net.thucydides.core.steps
 
 import net.thucydides.core.annotations.Steps
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specification {

@@ -1,7 +1,7 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenRunningTheSameTestInDifferentContexts extends Specification {

@@ -3,7 +3,7 @@ package net.serenitybdd.cucumber.formatter
 import io.cucumber.core.plugin.ManualScenarioChecker
 import io.cucumber.core.plugin.TaggedScenario
 import net.thucydides.core.model.TestResult
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -6,7 +6,7 @@ import net.thucydides.core.annotations.Managed
 import net.thucydides.core.annotations.TestCaseAnnotations
 import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DriverConfiguration
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport

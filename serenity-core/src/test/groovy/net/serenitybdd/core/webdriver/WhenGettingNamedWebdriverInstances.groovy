@@ -3,10 +3,9 @@ package net.serenitybdd.core.webdriver
 import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class WhenGettingNamedWebdriverInstances extends Specification {

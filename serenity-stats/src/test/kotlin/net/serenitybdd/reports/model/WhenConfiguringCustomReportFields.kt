@@ -1,11 +1,10 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.util.SystemEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.core.environment.SystemEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.io.File
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -68,7 +67,8 @@ class WhenConfiguringCustomReportFields {
         System.setProperty("COLOR","blue")
         val envProperties = Properties()
         val systemValues = mapOf("TARGET_PLATFORM" to "staging");
-        val environmentVariables = SystemEnvironmentVariables(envProperties, systemValues);
+        val environmentVariables =
+            SystemEnvironmentVariables(envProperties, systemValues);
 
         // GIVEN
         environmentVariables.setProperty("report.customfields.target_platform","\${TARGET_PLATFORM}")

@@ -1,10 +1,8 @@
 package net.serenitybdd.core.i8n
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.serenitybdd.core.environment.UndefinedEnvironmentVariableException
-import net.thucydides.core.ThucydidesSystemProperty
+
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenConfiguringInternationalisedLabels extends Specification {

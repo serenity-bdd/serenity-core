@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.email
 
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenGeneratingAnEmailableReport {
 
     val TEST_OUTCOMES_WITH_MULTIPLE_RESULTS = File(ClassLoader.getSystemResource("test_outcomes/with_different_results").file).toPath()
 
-    private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+    private val environmentVariables: EnvironmentVariables =
+        MockEnvironmentVariables()
 
 
     init {
@@ -247,7 +247,8 @@ class WhenGeneratingAnEmailableReport {
 
         @Test
         fun `should be written to serenity-summary_html`() {
-            val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+            val environmentVariables: EnvironmentVariables =
+                MockEnvironmentVariables()
             environmentVariables.setProperty("serenity.summary.report.filename","my-report.html")
 
             val reporter = SinglePageHtmlReporter(environmentVariables)

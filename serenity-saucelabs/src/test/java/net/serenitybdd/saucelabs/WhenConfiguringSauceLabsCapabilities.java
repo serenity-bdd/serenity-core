@@ -2,7 +2,7 @@ package net.serenitybdd.saucelabs;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

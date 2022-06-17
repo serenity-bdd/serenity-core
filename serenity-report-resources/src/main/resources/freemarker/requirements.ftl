@@ -384,7 +384,7 @@
                                                         <a name="${scenarioGroup.id}"></a>
                                                         <#if scenarioGroup.ruleName?has_content>
                                                             <div class="rule-title">
-                                                                Rule: ${scenarioGroup.ruleName}</div>
+                                                                Rule: ${formatter.renderTitle(scenarioGroup.ruleName)}</div>
                                                         </#if>
                                                         <p class="rule-tags inline-tag">
                                                             <#list scenarioGroup.filteredTags as tag>

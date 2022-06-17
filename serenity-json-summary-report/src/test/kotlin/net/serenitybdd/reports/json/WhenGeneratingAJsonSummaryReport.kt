@@ -3,7 +3,7 @@ package net.serenitybdd.reports.json
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,7 +16,8 @@ class WhenGeneratingAJsonSummaryReport {
 
     val TEST_OUTCOMES_WITH_MULTIPLE_RESULTS = File(ClassLoader.getSystemResource("test_outcomes/with_different_results").file).toPath()
 
-    private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+    private val environmentVariables: EnvironmentVariables =
+        MockEnvironmentVariables()
 
 
     init {

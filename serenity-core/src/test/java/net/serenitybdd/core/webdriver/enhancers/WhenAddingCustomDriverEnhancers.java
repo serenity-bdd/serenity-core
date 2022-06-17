@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver.enhancers;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.driverproviders.EnhanceDriver;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

@@ -1,9 +1,7 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.model.ContextIcon;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

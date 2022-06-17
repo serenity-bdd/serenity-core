@@ -2,7 +2,7 @@ package net.thucydides.core.requirements;
 
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Test;
 
 import java.util.List;

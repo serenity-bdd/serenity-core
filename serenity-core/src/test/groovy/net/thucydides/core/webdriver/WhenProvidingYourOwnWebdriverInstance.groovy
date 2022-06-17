@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Specification
 

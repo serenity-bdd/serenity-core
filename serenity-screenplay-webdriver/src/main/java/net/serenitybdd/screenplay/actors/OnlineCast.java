@@ -21,6 +21,7 @@ public class OnlineCast extends Cast {
         super(abilities);
     }
 
+    @SafeVarargs
     public OnlineCast(Consumer<Actor>... providers) {
         super(providers);
     }
@@ -29,6 +30,7 @@ public class OnlineCast extends Cast {
         return new OnlineCast(abilities);
     }
 
+    @SafeVarargs
     public static Cast whereEveryoneCan(Consumer<Actor>... abilityProviders) {
         return new OnlineCast(abilityProviders);
     }
@@ -47,7 +49,7 @@ public class OnlineCast extends Cast {
         return new BrowsingActorBuilder(this, driver);
     }
 
-    public class BrowsingActorBuilder {
+    public static class BrowsingActorBuilder {
 
         private final Cast cast;
         private final String driver;

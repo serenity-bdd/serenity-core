@@ -16,13 +16,16 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive, HasAuthentication {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -446,4 +449,27 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         throw new DevToolsNotSupportedException("DevTools not supported for driver " + getProxiedDriver());
     }
 
+    /**
+     * Registers a check for whether a set of Credentials should be used for a particular site, identified by its URI. If called multiple times, the credentials will be checked in the order they've been added and the first one to match will be used.
+     */
+    @Override
+    public void register(Predicate<URI> whenThisMatches, Supplier<Credentials> useTheseCredentials) {
+        ensureDriverSupportsTheHasAuthenticationInterface();
+        ((HasAuthentication) getProxiedDriver()).register(whenThisMatches, useTheseCredentials);
+    }
+
+    /**
+     * As register(Predicate, Supplier) but attempts to apply the credentials for any request for authorization.
+     */
+    @Override
+    public void register(Supplier<Credentials> alwaysUseTheseCredentials) {
+        ensureDriverSupportsTheHasAuthenticationInterface();
+        ((HasAuthentication) getProxiedDriver()).register(alwaysUseTheseCredentials);
+    }
+
+    private void ensureDriverSupportsTheHasAuthenticationInterface() {
+        if (!(getProxiedDriver() instanceof  HasAuthentication)) {
+            throw new HasAuthenticationNotSupportedException("HasAuthentication not supported for driver " + getProxiedDriver());
+        }
+    }
 }

@@ -97,14 +97,12 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         this.systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
         this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
-        lineFilters = LineFilters.forCurrentContext();
     }
 
     public SerenityReporter(Configuration systemConfiguration) {
         this.systemConfiguration = systemConfiguration;
         this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
-        lineFilters = LineFilters.forCurrentContext();
     }
 
     private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
@@ -426,6 +424,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void handleExamples(Feature currentFeature, List<Tag> scenarioOutlineTags, String id, List<Examples> examplesList) {
+        lineFilters = LineFilters.forCurrentContext();
         String featureName = currentFeature.getName();
         List<Tag> currentFeatureTags = currentFeature.getTags();
         getContext().doneAddingScenarioOutlineSteps();

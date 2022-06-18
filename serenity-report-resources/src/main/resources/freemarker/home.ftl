@@ -506,7 +506,7 @@
                                                         <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                         <#if (automatedTestCases?has_content)>
-                                                            <table class="manual-scenario-result-table table"
+                                                            <table class="automated-scenario-result-table table"
                                                                    id="scenario-results">
                                                                 <thead>
                                                                 <tr>

@@ -18,6 +18,7 @@ public class ConfiguredProxy {
         String ftpProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_FTP).orElse(null);
         String noProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_NOPROXY).orElse(null);
         String proxyType = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_TYPE).orElse(null);
+
         String proxyAutoconfigUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_AUTOCONFIG).orElse(null);
         String socksProxy = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_SOCKS_PROXY).orElse(null);
         String socksProxyUsername = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_SOCKS_USERNAME).orElse(null);
@@ -25,13 +26,11 @@ public class ConfiguredProxy {
         String socksProxyVersionValue = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(SERENITY_PROXY_SOCKS_VERSION).orElse(null);
         Integer socksProxyVersion = (StringUtils.isNumeric(socksProxyVersionValue)) ? Integer.parseInt(socksProxyVersionValue) : null;
 
-        Boolean autodetect = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(ThucydidesSystemProperty.SERENITY_PROXY_AUTODETECT);
+        boolean autodetect = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(ThucydidesSystemProperty.SERENITY_PROXY_AUTODETECT);
 
         if ((httpProxy  != null) && (!httpProxy.isEmpty())) {
             org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
-            if (httpProxy != null) {
-                proxy.setHttpProxy(httpProxy);
-            }
+            proxy.setHttpProxy(httpProxy);
             if (sslProxy != null) {
                 proxy.setSslProxy(sslProxy);
             }
@@ -61,7 +60,7 @@ public class ConfiguredProxy {
             if (socksProxyPassword != null) {
                 proxy.setSocksPassword(socksProxyPassword);
             }
-            if (socksProxyVersion != 0) {
+            if (socksProxyVersion != null && socksProxyVersion != 0) {
                 proxy.setSocksVersion(socksProxyVersion);
             }
             return Optional.of(proxy);

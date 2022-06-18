@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.webtests.ui.integration
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.screenplay.questions.SamplePage
+import net.serenitybdd.screenplay.targets.Target
 import net.serenitybdd.screenplay.ui.*
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
@@ -49,6 +50,48 @@ class WhenInteractingWithNestedElements extends Specification {
         RadioButton.withLabel("Radio").inside("#section2")      | "Section 2"
     }
 
+    def "Nested elements from outer elements to inner ones"() {
+        expect:
+        samplePage.find(element).click();
+        samplePage.find("#result").getText() == expectedText
+        where:
+        element                                                                          | expectedText
+        PageElement.locatedBy("#section1").find(Button.withText("Submit"))           | "Section 1"
+        PageElement.locatedBy("#section2").find(Button.withText("Submit"))           | "Section 2"
+        PageElement.locatedBy("#section1").find(InputField.withLabel("Input Field")) | "Section 1"
+        PageElement.locatedBy("#section2").find(InputField.withLabel("Input Field")) | "Section 2"
+        PageElement.locatedBy("#section1").find(Checkbox.withLabel("Checkbox"))      | "Section 1"
+        PageElement.locatedBy("#section2").find(Checkbox.withLabel("Checkbox"))      | "Section 2"
+        PageElement.locatedBy("#section1").find(Link.withText("Link"))               | "Section 1"
+        PageElement.locatedBy("#section2").find(Link.withText("Link"))               | "Section 2"
+        PageElement.locatedBy("#section1").find(RadioButton.withLabel("Radio"))      | "Section 1"
+        PageElement.locatedBy("#section2").find(RadioButton.withLabel("Radio"))      | "Section 2"
+    }
+
+    Target NESTED_SUBMIT = PageElement.locatedBy(".sections")
+                                      .find(PageElement.locatedBy("#section1")
+                                      .find(Button.withText("Submit")));
+
+
+    def "Multi-layer nested elements"() {
+        when:
+        samplePage.find(NESTED_SUBMIT).click();
+        then:
+        samplePage.find("#result").getText() == "Section 1"
+
+    }
+
+    Target INSIDE_SUBMIT = Button.withText("Submit")
+                                 .inside(PageElement.locatedBy("#section1"))
+                                 .inside(PageElement.locatedBy(".sections"))
+
+    def "Multi-layer inner elements"() {
+        when:
+        samplePage.find(INSIDE_SUBMIT).click();
+        then:
+        samplePage.find("#result").getText() == "Section 1"
+
+    }
     def "Elements nested inside another page element"() {
         expect:
         samplePage.find(element).click();

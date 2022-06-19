@@ -4,6 +4,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.TheValue;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,10 +16,10 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 @RunWith(SerenityRunner.class)
 public class WhenUsingCollectionMatchersWithScreenplayWeCan {
 
-    Actor collette = Actor.named("Collette");
-
     @Test
     public void checkForSubsets() {
+
+        Actor collette = Actor.named("Collette");
 
         List<String> allColors = Arrays.asList("red", "blue", "green", "yellow");
         List<String> favoriteColors = Arrays.asList("red", "blue");
@@ -30,6 +31,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
 
     @Test
     public void checkThatAllElementsMatchAPattern() {
+        Actor collette = Actor.named("Collette");
 
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
@@ -40,6 +42,7 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
 
     @Test
     public void checkThatAtLeastOneElementMatchesAPattern() {
+        Actor collette = Actor.named("Collette");
 
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
@@ -51,12 +54,12 @@ public class WhenUsingCollectionMatchersWithScreenplayWeCan {
     @Test
     public void checkThatAllElementsSatisfySomeCondition() {
 
+        Actor collette = Actor.named("Collette");
+
         List<String> allColors = Arrays.asList("color:red", "color:blue", "color:green", "color:yellow");
 
         collette.should(
                 seeThat(TheValue.of(allColors), CollectionMatchers.allSatisfy(color -> Assertions.assertThat(color).startsWith("color:")))
         );
     }
-
-
 }

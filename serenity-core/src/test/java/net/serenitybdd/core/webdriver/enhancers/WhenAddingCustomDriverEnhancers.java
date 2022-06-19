@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.time.Duration;
 
@@ -22,11 +23,7 @@ public class WhenAddingCustomDriverEnhancers {
         // Given
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.extension.packages","net.serenitybdd.core.webdriver.enhancers");
-
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-        WebDriver driver = new ChromeDriver(options);
+        WebDriver driver = new HtmlUnitDriver();
 
         // When
         EnhanceDriver.from(environmentVariables).to(driver);

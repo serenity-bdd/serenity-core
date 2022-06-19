@@ -65,29 +65,29 @@ public class FeatureFileScenarioOutcomes {
             List<ScenarioOutcome> scenarioOutcomes = new ArrayList<>();
             Feature currentFeature = feature.get().getFeature();
             for (FeatureChild currentChild : currentFeature.getChildren()) {
-                if (currentChild.getRule() != null) {
-                    Rule currentRule = currentChild.getRule();
+                if (currentChild.getRule() != null && currentChild.getRule().isPresent()) {
+                    Rule currentRule = currentChild.getRule().get();
                     currentRule.getChildren().stream()
-                            .filter(ruleChild -> ruleChild.getScenario() != null)
+                            .filter(ruleChild -> ruleChild.getScenario() != null && ruleChild.getScenario().isPresent())
                             .forEach(
                                     ruleChild -> scenarioOutcomes.add(
                                             scenarioOutcomeFrom(currentFeature,
-                                                    ruleChild.getScenario(),
+                                                    ruleChild.getScenario().get(),
                                                     requirementsOutcomes.getTestOutcomes(),
                                                     net.thucydides.core.model.Rule.from(currentRule)))
                             );
 
                 } else {
-                    if (currentChild.getScenario() != null) {
+                    if (currentChild.getScenario() != null && currentChild.getScenario().isPresent()) {
                         scenarioOutcomes.add(
                                 scenarioOutcomeFrom(currentFeature,
-                                        currentChild.getScenario(),
+                                        currentChild.getScenario().get(),
                                         requirementsOutcomes.getTestOutcomes()));
                     }
-                    if (currentChild.getBackground() != null) {
+                    if (currentChild.getBackground() != null && currentChild.getBackground().isPresent()) {
                         scenarioOutcomes.add(
                                 scenarioBackgroundFrom(currentFeature,
-                                        currentChild.getBackground(),
+                                        currentChild.getBackground().get(),
                                         requirementsOutcomes.getTestOutcomes()));
                     }
                 }

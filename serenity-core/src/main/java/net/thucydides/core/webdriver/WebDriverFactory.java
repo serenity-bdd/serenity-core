@@ -110,6 +110,7 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HTMLUnitDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
         }
         return driverProvidersByDriverType;

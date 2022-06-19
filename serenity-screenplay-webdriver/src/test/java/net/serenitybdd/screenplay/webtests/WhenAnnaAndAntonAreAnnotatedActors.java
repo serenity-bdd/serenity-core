@@ -15,13 +15,13 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenAnnaAndAntonAreAnnotatedActors {
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "htmlunit", options = "--headless")
     WebDriver annasBrowser;
 
     @CastMember(name = "Anna The Annotated User", browserField = "annasBrowser")
     Actor anna;
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "htmlunit", options = "--headless")
     WebDriver antonsBrowser;
 
     @CastMember(name = "Anton The Other Annotated User", browserField = "antonsBrowser")

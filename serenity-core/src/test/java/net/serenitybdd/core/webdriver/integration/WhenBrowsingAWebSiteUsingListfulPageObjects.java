@@ -17,6 +17,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.io.File;
@@ -57,13 +58,13 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     }
 
     @ImplementedBy(TableImpl.class)
-    public static interface Table extends WebElementFacade {
-    	public List<Row> getBodyRows();
+    public interface Table extends WebElementFacade {
+		List<Row> getBodyRows();
     }
     
     @ImplementedBy(RowImpl.class)
-    public static interface Row extends WebElementFacade {
-    	public String getCsvContent();
+    public interface Row extends WebElementFacade {
+		String getCsvContent();
     }
     
     public static class TableImpl extends WebElementFacadeImpl implements Table {
@@ -127,9 +128,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 
     @Before
     public void openLocalStaticSite() {
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-		driver = new ChromeDriver(options);
+		driver = new HtmlUnitDriver();
 
         openStaticTestSite();
         indexPage = new TablesPage(driver, 1000);

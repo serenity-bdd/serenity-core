@@ -13,7 +13,7 @@ import io.cucumber.messages.types.Tag
 class WhenReportingManualTestResults extends Specification {
 
     def environmentVariables = new MockEnvironmentVariables()
-    def gherkinLocation = new Location();
+    def gherkinLocation = new Location(0,0);
     def dateChecker = new ManualScenarioChecker(environmentVariables)
 
     @Unroll

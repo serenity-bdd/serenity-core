@@ -14,10 +14,9 @@ import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
-import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import org.openqa.selenium.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,22 +81,20 @@ public class AppiumConfiguration {
                 .filter(platform -> platform.isDefined)
                 .findFirst();
     }
+
     /**
      * Return the Appium platform defined in the system properties or the context. Must be either ios or android.
      */
     public MobilePlatform getTargetPlatform() {
-        Optional contextPlatform = Stream.of(definedContext())
+        Optional<MobilePlatform> contextPlatform = Stream.of(definedContext())
                 .filter(platform -> platform.isDefined)
                 .findFirst();
-        if (contextPlatform.isPresent()) {
-            return (MobilePlatform) contextPlatform.get();
-        }
-
-        return Stream.of(definedTargetPlatform())
+        return contextPlatform.orElseGet(() -> Stream.of(definedTargetPlatform())
                 .filter(platform -> platform.isDefined)
                 .findFirst()
-                .orElse(MobilePlatform.NONE);
-//                .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
+                .orElse(MobilePlatform.NONE));
+
+        //                .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
     }
 
     /**
@@ -179,7 +176,7 @@ public class AppiumConfiguration {
 
         Properties appiumProperties = new Properties();
         String env = environmentVariables.getProperty("environment", "default");
-        String regex=String.format("environments\\.(all|%s)\\.appium",env);
+        String regex = String.format("environments\\.(all|%s)\\.appium", env);
         List<String> appiumKeys =
                 environmentVariables.getKeys()
                         .stream()
@@ -208,7 +205,7 @@ public class AppiumConfiguration {
     }
 
     private void ensureAppOrBrowserPathDefinedIn(Properties appiumProperties) {
-        if (!(appiumProperties.containsKey("app") || (appiumProperties.containsKey("appPackage") && appiumProperties.containsKey("appActivity"))  || appiumProperties.containsKey("browserName"))) {
+        if (!(appiumProperties.containsKey("app") || (appiumProperties.containsKey("appPackage") && appiumProperties.containsKey("appActivity")) || appiumProperties.containsKey("browserName"))) {
             throw new ThucydidesConfigurationException("The browser under test or path to the app or (appPackage and appActivity) needs to be provided in the appium.app or appium.browserName property.");
         }
     }
@@ -226,7 +223,7 @@ public class AppiumConfiguration {
     }
 
     private static List<String> collectAppiumCapabilities() {
-        Class[] capabilityClasses = {
+        Class<?>[] capabilityClasses = {
                 MobileCapabilityType.class,
                 AndroidMobileCapabilityType.class,
                 IOSMobileCapabilityType.class,

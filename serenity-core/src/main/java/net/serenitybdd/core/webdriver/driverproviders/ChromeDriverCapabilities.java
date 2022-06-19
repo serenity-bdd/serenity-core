@@ -40,7 +40,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     @Override
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
-        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables)
+                                          .withPrefix("webdriver"));
 //        String switches = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(CHROME_SWITCHES);
 //        capabilities.setCapability("chrome.switches", switches);
 

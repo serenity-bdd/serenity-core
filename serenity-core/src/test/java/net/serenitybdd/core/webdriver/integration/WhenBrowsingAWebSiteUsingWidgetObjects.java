@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
@@ -15,8 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.io.File;
@@ -146,10 +144,10 @@ public class WhenBrowsingAWebSiteUsingWidgetObjects {
     @Before
     public void openLocalStaticSite() {
 
-		WebDriverManager.chromedriver().setup();
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-		driver = new ChromeDriver(options);
+//		WebDriverManager.chromedriver().setup();
+//		ChromeOptions options = new ChromeOptions();
+//		options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+		driver = new HtmlUnitDriver();
 
         openStaticTestSite();
         indexPage = new IndexPage(driver, 1);

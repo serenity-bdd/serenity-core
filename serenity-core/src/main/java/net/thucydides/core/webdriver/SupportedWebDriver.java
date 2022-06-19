@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -62,6 +63,10 @@ public enum SupportedWebDriver {
      */
     SAFARI(SafariDriver.class),
 
+    /**
+     * HtmlUnit
+     */
+    HTMLUNIT(HtmlUnitDriver.class),
     /**
      * Appium
      */

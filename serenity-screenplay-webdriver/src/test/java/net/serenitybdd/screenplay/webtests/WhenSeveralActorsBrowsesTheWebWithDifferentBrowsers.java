@@ -20,13 +20,13 @@ import static org.hamcrest.Matchers.hasProperty;
 @RunWith(SerenityRunner.class)
 public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
 
-    @Managed(driver = "chrome", options="--headless")
+    @Managed(driver = "htmlunit", options="--headless")
     WebDriver firstBrowser;
 
-    @Managed(driver = "chrome", options="--headless")
+    @Managed(driver = "htmlunit", options="--headless")
     WebDriver secondBrowser;
 
-    @Managed(driver = "chrome", options="--headless")
+    @Managed(driver = "htmlunit", options="--headless")
     WebDriver thirdBrowser;
 
     @Test

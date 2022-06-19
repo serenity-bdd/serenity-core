@@ -4,6 +4,8 @@ import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.environment.MockEnvironmentVariables
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
 
 class WhenProvidingYourOwnWebdriverInstance extends Specification {
@@ -39,7 +41,8 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
         when:
             driver = factory.newWebdriverInstance(ProvidedDriver);
         then:
-            driver.class == ChromeDriver
+//            driver.class == ChromeDriver
+            driver.class == HtmlUnitDriver
     }
 
     def "should be able to know when a provided driver is provided"() {
@@ -72,7 +75,7 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
             def sourceConfig = new ProvidedDriverConfiguration(environmentVariables)
             driver = sourceConfig.driverSource.newDriver()
         then:
-            driver.class == ChromeDriver
+            driver.class == HtmlUnitDriver
     }
 
     def "should be able to know if a provided driver can take screenshots"() {

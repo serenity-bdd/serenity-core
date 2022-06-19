@@ -718,7 +718,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 waitForCondition().until(elementToBeClickable(getElement()));
                 return true;
             }
-        } catch (TimeoutException timeout) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
             return false;
         }
         return false;

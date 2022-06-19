@@ -3,6 +3,8 @@ package net.thucydides.core.requirements.model.cucumber;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.Scenario;
 
+import java.util.Optional;
+
 /**
  * An example table that is mentioned by name in a feature narrative.
  */
@@ -33,12 +35,18 @@ public class ReferencedExampleTable {
                                     );
     }
 
-    private boolean scenarioContainsExampleTableWithName(Scenario scenario, String exampleTableName) {
-        if (scenario.getExamples() != null && scenario.getExamples().isEmpty()) { return false; }
+    private boolean scenarioContainsExampleTableWithName(Optional<Scenario> scenario, String exampleTableName) {
+        if(scenario.isPresent()) {
+            if (scenario.get().getExamples() != null && scenario.get().getExamples().isEmpty()) {
+                return false;
+            }
 
-        return scenario.getExamples().stream()
-                .anyMatch(
-                        examplesTable -> examplesTable.getName().equalsIgnoreCase(exampleTableName.trim())
-                );
+            return scenario.get().getExamples().stream()
+                    .anyMatch(
+                            examplesTable -> examplesTable.getName().equalsIgnoreCase(exampleTableName.trim())
+                    );
+        } else {
+            return false;
+        }
     }
 }

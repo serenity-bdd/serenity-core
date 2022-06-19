@@ -10,14 +10,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-
 
 public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
@@ -255,6 +254,7 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
         page.fieldDoesNotExist.shouldBeCurrentlyVisible();
     }
 
+    @Test
     public void should_check_element_as_visible_quickly_if_not_present_right_now() {
         page.firstName.shouldBeCurrentlyVisible();
     }

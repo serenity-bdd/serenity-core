@@ -14,10 +14,10 @@ public class RenderCucumber {
     }
 
     private static String renderedArgument(Step step) {
-        if(step.getDataTable() != null) {
-            return renderedDataTable(step.getDataTable());
-        } else if(step.getDocString() != null) {
-            return step.getDocString().getContent();
+        if(step.getDataTable() != null && step.getDataTable().isPresent()) {
+            return renderedDataTable(step.getDataTable().get());
+        } else if(step.getDocString() != null && step.getDocString().isPresent()) {
+            return step.getDocString().get().getContent();
         }
         return "";
     }
@@ -40,8 +40,8 @@ public class RenderCucumber {
         StringBuffer renderedTable = new StringBuffer();
         renderExampleDescriptionOf(examples);
         renderedTable.append(renderExampleDescriptionOf(examples));
-        addRow(renderedTable, examples.getTableHeader().getCells(), " ");
-        addSeparatorCells(renderedTable, examples.getTableHeader().getCells().size());
+        addRow(renderedTable, examples.getTableHeader().get().getCells(), " ");
+        addSeparatorCells(renderedTable, examples.getTableHeader().get().getCells().size());
 
         for (TableRow row : examples.getTableBody()) {
             addRow(renderedTable, row.getCells(), exampleRowResultIcon.resultToken(row.getLocation().getLine()));

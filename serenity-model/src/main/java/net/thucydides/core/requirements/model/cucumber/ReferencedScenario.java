@@ -19,8 +19,9 @@ public class ReferencedScenario {
     public NamedScenario withName(String scenarioName) {
         return feature.getChildren().stream()
                         .filter(featureChild -> featureChild.getScenario() != null)
-                        .filter(featureChild -> featureChild.getScenario().getName().equalsIgnoreCase(scenarioName.trim()))
-                        .map(featureChild -> NamedScenario.forScenarioDefinition(feature, featureChild.getScenario()))
+                        .filter(featureChild -> featureChild.getScenario().isPresent())
+                        .filter(featureChild -> featureChild.getScenario().get().getName().equalsIgnoreCase(scenarioName.trim()))
+                        .map(featureChild -> NamedScenario.forScenarioDefinition(feature, featureChild.getScenario().get()))
                         .findFirst()
                         .orElse(NamedScenario.withNoMatchingScenario());
     }

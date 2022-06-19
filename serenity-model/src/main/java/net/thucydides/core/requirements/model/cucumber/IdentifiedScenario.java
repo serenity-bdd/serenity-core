@@ -24,7 +24,7 @@ public class IdentifiedScenario extends NamedScenario {
         String scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
         this.scenarioId = Digest.ofTextValue(scenarioDefinition.getName());
         this.scenarioDefinition = scenarioDefinition;
-        this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition);
+        this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition.getName());
     }
 
     @Override

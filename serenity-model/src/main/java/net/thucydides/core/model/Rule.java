@@ -4,6 +4,7 @@ import io.cucumber.messages.types.RuleChild;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Rule {
@@ -26,7 +27,8 @@ public class Rule {
         RuleBackground ruleBackground = cucumberRule.getChildren().stream()
                 .map(RuleChild::getBackground)
                 .filter(Objects::nonNull)
-                .map(RuleBackground::from)
+                .filter(Optional::isPresent)
+                .map(background->RuleBackground.from(background.get()))
                 .findFirst().orElse(null);
 
         List<TestTag> tags = cucumberRule.getTags()

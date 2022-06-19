@@ -1,6 +1,7 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 import com.google.gson.GsonBuilder;
+import io.cucumber.gherkin.CucumberScenarioLoader;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;

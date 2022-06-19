@@ -6,6 +6,7 @@ import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.flags.Flag;
@@ -54,7 +55,7 @@ public class TestOutcomes {
     private final String label;
     private final TestTag testTag;
     private final TestResult resultFilter;
-    private ZonedDateTime startTime;
+    private final ZonedDateTime startTime;
 
     /**
      * Reference to the test statistics service provider, used to inject test history if required.
@@ -97,21 +98,21 @@ public class TestOutcomes {
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label) {
-        this(outcomes, estimatedAverageStepCount, label, null, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, null, null, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestTag tag) {
-        this(outcomes, estimatedAverageStepCount, label, tag, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, tag, null, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestResult resultFilter) {
-        this(outcomes, estimatedAverageStepCount, label, null, resultFilter, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, null, resultFilter, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
@@ -193,7 +194,7 @@ public class TestOutcomes {
         return new TestOutcomes(outcomes, SystemPropertiesConfiguration.DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
-    private static List<TestOutcome> NO_OUTCOMES = new ArrayList<>();
+    private static final List<TestOutcome> NO_OUTCOMES = new ArrayList<>();
 
 
     public static TestOutcomes withNoResults() {
@@ -1140,9 +1141,7 @@ public class TestOutcomes {
                 }
             }
             if (typeMatcher != null) {
-                if (!typeMatcher.matches(tag.getType())) {
-                    return false;
-                }
+                return typeMatcher.matches(tag.getType());
             }
             return true;
         }

@@ -1,6 +1,6 @@
 package net.thucydides.junit.rules;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
@@ -48,7 +48,7 @@ public class DisableThucydidesHistoryRule implements MethodRule {
     private final String originalValue;
 
     public DisableThucydidesHistoryRule() {
-        environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables() ;
         originalValue = environmentVariables.getProperty("serenity.store.history");
         environmentVariables.setProperty("serenity.store.history","false");
     }

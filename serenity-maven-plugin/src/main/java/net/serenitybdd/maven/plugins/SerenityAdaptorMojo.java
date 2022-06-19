@@ -1,6 +1,6 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.reports.TestOutcomeAdaptorReporter;
 import net.thucydides.core.reports.adaptors.AdaptorService;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -48,7 +48,7 @@ public class SerenityAdaptorMojo extends AbstractMojo {
     }
 
     public SerenityAdaptorMojo() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     protected File getOutputDirectory() {

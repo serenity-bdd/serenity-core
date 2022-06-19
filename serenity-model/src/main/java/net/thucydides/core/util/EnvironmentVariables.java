@@ -72,4 +72,6 @@ public interface EnvironmentVariables {
     Map<String, String> asMap();
 
     Map<String,String> simpleSystemPropertiesAsMap();
+
+    void reset();
 }

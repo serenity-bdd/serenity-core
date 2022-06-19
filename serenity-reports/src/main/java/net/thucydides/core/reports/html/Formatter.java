@@ -10,7 +10,7 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
@@ -94,7 +94,7 @@ public class Formatter {
     }
 
     public Formatter() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public String renderMarkdown(String text) {
@@ -559,10 +559,7 @@ public class Formatter {
         if (StringUtils.isEmpty(text)) {
             return false;
         }
-        if (StringUtils.isAllUpperCase(text)) {
-            return false;
-        }
-        return true;
+        return !StringUtils.isAllUpperCase(text);
     }
 
     public String formatWithFields(String textToFormat) {

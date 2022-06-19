@@ -562,9 +562,9 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-                        <!--                        <parallel>all</parallel>-->
-                        <!--                        <threadCount>16</threadCount>-->
-                        <!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
+                        <parallel>all</parallel>
+                        <threadCount>16</threadCount>
+                        <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -585,7 +585,7 @@
                             <exclude>**/*Sample*</exclude>
                         </excludes>
                         <parallel>all</parallel>
-                        <threadCount>8</threadCount>
+                        <threadCount>4</threadCount>
                         <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                     <executions>

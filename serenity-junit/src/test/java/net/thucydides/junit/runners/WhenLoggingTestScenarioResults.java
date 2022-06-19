@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
@@ -38,7 +38,7 @@ public class WhenLoggingTestScenarioResults extends AbstractTestStepRunnerTest {
 
         MockitoAnnotations.initMocks(this);
 
-        environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables() ;
         webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
 

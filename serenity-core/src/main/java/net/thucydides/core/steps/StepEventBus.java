@@ -10,6 +10,8 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.parallel.Agency;
 import net.serenitybdd.core.parallel.Agent;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -371,6 +373,8 @@ public class StepEventBus {
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
 
+        SystemEnvironmentVariables.currentEnvironmentVariables().reset();
+        TestLocalEnvironmentVariables.clear();
         clear();
     }
 

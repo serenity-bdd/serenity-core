@@ -10,6 +10,7 @@ import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
@@ -111,7 +112,7 @@ public class TestOutcome {
      *
      */
     private List<String> coreIssues;
-    private List<String> additionalIssues;
+    private final List<String> additionalIssues;
 
     private List<String> coreVersions;
     private List<String> additionalVersions;
@@ -194,7 +195,7 @@ public class TestOutcome {
 
     private transient EnvironmentVariables environmentVariables;
 
-    private transient LinkGenerator linkGenerator;
+    private final transient LinkGenerator linkGenerator;
 
     private transient FlagProvider flagProvider;
 
@@ -234,7 +235,7 @@ public class TestOutcome {
     /**
      * The actors used in a Screenplay test
      */
-    private List<CastMember> actors;
+    private final List<CastMember> actors;
 
     private ExternalLink externalLink;
 
@@ -402,7 +403,7 @@ public class TestOutcome {
 
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
-            environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+            environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
             if (this.context == null) {
                 this.context = contextFrom(environmentVariables);
             }
@@ -2267,7 +2268,7 @@ public class TestOutcome {
     }
 
     private Optional<TestStep> tailOf(List<TestStep> testSteps) {
-        return (testSteps.isEmpty()) ? Optional.<TestStep>empty() : Optional.of(testSteps.get(testSteps.size() - 1));
+        return (testSteps.isEmpty()) ? Optional.empty() : Optional.of(testSteps.get(testSteps.size() - 1));
     }
 
     public Integer getNestedStepCount() {
@@ -2595,9 +2596,7 @@ public class TestOutcome {
         if (context != null ? !context.equals(that.context) : that.context != null) return false;
         if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (userStory != null ? !userStory.equals(that.userStory) : that.userStory != null) return false;
-
-        return true;
+        return userStory != null ? userStory.equals(that.userStory) : that.userStory == null;
     }
 
     @Override

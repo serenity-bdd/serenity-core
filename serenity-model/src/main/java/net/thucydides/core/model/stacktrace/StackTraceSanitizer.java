@@ -1,6 +1,6 @@
 package net.thucydides.core.model.stacktrace;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class StackTraceSanitizer {
     }
 
     public static StackTraceSanitizer forStackTrace(StackTraceElement[] stackTrace) {
-        return new StackTraceSanitizer(Injectors.getInjector().getProvider(EnvironmentVariables.class).get(),
+        return new StackTraceSanitizer(SystemEnvironmentVariables.currentEnvironmentVariables(),
                                        stackTrace);
     }
 

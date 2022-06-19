@@ -1,9 +1,8 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +13,10 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequirementsTagProvider.class);
 
-    private RequirementsTagProvider fileSystemRequirementsTagProvider;
+    private final RequirementsTagProvider fileSystemRequirementsTagProvider;
 
     public FileSystemRequirementsService(String rootPath) {
-        super(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        super(SystemEnvironmentVariables.currentEnvironmentVariables());
         this.fileSystemRequirementsTagProvider = new FileSystemRequirementsTagProvider(environmentVariables, rootPath);
     }
 

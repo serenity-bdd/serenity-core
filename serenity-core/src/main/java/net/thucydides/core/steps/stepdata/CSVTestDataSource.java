@@ -3,13 +3,12 @@ package net.thucydides.core.steps.stepdata;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.configuration.FilePathParser;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.configuration.FilePathParser;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepFactory;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ public class CSVTestDataSource implements TestDataSource {
     private List<String[]> csvDataRows;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVTestDataSource.class);
-    FilePathParser testDataSourcePath = new FilePathParser(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+    FilePathParser testDataSourcePath = new FilePathParser(SystemEnvironmentVariables.currentEnvironmentVariables() );
 
     public CSVTestDataSource(final List<String> paths, final char separatorValue, final char quotechar, final char escape, final int skipLines) throws IOException {
         this.separator = separatorValue;
@@ -67,7 +66,7 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path) throws IOException {
-        this(NewList.<String>of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final List<String> paths, final char separatorValue) throws IOException {
@@ -75,11 +74,11 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
-        this(NewList.<String>of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {
-        this(NewList.<String>of(path), separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public static boolean validTestDataPath(final String path) {

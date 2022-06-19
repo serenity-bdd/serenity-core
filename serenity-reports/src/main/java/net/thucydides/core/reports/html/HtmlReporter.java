@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.logging.ConsoleColors;
 import net.thucydides.core.logging.LoggingLevel;
@@ -39,10 +40,9 @@ public abstract class HtmlReporter extends ThucydidesReporter {
 
     protected static final String TIMESTAMP_FORMAT = "dd-MM-yyyy HH:mm:ss";
     protected static final String READABLE_TIMESTAMP_FORMAT = "MMM dd, yyyy HH:mm:ss";
-    protected static final String ZONED_TIMESTAMP_FORMAT = "dd-MM-yyyy HH:mm:ss Z";
 
     public HtmlReporter() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     public HtmlReporter(final EnvironmentVariables environmentVariables) {

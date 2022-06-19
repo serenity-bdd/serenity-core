@@ -1,7 +1,6 @@
 package net.thucydides.core.environment;
 
 import net.serenitybdd.core.collect.NewMap;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.PropertiesFileLocalPreferences;
@@ -19,19 +18,26 @@ import java.util.stream.Collectors;
 public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     private Map<String, String> properties;
-    private Map<String, String> systemValues;
+    private final Map<String, String> systemValues;
+
+    /**
+     * System properties as loaded from the system, without test-specific configuration
+     */
+    private Map<String, String> pristineProperties;
 
     public SystemEnvironmentVariables() {
         this(System.getProperties(), System.getenv());
     }
 
+    private static final ThreadLocal<EnvironmentVariables> CURRENT_ENVIRONMENT_VARIABLES
+            = ThreadLocal.withInitial(SystemEnvironmentVariables::new);
     /**
      * Get the current environment variables.
      * @return
      */
-    static EnvironmentVariables currentEnvironmentVariables() {
-//        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        return new SystemEnvironmentVariables();
+    public static EnvironmentVariables currentEnvironmentVariables() {
+        CURRENT_ENVIRONMENT_VARIABLES.get().setProperties(TestLocalEnvironmentVariables.getProperties());
+        return CURRENT_ENVIRONMENT_VARIABLES.get();
     }
 
     public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
@@ -42,6 +48,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
         this.properties = NewMap.copyOf(propertyValues);
         this.systemValues = NewMap.copyOf(systemValues);
+
+        this.pristineProperties = NewMap.copyOf(propertyValues);
+
     }
 
     public String getValue(final String name) {
@@ -207,6 +216,12 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
                             key -> environmentValues.put(key, properties.get(key))
                     );
         return environmentValues;
+    }
+
+    @Override
+    public void reset() {
+        this.properties.clear();
+        this.properties.putAll(pristineProperties);
     }
 
     public EnvironmentVariables copy() {

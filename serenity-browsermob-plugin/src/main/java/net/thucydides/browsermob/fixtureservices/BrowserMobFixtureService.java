@@ -6,16 +6,14 @@ import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +27,12 @@ public class BrowserMobFixtureService implements FixtureService {
     private static final int MIN_AVAILABLE_PORT = 49152;
 
     private final EnvironmentVariables environmentVariables;
-    private Ports ports;
+    private final Ports ports;
 
-    private ThreadLocal<BrowserMobProxy> threadLocalproxyServer = new  ThreadLocal<>();
+    private final ThreadLocal<BrowserMobProxy> threadLocalproxyServer = new  ThreadLocal<>();
 
     public BrowserMobFixtureService() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     public BrowserMobFixtureService(EnvironmentVariables environmentVariables) {

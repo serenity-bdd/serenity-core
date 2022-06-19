@@ -1,7 +1,7 @@
 package net.thucydides.core.util;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class VersionProvider {
     private final Logger logger = LoggerFactory.getLogger(VersionProvider.class);
 
     public VersionProvider() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     public VersionProvider(EnvironmentVariables environmentVariables) {

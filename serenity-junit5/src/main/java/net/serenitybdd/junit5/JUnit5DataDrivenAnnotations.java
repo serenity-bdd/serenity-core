@@ -3,14 +3,13 @@ package net.serenitybdd.junit5;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.DataTable;
-import net.thucydides.core.steps.stepdata.StringTestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     JUnit5DataDrivenAnnotations(final Class testClass) {
-        this(testClass, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(testClass, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     JUnit5DataDrivenAnnotations(final Class testClass, EnvironmentVariables environmentVariables) {
@@ -96,7 +95,7 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     private void fillDataTablesFromCsvSource(Map<String, DataTable> dataTables, Method testDataMethod) {
-        CsvSource csvSource = ((CsvSource)testDataMethod.getAnnotation(CsvSource.class));
+        CsvSource csvSource = testDataMethod.getAnnotation(CsvSource.class);
         if (csvSource.textBlock() != null && !csvSource.textBlock().isEmpty()) {
             fillDataTablesFromCsvSourceTextBlock(dataTables, testDataMethod);
         } else {
@@ -230,7 +229,7 @@ public class JUnit5DataDrivenAnnotations {
     private List<List<Object>> getListOfObjectsFromExternalClassSource(String methodName) {
         Method factoryMethod;
         String externalParameterFactoryClassName = methodName.substring(0, methodName.indexOf("#"));
-        String externalParameterFactoryMethodName = methodName.substring(methodName.indexOf("#") +1, methodName.length());
+        String externalParameterFactoryMethodName = methodName.substring(methodName.indexOf("#") +1);
         try {
             Class externalClassFactory = Class.forName(externalParameterFactoryClassName);
             factoryMethod = externalClassFactory.getDeclaredMethod(externalParameterFactoryMethodName);

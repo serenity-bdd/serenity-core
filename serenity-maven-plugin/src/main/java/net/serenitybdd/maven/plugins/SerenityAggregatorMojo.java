@@ -3,6 +3,7 @@ package net.serenitybdd.maven.plugins;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.ExtendedReports;
 import net.thucydides.core.reports.ResultChecker;
@@ -147,7 +148,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
 
     private EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
-            environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+            environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         }
         return environmentVariables;
     }

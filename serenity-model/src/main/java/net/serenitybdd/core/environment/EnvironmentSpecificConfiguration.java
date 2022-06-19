@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class EnvironmentSpecificConfiguration {
     private EnvironmentVariables environmentVariables;
-    private EnvironmentStrategy environmentStrategy;
+    private final EnvironmentStrategy environmentStrategy;
 
     public Properties getPropertiesWithPrefix(String prefix) {
 
@@ -77,9 +77,9 @@ public class EnvironmentSpecificConfiguration {
         NO_ENVIRONMENT_DEFINED
     }
 
-    private Function<String, String> contextlessProperty = property -> environmentVariables.getProperty(property);
+    private final Function<String, String> contextlessProperty = property -> environmentVariables.getProperty(property);
 
-    private Function<String, String> defaultProperty = property -> {
+    private final Function<String, String> defaultProperty = property -> {
 
         String candidateValue = propertyForAllEnvironments(property);
         if (candidateValue == null) {
@@ -95,7 +95,7 @@ public class EnvironmentSpecificConfiguration {
         return !environmentVariables.getPropertiesWithPrefix("environments.").isEmpty();
     }
 
-    private Function<String, String> propertyForADefinedEnvironment = property -> {
+    private final Function<String, String> propertyForADefinedEnvironment = property -> {
         String environmentProperty = null;
 
         for (String environment : activeEnvironments()) {
@@ -226,18 +226,20 @@ public class EnvironmentSpecificConfiguration {
         return !this.getPropertiesWithPrefix(propertyGroupName).isEmpty();
     }
 
-    private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
+    private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)}");
 
     private String substituteProperties(String propertyValue) {
         if (propertyValue == null) {
-            return propertyValue;
+            return null;
         }
 
         Matcher matcher = VARIABLE_EXPRESSION_PATTERN.matcher(propertyValue);
         while (matcher.find()) {
             String nestedProperty = matcher.group().substring(2, matcher.group().length() - 1);
-            String value = Optional.ofNullable(getPropertyValue(nestedProperty))
-                    .orElse(EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty));
+            String value = getPropertyValue(nestedProperty);
+            if (value == null) {
+                value = EnvironmentSpecificConfiguration.from(environmentVariables).getPropertyValue(nestedProperty);
+            }
             if (value != null) {
                 propertyValue = matcher.replaceFirst(value);
                 matcher.reset(propertyValue);
@@ -264,16 +266,12 @@ public class EnvironmentSpecificConfiguration {
         return null;
     }
 
-    private static final Map<EnvironmentVariables, EnvironmentSpecificConfiguration> ENVIRONMENT_SPECIFIC_CONFIGS = new HashMap<>();
 
     public static EnvironmentSpecificConfiguration from(EnvironmentVariables environmentVariables) {
-        if (!ENVIRONMENT_SPECIFIC_CONFIGS.containsKey(environmentVariables)) {
-            ENVIRONMENT_SPECIFIC_CONFIGS.put(environmentVariables, new EnvironmentSpecificConfiguration(environmentVariables));
-        }
-        return ENVIRONMENT_SPECIFIC_CONFIGS.get(environmentVariables);
+        return new EnvironmentSpecificConfiguration(environmentVariables);
     }
 
-    private static EnvironmentStrategy environmentStrategyDefinedIn(EnvironmentVariables environmentVariables) {
+    private EnvironmentStrategy environmentStrategyDefinedIn(EnvironmentVariables environmentVariables) {
         boolean environmentsAreConfigured = !environmentVariables.getPropertiesWithPrefix("environments.").isEmpty();
         boolean environmentIsSpecified = environmentVariables.getProperty("environment") != null;
         boolean defaultEnvironmentsAreConfigured = !environmentVariables.getPropertiesWithPrefix("environments.default.").isEmpty();
@@ -297,7 +295,7 @@ public class EnvironmentSpecificConfiguration {
         return EnvironmentStrategy.ENVIRONMENT_CONFIGURED_AND_NAMED;
     }
 
-    private static boolean specifiedEnvironmentNotConfiguredIn(EnvironmentVariables environmentVariables) {
+    private boolean specifiedEnvironmentNotConfiguredIn(EnvironmentVariables environmentVariables) {
         List<String> activeEnvironments = activeEnvironmentsIn(environmentVariables);
         return activeEnvironments.stream().allMatch(
                 environment -> environmentVariables.getPropertiesWithPrefix("environments." + environment + ".").isEmpty()

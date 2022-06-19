@@ -2,7 +2,7 @@ package net.thucydides.core.reports.adaptors;
 
 import net.serenitybdd.core.collect.NewMap;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.reports.adaptors.lettuce.LettuceXUnitAdaptor;
 import net.thucydides.core.reports.adaptors.specflow.SpecflowAdaptor;
 import net.thucydides.core.reports.adaptors.xunit.DefaultXUnitAdaptor;
@@ -25,7 +25,7 @@ public class AdaptorService {
     }
 
     public AdaptorService() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     public TestOutcomeAdaptor getAdaptor(String name) {

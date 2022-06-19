@@ -38,6 +38,7 @@ public class BrowserStackSampleTest {
     }
 
     @Test
+//    @EnvironmentVariable("webdriver.driver","foo")
     public void shouldConnectToBrowserStack() {
 //        driver.get("https://duckduckgo.com/");
 //

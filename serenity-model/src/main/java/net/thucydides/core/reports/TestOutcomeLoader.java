@@ -2,7 +2,7 @@ package net.thucydides.core.reports;
 
 import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -29,7 +29,7 @@ public class TestOutcomeLoader {
     private final FormatConfiguration formatConfiguration;
 
     public TestOutcomeLoader() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     @Inject

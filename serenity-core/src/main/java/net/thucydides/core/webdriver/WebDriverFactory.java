@@ -7,10 +7,10 @@ import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +51,7 @@ public class WebDriverFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFactory.class);
 
     public WebDriverFactory() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {

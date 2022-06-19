@@ -2,7 +2,7 @@ package net.thucydides.core.pages.jquery;
 
 import com.google.common.io.Resources;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.WebDriver;
@@ -18,10 +18,9 @@ public class JQueryEnabledPage {
 
     private final WebDriver driver;
     private final EnvironmentVariables environmentVariables;
-    private static final Logger LOGGER = LoggerFactory.getLogger(JQueryEnabledPage.class);
 
     protected JQueryEnabledPage(WebDriver driver) {
-        this(driver, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(driver, SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     protected JQueryEnabledPage(WebDriver driver, EnvironmentVariables environmentVariables) {

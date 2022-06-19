@@ -159,32 +159,6 @@ class WhenInstrumentingTasks extends Specification {
         testOutcomeContainsNoSteps()
     }
 
-    def "There should be no test output if an immmutable task with no @Step annotation and arguments is instrumented and MANUAL_TASK_INSTRUMENTATION is true"() {
-
-        given:
-        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
-        Performable basicTask = EatsImmutableFruit.ofType("pear")
-        when:
-        Actor.named("Annie").attemptsTo(basicTask);
-        then:
-        testPassed()
-        and:
-        testOutcomeContainsNoSteps()
-    }
-
-    def "There should be no test output if a task with no @Step annotation with no arguments is instrumented and MANUAL_TASK_INSTRUMENTATION is true"() {
-
-        given:
-        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
-        Performable basicTask = instrumented(EatsAnApple)
-        when:
-        Actor.named("Annie").attemptsTo(basicTask);
-        then:
-        testPassed()
-        and:
-        testOutcomeContainsNoSteps()
-    }
-
     def "There should be no test output if a task is manually instantiated and MANUAL_TASK_INSTRUMENTATION is true"() {
 
         given:

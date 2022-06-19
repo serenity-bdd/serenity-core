@@ -1,6 +1,7 @@
 package net.thucydides.core.model.formatters;
 
 import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -20,7 +21,7 @@ public class ReportFormatter {
 
     public ReportFormatter() {
         this(Injectors.getInjector().getInstance(IssueTracking.class),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+                SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public ReportFormatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
@@ -30,7 +31,7 @@ public class ReportFormatter {
 
 
     public ReportFormatter(IssueTracking issueTracking) {
-        this(issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(issueTracking, SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
 

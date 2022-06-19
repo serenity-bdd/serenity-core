@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -34,7 +34,7 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
     public MultipleSourceRequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders,
                                                    IssueTracking issueTracking,
                                                    ReportNameProvider reportNameProvider) {
-        this(requirementsTagProviders, issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get(), reportNameProvider);
+        this(requirementsTagProviders, issueTracking, SystemEnvironmentVariables.currentEnvironmentVariables(), reportNameProvider);
     }
 
     public MultipleSourceRequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders,

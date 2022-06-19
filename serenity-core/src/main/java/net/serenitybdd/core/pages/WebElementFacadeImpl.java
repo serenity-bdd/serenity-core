@@ -7,7 +7,7 @@ import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
@@ -17,8 +17,8 @@ import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
@@ -54,12 +54,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private final Sleeper sleeper;
     private final Clock webdriverClock;
     private final By bySelector;
-    private JavascriptExecutorFacade javascriptExecutorFacade;
-    private InternalSystemClock clock = new InternalSystemClock();
+    private final JavascriptExecutorFacade javascriptExecutorFacade;
+    private final InternalSystemClock clock = new InternalSystemClock();
     private final EnvironmentVariables environmentVariables;
     private String foundBy;
 
-    private ElementLocator locator;
+    private final ElementLocator locator;
     private WebElement resolvedELement;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
@@ -72,7 +72,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
         this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
     }
@@ -85,7 +85,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
         this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
     }
@@ -98,7 +98,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
         this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
     }
@@ -116,7 +116,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.implicitTimeoutInMilliseconds = timeoutInMilliseconds;
         this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
 
@@ -672,7 +672,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementState shouldBeEnabled() {
         if (!isCurrentlyEnabled()) {
-            String errorMessage = String.format("Field '%s' should be enabled", toString());
+            String errorMessage = String.format("Field '%s' should be enabled", this);
             failWithMessage(errorMessage);
         }
         return this;
@@ -703,7 +703,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementState shouldNotBeEnabled() {
 
         if (isCurrentlyEnabled()) {
-            String errorMessage = String.format("Field '%s' should not be enabled", toString());
+            String errorMessage = String.format("Field '%s' should not be enabled", this);
             failWithMessage(errorMessage);
         }
         return this;
@@ -1232,7 +1232,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private void logIfVerbose(String logMessage) {
         if (useVerboseLogging()) {
-            LOGGER.debug(logMessage + " : " + toString());
+            LOGGER.debug(logMessage + " : " + this);
         }
     }
 

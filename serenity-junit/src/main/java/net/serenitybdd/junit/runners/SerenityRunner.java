@@ -2,6 +2,7 @@ package net.serenitybdd.junit.runners;
 
 import com.google.inject.Injector;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
@@ -595,6 +596,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     @Override
     protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
 
+        AnnotatedEnvironmentProperties.apply(method.getMethod());
 //  This might work too:
 //        Serenity.initialize(test);
         if (webtestsAreSupported()) {

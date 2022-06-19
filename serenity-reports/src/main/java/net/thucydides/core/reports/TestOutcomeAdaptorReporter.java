@@ -1,11 +1,10 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
-import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
 
-    private List<TestOutcomeAdaptor> adaptors = new ArrayList<>();
+    private final List<TestOutcomeAdaptor> adaptors = new ArrayList<>();
 
     private final Optional<File> NO_SOURCE_FILE = Optional.empty();
 
@@ -27,7 +26,7 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
 
 
     public TestOutcomeAdaptorReporter() {
-        formatConfiguration = new FormatConfiguration(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        formatConfiguration = new FormatConfiguration(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     /**

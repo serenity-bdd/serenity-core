@@ -218,20 +218,20 @@ public class WhenInteractingWithAnAPIUsingScreenplay {
         );
     }
 
-    @Test
-    public void update_a_user() {
-
-        sam.attemptsTo(
-                Put.to("/api/users")
-                        .with(request -> request.header("Content-Type", "application/json")
-                                .body("{\"firstName\": \"jack\",\"lastName\": \"smith\"}")
-                        )
-        );
-
-        sam.should(
-                seeThatResponse(response -> response.statusCode(200))
-        );
-    }
+//    @Test
+//    public void update_a_user() {
+//
+//        sam.attemptsTo(
+//                Put.to("/api/users")
+//                        .with(request -> request.header("Content-Type", "application/json")
+//                                .body("{\"firstName\": \"jack\",\"lastName\": \"smith\"}")
+//                        )
+//        );
+//
+//        sam.should(
+//                seeThatResponse(response -> response.statusCode(200))
+//        );
+//    }
 
     @Test
     public void delete_a_user() {

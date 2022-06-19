@@ -1,7 +1,9 @@
 package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
@@ -24,6 +26,7 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
         Serenity.injectAnnotatedPagesObjectInto(testInstance);
         Serenity.injectScenarioStepsInto(testInstance);
         Serenity.injectDependenciesInto(testInstance);
+        SystemEnvironmentVariables.currentEnvironmentVariables().reset();
     }
 
     private StepEventBus eventBusFor(ExtensionContext context) {
@@ -38,9 +41,10 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
     }
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         context.getTestMethod().ifPresent(
             method -> {
+                AnnotatedEnvironmentProperties.apply(method);
                 if (!eventBusFor(context).isBaseStepListenerRegistered()) {
                     eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
                 }

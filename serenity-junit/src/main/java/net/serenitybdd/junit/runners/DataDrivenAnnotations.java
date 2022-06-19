@@ -1,9 +1,9 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.DataTable;
 import net.thucydides.core.configuration.FilePathParser;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.model.DataTable;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -35,7 +35,7 @@ public class DataDrivenAnnotations {
     private final Class testClass;
 
     DataDrivenAnnotations(final Class testClass) {
-        this(testClass, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(testClass, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     DataDrivenAnnotations(final Class testClass, EnvironmentVariables environmentVariables) {

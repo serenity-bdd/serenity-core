@@ -4,7 +4,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.ThucydidesReporter;
@@ -30,7 +30,7 @@ public class CSVReporter extends ThucydidesReporter {
     private final String encoding;
 
     public CSVReporter(File outputDirectory) {
-        this(outputDirectory, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(outputDirectory, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public CSVReporter(File outputDirectory, EnvironmentVariables environmentVariables) {

@@ -3,8 +3,8 @@ package net.thucydides.core.requirements;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.files.TheDirectoryStructure;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.*;
@@ -73,11 +73,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level) {
-        this(filePathFormOf(rootDirectory), level, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(filePathFormOf(rootDirectory), level, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     private String baseDirectory() {
@@ -148,7 +148,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory) {
-        this(filePathFormOf(rootDirectory), Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(filePathFormOf(rootDirectory), SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     private final Object requirementsLock = new Object();
@@ -555,7 +555,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private Set<File> invalidFeatureFiles = new HashSet<>();
+    private final Set<File> invalidFeatureFiles = new HashSet<>();
 
     public Optional<Requirement> readRequirementsFromStoryOrFeatureFile(File storyFile) {
 
@@ -819,14 +819,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private FileFilter thatAreNarratives() {
-        return file -> file.getName().toLowerCase().equals("narrative.txt")
-                || file.getName().toLowerCase().equals("narrative.md")
-                || file.getName().toLowerCase().equals("readme.md")
-                || file.getName().toLowerCase().equals("placeholder.txt");
+        return file -> file.getName().equalsIgnoreCase("narrative.txt")
+                || file.getName().equalsIgnoreCase("narrative.md")
+                || file.getName().equalsIgnoreCase("readme.md")
+                || file.getName().equalsIgnoreCase("placeholder.txt");
     }
 
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {
-        return (storyFileExtension.toLowerCase().equals(FEATURE_EXTENSION) || storyFileExtension.toLowerCase().equals(STORY_EXTENSION));
+        return (storyFileExtension.equalsIgnoreCase(FEATURE_EXTENSION) || storyFileExtension.equalsIgnoreCase(STORY_EXTENSION));
     }
 
     public Optional<String> getOverview() {

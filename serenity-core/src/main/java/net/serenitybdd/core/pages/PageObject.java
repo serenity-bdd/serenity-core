@@ -6,6 +6,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
@@ -27,8 +28,8 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.interactions.Actions;
@@ -53,7 +54,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -83,7 +83,7 @@ public abstract class PageObject {
 
     private PageUrls pageUrls;
 
-    private net.serenitybdd.core.time.SystemClock clock;
+    private final net.serenitybdd.core.time.SystemClock clock;
 
     private Duration waitForTimeout;
     private Duration waitForElementTimeout;
@@ -134,7 +134,7 @@ public abstract class PageObject {
     protected PageObject() {
         this.webdriverClock = Clock.systemDefaultZone();
         this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.time.SystemClock.class);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
     }
 
@@ -809,7 +809,7 @@ public abstract class PageObject {
     public static class OpenWithParams {
 
         private PageObject pageObject;
-        private String urlTemplateName;
+        private final String urlTemplateName;
 
         public OpenWithParams(PageObject pageObject, String urlTemplateName) {
             this.pageObject = pageObject;

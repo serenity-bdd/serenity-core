@@ -4,7 +4,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
@@ -83,7 +83,7 @@ public class SpecflowScenarioTitleLine {
     }
 
     public SpecflowScenarioTitleLine(String titleLine) {
-        this(titleLine, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(titleLine, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     private String pathFrom(List<String> titleElements) {

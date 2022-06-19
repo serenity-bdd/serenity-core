@@ -2,7 +2,7 @@ package net.thucydides.core.statistics.service;
 
 import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -22,7 +22,7 @@ public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
     private final EnvironmentVariables environmentVariables;
 
     public FeatureStoryTagProvider() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(SystemEnvironmentVariables.currentEnvironmentVariables() );
     }
 
     public FeatureStoryTagProvider(EnvironmentVariables environmentVariables) {

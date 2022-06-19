@@ -184,6 +184,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return new HashMap<>();
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     public void setValue(String name, String value) {
         values.put(name, value);
     }

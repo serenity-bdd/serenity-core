@@ -1,5 +1,6 @@
 package smoketests;
 
+import net.serenitybdd.core.annotations.environment.EnvironmentProperty;
 import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.core.steps.ScenarioActor;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -7,6 +8,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -164,4 +166,5 @@ public class WhenUsingStepsAsNamedPersonas {
 
          return outcome.get().getTestSteps().get(0).getDescription();
     }
+
 }

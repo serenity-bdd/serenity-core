@@ -6,7 +6,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 import static net.thucydides.core.reflection.ClassFinder.loadClasses;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -40,11 +39,11 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     private final Configuration configuration;
     private final RequirementPersister persister;
-    private String rootPackage;
+    private final String rootPackage;
     SortedMap<String, Requirement> requirementsByPath = null;
 
     public PackageAnnotationBasedTagProvider() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public PackageAnnotationBasedTagProvider(EnvironmentVariables vars) {

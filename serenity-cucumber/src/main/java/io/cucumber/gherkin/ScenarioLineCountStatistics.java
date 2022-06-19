@@ -1,24 +1,19 @@
-package net.serenitybdd.cucumber.suiteslicing;
+package io.cucumber.gherkin;
 
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
-import io.cucumber.core.gherkin.messages.internal.gherkin.GherkinDocumentBuilder;
-import io.cucumber.core.gherkin.messages.internal.gherkin.Parser;
-import io.cucumber.core.gherkin.messages.internal.gherkin.TokenMatcher;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.FeatureChild;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Scenario;
+import net.serenitybdd.cucumber.suiteslicing.TestScenarioResult;
+import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.thucydides.core.util.Inflector;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,17 +28,15 @@ public class ScenarioLineCountStatistics implements TestStatistics {
 
     private ScenarioLineCountStatistics(List<URI> featurePaths) {
         Options featureOptions = () -> featurePaths;
-        //Parser<GherkinDocument> gherkinParser = new Parser<>(new AstBuilder());
 
-        TokenMatcher matcher = new TokenMatcher();
         FeaturePathFeatureSupplier supplier =
             new FeaturePathFeatureSupplier(classLoader, featureOptions, parser);
         List<Feature> features = new ArrayList<>();
         List<io.cucumber.core.gherkin.Feature> gherkinFeatures = supplier.get();
         for(io.cucumber.core.gherkin.Feature gherkinFeature  : gherkinFeatures) {
-            Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IdGenerator.UUID()));
-            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(), matcher);
-            features.add(gherkinDocument.getFeature());
+            Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
+            GherkinDocument gherkinDocument = (GherkinDocument)gherkinParser.parse(gherkinFeature.getSource(),gherkinFeature.getUri().toString());
+            features.add(gherkinDocument.getFeature().get());
         }
         this.results = features.stream()
             .map(featureToScenarios())
@@ -64,10 +57,11 @@ public class ScenarioLineCountStatistics implements TestStatistics {
             try {
                 return (cucumberFeature == null) ? Collections.emptyList() : cucumberFeature.getChildren()
                     .stream()
-                        .filter(child -> child.getScenario() != null).map(FeatureChild::getScenario)
-                    //.filter(child -> asList(ScenarioOutline.class, Scenario.class).contains(child.getClass()))
-                    .map(scenarioToResult(cucumberFeature))
-                    .collect(toList());
+                        .filter(child -> child.getScenario() != null && child.getScenario().isPresent())
+                        .map(FeatureChild::getScenario)
+                        .map(Optional::get)
+                        .map(scenarioToResult(cucumberFeature))
+                        .collect(toList());
             } catch (Exception e) {
                 throw new IllegalStateException(String.format("Could not extract scenarios from %s", cucumberFeature.getName()), e);
             }
@@ -102,8 +96,8 @@ public class ScenarioLineCountStatistics implements TestStatistics {
 
     private int backgroundStepCountFor(Feature feature) {
         FeatureChild scenarioDefinition = feature.getChildren().get(0);
-        if (scenarioDefinition.getBackground() != null) {
-            return scenarioDefinition.getBackground().getSteps().size();
+        if (scenarioDefinition.getBackground() != null && scenarioDefinition.getBackground().isPresent()) {
+            return scenarioDefinition.getBackground().get().getSteps().size();
         } else {
             return 0;
         }

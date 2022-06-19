@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber
 
-import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
+//import io.cucumber.core.gherkin.messages.internal.gherkin.Gherkin
 import io.cucumber.messages.IdGenerator
 import io.cucumber.messages.types.Envelope
 import io.cucumber.messages.types.Feature
@@ -15,20 +15,14 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def filteringTodoFeature = features[0]
 
     private List<Feature> loadCucumberFeatures(List<String> listOfFiles) {
-        IdGenerator idGenerator = new IdGenerator.Incrementing();
-        List<Feature> loadedFeatures = new ArrayList<>();
-        boolean includeSource = false;
-        boolean includeAst = true;
-        boolean includePickles = false;
-        List<Envelope> envelopes = Gherkin.fromPaths(listOfFiles, includeSource, includeAst, includePickles, idGenerator).collect(Collectors.toList());
-        for(Envelope envelope : envelopes )
-        {
-            if(envelope.gherkinDocument && envelope.gherkinDocument.feature)
-            {
-                loadedFeatures.add(envelope.getGherkinDocument().getFeature());
-            }
+        CucumberParser parser = new CucumberParser()
+        ArrayList<Feature> features = new ArrayList<>();
+        for(String currentFile: listOfFiles) {
+            Optional<AnnotatedFeature> feature = parser.loadFeature(new File(currentFile))
+            features.add(feature.get().feature);
         }
-        return loadedFeatures;
+        return features;
+
     }
     def "Should be able to identify scenarios in a feature file by name"() {
         when:

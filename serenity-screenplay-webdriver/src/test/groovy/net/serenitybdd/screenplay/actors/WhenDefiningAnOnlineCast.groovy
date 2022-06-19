@@ -58,4 +58,21 @@ class WhenDefiningAnOnlineCast extends Specification {
         !joe.abilityTo(BrowseTheWeb.class)
     }
 
+    static class Fetch implements Ability {
+        final String item
+        private int counter = 1;
+
+        Fetch(String item) {
+            this.item = item
+        }
+
+        static some(String item) {
+            return new Fetch(item)
+        }
+
+        String deliverItem() {
+            return item + " #" + counter++;
+        }
+    }
+
 }

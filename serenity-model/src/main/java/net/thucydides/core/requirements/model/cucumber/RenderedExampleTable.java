@@ -5,6 +5,7 @@ import io.cucumber.messages.types.Examples;
 import io.cucumber.messages.types.TableCell;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,8 @@ public class RenderedExampleTable {
     public static String renderedTable(Examples exampleTable, ExampleRowResultIcon exampleRowIcon) {
 
         final Map<Integer, Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
-
-        String headings = cellRow(exampleTable.getTableHeader().getCells(),
+        List<TableCell> tableCells = new ArrayList<>();
+        String headings = cellRow(exampleTable.getTableHeader().get().getCells(),
                                   maxColumnWidths,
                                   exampleTable.getLocation().getLine(),
                                   exampleRowIcon.noIcon())
@@ -76,7 +77,7 @@ public class RenderedExampleTable {
 
         Map<Integer, Integer> maxColumnWidth = new HashMap<>();
 
-        int columnCount = exampleTable.getTableHeader().getCells().size();
+        int columnCount = exampleTable.getTableHeader().get().getCells().size();
         for(int column = 0; column < columnCount; column++) {
             maxColumnWidth.put(column, maxColumnWidthFor(exampleTable, column));
         }
@@ -84,7 +85,7 @@ public class RenderedExampleTable {
     }
 
     private static Integer maxColumnWidthFor(Examples exampleTable, int column) {
-        int headerWidth = exampleTable.getTableHeader().getCells().get(column).getValue().length();
+        int headerWidth = exampleTable.getTableHeader().get().getCells().get(column).getValue().length();
 
         int maxCellWidth = exampleTable.getTableBody()
                 .stream()

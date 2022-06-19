@@ -1,5 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
+import io.cucumber.gherkin.ScenarioLineCountStatistics;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;

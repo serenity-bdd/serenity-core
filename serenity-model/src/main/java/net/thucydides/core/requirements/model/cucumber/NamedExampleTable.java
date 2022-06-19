@@ -6,7 +6,7 @@ import io.cucumber.messages.types.Scenario;
 import java.util.Optional;
 
 public abstract class NamedExampleTable {
-    public static NamedExampleTable forScenarioDefinition(Feature feature, Scenario scenarioDefinition, String exampleName) {
+    public static NamedExampleTable forScenarioDefinition(Feature feature, Optional<Scenario> scenarioDefinition, String exampleName) {
         return new IdentifiedExampleTable(feature, scenarioDefinition, exampleName);
     }
 

@@ -152,8 +152,7 @@ public class Formatter {
         return concatLines(BASIC_XML.translate(stringFormOf(text)), "<br>")
                 .replaceAll("\\t", "");
     }
-
-    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<\\w*>");
+    private static final Pattern SIMPLE_HTML_TAG = Pattern.compile("<[^>]*>");
 
     public String renderTitle(String text) {
         StringBuffer renderedTitle = new StringBuffer();

@@ -1,16 +1,19 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.*;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.configuration.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.reports.*;
-import net.thucydides.core.util.*;
-import org.slf4j.*;
+import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.configuration.TimeoutConfiguration;
+import net.thucydides.core.configuration.TimeoutValue;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.reports.NumberOfThreads;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
 
@@ -22,7 +25,7 @@ class Reporter {
 
     private final Collection<ReportingTask> reportingTasks;
 
-    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    private final EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
     private Reporter(Collection<ReportingTask> reportingTasks) {
         this.reportingTasks = reportingTasks;

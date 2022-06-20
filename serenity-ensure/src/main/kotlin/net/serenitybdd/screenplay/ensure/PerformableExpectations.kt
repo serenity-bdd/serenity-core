@@ -3,16 +3,25 @@ package net.serenitybdd.screenplay.ensure
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
 import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.StepEventBus
 
-open class PerformableExpectation<A, E>(private val actual: A?,
-                                        private val expectation: Expectation<A?, E>,
-                                        private val expected: E?,
-                                        private val isNegated: Boolean = false,
-                                        private val expectedDescription: String = "a value") : Performable {
+open class PerformableExpectation<A, E>(
+    private val actual: A?,
+    private val expectation: Expectation<A?, E>,
+    private val expected: E?,
+    private val isNegated: Boolean = false,
+    private val expectedDescription: String = "a value",
+    private val reportedError: String = ""
+) : Performable {
 
     private val description = expectation.describe(expected, isNegated, expectedDescription);
+
+    /**
+     * Override the default description reported when the assertion fails.
+     */
+    fun withReportedError(reportedError: String): PerformableExpectation<A, E> {
+        return PerformableExpectation(actual, expectation, expected, isNegated, expectedDescription, reportedError)
+    }
 
     @Step("{0} should see #description")
     override fun <T : Actor?> performAs(actor: T) {
@@ -27,12 +36,18 @@ open class PerformableExpectation<A, E>(private val actual: A?,
                 isNegated,
                 expectedDescription
             );
+
+            val exceptionMessageWithDescription = if (reportedError.isEmpty()) exceptionMessage
+            else reportedError + ": " + exceptionMessage;
+
             if (BlackBox.isUsingSoftAssertions()) {
                 BlackBox.softlyAssert(exceptionMessage)
-                StepEventBus.getEventBus().baseStepListener.updateCurrentStepFailureCause(AssertionError(exceptionMessage))
+                StepEventBus.getEventBus().baseStepListener.updateCurrentStepFailureCause(
+                    AssertionError(exceptionMessageWithDescription)
+                )
             } else {
                 takeScreenshot()
-                throw AssertionError(exceptionMessage)
+                throw AssertionError(exceptionMessageWithDescription)
             }
         }
     }
@@ -41,21 +56,23 @@ open class PerformableExpectation<A, E>(private val actual: A?,
      * Internal use only - DO NOT USE
      */
     protected constructor() : this(null,
-            Expectation<A?, E>(
-                    "placeholder",
-                    "placeholder",
-                    fun(_: Actor?, _: A?, _: E): Boolean = true
-            ),
-            null) {
+        Expectation<A?, E>(
+            "placeholder",
+            "placeholder",
+            fun(_: Actor?, _: A?, _: E): Boolean = true
+        ),
+        null) {
     }
 }
 
-open class BiPerformableExpectation<A, E>(private val actual: A?,
-                                          private val expectation: DoubleValueExpectation<A?, E>,
-                                          private val startRange: E?,
-                                          private val endRange: E?,
-                                          private val isNegated: Boolean = false,
-                                          private val expectedDescription: String) : Performable {
+open class BiPerformableExpectation<A, E>(
+    private val actual: A?,
+    private val expectation: DoubleValueExpectation<A?, E>,
+    private val startRange: E?,
+    private val endRange: E?,
+    private val isNegated: Boolean = false,
+    private val expectedDescription: String
+) : Performable {
 
     private val description = expectation.describeRange(startRange, endRange, isNegated, expectedDescription);
 
@@ -66,7 +83,15 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
 
         if (isAFailure(result, isNegated)) {
             takeScreenshot()
-            throw AssertionError(expectation.compareActualWithExpected(actual, startRange, endRange, isNegated, expectedDescription))
+            throw AssertionError(
+                expectation.compareActualWithExpected(
+                    actual,
+                    startRange,
+                    endRange,
+                    isNegated,
+                    expectedDescription
+                )
+            )
         }
     }
 
@@ -74,14 +99,14 @@ open class BiPerformableExpectation<A, E>(private val actual: A?,
      * Internal use only - DO NOT USE
      */
     protected constructor() : this(null,
-            DoubleValueExpectation<A?, E>(
-                    "placeholder",
-                    fun(_: Actor?, _: A?, _: E, _: E): Boolean = true
-            ),
-            null,
-            null,
-            false,
-            "") {
+        DoubleValueExpectation<A?, E>(
+            "placeholder",
+            fun(_: Actor?, _: A?, _: E, _: E): Boolean = true
+        ),
+        null,
+        null,
+        false,
+        "") {
     }
 }
 
@@ -91,11 +116,13 @@ fun takeScreenshot() {
     }
 }
 
-open class PerformablePredicate<A>(private val actual: A?,
-                                   private val expectation: PredicateExpectation<A?>,
-                                   private val isNegated: Boolean = false,
-                                   private val expectedDescription: String,
-                                   private val exception: Throwable? = null) : Performable {
+open class PerformablePredicate<A>(
+    private val actual: A?,
+    private val expectation: PredicateExpectation<A?>,
+    private val isNegated: Boolean = false,
+    private val expectedDescription: String,
+    private val exception: Throwable? = null
+) : Performable {
 
     private val description = expectation.describe(isNegated, expectedDescription);
 
@@ -122,12 +149,12 @@ open class PerformablePredicate<A>(private val actual: A?,
      * Internal use only - DO NOT USE
      */
     protected constructor() : this(null,
-            PredicateExpectation<A?>(
-                    "placeholder", "placeholder",
-                    fun(_: Actor?, _: A?): Boolean = true
-            ),
-            false,
-            "placeholder") {
+        PredicateExpectation<A?>(
+            "placeholder", "placeholder",
+            fun(_: Actor?, _: A?): Boolean = true
+        ),
+        false,
+        "placeholder") {
     }
 }
 

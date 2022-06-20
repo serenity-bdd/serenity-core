@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -17,7 +17,7 @@ public class AddCustomCapabilities {
 
     public AddCustomCapabilities(String prefix) {
         this.prefix = prefix;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public static AddCustomCapabilities startingWith(String prefix) {

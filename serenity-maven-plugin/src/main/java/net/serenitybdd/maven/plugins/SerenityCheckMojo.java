@@ -15,9 +15,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

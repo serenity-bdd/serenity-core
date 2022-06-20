@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.appium;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class AppiumDevicePool {
     }
 
     public synchronized static AppiumDevicePool instance() {
-        return instance(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return instance(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public boolean hasMultipleDevices() {

@@ -6,7 +6,7 @@ import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import net.serenitybdd.core.photography.PhotoLens;
 import net.serenitybdd.core.photography.ScreenShooter;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
@@ -30,7 +30,7 @@ public class ShutterbugScreenShooter implements ScreenShooter {
 
     public ShutterbugScreenShooter(PhotoLens lens) {
         this.driver = ((WebDriverPhotoLens) lens).getDriver();
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     @Override

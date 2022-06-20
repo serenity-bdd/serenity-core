@@ -7,8 +7,8 @@ import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriver
 import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -44,7 +44,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     public InternetExplorerDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     @Override

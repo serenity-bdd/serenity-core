@@ -22,6 +22,7 @@ import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -193,7 +194,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
     }
 
     private static Collection<String> environmentSpecifiedTags(List<?> existingTags) {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         String tagsExpression = ThucydidesSystemProperty.TAGS.from(environmentVariables, "");
         List<String> existingTagsValues = existingTags.stream().map(Object::toString).collect(toList());
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(tagsExpression).stream()
@@ -303,7 +304,7 @@ public class CucumberSerenityRunner extends ParentRunner<ParentRunner<?>> {
     @Override
     public List<ParentRunner<?>> getChildren() {
         try {
-            EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
             RuntimeOptions runtimeOptions = currentRuntimeOptions();
             List<Expression> tagFilters = runtimeOptions.getTagExpressions();
             List<URI> featurePaths = runtimeOptions.getFeaturePaths();

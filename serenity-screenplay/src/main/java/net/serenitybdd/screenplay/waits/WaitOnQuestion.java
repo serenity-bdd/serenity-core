@@ -2,8 +2,7 @@ package net.serenitybdd.screenplay.waits;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.hamcrest.Matcher;
 
 import java.time.Duration;
@@ -20,7 +19,7 @@ public class WaitOnQuestion extends WaitWithTimeout {
     public WaitOnQuestion(Question question , Matcher matcher) {
         this.question = question;
         this.matcher = matcher;
-        int durationInMillis = Injectors.getInjector().getInstance(EnvironmentVariables.class).getPropertyAsInteger(WEBDRIVER_WAIT_FOR_TIMEOUT, 3000);
+        int durationInMillis = SystemEnvironmentVariables.currentEnvironmentVariables().getPropertyAsInteger(WEBDRIVER_WAIT_FOR_TIMEOUT, 3000);
         this.timeout = Duration.ofMillis(durationInMillis);
     }
 

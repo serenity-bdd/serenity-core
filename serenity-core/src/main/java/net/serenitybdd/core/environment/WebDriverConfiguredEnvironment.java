@@ -2,7 +2,7 @@ package net.serenitybdd.core.environment;
 
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.DriverConfiguration;
 
@@ -19,7 +19,7 @@ public class WebDriverConfiguredEnvironment {
         if (testEnvironmentVariables.get() != null) {
             return testEnvironmentVariables.get();
         }
-        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public static DriverConfiguration getDriverConfiguration() {

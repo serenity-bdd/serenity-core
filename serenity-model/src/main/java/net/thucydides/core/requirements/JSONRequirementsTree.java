@@ -3,7 +3,7 @@ package net.thucydides.core.requirements;
 import com.google.gson.Gson;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestResultList;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -12,7 +12,6 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.tree.Node;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
 import java.util.Arrays;
@@ -28,14 +27,14 @@ public class JSONRequirementsTree {
 
     private JSONRequirementsTree(List<Node> nodes,
                                  boolean displayAsParent) {
-        this.hideEmptyRequirements = EnvironmentSpecificConfiguration.from(Injectors.getInjector().getInstance(EnvironmentVariables.class))
+        this.hideEmptyRequirements = EnvironmentSpecificConfiguration.from(SystemEnvironmentVariables.currentEnvironmentVariables())
                 .getBooleanProperty(ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
         this.nodes = nodes;
         this.displayAsParent = displayAsParent;
     }
 
     public JSONRequirementsTree(List<Requirement> requirements, RequirementsOutcomes requirementsOutcomes) {
-        hideEmptyRequirements = EnvironmentSpecificConfiguration.from(Injectors.getInjector().getInstance(EnvironmentVariables.class))
+        hideEmptyRequirements = EnvironmentSpecificConfiguration.from(SystemEnvironmentVariables.currentEnvironmentVariables())
                 .getBooleanProperty(ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
         nodes = requirements.stream()
                 .filter(requirement -> shouldShow(requirement, requirementsOutcomes))

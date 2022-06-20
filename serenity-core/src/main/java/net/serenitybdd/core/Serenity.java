@@ -11,6 +11,7 @@ import net.serenitybdd.core.reports.ReportDataSaver;
 import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.*;
@@ -34,9 +35,9 @@ import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach
  */
 public class Serenity {
 
-    private static final ThreadLocal<WebDriverFactory> factoryThreadLocal = new ThreadLocal<WebDriverFactory>();
-    private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<StepListener>();
-    private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = new ThreadLocal<TestSessionVariables>();
+    private static final ThreadLocal<WebDriverFactory> factoryThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = ThreadLocal.withInitial(TestSessionVariables::new);
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
 
     /**
@@ -87,7 +88,7 @@ public class Serenity {
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
 
-        return Arrays.asList(new PageObjectDependencyInjector(getPages()),
+        return Arrays.asList(new PageObjectDependencyInjector(),
                 new EnvironmentDependencyInjector());
     }
 
@@ -166,12 +167,12 @@ public class Serenity {
      * Return the current environment variables configured for this test run.
      */
     public static EnvironmentVariables environmentVariables() {
-        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public static boolean currentDriverIsDisabled() {
         WebDriver currentDriver = getWebdriverManager().getCurrentDriver();
-        return (currentDriver != null) && (currentDriver instanceof WebDriverFacade) && (((WebDriverFacade) currentDriver).isDisabled());
+        return (currentDriver instanceof WebDriverFacade) && (((WebDriverFacade) currentDriver).isDisabled());
     }
 
     public static void done(boolean closeAllDrivers) {
@@ -240,10 +241,6 @@ public class Serenity {
     }
 
     public static SessionMap<Object, Object> getCurrentSession() {
-
-        if (testSessionThreadLocal.get() == null) {
-            testSessionThreadLocal.set(new TestSessionVariables());
-        }
         return testSessionThreadLocal.get();
     }
 
@@ -344,9 +341,6 @@ public class Serenity {
     /**
      * Perform an arbitrary task and record it as a step in the reports.
      * Any exceptions that occur will be reported and thrown
-     *
-     * @param message
-     * @param reportableAction
      */
     public static void reportThat(String message, Reportable reportableAction) {
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(message));

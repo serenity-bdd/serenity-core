@@ -13,6 +13,7 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.logging.ConsoleLoggingListener;
@@ -34,7 +35,6 @@ import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 
 public class ThucydidesModule extends AbstractModule {
@@ -64,7 +64,6 @@ public class ThucydidesModule extends AbstractModule {
     }
 
     @Provides
-    @Singleton
     public EnvironmentVariables provideEnvironmentVariables() {
         return SystemEnvironmentVariables.createEnvironmentVariables();
     }

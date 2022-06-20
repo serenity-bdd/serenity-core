@@ -1,6 +1,6 @@
 package net.serenitybdd.core.i8n;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Locale;
@@ -30,7 +30,7 @@ public class LocalisedLabels {
     }
 
     public static LocalisedLabels forCurrentLocale() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         return new LocalisedLabels(environmentVariables, CURRENT_LOCALE.get());
     }
 

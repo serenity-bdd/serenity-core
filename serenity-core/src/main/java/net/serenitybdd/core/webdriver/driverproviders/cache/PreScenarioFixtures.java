@@ -4,7 +4,7 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.WebDriverInitialisationException;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -39,7 +39,7 @@ public class PreScenarioFixtures {
                 .fromPackage("net.serenitybdd")
                 .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension).collect(Collectors.toList());
 
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         capabilityEnhancers.addAll(customEnhancers(environmentVariables));
 
         capabilityEnhancers.forEach(

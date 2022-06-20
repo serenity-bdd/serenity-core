@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.PagesAnnotatedField;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.StepsClassResolver;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -24,7 +24,7 @@ public final class StepAnnotations {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepAnnotations.class);
 
     private StepAnnotations() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     private StepAnnotations(EnvironmentVariables environmentVariables) {

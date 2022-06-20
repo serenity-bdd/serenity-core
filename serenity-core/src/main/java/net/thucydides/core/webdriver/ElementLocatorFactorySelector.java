@@ -2,7 +2,6 @@ package net.thucydides.core.webdriver;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.SmartElementLocatorFactory;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import org.openqa.selenium.SearchContext;

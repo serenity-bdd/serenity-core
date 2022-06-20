@@ -1,8 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.serenitybdd.core.parallel.Agent;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -16,7 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 
 /**
@@ -46,14 +44,14 @@ public class InParallel {
      * </pre>
      */
     public static InParallel theActors(Actor... actors) {
-        return new InParallel(actors, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return new InParallel(actors, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     /**
      * Useful if you have a collection or cast of actors.
      */
     public static InParallel theActors(Collection<Actor> actors) {
-        return new InParallel(actors.toArray(new Actor[]{}), Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return new InParallel(actors.toArray(new Actor[]{}), SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public void perform(List<Runnable> tasks) {

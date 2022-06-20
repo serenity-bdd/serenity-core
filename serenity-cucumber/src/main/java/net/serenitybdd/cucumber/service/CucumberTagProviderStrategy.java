@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.service;
 
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
 import net.thucydides.core.statistics.service.ContextTagProvider;
 import net.thucydides.core.statistics.service.InjectedTagProvider;
@@ -21,7 +21,7 @@ public class CucumberTagProviderStrategy implements TagProviderStrategy {
     }
 
     public CucumberTagProviderStrategy() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     @Override

@@ -1,11 +1,12 @@
 package net.serenitybdd.core.photography;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+
 import java.io.IOException;
 
 /**
@@ -19,7 +20,7 @@ public class WebDriverPhotoLens implements PhotoLens {
 
     public WebDriverPhotoLens(WebDriver driver) {
         this.driver = driver;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public WebDriver getDriver() {

@@ -5,7 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 public class OpenPageWithName implements Interaction {
@@ -17,7 +17,7 @@ public class OpenPageWithName implements Interaction {
 
     public OpenPageWithName(String pageName) {
         this.pageName = pageName;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     @Step("{0} opens the #pageName page")

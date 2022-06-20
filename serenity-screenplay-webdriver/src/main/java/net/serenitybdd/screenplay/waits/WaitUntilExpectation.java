@@ -4,8 +4,7 @@ import net.serenitybdd.markers.IsSilent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.time.Duration;
@@ -19,7 +18,7 @@ public class WaitUntilExpectation<T> implements Interaction, IsSilent {
 
     public WaitUntilExpectation(ExpectedCondition<T> expectedCondition) {
         this.expectedCondition = expectedCondition;
-        int durationInMillis = Injectors.getInjector().getInstance(EnvironmentVariables.class).getPropertyAsInteger(WEBDRIVER_WAIT_FOR_TIMEOUT, 3000);
+        int durationInMillis = SystemEnvironmentVariables.currentEnvironmentVariables().getPropertyAsInteger(WEBDRIVER_WAIT_FOR_TIMEOUT, 3000);
         this.duration = Duration.ofMillis(durationInMillis);
     }
 

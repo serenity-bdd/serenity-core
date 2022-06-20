@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.configuration.FilePathParser;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class SanitisedBrowserPreferences {
     }
 
     private static Object of(Object value) {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         FilePathParser parser = new FilePathParser(environmentVariables);
         if (value instanceof String) {
             if (isMalformedPath(value.toString())) {

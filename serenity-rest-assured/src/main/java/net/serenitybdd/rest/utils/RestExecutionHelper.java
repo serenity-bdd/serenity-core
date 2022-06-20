@@ -1,7 +1,7 @@
 package net.serenitybdd.rest.utils;
 
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Collections;
@@ -23,7 +23,7 @@ public class RestExecutionHelper {
 
     public static boolean restCallsAreDisabled() {
 
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         if (!SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES.booleanFrom(environmentVariables, true)) {
             return false;

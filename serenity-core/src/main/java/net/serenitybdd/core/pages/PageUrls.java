@@ -5,7 +5,7 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.NamedUrl;
 import net.thucydides.core.annotations.NamedUrls;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
@@ -117,7 +117,7 @@ public class PageUrls {
 
     private static String namedUrlFrom(String annotatedBaseUrl) {
         String pageName = annotatedBaseUrl.substring(NAMED_URL_PREFIX.length());
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         return EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getOptionalProperty(pageName)
                 .orElse(environmentVariables.getProperty(pageName));

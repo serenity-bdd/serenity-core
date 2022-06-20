@@ -3,7 +3,7 @@ package net.thucydides.core.model;
 import net.serenitybdd.core.strings.FirstLine;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RootDirectory;
@@ -55,7 +55,7 @@ public class Story {
     }
 
     private String stripRootPathFrom(String testOutcomePath) {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         if (testOutcomePath == null) {
             return "";
@@ -296,7 +296,7 @@ public class Story {
     }
 
     public TestTag asQualifiedTag() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
         String lastElementOfPath = LastElement.of(getPath());
         String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;

@@ -2,7 +2,7 @@ package net.serenitybdd.core.photography;
 
 import net.serenitybdd.core.photography.bluring.Blurer;
 import net.serenitybdd.core.photography.resizing.Resizer;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class Darkroom {
     }
 
     public Darkroom() {
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     private boolean theDarkroomIsClosed() {

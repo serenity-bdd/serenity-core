@@ -3,7 +3,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
@@ -24,12 +24,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static net.thucydides.core.model.ReportType.HTML;
@@ -179,7 +180,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("reportNameInContext", getReportNameProvider());
         context.put("inflection", Inflector.getInstance());
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         context.put("tagInflector", new TagInflector(environmentVariables));
         context.put("styling", TagStylist.from(environmentVariables));
         context.put("requirementTypes", requirementsService.getRequirementTypes());

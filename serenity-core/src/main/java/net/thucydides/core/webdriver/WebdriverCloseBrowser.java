@@ -13,7 +13,8 @@ import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.FEATURE;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.NEVER;
 
 public class WebdriverCloseBrowser implements CloseBrowser {
 

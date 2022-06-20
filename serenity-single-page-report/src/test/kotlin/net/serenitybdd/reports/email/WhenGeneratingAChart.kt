@@ -28,6 +28,6 @@ class WhenGeneratingAChart {
         assertThat(savedGraph).exists()
     }
 
-    private fun savedGraph() = createTempFile("graph", ".png")
+    private fun savedGraph() = java.io.File.createTempFile("graph", ".png")
 
 }

@@ -2,7 +2,7 @@ package net.thucydides.core.requirements.reports;
 
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -37,7 +37,7 @@ public class RequirementOutcome {
         this.requirementsWithoutTests = requirementsWithoutTests;
         this.estimatedUnimplementedTests = estimatedUnimplementedTests;
         this.issueTracking = issueTracking;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes, IssueTracking issueTracking) {

@@ -1,6 +1,6 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
@@ -29,7 +29,7 @@ public class SerenityClearHistoryMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Clearing Serenity test result summaries");
 
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         String configuredHistoryDirectoryPath = HistoryDirectory.configuredIn(environmentVariables, historyDirectoryPath);
 

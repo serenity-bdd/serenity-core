@@ -2,7 +2,7 @@ package net.serenitybdd.core;
 
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 public class SystemTimeouts {
@@ -13,7 +13,7 @@ public class SystemTimeouts {
     }
 
     public static SystemTimeouts forTheCurrentTest() {
-        return new SystemTimeouts(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return new SystemTimeouts(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public long getImplicitTimeout() {

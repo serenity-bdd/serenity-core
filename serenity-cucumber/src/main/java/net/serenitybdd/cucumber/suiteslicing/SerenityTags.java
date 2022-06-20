@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -25,7 +25,7 @@ public class SerenityTags {
     private final EnvironmentVariables environmentVariables;
 
     private SerenityTags() {
-        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public static SerenityTags create() {

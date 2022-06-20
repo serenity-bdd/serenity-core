@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.SerenitySystemProperties;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
@@ -34,7 +34,7 @@ public class ReportNameProvider {
         this.context = context;
         this.reportNamer = reportNamer;
         this.requirementsService = requirementsService;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     public ReportNameProvider(Optional<String> context, ReportType reportType, RequirementsService requirementsService) {

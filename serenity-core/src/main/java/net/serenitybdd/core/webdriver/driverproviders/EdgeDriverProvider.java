@@ -5,8 +5,8 @@ import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -33,7 +33,7 @@ public class EdgeDriverProvider implements DriverProvider {
     public EdgeDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     @Override

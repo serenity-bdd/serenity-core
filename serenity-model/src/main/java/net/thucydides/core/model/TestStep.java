@@ -13,12 +13,10 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.requirements.reports.CompoundDuration;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-//import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;

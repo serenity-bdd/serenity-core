@@ -1,11 +1,12 @@
 package net.serenitybdd.core.photography;
 
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,7 +34,7 @@ public class PhotoSession {
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
         this.darkroom = darkroom;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.screenShooterFactory = new ScreenShooterFactory(environmentVariables);
 
         darkroom.isOpenForBusiness();

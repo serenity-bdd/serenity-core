@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements.model;
 
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.requirements.RequirementsPath;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -32,7 +32,7 @@ public class NarrativeReader {
     }
 
     public static NarrativeReader forRootDirectory(String rootDirectory) {
-        return forRootDirectory(Injectors.getInjector().getInstance(EnvironmentVariables.class), rootDirectory);
+        return forRootDirectory(SystemEnvironmentVariables.currentEnvironmentVariables(), rootDirectory);
     }
 
 

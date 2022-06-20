@@ -4,6 +4,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsService;
@@ -26,7 +27,7 @@ public class TagFilter {
             = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser","Duration");
 
     public TagFilter(){
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public TagFilter(EnvironmentVariables environmentVariables) {

@@ -4,7 +4,7 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.service.DriverService;
@@ -70,7 +70,7 @@ public class AppiumServerPool {
     }
 
     public synchronized static AppiumServerPool instance() {
-        return instance(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return instance(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public URL urlFor(String deviceName) {

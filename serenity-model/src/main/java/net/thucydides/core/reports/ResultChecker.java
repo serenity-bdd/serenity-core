@@ -2,8 +2,7 @@ package net.thucydides.core.reports;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.strings.Joiner;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.TestType;
@@ -19,7 +18,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -38,7 +36,7 @@ public class ResultChecker {
     }
 
     public ResultChecker(File outputDirectory, String tags) {
-        this(outputDirectory, tags, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(outputDirectory, tags, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public ResultChecker(File outputDirectory, String tags, EnvironmentVariables environmentVariables) {

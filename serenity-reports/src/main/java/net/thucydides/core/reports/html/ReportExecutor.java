@@ -2,7 +2,7 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ class ReportExecutor implements Callable<Void> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(ReportExecutor.class);
 
-    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    private final EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
     public ReportExecutor(ReportingTask reportingTask) {
         this.reportingTask = reportingTask;

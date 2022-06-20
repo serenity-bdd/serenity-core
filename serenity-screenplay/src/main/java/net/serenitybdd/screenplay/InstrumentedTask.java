@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.Instrumented;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.lang.reflect.Constructor;
@@ -17,7 +17,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
 public class InstrumentedTask {
 
     public static <T extends Performable> T of(T task) {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
             return task;

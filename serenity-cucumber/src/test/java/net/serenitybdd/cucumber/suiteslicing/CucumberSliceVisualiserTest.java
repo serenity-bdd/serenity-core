@@ -2,7 +2,7 @@ package net.serenitybdd.cucumber.suiteslicing;
 
 import io.cucumber.gherkin.ScenarioLineCountStatistics;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class CucumberSliceVisualiserTest {
     public void setUp() throws Exception{
         HISTORIC_RUN_STATISTICS = MultiRunTestStatistics.fromRelativePath("/statistics");
         LINE_COUNT_STATISTICS = ScenarioLineCountStatistics.fromFeaturePath(new URI(FEATURE_ROOT));
-        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         cucumberScenarioVisualiser = new CucumberScenarioVisualiser(environmentVariables);
     }
 

@@ -2,7 +2,7 @@ package net.serenitybdd.core.history;
 
 import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewMap;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -48,7 +48,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
     public FileSystemTestOutcomeSummaryRecorder(Path historyDirectory, Boolean deletePreviousHistory) {
         this.historyDirectory = historyDirectory;
         this.deletePreviousHistory = Optional.ofNullable(deletePreviousHistory).orElse(false);
-        previousOutcomeConverter = new GsonPreviousOutcomeConverter(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        previousOutcomeConverter = new GsonPreviousOutcomeConverter(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     @Override

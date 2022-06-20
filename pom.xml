@@ -75,7 +75,6 @@
         <freemarker.version>2.3.31</freemarker.version>
         <appium.version>8.0.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-        <!--        <phantomjs.version>1.4.4</phantomjs.version>-->
         <htmlunit.version>3.62.0</htmlunit.version>
         <webdrivermanager.version>5.1.1</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
@@ -93,8 +92,7 @@
         <jackson.version>2.13.2</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <!--        <kotlin.version>1.4.10</kotlin.version>-->
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>1.7.0</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
@@ -586,7 +584,7 @@
                             <exclude>**/*Sample*</exclude>
                         </excludes>
                         <parallel>all</parallel>
-                        <threadCount>4</threadCount>
+                        <threadCount>8</threadCount>
                         <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                     <executions>

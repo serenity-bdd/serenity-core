@@ -1,9 +1,7 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -23,7 +21,7 @@ public class NumberOfThreads {
     }
 
     protected NumberOfThreads() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class), new SystemReporterRuntime());
+        this(SystemEnvironmentVariables.currentEnvironmentVariables(), new SystemReporterRuntime());
     }
 
     protected NumberOfThreads(EnvironmentVariables environmentVariables) {

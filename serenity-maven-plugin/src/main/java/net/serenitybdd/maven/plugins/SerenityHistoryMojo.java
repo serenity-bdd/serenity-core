@@ -2,6 +2,7 @@ package net.serenitybdd.maven.plugins;
 
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder;
 import net.serenitybdd.core.history.TestOutcomeSummaryRecorder;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -52,7 +53,7 @@ public class SerenityHistoryMojo extends AbstractMojo {
 
         MavenProjectHelper.propagateBuildDir(session);
 
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         String configuredHistoryDirectoryPath = SERENITY_HISTORY_DIRECTORY.from(environmentVariables,
                                                                                 Optional.ofNullable(historyDirectoryPath).orElse(DEFAULT_HISTORY_DIRECTORY));

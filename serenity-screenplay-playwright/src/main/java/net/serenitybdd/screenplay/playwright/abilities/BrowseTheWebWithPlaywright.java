@@ -9,8 +9,8 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.playwright.Photographer;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.events.TestLifecycleEvents;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
@@ -353,15 +353,15 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      * Create a new Playwright ability using default configuration values.
      */
     public static BrowseTheWebWithPlaywright usingTheDefaultConfiguration() {
-        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return new BrowseTheWebWithPlaywright(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public static BrowseTheWebWithPlaywright withOptions(BrowserType.LaunchOptions options) {
-        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), options);
+        return new BrowseTheWebWithPlaywright(SystemEnvironmentVariables.currentEnvironmentVariables(), options);
     }
 
     public BrowseTheWebWithPlaywright withContextOptions(Browser.NewContextOptions contextOptions) {
-        return new BrowseTheWebWithPlaywright(Injectors.getInjector().getInstance(EnvironmentVariables.class), launchOptions,
+        return new BrowseTheWebWithPlaywright(SystemEnvironmentVariables.currentEnvironmentVariables(), launchOptions,
             contextOptions, browserType.orElse(null));
     }
 

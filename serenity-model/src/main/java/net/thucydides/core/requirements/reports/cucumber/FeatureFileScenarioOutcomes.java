@@ -3,7 +3,7 @@ package net.thucydides.core.requirements.reports.cucumber;
 
 import io.cucumber.messages.types.*;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestResultList;
@@ -43,7 +43,7 @@ public class FeatureFileScenarioOutcomes {
     }
 
     public FeatureFileScenarioOutcomes(Requirement requirement) {
-        this(requirement, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(requirement, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public static FeatureFileScenarioOutcomes from(Requirement requirement) {

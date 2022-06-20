@@ -5,8 +5,10 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
@@ -16,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith(SerenityRunner.class)
@@ -101,7 +105,7 @@ public class WhenUsingFluentAssertionsInJava {
 
         aster.attemptsTo(
                 Ensure.that(actualColor).matches("is an RGB color",
-                                          color -> color.equals("red") || color.equals("blue") || color.equals("green")),
+                        color -> color.equals("red") || color.equals("blue") || color.equals("green")),
                 Ensure.that(actualColor).not().matches("is red", color -> color.equals("red"))
         );
     }
@@ -215,7 +219,7 @@ public class WhenUsingFluentAssertionsInJava {
 
     private static final NamedExpectation<String> IS_A_PRIMARY_COLOR
             = new NamedExpectation<>("is a primary color",
-                                   color -> (color.equals("red")) || (color.equals("green")) || (color.equals("blue")));
+            color -> (color.equals("red")) || (color.equals("green")) || (color.equals("blue")));
 
     @Test
     public void weCanCheckThatAnyElementMatchesAConditionWithANamedPredicate() {
@@ -233,7 +237,7 @@ public class WhenUsingFluentAssertionsInJava {
         List<String> colors = ImmutableList.of("blue", "cyan", "pink");
 
         aster.attemptsTo(
-                Ensure.that(colors).anyMatch("is a primary color", it ->  isAPrimaryColor(it))
+                Ensure.that(colors).anyMatch("is a primary color", it -> isAPrimaryColor(it))
         );
     }
 
@@ -243,15 +247,28 @@ public class WhenUsingFluentAssertionsInJava {
         List<String> colors = ImmutableList.of("orange", "cyan", "pink");
 
         aster.attemptsTo(
-                Ensure.that(colors).noneMatch("is a primary color", it ->  isAPrimaryColor(it))
+                Ensure.that(colors).noneMatch("is a primary color", it -> isAPrimaryColor(it))
         );
     }
 
     private boolean isAPrimaryColor(String color) {
-        return  (color == "red") || (color == "green") || (color == "blue");
+        return (color == "red") || (color == "green") || (color == "blue");
     }
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
+    @Test
+    public void weCanAddMoreMeaningfulDescriptionsForOurAssertions() {
+
+        exceptionRule.expect(AssertionError.class);
+        exceptionRule.expectMessage(containsString("Must be 20 years old"));
+
+        int age = 20;
+        aster.attemptsTo(
+                Ensure.that(age).isEqualTo(21).withReportedError("Must be 20 years old")
+        );
+    }
 
     @Test
     public void weCanMakeAssertionsAboutQuestionsAboutTextValues() {
@@ -355,8 +372,8 @@ public class WhenUsingFluentAssertionsInJava {
     public void weCanMakeAssertionsAboutTimes() {
         Actor aster = Actor.named("Aster");
 
-        LocalTime tenInTheMorning = LocalTime.of(10,0);
-        LocalTime twoInTheAfternoon = LocalTime.of(14,0);
+        LocalTime tenInTheMorning = LocalTime.of(10, 0);
+        LocalTime twoInTheAfternoon = LocalTime.of(14, 0);
 
         aster.attemptsTo(
                 Ensure.that(tenInTheMorning).isBefore(twoInTheAfternoon),
@@ -369,8 +386,8 @@ public class WhenUsingFluentAssertionsInJava {
     public void weCanMakeAssertionsAboutDates() {
         Actor aster = Actor.named("Aster");
 
-        LocalDate firstOfJanuary = LocalDate.of(2000,1,1);
-        LocalDate secondOfJanuary = LocalDate.of(2000,1,2);
+        LocalDate firstOfJanuary = LocalDate.of(2000, 1, 1);
+        LocalDate secondOfJanuary = LocalDate.of(2000, 1, 2);
 
         aster.attemptsTo(
                 Ensure.that(firstOfJanuary).isBefore(secondOfJanuary)
@@ -382,8 +399,8 @@ public class WhenUsingFluentAssertionsInJava {
     public void weCanMakeAssertionsAboutQuestionsAboutDate() {
         Actor aster = Actor.named("Aster");
 
-        LocalDate firstOfJanuary = LocalDate.of(2000,1,1);
-        LocalDate secondOfJanuary = LocalDate.of(2000,1,2);
+        LocalDate firstOfJanuary = LocalDate.of(2000, 1, 1);
+        LocalDate secondOfJanuary = LocalDate.of(2000, 1, 2);
 
         aster.attemptsTo(
                 Ensure.thatTheAnswerTo("January 1st 2000", firstOfJanuary2000()).asADate().isBefore(secondOfJanuary),
@@ -431,13 +448,13 @@ public class WhenUsingFluentAssertionsInJava {
 
     Question<Collection<String>> colors() {
         return Question.about("colors").answeredBy(
-                actor -> Arrays.asList("red","green","blue")
+                actor -> Arrays.asList("red", "green", "blue")
         );
     }
 
     Question<LocalDate> firstOfJanuary2000() {
         return Question.about("first of January").answeredBy(
-                actor -> LocalDate.of(2000,1,1)
+                actor -> LocalDate.of(2000, 1, 1)
         );
     }
 

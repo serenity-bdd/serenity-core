@@ -12,7 +12,7 @@ import net.serenitybdd.screenplay.facts.Fact;
 import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -485,7 +485,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     }
 
     private boolean manualTaskInstrumentation() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         return (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false));
     }
 

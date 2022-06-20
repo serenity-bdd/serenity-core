@@ -1,7 +1,7 @@
 package net.thucydides.core.statistics.service;
 
 import net.serenitybdd.core.collect.NewSet;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.CoreTagProvider;
@@ -23,7 +23,7 @@ public class ContextTagProvider implements TagProvider, CoreTagProvider {
     EnvironmentVariables environmentVariables;
 
     public ContextTagProvider() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public ContextTagProvider(EnvironmentVariables environmentVariables) {

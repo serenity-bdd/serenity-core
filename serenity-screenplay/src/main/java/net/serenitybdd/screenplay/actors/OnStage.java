@@ -4,7 +4,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
@@ -133,7 +133,7 @@ public class OnStage {
     }
 
     private static List<String> pronouns() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(
                 ThucydidesSystemProperty.SCREENPLAY_PRONOUNS.from(environmentVariables, DEFAULT_PRONOUNS)

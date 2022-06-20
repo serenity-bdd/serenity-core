@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.formatting;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Consequence;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -18,7 +19,7 @@ public class FormattedTitle {
     }
 
     public static <T> String ofConsequence(Consequence<T> consequence, Actor actor) {
-        return new FormattedTitle(Injectors.getInjector().getInstance(EnvironmentVariables.class), actor).getFormattedTitleFor(consequence);
+        return new FormattedTitle(SystemEnvironmentVariables.currentEnvironmentVariables(), actor).getFormattedTitleFor(consequence);
     }
 
     public <T> String getFormattedTitleFor(Consequence<T> consequence) {

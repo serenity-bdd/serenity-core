@@ -2,7 +2,7 @@ package net.thucydides.core.statistics.service;
 
 import com.google.common.base.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.CoreTagProvider;
@@ -22,7 +22,7 @@ public class InjectedTagProvider implements TagProvider, CoreTagProvider {
     EnvironmentVariables environmentVariables;
 
     public InjectedTagProvider() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public InjectedTagProvider(EnvironmentVariables environmentVariables) {

@@ -4,7 +4,6 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * Implement this interface to add your own custom capabilities during driver creation.
@@ -17,5 +16,10 @@ public interface BeforeAWebdriverScenario {
                               TestOutcome testOutcome,
                               MutableCapabilities capabilities);
 
-    default boolean isActivated(EnvironmentVariables environmentVariables) { return true; }
+    /**
+     * Return true if this fixture should be applied given the current environment variables.
+     */
+    default boolean isActivated(EnvironmentVariables environmentVariables) {
+        return true;
+    }
 }

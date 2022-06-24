@@ -13,16 +13,8 @@ public class DevToolsWebDriverFacade extends WebDriverFacade implements HasDevTo
         super(driverClass, webDriverFactory);
     }
 
-    public DevToolsWebDriverFacade(Class<? extends WebDriver> driverClass, WebDriverFactory webDriverFactory, EnvironmentVariables environmentVariables) {
-        super(driverClass, webDriverFactory, environmentVariables);
-    }
-
-    public DevToolsWebDriverFacade(WebDriver driver, WebDriverFactory webDriverFactory, EnvironmentVariables environmentVariables) {
-        super(driver, webDriverFactory, environmentVariables);
-    }
-
-    public DevToolsWebDriverFacade(Class<? extends WebDriver> driverClass, WebDriverFactory webDriverFactory, WebDriver proxiedWebDriver, Duration implicitTimeout) {
-        super(driverClass, webDriverFactory, proxiedWebDriver, implicitTimeout);
+    public DevToolsWebDriverFacade(WebDriver driver, WebDriverFactory webDriverFactory) {
+        super(driver, webDriverFactory);
     }
 
     @Override

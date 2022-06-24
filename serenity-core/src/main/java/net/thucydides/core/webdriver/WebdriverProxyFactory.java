@@ -26,7 +26,7 @@ public class WebdriverProxyFactory implements Serializable {
     private static ThreadLocal<WebdriverProxyFactory> factory = new ThreadLocal<WebdriverProxyFactory>();
 
     private static List<ThucydidesWebDriverEventListener> eventListeners
-                                              = synchronizedList(new ArrayList<ThucydidesWebDriverEventListener>());
+                                              = synchronizedList(new ArrayList<>());
 
     private WebDriverFactory webDriverFactory;
     private WebDriverFacade mockDriver;
@@ -66,17 +66,19 @@ public class WebdriverProxyFactory implements Serializable {
         if (mockDriver != null) {
             return mockDriver;
         } else if (driverClass != null && HasDevTools.class.isAssignableFrom(driverClass)) {
-            return new DevToolsWebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
+//            return new DevToolsWebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
+            return new DevToolsWebDriverFacade(driverClass, webDriverFactory).withOptions(options);
         } else {
-            return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
+//            return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
+            return new WebDriverFacade(driverClass, webDriverFactory).withOptions(options);
         }
     }
 
     public WebDriverFacade proxyFor(WebDriver driver) {
         if (driver instanceof HasDevTools) {
-            return new DevToolsWebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+            return new DevToolsWebDriverFacade(driver, webDriverFactory);
         } else {
-            return new WebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+            return new WebDriverFacade(driver, webDriverFactory);
         }
     }
 

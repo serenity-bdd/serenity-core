@@ -38,6 +38,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileLocalPreferences.class);
 
     private static final Config systemProperties = ConfigFactory.systemProperties();
+    /**
+     * Configuration file path provided programmatically - used for testing
+     */
+    private Path configurationFilePath;
 
     @Inject
     public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables) {
@@ -50,6 +54,12 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         } else {
             this.mavenModuleDirectory = this.workingDirectory;
         }
+    }
+
+    public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables, Path configurationFilePath) {
+        this(environmentVariables);
+        this.configurationFilePath = configurationFilePath;
+
     }
 
     public File getHomeDirectory() {
@@ -208,6 +218,9 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private Optional<File> defaultPropertiesConfFile() {
 
+        if (configurationFilePath != null) {
+            return Optional.ofNullable(configurationFilePath.toFile());
+        }
         List<String> possibleConfigFileNames = new ArrayList<>();
 
         optionalEnvironmentVariable(System.getProperty(PROPERTIES)).ifPresent(possibleConfigFileNames::add);

@@ -56,7 +56,8 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     WebDriver newDriver() {
-        def desiredCapabilities = DesiredCapabilities.chrome();
+
+        def desiredCapabilities = new DesiredCapabilities();
         def chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
@@ -116,7 +117,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     private StaticSitePage openStaticPage() {
-        def driver = new WebDriverFacade(driver, new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
+        def driver = new WebDriverFacade(driver, new WebDriverFactory()); // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()
         return page

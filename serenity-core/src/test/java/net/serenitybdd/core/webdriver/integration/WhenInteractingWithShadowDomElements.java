@@ -1,7 +1,9 @@
 package net.serenitybdd.core.webdriver.integration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import net.serenitybdd.core.pages.*;
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -10,16 +12,16 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WhenInteractingWithShadowDomElements {
@@ -64,10 +66,10 @@ public class WhenInteractingWithShadowDomElements {
 
     @AfterClass
     public static void closeDriver() {
-    	if (driver != null) {
-	        driver.close();
-	        driver.quit();
-    	}
+        if (driver != null) {
+            driver.close();
+            driver.quit();
+        }
     }
 
     @Before
@@ -89,19 +91,19 @@ public class WhenInteractingWithShadowDomElements {
 
     @Test
     public void locate_a_shadow_dom_element() {
-        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInShadow","#shadow-host"));
+        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInShadow", "#shadow-host"));
         assertTrue(shadowInput.isVisible());
     }
 
     @Test
     public void locate_a_nested_shadow_dom_element() {
-        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInInnerShadow","#shadow-host", "#inner-shadow-host"));
+        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInInnerShadow", "#shadow-host", "#inner-shadow-host"));
         assertTrue(shadowInput.isVisible());
     }
 
     @Test
     public void locate_nested_shadow_dom_elements() {
-        ListOfWebElementFacades shadowInputs = indexPage.findAll(ByShadow.cssSelector(".test-class","#shadow-host"));
+        ListOfWebElementFacades shadowInputs = indexPage.findAll(ByShadow.cssSelector(".test-class", "#shadow-host"));
         assertThat(shadowInputs.size(), equalTo(2));
     }
 
@@ -113,14 +115,14 @@ public class WhenInteractingWithShadowDomElements {
 
     @Test
     public void interact_with_a_shadow_dom_element() {
-        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInShadow","#shadow-host"));
+        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInShadow", "#shadow-host"));
         shadowInput.sendKeys("Some value");
         assertThat(shadowInput.getValue(), is("Some value"));
     }
 
     @Test
     public void interact_with_a_nested_shadow_dom_element() {
-        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInInnerShadow","#shadow-host", "#inner-shadow-host"));
+        WebElementFacade shadowInput = indexPage.find(ByShadow.cssSelector("#inputInInnerShadow", "#shadow-host", "#inner-shadow-host"));
         shadowInput.sendKeys("Some value");
         assertThat(shadowInput.getValue(), is("Some value"));
     }
@@ -143,7 +145,7 @@ public class WhenInteractingWithShadowDomElements {
     public void interacting_with_a_web_component() {
         driver.get("https://mdn.github.io/web-components-examples/word-count-web-component/");
 
-        WebElement wordCountComponent = driver.findElement(ByShadow.cssSelector("span","p[is='word-count']"));
+        WebElement wordCountComponent = driver.findElement(ByShadow.cssSelector("span", "p[is='word-count']"));
         assertThat(wordCountComponent.getText(), is("Words: 212"));
     }
 }

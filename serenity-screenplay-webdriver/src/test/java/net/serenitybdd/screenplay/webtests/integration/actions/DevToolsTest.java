@@ -6,8 +6,8 @@ import net.serenitybdd.screenplay.actions.WithDevTools;
 import net.serenitybdd.screenplay.webtests.integration.ScreenplayInteractionTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.devtools.v100.performance.Performance;
-import org.openqa.selenium.devtools.v100.performance.model.Metric;
+import org.openqa.selenium.devtools.v103.performance.Performance;
+import org.openqa.selenium.devtools.v103.performance.model.Metric;
 
 import java.util.ArrayList;
 import java.util.List;

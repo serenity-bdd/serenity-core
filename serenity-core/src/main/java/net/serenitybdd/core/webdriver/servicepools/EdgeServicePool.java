@@ -4,6 +4,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeDriverService;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import java.io.File;
 
@@ -16,7 +17,9 @@ public class EdgeServicePool extends DriverServicePool<EdgeDriverService> {
 
     @Override
     protected WebDriver newDriverInstance(Capabilities capabilities) {
-        return new EdgeDriver(capabilities);
+        EdgeOptions options = new EdgeOptions();
+        options.merge(capabilities);
+        return new EdgeDriver(options);
     }
 
     @Override

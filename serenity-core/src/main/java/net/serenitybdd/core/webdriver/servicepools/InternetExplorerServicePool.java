@@ -2,8 +2,11 @@ package net.serenitybdd.core.webdriver.servicepools;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 
 import java.io.File;
 
@@ -16,7 +19,9 @@ public class InternetExplorerServicePool extends DriverServicePool<InternetExplo
 
     @Override
     protected WebDriver newDriverInstance(Capabilities capabilities) {
-        return new InternetExplorerDriver(capabilities);
+        InternetExplorerOptions options = new InternetExplorerOptions();
+        options.merge(capabilities);
+        return new InternetExplorerDriver(options);
     }
 
     @Override

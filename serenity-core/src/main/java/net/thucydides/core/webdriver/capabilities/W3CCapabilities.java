@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityValue;
 import org.openqa.selenium.*;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class W3CCapabilities {
 
@@ -54,13 +56,18 @@ public class W3CCapabilities {
         return capabilities;
     }
 
-    private static final List<String> EXCLUDED_PROPERTIES = Arrays.asList("driver","autodownload");
+
+    private final static List<String> EXCLUDED_PROPERTIES = Arrays.stream(ThucydidesSystemProperty.values())
+            .filter(prop -> prop.getPropertyName().startsWith("webdriver."))
+            .map(ThucydidesSystemProperty::getPropertyName)
+            .collect(Collectors.toList());
+
     private Properties deleteNonW3CPropertiesIn(Properties properties, String prefix) {
         Properties filteredProperties = new Properties();
+
         properties.forEach(
                 (key, value) -> {
-                    String keyWithoutPrefix = key.toString().replace(prefix + ".", "");
-                    if (!EXCLUDED_PROPERTIES.contains(keyWithoutPrefix)) {
+                    if (!EXCLUDED_PROPERTIES.contains(key)) {
                         filteredProperties.put(key, value);
                     }
                 }

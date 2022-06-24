@@ -16,7 +16,7 @@ public class LambdaTestVideoLink {
     }
 
     public String videoUrlForSession(String sessionId) {
-        String authToken = LambdaTestAuthToken.usingCredentialsFrom(environmentVariables);
+        String authToken = LambdaTestCredentials.from(environmentVariables).getAuthToken();
         return String.format(PUBLIC_URL, sessionId, authToken);
     }
 

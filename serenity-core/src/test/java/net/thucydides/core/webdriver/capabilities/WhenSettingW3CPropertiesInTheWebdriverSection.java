@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WhenSettingW3CProperties {
+public class WhenSettingW3CPropertiesInTheWebdriverSection {
 
     EnvironmentVariables environmentVariables;
 
@@ -31,8 +31,8 @@ public class WhenSettingW3CProperties {
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver");
 
         assertThat(caps.getBrowserName()).isEqualTo("Chrome");
-        assertThat(caps.getVersion()).isEqualTo("80");
-        assertThat(caps.getPlatform()).isEqualTo(Platform.SNOW_LEOPARD);
+        assertThat(caps.getBrowserVersion()).isEqualTo("80");
+        assertThat(caps.getPlatformName()).isEqualTo(Platform.SNOW_LEOPARD);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class WhenSettingW3CProperties {
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver");
 
         assertThat(caps.getBrowserName()).isEqualTo("Chrome");
-        assertThat(caps.getVersion()).isEqualTo("80");
-        assertThat(caps.getPlatform()).isEqualTo(Platform.SNOW_LEOPARD);
+        assertThat(caps.getBrowserVersion()).isEqualTo("80");
+        assertThat(caps.getPlatformName()).isEqualTo(Platform.SNOW_LEOPARD);
     }
 
     @Test

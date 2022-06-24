@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.junit.Before;
@@ -13,13 +14,11 @@ import java.util.function.Predicate;
 public class WhenUsingTheHasAuthenticationInterface {
 
     WebDriverFacade driver;
-    EnvironmentVariables environmentVariables;
 
     @Before
     public void initDriver() {
-        environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("headless.mode","true");
-        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory(), environmentVariables);
+        TestLocalEnvironmentVariables.setProperty("headless.mode","true");
+        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
     }
 
     @Test

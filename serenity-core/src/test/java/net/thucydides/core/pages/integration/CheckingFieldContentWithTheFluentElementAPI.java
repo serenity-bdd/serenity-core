@@ -12,16 +12,14 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
-public class CheckingFieldContentWithTheFluentElementAPI  {
+public class CheckingFieldContentWithTheFluentElementAPI {
 
     static WebDriver localDriver;
     static StaticSitePage page;

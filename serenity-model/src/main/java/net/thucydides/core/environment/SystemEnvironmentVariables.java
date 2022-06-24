@@ -1,12 +1,14 @@
 package net.thucydides.core.environment;
 
 import net.serenitybdd.core.collect.NewMap;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.PropertiesFileLocalPreferences;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -29,26 +31,28 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this(System.getProperties(), System.getenv());
     }
 
-    private static final ThreadLocal<EnvironmentVariables> CURRENT_ENVIRONMENT_VARIABLES
-            = ThreadLocal.withInitial(SystemEnvironmentVariables::new);
     /**
-     * Get the current environment variables.
-     * @return
+     * Get the current environment variables, including any values updated for the scope of this test.
+     * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        CURRENT_ENVIRONMENT_VARIABLES.get().setProperties(TestLocalEnvironmentVariables.getProperties());
-        return CURRENT_ENVIRONMENT_VARIABLES.get();
+        EnvironmentVariables environmentVariables = createEnvironmentVariables();
+        TestLocalEnvironmentVariables.getProperties().forEach(
+                (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
+        );
+        return environmentVariables;
     }
 
-    public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
-        Map<String, String> propertyValues = new HashMap<>();
-        for(String property : systemProperties.stringPropertyNames()) {
-            propertyValues.put(property, systemProperties.getProperty(property));
-        }
 
-        this.properties = NewMap.copyOf(propertyValues);
+    public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
         this.systemValues = NewMap.copyOf(systemValues);
 
+        Map<String, String> propertyValues = new HashMap<>();
+        for(String property : systemProperties.stringPropertyNames()) {
+            String value = systemProperties.getProperty(property);
+            propertyValues.put(property, value);
+        }
+        this.properties = NewMap.copyOf(propertyValues);
         this.pristineProperties = NewMap.copyOf(propertyValues);
 
     }
@@ -114,7 +118,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     @Override
     public String injectSystemPropertiesInto(String value) {
         if (value == null) { return value; }
-
+        if (!value.contains("${")) { return value; }
         for(String key : systemValues.keySet()) {
             value = value.replace("${" + key.toUpperCase() + "}", systemValues.get(key));
         }
@@ -229,7 +233,20 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentVariables createEnvironmentVariables() {
-        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
+        return createEnvironmentVariables(new SystemEnvironmentVariables());
+    }
+
+    public static EnvironmentVariables createEnvironmentVariables(Path configurationFile, EnvironmentVariables environmentVariables) {
+        LocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables, configurationFile);
+        try {
+            localPreferences.loadPreferences();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return environmentVariables;
+    }
+
+    private static EnvironmentVariables createEnvironmentVariables(EnvironmentVariables environmentVariables) {
         LocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
         try {
             localPreferences.loadPreferences();
@@ -238,4 +255,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         }
         return environmentVariables;
     }
+
+
 }

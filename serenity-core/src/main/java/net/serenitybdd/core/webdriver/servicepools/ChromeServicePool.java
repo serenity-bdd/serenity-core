@@ -4,6 +4,8 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import java.io.File;
 
@@ -16,7 +18,9 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
 
     @Override
     protected WebDriver newDriverInstance(Capabilities capabilities) {
-        return new ChromeDriver(capabilities);
+        ChromeOptions options = new ChromeOptions();
+        options.merge(capabilities);
+        return new ChromeDriver(options);
     }
 
     @Override

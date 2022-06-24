@@ -76,8 +76,8 @@ public class SaucelabsRemoteDriverCapabilities {
             String browserName = sourceCapabilities.getBrowserName();
             capabilities.setCapability("browserName", SAUCELABS_BROWSER_NAMES.getOrDefault(browserName, browserName));
         }
-        if (sourceCapabilities.getVersion() != null) {
-            capabilities.setCapability("browserVersion", sourceCapabilities.getVersion());
+        if (sourceCapabilities.getBrowserVersion() != null) {
+            capabilities.setCapability("browserVersion", sourceCapabilities.getBrowserVersion());
         }
         if (sourceCapabilities.getCapability("platformName") != null) {
             capabilities.setCapability("platformName", sourceCapabilities.getCapability("platformName"));

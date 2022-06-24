@@ -113,7 +113,10 @@ public class DriverCapabilities {
                     .to(capabilities);
         }
 
+        // Legacy support for W3C capabilities in the webdriver section
         capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        // New support for a dedicated w3c section containing W3C capabilities
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("w3c"));
         return capabilities;
     }
 

@@ -13,8 +13,8 @@ public class CapabilitiesConverter {
     public static Properties capabilitiesToProperties(Capabilities capabilities) {
         Properties properties = new Properties();
 
-        if (capabilities.getPlatform() != null) {
-            properties.setProperty("platform", capabilities.getPlatform().name());
+        if (capabilities.getPlatformName() != null) {
+            properties.setProperty("platform", capabilities.getPlatformName().toString());
         }
 
         for (String capability : capabilities.asMap().keySet()) {

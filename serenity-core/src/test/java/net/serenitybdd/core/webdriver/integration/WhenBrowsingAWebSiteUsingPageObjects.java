@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
 import net.serenitybdd.core.pages.WebElementFacade;
@@ -13,7 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.support.FindBy;
 
@@ -90,11 +92,10 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @BeforeClass
     public static void openDriver() {
-//        WebDriverManager.chromedriver().setup();
-//        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
-//        driver = new ChromeDriver(options);
-        driver = new HtmlUnitDriver();
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+        driver = new ChromeDriver(options);
     }
 
     @Before

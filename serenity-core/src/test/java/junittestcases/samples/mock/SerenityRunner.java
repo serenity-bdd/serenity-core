@@ -9,6 +9,7 @@ import org.junit.runner.notification.RunNotifier;
  * Created by john on 8/12/14.
  */
 public class SerenityRunner extends Runner implements Taggable {
+
     @Override
     public Description getDescription() {
         return null;

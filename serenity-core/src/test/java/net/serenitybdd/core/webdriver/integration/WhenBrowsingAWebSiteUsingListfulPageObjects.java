@@ -17,7 +17,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.io.File;
@@ -128,7 +127,9 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 
     @Before
     public void openLocalStaticSite() {
-		driver = new HtmlUnitDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.setHeadless(true);
+		driver = new ChromeDriver(options);
 
         openStaticTestSite();
         indexPage = new TablesPage(driver, 1000);

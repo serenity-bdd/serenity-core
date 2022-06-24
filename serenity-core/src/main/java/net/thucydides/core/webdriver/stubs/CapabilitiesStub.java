@@ -18,16 +18,6 @@ public class CapabilitiesStub implements Capabilities {
     }
 
     @Override
-    public Platform getPlatform() {
-        return null;
-    }
-
-    @Override
-    public String getVersion() {
-        return null;
-    }
-
-    @Override
     public Map<String, Object> asMap() {
         return new HashMap<>();
     }

@@ -43,9 +43,9 @@ public class AddCustomCapabilities {
                     .orElse(null);
 
             if (isNotEmpty(propertyValue)) {
-                capabilities.setCapability(preparedPropertyKey, asObject(propertyValue));
+                capabilities.setCapability(preparedPropertyKey, CapabilityProperty.asObject(propertyValue));
                 if (withPrefix) {
-                    capabilities.setCapability(propertyKey, asObject(propertyValue));
+                    capabilities.setCapability(propertyKey, CapabilityProperty.asObject(propertyValue));
                 }
             }
         }
@@ -59,31 +59,6 @@ public class AddCustomCapabilities {
             return "browser_version";
         }
         return shortenedPropertyKey;
-    }
-
-    private Object asObject(String propertyValue) {
-
-        if (isAQuoted(propertyValue)) {
-            return propertyValue;
-        }
-
-        try {
-            return Integer.parseInt(propertyValue);
-        } catch(NumberFormatException noBiggyWeWillTrySomethingElse) {}
-
-        if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
-            return Boolean.parseBoolean(propertyValue);
-        }
-
-        return propertyValue;
-    }
-
-    private boolean isAQuoted(String propertyValue) {
-        return (surroundedBy("\"", propertyValue) || surroundedBy("'", propertyValue));
-    }
-
-    private boolean surroundedBy(String quote, String propertyValue) {
-        return propertyValue.startsWith(quote) && propertyValue.endsWith(quote);
     }
 
     public AddCustomCapabilities withAndWithoutPrefixes() {

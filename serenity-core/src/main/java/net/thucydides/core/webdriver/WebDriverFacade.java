@@ -1,9 +1,9 @@
 package net.thucydides.core.webdriver;
 
 import io.appium.java_client.android.AndroidDriver;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
@@ -11,7 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.interactions.*;
+import org.openqa.selenium.interactions.Interactive;
+import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive, HasAuthentication {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive, HasAuthentication {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -39,6 +40,13 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private String options = "";
 
+    private EnvironmentVariables getEnvironmentVariables() {
+        if (environmentVariables != null) {
+            return environmentVariables;
+        }
+        return SystemEnvironmentVariables.currentEnvironmentVariables();
+    }
+
     /**
      * Implicit timeout values recorded to that they can be restored after calling findElements()
      */
@@ -46,21 +54,32 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
-        this(driverClass, webDriverFactory, ConfiguredEnvironment.getEnvironmentVariables());
-    }
-
-    public WebDriverFacade(final Class<? extends WebDriver> driverClass,
-                           final WebDriverFactory webDriverFactory,
-                           final EnvironmentVariables environmentVariables ) {
         this.driverClass = driverClass;
         this.webDriverFactory = webDriverFactory;
-        this.environmentVariables = environmentVariables;
+        this.implicitTimeout = defaultImplicitWait();
+    }
+//
+//    public WebDriverFacade(final Class<? extends WebDriver> driverClass,
+//                           final WebDriverFactory webDriverFactory,
+//                           final EnvironmentVariables environmentVariables ) {
+//        this.driverClass = driverClass;
+//        this.webDriverFactory = webDriverFactory;
+//        this.environmentVariables = environmentVariables;
+//        this.implicitTimeout = defaultImplicitWait();
+//    }
+
+    public WebDriverFacade(final WebDriver driver,
+                           final WebDriverFactory webDriverFactory) {
+        this.driverClass = driver.getClass();
+        this.proxiedWebDriver = driver;
+        this.webDriverFactory = webDriverFactory;
         this.implicitTimeout = defaultImplicitWait();
     }
 
+
     public WebDriverFacade(final WebDriver driver,
                            final WebDriverFactory webDriverFactory,
-                           final EnvironmentVariables environmentVariables ) {
+                           final EnvironmentVariables environmentVariables) {
         this.driverClass = driver.getClass();
         this.proxiedWebDriver = driver;
         this.webDriverFactory = webDriverFactory;
@@ -70,9 +89,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private Duration defaultImplicitWait() {
         int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
+                .integerFrom(getEnvironmentVariables(), (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
 
-       return Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
+        return Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
     }
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
@@ -90,13 +109,13 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return new WebDriverFacade(driverClass, webDriverFactory, proxiedWebDriver, implicitTimeout);
     }
 
-    public Class<? extends WebDriver>  getDriverClass() {
+    public Class<? extends WebDriver> getDriverClass() {
         if (proxiedWebDriver != null) {
             return getProxiedDriver().getClass();
         }
 
         if (driverClass.isAssignableFrom(SupportedWebDriver.PROVIDED.getWebdriverClass())) {
-            return new ProvidedDriverConfiguration(environmentVariables).getDriverSource().driverType();
+            return new ProvidedDriverConfiguration(getEnvironmentVariables()).getDriverSource().driverType();
         }
 
         return driverClass;
@@ -143,7 +162,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
                 return new WebDriverStub();
             } else {
                 webDriverFactory.setupFixtureServices();
-                return webDriverFactory.newWebdriverInstance(driverClass, options, environmentVariables);
+                return webDriverFactory.newWebdriverInstance(driverClass, options, getEnvironmentVariables());
             }
         } catch (DriverConfigurationError e) {
             throw new DriverConfigurationError("Could not instantiate " + driverClass, e);
@@ -229,7 +248,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             webDriverFactory.resetTimeouts(getProxiedDriver());
         }
         return element;
-   }
+    }
 
     public String getPageSource() {
         if (!isEnabled() || !isInstantiated()) {
@@ -264,18 +283,18 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public void close() {
         if (proxyInstanciated()) {
-        	//if there is only one window closing it means quitting the web driver
-        	if (areWindowHandlesAllowed(getDriverInstance()) &&
-                    getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
+            //if there is only one window closing it means quitting the web driver
+            if (areWindowHandlesAllowed(getDriverInstance()) &&
+                    getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1) {
                 this.quit();
-            } else{
-        	    WebDriverInstanceEvents.bus().notifyOf(WebDriverLifecycleEvent.CLOSE).forDriver(getDriverInstance());
+            } else {
+                WebDriverInstanceEvents.bus().notifyOf(WebDriverLifecycleEvent.CLOSE).forDriver(getDriverInstance());
                 getDriverInstance().close();
             }
         }
     }
 
-    private boolean areWindowHandlesAllowed(final WebDriver driver){
+    private boolean areWindowHandlesAllowed(final WebDriver driver) {
         return !(driver instanceof AndroidDriver);
     }
 
@@ -287,7 +306,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
                 webDriverFactory.releaseTimoutFor(getDriverInstance());
 
             } catch (WebDriverException e) {
-                LOGGER.warn("Error while quitting the driver (" + e.getMessage() + ")", e);
+                LOGGER.warn("Error while quitting the driver (" + e.getMessage() + ")");
+                LOGGER.debug("Caused by:" + e.getMessage(), e);
             }
             proxiedWebDriver = null;
         }
@@ -338,36 +358,20 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public boolean canTakeScreenshots() {
-    	if (driverClass != null) {
-    		if (driverClass == ProvidedDriver.class) {
-    			return TakesScreenshot.class.isAssignableFrom(getDriverClass()) || (getDriverClass() == RemoteWebDriver.class);
-    		} else {
-    			return TakesScreenshot.class.isAssignableFrom(driverClass)
-    					|| (driverClass == RemoteWebDriver.class);
-    		}
-    	} else {
-    		return false;
-    	}
+        if (driverClass != null) {
+            if (driverClass == ProvidedDriver.class) {
+                return TakesScreenshot.class.isAssignableFrom(getDriverClass()) || (getDriverClass() == RemoteWebDriver.class);
+            } else {
+                return TakesScreenshot.class.isAssignableFrom(driverClass)
+                        || (driverClass == RemoteWebDriver.class);
+            }
+        } else {
+            return false;
+        }
     }
 
     public boolean isInstantiated() {
         return (driverClass != null) && (proxiedWebDriver != null);
-    }
-
-    public Keyboard getKeyboard() {
-        if (!isEnabled() || !isInstantiated()) {
-            return new KeyboardStub();
-        }
-
-        return ((HasInputDevices) getProxiedDriver()).getKeyboard();
-    }
-
-    public Mouse getMouse() {
-        if (!isEnabled() || !isInstantiated()) {
-            return new MouseStub();
-        }
-
-        return ((HasInputDevices) getProxiedDriver()).getMouse();
     }
 
     public Object executeScript(String script, Object... parameters) {
@@ -436,7 +440,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     /**
      * Check whether the underlying driver supports DevTools
-     * @return
      */
     public boolean hasDevTools() {
         return (getProxiedDriver() instanceof HasDevTools);
@@ -468,7 +471,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     private void ensureDriverSupportsTheHasAuthenticationInterface() {
-        if (!(getProxiedDriver() instanceof  HasAuthentication)) {
+        if (!(getProxiedDriver() instanceof HasAuthentication)) {
             throw new HasAuthenticationNotSupportedException("HasAuthentication not supported for driver " + getProxiedDriver());
         }
     }

@@ -2,6 +2,7 @@ package net.thucydides.core.annotations.findby.integration
 
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
+import net.thucydides.core.environment.TestLocalEnvironmentVariables
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.environment.MockEnvironmentVariables
@@ -38,9 +39,8 @@ class WhenUsingSmartFindByOnPageObjects extends Specification {
 
 
 	def newDriver() {
-		EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-		environmentVariables.setProperty("headless.mode","true");
-		driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory(), environmentVariables);
+		TestLocalEnvironmentVariables.setProperty("headless.mode","true");
+		driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
 	}
 
 	@Shared

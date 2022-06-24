@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(SerenityRunner.class)
 public class WhenAndyIsAnAnnotatedActorWithAnAutomaticallyAssignedBrowser {
 
-    @CastMember(driver = "htmlunit", options = "--headless")
+    @CastMember(driver = "chrome", options = "--headless")
     Actor andy;
 
     @Test

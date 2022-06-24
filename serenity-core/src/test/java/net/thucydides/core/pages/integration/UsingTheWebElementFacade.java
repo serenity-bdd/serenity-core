@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,7 +94,7 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
     @Test
     public void page_level_queries_should_return_elements_using_successive_filters_of_locatorsas_a_stream() {
-        Stream<net.serenitybdd.core.pages.WebElementFacade> elements = page.findEach(By.id("demo"),By.id("firstname"));
+        Stream<net.serenitybdd.core.pages.WebElementFacade> elements = page.findEach(By.id("demo"), By.id("firstname"));
         assertThat(elements.collect(Collectors.toList())).isNotEmpty();
     }
 

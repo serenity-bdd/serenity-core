@@ -159,7 +159,6 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                             allTags,
                             testOutcomes))
                     .collect(Collectors.toList());
-
         }
 
         private boolean requirementTag(List<String> requirementTypes, TestTag tag) {

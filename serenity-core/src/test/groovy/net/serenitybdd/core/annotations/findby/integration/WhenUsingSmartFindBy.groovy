@@ -90,7 +90,7 @@ class WhenUsingSmartFindBy extends Specification {
             def optionList = driver.findElements(By.jquery("#multiselect option"))
 
         then: "we should find a list of elements"
-            optionList.size == 5
+            optionList.size() == 5
     }
 
 

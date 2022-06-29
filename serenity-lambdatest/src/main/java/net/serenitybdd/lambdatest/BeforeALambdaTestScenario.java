@@ -6,6 +6,8 @@ import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.reports.html.TagExclusions;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.CapabilityProperty;
@@ -14,6 +16,7 @@ import org.openqa.selenium.MutableCapabilities;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
@@ -43,6 +46,9 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // Define the test name
         ltOptions.put("name", LambdaTestName.from(testOutcome));
 
+        // Add tags
+        ltOptions.put("tags", tagsFrom(testOutcome,environmentVariables));
+
         // Fetch LambdaTest-specific properties from the 'lambdatest' section in serenity.conf
         Properties lambdatestProps = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getPropertiesWithPrefixStripped("lambdatest");
@@ -50,6 +56,14 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         capabilities.setCapability("LT:Options", ltOptions);
 
         return capabilities;
+    }
+
+    private String[] tagsFrom(TestOutcome testOutcome, EnvironmentVariables environmentVariables) {
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        return testOutcome.getTags().stream()
+                .filter(exclusions::doNotExclude)
+                .map(TestTag::toString)
+                .collect(Collectors.toList()).toArray(new String[]{});
     }
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {

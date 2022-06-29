@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * Return system environment variable values.
  */
-public interface EnvironmentVariables {
+public interface  EnvironmentVariables {
 
     String getValue(final String name);
 

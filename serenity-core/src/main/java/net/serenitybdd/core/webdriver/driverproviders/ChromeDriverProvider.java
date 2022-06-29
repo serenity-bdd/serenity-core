@@ -41,7 +41,7 @@ public class ChromeDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
-        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
+        if (isDriverAutomaticallyDownloaded(environmentVariables)) {
             logger.info("Using automatically driver download");
             WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forChrome();
         } else {
@@ -50,7 +50,7 @@ public class ChromeDriverProvider implements DriverProvider {
         MutableCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
 
-        ChromeOptions chromeOptions = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).configuredOptions();
+        ChromeOptions chromeOptions = chromeDriverCapabilitiesDefinedIn(environmentVariables, options).configuredOptions();
         enhancedCapabilities.asMap().forEach(
                 chromeOptions::setCapability
         );
@@ -60,17 +60,16 @@ public class ChromeDriverProvider implements DriverProvider {
         //
         final ChromeOptions enhancedChromeOptions = ConfigureChromeOptions.from(environmentVariables).to(chromeOptions);
 
-        WebDriver newDriver = ProvideNewDriver.withConfiguration(environmentVariables,
+        return ProvideNewDriver.withConfiguration(environmentVariables,
                 enhancedCapabilities,
                 driverServicePool,
                 DriverServicePool::newDriver,
                 (pool, capabilities) -> new ChromeDriver(enhancedChromeOptions)
         );
-        return newDriver;
     }
 
     private MutableCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
-        MutableCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables,options).getCapabilities();
+        MutableCapabilities capabilities = chromeDriverCapabilitiesDefinedIn(environmentVariables, options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
     }

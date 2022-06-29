@@ -90,7 +90,7 @@ public class DriverCapabilities {
 
         MutableCapabilities capabilities;
 
-        String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
+        String remoteBrowser = RemoteDriverName.definedIn(environmentVariables);
         if (!isUndefined(remoteBrowser)) {
             capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
         } else {

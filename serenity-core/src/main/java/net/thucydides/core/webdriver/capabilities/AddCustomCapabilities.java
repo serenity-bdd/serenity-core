@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.capabilities;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class AddCustomCapabilities {
         return this;
     }
 
-    public void to(DesiredCapabilities capabilities) {
+    public void to(MutableCapabilities capabilities) {
         List<String> propertiesWithPrefix = environmentVariables.getKeys()
                 .stream()
                 .filter(key -> key.startsWith(prefix))

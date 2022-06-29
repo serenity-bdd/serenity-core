@@ -83,8 +83,10 @@ public class W3CCapabilities {
     }
 
     private String unprefixed(String prefix, String propertyName) {
-        return propertyName.replace(prefix + ".","");
+        String simplePropertyName = propertyName.replace(prefix + ".","");
+        return simplePropertyName.replaceAll("^\"","")
+                                 .replaceAll("\"$","")
+                                 .replaceAll("\\.\"",".")
+                                 .replaceAll("\"\\.",".");
     }
-
-
 }

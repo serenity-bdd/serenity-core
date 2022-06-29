@@ -52,7 +52,7 @@ public class CapabilityValue {
         }
     }
 
-    private static String stripQuotesFrom(String value) {
+    public static String stripQuotesFrom(String value) {
         if (value.startsWith("\"") && value.endsWith("\"")) {
             return value.substring(1, value.length() - 1);
         }

@@ -10,6 +10,7 @@ import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -38,11 +39,11 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     @Override
-    public DesiredCapabilities getCapabilities() {
-        DesiredCapabilities capabilities = new DesiredCapabilities(configuredOptions());
-        capabilities.merge(W3CCapabilities.definedIn(environmentVariables)
-                                          .withPrefix("webdriver"));
-//        String switches = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(CHROME_SWITCHES);
+    public MutableCapabilities getCapabilities() {
+        MutableCapabilities capabilities = configuredOptions();
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("w3c"));
+        //        String switches = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(CHROME_SWITCHES);
 //        capabilities.setCapability("chrome.switches", switches);
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);

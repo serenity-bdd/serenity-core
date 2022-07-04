@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -84,6 +86,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                 preferencesIn(preferencesFileInHomeDirectory()),
                 preferencesIn(legacyPreferencesFileInHomeDirectory()),
                 preferencesInClasspath());
+
+        if (typesafeConfigFileExists()) {
+            environmentVariables.setConfig(typesafeConfig());
+        }
+
     }
 
     private Properties preferencesInClasspath() throws IOException {
@@ -116,29 +123,31 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return getPropertiesFromConfig(preferences);
     }
 
-    private Properties typesafeConfigPreferences() {
+    private Config typesafeConfig() {
         return defaultPropertiesConfFile()
                 .filter(File::exists)
-                .map(configFile -> getPropertiesFromConfig(typesafeConfigFile(configFile).entrySet()))
-                .orElse(getPropertiesFromConfig(ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet()));
+                .map(this::typesafeConfigFile)
+                .orElse(ConfigFactory.load(TYPESAFE_CONFIG_FILE));
+    }
+
+    private boolean typesafeConfigFileExists() {
+        if (defaultPropertiesConfFile().isPresent() && defaultPropertiesConfFile().get().exists()) {
+            return true;
+        }
+        URL configFilePath = getClass().getClassLoader().getResource(TYPESAFE_CONFIG_FILE);
+        if (configFilePath != null) {
+            return new File(configFilePath.getFile()).exists();
+        } else {
+            return false;
+        }
+    }
+
+    private Properties typesafeConfigPreferences() {
+        return getPropertiesFromConfig(typesafeConfig().entrySet());
     }
 
     private Config typesafeConfigFile(File configFile) {
-
-        // TODO: Cache resolved config for the aggregate phase
-        try {
-            return ConfigFactory.parseFile(configFile).resolveWith(ConfigFactory.systemProperties());
-        } catch (ConfigException failedToReadTheSerenityConfFile) {
-            try {
-                LOGGER.warn("Failed to read the serenity.conf file: " + failedToReadTheSerenityConfFile.getMessage()
-                        + " - Falling back on serenity.conf without using environment variables");
-                return ConfigFactory.parseFile(configFile);
-            } catch (ConfigException failedToReadTheUnresolvedSerenityConfFile) {
-                LOGGER.error("Failed to parse the serenity.conf file", failedToReadTheUnresolvedSerenityConfFile);
-                throw failedToReadTheUnresolvedSerenityConfFile;
-            }
-        }
-
+        return ConfigCache.instance().getConfig(configFile);
     }
 
     private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {

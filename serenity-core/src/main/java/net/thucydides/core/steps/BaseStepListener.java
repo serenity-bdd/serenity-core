@@ -31,6 +31,7 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.core.util.ConfigCache;
 import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -934,6 +935,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     @Override
     public void testRunFinished() {
         closeDarkroom();
+        ConfigCache.instance().clear();
     }
 
     public void currentStepDone(TestResult result) {

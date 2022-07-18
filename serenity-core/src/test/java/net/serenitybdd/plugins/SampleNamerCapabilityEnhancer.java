@@ -1,5 +1,6 @@
-package net.serenitybdd.core.webdriver.enhancers;
+package net.serenitybdd.plugins;
 
+import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;

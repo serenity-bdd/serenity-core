@@ -49,7 +49,7 @@ public class EnhanceDriver {
                 ENHANCERS.addAll(
                         ClassFinder.loadClasses()
                                 .thatImplement(CustomDriverEnhancer.class)
-                                .fromPackage("net.serenitybdd")
+                                .fromPackage("net.serenitybdd.plugins")
                                 .stream().map(extension -> (Class<CustomDriverEnhancer>) extension)
                                 .collect(Collectors.toList())
                 );

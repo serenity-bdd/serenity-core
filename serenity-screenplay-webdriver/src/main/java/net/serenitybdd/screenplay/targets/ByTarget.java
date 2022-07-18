@@ -9,6 +9,7 @@ import net.serenitybdd.core.selectors.Selectors;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.ui.PageElement;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.By;

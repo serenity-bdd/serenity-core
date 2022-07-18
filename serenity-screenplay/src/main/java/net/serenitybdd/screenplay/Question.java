@@ -112,6 +112,5 @@ public interface Question<ANSWER> {
                 value -> (T) DefaultConverters.converterFor(type).convert(value)
         ).collect(Collectors.toList());
     }
-
 }
 

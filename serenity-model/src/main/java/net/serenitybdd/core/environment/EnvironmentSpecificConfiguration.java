@@ -1,6 +1,8 @@
 package net.serenitybdd.core.environment;
 
 import com.google.common.base.Splitter;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -100,6 +102,19 @@ public class EnvironmentSpecificConfiguration {
         String regexPrefix = prefix.replaceAll("\\.", "\\\\.");
         Pattern propertyWithPrefix = Pattern.compile("environments\\.([^.]*)\\." + regexPrefix + "(.*)");
         return key.startsWith(prefix) || propertyWithPrefix.matcher(key).matches();
+    }
+
+    public Config getConfig(String prefix) {
+        // Look for an environment-specific section
+        String activeEnvironment = environmentVariables.getProperty("environment", "");
+        String qualifiedPrefix = "environments." + activeEnvironment + "." + prefix;
+        if (!activeEnvironment.isEmpty() && environmentVariables.hasPath(qualifiedPrefix)) {
+            return environmentVariables.getConfig(qualifiedPrefix);
+        } else if (environmentVariables.hasPath(prefix)) {
+            return environmentVariables.getConfig(prefix);
+        } else {
+            return ConfigFactory.empty();
+        }
     }
 
     enum EnvironmentStrategy {

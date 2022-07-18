@@ -1,7 +1,9 @@
 package net.thucydides.core.environment;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValueType;
 import net.serenitybdd.core.collect.NewMap;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.PropertiesFileLocalPreferences;
@@ -21,11 +23,32 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     private Map<String, String> properties;
     private final Map<String, String> systemValues;
+    private Config config;
+
+    private static final ThreadLocal<EnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
+            = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
 
     /**
      * System properties as loaded from the system, without test-specific configuration
      */
     private Map<String, String> pristineProperties;
+
+    private SystemEnvironmentVariables(Map<String, String> properties, Map<String, String> systemValues, Config config, Map<String, String> pristineProperties) {
+        this.properties = properties;
+        this.systemValues = systemValues;
+        this.config = config;
+        this.pristineProperties = pristineProperties;
+    }
+
+
+    public EnvironmentVariables copy() {
+        return new SystemEnvironmentVariables(
+                new HashMap<>(this.properties),
+                new HashMap<>(this.systemValues),
+                this.config,
+                new HashMap<>(this.pristineProperties));
+    }
+
 
     public SystemEnvironmentVariables() {
         this(System.getProperties(), System.getenv());
@@ -36,11 +59,15 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        EnvironmentVariables environmentVariables = createEnvironmentVariables();
+        EnvironmentVariables environmentVariables = LOADED_ENVIRONMENT_VARIABLES.get().copy();
         TestLocalEnvironmentVariables.getProperties().forEach(
                 (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
         );
         return environmentVariables;
+    }
+
+    public void setConfig(Config typesafeConfig) {
+        this.config = typesafeConfig.resolve();
     }
 
 
@@ -48,7 +75,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this.systemValues = NewMap.copyOf(systemValues);
 
         Map<String, String> propertyValues = new HashMap<>();
-        for(String property : systemProperties.stringPropertyNames()) {
+        for (String property : systemProperties.stringPropertyNames()) {
             String value = systemProperties.getProperty(property);
             propertyValues.put(property, value);
         }
@@ -112,14 +139,24 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public boolean aValueIsDefinedFor(String property) {
+        boolean pathIsDefined = ((config != null) && config.hasPath(property));
         return properties.containsKey(property);
     }
 
     @Override
+    public boolean hasPath(String path) {
+        return ((config != null) && config.hasPath(path));
+    }
+
+    @Override
     public String injectSystemPropertiesInto(String value) {
-        if (value == null) { return value; }
-        if (!value.contains("${")) { return value; }
-        for(String key : systemValues.keySet()) {
+        if (value == null) {
+            return value;
+        }
+        if (!value.contains("${")) {
+            return value;
+        }
+        for (String key : systemValues.keySet()) {
             value = value.replace("${" + key.toUpperCase() + "}", systemValues.get(key));
         }
         return value;
@@ -215,10 +252,10 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public Map<String, String> simpleSystemPropertiesAsMap() {
         Map<String, String> environmentValues = new HashMap<>();
         properties.keySet().stream()
-                    .filter(key -> !key.contains("."))
-                    .forEach(
-                            key -> environmentValues.put(key, properties.get(key))
-                    );
+                .filter(key -> !key.contains("."))
+                .forEach(
+                        key -> environmentValues.put(key, properties.get(key))
+                );
         return environmentValues;
     }
 
@@ -228,12 +265,12 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this.properties.putAll(pristineProperties);
     }
 
-    public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(getProperties(), systemValues);
-    }
-
     public static EnvironmentVariables createEnvironmentVariables() {
         return createEnvironmentVariables(new SystemEnvironmentVariables());
+    }
+
+    public static EnvironmentVariables createEnvironmentVariables(Path configurationFile) {
+        return createEnvironmentVariables(configurationFile, new SystemEnvironmentVariables());
     }
 
     public static EnvironmentVariables createEnvironmentVariables(Path configurationFile, EnvironmentVariables environmentVariables) {
@@ -256,5 +293,20 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return environmentVariables;
     }
 
+    public Config getConfig(String prefix) {
+        if (config != null && config.hasPath(prefix)) {
+            return config.getConfig(prefix);
+        }
+        return ConfigFactory.empty();
+    }
+
+    private boolean hasDefinedEnvironment(Config config) {
+        if (config.hasPath("environment") && (config.getValue("environment").valueType() == ConfigValueType.STRING)) {
+            String environment = config.getString("environment");
+            return (config.hasPath("environments." + environment));
+        } else {
+            return false;
+        }
+    }
 
 }

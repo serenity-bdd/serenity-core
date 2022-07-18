@@ -1,10 +1,11 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.DriverConfigurationError;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.InvalidArgumentException;
@@ -24,17 +25,19 @@ class DefaultRemoteDriver extends RemoteDriverBuilder {
         this.remoteDriverCapabilities = remoteDriverCapabilities;
     }
 
-    WebDriver buildWithOptions(String options) throws MalformedURLException {
-        String remoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables);
-        if (remoteUrl == null) {
-            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-            remoteUrl = getRemoteUrlFromFixtureClasses(environmentVariables);
-        }
+    WebDriver buildWithOptions(String options) {
+        String remoteUrl = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL)
+                .orElse(getRemoteUrlFromFixtureClasses(environmentVariables));
         if (remoteUrl == null) {
             throw new InvalidArgumentException("A webdriver.remote.url property must be defined when using a Remote driver.");
         }
         Capabilities capabilities = buildRemoteCapabilities(options);
-        return newRemoteDriver(new URL(remoteUrl), capabilities, options);
+        try {
+            return newRemoteDriver(new URL(remoteUrl), capabilities, options);
+        } catch (MalformedURLException e) {
+            throw new DriverConfigurationError("Invalid remote URL: " + remoteUrl);
+        }
     }
 
     @Nullable
@@ -51,6 +54,7 @@ class DefaultRemoteDriver extends RemoteDriverBuilder {
     }
 
     private Capabilities buildRemoteCapabilities(String options) {
+
         String driver = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables);
         if (driver == null) {
             driver = getDriverFrom(environmentVariables);

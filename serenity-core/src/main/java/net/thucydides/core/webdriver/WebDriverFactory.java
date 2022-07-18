@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.webdriver.driverproviders.*;
@@ -15,6 +16,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,16 +104,17 @@ public class WebDriverFactory {
 
         if (driverProvidersByDriverType == null) {
             driverProvidersByDriverType = new HashMap<>();
-
-            driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
+            // UPDATED PROVIDERS
             driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
-            driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(fixtureProviderService));
-//            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HTMLUnitDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
+            // LEGACY PROVIDERS
+            driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
+//            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HTMLUnitDriverProvider(fixtureProviderService));
         }
         return driverProvidersByDriverType;
     }
@@ -213,10 +216,7 @@ public class WebDriverFactory {
     private void setImplicitTimeoutsIfSpecified(WebDriver driver) {
         if (ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.isDefinedIn(environmentVariables)) {
             int timeout = WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, 0);
-//            int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-//                    .getPropertyName(),0);
-
-            driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.MILLISECONDS);
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(timeout));
         }
     }
 
@@ -226,11 +226,10 @@ public class WebDriverFactory {
     }
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables) {
-        String driver = ThucydidesSystemProperty.WEBDRIVER_DRIVER.from(environmentVariables);
-        if (driver == null) {
-            driver = ThucydidesSystemProperty.DRIVER.from(environmentVariables);
-        }
-        return driver;
+       return EnvironmentSpecificConfiguration
+                .from(environmentVariables)
+                .getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_DRIVER, DRIVER, WEBDRIVER_CAPABILITIES_BROWSERNAME)
+                .orElse(null);
     }
 
     public void setupFixtureServices() throws FixtureException {
@@ -253,7 +252,7 @@ public class WebDriverFactory {
         Duration currentTimeout = currentTimeoutFor(proxiedDriver);
         timeoutStack.pushTimeoutFor(proxiedDriver, implicitTimeout);
         if ((implicitTimeout != currentTimeout) && isNotAMocked(proxiedDriver)) {
-            proxiedDriver.manage().timeouts().implicitlyWait(implicitTimeout.toMillis(), TimeUnit.MILLISECONDS);
+            proxiedDriver.manage().timeouts().implicitlyWait(implicitTimeout);
         }
     }
 

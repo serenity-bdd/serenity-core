@@ -21,8 +21,8 @@
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">
-                <span class="projecttitle">${reportOptions.projectName}</span>
-                <span class="projectsubtitle">${reportOptions.projectSubTitle}</span>
+                <span class="projecttitle">${reportOptions.projectName!"Serenity BDD Report"}</span>
+                <span class="projectsubtitle">${reportOptions.projectSubTitle!""}</span>
             </span>
         </div>
     </div>

@@ -1,5 +1,8 @@
 package net.thucydides.core.util;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,7 +11,7 @@ import java.util.Properties;
 /**
  * Return system environment variable values.
  */
-public interface  EnvironmentVariables {
+public interface EnvironmentVariables {
 
     String getValue(final String name);
 
@@ -33,11 +36,11 @@ public interface  EnvironmentVariables {
      * The property may be defined in the project's serenity.properties or serenity.conf file, or be provided as a
      * a system property. This is designed particularly for user-provided properties, to make it easier to store
      * test confiuration properties in a single file.
-     *
+     * <p>
      * Sample usage:
      * ```
      * EnvironmentVariables environmentVariables;
-     *
+     * <p>
      * String environment = environmentVariables.optionalProperty("env").orElse("DEV")
      * ```
      */
@@ -67,11 +70,19 @@ public interface  EnvironmentVariables {
 
     boolean aValueIsDefinedFor(String property);
 
+    boolean hasPath(String path);
+
     String injectSystemPropertiesInto(String value);
 
     Map<String, String> asMap();
 
-    Map<String,String> simpleSystemPropertiesAsMap();
+    Map<String, String> simpleSystemPropertiesAsMap();
 
     void reset();
+
+    void setConfig(Config typesafeConfig);
+
+    default Config getConfig(String prefix) {
+        return ConfigFactory.empty();
+    }
 }

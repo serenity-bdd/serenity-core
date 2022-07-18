@@ -16,7 +16,7 @@ public class ProvidedDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setJavascriptEnabled(true);
-        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities());
         return capabilities;
     }
 

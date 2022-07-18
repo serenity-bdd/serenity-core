@@ -22,6 +22,7 @@ public abstract class SearchableTarget extends Target {
     public abstract List<String> getCssOrXPathSelectors();
 
     public SearchableTarget containingText(String text) {
+        
         if (this instanceof HasByLocator) {
             By byLocator = ((HasByLocator) this).getLocator();
             return Target.the(getName() + " located by '" + byLocator + "' and containing text '" + text + "'")

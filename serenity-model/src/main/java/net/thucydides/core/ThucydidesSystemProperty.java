@@ -30,6 +30,11 @@ public enum ThucydidesSystemProperty {
     DRIVER,
 
     /**
+     * Used to identify the current driver using the W3C capabililites
+     */
+    WEBDRIVER_CAPABILITIES_BROWSERNAME("webdriver.capabilities.browserName"),
+
+    /**
      * If using a provided driver, what type is it.
      * The implementation class needs to be defined in the webdriver.provided.{type} system property.
      */
@@ -44,12 +49,6 @@ public enum ThucydidesSystemProperty {
      * The URL to be used for remote drivers (including a selenium grid hub)
      */
     WEBDRIVER_REMOTE_URL,
-
-    /**
-     * What port to run PhantomJS on (used in conjunction with webdriver.remote.url to
-     * register with a Selenium hub, e.g. -Dphantomjs.webdriver=5555 -Dwebdriver.remote.url=http://localhost:4444
-     */
-    // PHANTOMJS_WEBDRIVER_PORT,
 
     /**
      * Sets a number of common chrome options useful for automated testing.
@@ -116,6 +115,9 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_PROJECT_KEY,
 
+    /**
+     * Use serenity.project.key instead
+     */
     @Deprecated
     THUCYDIDES_PROJECT_NAME,
 
@@ -147,6 +149,9 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REPORT_URL,
 
+    /**
+     * Use serenity.home instead
+     */
     @Deprecated
     THUCYDIDES_HOME,
 
@@ -155,6 +160,9 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_HOME,
 
+    /**
+     * Use serenity.report.resources
+     */
     @Deprecated
     THUCYDIDES_REPORT_RESOURCES,
 
@@ -697,7 +705,19 @@ public enum ThucydidesSystemProperty {
 
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.
+     * @deprecated Use the timeouts section in the webdriver.capabilities block in serenity.conf,
+     * For example:
+     * webdriver {
+     *     capabilities {
+     *         timeouts {
+     *             script = 30000
+     *             pageLoad = 300000
+     *             implicit = 0
+     *         }
+     *     }
+     * }
      */
+    @Deprecated
     WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT,
 
     /**

@@ -2,39 +2,18 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.http.ClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class FirefoxDriverProvider implements DriverProvider {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class FirefoxDriverProvider extends DownloadableDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
-
-    private final DriverServicePool driverServicePool = new GeckoServicePool();
-
-    protected String serviceName(){ return "firefox"; }
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -44,35 +23,36 @@ public class FirefoxDriverProvider implements DriverProvider {
     }
 
     @Override
-    // TODO: Add support for runtime options
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
+        // If webdriver calls are suspended no need to create a new driver
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
+        // Download the driver using WebDriverManager if required
+        downloadDriverIfRequired("firefox", environmentVariables);
+        //
+        // Load the FirefoxDriver capabilities from the serenity.conf file
+        //
+        FirefoxOptions firefoxOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").firefoxOptions();
+        //
+        // Add any arguments passed from the test itself
+        //
+        firefoxOptions.addArguments(argumentsIn(options));
+        //
+        // Check for extended classes to add extra ChromeOptions configuration
+        //
+        final FirefoxOptions enhancedOptions = EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(firefoxOptions);
+        //
+        // Record the driver capabilities for reporting
+        //
+        driverProperties.registerCapabilities("firefox", capabilitiesToProperties(enhancedOptions));
 
-        if (isDriverAutomaticallyDownloaded(environmentVariables)) {
-            logger.info("Using automatically driver download");
-            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forFirefox();
-        } else {
-            logger.info("Not using automatically driver download");
-        }
-
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-
-        new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
-        FirefoxOptions firefoxOptions = new FirefoxDriverCapabilities(environmentVariables, options).getOptions();
-        SetProxyConfiguration.from(environmentVariables).in(firefoxOptions);
-        AddLoggingPreferences.from(environmentVariables).to(firefoxOptions);
-
-        enhancer.enhanced(firefoxOptions, SupportedWebDriver.FIREFOX);
-
-        driverProperties.registerCapabilities("firefox", capabilitiesToProperties(firefoxOptions));
-
-        return ProvideNewDriver.withConfiguration(environmentVariables,
-                firefoxOptions,
-                driverServicePool,
-                DriverServicePool::newDriver,
-                (pool, caps) -> new FirefoxDriver(firefoxOptions)
-        );
+        return new FirefoxDriver(enhancedOptions);
+//        return ProvideNewDriver.withConfiguration(environmentVariables,
+//                enhancedOptions,
+//                driverServicePool,
+//                DriverServicePool::newDriver,
+//                (pool, capabilities) -> new FirefoxDriver(enhancedOptions)
+//        );
     }
 }

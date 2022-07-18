@@ -36,9 +36,14 @@ public class BuildInfoProvider {
         Map<String, String> generalProperties = new HashMap<>();
         generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables, "firefox"));
         generalProperties.put("Operating System", System.getProperty("os.name") + " version " + System.getProperty("os.version"));
-        addGroupPropertiesTo("webdriver",generalProperties);
+//        addGroupPropertiesTo("webdriver",generalProperties);
         addGroupPropertiesTo("saucelabs",generalProperties);
         addGroupPropertiesTo("browserstack",generalProperties);
+        driverCapabilityRecord.getDrivers().forEach(
+                driver -> generalProperties.put("Driver " + driver,
+                                                driverCapabilityRecord.getDriverCapabilities().get(driver).toString())
+        );
+
         addCustomPropertiesTo(generalProperties);
 
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();

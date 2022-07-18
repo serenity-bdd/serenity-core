@@ -1033,6 +1033,12 @@ public class TestOutcome {
         return testSource == null || (testSource.equalsIgnoreCase("JUnit5"));
     }
 
+    public void updateDataTableResult(int row, TestResult result) {
+        if (dataTable != null && dataTable.getSize() > row) {
+            dataTable.updateRowResult(row, result);
+        }
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 

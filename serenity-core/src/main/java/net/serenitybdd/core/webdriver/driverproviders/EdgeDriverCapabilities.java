@@ -47,7 +47,7 @@ public class EdgeDriverCapabilities implements DriverCapabilitiesProvider {
         edgeCaps.setCapability("ms:edgeOptions", edgeOptions);
 
         DesiredCapabilities capabilities = new DesiredCapabilities(edgeCaps);
-        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+        capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities());
 
         AddLoggingPreferences.from(environmentVariables).to(capabilities);
         SetProxyConfiguration.from(environmentVariables).in(capabilities);

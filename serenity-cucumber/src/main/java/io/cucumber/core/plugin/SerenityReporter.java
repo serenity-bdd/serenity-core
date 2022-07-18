@@ -664,7 +664,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private boolean containsScenario(io.cucumber.messages.types.Rule rule, Scenario scenario) {
-        return rule.getChildren().stream().anyMatch(child -> child.getScenario().get() == scenario);
+        return rule.getChildren().stream().anyMatch(child -> child.getScenario().isPresent() && child.getScenario().get() == scenario);
     }
 
     private List<Tag> tagsForScenario(Scenario scenarioDefinition) {

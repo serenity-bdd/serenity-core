@@ -32,7 +32,7 @@ public class ParameterizedTestsOutcomeAggregator {
         if (allOutcomes.isEmpty()) {
             return new ArrayList<>();
         } else {
-            return  aggregatedScenarioOutcomes(allOutcomes);
+            return aggregatedScenarioOutcomes(allOutcomes);
         }
     }
 
@@ -40,7 +40,9 @@ public class ParameterizedTestsOutcomeAggregator {
 
         Map<String, TestOutcome> scenarioOutcomes = new HashMap<>();
 
-        for (TestOutcome testOutcome : allOutcomes) {
+        for(int testOutcomeNumber = 0; testOutcomeNumber < allOutcomes.size(); testOutcomeNumber++) {
+            TestOutcome testOutcome = allOutcomes.get(testOutcomeNumber);
+//        for (TestOutcome testOutcome : allOutcomes) {
             final String normalizedMethodName = baseMethodName(testOutcome);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
@@ -64,6 +66,7 @@ public class ParameterizedTestsOutcomeAggregator {
                 } else {
                     scenarioOutcome.addDataFrom(testOutcome.getDataTable());
                 }
+                scenarioOutcome.updateDataTableResult(testOutcomeNumber, testOutcome.getResult());
             }
         }
 

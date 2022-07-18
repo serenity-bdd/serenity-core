@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
 
 public abstract class ScreenplayInteractionTestBase {
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "chrome")//, options = "--headless")
     protected WebDriver driver;
 
     protected Actor dina;

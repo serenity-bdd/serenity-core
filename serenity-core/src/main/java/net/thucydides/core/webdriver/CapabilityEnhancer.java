@@ -55,7 +55,7 @@ public class CapabilityEnhancer {
 
         // Add W3C capabilities defined in the "webdriver" section of the serenity.conf file for non-Appium drivers
         if (driver.isW3CCompliant()) {
-            capabilities = capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver"));
+            capabilities = capabilities.merge(W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities());
         }
         return capabilities;
 }

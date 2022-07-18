@@ -1,10 +1,7 @@
 package net.serenitybdd.screenplay.playwright.abilities;
 
-import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.BrowserChannel;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.playwright.interactions.Open;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

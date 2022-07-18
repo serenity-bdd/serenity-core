@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
-public class MoveMouseToTarget extends MoveMouseTo {
+public class MoveMouseToTarget extends ChainablePerformable {
    private final Target target;
 
    public MoveMouseToTarget(Target target) {
@@ -11,6 +11,7 @@ public class MoveMouseToTarget extends MoveMouseTo {
    }
 
    public <T extends Actor> void performAs(T actor) {
-       performMouseMoveAs(actor, target.resolveFor(actor));
+       addActionAtStart(actions -> actions.moveToElement(target.resolveFor(actor)));
+       performSubsequentActionsAs(actor);
    }
 }

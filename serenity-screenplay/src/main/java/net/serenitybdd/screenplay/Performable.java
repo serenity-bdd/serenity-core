@@ -16,7 +16,7 @@ import net.serenitybdd.core.SkipNested;
  *
  */
 @FunctionalInterface
-public interface Performable extends SkipNested {
+public interface  Performable extends SkipNested {
     <T extends Actor> void performAs(T actor);
     default Performable then(Performable nextPerformable) {
         return CompositePerformable.from(this, nextPerformable);

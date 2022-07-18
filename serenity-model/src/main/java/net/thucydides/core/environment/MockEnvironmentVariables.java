@@ -1,5 +1,6 @@
 package net.thucydides.core.environment;
 
+import com.typesafe.config.Config;
 import net.serenitybdd.core.collect.NewMap;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -162,6 +163,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     @Override
+    public boolean hasPath(String path) {
+        return false;
+    }
+
+    @Override
     public String injectSystemPropertiesInto(String value) {
         return value;
     }
@@ -187,6 +193,15 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     @Override
     public void reset() {
 
+    }
+
+    @Override
+    public void setConfig(Config typesafeConfig) {
+    }
+
+    @Override
+    public Config getConfig(String prefix) {
+        return EnvironmentVariables.super.getConfig(prefix);
     }
 
     public void setValue(String name, String value) {

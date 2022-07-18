@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(SerenityJUnit5Extension.class)
@@ -38,12 +39,12 @@ public class SampleCSVDataDrivenScenario {
     @ParameterizedTest(name = "Csv File Data Test {0}")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void data_driven_test(String name, int age,String address) {
+//        assertThat(name).isNotEqualTo("Paul Brown");
     }
 
     @ParameterizedTest(name = "Another Csv File Data Test {0} ")
     @CsvFileSource(resources="/test-data/simple-data.csv",numLinesToSkip = 1)
     public void another_data_driven_test(String name, int age,String address) {}
-
 
     public String getName() {
         return name;

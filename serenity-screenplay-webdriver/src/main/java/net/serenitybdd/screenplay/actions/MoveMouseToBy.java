@@ -7,15 +7,16 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class MoveMouseToBy extends MoveMouseTo {
+public class MoveMouseToBy extends ChainablePerformable {
     private final List<By> locators;
 
-   public MoveMouseToBy(By... locators) {
-       this.locators = NewList.copyOf(locators);
-   }
+    public MoveMouseToBy(By... locators) {
+        this.locators = NewList.copyOf(locators);
+    }
 
-   public <T extends Actor> void performAs(T actor) {
-       WebElement element = WebElementLocator.forLocators(locators).andActor(actor);
-       performMouseMoveAs(actor, element);
-   }
+    public <T extends Actor> void performAs(T actor) {
+        WebElement element = WebElementLocator.forLocators(locators).andActor(actor);
+        addActionAtStart(actions -> actions.moveToElement(element));
+        performSubsequentActionsAs(actor);
+    }
 }

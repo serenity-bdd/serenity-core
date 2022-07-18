@@ -2,85 +2,70 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
+import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
+import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 
-import java.util.List;
-import java.util.Map;
-
-public class EdgeDriverProvider implements DriverProvider {
+/**
+ * Create a new instance of a ChromeDriver driver, using the configuration options defined in serenity.conf
+ * and/or in the custom fixture classes.
+ */
+public class EdgeDriverProvider extends DownloadableDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
-    private final EnvironmentVariables environmentVariables;
-    private final DriverServicePool<EdgeDriverService>  driverServicePool = new EdgeServicePool();
+
+    private final DriverServicePool<ChromeDriverService> driverServicePool = new ChromeServicePool();
 
     private final FixtureProviderService fixtureProviderService;
 
     public EdgeDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
-        this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
+        // If webdriver calls are suspended no need to create a new driver
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
+        // Download the driver using WebDriverManager if required
+        downloadDriverIfRequired("edge", environmentVariables);
+        //
+        // Load the EdgeDriver capabilities from the serenity.conf file
+        //
+        EdgeOptions edgeOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").edgeOptions();
+        //
+        // Add any arguments passed from the test itself
+        //
+        edgeOptions.addArguments(argumentsIn(options));
+        //
+        // Check for extended classes to add extra ChromeOptions configuration
+        //
+        EdgeOptions enhancedOptions = ConfigureChromiumOptions.from(environmentVariables).into(edgeOptions);
+        EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(edgeOptions);
+        //
+        // Record the driver capabilities for reporting
+        //
+        driverProperties.registerCapabilities("edge", capabilitiesToProperties(enhancedOptions));
 
-        if(isDriverAutomaticallyDownloaded(environmentVariables)) {
-            WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forEdge();
-        }
-
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        MutableCapabilities desiredCapabilities = enhancer.enhanced(
-                new EdgeDriverCapabilities(environmentVariables, options).getCapabilities(),
-                SupportedWebDriver.EDGE);
-
-        driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
-
-        SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
-        AddLoggingPreferences.from(environmentVariables).to(desiredCapabilities);
-
-        EdgeOptions edgeOptions = new EdgeOptions();
-        List<String> args = DriverArgs.fromValue(options);
-        edgeOptions.addArguments(args);
-        if (args.contains("headless") || args.contains("--headless")) {
-            edgeOptions.setHeadless(true);
-        }
-
-        addPreferencesTo(edgeOptions);
-        EdgeOptions enhancedOptions = edgeOptions.merge(desiredCapabilities);
-
-        return ProvideNewDriver.withConfiguration(environmentVariables,
-                desiredCapabilities,
-                driverServicePool,
-                DriverServicePool::newDriver,
-                (pool, caps) -> new EdgeDriver(enhancedOptions)
-        );
+        return new EdgeDriver(enhancedOptions);
+//        return ProvideNewDriver.withConfiguration(environmentVariables,
+//                enhancedOptions,
+//                driverServicePool,
+//                DriverServicePool::newDriver,
+//                (pool, capabilities) -> new EdgeDriver(enhancedOptions)
+//        );
     }
 
-    public static Map<String, Object> optionsConfiguredIn(EnvironmentVariables environmentVariables) {
-        Map<String, Object> chromePreferences = BrowserPreferences.startingWith("edge.options.").from(environmentVariables);
-        return SanitisedBrowserPreferences.cleanUpPathsIn(chromePreferences);
-    }
-
-    private void addPreferencesTo(EdgeOptions options) {
-        Map<String, Object> optionValues = optionsConfiguredIn(environmentVariables);
-        optionValues.forEach(options::setCapability);
-    }
 }

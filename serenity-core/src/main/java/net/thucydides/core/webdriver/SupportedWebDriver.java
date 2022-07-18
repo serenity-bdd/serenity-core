@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
+
 /**
  * The list of supported web drivers.
  * These are the drivers that support screenshots.
@@ -50,12 +52,12 @@ public enum SupportedWebDriver {
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE", "Internet Explorer", "internet explorer", "internet_explorer")),
+    IEXPLORER(InternetExplorerDriver.class, false, asList("IE", "Internet Explorer", "internet explorer", "internet_explorer")),
 
     /**
      * Microsoft Edge
      */
-    EDGE(EdgeDriver.class, false),
+    EDGE(EdgeDriver.class, false, asList("edge","MicrosoftEdge")),
 
     /**
      * Safari
@@ -91,19 +93,20 @@ public enum SupportedWebDriver {
     }
 
     SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
-        this(webdriverClass, supportsJavascriptInjection, new ArrayList<String>());
+        this(webdriverClass, supportsJavascriptInjection, new ArrayList<>());
     }
 
     SupportedWebDriver(Class<? extends WebDriver> webdriverClass) {
-        this(webdriverClass, true, new ArrayList<String>());
+        this(webdriverClass, true, new ArrayList<>());
     }
 
     public static SupportedWebDriver valueOrSynonymOf(String driverName) {
+        String trimmedDriverName = driverName.trim();
         for (SupportedWebDriver supportedWebDriver : values()) {
-            if (driverName.trim().equalsIgnoreCase(supportedWebDriver.name())) {
+            if (trimmedDriverName.equalsIgnoreCase(supportedWebDriver.name())) {
                 return supportedWebDriver;
             }
-            if (supportedWebDriver.synonyms.contains(driverName.trim())) {
+            if (supportedWebDriver.synonyms.stream().anyMatch(trimmedDriverName::equalsIgnoreCase)) {
                 return supportedWebDriver;
             }
         }
@@ -158,7 +161,7 @@ public enum SupportedWebDriver {
 
     public static SupportedWebDriver getDriverTypeFor(final String value) throws DriverConfigurationError {
         try {
-            return SupportedWebDriver.valueOrSynonymOf(value.toUpperCase());
+            return SupportedWebDriver.valueOrSynonymOf(value);
         } catch (IllegalArgumentException e) {
             SupportedWebDriver closestMatchingDriver = getClosestDriverValueTo(value);
             throw new DriverConfigurationError("Unsupported browser type: " + value

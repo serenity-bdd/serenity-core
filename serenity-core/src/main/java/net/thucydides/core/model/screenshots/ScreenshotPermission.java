@@ -4,6 +4,7 @@ import net.serenitybdd.markers.DisableScreenshots;
 import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.annotations.Screenshots;
 import net.thucydides.core.model.TakeScreenshots;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reflection.StackTraceAnalyser;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.Configuration;
@@ -20,23 +21,59 @@ public class ScreenshotPermission {
     }
 
 
-    public boolean areDisabledForThisAction() {
+    public boolean areDisabledForThisAction(TestResult result) {
+        //
+        // Don't disable screenshots for failures or errors
+        //
+        if (result.isAtLeast(TestResult.FAILURE)) {
+            return false;
+        }
         TakeScreenshots codeLevelScreenshotConfiguration
-                = stepMethodOverride().orElseGet(() -> methodOverride().orElse(taskOverride().orElse(classOverride().orElse(TakeScreenshots.UNDEFINED))));
+                = stepMethodOverride()
+                .orElseGet(() -> methodOverride()
+                        .orElse(taskOverride(result)
+                                .orElse(classOverride()
+                                        .orElse(TakeScreenshots.UNDEFINED))));
 
         return codeLevelScreenshotConfiguration == TakeScreenshots.DISABLED;
     }
+//
+//    public boolean areAllowed(TakeScreenshots takeScreenshots) {
+//
+//        TakeScreenshots configuredLevelOverride = stepMethodOverride()
+//                .orElseGet(() -> methodOverride()
+//                        .orElse(taskOverride()
+//                                .orElse(classOverride()
+//                                        .orElse(stepDefinitionOverride().orElse(null)))));
+//        if (configuredLevelOverride != null) {
+//            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevelOverride);
+//        }
+//
+//        TakeScreenshots configuredLevel = configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED);
+//
+//        if (configuredLevel != TakeScreenshots.UNDEFINED) {
+//            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel);
+//        } else {
+//            return legacyScreenshotConfiguration(takeScreenshots);
+//        }
+//    }
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
+        return areAllowed(takeScreenshots, TestResult.UNDEFINED);
+    }
 
-        TakeScreenshots configuredLevel = stepMethodOverride()
+    public boolean areAllowed(TakeScreenshots takeScreenshots, TestResult result) {
+
+        TakeScreenshots configuredLevelOverride = stepMethodOverride()
                 .orElseGet(() -> methodOverride()
-                        .orElse(taskOverride()
+                        .orElse(taskOverride(result)
                                 .orElse(classOverride()
-                                        .orElse(stepDefinitionOverride()
-                                                .orElse(configuration.getScreenshotLevel()
-                                                        .orElse(TakeScreenshots.UNDEFINED))))));
+                                        .orElse(stepDefinitionOverride().orElse(null)))));
+        if (configuredLevelOverride != null) {
+            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevelOverride);
+        }
 
+        TakeScreenshots configuredLevel = configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED);
 
         if (configuredLevel != TakeScreenshots.UNDEFINED) {
             return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel);
@@ -78,14 +115,24 @@ public class ScreenshotPermission {
         return Optional.empty();
     }
 
-    private Optional<TakeScreenshots> taskOverride() {
+    private Optional<TakeScreenshots> taskOverride(TestResult result) {
+
+        Optional<TakeScreenshots> screenshotOptionDefinedInMethod = Optional.empty();
         for (Method callingMethod : StackTraceAnalyser.performAsMethodsIn(new Throwable().getStackTrace())) {
             Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenTaskScreenshotPreferenceFor(callingMethod);
             if (overriddenScreenshotPreference.isPresent()) {
-                return overriddenScreenshotPreference;
+                screenshotOptionDefinedInMethod = overriddenScreenshotPreference;
             }
         }
-        return Optional.empty();
+
+        //
+        // Tasks do not override failing tests
+        //
+        if (result.isAtLeast(TestResult.FAILURE)) {
+            return Optional.of(TakeScreenshots.FOR_FAILURES);
+        } else {
+            return screenshotOptionDefinedInMethod;
+        }
     }
 
     private Optional<TakeScreenshots> stepDefinitionOverride() {

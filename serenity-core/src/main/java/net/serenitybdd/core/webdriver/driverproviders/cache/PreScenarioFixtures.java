@@ -36,7 +36,7 @@ public class PreScenarioFixtures {
         List<Class<BeforeAWebdriverScenario>> capabilityEnhancers
                 = ClassFinder.loadClasses()
                 .thatImplement(BeforeAWebdriverScenario.class)
-                .fromPackage("net.serenitybdd")
+                .fromPackage("net.serenitybdd.plugins")
                 .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension).collect(Collectors.toList());
 
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();

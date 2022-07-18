@@ -40,7 +40,7 @@ class IFrameSwitcher {
             currentIFrames.put(driver, empty());
         } else {
             driver.switchTo().defaultContent();
-            target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame((WebElement)driver.findElement(frameLocator))));
+            target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame(driver.findElement(frameLocator))));
             currentIFrames.put(driver, target.getIFrame());
         }
     }

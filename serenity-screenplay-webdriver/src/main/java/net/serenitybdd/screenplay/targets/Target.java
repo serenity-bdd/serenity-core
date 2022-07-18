@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public abstract class Target implements ResolvableElement {
 
     protected final String targetElementName;
-    protected final Optional<IFrame> iFrame;
+    protected Optional<IFrame> iFrame;
     protected final Optional<Duration> timeout;
 
     public Target(String targetElementName, Optional<IFrame> iFrame) {
@@ -31,6 +31,11 @@ public abstract class Target implements ResolvableElement {
         this.targetElementName = targetElementName;
         this.iFrame = iFrame;
         this.timeout = timeout;
+    }
+
+    public <T extends Target> T inIFrame(By... byLocators) {
+        this.iFrame = Optional.of(IFrame.withPath(byLocators));
+        return (T) this;
     }
 
     @Override

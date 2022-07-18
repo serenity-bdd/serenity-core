@@ -1,6 +1,8 @@
 package net.thucydides.core.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +26,12 @@ public class DataTableRow {
     }
 
     public List<?> getValues() {
-        return new ArrayList<>(values);
+        return (values == null) ? Collections.emptyList() : new ArrayList<>(values);
     }
 
     public List<String> getStringValues() {
 
-        return values.stream().map(
+        return getValues().stream().map(
                 value -> (value == null) ? "" : value.toString()
         ).collect(Collectors.toList());
     }
@@ -59,7 +61,7 @@ public class DataTableRow {
         if(!(other instanceof DataTableRow)){
             return false;
         }
-        return (this.values.equals(((DataTableRow) other).values))
+        return (this.getValues().equals(((DataTableRow) other).getValues()))
                 && (this.lineNumber == ((DataTableRow) other).getLineNumber())
                 && (this.result == ((DataTableRow) other).getResult());
     }
@@ -71,13 +73,13 @@ public class DataTableRow {
         if(!(other instanceof DataTableRow)){
             return false;
         }
-        return (this.values.equals(((DataTableRow) other).values))
+        return (this.getValues().equals(((DataTableRow) other).getValues()))
                 && (this.lineNumber == ((DataTableRow) other).getLineNumber());
     }
     @Override
     public String toString() {
         return "DataTableRow{" +
-                "values=" + values +
+                "values=" + getValues() +
                 ", result=" + result +
                 '}';
     }

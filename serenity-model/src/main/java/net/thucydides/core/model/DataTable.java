@@ -398,6 +398,12 @@ public class DataTable {
         return Optional.empty();
     }
 
+    public void updateRowResult(int row, TestResult result) {
+        if (row < rows.size()) {
+            rows.get(row).setResult(result);
+        }
+    }
+
     public static class DataTableBuilder {
         private String scenarioOutline;
         private List<String> headers;
@@ -448,9 +454,11 @@ public class DataTable {
         }
 
         public DataTableBuilder andRows(List<List<Object>> rows) {
-            List<DataTableRow> dataTableRows = rows.stream()
-                    .map(values -> new DataTableRow(values, 0))
-                    .collect(Collectors.toList());
+            int rowNumber = 0;
+            List<DataTableRow> dataTableRows = new ArrayList<>();
+            for(List<Object> values : rows) {
+                dataTableRows.add(new DataTableRow(values, rowNumber++));
+            }
 
             return new DataTableBuilder(scenarioOutline, headers, dataTableRows, title, description, descriptors);
         }

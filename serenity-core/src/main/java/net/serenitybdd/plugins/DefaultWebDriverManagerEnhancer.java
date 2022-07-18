@@ -1,7 +1,8 @@
-package net.serenitybdd.core.webdriver.enhancers;
+package net.serenitybdd.plugins;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.core.webdriver.enhancers.WebDriverManagerEnhancer;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 

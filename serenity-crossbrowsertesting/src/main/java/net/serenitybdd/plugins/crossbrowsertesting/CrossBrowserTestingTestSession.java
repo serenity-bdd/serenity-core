@@ -1,4 +1,4 @@
-package net.serenitybdd.crossbrowsertesting;
+package net.serenitybdd.plugins.crossbrowsertesting;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;

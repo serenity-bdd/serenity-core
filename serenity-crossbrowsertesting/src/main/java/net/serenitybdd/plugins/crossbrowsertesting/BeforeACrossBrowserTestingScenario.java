@@ -1,4 +1,4 @@
-package net.serenitybdd.crossbrowsertesting;
+package net.serenitybdd.plugins.crossbrowsertesting;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;

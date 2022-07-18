@@ -22,7 +22,7 @@ public class AtTheEndOfAWebDriverTest {
         if (baseWebdriverTeardownClasses == null) {
             baseWebdriverTeardownClasses = ClassFinder.loadClasses()
                     .thatImplement(AfterAWebdriverScenario.class)
-                    .fromPackage("net.serenitybdd");
+                    .fromPackage("net.serenitybdd.plugins");
         }
 
         return new ArrayList<>(baseWebdriverTeardownClasses);

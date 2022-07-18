@@ -25,7 +25,7 @@ public class WebDriverManagerSetup {
 
         List<Class<?>> customEnhancers = ClassFinder.loadClasses()
                 .thatImplement(WebDriverManagerEnhancer.class)
-                .fromPackage("net.serenitybdd");
+                .fromPackage("net.serenitybdd.plugins");
 
         String extensionPackageList = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
         if (extensionPackageList != null) {

@@ -4,11 +4,10 @@ import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
+import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.html.TagExclusions;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
@@ -16,7 +15,6 @@ import org.openqa.selenium.MutableCapabilities;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
@@ -47,7 +45,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("name", TestOutcomeName.from(testOutcome));
 
         // Add tags
-        newOptions.put("tags", tagsFrom(testOutcome, environmentVariables));
+        newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
         // The w3c option is set to true by default, unless it is deactivated explicity
         newOptions.put("w3c", true);
@@ -58,23 +56,6 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         }
         capabilities.setCapability("LT:Options", newOptions);
         return capabilities;
-    }
-
-    private String[] tagsFrom(TestOutcome testOutcome, EnvironmentVariables environmentVariables) {
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
-        return testOutcome.getTags().stream()
-                .filter(exclusions::doNotExclude)
-                .map(TestTag::toString)
-                .map(this::stripTagPrefixFrom)
-                .collect(Collectors.toList()).toArray(new String[]{});
-    }
-
-    private String stripTagPrefixFrom(String tagName) {
-        if (tagName.toLowerCase().startsWith("tag:")) {
-            return tagName.substring(4);
-        } else {
-            return tagName;
-        }
     }
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {

@@ -2,6 +2,7 @@ package net.serenitybdd.plugins.saucelabs;
 
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -26,6 +27,9 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         newOptions.put("username", SauceLabsCredentials.from(environmentVariables).getUser());
         newOptions.put("accessKey", SauceLabsCredentials.from(environmentVariables).getAccessKey());
         capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
+
+        // Add tags
+        newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
         Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("sauce:options");
         if (currentOptions != null) {

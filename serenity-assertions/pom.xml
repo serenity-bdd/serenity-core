@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.3.0-BETA-1</version>
+        <version>3.3.0-BETA-2-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-assertions</artifactId>
     <packaging>jar</packaging>

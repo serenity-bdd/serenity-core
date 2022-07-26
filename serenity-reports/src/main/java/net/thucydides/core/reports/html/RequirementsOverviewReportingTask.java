@@ -162,6 +162,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         List<ScenarioOutcome> scenariosWithoutARule = new ArrayList<>();
 
         Map<Rule, List<ScenarioOutcome>> scenarioOutcomeMap = new HashMap<>();
+        List<Rule> scenarioRules = new ArrayList<>();
         for (ScenarioOutcome scenario : scenarios) {
             Rule rule = scenario.getRule();
             if (rule == null) {
@@ -169,6 +170,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             } else {
                 if (!scenarioOutcomeMap.containsKey(rule)) {
                     scenarioOutcomeMap.put(rule, new ArrayList<>());
+                    scenarioRules.add(rule);
                 }
                 scenarioOutcomeMap.get(rule).add(scenario);
             }
@@ -187,7 +189,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
                     );
             scenarioGroups.add(scenarioGroup);
         }
-        for (Rule rule : scenarioOutcomeMap.keySet()) {
+        for (Rule rule : scenarioRules) {
             scenarioGroups.add(new ScenarioOutcomeGroup(rule, scenarioOutcomeMap.get(rule)));
         }
 

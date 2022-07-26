@@ -15,6 +15,7 @@ public class WhenAddingCustomWebDriverManagerEnhancers {
     public void weCanEnhanceAWebDriverManagerSetupByImplementingAnEnhancer() {
 
         WebDriverManager webDriverManager = WebDriverManager.chromedriver();
+        environmentVariables.setProperty("serenity.extension.packages","net.serenitybdd.core.webdriver.driverproviders.webdrivermanager");
         WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).enhance(webDriverManager);
 
         assertThat(SampleWebDriverManagerEnhancer.WAS_ENHANCED).isTrue();

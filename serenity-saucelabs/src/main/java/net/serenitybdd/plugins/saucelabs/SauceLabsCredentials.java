@@ -22,12 +22,12 @@ class SauceLabsCredentials {
     }
 
     public String getUser() {
-        String userDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("browserstack.user").orElse("");
+        String userDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("sauce.username").orElse("");
         return Optional.ofNullable(environmentVariables.getValue("SAUCE_USERNAME")).orElse(userDefinedInSerenityConf);
     }
 
     public String getAccessKey() {
-        String keyDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("browserstack.key").orElse("");
+        String keyDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("sauce.key").orElse("");
         return Optional.ofNullable(environmentVariables.getValue("SAUCE_ACCESS_KEY")).orElse(keyDefinedInSerenityConf);
     }
 

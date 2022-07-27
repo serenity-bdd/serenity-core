@@ -16,7 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.safari.SafariOptions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,23 +75,29 @@ public class RemoteDriverProvider implements DriverProvider {
 
             EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(capabilities);
             AddCustomDriverCapabilities.from(environmentVariables)
-                                       .withTestDetails(SupportedWebDriver.getDriverTypeFor(driverName), testOutcome)
-                                       .to(capabilities);
+                    .withTestDetails(SupportedWebDriver.getDriverTypeFor(driverName), testOutcome)
+                    .to(capabilities);
             return new RemoteWebDriver(remoteUrl, capabilities);
         }
     }
 
     private URL getRemoteUrlFrom(EnvironmentVariables environmentVariables) {
-        String remoteUrl = EnvironmentSpecificConfiguration
-                .from(environmentVariables)
-                .getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL)
-                .orElse(
-                        getRemoteUrlFromFixtureClasses(environmentVariables).orElseThrow(
-                                () -> new RemoteDriverConfigurationError("A webdriver.remote.url property must be defined when using a Remote driver.")
-                        )
-                );
+
+        String remoteUrl = null;
 
         try {
+            Optional<String> environmentDefinedRemoteUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL);
+            if (environmentDefinedRemoteUrl.isPresent()) {
+                remoteUrl = environmentDefinedRemoteUrl.get();
+            } else {
+                Optional<String> remoteUrlDefinedInFixtureClasses = getRemoteUrlFromFixtureClasses(environmentVariables);
+                if (remoteUrlDefinedInFixtureClasses.isPresent()) {
+                    remoteUrl = remoteUrlDefinedInFixtureClasses.get();
+                }
+            }
+            if (remoteUrl == null) {
+                throw new RemoteDriverConfigurationError("A webdriver.remote.url property must be defined when using a Remote driver.");
+            }
             return new URL(remoteUrl);
         } catch (MalformedURLException e) {
             throw new RemoteDriverConfigurationError("Incorrectly formed webdriver.remote.url property: " + remoteUrl, e);

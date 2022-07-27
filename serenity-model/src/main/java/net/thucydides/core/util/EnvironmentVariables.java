@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import com.google.common.base.Splitter;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -84,5 +85,12 @@ public interface EnvironmentVariables {
 
     default Config getConfig(String prefix) {
         return ConfigFactory.empty();
+    }
+
+    default List<String> activeEnvironments() {
+        return Splitter.on(",")
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(getProperty("environment", ""));
     }
 }

@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.EMPTY_LIST;
+
 public class ScenarioOutcomes {
 
     public static List<ScenarioOutcome> from(RequirementsOutcomes requirementsOutcomes) {
@@ -61,8 +63,8 @@ public class ScenarioOutcomes {
 
         String featureName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : "";
         String scenarioName = testOutcome.getName();
-        List<String> exampleTables = (testOutcome.isDataDriven()) ?
-                Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName)) : Collections.EMPTY_LIST;
+        List<String> exampleTables = (testOutcome.isDataDriven() && !testOutcome.getDataTable().isEmpty()) ?
+                Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName)) : EMPTY_LIST;
 
         String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;

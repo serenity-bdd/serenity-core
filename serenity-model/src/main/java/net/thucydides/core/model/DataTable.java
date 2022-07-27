@@ -92,11 +92,15 @@ public class DataTable {
     }
 
     public List<String> getHeaders() {
-        return new ArrayList<>(headers);
+        return (headers == null) ?  emptyHeaders() : new ArrayList<>(headers);
+    }
+
+    private List<String> emptyHeaders() {
+        return getRows().stream().map(row -> "").collect(Collectors.toList());
     }
 
     public List<DataTableRow> getRows() {
-        return new ArrayList<>(rows);
+        return (rows == null) ? new ArrayList<>() : new ArrayList<>(rows);
     }
 
     public RowValueAccessor row(int rowNumber) {
@@ -108,7 +112,7 @@ public class DataTable {
     }
 
     boolean atLastRow() {
-        return ((rows.isEmpty()) || (currentRow.get() == rows.size() - 1));
+        return ((getRows().isEmpty()) || (currentRow.get() == rows.size() - 1));
     }
 
     public RowValueAccessor currentRow() {
@@ -154,7 +158,7 @@ public class DataTable {
 
     void addRow(DataTableRow dataTableRow) {
         appendRow(dataTableRow);
-        currentRow.set(rows.size() - 1);
+        currentRow.set(getRows().size() - 1);
     }
 
     public void appendRow(Map<String, ?> data) {
@@ -292,12 +296,14 @@ public class DataTable {
     }
 
     private void addHeaderTo(StringBuilder renderedTable) {
-        renderedTable.append("| ");
-        getHeaders().forEach(
-                header -> renderedTable.append(header).append(" |")
-        );
-        addBlankCellTo(renderedTable);
-        renderedTable.append(System.lineSeparator());
+        if (!getHeaders().isEmpty()) {
+            renderedTable.append("| ");
+            getHeaders().forEach(
+                    header -> renderedTable.append(header).append(" |")
+            );
+            addBlankCellTo(renderedTable);
+            renderedTable.append(System.lineSeparator());
+        }
     }
 
     private void addBlankCellTo(StringBuilder renderedTable) {
@@ -402,6 +408,10 @@ public class DataTable {
         if (row < rows.size()) {
             rows.get(row).setResult(result);
         }
+    }
+
+    public boolean isEmpty() {
+        return this.rows != null && !this.rows.isEmpty();
     }
 
     public static class DataTableBuilder {

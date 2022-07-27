@@ -1,6 +1,5 @@
 package net.serenitybdd.core.environment;
 
-import com.google.common.base.Splitter;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -63,6 +62,7 @@ public class EnvironmentSpecificConfiguration {
         );
         return propertiesWithPrefix;
     }
+
     private boolean propertyMatchesEnvironment(String key) {
         if (!isEnvironmentSpecific(key)) {
             return true;
@@ -76,11 +76,8 @@ public class EnvironmentSpecificConfiguration {
         return activeEnvironmentsIn(environmentVariables);
     }
 
-    private static List<String> activeEnvironmentsIn(EnvironmentVariables environmentVariables) {
-        return Splitter.on(",")
-                .trimResults()
-                .omitEmptyStrings()
-                .splitToList(environmentVariables.getProperty("environment", ""));
+    public static List<String> activeEnvironmentsIn(EnvironmentVariables environmentVariables) {
+        return environmentVariables.activeEnvironments();
     }
 
     private static final String ENVIRONMENT_PREFIX = "environments\\.([^.]*)\\.";
@@ -106,11 +103,21 @@ public class EnvironmentSpecificConfiguration {
 
     public Config getConfig(String prefix) {
         // Look for an environment-specific section
-        String activeEnvironment = environmentVariables.getProperty("environment", "");
-        String qualifiedPrefix = "environments." + activeEnvironment + "." + prefix;
-        if (!activeEnvironment.isEmpty() && environmentVariables.hasPath(qualifiedPrefix)) {
-            return environmentVariables.getConfig(qualifiedPrefix);
+        List<String> activeEnvironments = environmentVariables.activeEnvironments();
+
+        Optional<String> activePrefix = activeEnvironments.stream()
+                .filter(
+                        activeEnvironment -> {
+                            String qualifiedPrefix = "environments." + activeEnvironment + "." + prefix;
+                            return !activeEnvironment.isEmpty() && environmentVariables.hasPath(qualifiedPrefix);
+                        }
+                ).map(activeEnvironment -> "environments." + activeEnvironment + "." + prefix)
+                .findFirst();
+
+        if (activePrefix.isPresent()) {
+            return environmentVariables.getConfig(activePrefix.get());
         } else if (environmentVariables.hasPath(prefix)) {
+            // Use default value without the environment prefix if available
             return environmentVariables.getConfig(prefix);
         } else {
             return ConfigFactory.empty();

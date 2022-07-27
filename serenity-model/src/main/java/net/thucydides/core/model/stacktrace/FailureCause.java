@@ -9,6 +9,8 @@ import net.thucydides.core.model.TestFailureException;
 import net.thucydides.core.util.NameConverter;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -185,7 +187,11 @@ public class FailureCause {
         if (stringConstructorFor(failureClass).isPresent()) {
             return (T) stringConstructorFor(failureClass).get().newInstance(testFailureMessage);
         } else if (stringThrowableConstructorFor(failureClass).isPresent()) {
-            return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
+            try {
+                return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
+            } catch (Throwable requiresNonNullExceptionCause) {
+                return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, reconstructedExceptionFor(failureClass));
+            }
         } else if (throwableConstructorFor(failureClass).isPresent()) {
             return (T) throwableConstructorFor(failureClass).get().newInstance(new AssertionError(testFailureMessage));
         } else if (AssertionError.class.isAssignableFrom(failureClass)) {
@@ -212,13 +218,33 @@ public class FailureCause {
         }
     }
 
-    private Optional<Constructor> stringThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
-        try {
-            return Optional.ofNullable(failureClass.getConstructor(String.class, Throwable.class));
-        } catch (NoSuchMethodException e) {
-            return Optional.empty();
-        }
+    private Optional<Constructor> stringThrowableConstructorFor(Class failureClass) {
+        return Arrays.stream(failureClass.getDeclaredConstructors()).filter(
+                constructor -> constructor.getParameterTypes().length == 2
+                        && String.class.isAssignableFrom(constructor.getParameterTypes()[0])
+                        && Throwable.class.isAssignableFrom(constructor.getParameterTypes()[1])
+        ).findFirst();
     }
+
+    private Object reconstructedExceptionFor(Class failureClass) {
+        try {
+            Optional<Constructor> constructor = stringThrowableConstructorFor(failureClass);
+            if (constructor.isPresent()) {
+                try {
+                    Object dummyException = constructor.get().getParameterTypes()[1].getDeclaredConstructor().newInstance();
+                    if (dummyException instanceof Throwable) {
+                        ((Throwable)dummyException).setStackTrace(new StackTraceElement[]{});
+                    }
+                    return dummyException;
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    return null;
+                }
+            }
+        } catch(Throwable couldNotCreateADummyException) {
+        }
+        return null;
+    }
+
 
     private Optional<Constructor> throwableConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {

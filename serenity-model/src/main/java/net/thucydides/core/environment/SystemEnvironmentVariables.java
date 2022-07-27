@@ -299,14 +299,4 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         }
         return ConfigFactory.empty();
     }
-
-    private boolean hasDefinedEnvironment(Config config) {
-        if (config.hasPath("environment") && (config.getValue("environment").valueType() == ConfigValueType.STRING)) {
-            String environment = config.getString("environment");
-            return (config.hasPath("environments." + environment));
-        } else {
-            return false;
-        }
-    }
-
 }

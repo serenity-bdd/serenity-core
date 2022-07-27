@@ -53,7 +53,12 @@ public class RootCauseAnalyzer {
     }
 
     public String getMessage() {
-        return (getRootCause().getMessage() != null) ?
-                getRootCause().getMessage().replace("java.lang.AssertionError","") : getRootCause().getMessage();
+        if (thrownException.getMessage() != null) {
+            return thrownException.getMessage();
+        } else if (getRootCause().getMessage() != null) {
+            return getRootCause().getMessage().replace("java.lang.AssertionError","");
+        } else {
+            return null;
+        }
     }
 }

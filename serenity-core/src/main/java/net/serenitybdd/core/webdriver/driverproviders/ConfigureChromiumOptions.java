@@ -10,6 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+
 public class ConfigureChromiumOptions {
 
     private final EnvironmentVariables environmentVariables;
@@ -53,5 +56,16 @@ public class ConfigureChromiumOptions {
                     }
                 }
         );
+
+        //
+        // Headless mode from command line or headless.mode property
+        //
+        chromeOptions.setHeadless(HEADLESS_MODE.booleanFrom(environmentVariables,false));
+        //
+        // Legacy accept.insecure.certificates switch
+        //
+        chromeOptions.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false));
+
+
     }
 }

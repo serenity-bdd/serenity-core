@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+
 /**
  * Build a ChromeOptions or EdgeOptions object from a set of Desired Capabilities defined in the serenity.conf file.
  */
@@ -107,6 +109,7 @@ public class ChromiumOptionsBuilder {
         } else if (capabilities.getCapability(EdgeOptions.LOGGING_PREFS) != null) {
             setChromiumLoggingPreferences(capabilities, chromiumOptions);
         }
+
         return chromiumOptions;
     }
 

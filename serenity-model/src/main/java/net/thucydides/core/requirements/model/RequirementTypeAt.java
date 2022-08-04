@@ -16,7 +16,9 @@ public class RequirementTypeAt {
     }
 
     public String in(List<String> requirementTypes) {
-        if (level >= requirementTypes.size()) {
+        if (level <= 0) {
+            return requirementTypes.get(0);
+        } else if (level >= requirementTypes.size()) {
             return PathElements.lastOf(requirementTypes);
         } else {
             return requirementTypes.get(level);

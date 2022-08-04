@@ -739,7 +739,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         clear();
-        getElement().sendKeys(keysToSend);
+        sendKeys(keysToSend);
         notifyScreenChange();
         return this;
     }
@@ -761,7 +761,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         clear();
-        getElement().sendKeys(value, Keys.ENTER);
+        sendKeys(value, Keys.ENTER);
         notifyScreenChange();
         return this;
     }
@@ -782,8 +782,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         clear();
 
-        getElement().sendKeys(value);
-        getElement().sendKeys(Keys.TAB);
+        sendKeys(value);
+        sendKeys(Keys.TAB);
 
         getClock().pauseFor(100);
         notifyScreenChange();
@@ -1276,7 +1276,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public void sendKeys(CharSequence... keysToSend) {
-        getElement().sendKeys(nonNullCharSequenceFrom(keysToSend));
+        if (!allElementsAreNull(keysToSend)) {
+            getElement().sendKeys(nonNullCharSequenceFrom(keysToSend));
+        }
+    }
+
+    private boolean allElementsAreNull(CharSequence[] keysToSend) {
+        return Arrays.stream(keysToSend).allMatch(Objects::isNull);
     }
 
     public String getTagName() {

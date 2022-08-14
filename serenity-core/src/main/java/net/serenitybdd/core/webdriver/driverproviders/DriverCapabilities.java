@@ -40,10 +40,6 @@ public class DriverCapabilities {
         SupportedWebDriver driverType = driverTypeFor(driverComponentof(driverName));
         Preconditions.checkNotNull(driverType, "Unsupported remote driver type: " + driverName);
 
-        MutableCapabilities capabilities = W3CCapabilities.definedIn(environmentVariables)
-                                                          .withPrefix("webdriver.capabilities")
-                                                          .forDriver(driverType);
-
         if (shouldUseARemoteDriver()) {
             return enhancer.enhanced(remoteCapabilities(options), driverType);
         } else {

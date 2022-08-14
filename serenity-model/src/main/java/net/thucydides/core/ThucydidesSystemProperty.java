@@ -742,6 +742,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * Arguments to be passed to the Chrome driver, separated by commas.
+     * @Deprecated: this option is no longer supported as of 3.3.0, use the W3C options instead.
      */
     CHROME_SWITCHES,
 

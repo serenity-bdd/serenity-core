@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
-
 /**
  * Build a ChromeOptions or EdgeOptions object from a set of Desired Capabilities defined in the serenity.conf file.
  */
@@ -47,14 +45,12 @@ public class ChromiumOptionsBuilder {
                 switch (optionName) {
                     // Arguments
                     case "args":
-                        if (options.get("args") instanceof List) {
-                            List<String> args = ListOfValues.from(options).forProperty("args");
-                            if (!args.isEmpty()) {
-                                chromiumOptions.addArguments(args);
-                            }
-                            if (args.contains("headless") || args.contains("--headless")) {
-                                chromiumOptions.setHeadless(true);
-                            }
+                        List<String> args = ListOfValues.from(options).forProperty("args");
+                        if (!args.isEmpty()) {
+                            chromiumOptions.addArguments(args);
+                        }
+                        if (args.contains("headless") || args.contains("--headless")) {
+                            chromiumOptions.setHeadless(true);
                         }
                         break;
                     // Extensions
@@ -93,6 +89,9 @@ public class ChromiumOptionsBuilder {
                         break;
                     case "prefs":
                         chromiumOptions.setExperimentalOption("prefs", NestedMap.called("prefs").from(options));
+                        break;
+                    case "excludeSwitches":
+                        chromiumOptions.setExperimentalOption("excludeSwitches", ListOfValues.from(options).forProperty("args"));
                         break;
                     default:
                         extraOptions.put(optionName, options.get(optionName));

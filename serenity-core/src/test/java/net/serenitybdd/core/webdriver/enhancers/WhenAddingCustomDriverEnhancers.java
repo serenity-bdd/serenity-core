@@ -1,8 +1,10 @@
 package net.serenitybdd.core.webdriver.enhancers;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.driverproviders.EnhanceDriver;
 import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,9 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenAddingCustomDriverEnhancers {
 
+    @Before
+    public void setupWebDriver() {
+        WebDriverManager.chromedriver().setup();
+    }
+
     @Test
     public void customEnhancersCanAddExtraCapabilitiesWhenADriverIsCreated() {
-
 
         // Given
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();

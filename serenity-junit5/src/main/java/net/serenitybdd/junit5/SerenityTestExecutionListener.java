@@ -4,6 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
@@ -26,7 +27,6 @@ import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -162,7 +162,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 methodParameterClasses = Arrays.asList(methodParameterTypes.split(",")).stream().map(parameterClassName -> {
                     try {
                         //ClassUtils handles also simple data type like int, char..
-                        return ClassUtils.forName(parameterClassName.trim(), this.getClass().getClassLoader());
+                        return ClassUtil.forName(parameterClassName.trim(), this.getClass().getClassLoader());
                     } catch (ClassNotFoundException e) {
                         logger.error("Problem when getting parameter classes ", e);
                         return null;

@@ -22,11 +22,14 @@ public class ListOfValues {
     @NotNull
     public List<String> forProperty(String propertyName) {
         if (options.get(propertyName) != null) {
-            return ((List<?>) options.get(propertyName)).stream()
-                    .map(Object::toString)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
+            if (options.get(propertyName) instanceof List) {
+                return ((List<?>) options.get(propertyName)).stream()
+                        .map(Object::toString)
+                        .collect(Collectors.toList());
+            } else if (options.get(propertyName) instanceof String) {
+                return Arrays.stream(options.get(propertyName).toString().split(";")).collect(Collectors.toList());
+            }
         }
+        return Collections.emptyList();
     }
 }

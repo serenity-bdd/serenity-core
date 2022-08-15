@@ -166,8 +166,8 @@ public class ParameterizedTestsOutcomeAggregator {
         List<TestOutcome> testOutcomes = new ArrayList<>();
         for (TestOutcome testOutcome : allTestOutcomes) {
             //if (!testOutcomes.contains(testOutcome)) {
-                testOutcomes.add(withParentStepsMerged(testOutcome));
-                //testOutcomes.add(testOutcome);
+            testOutcomes.add(withParentStepsMerged(testOutcome));
+            //testOutcomes.add(testOutcome);
             //}
         }
         return testOutcomes;

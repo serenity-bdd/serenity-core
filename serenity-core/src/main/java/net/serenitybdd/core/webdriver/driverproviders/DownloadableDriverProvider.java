@@ -18,14 +18,14 @@ public abstract class DownloadableDriverProvider implements DriverProvider {
         return Splitter.on(";").omitEmptyStrings().splitToList(options);
     }
 
-    private final static Set<String> DOWNLOADED_DRIVERS = new CopyOnWriteArraySet<>();
+    private final static ThreadLocal<Set<String>> DOWNLOADED_DRIVERS = ThreadLocal.withInitial(CopyOnWriteArraySet::new);
 
     protected void downloadDriverIfRequired(String driver, EnvironmentVariables environmentVariables) {
-        if (!DOWNLOADED_DRIVERS.contains(driver)) {
+        if (!DOWNLOADED_DRIVERS.get().contains(driver)) {
             synchronized (DOWNLOADED_DRIVERS) {
-                DOWNLOADED_DRIVERS.add(driver);
+                DOWNLOADED_DRIVERS.get().add(driver);
                 if (isDriverAutomaticallyDownloaded(environmentVariables)) {
-                    LOGGER.info("Using automatically driver download");
+                    LOGGER.info("Using WebDriverManager configuration for " + driver);
                     switch (driver) {
                         case "chrome":
                             WebDriverManagerSetup.usingEnvironmentVariables(environmentVariables).forChrome();

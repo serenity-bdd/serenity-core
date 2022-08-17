@@ -190,7 +190,6 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static WebdriverManager getWebdriverManager() {
-//        lazyInitalize();
         if (webdriverManagerIsNotInstantiated()) {
             initialize();
         }

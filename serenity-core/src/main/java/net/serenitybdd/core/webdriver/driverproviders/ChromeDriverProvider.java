@@ -70,6 +70,7 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         LOGGER.info(enhancedOptions.toString());
 
         return new ChromeDriver(driverService, enhancedOptions);
+//        return new ChromeDriver(enhancedOptions);
     }
 
 }

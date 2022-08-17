@@ -12,16 +12,9 @@ import java.util.Properties;
 public class CapabilitiesConverter {
     public static Properties capabilitiesToProperties(Capabilities capabilities) {
         Properties properties = new Properties();
-
-        if (capabilities.getPlatformName() != null) {
-            properties.setProperty("platform", capabilities.getPlatformName().toString());
-        }
-
-        for (String capability : capabilities.asMap().keySet()) {
-            if (capabilities.getCapability(capability) instanceof String) {
-                properties.setProperty(capability, capabilities.getCapability(capability).toString());
-            }
-        }
+        capabilities.asMap().forEach(
+                (key, value) -> properties.setProperty(key,value.toString())
+        );
         return properties;
     }
 
@@ -34,7 +27,8 @@ public class CapabilitiesConverter {
 
             driverOptionsInJsonFormat = StringUtils.strip(driverOptionsInJsonFormat);
 
-            driverOptions = new Gson().fromJson(driverOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
+            driverOptions = new Gson().fromJson(driverOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {
+            }.getType());
         }
 
         return driverOptions;

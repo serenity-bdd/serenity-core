@@ -15,7 +15,7 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
-        if (!BrowserStackConfiguration.isDriverEnabled(driver) || !BrowserStackConfiguration.isActiveFor(environmentVariables)) {
+        if (!BrowserStackConfiguration.isDriverEnabled(driver) || !isActivated(environmentVariables)) {
             return;
         }
 
@@ -28,5 +28,9 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         String publicUrl = browserStackTestSession.getPublicUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
+    }
+
+    public boolean isActivated(EnvironmentVariables environmentVariables) {
+        return BrowserStackConfiguration.isActiveFor(environmentVariables);
     }
 }

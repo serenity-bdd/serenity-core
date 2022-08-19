@@ -1,11 +1,15 @@
 package net.serenitybdd.plugins.saucelabs;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
+import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTags;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +40,12 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
                     + "You can find both of these here: https://app.saucelabs.com/user-settings"
             );
         } else {
+            ((JavascriptExecutor)driver).executeScript("sauce:job-name=" + TestOutcomeName.from(testOutcome));
+            ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
+
+            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
+            ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
+
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
             sauceLabsTestSession.updateTestResultFor(testOutcome);
 
@@ -46,8 +56,6 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
 
     @Override
     public boolean isActivated(EnvironmentVariables environmentVariables) {
-        return EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getOptionalProperty("saucelabs.platformName")
-                .isPresent();
+        return SauceLabsConfiguration.isActiveFor(environmentVariables);
     }
 }

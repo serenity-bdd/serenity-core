@@ -47,7 +47,7 @@ public class SauceLabsTestSession {
     }
 
     public String getTestLink() {
-        if (sauceLabsKey != null) {
+        if ((sauceLabsKey != null) && (sessionId != null)) {
             return noLoginLink();
         } else {
             return String.format(APP_TEST_LINK_TEMPLATE, sessionId);

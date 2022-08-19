@@ -27,7 +27,10 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             return;
         }
 
-        String sessionId = RemoteDriver.of(driver).getSessionId().toString();
+        String sessionId = null;
+        if (RemoteDriver.of(driver).getSessionId() != null) {
+            sessionId = RemoteDriver.of(driver).getSessionId().toString();
+        }
         String userName = SauceLabsCredentials.from(environmentVariables).getUser();
 
         String key = SauceLabsCredentials.from(environmentVariables).getAccessKey();
@@ -47,7 +50,7 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
 
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
-            sauceLabsTestSession.updateTestResultFor(testOutcome);
+//            sauceLabsTestSession.updateTestResultFor(testOutcome);
 
             String publicUrl = sauceLabsTestSession.getTestLink();
             testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));

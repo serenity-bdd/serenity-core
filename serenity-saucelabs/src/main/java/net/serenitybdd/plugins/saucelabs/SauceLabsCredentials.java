@@ -7,7 +7,7 @@ import java.util.Optional;
 
 /**
  * The SauceLabs username and access key will be read from the SAUCE_USERNAME and SAUCE_ACCESS_KEY system properties,
- * or (if not defined there) from the browserstack.user and browserstack.key configuration properties
+ * or (if not defined there) from the saucelabs.username and saucelabs.accessKey configuration properties
  */
 class SauceLabsCredentials {
 
@@ -22,12 +22,12 @@ class SauceLabsCredentials {
     }
 
     public String getUser() {
-        String userDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("sauce.username").orElse("");
+        String userDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("saucelabs.username","sauce.username").orElse("");
         return Optional.ofNullable(environmentVariables.getValue("SAUCE_USERNAME")).orElse(userDefinedInSerenityConf);
     }
 
     public String getAccessKey() {
-        String keyDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("sauce.key").orElse("");
+        String keyDefinedInSerenityConf = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("saucelabs.accessKey","sauce.key").orElse("");
         return Optional.ofNullable(environmentVariables.getValue("SAUCE_ACCESS_KEY")).orElse(keyDefinedInSerenityConf);
     }
 

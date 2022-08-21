@@ -33,6 +33,7 @@ import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.util.ConfigCache;
 import net.thucydides.core.webdriver.*;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -108,7 +109,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<TestTag> storywideTags;
     private Darkroom darkroom;
     private Photographer photographer;
-    private SoundEngineer soundEngineer = new SoundEngineer();
+    private SoundEngineer soundEngineer;
 
     private final CloseBrowser closeBrowsers;
 
@@ -368,7 +369,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.configuration = injector.getInstance(Configuration.class);
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
         this.closeBrowsers = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
-
+        this.soundEngineer = new SoundEngineer(configuration.getEnvironmentVariables());
     }
 
     /**
@@ -1087,16 +1088,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return new ArrayList<>();
         }
 
-        return SerenityWebdriverManager.inThisTestThread().getCurrentDrivers().stream().map(
-                driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver))
-        ).collect(Collectors.toList());
+        return SerenityWebdriverManager.inThisTestThread()
+                .getCurrentDrivers()
+                .stream()
+                .map(driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver)))
+                .filter(ScreenshotAndHtmlSource::wasTaken)
+                .collect(Collectors.toList());
     }
 
     private File screenshotFrom(WebDriver driver) {
         Path screenshotPath = getPhotographer().takesAScreenshot()
                 .with(new WebDriverPhotoLens(driver))
                 .andWithBlurring(AnnotatedBluring.blurLevel())
-                .andSaveToDirectory(pathOf(outputDirectory))
+                .toDirectory(pathOf(outputDirectory))
+                .takeScreenshot()
                 .getPathToScreenshot();
 
         return (screenshotPath == null) ? null : screenshotPath.toFile();

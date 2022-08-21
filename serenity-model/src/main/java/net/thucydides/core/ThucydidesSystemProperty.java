@@ -1090,10 +1090,10 @@ public enum ThucydidesSystemProperty {
     SERENITY_TEST_REQUIREMENTS_BASEDIR,
 
     /**
-     * Set to true if you want the HTML source code to be recorded as well as the screenshots.
-     * This is not currently used in the reports.
+     * Set to true if you want the HTML source code to be recorded for all screenshots, and not just for failures.
+     * Set to false by default.
      */
-    //    THUCYDIDES_STORE_HTML_SOURCE,
+    SERENITY_ALWAYS_STORE_HTML,
 
     @Deprecated
     THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS,

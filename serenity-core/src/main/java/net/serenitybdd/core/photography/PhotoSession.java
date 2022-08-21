@@ -4,6 +4,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.UnhandledAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,9 +58,11 @@ public class PhotoSession {
             previousScreenshotTimestamp.set(System.currentTimeMillis());
 
             return photo;
-
         } catch (IOException e) {
             LOGGER.warn("Failed to take screenshot", e);
+            return ScreenshotPhoto.None;
+        } catch (UnhandledAlertException cantTakeScreenshotsIfAnAlertIsPresent) {
+            LOGGER.warn("Failed to take screenshot because an alert was being displayed", cantTakeScreenshotsIfAnAlertIsPresent);
             return ScreenshotPhoto.None;
         }
     }

@@ -25,12 +25,14 @@ public class PhotoSessionBooking {
         return this;
     }
 
-    public ScreenshotPhoto andSaveToDirectory(Path outputDirectory) {
+    public PhotoSessionBooking toDirectory(Path outputDirectory) {
+        this.outputDirectory = outputDirectory;
+        return this;
+    }
+
+    public ScreenshotPhoto takeScreenshot() {
         Preconditions.checkNotNull(lens);
         Preconditions.checkNotNull(outputDirectory);
-
-        this.outputDirectory = outputDirectory;
-
         return inPhotoSession().takeScreenshot();
     }
 

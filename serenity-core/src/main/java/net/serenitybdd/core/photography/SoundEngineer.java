@@ -4,7 +4,9 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ALWAYS_STORE_HTML;
+import static net.serenitybdd.core.photography.StoreHTML.ALWAYS;
+import static net.serenitybdd.core.photography.StoreHTML.NEVER;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_STORE_HTML;
 
 public class SoundEngineer {
 
@@ -16,8 +18,14 @@ public class SoundEngineer {
     }
 
     public SoundEngineer ifRequiredForResult(TestResult result) {
-        recordPageSource = (SERENITY_ALWAYS_STORE_HTML.booleanFrom(environmentVariables, false))
-                || ((result == TestResult.FAILURE || result == TestResult.ERROR));
+        StoreHTML storeHTML = StoreHTML.valueOf(SERENITY_STORE_HTML.optionalFrom(environmentVariables).orElse("FAILURES"));
+        if (storeHTML == NEVER) {
+            recordPageSource = false;
+        } else if (storeHTML == ALWAYS) {
+            recordPageSource = true;
+        } else {
+            recordPageSource = (result == TestResult.FAILURE || result == TestResult.ERROR || result == TestResult.UNDEFINED);
+        }
         return this;
     }
 

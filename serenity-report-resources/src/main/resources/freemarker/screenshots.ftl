@@ -211,9 +211,11 @@
                         </div>
                     </#if>
                 </#if>
-                <div class="panel-body">
-                    <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
-                </div>
+                <#if (testOutcome.failureDetails.pageSourceExists()) >
+                    <div class="panel-body">
+                        <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
+                    </div>
+                </#if>
             </div>
         </#if>
         <div class="slider-wrapper theme-default">

@@ -7,4 +7,5 @@ import java.io.IOException;
  */
 public interface PhotoLens {
     byte[] takeScreenshot() throws IOException;
+    default boolean canTakeScreenshot() { return true; }
 }

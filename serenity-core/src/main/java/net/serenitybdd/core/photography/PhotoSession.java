@@ -42,11 +42,16 @@ public class PhotoSession {
     }
 
     public ScreenshotPhoto takeScreenshot() {
-
         if (tooSoonForNewPhoto() && previousScreenshot.get() != null) {
             return previousScreenshot.get();
+        } else if (!lens.canTakeScreenshot()) {
+            return ScreenshotPhoto.None;
+        } else {
+            return captureAndRecordScreenshotData();
         }
+    }
 
+    private ScreenshotPhoto captureAndRecordScreenshotData() {
         try {
             byte[] screenshotData = screenShooterFactory.buildScreenShooter(lens).takeScreenshot();
             if (shouldIgnore(screenshotData)) {
@@ -58,11 +63,8 @@ public class PhotoSession {
             previousScreenshotTimestamp.set(System.currentTimeMillis());
 
             return photo;
-        } catch (IOException e) {
+        } catch (IOException | UnhandledAlertException e) {
             LOGGER.warn("Failed to take screenshot", e);
-            return ScreenshotPhoto.None;
-        } catch (UnhandledAlertException cantTakeScreenshotsIfAnAlertIsPresent) {
-            LOGGER.warn("Failed to take screenshot because an alert was being displayed", cantTakeScreenshotsIfAnAlertIsPresent);
             return ScreenshotPhoto.None;
         }
     }
@@ -96,10 +98,7 @@ public class PhotoSession {
 
         Files.createDirectories(screenshotsDirectory);
 
-        ScreenshotNegative screenshotNegative = prepareNegativeIn(screenshotsDirectory)
-                .withScreenshotData(screenshotData)
-                .andBlurringOf(blurLevel)
-                .andTargetPathOf(screenshotPath);
+        ScreenshotNegative screenshotNegative = prepareNegativeIn(screenshotsDirectory).withScreenshotData(screenshotData).andBlurringOf(blurLevel).andTargetPathOf(screenshotPath);
 
         return darkroom.sendNegative(screenshotNegative);
     }

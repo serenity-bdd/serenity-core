@@ -4,10 +4,12 @@ import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Take a screenshot with a specified WebDriver instance.
@@ -25,6 +27,28 @@ public class WebDriverPhotoLens implements PhotoLens {
 
     public WebDriver getDriver() {
         return driver;
+    }
+
+    @Override
+    public boolean canTakeScreenshot() {
+        if (alertIsDisplayedFor(driver)) {
+            return false;
+        }
+        return (WebDriverFactory.isAlive(driver) && unproxied(driver) instanceof TakesScreenshot);
+    }
+
+    private boolean alertIsDisplayedFor(WebDriver driver) {
+        if (driver.switchTo() == null) { return false; }
+
+        String currentWindow = driver.getWindowHandle();
+        try {
+            driver.switchTo().alert().getText();
+            return true;
+        } catch (NoAlertPresentException screenshotsNotSupportedIfAnAlertIsPresent) {
+            return false;
+        } finally {
+            driver.switchTo().window(currentWindow);
+        }
     }
 
     public byte[] takeScreenshot() throws IOException {

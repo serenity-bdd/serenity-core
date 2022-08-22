@@ -15,13 +15,15 @@ import java.nio.file.Files;
 import static net.thucydides.core.steps.stepdata.StepData.setDefaultStepFactory;
 import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class WhenStepFailedInStepsWithTestData {
 
     @Mock
     WebDriver driver;
+
+    @Mock
+    WebDriver.TargetLocator targetLocator;
 
     @Mock
     Logger logger;
@@ -43,6 +45,7 @@ public class WhenStepFailedInStepsWithTestData {
         StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
         StepEventBus.getEventBus().registerListener(listener);
         setDefaultStepFactory(null);
+        when(driver.switchTo()).thenReturn(targetLocator);
     }
 
     static class TestSteps extends ScenarioSteps {

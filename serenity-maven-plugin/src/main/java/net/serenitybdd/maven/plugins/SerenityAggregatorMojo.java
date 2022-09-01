@@ -222,7 +222,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     private Optional<UserStoryTestReporter> reportFrom(String key) {
         String reportClass = environmentVariables.getProperty(key);
         try {
-            return Optional.of((UserStoryTestReporter) Class.forName(reportClass).newInstance());
+            return Optional.of((UserStoryTestReporter) Class.forName(reportClass, true, Thread.currentThread().getContextClassLoader()).newInstance());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }

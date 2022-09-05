@@ -1,6 +1,8 @@
 package net.thucydides.core.reports.html;
 
 import net.thucydides.core.model.TestResult;
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.internal.StringUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,20 +49,21 @@ public class ResultIconFormatter {
     }
 
     public String forResult(String result) {
-        return forResult(TestResult.valueOf(result), "#");
+        return forResult(TestResult.valueOf(result), "","#");
     }
 
     public String forResult(TestResult result) {
-        return forResult(result,"#");
+        return forResult(result,"","#");
     }
-    public String forResult(TestResult result, String htmlReport) {
+    public String forResult(TestResult result, String errorMessage, String htmlReport) {
 
         TestResult testResult = Optional.ofNullable(result).orElse(TestResult.PENDING);
+        String resultMessage = (StringUtils.isEmpty(errorMessage)) ? testResult.toString() : testResult + System.lineSeparator() + errorMessage;
         return resultIcons.get(testResult)
                 .replace("${report}", htmlReport)
                 .replace("${iconStyle}", resultIconStyles.get(testResult))
                 .replace("${qualifier}", qualifier)
-                .replace("${result}", testResult.toString());
+                .replace("${result}", resultMessage);
     }
 
     public String colorFor(TestResult result) {

@@ -12,6 +12,7 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestStep;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
@@ -247,7 +248,7 @@ public class Formatter {
 
             matchingOutcome.ifPresent(
                     testOutcome -> matcher.appendReplacement(newText,
-                            resultIconFormatter.forResult(testOutcome.getResult(), testOutcome.getHtmlReport()))
+                            resultIconFormatter.forResult(testOutcome.getResult(), testOutcome.getConciseErrorMessage(), testOutcome.getHtmlReport()))
             );
         }
         matcher.appendTail(newText);
@@ -277,8 +278,10 @@ public class Formatter {
                 TestOutcome testOutcome = rowOutome.get();
                 Optional<Integer> matchingRow = getMatchingRowNumber(exampleLineNumber, testOutcome, currentRow);
                 if (matchingRow.isPresent() && rowIsAvailable(testOutcome, matchingRow.get())) {
+                    TestStep rowResult = testOutcome.getTestSteps().get(matchingRow.get());
                     matcher.appendReplacement(newText,
-                            resultIconFormatter.forResult(testOutcome.getTestSteps().get(matchingRow.get()).getResult(),
+                            resultIconFormatter.forResult(rowResult.getResult(),
+                                    rowResult.getConciseErrorMessage(),
                                     testOutcome.getHtmlReport()));
                 } else {
                     matcher.appendReplacement(newText, "&nbsp;");

@@ -91,7 +91,7 @@
         <jackson.version>2.13.3</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.7.0</kotlin.version>
+        <kotlin.version>1.7.10</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>

@@ -2,8 +2,6 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -13,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +40,10 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         // Download the driver using WebDriverManager if required
         downloadDriverIfRequired("chrome", environmentVariables);
         //
+        // Update the chromedriver binary path if necessary
+        //
+        UpdateDriverEnvironmentProperty.forDriverProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY);
+        //
         // Load the ChromeDriver capabilities from the serenity.conf file
         //
         ChromeOptions chromeOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").chromeOptions();
@@ -70,7 +71,6 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         LOGGER.info(enhancedOptions.toString());
 
         return new ChromeDriver(driverService, enhancedOptions);
-//        return new ChromeDriver(enhancedOptions);
     }
 
 }

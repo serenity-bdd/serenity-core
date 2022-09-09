@@ -10,10 +10,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 
 /**
@@ -42,6 +41,10 @@ public class EdgeDriverProvider extends DownloadableDriverProvider implements Dr
         // Download the driver using WebDriverManager if required
         downloadDriverIfRequired("edge", environmentVariables);
         //
+        // Update the binary path if necessary
+        //
+        UpdateDriverEnvironmentProperty.forDriverProperty(EdgeDriverService.EDGE_DRIVER_EXE_PROPERTY);
+        //
         // Load the EdgeDriver capabilities from the serenity.conf file
         //
         EdgeOptions edgeOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").edgeOptions();
@@ -60,12 +63,6 @@ public class EdgeDriverProvider extends DownloadableDriverProvider implements Dr
         driverProperties.registerCapabilities("edge", capabilitiesToProperties(enhancedOptions));
 
         return new EdgeDriver(enhancedOptions);
-//        return ProvideNewDriver.withConfiguration(environmentVariables,
-//                enhancedOptions,
-//                driverServicePool,
-//                DriverServicePool::newDriver,
-//                (pool, capabilities) -> new EdgeDriver(enhancedOptions)
-//        );
     }
 
 }

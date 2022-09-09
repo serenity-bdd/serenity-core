@@ -2,20 +2,14 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariDriverService;
 import org.openqa.selenium.safari.SafariOptions;
 
 public class SafariDriverProvider extends DownloadableDriverProvider implements DriverProvider {
@@ -37,6 +31,10 @@ public class SafariDriverProvider extends DownloadableDriverProvider implements 
         }
         // Download the driver using WebDriverManager if required
         downloadDriverIfRequired("safari", environmentVariables);
+        //
+        // Update the binary path if necessary
+        //
+        UpdateDriverEnvironmentProperty.forDriverProperty(SafariDriverService.SAFARI_DRIVER_EXE_PROPERTY);
         //
         // Load the capabilities from the serenity.conf file
         //

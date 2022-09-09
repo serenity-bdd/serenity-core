@@ -2,18 +2,15 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerDriverService;
 import org.openqa.selenium.ie.InternetExplorerOptions;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.safari.SafariOptions;
 
 public class InternetExplorerDriverProvider extends DownloadableDriverProvider implements DriverProvider {
 
@@ -35,6 +32,10 @@ public class InternetExplorerDriverProvider extends DownloadableDriverProvider i
         // Download the driver using WebDriverManager if required
         downloadDriverIfRequired("ie", environmentVariables);
         //
+        // Update the binary path if necessary
+        //
+        UpdateDriverEnvironmentProperty.forDriverProperty(InternetExplorerDriverService.IE_DRIVER_EXE_PROPERTY);
+        //
         // Load the capabilities from the serenity.conf file
         //
         InternetExplorerOptions ieOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").internetExplorerOptions();
@@ -48,11 +49,5 @@ public class InternetExplorerDriverProvider extends DownloadableDriverProvider i
         driverProperties.registerCapabilities("ie", capabilitiesToProperties(ieOptions));
 
         return new InternetExplorerDriver(ieOptions);
-//        return ProvideNewDriver.withConfiguration(environmentVariables,
-//                ieOptions,
-//                driverServicePool,
-//                DriverServicePool::newDriver,
-//                (pool, capabilities) -> new InternetExplorerDriver(ieOptions)
-//        );
     }
 }

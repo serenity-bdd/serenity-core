@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -79,6 +80,21 @@ public class TestOutcomeLoader {
         } catch (Exception e) {
             throw new ReportLoadingFailedError("Can not load reports for some reason", e);
         }
+
+    }
+
+    public Stream<TestOutcome> streamFrom(final File reportDirectory) throws ReportLoadingFailedError {
+
+        final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
+
+        File[] outputFiles = reportDirectory.listFiles(new SerializedOutcomeFilenameFilter());
+        if (outputFiles == null) {
+            return Stream.of();
+        }
+
+        return Arrays.stream(outputFiles).map(testOutcomeReporter::loadReportFrom)
+                           .filter(Optional::isPresent)
+                           .map(Optional::get);
 
     }
 
@@ -166,7 +182,8 @@ public class TestOutcomeLoader {
     }
 
     private AcceptanceTestLoader getOutcomeReporter() {
-        switch (formatConfiguration.getPreferredFormat()) {
+        OutcomeFormat preferredFormat = formatConfiguration.getPreferredFormat() != null ? formatConfiguration.getPreferredFormat() : OutcomeFormat.JSON;
+        switch (preferredFormat) {
             case XML:
                 return new XMLTestOutcomeReporter();
             case JSON:

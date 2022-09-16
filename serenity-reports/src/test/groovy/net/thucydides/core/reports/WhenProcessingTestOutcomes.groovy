@@ -8,6 +8,7 @@ import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.withResult
@@ -193,6 +194,17 @@ class WhenProcessingTestOutcomes extends Specification {
             def tests = testOutcomes.passingTests.getTests()
         then:
             tests.size() == 11
+    }
+
+    def "should load test outcomes as a stream"() {
+        given:
+        environmentVariables.setProperty("thucydides.report.format","json");
+        def loader = new TestOutcomeLoader(environmentVariables)
+        TestOutcomes testOutcomes = TestOutcomes.of(loader.streamFrom(directoryInClasspathCalled("/json-test-outcomes")).collect(Collectors.toList()));
+        when:
+        def tests = testOutcomes.passingTests.getTests()
+        then:
+        tests.size() == 11
     }
 
     def "should list all failing tests"() {

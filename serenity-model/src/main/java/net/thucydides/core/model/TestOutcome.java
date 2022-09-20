@@ -564,15 +564,7 @@ public class TestOutcome {
     }
 
     private List<String> removeDuplicates(List<String> issues) {
-        List<String> issuesWithNoDuplicates = new ArrayList<>();
-        if (issues != null) {
-            for (String issue : issues) {
-                if (!issuesWithNoDuplicates.contains(issue)) {
-                    issuesWithNoDuplicates.add(issue);
-                }
-            }
-        }
-        return issuesWithNoDuplicates;
+        return issues.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -1749,11 +1741,11 @@ public class TestOutcome {
     }
 
     public List<String> getIssues() {
-        List<String> allIssues = new ArrayList<>(issues());
+        Set<String> allIssues = new HashSet<>(issues());
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
-        return allIssues;
+        return new ArrayList<>(allIssues);
     }
 
     private List<String> versions() {

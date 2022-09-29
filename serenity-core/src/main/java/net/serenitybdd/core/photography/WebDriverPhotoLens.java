@@ -6,6 +6,7 @@ import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
@@ -40,14 +41,17 @@ public class WebDriverPhotoLens implements PhotoLens {
     private boolean alertIsDisplayedFor(WebDriver driver) {
         if (driver.switchTo() == null) { return false; }
 
-        String currentWindow = driver.getWindowHandle();
+        String currentWindow = null;
         try {
+            currentWindow = driver.getWindowHandle();
             driver.switchTo().alert().getText();
             return true;
-        } catch (NoAlertPresentException screenshotsNotSupportedIfAnAlertIsPresent) {
+        } catch (NoAlertPresentException | UnsupportedCommandException screenshotsNotSupportedIfAnAlertIsPresent) {
             return false;
         } finally {
-            driver.switchTo().window(currentWindow);
+            if (currentWindow != null) {
+                driver.switchTo().window(currentWindow);
+            }
         }
     }
 

@@ -127,17 +127,4 @@ public class WhenUsingADisabledWebDriverFacade {
         assertThat(webDriverFacade.manage().window().getSize(), is(notNullValue()));
     }
 
-    @Test
-    public void manage_ime_should_be_ignored() {
-        webDriverFacade.manage().ime().activateEngine("whatever");
-        webDriverFacade.manage().ime().deactivate();
-        assertThat(webDriverFacade.manage().ime().getActiveEngine(), is(""));
-        assertThat(webDriverFacade.manage().ime().isActivated(), is(false));
-        assertThat(webDriverFacade.manage().ime().getAvailableEngines().size(), is(0));
-        assertThat(webDriverFacade.manage().ime().getAvailableEngines().size(), is(0));
-
-
-    }
-
-
 }

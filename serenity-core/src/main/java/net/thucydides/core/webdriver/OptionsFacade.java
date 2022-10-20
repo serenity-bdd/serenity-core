@@ -52,11 +52,6 @@ public class OptionsFacade implements WebDriver.Options {
     }
 
     @Override
-    public WebDriver.ImeHandler ime() {
-        return options.ime();
-    }
-
-    @Override
     public WebDriver.Window window() {
         return options.window();
     }

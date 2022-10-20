@@ -3,10 +3,9 @@ package net.serenitybdd.junit5;
 import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.model.TestResult;
-import org.junit.Ignore;
-import org.junit.runners.model.FrameworkMethod;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class TestMethodConfiguration {
 
@@ -29,7 +28,7 @@ public class TestMethodConfiguration {
     }
 
     public boolean isIgnored() {
-        return method.getAnnotation(Ignore.class) != null;
+        return Arrays.stream(method.getAnnotations()).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals("Ignore"));
     }
 
     public boolean isPending() {

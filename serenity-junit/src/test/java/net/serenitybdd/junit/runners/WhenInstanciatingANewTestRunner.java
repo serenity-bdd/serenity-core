@@ -81,7 +81,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
     @Test
     public void driver_can_be_overridden_using_the_driver_property_in_the_Managed_annotation() throws InitializationError {
-        environmentVariables.setProperty("webdriver.driver", "opera");
+        environmentVariables.setProperty("webdriver.driver", "edge");
 
         SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenarioWithABrowser.class);
 

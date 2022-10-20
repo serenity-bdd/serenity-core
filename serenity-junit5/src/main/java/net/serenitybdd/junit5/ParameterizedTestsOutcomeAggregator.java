@@ -4,7 +4,6 @@ import net.thucydides.core.model.*;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.runner.Runner;
 
 import java.util.*;
 import java.util.stream.Collectors;

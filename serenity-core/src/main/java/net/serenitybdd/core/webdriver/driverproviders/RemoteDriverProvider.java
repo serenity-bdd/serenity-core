@@ -108,7 +108,7 @@ public class RemoteDriverProvider implements DriverProvider {
         return EnvironmentSpecificConfiguration
                 .from(environmentVariables)
                 .getOptionalProperty("webdriver.capabilities.browserName")
-                .orElse(
+                .orElseGet(() ->
                         EnvironmentSpecificConfiguration
                                 .from(environmentVariables)
                                 .getOptionalProperty(WEBDRIVER_REMOTE_DRIVER, WEBDRIVER_DRIVER)

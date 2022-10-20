@@ -43,10 +43,6 @@ public class OptionsStub implements WebDriver.Options {
         return new TimeoutsStub();
     }
 
-    public WebDriver.ImeHandler ime() {
-        return new ImeHandlerStub();
-    }
-
     public WebDriver.Window window() {
         return new WindowStub();
     }

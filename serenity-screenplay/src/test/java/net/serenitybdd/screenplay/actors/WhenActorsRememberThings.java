@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.actors;
 
-import net.serenitybdd.core.Serenity;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import org.junit.Test;

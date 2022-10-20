@@ -564,6 +564,7 @@ public class TestOutcome {
     }
 
     private List<String> removeDuplicates(List<String> issues) {
+        if (issues == null) { return new ArrayList<>(); }
         return issues.stream().distinct().collect(Collectors.toList());
     }
 
@@ -1970,6 +1971,7 @@ public class TestOutcome {
     public List<String> getIssueKeys() {
         return getIssues().stream()
                 .map(issue -> IssueKeyFormat.forEnvironment(getEnvironmentVariables()).andKey(issue))
+                .sorted()
                 .collect(Collectors.toList());
     }
 

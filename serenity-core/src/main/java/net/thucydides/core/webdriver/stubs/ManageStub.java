@@ -47,11 +47,6 @@ public class ManageStub implements WebDriver.Options {
     }
 
     @Override
-    public WebDriver.ImeHandler ime() {
-        return null;
-    }
-
-    @Override
     public WebDriver.Window window() {
         return new WindowStub();
     }

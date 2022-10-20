@@ -311,7 +311,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             handleResult(event.getResult());
             finishExample();
         }
-        if (Status.FAILED.equals(event.getResult()) && noAnnotatedResultIdDefinedFor(event)) {
+        if (Status.FAILED.equals(event.getResult().getStatus()) && noAnnotatedResultIdDefinedFor(event)) {
             getStepEventBus(event.getTestCase().getUri()).testFailed(event.getResult().getError());
         } else {
             getStepEventBus(event.getTestCase().getUri()).testFinished(getContext().examplesAreRunning());

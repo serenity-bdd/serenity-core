@@ -406,7 +406,7 @@ public class StepFactory {
     }
 
     private class ParameterAssignementChecker {
-        private static final boolean PARAMETER_CAN_BE_ASSIGNED = false;
+        private static final boolean PARAMETER_CAN_BE_ASSIGNED = true;
         private final Object parameter;
 
         public ParameterAssignementChecker(Object parameter) {

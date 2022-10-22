@@ -329,8 +329,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private void handleTestStepStarted(TestStepStarted event) {
-
-
         StepDefinitionAnnotations.setScreenshotPreferencesTo(
                 StepDefinitionAnnotationReader
                         .withScreenshotLevel((TakeScreenshots) systemConfiguration.getScreenshotLevel()

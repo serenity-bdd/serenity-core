@@ -56,7 +56,7 @@
         <commons.lang.version>3.12.0</commons.lang.version>
         <commons.lang2.version>2.6</commons.lang2.version>
         <commons.io.version>2.11.0</commons.io.version>
-        <commons.text.version>1.9</commons.text.version>
+        <commons.text.version>1.10.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.collections.version>3.2.2</commons.collections.version>
         <commons.net.version>3.8.0</commons.net.version>
@@ -72,7 +72,7 @@
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.2.0</awaitility.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <appium.version>8.1.1</appium.version>
+        <appium.version>8.2.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <htmlunit.version>3.62.0</htmlunit.version>
         <webdrivermanager.version>5.2.1</webdrivermanager.version>
@@ -88,7 +88,7 @@
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.0.M1</thymeleaf.version>
         <javassist.version>3.28.0-GA</javassist.version>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.13.4</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
         <kotlin.version>1.7.10</kotlin.version>

@@ -1050,6 +1050,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private boolean shouldTakeScreenshot(ScreenshotType screenshotType,
                                          ScreenshotAndHtmlSource screenshotAndHtmlSource) {
+        if (screenshots().areDisabled()) {
+            return false;
+        }
         return (screenshotType == MANDATORY_SCREENSHOT)
                 || getCurrentStep().getScreenshots().isEmpty()
                 || shouldTakeOptionalScreenshot(screenshotAndHtmlSource);

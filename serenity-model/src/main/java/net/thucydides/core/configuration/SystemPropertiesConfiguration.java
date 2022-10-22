@@ -200,7 +200,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     @SuppressWarnings("deprecation")
     public boolean takeVerboseScreenshots() {
         return Boolean.parseBoolean(propertyNamed(THUCYDIDES_VERBOSE_SCREENSHOTS, "false"));
-//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_VERBOSE_SCREENSHOTS.getPropertyName(), false);
     }
 
     public Optional<TakeScreenshots> getScreenshotLevel() {

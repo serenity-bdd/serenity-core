@@ -20,6 +20,10 @@ public class ScreenshotPermission {
         this.configuration = configuration;
     }
 
+    public boolean areDisabled() {
+        TakeScreenshots configuredLevel = configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED);
+        return configuredLevel == TakeScreenshots.DISABLED;
+    }
 
     public boolean areDisabledForThisAction(TestResult result) {
         //
@@ -37,26 +41,6 @@ public class ScreenshotPermission {
 
         return codeLevelScreenshotConfiguration == TakeScreenshots.DISABLED;
     }
-//
-//    public boolean areAllowed(TakeScreenshots takeScreenshots) {
-//
-//        TakeScreenshots configuredLevelOverride = stepMethodOverride()
-//                .orElseGet(() -> methodOverride()
-//                        .orElse(taskOverride()
-//                                .orElse(classOverride()
-//                                        .orElse(stepDefinitionOverride().orElse(null)))));
-//        if (configuredLevelOverride != null) {
-//            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevelOverride);
-//        }
-//
-//        TakeScreenshots configuredLevel = configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED);
-//
-//        if (configuredLevel != TakeScreenshots.UNDEFINED) {
-//            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel);
-//        } else {
-//            return legacyScreenshotConfiguration(takeScreenshots);
-//        }
-//    }
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
         return areAllowed(takeScreenshots, TestResult.UNDEFINED);

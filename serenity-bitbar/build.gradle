@@ -1,0 +1,13 @@
+ext {
+    projectDescription = 'Serenity BitBar Integration'
+}
+
+dependencies {
+    implementation project(':serenity-core')
+    implementation "org.apache.httpcomponents:httpcore:4.4.14"
+    implementation "org.apache.httpcomponents:httpclient:4.5.13"
+    implementation "com.testdroid:testdroid-api:3.6"
+    // TEST DEPENDENCIES
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+    testImplementation "junit:junit:${junitVersion}"
+}

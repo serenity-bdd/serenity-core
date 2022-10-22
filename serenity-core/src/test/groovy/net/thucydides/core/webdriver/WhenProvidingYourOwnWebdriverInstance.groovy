@@ -73,7 +73,6 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
         def sourceConfig = new ProvidedDriverConfiguration(environmentVariables)
         driver = sourceConfig.driverSource.newDriver()
         then:
-//            driver.class == HtmlUnitDriver
         driver.class == ChromeDriver
     }
 

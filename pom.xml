@@ -85,8 +85,8 @@
         <jbehave.version>4.8.3</jbehave.version>
         <opentest4j.version>1.2.0</opentest4j.version>
         <ant.version>1.10.12</ant.version>
-        <restassured.version>5.1.1</restassured.version>
-        <wiremock.version>1.58</wiremock.version>
+        <restassured.version>5.2.0</restassured.version>
+        <wiremock.version>2.27.2</wiremock.version>
         <thymeleaf.version>3.1.0.M1</thymeleaf.version>
         <javassist.version>3.28.0-GA</javassist.version>
         <jackson.version>2.13.3</jackson.version>

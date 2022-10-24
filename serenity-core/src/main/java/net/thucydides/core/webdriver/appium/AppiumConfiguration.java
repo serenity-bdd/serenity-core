@@ -14,6 +14,7 @@ import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
+import net.thucydides.core.webdriver.capabilities.CapabilityProperty;
 import org.openqa.selenium.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -138,10 +139,10 @@ public class AppiumConfiguration {
         SetProxyConfiguration.from(environmentVariables).in(capabilities);
         AddLoggingPreferences.from(environmentVariables).to(capabilities);
 
-        Properties appiumProperties = getProperties(options);
+        Map<String,Object> appiumProperties = getProperties(options);
 
         for (Object key : appiumProperties.keySet()) {
-            capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));
+            capabilities.setCapability(key.toString(), appiumProperties.get(key.toString()));
         }
 
         if (!ThucydidesSystemProperty.APPIUM_PROCESS_DESIRED_CAPABILITIES.booleanFrom(environmentVariables, Boolean.FALSE)) {
@@ -168,13 +169,13 @@ public class AppiumConfiguration {
         return processedCapabilities;
     }
 
-    public Properties getProperties(String options) {
+    public Map<String,Object> getProperties(String options) {
         return appiumPropertiesFrom(environmentVariables, options);
     }
 
-    private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
+    private Map<String,Object>  appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
 
-        Properties appiumProperties = new Properties();
+        Map<String,Object>  appiumProperties = new HashMap<>();
         String env = environmentVariables.getProperty("environment", "default");
         String regex = String.format("environments\\.(all|%s)\\.appium", env);
         List<String> appiumKeys =
@@ -193,18 +194,18 @@ public class AppiumConfiguration {
 
             String value = isAppProperty(key) ? appPathFrom(specifiedAppPath) : specifiedAppPath;
             String simplifiedKey = key.replace("appium.", "");
-            appiumProperties.setProperty(simplifiedKey, value.trim());
+            appiumProperties.put(simplifiedKey, CapabilityProperty.asObject(value.trim()));
         }
 
         Map<String, String> optionsMap = OptionsMap.from(options);
         for (String key : optionsMap.keySet()) {
-            appiumProperties.setProperty(key, optionsMap.get(key));
+            appiumProperties.put(key, CapabilityProperty.asObject(optionsMap.get(key)));
         }
         ensureAppOrBrowserPathDefinedIn(appiumProperties);
         return appiumProperties;
     }
 
-    private void ensureAppOrBrowserPathDefinedIn(Properties appiumProperties) {
+    private void ensureAppOrBrowserPathDefinedIn(Map<String,Object>  appiumProperties) {
         if (!(appiumProperties.containsKey("app") || (appiumProperties.containsKey("appPackage") && appiumProperties.containsKey("appActivity")) || appiumProperties.containsKey("browserName"))) {
             throw new ThucydidesConfigurationException("The browser under test or path to the app or (appPackage and appActivity) needs to be provided in the appium.app or appium.browserName property.");
         }

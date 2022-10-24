@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
 
+import static net.serenitybdd.core.webdriver.enhancers.SampleDriverEnhancer.DRIVER_ENHANCED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenAddingCustomDriverEnhancers {
@@ -35,7 +36,7 @@ public class WhenAddingCustomDriverEnhancers {
         EnhanceDriver.from(environmentVariables).to(driver);
 
         // Then
-        assertThat(driver.manage().timeouts().getScriptTimeout()).isEqualTo(Duration.ofSeconds(10));
+        assertThat(DRIVER_ENHANCED).isTrue();
 
         driver.close();
     }

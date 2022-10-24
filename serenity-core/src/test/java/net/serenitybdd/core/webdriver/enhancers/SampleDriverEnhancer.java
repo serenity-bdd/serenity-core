@@ -7,8 +7,9 @@ import java.time.Duration;
 
 public class SampleDriverEnhancer implements CustomDriverEnhancer {
 
+    public static boolean DRIVER_ENHANCED = false;
     @Override
     public void apply(EnvironmentVariables environmentVariables, WebDriver driver) {
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
+        DRIVER_ENHANCED = true;
     }
 }

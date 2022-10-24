@@ -195,8 +195,8 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
-        appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
+        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == true
+        appiumConfiguration.capabilities.getCapability("showIOSLog") == true
         appiumConfiguration.capabilities.capabilityNames.size() == 3
     }
 
@@ -208,8 +208,8 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
-        appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
+        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == true
+        appiumConfiguration.capabilities.getCapability("autoWebview") == true
         appiumConfiguration.capabilities.capabilityNames.size() == 3
 
     }
@@ -223,7 +223,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == "true"
+        appiumConfiguration.capabilities.getCapability("showChromedriverLog") == true
         !appiumConfiguration.capabilities.capabilityNames.contains("showIOSLog")
 
     }
@@ -238,8 +238,8 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        appiumConfiguration.capabilities.getCapability("showIOSLog") == "true"
-        appiumConfiguration.capabilities.getCapability("autoWebview") == "true"
+        appiumConfiguration.capabilities.getCapability("showIOSLog") == true
+        appiumConfiguration.capabilities.getCapability("autoWebview") == true
         !appiumConfiguration.capabilities.capabilityNames.contains("showChromedriverLog")
         appiumConfiguration.capabilities.capabilityNames.size() == 3
     }

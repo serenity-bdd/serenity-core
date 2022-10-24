@@ -83,7 +83,6 @@ public class JUnitStepListenerBuilder {
     private BaseStepListener buildBaseStepListener() {
         if (pageFactory != null) {
             return Listeners.getBaseStepListener()
-                    .withPages(pageFactory)
                     .and().withOutputDirectory(outputDirectory);
         } else {
             return Listeners.getBaseStepListener()
@@ -98,7 +97,6 @@ public class JUnitStepListenerBuilder {
                 buildBaseStepListener(),
                 Listeners.getLoggingListener(),
                 newTestCountListener());
-//                Listeners.getStatisticsListener());
     }
 
     private StepListener newTestCountListener() {

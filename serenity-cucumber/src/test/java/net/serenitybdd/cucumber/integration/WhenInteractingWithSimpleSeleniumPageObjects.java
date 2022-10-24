@@ -6,4 +6,4 @@ import org.junit.runner.RunWith;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(features="src/test/resources/samples/web/aBehaviorWithSeleniumPageObjects.feature")
-public class SimpleSeleniumPageObjects {}
+public class WhenInteractingWithSimpleSeleniumPageObjects {}

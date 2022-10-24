@@ -163,7 +163,7 @@ public class WhenRecordingStepExecutionResults {
 
         when(pages.getDriver()).thenReturn(null);
 
-        BaseStepListener listener = new BaseStepListener(outputDirectory, pages);
+        BaseStepListener listener = new BaseStepListener(outputDirectory);
 
         assertThat(listener.getDriver(), is(notNullValue()));
     }
@@ -171,7 +171,7 @@ public class WhenRecordingStepExecutionResults {
     @Test
     public void the_listener_can_create_a_new_driver_if_the_pages_factory_is_not_defined() {
 
-        BaseStepListener listener = new BaseStepListener(outputDirectory, (Pages) null);
+        BaseStepListener listener = new BaseStepListener(outputDirectory);
 
         assertThat(listener.getDriver(), is(notNullValue()));
     }

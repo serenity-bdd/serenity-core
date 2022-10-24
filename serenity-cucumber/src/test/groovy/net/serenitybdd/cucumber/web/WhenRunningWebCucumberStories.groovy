@@ -81,7 +81,7 @@ class WhenRunningWebCucumberStories extends Specification {
 
     def "a cucumber step library can use page objects directly"()  {
         given:
-        def runtime = serenityRunnerForCucumberTestRunner(SimpleSeleniumPageObjects.class, outputDirectory, environmentVariables);
+        def runtime = serenityRunnerForCucumberTestRunner(WhenInteractingWithSimpleSeleniumPageObjects.class, outputDirectory, environmentVariables);
 
         when:
         runtime.run();

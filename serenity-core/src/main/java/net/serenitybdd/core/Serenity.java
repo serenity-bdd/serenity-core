@@ -117,7 +117,7 @@ public class Serenity {
     public static void initStepListener() {
         Configuration configuration = ConfiguredEnvironment.getConfiguration();
         File outputDirectory = configuration.getOutputDirectory();
-        StepListener listener = new BaseStepListener(outputDirectory, getPages());
+        StepListener listener = new BaseStepListener(outputDirectory);
         stepListenerThreadLocal.set(listener);
         StepEventBus.getEventBus().registerListener(getStepListener());
     }

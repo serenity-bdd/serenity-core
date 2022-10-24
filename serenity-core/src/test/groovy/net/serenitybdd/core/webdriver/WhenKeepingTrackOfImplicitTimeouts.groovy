@@ -124,11 +124,11 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
             super(driver)
         }
 
-        public void setImplicitTimeoutTo(int timeout) {
+        void setImplicitTimeoutTo(int timeout) {
             setImplicitTimeout(timeout, ChronoUnit.SECONDS);
         }
 
-        public long getImplicitTimoutMilliseconds() {
+        long getImplicitTimoutMilliseconds() {
             return implicitTimoutMilliseconds();
         }
     }

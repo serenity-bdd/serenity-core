@@ -32,10 +32,6 @@ public class WhenCreatingANewBaseStepListener {
             super(driverClass, outputDirectory);
         }
 
-        public TestableBaseStepListener(final File outputDirectory, final Pages pages) {
-            super(outputDirectory, pages);
-        }
-
         @Override
         protected WebdriverProxyFactory getProxyFactory() {
             return proxyFactory;

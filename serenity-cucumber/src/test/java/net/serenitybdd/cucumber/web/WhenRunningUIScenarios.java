@@ -67,36 +67,6 @@ public class WhenRunningUIScenarios {
     }
 
     @Test
-    public void shouldUseADifferentBrowserIfRequested() {
-        // Given
-        io.cucumber.core.runtime.Runtime runtime = serenityRunnerForCucumberTestRunner(SimpleSeleniumDifferentBrowserScenario.class, outputDirectory, environmentVariables);
-
-        // When
-        runtime.run();
-
-        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory);
-        TestOutcome testOutcome = recordedTestOutcomes.get(0);
-
-        // Then
-        assertThat(testOutcome.getResult()).isEqualTo(TestResult.SUCCESS);
-    }
-
-    @Test
-    public void shouldBeAbleToUsePageObjectsDirectly() {
-        // Given
-        io.cucumber.core.runtime.Runtime runtime = serenityRunnerForCucumberTestRunner(SimpleSeleniumPageObjects.class, outputDirectory, environmentVariables);
-
-        // When
-        runtime.run();
-
-        List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory);
-        TestOutcome testOutcome = recordedTestOutcomes.get(0);
-
-        // Then
-        assertThat(testOutcome.getResult()).isEqualTo(TestResult.SUCCESS);
-    }
-
-    @Test
     public void shouldRunSubsequentScenariosAfteeAScenarioFails() {
         // Given
         io.cucumber.core.runtime.Runtime runtime = serenityRunnerForCucumberTestRunner(SimpleSeleniumFailingAndPassingScenario.class, outputDirectory, environmentVariables);

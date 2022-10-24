@@ -26,6 +26,7 @@ public class FileSystemRequirementsStore implements RequirementsStore {
         this.storeName = storeName;
         this.gson = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
+                .setLenient()
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter()).create();
 
     }

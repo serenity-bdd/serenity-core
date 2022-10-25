@@ -11,16 +11,20 @@ class DropdownSelector {
     private final WebElementFacadeImpl webElementFacade;
 
     public DropdownSelector(WebElementFacadeImpl webElementFacade) {
-
         this.webElementFacade = webElementFacade;
     }
 
     public WebElementFacade byVisibleText(String label) {
-        if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
+        if (webElementFacade.driverIsDisabled()) {
+            return webElementFacade;
+        }
 
-        webElementFacade.waitUntilElementAvailable();
-        Select select = new Select(webElementFacade.getElement());
-        select.selectByVisibleText(label);
+        WithRetries.on(webElementFacade).perform(
+                elementFacade -> {
+                    Select select = new Select(webElementFacade.getElement());
+                    select.selectByVisibleText(label);
+                }, 12);
+
         webElementFacade.notifyScreenChange();
         return webElementFacade;
     }
@@ -38,10 +42,15 @@ class DropdownSelector {
     }
 
     public WebElementFacade byValue(String value) {
-        if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
-        webElementFacade.waitUntilElementAvailable();
-        Select select = new Select(webElementFacade.getElement());
-        select.selectByValue(value);
+        if (webElementFacade.driverIsDisabled()) {
+            return webElementFacade;
+        }
+        WithRetries.on(webElementFacade).perform(
+                elementFacade -> {
+                    Select select = new Select(webElementFacade.getElement());
+                    select.selectByValue(value);
+                }, 12);
+
         webElementFacade.notifyScreenChange();
         return webElementFacade;
     }
@@ -59,10 +68,14 @@ class DropdownSelector {
     }
 
     public WebElementFacade byIndex(int indexValue) {
-        if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
-        webElementFacade.waitUntilElementAvailable();
-        Select select = new Select(webElementFacade.getElement());
-        select.selectByIndex(indexValue);
+        if (webElementFacade.driverIsDisabled()) {
+            return webElementFacade;
+        }
+        WithRetries.on(webElementFacade).perform(
+                elementFacade -> {
+                    Select select = new Select(webElementFacade.getElement());
+                    select.selectByIndex(indexValue);
+                }, 12);
         webElementFacade.notifyScreenChange();
         return webElementFacade;
     }

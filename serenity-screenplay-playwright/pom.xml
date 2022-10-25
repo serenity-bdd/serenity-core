@@ -32,11 +32,11 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
-<!--                <configuration>-->
-<!--                    <parallel>all</parallel>-->
-<!--                    <threadCount>8</threadCount>-->
-<!--                    <perCoreThreadCount>true</perCoreThreadCount>-->
-<!--                </configuration>-->
+                <configuration>
+                    <parallel>all</parallel>
+                    <threadCount>8</threadCount>
+                    <perCoreThreadCount>true</perCoreThreadCount>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>

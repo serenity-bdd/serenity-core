@@ -62,7 +62,7 @@
         <commons.net.version>3.8.0</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <selenium.version>4.5.0</selenium.version>
+        <selenium.version>4.5.3</selenium.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <jsoup.version>1.14.3</jsoup.version>
         <joda-time.version>2.8.2</joda-time.version>
@@ -560,9 +560,9 @@
                             <exclude>**/samples/**</exclude>
                             <exclude>**/*Sample*</exclude>
                         </excludes>
-<!--                        <parallel>all</parallel>-->
-<!--                        <threadCount>16</threadCount>-->
-<!--                        <perCoreThreadCount>true</perCoreThreadCount>-->
+                        <parallel>all</parallel>
+                        <threadCount>16</threadCount>
+                        <perCoreThreadCount>true</perCoreThreadCount>
                     </configuration>
                 </plugin>
                 <plugin>

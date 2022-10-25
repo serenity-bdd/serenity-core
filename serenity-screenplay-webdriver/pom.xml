@@ -42,9 +42,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-<!--                    <parallel>all</parallel>-->
-<!--                    <threadCount>8</threadCount>-->
-<!--                    <perCoreThreadCount>true</perCoreThreadCount>-->
+                    <parallel>all</parallel>
+                    <threadCount>8</threadCount>
+                    <perCoreThreadCount>true</perCoreThreadCount>
                 </configuration>
             </plugin>
         </plugins>

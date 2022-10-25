@@ -8,7 +8,11 @@ import java.util.function.Consumer;
 public class WithRetries {
     private final WebElementFacadeImpl elementFacade;
 
-    public WithRetries(WebElementFacadeImpl elementFacade) {
+    public static WithRetries on(WebElementFacadeImpl elementFacade) {
+        return new WithRetries(elementFacade);
+    }
+
+    private WithRetries(WebElementFacadeImpl elementFacade) {
         this.elementFacade = elementFacade;
     }
 

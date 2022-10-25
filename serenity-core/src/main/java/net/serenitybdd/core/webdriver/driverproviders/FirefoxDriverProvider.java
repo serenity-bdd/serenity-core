@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -43,6 +44,9 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
         // Add any arguments passed from the test itself
         //
         firefoxOptions.addArguments(argumentsIn(options));
+        if (ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables)) {
+            firefoxOptions.setHeadless(ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables));
+        }
         //
         // Check for extended classes to add extra ChromeOptions configuration
         //

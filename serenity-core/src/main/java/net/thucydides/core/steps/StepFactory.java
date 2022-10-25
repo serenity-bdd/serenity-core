@@ -415,7 +415,7 @@ public class StepFactory {
 
         public boolean cannotBeAssignedTo(Class<?> parameterType) {
             if (parameter == null) {
-                return PARAMETER_CAN_BE_ASSIGNED;
+                return !PARAMETER_CAN_BE_ASSIGNED;
             }
             return (!isAssignableFrom(parameter, parameterType));
         }

@@ -1,4 +1,4 @@
-@driver:chrome
+@driver:firefox
 @driver-options:--headless
 Feature: Use specified browser
 
@@ -8,7 +8,7 @@ Feature: Use specified browser
     When I type in the first name <firstname>
     And I type in the last name <lastname>
     Then I should see entered values of <expectedFirstname> and <expectedLastname>
-    And I should be using Chrome
+    And I should be using Firefox
 
     Examples:
       |firstname|lastname| expectedFirstname | expectedLastname |

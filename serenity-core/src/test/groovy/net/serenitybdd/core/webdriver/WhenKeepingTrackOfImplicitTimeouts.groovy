@@ -24,10 +24,6 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     WebDriver anotherDriver = Mock()
     WebDriver yetAnotherDriver = Mock()
 
-    def setup() {
-        WebDriverManager.chromedriver().setup()
-    }
-
     def "stack should be initially empty"() {
         when:
             def timeoutstack = new TimeoutStack();
@@ -116,62 +112,5 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
         and:
             storedDuration2.get() == timeout1
     }
-
-    @DefaultUrl("classpath:static-site/index.html")
-    static class PageObjectUsingImplicitTimeouts extends PageObject {
-
-        PageObjectUsingImplicitTimeouts(WebDriver driver) {
-            super(driver)
-        }
-
-        void setImplicitTimeoutTo(int timeout) {
-            setImplicitTimeout(timeout, ChronoUnit.SECONDS);
-        }
-
-        long getImplicitTimoutMilliseconds() {
-            return implicitTimoutMilliseconds();
-        }
-    }
-
-    def "should be able to set the implicit timeout"() {
-        given:
-            WebDriverFacade driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory()).withOptions("--headless");
-            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
-            pageObject.open()
-        when:
-            pageObject.setImplicitTimeoutTo(3)
-        then:
-            pageObject.getImplicitTimoutMilliseconds() == 3000
-    }
-
-    def "should be able to reset the implicit timeout"() {
-        given:
-            def driver = new WebDriverFacade(ChromeDriver, new WebDriverFactory()).withOptions("--headless");;
-            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
-            def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
-        when:
-            pageObject.setImplicitTimeoutTo(12)
-        and:
-            pageObject.resetImplicitTimeout()
-        then:
-            pageObject.getImplicitTimoutMilliseconds() == originalTimeout
-    }
-
-    def "should be able to set and reset the implicit timeout using nested calls"() {
-        given:
-            def driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory()).withOptions("--headless");
-            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
-            def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
-        when:
-            pageObject.setImplicitTimeoutTo(6)
-            pageObject.setImplicitTimeoutTo(12)
-        then:
-            pageObject.getImplicitTimoutMilliseconds() == 12000
-            pageObject.resetImplicitTimeout()
-            pageObject.getImplicitTimoutMilliseconds() == 6000
-            pageObject.resetImplicitTimeout()
-            pageObject.getImplicitTimoutMilliseconds() == originalTimeout
-    }
-
 }
 

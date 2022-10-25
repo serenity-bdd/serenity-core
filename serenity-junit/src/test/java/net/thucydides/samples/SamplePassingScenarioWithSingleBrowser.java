@@ -17,7 +17,7 @@ public class SamplePassingScenarioWithSingleBrowser {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplePassingScenarioWithSingleBrowser.class);
 
-    @Managed(driver = "firefox", uniqueSession=true)
+    @Managed(driver = "firefox", uniqueSession=true, options = "--headless")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")

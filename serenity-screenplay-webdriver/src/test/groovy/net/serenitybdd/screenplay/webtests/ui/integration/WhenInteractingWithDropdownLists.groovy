@@ -8,6 +8,8 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -18,10 +20,10 @@ class WhenInteractingWithDropdownLists extends Specification {
     static SamplePage samplePage;
 
     def setupSpec() {
-        WebDriverManager.chromedriver().setup()
-        ChromeOptions options = new ChromeOptions()
-        options.setHeadless(true)
-        driver = new ChromeDriver(options)
+        WebDriverManager.firefoxdriver().setup();
+        FirefoxOptions options = new FirefoxOptions();
+        options.setHeadless(true);
+        driver = new FirefoxDriver(options)
         samplePage = new SamplePage(driver)
     }
 

@@ -43,10 +43,10 @@ import static org.hamcrest.Matchers.*;
 @RunWith(SerenityRunner.class)
 public class WhenDinaBrowsesTheWeb {
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "firefox", options = "--headless")
     WebDriver firstBrowser;
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "firefox", options = "--headless")
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();

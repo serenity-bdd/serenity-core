@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
@@ -32,6 +33,7 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
@@ -46,6 +48,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClick
  */
 public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.core.pages.WebElementFacade {
 
+    public static final int NUMBER_OF_TRIES_FOR_UNREADY_ELEMENTS = 12;
     private final WebElement webElement;
     private final WebDriver driver;
     private final long implicitTimeoutInMilliseconds;
@@ -61,6 +64,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private final ElementLocator locator;
     private WebElement resolvedELement;
+    private WithRetries withRetries;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
 
@@ -75,6 +79,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
         this.waitForTimeoutInMilliseconds = (waitForTimeoutInMilliseconds >= 0) ? waitForTimeoutInMilliseconds : defaultWaitForTimeout();
+        this.withRetries = new WithRetries(this);
     }
 
     public WebElementFacadeImpl(final WebDriver driver, final WebElement webElement, final long implicitTimeoutInMilliseconds, final long waitForTimeoutInMilliseconds, final By bySelector) {
@@ -730,16 +735,17 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @param keysToSend
      */
     @Override
-    public WebElementFacade type(CharSequence... keysToSend) {
-        keysToSend = nonNullCharSequenceFrom(keysToSend);
+    public WebElementFacade type(final CharSequence... keysToSend) {
+        final CharSequence[] keyValue = nonNullCharSequenceFrom(keysToSend);
         logIfVerbose("Type '" + keysToSend + "'");
 
         if (driverIsDisabled()) {
             return this;
         }
-
-        clear();
-        sendKeys(keysToSend);
+        withRetries.perform(elementFacade -> {
+                elementFacade.getElement().clear();
+                elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keyValue));
+        }, 12);
         notifyScreenChange();
         return this;
     }
@@ -760,9 +766,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        clear();
-        sendKeys(value, Keys.ENTER);
+        withRetries.perform(elementFacade -> {
+            elementFacade.getElement().clear();
+            elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(value, Keys.ENTER));
+        }, NUMBER_OF_TRIES_FOR_UNREADY_ELEMENTS);
         notifyScreenChange();
+
         return this;
     }
 
@@ -780,12 +789,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
 
-        clear();
+        withRetries.perform(elementFacade -> {
+            elementFacade.getElement().clear();
+            elementFacade.getElement().sendKeys(value);
+            elementFacade.getElement().sendKeys(Keys.TAB);
+        }, NUMBER_OF_TRIES_FOR_UNREADY_ELEMENTS);
 
-        sendKeys(value);
-        sendKeys(Keys.TAB);
-
-        getClock().pauseFor(100);
         notifyScreenChange();
         return this;
     }
@@ -1203,8 +1212,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 break;
         }
 
+        withRetries.perform(elementFacade -> elementFacade.getElement().click(), 12);
+
         logClick();
-        getElement().click();
         notifyScreenChange();
     }
 
@@ -1217,13 +1227,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public void doubleClick() {
+
         Actions actions = new Actions(driver);
-        actions.doubleClick(this);
+        withRetries.perform(actions::doubleClick, 12);
     }
 
     public void contextClick() {
         Actions actions = new Actions(driver);
-        actions.contextClick(this);
+        withRetries.perform(actions::contextClick, 12);
     }
 
     private void logClick() {
@@ -1246,7 +1257,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driverIsDisabled()) {
             return;
         }
-        getElement().clear();
+        withRetries.perform(elementFacade -> elementFacade.getElement().clear(), 12);
     }
 
     protected void notifyScreenChange() {
@@ -1277,7 +1288,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public void sendKeys(CharSequence... keysToSend) {
         if (!allElementsAreNull(keysToSend)) {
-            getElement().sendKeys(nonNullCharSequenceFrom(keysToSend));
+            withRetries.perform(elementFacade -> {
+                elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keysToSend));
+            }, 12);
         }
     }
 

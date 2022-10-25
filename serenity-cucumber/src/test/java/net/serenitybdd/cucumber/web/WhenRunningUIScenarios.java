@@ -29,7 +29,7 @@ public class WhenRunningUIScenarios {
     @Before
     public void setup() {
         outputDirectory = Files.newTemporaryFolder();
-        environmentVariables.setProperty("webdriver.driver", "chrome");
+        environmentVariables.setProperty("webdriver.driver", "firefox");
         environmentVariables.setProperty("headless.mode", "true");
     }
 

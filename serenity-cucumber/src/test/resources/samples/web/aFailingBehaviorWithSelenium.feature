@@ -1,4 +1,4 @@
-@driver:chrome
+@driver:firefox
 @driver-options:--headless
 Feature: A failing scenario that uses selenium
 

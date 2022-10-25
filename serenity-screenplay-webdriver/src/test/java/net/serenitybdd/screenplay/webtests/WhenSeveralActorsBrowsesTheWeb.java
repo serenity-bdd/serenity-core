@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.hasProperty;
 @RunWith(SerenityRunner.class)
 public class WhenSeveralActorsBrowsesTheWeb {
 
-    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "firefox", options = "--headless")
     WebDriver firstBrowser;
 
     @BeforeClass

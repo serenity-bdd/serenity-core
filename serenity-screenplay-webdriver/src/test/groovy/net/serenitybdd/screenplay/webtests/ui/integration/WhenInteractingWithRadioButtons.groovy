@@ -9,6 +9,8 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.locators.RelativeLocator
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -20,10 +22,10 @@ class WhenInteractingWithRadioButtons extends Specification {
     static SamplePage samplePage;
 
     def setupSpec() {
-        WebDriverManager.chromedriver().setup()
-        ChromeOptions options = new ChromeOptions()
+        WebDriverManager.firefoxdriver().setup()
+        FirefoxOptions options = new FirefoxOptions()
         options.setHeadless(true)
-        driver = new ChromeDriver(options)
+        driver = new FirefoxDriver(options)
         samplePage = new SamplePage(driver)
     }
 

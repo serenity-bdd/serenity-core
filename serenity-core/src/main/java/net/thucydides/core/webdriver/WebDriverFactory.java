@@ -146,8 +146,9 @@ public class WebDriverFactory {
                 return waitThenRetry(driverClass, options, environmentVariables);
             } else {
                 throw new DriverConfigurationError(
-                        "Could not instantiate new WebDriver instance of type " + driverClass + " (" +
-                        cause.getMessage() + "). See below for more details.", cause);
+                        "WebDriver was unable to create a new instance of type " + driverClass + System.lineSeparator()
+                        + "WebDriver reported the following message: " + cause.getMessage() + System.lineSeparator()
+                        + "See below for more details.", cause);
             }
         }
     }

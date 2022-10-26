@@ -54,8 +54,7 @@ public class TheDirectoryStructure {
         if (!rootDirectory.isDirectory()) { return 0; }
 
         Collection<File> directoryContents = FileUtils.listFilesAndDirs(rootDirectory,
-                                   new NotFileFilter(TrueFileFilter.INSTANCE),
-                                   normalDirectoriesOnly());
+                                   new NotFileFilter(TrueFileFilter.INSTANCE), normalDirectoriesOnly());
 
         int maxDepth = 0;
         for(File file : directoryContents) {

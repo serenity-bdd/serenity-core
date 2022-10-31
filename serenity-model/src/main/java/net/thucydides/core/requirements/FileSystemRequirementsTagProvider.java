@@ -43,7 +43,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
 
-    private final static Logger logger = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
 
     private static final List<Requirement> NO_REQUIREMENTS = new ArrayList<>();
     private static final List<TestTag> NO_TEST_TAGS = new ArrayList<>();
@@ -544,6 +544,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public Requirement readRequirementFrom(File requirementDirectory) {
+        requirementDirectory = normalised(requirementDirectory);
         java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level - 1));
 
         if (requirementNarrative.isPresent()) {
@@ -558,6 +559,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final Set<File> invalidFeatureFiles = new HashSet<>();
 
     public Optional<Requirement> readRequirementsFromStoryOrFeatureFile(File storyFile) {
+        storyFile = normalised(storyFile);
 
         if (invalidFeatureFiles.contains(storyFile)) { return Optional.empty(); }
 
@@ -640,6 +642,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
+        requirementDirectory = normalised(requirementDirectory);
+        LOGGER.debug("Loading requirements from directory: {} ({})", requirementDirectory, requirementDirectory.getAbsolutePath());
         String requirementType = getRequirementTypeOf(requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
@@ -651,6 +655,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private String getRequirementTypeOf(File requirementDirectory) {
+        requirementDirectory = normalised(requirementDirectory);
         int depth = requirementDepthOf(topLevelDirectory, requirementDirectory);
         int maxDepth = TheDirectoryStructure.startingAt(directoryAt(topLevelDirectory)).maxDepth();
         return getDefaultType(depth, maxDepth);
@@ -716,6 +721,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, RequirementDefinition requirementNarrative) {
+        requirementDirectory = normalised(requirementDirectory);
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
@@ -732,6 +738,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
+        requirementDirectory = normalised(requirementDirectory);
         String childDirectory = rootDirectory + "/" + requirementDirectory.getName();
         if (childrenExistFor(childDirectory)) {
             RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(rootDirectory, childDirectory, level + 1, environmentVariables);
@@ -780,7 +787,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private boolean hasSubdirectories(String path) {
-        File pathDirectory = new File(path);
+        File pathDirectory = normalised(new File(path));
         if (!pathDirectory.exists()) {
             return false;
         }
@@ -804,7 +811,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private boolean storyOrFeatureFilesExistIn(File directory) {
-        return startingAt(directory).containsFiles(thatAreStories(), thatAreNarratives());
+        return startingAt(normalised(directory)).containsFiles(thatAreStories(), thatAreNarratives());
     }
 
     private FileFilter thatAreStories() {
@@ -831,6 +838,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public Optional<String> getOverview() {
         return overviewReader.readOverviewFrom(directoryPaths.toArray(new String[]{}));
+    }
+
+    private File normalised(File directory) {
+        return new File(directory.getPath().replace("\\", "/"));
     }
 
 }

@@ -1,10 +1,13 @@
 package net.thucydides.core.files;
 
 import com.google.common.base.Splitter;
+import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -14,6 +17,8 @@ import java.util.List;
 
 public class TheDirectoryStructure {
     private final File rootDirectory;
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TheDirectoryStructure.class);
 
     public TheDirectoryStructure(File rootDirectory) {
         this.rootDirectory = rootDirectory;
@@ -51,6 +56,8 @@ public class TheDirectoryStructure {
     }
 
     public int maxDepth() {
+        LOGGER.debug("Calculating maximum directory depth for requirements hierarcy at: {} ({})", rootDirectory, rootDirectory.getAbsolutePath());
+
         if (!rootDirectory.isDirectory()) { return 0; }
 
         Collection<File> directoryContents = FileUtils.listFilesAndDirs(rootDirectory,
@@ -64,6 +71,7 @@ public class TheDirectoryStructure {
                 maxDepth = depth;
             }
         }
+        LOGGER.debug("Max depth = {}", maxDepth);
         return maxDepth;
     }
 

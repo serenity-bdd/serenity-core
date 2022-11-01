@@ -54,7 +54,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final OverviewReader overviewReader;
     private final Set<String> directoryPaths;
     private final int level;
-    private final List<String> requirementTypes;
 
     private final static String DEFAULT_FEATURE_DIRECTORY = "src/test/resources/features";
 
@@ -112,7 +111,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
 
         topLevelDirectory = rootDirectory;
-        requirementTypes = new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
 //                .withRequirementTypes(getRequirementTypes(rootDirectory));
         this.overviewReader = new OverviewReader();
@@ -133,7 +131,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
 
         this.topLevelDirectory = topLevelDirectory;
-        requirementTypes = new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
 //                .withRequirementTypes(getRequirementTypes());
         this.overviewReader = new OverviewReader();
@@ -197,6 +194,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private int maxDirectoryDepthIn(Set<String> directoryPaths) {
         return directoryPaths.stream()
+                .map(this::normalised)
                 .mapToInt(directoryPath -> TheDirectoryStructure.startingAt(new File(directoryPath)).maxDepth())
                 .max().orElse(0);
     }
@@ -655,7 +653,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private String getRequirementTypeOf(File requirementDirectory) {
-        requirementDirectory = normalised(requirementDirectory);
+        LOGGER.debug("Get requirements type for: {} ({})", requirementDirectory, requirementDirectory.getAbsolutePath());
         int depth = requirementDepthOf(topLevelDirectory, requirementDirectory);
         int maxDepth = TheDirectoryStructure.startingAt(directoryAt(topLevelDirectory)).maxDepth();
         return getDefaultType(depth, maxDepth);
@@ -841,7 +839,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private File normalised(File directory) {
-        return new File(directory.getPath().replace("\\", "/"));
+        return new File(normalised(directory.getPath()));
     }
 
+    private String normalised(String directory) {
+        return directory.replace("\\", "/");
+    }
 }

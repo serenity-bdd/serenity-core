@@ -55,9 +55,7 @@ public class FeatureFileScenarioOutcomes {
     }
 
     public List<ScenarioOutcome> forOutcomesIn(RequirementsOutcomes requirementsOutcomes) {
-        CucumberParser parser = new CucumberParser();
-        Optional<AnnotatedFeature> feature
-                = parser.loadFeature(pathFromResourceOnClasspath(normalizedFormOf(requirement.getPath())));
+        Optional<AnnotatedFeature> feature = FeatureCache.getCache().loadFeature(pathFromResourceOnClasspath(normalizedFormOf(requirement.getPath())));
 
         if (!feature.isPresent()) {
             return Collections.emptyList();

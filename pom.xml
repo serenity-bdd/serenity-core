@@ -466,11 +466,11 @@
                 <artifactId>thymeleaf</artifactId>
                 <version>${thymeleaf.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.javassist</groupId>-->
-<!--                <artifactId>javassist</artifactId>-->
-<!--                <version>${javassist.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.knowm.xchart</groupId>
                 <artifactId>xchart</artifactId>

@@ -69,7 +69,7 @@ public class TheDirectoryStructure {
                                                                         normalDirectoriesOnly());
 
         int maxDepth = directoryContents.stream()
-                .map(fileInDirectory -> fileInDirectory.toPath().relativize(rootDirectory))
+                .map(fileInDirectory -> rootDirectory.relativize(fileInDirectory.toPath()))
                 .mapToInt(this::numberOfElementsIn)
                 .max()
                 .orElse(0);

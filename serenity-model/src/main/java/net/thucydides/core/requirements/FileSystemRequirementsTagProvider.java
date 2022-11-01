@@ -64,7 +64,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-                RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(DEFAULT_FEATURE_DIRECTORY)).toString());
+                RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(defaultFeatureDirectory()).toString());
+    }
+
+    private static Path defaultFeatureDirectory() {
+        return Paths.get(System.getProperty("user.dir")).resolve(DEFAULT_FEATURE_DIRECTORY);
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {

@@ -41,16 +41,16 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <junit.version>4.13.2</junit.version>
-        <groovy.version>4.0.1</groovy.version>
+        <groovy.version>4.0.6</groovy.version>
         <spock.version>2.2-M1-groovy-4.0</spock.version>
-        <byte-buddy.version>1.12.12</byte-buddy.version>
+        <byte-buddy.version>1.12.18</byte-buddy.version>
         <guava.version>31.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>1.7.30</slf4j.version>
         <guice.version>5.1.0</guice.version>
-        <cucumber.version>7.4.1</cucumber.version>
+        <cucumber.version>7.8.1</cucumber.version>
         <gson.version>2.9.0</gson.version>
-        <junit5.version>5.9.0</junit5.version>
+        <junit5.version>5.9.1</junit5.version>
         <mockito.version>3.3.3</mockito.version>
         <assertj.version>3.22.0</assertj.version>
         <commons.lang.version>3.12.0</commons.lang.version>
@@ -84,14 +84,14 @@
         <jbehave.version>4.8.3</jbehave.version>
         <opentest4j.version>1.2.0</opentest4j.version>
         <ant.version>1.10.12</ant.version>
-        <restassured.version>5.1.1</restassured.version>
+        <restassured.version>5.2.0</restassured.version>
         <wiremock.version>1.58</wiremock.version>
-        <thymeleaf.version>3.1.0.M1</thymeleaf.version>
-        <javassist.version>3.28.0-GA</javassist.version>
+        <thymeleaf.version>3.1.0.RC1</thymeleaf.version>
+        <javassist.version>3.29.2-GA</javassist.version>
         <jackson.version>2.13.4</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.7.10</kotlin.version>
+        <kotlin.version>1.7.20</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
@@ -466,11 +466,11 @@
                 <artifactId>thymeleaf</artifactId>
                 <version>${thymeleaf.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${javassist.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.javassist</groupId>-->
+<!--                <artifactId>javassist</artifactId>-->
+<!--                <version>${javassist.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.knowm.xchart</groupId>
                 <artifactId>xchart</artifactId>

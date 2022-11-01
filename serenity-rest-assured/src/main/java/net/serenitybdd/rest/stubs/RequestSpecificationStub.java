@@ -349,6 +349,21 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
+    public RequestSpecification csrf(String s) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification csrf(String s, String s1) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification disableCsrf() {
+        return this;
+    }
+
+    @Override
     public RequestSpecification port(final int port) {
         return this;
     }

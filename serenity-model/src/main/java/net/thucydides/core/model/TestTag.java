@@ -137,7 +137,7 @@ public class TestTag implements Comparable<TestTag> {
         }
 
         private String withoutTagSymbol(String type) {
-            return type.startsWith("@") ? type.substring(1) : type;
+            return (type != null && type.startsWith("@")) ? type.substring(1) : type;
         }
     }
 

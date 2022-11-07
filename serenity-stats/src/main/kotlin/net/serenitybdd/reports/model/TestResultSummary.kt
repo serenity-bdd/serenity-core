@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
 class TestResultSummary(val totalCount: Int,
-                        val countByResult: Map<String, Int>,
+                        val countByResult: Map<String, Long>,
                         val percentageByResult: Map<String, Int>,
                         val totalTestDuration: String,
                         val clockTestDuration: String,

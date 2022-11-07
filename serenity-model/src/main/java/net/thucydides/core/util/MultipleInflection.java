@@ -2,10 +2,10 @@ package net.thucydides.core.util;
 
 public class MultipleInflection {
 
-    private final int cardinality;
+    private final long cardinality;
     private final Inflector inflector;
 
-    protected MultipleInflection(int cardinality, Inflector inflector) {
+    protected MultipleInflection(long cardinality, Inflector inflector) {
         this.cardinality = cardinality;
         this.inflector = inflector;
     }

@@ -330,7 +330,7 @@
                                                     <th width="65px" class="test-results-heading">Abort</th>
                                                     <th width="65px" class="test-results-heading">Ignore</th>
                                                 </#if>
-                                                <th width="100px" class="test-results-heading">Duration<br>(seconds)</th>
+                                                <th width="100px" class="test-results-heading">Total Duration<br>(seconds)</th>
                                             </tr>
                                             </thead>
                                             <tbody>

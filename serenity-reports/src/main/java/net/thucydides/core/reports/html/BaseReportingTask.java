@@ -40,7 +40,6 @@ public abstract class BaseReportingTask implements ReportingTask {
                                       final String outputFile) throws IOException {
 
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
-        long start = System.currentTimeMillis();
         try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
         }

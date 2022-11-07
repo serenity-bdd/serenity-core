@@ -4,7 +4,7 @@ import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ResultCounts
 
-fun countByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Int> {
+fun countByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Long> {
     return TestResult.values().associate { result -> Pair(result.toString(),
                                                           ResultCounts.forOutcomesIn(testOutcomes).getOverallTestCount(result.toString()))
     }

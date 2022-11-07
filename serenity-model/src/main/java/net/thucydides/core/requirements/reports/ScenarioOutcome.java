@@ -5,7 +5,6 @@ import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.TagFilter;
-import net.thucydides.core.requirements.model.Requirement;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -31,6 +30,8 @@ public interface ScenarioOutcome {
     List<String> getSteps();
 
     List<String> getExamples();
+
+    default List<ExampleOutcome> getExampleOutcomes() { return new ArrayList<>(); }
 
     boolean hasExamples();
 

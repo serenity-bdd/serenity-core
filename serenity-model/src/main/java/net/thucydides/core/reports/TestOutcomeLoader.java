@@ -71,6 +71,7 @@ public class TestOutcomeLoader {
                 testOutcomes.addAll(loadedTestOutcome.get());
             }
             executorPool.shutdown();
+
             if (hasAnnotatedOrder(testOutcomes)) {
                 return inAnnotatedOrder(testOutcomes);
             } else {

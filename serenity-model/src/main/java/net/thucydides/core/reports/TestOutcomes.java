@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.naturalOrder;
 import static org.hamcrest.Matchers.is;
@@ -89,30 +90,30 @@ public class TestOutcomes {
     private List<TestOutcome> sorted(Collection<? extends TestOutcome> outcomes) {
         return outcomes.stream()
                 .sorted(Comparator.comparing(TestOutcome::getPath,
-                        Comparator.nullsFirst(naturalOrder()))
-                .thenComparing(TestOutcome::getOrder, Comparator.nullsFirst(naturalOrder()))
-                .thenComparing(TestOutcome::getStartTime, Comparator.nullsFirst(naturalOrder())))
+                                Comparator.nullsFirst(naturalOrder()))
+                        .thenComparing(TestOutcome::getOrder, Comparator.nullsFirst(naturalOrder()))
+                        .thenComparing(TestOutcome::getStartTime, Comparator.nullsFirst(naturalOrder())))
                 .collect(Collectors.toList());
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label) {
-        this(outcomes, estimatedAverageStepCount, label, null, null, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
+        this(outcomes, estimatedAverageStepCount, label, null, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestTag tag) {
-        this(outcomes, estimatedAverageStepCount, label, tag, null, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
+        this(outcomes, estimatedAverageStepCount, label, tag, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestResult resultFilter) {
-        this(outcomes, estimatedAverageStepCount, label, null, resultFilter, null, SystemEnvironmentVariables.currentEnvironmentVariables() );
+        this(outcomes, estimatedAverageStepCount, label, null, resultFilter, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
@@ -125,7 +126,12 @@ public class TestOutcomes {
     }
 
     public TestOutcomes withResultFilter(TestResult testResult) {
-        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, testResult);
+        List<TestOutcome> filteredOutcomes = this.getOutcomes().stream()
+                .filter(outcome -> outcome.containsAtLeastOneOutcomeWithResult(testResult))
+                .map(outcome -> outcome.withExamplesMatching(example -> example.getResult().equals(testResult)))
+                .collect(Collectors.toList());
+
+        return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label, testResult);
     }
 
     public TestOutcomes filteredByEnvironmentTags() {
@@ -140,6 +146,7 @@ public class TestOutcomes {
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
     }
+
     public TestOutcomes havingResult(String result) {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }
@@ -153,7 +160,7 @@ public class TestOutcomes {
     }
 
     private boolean onlyPassing(TestResult[] results) {
-        return stream(results).allMatch( result -> result == TestResult.SUCCESS);
+        return stream(results).allMatch(result -> result == TestResult.SUCCESS);
     }
 
     private List<TestOutcome> outcomesExclusivelyWithResults(TestResult... results) {
@@ -161,6 +168,7 @@ public class TestOutcomes {
 
         return outcomes.stream()
                 .filter(outcome -> eligableResults.contains(outcome.getResult()))
+                .map(outcome -> outcome.withExamplesMatching(example -> eligableResults.contains(example.getResult())))
                 .collect(Collectors.toList());
     }
 
@@ -183,7 +191,6 @@ public class TestOutcomes {
     }
 
     public TestOutcomes havingResult(TestResult result) {
-
         return TestOutcomes.of(outcomesFilteredByResult(result))
                 .withLabel(labelForTestsWithStatus(result.name()))
                 .withResultFilter(result)
@@ -198,7 +205,7 @@ public class TestOutcomes {
 
 
     public static TestOutcomes withNoResults() {
-        return new TestOutcomes(NO_OUTCOMES,ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
+        return new TestOutcomes(NO_OUTCOMES, ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
 
     }
 
@@ -206,7 +213,9 @@ public class TestOutcomes {
 
     public Map<? extends Flag, Integer> getFlagCounts() {
 
-        if (flagCount != null) { return flagCount; }
+        if (flagCount != null) {
+            return flagCount;
+        }
 
         flagCount = FlagCounts.in(getOutcomes()).asAMap();
 
@@ -226,7 +235,6 @@ public class TestOutcomes {
     }
 
 
-
     public String getLabel() {
         return label;
     }
@@ -242,21 +250,21 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
     }
 
-    private final static Set<String> SECOND_CLASS_TAG_TYPES = NewSet.of("version","feature", "story");
+    private final static Set<String> SECOND_CLASS_TAG_TYPES = NewSet.of("version", "feature", "story");
 
     public List<String> getFirstClassTagTypes() {
         return getTagTypes()
-                    .stream()
-                    .filter(tagType -> !SECOND_CLASS_TAG_TYPES.contains(tagType))
-                    .filter(tagType -> !getRequirementTagTypes().contains(tagType))
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(tagType -> !SECOND_CLASS_TAG_TYPES.contains(tagType))
+                .filter(tagType -> !getRequirementTagTypes().contains(tagType))
+                .collect(Collectors.toList());
     }
 
     public List<String> getRequirementTagTypes() {
-       return requirementsService.getRequirementTypes()
-               .stream()
-               .filter(tagType -> getTagTypes().contains(tagType))
-               .collect(Collectors.toList());
+        return requirementsService.getRequirementTypes()
+                .stream()
+                .filter(tagType -> getTagTypes().contains(tagType))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -335,8 +343,8 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
 
         return allTags.stream()
-                .filter( tag -> !moreSpecificTagExists(tag, allTags) )
-                .filter( withExcludedTags )
+                .filter(tag -> !moreSpecificTagExists(tag, allTags))
+                .filter(withExcludedTags)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
@@ -375,7 +383,7 @@ public class TestOutcomes {
 
         Set<TestOutcome> testOutcomesForThisRequirement = new HashSet<>();
 
-        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
+        for (Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
             testOutcomesForThisRequirement.addAll(
                     withTag(childRequirement.asTag()).getOutcomes()
             );
@@ -392,7 +400,9 @@ public class TestOutcomes {
                 .withRootOutcomes(getRootOutcomes());
     }
 
-    public TestTag getTestTag() { return testTag; }
+    public TestTag getTestTag() {
+        return testTag;
+    }
 
     public boolean containsTag(TestTag testTag) {
         return getTags().contains(testTag);
@@ -440,12 +450,12 @@ public class TestOutcomes {
     public Integer scenarioCountWithResult(TestResult result) {
         return outcomes
                 .stream()
-                .mapToInt(outcome -> countScenariosWithResult(result, outcome))
+                .mapToInt(outcome -> countScenariosWithResult(outcome, result))
                 .sum();
     }
 
-    private int countScenariosWithResult(TestResult result, TestOutcome outcome) {
-        if (result == TestResult.UNSUCCESSFUL) {
+    private int countScenariosWithResult(TestOutcome outcome, TestResult... result) {
+        if (result.length == 1 && result[0] == TestResult.UNSUCCESSFUL) {
             return countScenariosWithResults(outcome, TestResult.FAILURE, TestResult.ERROR, TestResult.COMPROMISED);
         } else {
             return countScenariosWithResults(outcome, result);
@@ -453,7 +463,7 @@ public class TestOutcomes {
     }
 
     private boolean hasResult(TestResult[] results, TestResult expectedResult) {
-        for(int i = 0; i < results.length; i++) {
+        for (int i = 0; i < results.length; i++) {
             if (results[i] == expectedResult) return true;
         }
         return false;
@@ -470,7 +480,7 @@ public class TestOutcomes {
         }
 
         if ((dataTableRowResultsAreUndefinedIn(outcome.getDataTable()) || isJUnit(outcome) || isJUnit5(outcome))
-            && outcome.getTestSteps().size() >= outcome.getDataTable().getSize()) {
+                && outcome.getTestSteps().size() >= outcome.getDataTable().getSize()) {
             return (int) stepsWithResultIn(outcome.getTestSteps(), results);
         }
 
@@ -489,7 +499,7 @@ public class TestOutcomes {
 
     private long stepsWithResultIn(List<TestStep> steps, TestResult... results) {
         return steps.stream()
-                .filter(step -> hasResult(results,step.getResult()))
+                .filter(step -> hasResult(results, step.getResult()))
                 .count();
     }
 
@@ -506,11 +516,23 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes).withLabel("");
     }
 
-    public TestOutcomes withResult(TestResult result) {
+    public TestOutcomes withResult(TestResult... result) {
 
         List<TestOutcome> filteredOutcomes = outcomes
                 .stream()
-                .filter(outcome -> countScenariosWithResult(result, outcome) > 0)
+                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
+                .map(outcome -> outcome.withExamplesMatching(step -> asList(result).contains(step.getResult())))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(filteredOutcomes);
+    }
+
+    public TestOutcomes withResultMatching(Predicate<TestResult> resultCondition, TestResult... result) {
+
+        List<TestOutcome> filteredOutcomes = outcomes
+                .stream()
+                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
+                .map(outcome -> outcome.withExamplesMatching(step -> resultCondition.test(step.getResult())))
                 .collect(Collectors.toList());
 
         return TestOutcomes.of(filteredOutcomes);
@@ -520,7 +542,7 @@ public class TestOutcomes {
         for (TestOutcome outcome : outcomes) {
             List<TestTag> outcomeTags = new ArrayList<>(outcome.getAllTags());
             List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
-            for(Requirement requirement : parentRequirements) {
+            for (Requirement requirement : parentRequirements) {
                 outcomeTags.add(requirement.asTag());
             }
             outcome.addTags(outcomeTags);
@@ -619,7 +641,7 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
 
         return TestOutcomes.of(testOutcomesWithTags).withLabel(Joiner.on(",").join(tagTypes))
-                           .withRootOutcomes(getRootOutcomes());
+                .withRootOutcomes(getRootOutcomes());
     }
 
     private TestOutcomes withRootOutcomes(TestOutcomes rootOutcomes) {
@@ -644,9 +666,9 @@ public class TestOutcomes {
     public TestOutcomes withTag(TestTag tag) {
         List<? extends TestOutcome> outcomesWithMatchingTag = matchingOutcomes(outcomes, tag);
         return TestOutcomes.of(outcomesWithMatchingTag)
-                           .withLabel(tag.getShortName())
-                           .withTestTag(tag)
-                           .withRootOutcomes(getRootOutcomes());
+                .withLabel(tag.getShortName())
+                .withTestTag(tag)
+                .withRootOutcomes(getRootOutcomes());
     }
 
     public TestOutcomes withCardNumber(String issueCardNumber) {
@@ -656,6 +678,7 @@ public class TestOutcomes {
                 .withTestTag(TestTag.withName(issueCardNumber).andType("issue"))
                 .withRootOutcomes(getRootOutcomes());
     }
+
     private TestOutcomes withTestTag(TestTag tag) {
         return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, tag);
     }
@@ -669,7 +692,6 @@ public class TestOutcomes {
     }
 
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
-
         return outcomes.stream()
                 .filter(outcome -> hasMatchingTag(outcome, tag))
                 .map(outcome -> outcome.withDataRowsfilteredbyTag(tag))
@@ -685,7 +707,7 @@ public class TestOutcomes {
     }
 
     private boolean hasMatchingTagsFrom(TestOutcome outcome, Collection<TestTag> tags) {
-        return tags.stream().anyMatch( tag -> hasMatchingTag(outcome, tag));
+        return tags.stream().anyMatch(tag -> hasMatchingTag(outcome, tag));
     }
 
     private boolean hasMatchingTag(TestOutcome outcome, TestTag tag) {
@@ -709,10 +731,7 @@ public class TestOutcomes {
     }
 
     public TestOutcomes getUnsuccessfulTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR, TestResult.FAILURE,  TestResult.COMPROMISED))
-                .withLabel(labelForTestsWithStatus("unsuccessful tests"))
-                .withResultFilter(TestResult.UNSUCCESSFUL)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.ERROR, TestResult.FAILURE, TestResult.COMPROMISED);
     }
 
     /**
@@ -721,31 +740,19 @@ public class TestOutcomes {
      * @return A new set of test outcomes containing only the failing tests
      */
     public TestOutcomes getFailingTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.FAILURE))
-                .withLabel(labelForTestsWithStatus("failing tests"))
-                .withResultFilter(TestResult.FAILURE)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.FAILURE);
     }
 
     public TestOutcomes getAbortedTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ABORTED))
-                .withLabel(labelForTestsWithStatus("aborted tests"))
-                .withResultFilter(TestResult.ABORTED)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.ABORTED);
     }
 
     public TestOutcomes getErrorTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
-                .withLabel(labelForTestsWithStatus("tests with errors"))
-                .withResultFilter(TestResult.ERROR)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.ERROR);
     }
 
     public TestOutcomes getCompromisedTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.COMPROMISED))
-                .withLabel(labelForTestsWithStatus("compromised tests"))
-                .withResultFilter(TestResult.COMPROMISED)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.COMPROMISED);
     }
 
     private String labelForTestsWithStatus(String status) {
@@ -762,10 +769,7 @@ public class TestOutcomes {
      * @return A new set of test outcomes containing only the successful tests
      */
     public TestOutcomes getPassingTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.SUCCESS))
-                .withLabel(labelForTestsWithStatus("passing tests"))
-                .withResultFilter(TestResult.SUCCESS)
-                .withRootOutcomes(getRootOutcomes());
+        return this.withResult(TestResult.SUCCESS);
     }
 
     /**
@@ -774,19 +778,13 @@ public class TestOutcomes {
      * @return A new set of test outcomes containing only the pending or ignored tests
      */
     public TestOutcomes getPendingTests() {
-
-        List<TestOutcome> pendingOutcomes = outcomesWithResults(outcomes, TestResult.PENDING);
-        return TestOutcomes.of(pendingOutcomes)
-                .withLabel(labelForTestsWithStatus("pending tests"))
-                .withResultFilter(TestResult.PENDING)
-                .withRootOutcomes(getRootOutcomes());
-
+        return this.withResult(TestResult.PENDING);
     }
 
     private List<TestOutcome> outcomesWithResults(List<? extends TestOutcome> outcomes,
                                                   TestResult... possibleResults) {
         List<TestOutcome> validOutcomes = new ArrayList<>();
-        List<TestResult> possibleResultsList = Arrays.asList(possibleResults);
+        List<TestResult> possibleResultsList = asList(possibleResults);
         for (TestOutcome outcome : outcomes) {
             if (possibleResultsList.contains(outcome.getResult())) {
                 validOutcomes.add(outcome);
@@ -823,6 +821,7 @@ public class TestOutcomes {
 
         return resultTypeAdjective + Inflector.inflection().of(getTotalMatchingScenarios()).times("test").inPluralForm().toString();
     }
+
     /**
      * @return The total number of test runs in this set (including rows in data-driven tests).
      */
@@ -833,7 +832,9 @@ public class TestOutcomes {
     }
 
     public int getTotalMatchingScenarios() {
-        if (resultFilter == null) { return getTotal(); }
+        if (resultFilter == null) {
+            return getTotal();
+        }
 
         return scenarioCountWithResult(resultFilter);
     }
@@ -846,7 +847,11 @@ public class TestOutcomes {
     }
 
     public List<? extends TestOutcome> getOutcomes() {
-        return outcomes; //NewList.copyOf(outcomes);
+        return outcomes;
+    }
+
+    public long getNumberOfTestScenarios() {
+        return getOutcomes().stream().map(outcome -> outcome.getParentId() + ":" + outcome.getName()).distinct().count();
     }
 
     /**
@@ -879,8 +884,8 @@ public class TestOutcomes {
         TestType expectedTestType = TestType.valueOf(testType.toUpperCase());
 
         return outcomes.stream()
-                        .mapToInt(outcome -> outcome.countResults(TestResult.SUCCESS, expectedTestType))
-                        .sum();
+                .mapToInt(outcome -> outcome.countResults(TestResult.SUCCESS, expectedTestType))
+                .sum();
     }
 
 
@@ -928,15 +933,16 @@ public class TestOutcomes {
 
         public Double withResult(TestResult testResult) {
             int matchingTestCount = countTestsWithResult(testResult, testType);
-            return (getTotal() == 0) ? 0 :  (matchingTestCount / (double) getTotal());
+            return (getTotal() == 0) ? 0 : (matchingTestCount / (double) getTotal());
         }
 
         public Double withIndeterminateResult() {
             int pendingCount = countTestsWithResult(TestResult.PENDING, testType);
-            int ignoredCount =  countTestsWithResult(TestResult.IGNORED, testType);
-            int skippedCount =  countTestsWithResult(TestResult.SKIPPED, testType);
+            int ignoredCount = countTestsWithResult(TestResult.IGNORED, testType);
+            int skippedCount = countTestsWithResult(TestResult.SKIPPED, testType);
             return (getTotal() == 0) ? 0 : ((pendingCount + skippedCount + ignoredCount) / (double) getTotal());
         }
+
         public Double withFailureOrError() {
             return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED) + withResult(TestResult.ABORTED);
         }
@@ -958,7 +964,7 @@ public class TestOutcomes {
         return new OutcomeProportionStepCounter(TestType.valueOf(testType.toUpperCase()));
     }
 
-    public class OutcomeProportionStepCounter extends TestOutcomeCounter  {
+    public class OutcomeProportionStepCounter extends TestOutcomeCounter {
 
         public OutcomeProportionStepCounter(TestType testType) {
             super(testType);
@@ -975,8 +981,8 @@ public class TestOutcomes {
 
         public Double withIndeterminateResult() {
             int pendingCount = countStepsWithResult(TestResult.PENDING, testType);
-            int ignoredCount =  countStepsWithResult(TestResult.IGNORED, testType);
-            int skippedCount =  countStepsWithResult(TestResult.SKIPPED, testType);
+            int ignoredCount = countStepsWithResult(TestResult.IGNORED, testType);
+            int skippedCount = countStepsWithResult(TestResult.SKIPPED, testType);
             return ((pendingCount + skippedCount + ignoredCount) / (double) getEstimatedTotalStepCount());
         }
 
@@ -1009,7 +1015,7 @@ public class TestOutcomes {
 
     private int countStepsWithResult(TestResult expectedResult, TestType testType) {
 
-        int stepCount =  outcomes.stream()
+        int stepCount = outcomes.stream()
                 .mapToInt(outcome -> outcome.countNestedStepsWithResult(expectedResult, testType))
                 .sum();
 
@@ -1050,26 +1056,31 @@ public class TestOutcomes {
         return getTotal() - totalImplementedTests();
     }
 
-    public int getTestCount() {
-        return getScenarioCount();
+    public long getTestCount() {
+        return getTestCaseCount();
     }
 
     /**
      * The test case count include all individual tests data-driven tests. A data-driven test counts as 1 test.
+     *
      * @return
      */
-    public int getTestCaseCount() {
-        return outcomes.size();
+    public long getTestCaseCount() {
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getTestCount)
+                .sum();
     }
 
     /**
      * The scenario count include all individual tests and rows in data-driven tests.
+     *
      * @return
      */
-    public int getScenarioCount() {
+    public long getScenarioCount() {
         return outcomes.stream()
-                .mapToInt(TestOutcome::getTestCount)
-                .sum();
+                .map(TestOutcome::getId)
+                .distinct()
+                .count();
     }
 
     private int totalImplementedTests() {
@@ -1108,7 +1119,7 @@ public class TestOutcomes {
             return this;
         }
 
-        public TestOutcomeMatcher withNameIn(List<Matcher<String>>  nameMatchers) {
+        public TestOutcomeMatcher withNameIn(List<Matcher<String>> nameMatchers) {
             this.nameMatcher = new ArrayList<>(nameMatchers);
             return this;
         }
@@ -1147,7 +1158,7 @@ public class TestOutcomes {
         }
 
         private boolean matches(String name, List<Matcher<String>> matchers) {
-            return matchers.stream().anyMatch( match -> match.matches(name));
+            return matchers.stream().anyMatch(match -> match.matches(name));
         }
     }
 

@@ -11,10 +11,7 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_LIST;
@@ -60,27 +57,27 @@ public class ScenarioOutcomes {
     }
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome, RequirementsService requirements) {
-
-        String featureName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : "";
-        String scenarioName = testOutcome.getName();
-        List<String> exampleTables = (testOutcome.isDataDriven() && !testOutcome.getDataTable().isEmpty()) ?
-                Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName)) : EMPTY_LIST;
-
         String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;
 
-        List<String> steps = (testOutcome.getDataDrivenSampleScenario() != null && !testOutcome.getDataDrivenSampleScenario().isEmpty()) ?
-                testStepsFromSampleScenario(testOutcome.getDataDrivenSampleScenario()) :
-                testOutcome.getTestSteps()
-                        .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
-
-        Optional<Requirement> requirement = requirements.getParentRequirementFor(testOutcome);
-        List<TestTag> scenarioTags = new ArrayList<>();
-        if (requirement.isPresent() && requirement.get().getScenarioTags() != null) {
-            if (requirement.get().getScenarioTags().get(testOutcome.getName()) != null) {
-                scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
-            }
+        if (testOutcome.isDataDriven()) {
+            return dataDrivenOutcomeFrom(userStoryName, userStoryReportName, testOutcome, requirements);
+        } else {
+            return singleScenarioOutlineFrom(userStoryName, userStoryReportName, testOutcome, requirements);
         }
+    }
+
+    public static ScenarioOutcome singleScenarioOutlineFrom(String userStoryName,
+                                                            String userStoryReportName,
+                                                            TestOutcome testOutcome,
+                                                            RequirementsService requirements) {
+
+        List<String> steps = testOutcome.getTestSteps().stream()
+                .map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription()))
+                .collect(Collectors.toList());
+
+        List<TestTag> scenarioTags = getTestTags(requirements, testOutcome);
+
         return new SingleScenarioOutcome(
                 testOutcome.getQualified().withContext().getTitleWithLinks(),
                 testOutcome.getTitle(),
@@ -92,7 +89,7 @@ public class ScenarioOutcomes {
                 testOutcome.isManual(),
                 testOutcome.getDescription(),
                 steps,
-                exampleTables,
+                new ArrayList<>(),
                 testOutcome.getDataTableRowCount(),
                 userStoryName,
                 userStoryReportName,
@@ -102,10 +99,61 @@ public class ScenarioOutcomes {
                 scenarioTags);
     }
 
+    private static List<TestTag> getTestTags(RequirementsService requirements, TestOutcome testOutcome) {
+        Optional<Requirement> requirement = requirements.getParentRequirementFor(testOutcome);
+        List<TestTag> scenarioTags = new ArrayList<>();
+        if (requirement.isPresent() && requirement.get().getScenarioTags() != null) {
+            if (requirement.get().getScenarioTags().get(testOutcome.getName()) != null) {
+                scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
+            }
+        }
+        return scenarioTags;
+    }
+
+    public static ScenarioOutcome dataDrivenOutcomeFrom(String userStoryName,
+                                                        String userStoryReportName,
+                                                        TestOutcome testOutcome,
+                                                        RequirementsService requirements) {
+//        String featureName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : "";
+//        String scenarioName = testOutcome.getName();
+//        List<String> exampleTables = (testOutcome.getDataTable().isEmpty()) ?
+//                EMPTY_LIST : Collections.singletonList(testOutcome.getDataTable().toMarkdown(featureName, scenarioName));
+
+        List<String> steps = (testOutcome.getDataDrivenSampleScenario() != null && !testOutcome.getDataDrivenSampleScenario().isEmpty()) ?
+                testStepsFromSampleScenario(testOutcome.getDataDrivenSampleScenario()) :
+                testOutcome.getTestSteps()
+                        .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
+
+        List<TestTag> scenarioTags = getTestTags(requirements, testOutcome);
+
+        List<String> reportBadges = ReportBadges.from(Collections.singletonList(testOutcome), testOutcome.getTitle());
+
+        List<ExampleOutcome> exampleOutcomes = ExampleOutcomes.from(testOutcome);
+        return new ScenarioSummaryOutcome(
+                testOutcome.getQualified().withContext().getTitleWithLinks(),
+                "Scenario Outline",
+                testOutcome.getResult(),
+                reportBadges,
+                ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome),
+                testOutcome.getDescription(),
+                steps,
+                EMPTY_LIST, // No rendered examples available here
+                exampleOutcomes,
+                exampleOutcomes.size(),
+                testOutcome.isManual(),
+                userStoryName,
+                userStoryReportName,
+                testOutcome.getTags(),
+                new HashMap<>(), // No known example tags here
+                testOutcome.getRule(),
+                testOutcome.getStartTime(),
+                testOutcome.getDuration(),
+                scenarioTags);
+    }
+
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {
         return DescriptionSplitter.splitIntoSteps(sampleDataDrivenScenario).stream().map(
                 RenderMarkdown::convertEmbeddedTablesIn
         ).collect(Collectors.toList());
     }
-
 }

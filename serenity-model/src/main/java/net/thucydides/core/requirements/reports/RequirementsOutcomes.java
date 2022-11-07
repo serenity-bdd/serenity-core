@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
 import com.google.common.collect.Streams;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
@@ -96,11 +95,11 @@ public class RequirementsOutcomes {
                 estimatedUnimplementedTests, issueTracking);
     }
 
-    public int getTestCaseCount() {
+    public long getTestCaseCount() {
         return this.testOutcomes.getTestCaseCount();
     }
 
-    public int getScenarioCount() {
+    public long getScenarioCount() {
         return this.testOutcomes.getScenarioCount();
     }
 

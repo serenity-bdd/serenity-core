@@ -70,8 +70,7 @@ public class DurationReportingTask extends BaseReportingTask implements Reportin
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DurationReportingTask{");
-        sb.append("reportName='").append(reportName).append('\'');
-        sb.append('}');
+        sb.append("reportName='").append(reportName).append('\'').append('}');
         return sb.toString();
     }
 

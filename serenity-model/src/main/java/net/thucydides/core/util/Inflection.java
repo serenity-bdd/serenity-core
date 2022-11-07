@@ -4,14 +4,14 @@ public class Inflection {
     private final static int DEFAULT_PLURAL_COUNT = 2;
 
     private String word;
-    private int pluralCount;
+    private final long pluralCount;
     private final Inflector inflector;
 
     Inflection(String word, Inflector inflector) {
         this(word, DEFAULT_PLURAL_COUNT, inflector);
     }
 
-    Inflection(String word, int pluralCount, Inflector inflector) {
+    Inflection(String word, long pluralCount, Inflector inflector) {
         this.word = word;
         this.pluralCount = pluralCount;
         this.inflector = inflector;

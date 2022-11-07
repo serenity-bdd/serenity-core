@@ -29,31 +29,48 @@ class DurationDistribution(
     private fun durationBucketsFrom(durationLimits: List<Duration>): List<DurationBucket> {
         val durationBuckets: MutableList<DurationBucket> = mutableListOf()
         val bucketLabels = distributionLabels()
-        for ((index, durationLimit) in durationLimits.plus(Duration.ofSeconds(Long.MAX_VALUE)).withIndex())
+        var lowerLimit = 0L
+        for ((index, durationLimit) in durationLimits.plus(Duration.ofSeconds(Long.MAX_VALUE)).withIndex()) {
+            val upperLimit = durationLimit.get(ChronoUnit.SECONDS)
             durationBuckets.add(
                 DurationBucket(
-                    bucketLabels.get(index),
-                    durationLimit.get(ChronoUnit.SECONDS),
+                    bucketLabels[index],
+                    lowerLimit,
+                    upperLimit,
                     mutableListOf()
                 )
             )
+            lowerLimit = upperLimit
+        }
         return durationBuckets
     }
 
+    fun getBucketCount(): Int {
+        return distributionLabels().size
+    }
+
     fun getNumberOfTestsPerDuration(): String {
-        val durationCounts = durationBuckets.map { bucket -> numberOfScenariosIn(bucket.outcomes) }
+        val durationCounts = durationBuckets.map { bucket -> bucket.outcomes.size }
         return asFormattedList(durationCounts)
     }
 
-    private fun numberOfScenariosIn(outcomes: MutableList<TestOutcome>): Int {
-        return outcomes.sumOf { outcome -> if (outcome == null) 0 else outcome.testCount }
+    private fun populateDurationBuckets() {
+        // Find all the test case durations in the current test outcomes
+        val testCaseDurations = testOutcomes.tests.flatMap { testCase -> testCaseDurationsIn(testCase) }
+        // Find the bucket or buckets that match the test results in each test outcome and add the test outcome to the corresponding buckets
+        for (testCaseDuration in testCaseDurations) {
+            // Assign each test outcome containing a scenario
+            findMatchingBucketForTestCase(testCaseDuration).addOutcome(testCaseDuration)
+        }
     }
 
-
-    private fun populateDurationBuckets() {
-        // Find the bucket or buckets that match the test results in each test outcome and add the test outcome to the corresponding buckets
-        for (testOutcome in testOutcomes.tests) {
-            findMatchingBucketsForTestOutcome(testOutcome).forEach { bucket -> bucket.addOutcome(testOutcome) }
+    private fun testCaseDurationsIn(testOutcome: TestOutcome): List<TestCaseDuration> {
+        return if (testOutcome.isDataDriven) {
+            testOutcome.testSteps.map { testStep ->
+                TestCaseDuration(testStep.description, testStep.duration, testOutcome.fromStep(testStep))
+            }
+        } else {
+            listOf(TestCaseDuration(testOutcome.title, testOutcome.duration, testOutcome))
         }
     }
 
@@ -84,10 +101,6 @@ class DurationDistribution(
 
     fun getBucketLabels(): String {
         return asFormattedList(distributionLabels())
-    }
-
-    fun getBucketCount(): Int {
-        return distributionLabels().size
     }
 
     fun asFormattedList(labels: List<Any>) = "[${labels.joinToString(",") { duration -> "'${duration}'" }}]"
@@ -161,25 +174,13 @@ class DurationDistribution(
         }
     }
 
-    /**
-     * Find the matching buckets for the test or tests in a given test outcome
-     */
-    fun findMatchingBucketsForTestOutcome(testOutcome: TestOutcome): MutableCollection<DurationBucket> {
-        val matchingBuckets = HashSet<DurationBucket>()
-        // Find the duration of the test outcome, or the set of durations for a scenario outline or data-driven test
-        val scenarioDurations = if ((testOutcome.isDataDriven)) {
-            testOutcome.testSteps.map { step -> step.durationInSeconds }
-        } else {
-            listOf(testOutcome.durationInSeconds)
+    fun findMatchingBucketForTestCase(testCase: TestCaseDuration) =
+        durationBuckets.first { bucket ->
+            testCase.duration in bucket.minDurationInSeconds * 1000 until bucket.maxDurationInSeconds * 1000
         }
 
-        // Find the first bucket with a minimal duration that is greater than or equal to the scenario duration for each scenario in this test outcome
-        scenarioDurations.forEach { scenarioDuration ->
-            val matchingBucket = durationBuckets.first { bucket -> scenarioDuration <= bucket.durationInSeconds }
-            matchingBuckets.add(matchingBucket)
-        }
-        return matchingBuckets
-    }
+    fun findMatchingBucketsForTestOutcome(testOutcome: TestOutcome) =
+        testCaseDurationsIn(testOutcome).map { testCaseDuration -> findMatchingBucketForTestCase(testCaseDuration) }
 
     fun getDurationTags(): List<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }
 

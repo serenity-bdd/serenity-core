@@ -37,6 +37,10 @@ public class Inflector {
         return new MultipleInflection(count, this);
     }
 
+    public MultipleInflection of(long count) {
+        return new MultipleInflection(count, this);
+    }
+
     protected static class Rule {
 
         protected final String expression;
@@ -114,8 +118,7 @@ public class Inflector {
         return wordStr;
     }
 
-    public String pluralize(Object word,
-                            int count) {
+    public String pluralize(Object word, long count) {
         if (word == null) return null;
         if (count == 1 || count == -1) {
             return word.toString();

@@ -13,11 +13,7 @@ import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.AnnotatedFeature;
-import net.thucydides.core.requirements.model.cucumber.CucumberParser;
-import net.thucydides.core.requirements.reports.ReportBadges;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.requirements.reports.ScenarioSummaryOutcome;
+import net.thucydides.core.requirements.reports.*;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -130,6 +126,7 @@ public class FeatureFileScenarioOutcomes {
                 scenario.getDescription(),
                 renderedSteps,
                 new ArrayList<>(),
+                new ArrayList<>(),
                 0,
                 false,
                 feature.getName(),
@@ -197,6 +194,11 @@ public class FeatureFileScenarioOutcomes {
         List<String> renderedExamples = (scenarioContainsExamples(scenario)) ?
                 RenderCucumber.examples(filteredExamples, feature.getName()) : new ArrayList<>();
 
+        List<ExampleOutcome> exampleOutcomes = new ArrayList<>();
+        for (TestOutcome outcome : outcomes) {
+            exampleOutcomes.addAll(ExampleOutcomes.from(outcome));
+        }
+
         int exampleCount = (scenarioContainsExamples(scenario)) ?
                 filteredExamples.stream().mapToInt(examples -> examples.getTableBody().size()).sum()
                 : 0;
@@ -219,6 +221,7 @@ public class FeatureFileScenarioOutcomes {
                 scenario.getDescription(),
                 renderedSteps,
                 renderedExamples,
+                exampleOutcomes,
                 exampleCount,
                 isManual,
                 feature.getName(),
@@ -230,7 +233,6 @@ public class FeatureFileScenarioOutcomes {
                 totalDurationOf(outcomes),
                 scenarioTags);
     }
-
 
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {
         if (scenarioContainsExamples(scenario)) {

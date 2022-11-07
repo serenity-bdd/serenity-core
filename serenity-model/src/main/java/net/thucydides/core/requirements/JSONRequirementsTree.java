@@ -88,7 +88,7 @@ public class JSONRequirementsTree {
 
     private String countScenariosIn(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
         Inflector inflection = Inflector.getInstance();
-        int scenarioCount = scenariosUnder(requirement, requirementsOutcomes);
+        long scenarioCount = scenariosUnder(requirement, requirementsOutcomes);
 
         if (scenarioCount == 0) return "";
 
@@ -98,7 +98,7 @@ public class JSONRequirementsTree {
                 + "</span>";
     }
 
-    private int scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+    private long scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
         return requirementsOutcomes.getTestOutcomes().forRequirement(requirement).getTestCount();
     }
 

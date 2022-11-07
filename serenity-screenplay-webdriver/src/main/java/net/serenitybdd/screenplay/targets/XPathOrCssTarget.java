@@ -35,6 +35,7 @@ public class XPathOrCssTarget extends SearchableTarget {
     }
 
     public ListOfWebElementFacades resolveAllFor(PageObject page) {
+
         if (timeout.isPresent()) {
             return new ListOfWebElementFacades(page.withTimeoutOf(timeout.get()).findAll(cssOrXPathSelector));
         } else {

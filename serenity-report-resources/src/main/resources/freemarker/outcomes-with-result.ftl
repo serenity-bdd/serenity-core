@@ -46,7 +46,10 @@
             "language": {
                 searchPlaceholder: "Filter",
                 search: ""
-            }
+            },
+            columnDefs: [
+                {type: 'time-elapsed-dhms', targets: 4}
+            ]
         });
 
         // Results table
@@ -141,8 +144,7 @@
                                 <div>
                                     <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
 
-                                ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel}
-                                    across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
+                                    ${testOutcomes.testCaseCount} ${testOutcomes.resultTypeLabel} in ${testOutcomes.scenarioCount} ${scenarioLabel}
 
                                     <#if (csvReport! != '')> |
                                         <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down" title="Download CSV"></i></a>
@@ -218,13 +220,13 @@
                                                                         <td>
                                                                             <i class="bi bi-card-checklist"></i> Number of Scenarios
                                                                         </td>
-                                                                        <td>${testCount}</td>
+                                                                        <td>${testOutcomes.scenarioCount}</td>
                                                                     </tr>
                                                                     <tr scope="row">
                                                                         <td>
                                                                             <i class="bi bi-caret-right"></i> Number of Test Cases
                                                                         </td>
-                                                                        <td>${scenarioCount}</td>
+                                                                        <td>${testOutcomes.testCaseCount}</td>
                                                                     </tr>
                                                                     <tr scope="row">
                                                                         <td>
@@ -475,31 +477,65 @@
                                                     <th class="test-name-column">Scenario</th>
                                                     <th>Steps</th>
                                                     <th>Started</th>
-                                                    <th>Duration</th>
+                                                    <th>Total Duration</th>
                                                     <th>Result</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <#list automatedTestCases as scenario>
                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
-                                                <tr class="scenario-result ${scenario.result}">
-                                                    <td>
-                                                        <#if scenario.parentName?has_content>
-                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>
-                                                        </#if>
-                                                    </td>
-                                                    <td>
-                                                        <a href="${scenario.scenarioReport}">${scenario.title}</a>
-                                                               <#if scenario.hasExamples() >
-                                                                   (${scenario.numberOfExamples})
-                                                               </#if>
-                                                    </td>
-                                                    <td>${scenario.stepCount}</td>
-                                                    <td>${scenario.formattedStartTime}</td>
-                                                    <td>${scenario.formattedDuration}</td>
-                                                    <td>${outcome_icon} <span
-                                                            style="display:none">${scenario.result}</span></td>
-                                                </tr>
+                                                    <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
+                                                        <#list scenario.getExampleOutcomes() as exampleOutcome>
+                                                            <#assign example_outcome_icon = formatter.resultIcon().forResult(exampleOutcome.result) />
+                                                            <tr class="scenario-result ${exampleOutcome.result}">
+                                                                <td>
+                                                                    <#if scenario.parentName?has_content>
+                                                                        <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                                    </#if>
+                                                                </td>
+                                                                <td>
+                                                                    <i class="bi bi-table" title="Data Driven Scenario">
+                                                                        <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
+                                                                        <#if exampleOutcome.hasSubtitle() >
+                                                                            <br/>${exampleOutcome.subtitle}
+                                                                        </#if>
+                                                                </td>
+                                                                <td>${exampleOutcome.stepCount}</td>
+                                                                <td>${exampleOutcome.formattedStartTime}</td>
+                                                                <td>${exampleOutcome.formattedDuration}</td>
+                                                                <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
+                                                                    <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                        &nbsp;
+                                                                        <a href="${scenario.externalLink.url}" class="tag"
+                                                                           title="${scenario.externalLink.type}">
+                                                                            <i class="fs-2 bi bi-camera-reels"></i>
+                                                                        </a>
+                                                                    </#if>
+                                                                </td>
+                                                            </tr>
+                                                        </#list>
+                                                    <#else>
+                                                        <tr class="scenario-result ${scenario.result}">
+                                                            <td>
+                                                                <#if scenario.parentName?has_content>
+                                                                    <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                                </#if>
+                                                            </td>
+                                                            <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
+                                                            <td>${scenario.stepCount}</td>
+                                                            <td>${scenario.formattedStartTime}</td>
+                                                            <td>${scenario.formattedDuration}</td>
+                                                            <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                                <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                    &nbsp;
+                                                                    <a href="${scenario.externalLink.url}" class="tag"
+                                                                       title="${scenario.externalLink.type}">
+                                                                        <i class="fs-2 bi bi-camera-reels"></i>
+                                                                    </a>
+                                                                </#if>
+                                                            </td>
+                                                        </tr>
+                                                    </#if>
                                                 </#list>
                                                 </tbody>
                                             </table>

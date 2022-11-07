@@ -99,7 +99,7 @@
                                         <th width="65" class="test-results-heading">Pend</th>
                                         <th width="65" class="test-results-heading">Skip</th>
                                         </#if>
-                                        <th width="65" class="test-results-heading">Duration</th>
+                                        <th width="65" class="test-results-heading">Total Duration</th>
                                     </tr>
                                 </thead>
                                 <tbody>

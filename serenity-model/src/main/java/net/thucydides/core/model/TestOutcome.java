@@ -2077,7 +2077,7 @@ public class TestOutcome {
 
 
     public int getTestCount() {
-        return isDataDriven() ? getDataTable().getSize() : 1;
+        return isDataDriven() ? getTestStepCount() : 1;
     }
 
     public int getImplementedTestCount() {
@@ -2799,7 +2799,11 @@ public class TestOutcome {
     }
 
     public TestOutcome fromStep(int index) {
-        List<TestStep> specifiedSteps = Arrays.asList(testSteps.get(index));
+        return fromStep(testSteps.get(index));
+    }
+
+    public TestOutcome fromStep(TestStep testStep) {
+        List<TestStep> specifiedSteps = Arrays.asList(testStep);
         TestOutcome specifiedOutcome = this.copy().withSteps(specifiedSteps);
         Optional<TestFailureCause> failureCause = TestFailureCause.from(specifiedOutcome.getFlattenedTestSteps());
         if (failureCause.isPresent()) {
@@ -2812,5 +2816,27 @@ public class TestOutcome {
 
     public List<String> getNestedTestPath() {
         return nestedTestPath;
+    }
+
+    public TestOutcome withExamplesMatching(Predicate<TestStep> condition) {
+        if (isDataDriven()) {
+            return copy().removeTopLevelStepsNotMatching(condition);
+        } else {
+            return this;
+        }
+    }
+
+    public TestOutcome removeTopLevelStepsNotMatching(Predicate<TestStep> condition) {
+        List<TestStep> updatedSteps = testSteps.stream().filter(condition).collect(Collectors.toList());
+        this.testSteps = updatedSteps;
+        return this;
+    }
+
+    public boolean containsAtLeastOneOutcomeWithResult(TestResult expectedResult) {
+        if (isDataDriven()) {
+            return testSteps.stream().anyMatch(step -> step.getResult().equals(expectedResult));
+        } else {
+            return getResult().equals(expectedResult);
+        }
     }
 }

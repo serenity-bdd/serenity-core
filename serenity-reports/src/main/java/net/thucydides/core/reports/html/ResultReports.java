@@ -9,11 +9,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ResultReports {
 
@@ -135,7 +132,7 @@ public class ResultReports {
                         tasks.add(durationReport(freemarker,
                                 environmentVariables,
                                 outputDirectory,
-                                TestOutcomes.of(bucket.getOutcomes()).withLabel(label),
+                                TestOutcomes.of(bucket.getTestOutcomes()).withLabel(label),
                                 reportName,
                                 currentTag,
                                 bucket.getDuration()));

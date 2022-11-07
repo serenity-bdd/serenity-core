@@ -62,33 +62,6 @@ class WhenProcessingTestOutcomes extends Specification {
             tags == ["a feature", "a story", "an epic", "another different story", "another story"]
     }
 
-    def "should list all the tags of a given type for the test outcomes"() {
-        given:
-        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
-        when:
-        def tags = testOutcomes.getTagsOfType('story')
-        then:
-        tags.collect({it.shortName.toLowerCase()}) as Set == ["another story", "a story",  "another different story"] as Set
-    }
-
-    def "should list all the tags of a given type for the test outcomes except for specified tags"() {
-        given:
-        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
-        when:
-        def tags = testOutcomes.getTagsOfTypeExcluding 'story', 'a story'
-        then:
-        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story"] as Set
-    }
-
-    def "should list all the tags of a given type for the test outcomes except for specified tags for different cases"() {
-        given:
-        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
-        when:
-        def tags = testOutcomes.getTagsOfTypeExcluding 'story', 'A Story'
-        then:
-        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story"] as Set
-    }
-
     def "should list all the tags of a single type for the test outcomes"() {
         given:
             TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes()
@@ -192,7 +165,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             def tests = testOutcomes.passingTests.getTests()
         then:
-            tests.size() == 11
+            tests.size() == 12
     }
 
     def "should list all failing tests"() {

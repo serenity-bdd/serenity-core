@@ -1,16 +1,16 @@
 package net.thucydides.core.reports;
 
 import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static net.thucydides.core.model.TestResult.FAILURE;
+import static net.thucydides.core.model.TestResult.SUCCESS;
 
 public class TestOutcomesBuilder {
 
@@ -100,13 +100,18 @@ public class TestOutcomesBuilder {
                         Arrays.asList("7","8")
                 )).build());
 
-        testOutcome.getDataTable().getRows().get(0).setResult(TestResult.SUCCESS);
-        testOutcome.getDataTable().getRows().get(1).setResult(TestResult.SUCCESS);
-        testOutcome.getDataTable().getRows().get(2).setResult(TestResult.SUCCESS);
-        testOutcome.getDataTable().getRows().get(3).setResult(TestResult.FAILURE);
+        testOutcome.getDataTable().getRows().get(0).setResult(SUCCESS);
+        testOutcome.getDataTable().getRows().get(1).setResult(SUCCESS);
+        testOutcome.getDataTable().getRows().get(2).setResult(SUCCESS);
+        testOutcome.getDataTable().getRows().get(3).setResult(FAILURE);
+
+        testOutcome.recordStep(TestStep.forStepCalled("Test 1").withResult(SUCCESS));
+        testOutcome.recordStep(TestStep.forStepCalled("Test 2").withResult(SUCCESS));
+        testOutcome.recordStep(TestStep.forStepCalled("Test 3").withResult(SUCCESS));
+        testOutcome.recordStep(TestStep.forStepCalled("Test 4").withResult(FAILURE));
 
         testOutcome.setStartTime(LATE_DATE);
-        testOutcome.setResult(TestResult.FAILURE);
+        testOutcome.setResult(FAILURE);
         return testOutcome;
     }
 

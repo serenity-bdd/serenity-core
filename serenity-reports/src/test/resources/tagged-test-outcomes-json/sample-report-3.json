@@ -8,9 +8,13 @@
     "ignored": "0",
     "pending": "1",
     "result": "PENDING",
-    "user-story": {
+    "userStory": {
         "id": "net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
-        "name": "A user story in a feature"
+        "name": "A user story in a feature",
+        "displayName": "To a list with existing entries",
+        "storyClassName": "todomvc.WhenAddingTasks$ToAListWithExistingEntries",
+        "path": "WhenAddingTasks",
+        "type": "story"
     },
     "tags": [
         {

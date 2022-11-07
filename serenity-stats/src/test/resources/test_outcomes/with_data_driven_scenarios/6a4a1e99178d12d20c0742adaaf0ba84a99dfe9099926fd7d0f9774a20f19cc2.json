@@ -1,0 +1,352 @@
+{
+  "name": "Colin purchases two items and sees them both appear in the purchase summary",
+  "id": "completing-a-purchase;colin-purchases-two-items-and-sees-them-both-appear-in-the-purchase-summary",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given Colin has logged onto the application",
+      "duration": 872,
+      "startTime": "2022-11-01T09:43:29.714161Z[Europe/London]",
+      "screenshots": [
+        {
+          "screenshot": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png",
+          "timeStamp": 1667295810586,
+          "screenshotName": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 2,
+          "description": "Colin opens the browser at https://www.saucedemo.com",
+          "duration": 847,
+          "startTime": "2022-11-01T09:43:29.716272Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png",
+              "timeStamp": 1667295810564,
+              "screenshotName": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "description": "Given Colin has the following items in his cart:\n| Sauce Labs Backpack |\n| Sauce Labs Bolt T-Shirt |",
+      "duration": 14,
+      "startTime": "2022-11-01T09:43:30.587003Z[Europe/London]",
+      "screenshots": [
+        {
+          "screenshot": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png",
+          "htmlSource": "pagesource10086578875216315250.html",
+          "timeStamp": 1667295810594,
+          "screenshotName": "27a13b545ff5a9fe6a4478a219c8c8c328b2e91fdf8b3a876f46a1d2e7dbafad.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 4,
+      "description": "When he checks out his cart providing his personal details",
+      "duration": 1957,
+      "startTime": "2022-11-01T09:43:30.602126Z[Europe/London]",
+      "screenshots": [
+        {
+          "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+          "timeStamp": 1667295812559,
+          "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 5,
+          "description": "he opens the browser at https://www.saucedemo.com/checkout-step-one.html",
+          "duration": 476,
+          "startTime": "2022-11-01T09:43:30.611024Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png",
+              "timeStamp": 1667295811087,
+              "screenshotName": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 6,
+          "description": "he provides personal details: CustomerDetails[firstName\u003dColin, lastName\u003dMacColin, postCode\u003d123-ABC]",
+          "duration": 1468,
+          "startTime": "2022-11-01T09:43:31.089011Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png",
+              "htmlSource": "pagesource5485124482782059612.html",
+              "timeStamp": 1667295811100,
+              "screenshotName": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png"
+            },
+            {
+              "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+              "timeStamp": 1667295812557,
+              "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1,
+          "children": [
+            {
+              "number": 7,
+              "description": "he enters \u0027Colin\u0027 into \u0027First Name\u0027 field",
+              "duration": 369,
+              "startTime": "2022-11-01T09:43:31.100766Z[Europe/London]",
+              "screenshots": [
+                {
+                  "screenshot": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png",
+                  "htmlSource": "pagesource2514837340816926616.html",
+                  "timeStamp": 1667295811108,
+                  "screenshotName": "f9ac8169c1292922b74f8f715030bd3d05b1a8589223c8574ccf9f9e711b9070.png"
+                },
+                {
+                  "screenshot": "9bd55c4f7ecce114126bbff68a07a69b1be0cc09e4dfd69d4495598d01016d34.png",
+                  "timeStamp": 1667295811470,
+                  "screenshotName": "9bd55c4f7ecce114126bbff68a07a69b1be0cc09e4dfd69d4495598d01016d34.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "precondition": false,
+              "level": 2
+            },
+            {
+              "number": 8,
+              "description": "he enters \u0027MacColin\u0027 into \u0027Last Name\u0027 field",
+              "duration": 351,
+              "startTime": "2022-11-01T09:43:31.470997Z[Europe/London]",
+              "screenshots": [
+                {
+                  "screenshot": "9bd55c4f7ecce114126bbff68a07a69b1be0cc09e4dfd69d4495598d01016d34.png",
+                  "htmlSource": "pagesource10973504471131005721.html",
+                  "timeStamp": 1667295811478,
+                  "screenshotName": "9bd55c4f7ecce114126bbff68a07a69b1be0cc09e4dfd69d4495598d01016d34.png"
+                },
+                {
+                  "screenshot": "b2292ec168f8a4008d6176c64297bd85d077a8e112a45f1a5c00c4bf31c4384b.png",
+                  "timeStamp": 1667295811822,
+                  "screenshotName": "b2292ec168f8a4008d6176c64297bd85d077a8e112a45f1a5c00c4bf31c4384b.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "precondition": false,
+              "level": 2
+            },
+            {
+              "number": 9,
+              "description": "he enters \u0027123-ABC\u0027 into \u0027Zip/Postal Code\u0027 field",
+              "duration": 362,
+              "startTime": "2022-11-01T09:43:31.823133Z[Europe/London]",
+              "screenshots": [
+                {
+                  "screenshot": "b2292ec168f8a4008d6176c64297bd85d077a8e112a45f1a5c00c4bf31c4384b.png",
+                  "htmlSource": "pagesource12613552534411640169.html",
+                  "timeStamp": 1667295811831,
+                  "screenshotName": "b2292ec168f8a4008d6176c64297bd85d077a8e112a45f1a5c00c4bf31c4384b.png"
+                },
+                {
+                  "screenshot": "49c665f1fe43318a7b263e00c3a88248b1e5db01498622e5d48f6e3b1aebb128.png",
+                  "timeStamp": 1667295812185,
+                  "screenshotName": "49c665f1fe43318a7b263e00c3a88248b1e5db01498622e5d48f6e3b1aebb128.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "precondition": false,
+              "level": 2
+            },
+            {
+              "number": 10,
+              "description": "he clicks on \u0027Continue\u0027 button",
+              "duration": 368,
+              "startTime": "2022-11-01T09:43:32.185694Z[Europe/London]",
+              "screenshots": [
+                {
+                  "screenshot": "49c665f1fe43318a7b263e00c3a88248b1e5db01498622e5d48f6e3b1aebb128.png",
+                  "htmlSource": "pagesource12785631254574142677.html",
+                  "timeStamp": 1667295812193,
+                  "screenshotName": "49c665f1fe43318a7b263e00c3a88248b1e5db01498622e5d48f6e3b1aebb128.png"
+                },
+                {
+                  "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+                  "timeStamp": 1667295812553,
+                  "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "precondition": false,
+              "level": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "description": "Then he should be presented with a summary of his purchase including:\n| Qty | Description | Price |\n| 1 | Sauce Labs Backpack | $29.99 |\n| 1 | Sauce Labs Bolt T-Shirt | $15.99 |",
+      "duration": 376,
+      "startTime": "2022-11-01T09:43:32.559789Z[Europe/London]",
+      "screenshots": [
+        {
+          "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+          "htmlSource": "pagesource4447206479322787005.html",
+          "timeStamp": 1667295812566,
+          "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 12,
+      "description": "And the total price should be:\n| Item total | Tax | Total |\n| $45.98 | $3.68 | $49.66 |",
+      "duration": 362,
+      "startTime": "2022-11-01T09:43:32.936273Z[Europe/London]",
+      "screenshots": [
+        {
+          "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+          "htmlSource": "pagesource14775659562214063490.html",
+          "timeStamp": 1667295812943,
+          "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 13,
+          "description": "he should see text of element located by .summary_subtotal_label that is equal to: \u003c\"$45.98\"\u003e",
+          "duration": 24,
+          "startTime": "2022-11-01T09:43:32.944635Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+              "htmlSource": "pagesource6347230545370733443.html",
+              "timeStamp": 1667295812951,
+              "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 14,
+          "description": "he should see text of element located by .summary_tax_label that is equal to: \u003c\"$3.68\"\u003e",
+          "duration": 300,
+          "startTime": "2022-11-01T09:43:32.969558Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+              "htmlSource": "pagesource610170678769278101.html",
+              "timeStamp": 1667295812976,
+              "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 15,
+          "description": "he should see text of element located by .summary_total_label that is equal to: \u003c\"$49.66\"\u003e",
+          "duration": 24,
+          "startTime": "2022-11-01T09:43:33.271410Z[Europe/London]",
+          "screenshots": [
+            {
+              "screenshot": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png",
+              "htmlSource": "pagesource3361770985118926510.html",
+              "timeStamp": 1667295813278,
+              "screenshotName": "d24636b265e2fbeb4ae1c50b6e6a1ca7e5b2f15870b53578705e1e2e88bf8ac9.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "completing-a-purchase",
+    "storyName": "Completing a purchase",
+    "displayName": "Completing a purchase",
+    "path": "purchases/completing_a_purchase.feature",
+    "type": "feature"
+  },
+  "featureTag": {
+    "name": "Purchases/Completing a purchase",
+    "type": "feature",
+    "displayName": "Purchases/Completing a purchase"
+  },
+  "title": "Colin purchases two items and sees them both appear in the purchase summary",
+  "description": "",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "Purchases",
+      "type": "capability",
+      "displayName": "Purchases"
+    },
+    {
+      "name": "resetappstate",
+      "type": "tag",
+      "displayName": "resetappstate"
+    },
+    {
+      "name": "tax",
+      "type": "tag",
+      "displayName": "tax"
+    },
+    {
+      "name": "Purchases/Completing a purchase",
+      "type": "feature",
+      "displayName": "Completing a purchase"
+    }
+  ],
+  "startTime": "2022-11-01T09:43:29.711941Z[Europe/London]",
+  "duration": 3592,
+  "rule": {
+    "name": "Customers should see a summary of their order before they complete their purchase",
+    "description": ""
+  },
+  "projectKey": "",
+  "sessionId": "0feee8acaae8c5b1cdf61c899e6ba436",
+  "driver": "chrome:colin",
+  "isManualTestingUpToDate": false,
+  "manual": false,
+  "testSource": "Cucumber",
+  "actors": [
+    {
+      "name": "Colin",
+      "can": [
+        "browse the web"
+      ],
+      "has": [
+        "swaglabs.actions.cart.AShoppingCart@2d09de60"
+      ]
+    }
+  ],
+  "result": "SUCCESS"
+}

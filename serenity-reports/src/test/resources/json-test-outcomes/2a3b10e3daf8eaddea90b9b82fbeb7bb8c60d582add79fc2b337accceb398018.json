@@ -56,7 +56,8 @@
   "userStory": {
     "id": "logging_on",
     "storyName": "Logging on",
-    "path": "stories/authentication/logging_on.story"
+    "path": "stories/authentication/logging_on.story",
+    "type": "story"
   },
   "title": "Logging on with an expired account",
   "tags": [

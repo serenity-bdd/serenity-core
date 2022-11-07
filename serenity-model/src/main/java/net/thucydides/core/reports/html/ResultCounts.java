@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 public class ResultCounts {
     private TestOutcomes testOutcomes;
 
-    private final Map<TestResult, Integer> automatedTests = new HashMap<>();
-    private final Map<TestResult, Integer> manualTests = new HashMap<>();
-    private final Map<TestResult, Integer> totalTests = new HashMap<>();
+    private final Map<TestResult, Long> automatedTests = new HashMap<>();
+    private final Map<TestResult, Long> manualTests = new HashMap<>();
+    private final Map<TestResult, Long> totalTests = new HashMap<>();
     private final int totalAutomatedTests;
     private final int totalManualTests;
     private final int totalTestCount;
@@ -20,8 +20,8 @@ public class ResultCounts {
     public ResultCounts(TestOutcomes testOutcomes) {
         this.testOutcomes = testOutcomes;
         for (TestResult result : TestResult.values()) {
-            automatedTests.put(result, testOutcomes.ofType(TestType.AUTOMATED).scenarioCountWithResult(result));
-            manualTests.put(result, testOutcomes.ofType(TestType.MANUAL).scenarioCountWithResult(result));
+            automatedTests.put(result, testOutcomes.ofType(TestType.AUTOMATED).withResult(result).getTestCaseCount());
+            manualTests.put(result, testOutcomes.ofType(TestType.MANUAL).withResult(result).getTestCaseCount());
             totalTests.put(result, automatedTests.get(result) + manualTests.get(result));
         }
         this.totalAutomatedTests = testOutcomes.ofType(TestType.AUTOMATED).getTotal();
@@ -33,16 +33,16 @@ public class ResultCounts {
         return manualTests.values().stream().anyMatch(value -> value > 0);
     }
 
-    public Integer getAutomatedTestCount(String result) {
-        return automatedTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
+    public Long getAutomatedTestCount(String result) {
+        return automatedTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0L);
     }
 
-    public Integer getManualTestCount(String result) {
-        return manualTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
+    public Long getManualTestCount(String result) {
+        return manualTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0L);
     }
 
-    public Integer getOverallTestCount(String result) {
-        return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0);
+    public Long getOverallTestCount(String result) {
+        return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()), 0L);
     }
 
     public Integer getOverallTestsCount(String... results) {
@@ -113,26 +113,26 @@ public class ResultCounts {
     public String allResultValuesFor(String... testResultTypes) {
         return "[" + Arrays.stream(testResultTypes)
                 .map(this::getOverallTestCount)
-                .map(value -> Integer.toString(value))
+                .map(value -> Long.toString(value))
                 .collect(Collectors.joining(",")) + "]";
     }
 
     public String automatedResultValuesFor(String... testResultTypes) {
         return "[" + Arrays.stream(testResultTypes)
                 .map(this::getAutomatedTestCount)
-                .map(value -> Integer.toString(value))
+                .map(value -> Long.toString(value))
                 .collect(Collectors.joining(",")) + "]";
     }
 
     public String manualResultValuesFor(String... testResultTypes) {
         return "[" + Arrays.stream(testResultTypes)
                 .map(this::getManualTestCount)
-                .map(value -> Integer.toString(value))
+                .map(value -> Long.toString(value))
                 .collect(Collectors.joining(",")) + "]";
     }
 
     private String labeledValue(String resultType, TestType testType) {
-        int resultCount;
+        long resultCount;
         if (testType == TestType.AUTOMATED) {
             resultCount = this.getAutomatedTestCount(resultType);
         } else if (testType == TestType.MANUAL) {
@@ -149,7 +149,7 @@ public class ResultCounts {
 
     public String percentageLabelsByTypeFor(String... testResultTypes) {
         List<String> resultLabels = new ArrayList<>();
-        int totalTestCount = testOutcomes.getTestCount();
+        long totalTestCount = testOutcomes.getTestCaseCount();
         for (String resultType : testResultTypes) {
             double percentageAutomated = automatedTests.get(TestResult.valueOf(resultType.toUpperCase())) * 100.0 / totalTestCount;
             double percentageManual = manualTests.get(TestResult.valueOf(resultType.toUpperCase())) * 100.0 / totalTestCount;

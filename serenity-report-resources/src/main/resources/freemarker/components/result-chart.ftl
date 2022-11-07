@@ -7,17 +7,17 @@
 
         // Options define for display value on top of bars
         const outcomeDetailsReports = [
-            { title: 'Passing Scenarios', link: "${successReport}" },
-            { title: 'Pending Scenarios', link: "${pendingReport}" },
-            { title: 'Ignored Scenarios', link: "${ignoredReport}" },
-            { title: 'Skipped Scenarios', link: "${skippedReport}" },
-            { title: 'Aborted Scenarios',  link: "${abortedReport}"},
-            { title: 'Failed Scenarios', link: "${failureReport}"  },
-            { title: 'Broken Scenarios', link: "${errorReport}"    },
-            { title: 'Compromised Scenarios',  link: "${compromisedReport}" },
+            { title: 'Passing Test Cases', link: "${successReport}" },
+            { title: 'Pending Test Cases', link: "${pendingReport}" },
+            { title: 'Ignored Test Cases', link: "${ignoredReport}" },
+            { title: 'Skipped Test Cases', link: "${skippedReport}" },
+            { title: 'Aborted Test Cases',  link: "${abortedReport}"},
+            { title: 'Failed Test Cases', link: "${failureReport}"  },
+            { title: 'Broken Test Cases', link: "${errorReport}"    },
+            { title: 'Compromised Test Cases',  link: "${compromisedReport}" },
         ]
         const outcomeData = {
-            labels: ['Passing Scenarios', 'Pending Scenarios', 'Ignored Scenarios', 'Skipped Scenarios', 'Aborted Scenarios', 'Failed Scenarios', 'Broken Scenarios', 'Compromised Scenarios','Undefined Scenarios'],
+            labels: ['Passing Test Cases', 'Pending Test Cases', 'Ignored Test Cases', 'Skipped Test Cases', 'Aborted Test Cases', 'Failed Test Cases', 'Broken Test Cases', 'Compromised Test Cases','Undefined Test Cases'],
             datasets: [{
                 label: 'Test Results',
                 fill: false,

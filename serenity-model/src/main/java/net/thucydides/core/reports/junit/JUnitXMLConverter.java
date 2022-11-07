@@ -188,7 +188,7 @@ public class JUnitXMLConverter {
         Element testSuiteElement = doc.createElement("testsuite");
         testSuiteElement.setAttribute("name", testCaseName);
         testSuiteElement.setAttribute("time", Double.toString(testCaseOutcomes.getDurationInSeconds()));
-        testSuiteElement.setAttribute("tests", Integer.toString(testCaseOutcomes.getTestCount()));
+        testSuiteElement.setAttribute("tests", Long.toString(testCaseOutcomes.getTestCount()));
         testSuiteElement.setAttribute("errors", Integer.toString(errors));
         testSuiteElement.setAttribute("skipped", Integer.toString(skipped));
         testSuiteElement.setAttribute("failures", Integer.toString(failures));

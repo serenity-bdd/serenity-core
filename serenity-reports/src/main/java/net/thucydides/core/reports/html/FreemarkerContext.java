@@ -151,16 +151,15 @@ public class FreemarkerContext {
 
         context.put("serenityVersionNumber", version);
         context.put("buildNumber", buildNumber);
-        context.put("build", buildProperties)
-        ;
+        context.put("build", buildProperties);
 
-        context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
 
         List<ScenarioOutcome> scenarios = outcomeFilter.scenariosFilteredByTagIn(ScenarioOutcomes.from(testOutcomes, requirements));
         List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
 
         context.put("testCount", testOutcomes.getOutcomes().size());
-        context.put("scenarioCount", testOutcomes.getTestCount());
+        context.put("scenarioCount", testOutcomes.getNumberOfTestScenarios());
+        context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
 
         context.put("scenarios", scenarios);
         context.put("filteredScenarios", scenarios);

@@ -8,10 +8,7 @@ import net.thucydides.core.model.TestTag;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String name;
@@ -23,6 +20,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String description;
     private final List<String> steps;
     private final List<String> examples;
+    private final List<ExampleOutcome> exampleOutcomes;
     private final int exampleCount;
     private final String parentName;
     private final String parentReport;
@@ -42,6 +40,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   String description,
                                   List<String> steps,
                                   List<String> examples,
+                                  List<ExampleOutcome> exampleOutcomes,
                                   int exampleCount,
                                   Boolean isManual,
                                   String parentName,
@@ -61,6 +60,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.description = description;
         this.steps = steps;
         this.examples = examples;
+        this.exampleOutcomes = exampleOutcomes;
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
@@ -190,4 +190,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     public ExternalLink getExternalLink() {
         return null;
     }
+
+    @Override
+    public List<ExampleOutcome> getExampleOutcomes() { return exampleOutcomes; }
+
 }

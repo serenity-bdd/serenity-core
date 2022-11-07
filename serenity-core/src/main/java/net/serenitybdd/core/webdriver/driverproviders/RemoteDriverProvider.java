@@ -32,7 +32,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIV
  */
 public class RemoteDriverProvider implements DriverProvider {
 
-    public static final String MISSING_REMOTE_DRIVER_PROPERTY = "Remote driver not specified - you need to specify the name of the remote driver either in the webdriver.capabilities.browserName or in the legacy webdriver.remote.driver or webdriver.driver properties.";
+    public static final String MISSING_REMOTE_DRIVER_PROPERTY = "Remote driver not specified";
 
     private final FixtureProviderService fixtureProviderService;
 

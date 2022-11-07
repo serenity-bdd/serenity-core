@@ -13,7 +13,8 @@ class TestResultsByFeature(val featureName: String,
 
     companion object {
         fun from(testOutcomes: TestOutcomes): List<TestResultsByFeature> {
-            val outcomesGroupedByFeature = testOutcomes.tests.groupBy { it.userStory }
+//            val outcomesGroupedByFeature = testOutcomes.tests.groupBy { it.userStory }
+            val outcomesGroupedByFeature = testOutcomes.testCases.groupBy { it.userStory }
             return outcomesGroupedByFeature.keys.map { userStory ->
                 TestResultsByFeature(userStory.name,
                         issuesIn(outcomesGroupedByFeature.getOrDefault(userStory, listOf())),
@@ -22,7 +23,7 @@ class TestResultsByFeature(val featureName: String,
         }
 
         private fun scenariosIn(testOutcomes: List<TestOutcome>): List<ScenarioSummary> =
-                testOutcomes.map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome) }
+                testOutcomes.map { outcome -> ScenarioSummary.ofAllScenariosIn(outcome) }
 
         private fun issuesIn(testOutcomes: List<TestOutcome>): List<String> =
                 testOutcomes.map { outcome -> outcome.issues.toList() }.flatten().distinct()

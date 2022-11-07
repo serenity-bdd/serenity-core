@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestResult
  * A scenario may include multiple rows from an example table
  */
 class ScenarioSummary(val title: String,
+                      val testData: String,
                       testResult: TestResult,
                       val reportName: String,
                       val results: List<ScenarioSummaryResult>) {
@@ -17,12 +18,22 @@ class ScenarioSummary(val title: String,
     val hasExamples = results.size > 1
 
     companion object {
+        fun ofAllScenariosIn(outcome: TestOutcome): ScenarioSummary =
+            if (outcome.isDataDriven) {
+                ScenarioSummary(outcome.title, outcome.testData ?: "", outcome.result, outcome.htmlReport, allScenariosIn(outcome))
+            } else {
+                from(outcome)
+            }
+
         fun ofFailingScenariosIn(outcome: TestOutcome): ScenarioSummary =
                 if (outcome.isDataDriven) {
-                    ScenarioSummary(outcome.title, outcome.result, outcome.htmlReport, failingScenariosIn(outcome))
+                    ScenarioSummary(outcome.title, outcome.testData ?: "", outcome.result, outcome.htmlReport, failingScenariosIn(outcome))
                 } else {
                     from(outcome)
                 }
+
+        private fun allScenariosIn(outcome: TestOutcome): List<ScenarioSummaryResult> =
+            outcome.testSteps.map { ScenarioSummaryResult(it.result, it.conciseErrorMessage, it.description, it.exception?.errorType.orEmpty()) }
 
         private fun failingScenariosIn(outcome: TestOutcome): List<ScenarioSummaryResult> =
             outcome.testSteps
@@ -32,6 +43,7 @@ class ScenarioSummary(val title: String,
 
         fun from(outcome: TestOutcome): ScenarioSummary
                 = ScenarioSummary(outcome.title,
+                                  "",
                                   outcome.result,
                                   outcome.htmlReport,
                                   listOf(ScenarioSummaryResult(outcome.result, outcome.conciseErrorMessage, outcome.description.orEmpty(), outcome.testFailureErrorType)))

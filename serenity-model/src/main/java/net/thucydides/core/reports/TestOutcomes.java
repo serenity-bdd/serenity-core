@@ -781,24 +781,20 @@ public class TestOutcomes {
         return this.withResult(TestResult.PENDING);
     }
 
-    private List<TestOutcome> outcomesWithResults(List<? extends TestOutcome> outcomes,
-                                                  TestResult... possibleResults) {
-        List<TestOutcome> validOutcomes = new ArrayList<>();
-        List<TestResult> possibleResultsList = asList(possibleResults);
-        for (TestOutcome outcome : outcomes) {
-            if (possibleResultsList.contains(outcome.getResult())) {
-                validOutcomes.add(outcome);
-            }
-        }
-        return validOutcomes;
-    }
-
     /**
      * @return The list of TestOutcomes contained in this test outcome set.
      */
     public List<? extends TestOutcome> getTests() {
         return outcomes;
     }
+
+    /**
+     * @return The list of TestOutcomes contained in this test outcome set.
+     */
+    public List<? extends TestOutcome> getTestCases() {
+        return outcomes.stream().flatMap(outcome -> outcome.asTestCases().stream()).collect(Collectors.toList());
+    }
+
 
     /**
      * @return The total duration of all of the tests in this set in milliseconds.

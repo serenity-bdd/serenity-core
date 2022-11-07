@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
@@ -40,6 +41,7 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
         // Load the FirefoxDriver capabilities from the serenity.conf file
         //
         FirefoxOptions firefoxOptions = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").firefoxOptions();
+        FirefoxOptionsEnhancer.enhanceOptions(firefoxOptions).using(environmentVariables);
         //
         // Add any arguments passed from the test itself
         //

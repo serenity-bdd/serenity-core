@@ -1336,8 +1336,7 @@
                                 <tr>
                                     <td class="compact-wrapper"
                                         style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">
-                                            Full Test Results</h3>
+                                        <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;">Full Test Results</h3>
                                         <table class="failure-list failure-scoreboard"
                                                style="border-width:1px;border-style:solid;border-color:#acb1b9;border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
                                             <tr>
@@ -1346,9 +1345,7 @@
                                             </tr>
                                             <span th:each="feature : ${resultsByFeature}">
 											<tr>
-												<td colspan="2" th:text=${feature.description} class="feature feature-title"
-                                                    style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">A Feature
-												</td>
+												<td colspan="2" th:text=${feature.description} class="feature feature-title"  style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;">A Feature</td>
 											</tr>
 											<tr th:each="scenario: ${feature.scenarios}">
                                         <td class="scenarioName"
@@ -1358,6 +1355,9 @@
                                                th:text="${scenario.title}">Scenario</a>
 	                                        <a th:unless="${!#strings.isEmpty(report.link)}"
                                                th:text="${scenario.title}">Scenario</a>
+                                            <div th:if="${scenario.testData != null && !#strings.isEmpty(scenario.testData)}" th:text="${scenario.testData}">
+                                               Test Data
+                                            </div>
                                         </td>
                                         <td>
                                           <span th:if="${scenario.results.empty}"

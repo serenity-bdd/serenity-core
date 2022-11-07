@@ -76,10 +76,10 @@ public class ResultChecker {
         logger.info(white("-----------------------------------------"));
         logger.info(
                 resultLine(white(
-                 "Test cases executed    "), white(Integer.toString(testOutcomes.getOutcomes().size()))));
+                 "Test scenarios executed    "), white(Long.toString(testOutcomes.getScenarioCount()))));
         logger.info(
                 resultLine(white(
-                 "Tests executed         "), white(Integer.toString(testOutcomes.getTotal()))));
+                 "Test cases executed         "), white(Long.toString(testOutcomes.getTestCaseCount()))));
         logger.info(
                 resultLine(green(
                  "Tests passed           "), green(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.SUCCESS))))

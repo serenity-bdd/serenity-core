@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.webdriver.driverproviders.webdrivermanager.WebDriverManagerSetup;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public abstract class DownloadableDriverProvider implements DriverProvider {
     private final static ThreadLocal<Set<String>> DOWNLOADED_DRIVERS = ThreadLocal.withInitial(CopyOnWriteArraySet::new);
 
     protected void downloadDriverIfRequired(String driver, EnvironmentVariables environmentVariables) {
-        if (!DOWNLOADED_DRIVERS.get().contains(driver)) {
+        if (ThucydidesSystemProperty.WEBDRIVER_AUTODOWNLOAD.booleanFrom(environmentVariables, false) && !DOWNLOADED_DRIVERS.get().contains(driver)) {
             synchronized (DOWNLOADED_DRIVERS) {
                 DOWNLOADED_DRIVERS.get().add(driver);
                 if (isDriverAutomaticallyDownloaded(environmentVariables)) {

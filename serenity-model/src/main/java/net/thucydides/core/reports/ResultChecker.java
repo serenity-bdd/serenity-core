@@ -1,7 +1,6 @@
 package net.thucydides.core.reports;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
@@ -25,7 +24,6 @@ public class ResultChecker {
 
     private static final String WITH_NO_TAGS = "";
     private final File outputDirectory;
-    private EnvironmentVariables environmentVariables;
     private final List<TestTag> tags;
     private final AsciiColors asciiColors;
 
@@ -42,7 +40,6 @@ public class ResultChecker {
     public ResultChecker(File outputDirectory, String tags, EnvironmentVariables environmentVariables) {
         this.outputDirectory = outputDirectory;
         this.tags = tagsFrom(tags);
-        this.environmentVariables = environmentVariables;
         this.asciiColors = new AsciiColors(environmentVariables);
     }
 
@@ -69,56 +66,50 @@ public class ResultChecker {
 
         return TestResult.UNDEFINED;
     }
-
+    private static final int COLUMN_WIDTH = 30;
     private void logOutcomesFrom(TestOutcomes testOutcomes) {
-        logger.info(white("-----------------------------------------"));
-        logger.info(white(" SERENITY TESTS: ") + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
-        logger.info(white("-----------------------------------------"));
+        logger.info(white("------------------------------------------------",0));
+        logger.info(white("| SERENITY TESTS: ", COLUMN_WIDTH) + "  | " + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
+        logger.info(white("------------------------------------------------",0));
         logger.info(
                 resultLine(white(
-                 "Test scenarios executed    "), white(Long.toString(testOutcomes.getScenarioCount()))));
+                 "Test scenarios executed",COLUMN_WIDTH), white(Long.toString(testOutcomes.getScenarioCount()),0)));
         logger.info(
                 resultLine(white(
-                 "Test cases executed         "), white(Long.toString(testOutcomes.getTestCaseCount()))));
+                 "Test cases executed",COLUMN_WIDTH), white(Long.toString(testOutcomes.getTestCaseCount()),0)));
         logger.info(
-                resultLine(green(
-                 "Tests passed           "), green(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.SUCCESS))))
+                resultLine(green("Tests passed",COLUMN_WIDTH), green(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.SUCCESS)),0))
         );
         logger.info(
-                resultLine(red(
-                 "Tests failed           "), red(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE))))
+                resultLine(red("Tests failed",COLUMN_WIDTH), red(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE)),0))
         );
         logger.info(
-                resultLine(yellow(
-                 "Tests with errors      "), yellow(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR))))
+                resultLine(yellow("Tests with errors",COLUMN_WIDTH), yellow(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR)),0))
         );
         logger.info(
-                resultLine(purple(
-                        "Tests compromised      "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED))))
+                resultLine(purple("Tests compromised",COLUMN_WIDTH), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED)),0))
         );
         logger.info(
-                resultLine(purple(
-                        "Tests aborted          "), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ABORTED))))
+                resultLine(purple("Tests aborted",COLUMN_WIDTH), purple(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.ABORTED)),0))
         );
         logger.info(
-                resultLine(cyan(
-                  "Tests pending          "), cyan(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.PENDING))))
+                resultLine(cyan("Tests pending",COLUMN_WIDTH), cyan(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.PENDING)),0))
         );
         logger.info(
-                resultLine(grey(
-                  "Tests ignored/skipped  "), grey(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.IGNORED)
-                                                                                        + testOutcomes.count(TestType.ANY).withResult(TestResult.SKIPPED))))
+                resultLine(grey("Tests ignored/skipped",COLUMN_WIDTH), grey(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.IGNORED)
+                                                                                           + testOutcomes.count(TestType.ANY).withResult(TestResult.SKIPPED)),0))
         );
-        logger.info("------------------------ | --------------");
-        logger.info(resultLine("Total Duration         ", CompoundDuration.of(testOutcomes.getDuration())));
-        logger.info(resultLine("Fastest test took      ", CompoundDuration.of(testOutcomes.getFastestTestDuration())));
-        logger.info(resultLine("Slowest test took      ", CompoundDuration.of(testOutcomes.getSlowestTestDuration())));
-        logger.info("-----------------------------------------");
+
+        logger.info("------------------------------- | --------------");
+        logger.info(resultLine("Total Duration", CompoundDuration.of(testOutcomes.getDuration())));
+        logger.info(resultLine("Fastest test took", CompoundDuration.of(testOutcomes.getFastestTestDuration())));
+        logger.info(resultLine("Slowest test took", CompoundDuration.of(testOutcomes.getSlowestTestDuration())));
+        logger.info("------------------------------------------------");
         logger.info("");
 
         Path index = outputDirectory.toPath().resolve("index.html");
 
-        logger.info(white("SERENITY REPORTS"));
+        logger.info(white("SERENITY REPORTS",0));
         logger.info("  - Full Report: " + index.toUri());
     }
 
@@ -126,63 +117,49 @@ public class ResultChecker {
         return  "| " + label + "| " + value;
     }
 
-    private String pad(String text, int totalLength) {
-        return StringUtils.rightPad(text, totalLength);
-    }
-
     private String colored(TestResult result, String text) {
         switch (result) {
             case SUCCESS:
-                return green(text);
+                return green(text,0);
             case FAILURE:
-                return red(text);
+                return red(text,0);
             case ERROR:
-                return yellow(text);
+                return yellow(text,0);
             case PENDING:
-                return cyan(text);
+                return cyan(text,0);
             default:
                 return text;
         }
     }
 
-    private String red(String text) {
-        return asciiColors.bold().red(text);
+    private String red(String text, int width) {
+        return asciiColors.bold().red(StringUtils.rightPad(text, width));
     }
 
-    private String green(String text) {
-        return asciiColors.bold().green(text);
+    private String green(String text, int width) {
+        return asciiColors.bold().green(StringUtils.rightPad(text, width));
     }
 
-    private String cyan(String text) {
-        return asciiColors.bold().cyan(text);
+    private String cyan(String text, int width) {
+        return asciiColors.bold().cyan(StringUtils.rightPad(text, width));
     }
 
-    private String grey(String text) {
-        return asciiColors.bold().grey(text);
+    private String grey(String text, int width) {
+        return asciiColors.bold().grey(StringUtils.rightPad(text, width));
     }
 
-    private String yellow(String text) {
-        return asciiColors.bold().yellow(text);
+    private String yellow(String text, int width) {
+        return asciiColors.bold().yellow(StringUtils.rightPad(text, width));
     }
 
-    private String purple(String text) {
-        return asciiColors.bold().magenta(text);
+    private String purple(String text, int width) {
+        return asciiColors.bold().magenta(StringUtils.rightPad(text, width));
     }
 
-    private String white(String text) {
-        return asciiColors.bold().white(text);
+    private String white(String text, int width) {
+        return asciiColors.bold().white(StringUtils.rightPad(text, width));
     }
 
-    private String testOutcomeSummary(TestOutcomes testOutcomes) {
-        int errors = testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR);
-        int failures = testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE);
-        int compromised = testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED);
-
-        return Joiner.on(" ").join("SERENITY TEST FAILURES:",
-                OutcomeSummary.forOutcome(TestResult.ERROR).withCount(errors),
-                OutcomeSummary.forOutcome(TestResult.FAILURE).withCount(failures),
-                OutcomeSummary.forOutcome(TestResult.COMPROMISED).withCount(compromised));
-    }
 
     private Optional<TestOutcomes> loadOutcomes() {
         TestOutcomes outcomes = null;
@@ -191,14 +168,6 @@ public class ResultChecker {
                                         .inFormat(OutcomeFormat.JSON)
                                         .from(outputDirectory)
                                         .filteredByEnvironmentTags();
-//
-//            if (outcomes.getTotal() == 0) {
-//                outcomes = TestOutcomeLoader.loadTestOutcomes()
-//                                            .inFormat(OutcomeFormat.XML)
-//                                            .from(outputDirectory)
-//                                            .filteredByEnvironmentTags();
-//            }
-
             if (thereAreTagsIn(tags)) {
                 outcomes = outcomes.withTags(tags);
             }

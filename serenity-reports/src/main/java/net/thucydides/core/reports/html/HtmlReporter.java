@@ -78,7 +78,6 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     protected void copyResourcesToOutputDirectory() throws IOException {
         updateResourceDirectoryFromSystemPropertyIfDefined();
         HtmlResourceCopier.copyHtmlResourcesFrom(getResourceDirectory()).to(getOutputDirectory());
-
         copyProjectSpecificResources();
     }
 
@@ -114,7 +113,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private void updateResourceDirectoryFromSystemPropertyIfDefined() {
 
         String systemDefinedResourceDirectory
-             = ThucydidesSystemProperty.THUCYDIDES_REPORT_RESOURCES.from(environmentVariables);
+             = ThucydidesSystemProperty.SERENITY_REPORT_RESOURCES.from(environmentVariables);
         if (systemDefinedResourceDirectory != null) {
             setResourceDirectory(systemDefinedResourceDirectory);
         }

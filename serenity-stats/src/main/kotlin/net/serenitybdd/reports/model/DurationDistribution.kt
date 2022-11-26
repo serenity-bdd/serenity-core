@@ -175,9 +175,15 @@ class DurationDistribution(
     }
 
     fun findMatchingBucketForTestCase(testCase: TestCaseDuration) =
-        durationBuckets.first { bucket ->
-            testCase.duration in bucket.minDurationInSeconds * 1000 until bucket.maxDurationInSeconds * 1000
+        if (testCase.duration < durationBuckets.first().minDurationInSeconds) {
+            durationBuckets.first()
         }
+        else if (testCase.duration >= durationBuckets.last().minDurationInSeconds)
+            durationBuckets.last()
+        else
+            durationBuckets.first { bucket ->
+                testCase.duration in bucket.minDurationInSeconds * 1000 until bucket.maxDurationInSeconds * 1000
+            }
 
     fun findMatchingBucketsForTestOutcome(testOutcome: TestOutcome) =
         testCaseDurationsIn(testOutcome).map { testCaseDuration -> findMatchingBucketForTestCase(testCaseDuration) }

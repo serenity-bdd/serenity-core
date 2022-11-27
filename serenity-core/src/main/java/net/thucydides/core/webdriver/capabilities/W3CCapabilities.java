@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
+import io.cucumber.java.hu.Ha;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -21,10 +22,7 @@ import org.openqa.selenium.safari.SafariOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.webdriver.CapabilityValue.stripQuotesFrom;
@@ -34,6 +32,7 @@ public class W3CCapabilities {
     private final EnvironmentVariables environmentVariables;
     private static final Logger LOGGER = LoggerFactory.getLogger(W3CCapabilities.class);
     private String prefix;
+    private final Set<String> STRING_CONFIG_PROPERTIES = new HashSet<>(Arrays.asList("platformName","platformVersion"));
 
     public W3CCapabilities(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -90,6 +89,9 @@ public class W3CCapabilities {
         if (hasValueFor("browserVersion", ConfigValueType.STRING, config)) {
             capabilities.setVersion(config.getString("browserVersion"));
         }
+        if (hasValueFor("platformVersion", ConfigValueType.STRING, config)) {
+            capabilities.setVersion(config.getString("platformVersion"));
+        }
         if (hasValueFor("platformName", ConfigValueType.STRING, config)) {
             String platformName = config.getString("platformName");
             capabilities.setCapability("platformName", platformName);
@@ -137,7 +139,7 @@ public class W3CCapabilities {
 
     private void addCapabilityValue(Config config, DesiredCapabilities capabilities, String fieldName) {
         ConfigValue value = config.getValue(fieldName);
-        if (fieldName.equals("platformName")) {
+        if (STRING_CONFIG_PROPERTIES.contains(fieldName)) {
             capabilities.setPlatform(Platform.fromString(value.unwrapped().toString()));
         } else {
             capabilities.setCapability(fieldName, asObject(value));

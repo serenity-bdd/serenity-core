@@ -3,6 +3,7 @@ package net.serenitybdd.plugins.saucelabs;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.plugins.CapabilityTags;
+import net.serenitybdd.plugins.saucelabs.SaucelabsRemoteDriverCapabilities;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -23,10 +24,14 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         }
 
         HashMap<String, Object> newOptions = new HashMap<>();
+        SaucelabsRemoteDriverCapabilities sauceCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
+        
+        // Add sauce options from environment variables
+        newOptions.putAll((Map<String, Object>) sauceCapabilities.getCapabilities(capabilities).getCapability("sauce:options"));
 
-        newOptions.put("username", SauceLabsCredentials.from(environmentVariables).getUser());
+        newOptions.put("username",  SauceLabsCredentials.from(environmentVariables).getUser());
         newOptions.put("accessKey", SauceLabsCredentials.from(environmentVariables).getAccessKey());
-        capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
+        newOptions.put("name", TestOutcomeName.from(testOutcome));
 
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));

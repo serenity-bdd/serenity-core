@@ -58,11 +58,23 @@ private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
 }
 
 fun averageDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-    if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average().toLong()
+    if (outcomes.isEmpty())
+        0
+    else
+        outcomes.flatMap { outcome -> testCaseDurationsIn(outcome) }
+            .map { duration -> duration.toMillis() }
+            .average()
+            .toLong()
 )
 
-fun formattedDuration(duration: Duration): String {
+fun testCaseDurationsIn(outcome: TestOutcome): List<Duration> =
+    if (outcome.isDataDriven)
+        outcome.testSteps.map { step -> ofMillis(step.duration)
+    } else
+        listOf(ofMillis(outcome.duration))
 
+
+fun formattedDuration(duration: Duration): String {
     val days = duration.toDays()
     val hours = duration.toHours() - (days * 24)
     val minutes = duration.toMinutes() - (days * 24 * 60) - (hours * 60)

@@ -29,18 +29,17 @@ class DurationDistribution(
     private fun durationBucketsFrom(durationLimits: List<Duration>): List<DurationBucket> {
         val durationBuckets: MutableList<DurationBucket> = mutableListOf()
         val bucketLabels = distributionLabels()
-        var lowerLimit = 0L
-        for ((index, durationLimit) in durationLimits.plus(Duration.ofSeconds(Long.MAX_VALUE)).withIndex()) {
-            val upperLimit = durationLimit.get(ChronoUnit.SECONDS)
+        var lowerLimit = Duration.ofMillis(0)
+        for ((index, durationLimit) in durationLimits.plus(ChronoUnit.FOREVER.duration).withIndex()) {
             durationBuckets.add(
                 DurationBucket(
                     bucketLabels[index],
                     lowerLimit,
-                    upperLimit,
+                    durationLimit,
                     mutableListOf()
                 )
             )
-            lowerLimit = upperLimit
+            lowerLimit = durationLimit
         }
         return durationBuckets
     }
@@ -175,19 +174,10 @@ class DurationDistribution(
     }
 
     fun findMatchingBucketForTestCase(testCase: TestCaseDuration) =
-        if (testCase.duration < durationBuckets.first().minDurationInSeconds) {
-            durationBuckets.first()
-        }
-        else if (testCase.duration >= durationBuckets.last().minDurationInSeconds)
-            durationBuckets.last()
-        else
-            durationBuckets.first { bucket ->
-                testCase.duration in bucket.minDurationInSeconds * 1000 until bucket.maxDurationInSeconds * 1000
-            }
+        durationBuckets.first { bucket -> bucket.contains(Duration.ofMillis(testCase.duration)) }
 
     fun findMatchingBucketsForTestOutcome(testOutcome: TestOutcome) =
         testCaseDurationsIn(testOutcome).map { testCaseDuration -> findMatchingBucketForTestCase(testCaseDuration) }
 
     fun getDurationTags(): List<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }
-
 }

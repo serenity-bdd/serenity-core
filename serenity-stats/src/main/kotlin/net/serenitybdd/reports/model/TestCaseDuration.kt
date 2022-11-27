@@ -23,5 +23,4 @@ class TestCaseDuration(val title: String,
         result = 31 * result + testOutcome.hashCode()
         return result
     }
-
 }

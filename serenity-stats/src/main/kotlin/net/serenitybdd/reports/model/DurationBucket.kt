@@ -2,16 +2,14 @@ package net.serenitybdd.reports.model
 
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestTag
+import java.time.Duration
 
 class DurationBucket(
     val duration: String,
-    val minDurationInSeconds: Long,
-    val maxDurationInSeconds: Long,
+    val minDuration: Duration,
+    val maxDuration: Duration,
     val outcomes: MutableList<TestCaseDuration>
 ) {
-    private val minDurationInMilliseconds = minDurationInSeconds * 1000L
-    private val maxDurationInMilliseconds = maxDurationInSeconds * 1000L
-
     fun addOutcome(testCaseDuration: TestCaseDuration) {
         if (testCaseDuration.testOutcome.isDataDriven) {
             val outcomeTitle = "${testCaseDuration.testOutcome.getTitle()} (${duration})"
@@ -23,15 +21,14 @@ class DurationBucket(
 
     private fun withExamplesOfMatchingDuration(title: String, outcome: TestOutcome): TestCaseDuration {
         val outcomeWithMatchingExamples = outcome.copy()
-            .removeTopLevelStepsNotMatching { testStep ->
-                testStep.duration in minDurationInMilliseconds until maxDurationInMilliseconds
-            };
+            .removeTopLevelStepsNotMatching { testStep -> this.contains(Duration.ofMillis(testStep.duration)) }
+        val outcomeDuration =
+            if (outcomeWithMatchingExamples.testSteps.isEmpty()) 0 else outcomeWithMatchingExamples.testSteps[0].duration
 
-        return TestCaseDuration(title, outcomeWithMatchingExamples.testSteps[0].duration, outcomeWithMatchingExamples)
+        return TestCaseDuration(title, outcomeDuration, outcomeWithMatchingExamples)
     }
 
+    fun contains(duration: Duration) : Boolean = duration.compareTo(minDuration) >= 0 && duration.compareTo(maxDuration) <= 0
     fun getTestOutcomes() = outcomes.map { outcome -> outcome.testOutcome }
     fun getTag(): TestTag = TestTag.withName(duration).andType("Duration")
-
-
 }

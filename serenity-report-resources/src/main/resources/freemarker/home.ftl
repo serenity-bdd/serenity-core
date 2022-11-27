@@ -77,12 +77,13 @@
             });
 
             $(".feature-coverage-table").DataTable({
-                searching: false,
+                searching: true,
                 paging: false,
                 info: false
             });
 
             $(".feature-coverage-table-with-pagination").DataTable({
+                searching: true,
                 order: [[0, "asc",]],
                 pageLength: 10,
                 language: {
@@ -193,7 +194,7 @@
                             <div class="test-count-summary">
                                 <div class="test-count-title">
                                     <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
-                                    ${testOutcomes.testCaseCount} ${testOutcomes.resultTypeLabel} in ${testOutcomes.scenarioCount} ${scenarioLabel}
+                                    ${testOutcomes.testCaseCount} ${testOutcomes.resultTypeLabel}
 
                                     <#if (csvReport! != '')> |
                                         <a href="${csvReport}" title="Download CSV"> <i class="bi bi-cloud-arrow-down" title="Download CSV"></i></a>
@@ -415,8 +416,8 @@
                                                                                         <a href="${tagCoverage.report}" > ${displayedTagName}</a>
                                                                                     </#if>
                                                                                 </td>
-                                                                                <td>${tagCoverage.testCount}</td>
                                                                                 <td>${tagCoverage.scenarioCount}</td>
+                                                                                <td>${tagCoverage.testCount}</td>
                                                                                 <td>${tagCoverage.successRate}</td>
                                                                                 <td>
                                                                                     <#if tagCoverage.testCount = 0>

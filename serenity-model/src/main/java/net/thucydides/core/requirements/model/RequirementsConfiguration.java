@@ -30,10 +30,7 @@ public class RequirementsConfiguration {
 
     public RequirementsConfiguration(EnvironmentVariables environmentVariables, String rootDirectory) {
         this.environmentVariables = environmentVariables;
-//        root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();
-//        if (!root.isPresent()) {
-            root = Optional.of(absolutePathOfDirectoryOnClasspath(rootDirectory));
-///        }
+        root = Optional.of(absolutePathOfDirectoryOnClasspath(rootDirectory));
     }
 
     private Path absolutePathOfDirectoryOnClasspath(String rootDirectory) {
@@ -83,18 +80,24 @@ public class RequirementsConfiguration {
     private List<String> jbehaveCapabilityTypes() {
         int featureDirectoryDepth = getJBehaveFileMatcher().get().getMaxDepth();
         switch (featureDirectoryDepth) {
-            case 0: return NewList.of("story");
-            case 1: return NewList.of("feature", "story");
-            default: return NewList.of("capability","feature", "story");
+            case 0:
+                return NewList.of("story");
+            case 1:
+                return NewList.of("feature", "story");
+            default:
+                return NewList.of("capability", "feature", "story");
         }
     }
 
     private List<String> cucumberCapabilityTypes() {
         int featureDirectoryDepth = getCucumberFileMatcher().get().getMaxDepth();
         switch (featureDirectoryDepth) {
-            case 0: return NewList.of("feature");
-            case 1: return NewList.of("capability", "feature");
-            default: return NewList.of("theme","capability", "feature");
+            case 0:
+                return NewList.of("feature");
+            case 1:
+                return NewList.of("capability", "feature");
+            default:
+                return NewList.of("theme", "capability", "feature");
         }
     }
 
@@ -107,7 +110,7 @@ public class RequirementsConfiguration {
         try {
 //            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
-                jbehaveFileMatcher = new SearchForFilesOfType(root.get(),".story");
+                jbehaveFileMatcher = new SearchForFilesOfType(root.get(), ".story");
                 Files.walkFileTree(root.get(), jbehaveFileMatcher);
                 return Optional.of(jbehaveFileMatcher);
             }
@@ -131,7 +134,7 @@ public class RequirementsConfiguration {
         try {
 //            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
-                cucumberFileMatcher = new SearchForFilesOfType(root.get(),".feature");
+                cucumberFileMatcher = new SearchForFilesOfType(root.get(), ".feature");
                 Files.walkFileTree(root.get(), cucumberFileMatcher);
                 return Optional.of(cucumberFileMatcher);
             }

@@ -367,8 +367,12 @@ public class StepEventBus {
         outcome = checkForEmptyScenarioIn(outcome);
         recordTestSource();
 
-        for (StepListener stepListener : getAllListeners()) {
-            stepListener.testFinished(outcome, inDataDrivenTest);
+        try {
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.testFinished(outcome, inDataDrivenTest);
+            }
+        } catch(Throwable testFailedInTeardownOperations) {
+            getBaseStepListener().stepFailedWithException(testFailedInTeardownOperations);
         }
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());

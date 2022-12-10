@@ -6,6 +6,10 @@ import spock.lang.Specification
 
 class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
+    def setup() {
+        DefaultCapabilityTypes.instance().clear()
+    }
+
     def "Should be able to load capabilities from the default directory structure"() {
         given: "We are using the default requirements service"
             Requirements requirements = new FileSystemRequirements("sample-story-directories/capabilities_and_features")

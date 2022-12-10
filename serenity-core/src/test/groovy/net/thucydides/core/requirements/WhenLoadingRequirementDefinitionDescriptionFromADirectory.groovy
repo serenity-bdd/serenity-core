@@ -6,6 +6,10 @@ import spock.lang.Specification
 
 class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specification {
 
+    def setup() {
+        DefaultCapabilityTypes.instance().clear()
+    }
+
     def "Directories in a 1-level directory structure represent the top level of the requirements hierarchy"() {
         given: "there is a readme.md file in a single-level directory structure"
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/one-level-feature-files/features/fruit")
@@ -84,20 +88,20 @@ class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specific
     }
 
 
-//    def "Should be able to derive the narrative type from the directory level"() {
-//        given: "there is a narrative.txt file in a directory"
-//            File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples")
-//        when: "We try to load the narrativeText from the directory"
-//            def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-//            def narrative = reader.loadFrom(directoryContainingANarrative)
-//        then: "the narrativeText should be found"
-//            narrative.present
-//        and: "the narrativeText title and description should be loaded"
-//            narrative.get().title.get() == "Grow red apples"
-//        and: "the type should be derived from the directory level"
-//            narrative.get().type == "capability"
-//    }
-//
+    def "Should be able to derive the narrative type from the directory level"() {
+        given: "there is a narrative.txt file in a directory"
+            File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples")
+        when: "We try to load the narrativeText from the directory"
+            def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
+            def narrative = reader.loadFrom(directoryContainingANarrative)
+        then: "the narrativeText should be found"
+            narrative.present
+        and: "the narrativeText title and description should be loaded"
+            narrative.get().title.get() == "Grow shiny red apples"
+        and: "the type should be derived from the directory level"
+            narrative.get().type == "feature"
+    }
+
     def "Should be able to cope with missing title lines"() {
         given: "there is a narrative.txt file in a directory"
             File reqDirectory = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_granny_smiths")

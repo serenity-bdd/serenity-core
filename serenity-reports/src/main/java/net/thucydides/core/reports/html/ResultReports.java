@@ -80,32 +80,42 @@ public class ResultReports {
 
         List<ReportingTask> tasks = new ArrayList<>();
 
-        OutcomeCounter totalTests = testOutcomesForThisTag.getTotalTests();
-        if (totalTests.withResult(TestResult.SUCCESS) > 0) {
+        List<TestResult> allResults = testOutcomesForThisTag.getAllResults();
+//        OutcomeCounter totalTests = testOutcomesForThisTag.getTotalTests();
+        if (allResults.contains(TestResult.SUCCESS)) {
+//        if (totalTests.withResult(TestResult.SUCCESS) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getPassingTests(), reportName, tag, "success"));
         }
-        if (totalTests.withResult(TestResult.PENDING) > 0) {
+        if (allResults.contains(TestResult.PENDING)) {
+//        if (totalTests.withResult(TestResult.PENDING) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getPendingTests(), reportName, tag, "pending"));
         }
-        if ((totalTests.withResult(TestResult.FAILURE) > 0) || (totalTests.withResult(TestResult.ERROR) > 0)) {
+        if (allResults.contains(TestResult.FAILURE) || allResults.contains(TestResult.ERROR)) {
+//        if ((totalTests.withResult(TestResult.FAILURE) > 0) || (totalTests.withResult(TestResult.ERROR) > 0)) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getUnsuccessfulTests(), reportName, tag, "broken"));
         }
-        if (totalTests.withResult(TestResult.FAILURE) > 0) {
+        if (allResults.contains(TestResult.FAILURE)) {
+//        if (totalTests.withResult(TestResult.FAILURE) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getFailingTests(), reportName, tag, "failure"));
         }
-        if (totalTests.withResult(TestResult.ABORTED) > 0) {
+        if (allResults.contains(TestResult.ABORTED)) {
+//        if (totalTests.withResult(TestResult.ABORTED) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getAbortedTests(), reportName, tag, "aborted"));
         }
-        if (totalTests.withResult(TestResult.ERROR) > 0) {
+        if (allResults.contains(TestResult.ERROR)) {
+//        if (totalTests.withResult(TestResult.ERROR) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getErrorTests(), reportName, tag, "error"));
         }
-        if (totalTests.withResult(TestResult.COMPROMISED) > 0) {
+        if (allResults.contains(TestResult.COMPROMISED)) {
+//        if (totalTests.withResult(TestResult.COMPROMISED) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getCompromisedTests(), reportName, tag, "compromised"));
         }
-        if (totalTests.withResult(TestResult.IGNORED) > 0) {
+        if (allResults.contains(TestResult.IGNORED)) {
+//        if (totalTests.withResult(TestResult.IGNORED) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.havingResult(TestResult.IGNORED), reportName, tag, "ignored"));
         }
-        if (totalTests.withResult(TestResult.SKIPPED) > 0) {
+        if (allResults.contains(TestResult.SKIPPED)) {
+//        if (totalTests.withResult(TestResult.SKIPPED) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.havingResult(TestResult.SKIPPED), reportName, tag, "skipped"));
         }
         return tasks;

@@ -4,6 +4,7 @@ import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.reports.styling.TagStylist;
+import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
@@ -108,15 +109,12 @@ public class FreemarkerContext {
                                                ReportNameProvider reportName,
                                                boolean useFiltering) {
         Map<String, Object> context = new HashMap<>();
-
-
-        // WIP
-
         TestOutcomes testOutcomes = completeTestOutcomes.filteredByEnvironmentTags();
 
-        // EWIP
         context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", testOutcomes);
+
+        // Calculate Duration
         context.put("durations", new DurationDistribution(environmentVariables, testOutcomes));
 
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());

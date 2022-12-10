@@ -60,6 +60,7 @@ class WhenConvertingW3CPropertiesToChromeOptions {
         assertThat(options).isNotNull();
         assertThat(options.getBrowserName()).isEqualTo("Chrome");
     }
+
     @Nested
     @DisplayName("We can specify browser preferences such as")
     class CanSpecifyDriverDetails {
@@ -241,14 +242,9 @@ class WhenConvertingW3CPropertiesToChromeOptions {
         @DisplayName("chrome driver arguments")
         void chomeArgs() {
             List<String> args = (List<String>) chromeOptions.get("args");
-            assertThat(args).containsExactly("window-size=1000,800", "start-maximized","headless","--headless");
-        }
-
-        @Test
-        @DisplayName("chrome extensions")
-        public void weCanConfigureChomeExtensions() {
-            List<File> extensions = (List<File>) chromeOptions.get("extensions");
-            assertThat(extensions).hasSize(2);
+            assertThat(args).contains("start-maximized")
+                    .contains("window-size=1000,800")
+                    .contains("headless");
         }
     }
 
@@ -267,9 +263,9 @@ class WhenConvertingW3CPropertiesToChromeOptions {
         @Test
         @DisplayName("including the detailed logging preferences")
         void loggingPrefs() {
-             LoggingPreferences loggingPreferences = (LoggingPreferences) options.getCapability("goog:loggingPrefs");
-             assertThat(loggingPreferences.getLevel("browser")).isEqualTo(Level.ALL);
-             assertThat(loggingPreferences.getLevel("driver")).isEqualTo(Level.ALL);
+            LoggingPreferences loggingPreferences = (LoggingPreferences) options.getCapability("goog:loggingPrefs");
+            assertThat(loggingPreferences.getLevel("browser")).isEqualTo(Level.ALL);
+            assertThat(loggingPreferences.getLevel("driver")).isEqualTo(Level.ALL);
         }
     }
 

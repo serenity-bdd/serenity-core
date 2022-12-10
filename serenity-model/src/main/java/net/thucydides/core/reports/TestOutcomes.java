@@ -44,7 +44,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class TestOutcomes {
 
-    private final List<? extends TestOutcome> outcomes;
+    private final List<TestOutcome> outcomes;
     private final Optional<TestOutcomes> rootOutcomes;
     private final double estimatedAverageStepCount;
     private final EnvironmentVariables environmentVariables;
@@ -128,8 +128,11 @@ public class TestOutcomes {
     public TestOutcomes withResultFilter(TestResult testResult) {
         List<TestOutcome> filteredOutcomes = this.getOutcomes().stream()
                 .filter(outcome -> outcome.containsAtLeastOneOutcomeWithResult(testResult))
-                .map(outcome -> outcome.withExamplesMatching(example -> example.getResult().equals(testResult)))
+                .map(outcome -> outcome.withExamplesHavingResult(testResult))
                 .collect(Collectors.toList());
+
+        List<TestOutcome> filteredOutcomeList = new ArrayList<>();
+
 
         return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label, testResult);
     }
@@ -151,11 +154,12 @@ public class TestOutcomes {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }
 
-    private List<TestOutcome> outcomesFilteredByResult(TestResult... results) {
-        if (onlyPassing(results)) {
-            return outcomesExclusivelyWithResults(results);
+    private List<TestOutcome> outcomesFilteredByResult(TestResult result) {
+//        if (onlyPassing(results)) {
+        if (result == TestResult.SUCCESS) {
+            return outcomesExclusivelyWithResults(result);
         } else {
-            return outcomesWithAtLeastOneResultOf(results);
+            return outcomesWithAtLeastOneResultOf(result);
         }
     }
 
@@ -163,14 +167,17 @@ public class TestOutcomes {
         return stream(results).allMatch(result -> result == TestResult.SUCCESS);
     }
 
-    private List<TestOutcome> outcomesExclusivelyWithResults(TestResult... results) {
-        List<TestResult> eligableResults = NewList.of(results);
-
+    private List<TestOutcome> outcomesExclusivelyWithResults(TestResult result) {
+        if (allOutcomesHaveResult(result)) {
+            return outcomes;
+        }
         return outcomes.stream()
-                .filter(outcome -> eligableResults.contains(outcome.getResult()))
-                .map(outcome -> outcome.withExamplesMatching(example -> eligableResults.contains(example.getResult())))
+                .filter(outcome -> result.expanded().contains(outcome.getResult()))
+                .map(outcome -> outcome.withExamplesHavingResult(result))
                 .collect(Collectors.toList());
     }
+
+
 
     private List<TestOutcome> outcomesWithAtLeastOneResultOf(TestResult... results) {
         return outcomes.stream()
@@ -190,11 +197,38 @@ public class TestOutcomes {
         );
     }
 
-    public TestOutcomes havingResult(TestResult result) {
-        return TestOutcomes.of(outcomesFilteredByResult(result))
-                .withLabel(labelForTestsWithStatus(result.name()))
-                .withResultFilter(result)
-                .withRootOutcomes(getRootOutcomes());
+    public TestOutcomes havingResult(TestResult expectedResult) {
+
+        if (allOutcomesHaveResult(expectedResult)) {
+            return this;
+        } else {
+            return TestOutcomes.of(outcomesFilteredByResult(expectedResult))
+                    .withLabel(labelForTestsWithStatus(expectedResult.name()))
+                    .withResultFilter(expectedResult)
+                    .withRootOutcomes(getRootOutcomes());
+        }
+    }
+
+    private boolean allOutcomesHaveResult(TestResult expectedResult) {
+        return !getDistinctResults().isEmpty() && expectedResult.expanded().containsAll(getDistinctResults());
+    }
+
+    public long getResultCount() {
+        return outcomes.stream()
+                .flatMap(TestOutcome::getAllResultsStream)
+                .count();
+    }
+
+    public List<TestResult> getAllResults() {
+        return outcomes.stream()
+                .flatMap(TestOutcome::getAllResultsStream)
+                .collect(Collectors.toList());
+    }
+
+    public Set<TestResult> getDistinctResults() {
+        return outcomes.stream()
+                .flatMap(TestOutcome::getAllResultsStream)
+                .collect(Collectors.toSet());
     }
 
     public static TestOutcomes of(Collection<? extends TestOutcome> outcomes) {
@@ -516,27 +550,77 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes).withLabel("");
     }
 
-    public TestOutcomes withResult(TestResult... result) {
 
-        List<TestOutcome> filteredOutcomes = outcomes
-                .stream()
-                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
-                .map(outcome -> outcome.withExamplesMatching(step -> asList(result).contains(step.getResult())))
-                .collect(Collectors.toList());
+    public long countWithResult(TestType expectedType, TestResult expectedResult) {
+        int matchingResults = 0;
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.typeCompatibleWith(expectedType)) {
+                for(TestResult actualResult : outcome.getAllResults()) {
+                    if (expectedResult.expanded().contains(actualResult)) {
+                        matchingResults++;
+                    }
+                }
+            }
+        }
+        return matchingResults;
+//        return getOutcomes().stream()
+//                .filter(outcome -> outcome.typeCompatibleWith(expectedType))
+//                .flatMap(TestOutcome::getAllResultsStream)
+//                .filter(result -> expectedResult.expanded().contains(result))
+//                .count();
+    }
+
+    public long countWithType(TestType expectedType) {
+        int matchingResults = 0;
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.typeCompatibleWith(expectedType)) {
+                matchingResults += outcome.getAllResults().size();
+            }
+        }
+        return matchingResults;
+//        return getOutcomes().stream()
+//                .filter(outcome -> outcome.typeCompatibleWith(expectedType))
+//                .flatMap(TestOutcome::getAllResultsStream)
+//                .count();
+    }
+
+    public TestOutcomes withResult(TestResult result) {
+
+        List<TestOutcome> filteredOutcomes = new ArrayList<>();
+        for (TestOutcome outcome : outcomes) {
+            if (hasResult(outcome, result)) {
+                filteredOutcomes.add(outcome.withExamplesHavingResult(result));
+            }
+        }
+//        List<TestOutcome> filteredOutcomes = outcomes
+//                .stream()
+//                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
+//                .map(outcome -> outcome.withExamplesMatching(step -> asList(result).contains(step.getResult())))
+//                .collect(Collectors.toList());
 
         return TestOutcomes.of(filteredOutcomes);
     }
 
-    public TestOutcomes withResultMatching(Predicate<TestResult> resultCondition, TestResult... result) {
-
-        List<TestOutcome> filteredOutcomes = outcomes
-                .stream()
-                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
-                .map(outcome -> outcome.withExamplesMatching(step -> resultCondition.test(step.getResult())))
-                .collect(Collectors.toList());
-
-        return TestOutcomes.of(filteredOutcomes);
+    private boolean hasResult(TestOutcome outcome, TestResult expectedResult) {
+        for (TestResult result : expectedResult.expanded()) {
+            if (outcome.hasResult(result)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+
+//    public TestOutcomes withResultMatching(Predicate<TestResult> resultCondition, TestResult... result) {
+//
+//        List<TestOutcome> filteredOutcomes = outcomes
+//                .stream()
+//                .filter(outcome -> countScenariosWithResult(outcome, result) > 0)
+//                .map(outcome -> outcome.withExamplesMatching(step -> resultCondition.test(step.getResult())))
+//                .collect(Collectors.toList());
+//
+//        return TestOutcomes.of(filteredOutcomes);
+//    }
 
     public TestOutcomes withRequirementsTags() {
         for (TestOutcome outcome : outcomes) {
@@ -731,7 +815,7 @@ public class TestOutcomes {
     }
 
     public TestOutcomes getUnsuccessfulTests() {
-        return this.withResult(TestResult.ERROR, TestResult.FAILURE, TestResult.COMPROMISED);
+        return this.withResult(TestResult.UNSUCCESSFUL);
     }
 
     /**
@@ -792,7 +876,10 @@ public class TestOutcomes {
      * @return The list of TestOutcomes contained in this test outcome set.
      */
     public List<? extends TestOutcome> getTestCases() {
-        return outcomes.stream().flatMap(outcome -> outcome.asTestCases().stream()).collect(Collectors.toList());
+        return outcomes.stream()
+                .parallel()
+                .flatMap(outcome -> outcome.asTestCases().stream())
+                .collect(Collectors.toList());
     }
 
 
@@ -846,8 +933,13 @@ public class TestOutcomes {
         return outcomes;
     }
 
+    private Long numberOfTestScenarios = null;
+
     public long getNumberOfTestScenarios() {
-        return getOutcomes().stream().map(outcome -> outcome.getParentId() + ":" + outcome.getName()).distinct().count();
+        if (numberOfTestScenarios == null) {
+            numberOfTestScenarios = getOutcomes().stream().map(outcome -> outcome.getParentId() + ":" + outcome.getName()).distinct().count();
+        }
+        return numberOfTestScenarios;
     }
 
     /**
@@ -1156,6 +1248,7 @@ public class TestOutcomes {
         private boolean matches(String name, List<Matcher<String>> matchers) {
             return matchers.stream().anyMatch(match -> match.matches(name));
         }
+
     }
 
     public boolean isEmpty() {
@@ -1167,5 +1260,44 @@ public class TestOutcomes {
         return "TestOutcomes{" +
                 "outcomes=" + outcomes +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TestOutcomes that = (TestOutcomes) o;
+
+        if (Double.compare(that.estimatedAverageStepCount, estimatedAverageStepCount) != 0) return false;
+        if (!Objects.equals(outcomes, that.outcomes)) return false;
+        if (!Objects.equals(rootOutcomes, that.rootOutcomes)) return false;
+        if (!Objects.equals(environmentVariables, that.environmentVariables))
+            return false;
+        if (!Objects.equals(requirementsService, that.requirementsService))
+            return false;
+        if (!Objects.equals(label, that.label)) return false;
+        if (!Objects.equals(testTag, that.testTag)) return false;
+        if (resultFilter != that.resultFilter) return false;
+        if (!Objects.equals(startTime, that.startTime)) return false;
+        return Objects.equals(flagCount, that.flagCount);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = outcomes != null ? outcomes.hashCode() : 0;
+        result = 31 * result + (rootOutcomes != null ? rootOutcomes.hashCode() : 0);
+        temp = Double.doubleToLongBits(estimatedAverageStepCount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (environmentVariables != null ? environmentVariables.hashCode() : 0);
+        result = 31 * result + (requirementsService != null ? requirementsService.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (testTag != null ? testTag.hashCode() : 0);
+        result = 31 * result + (resultFilter != null ? resultFilter.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (flagCount != null ? flagCount.hashCode() : 0);
+        return result;
     }
 }

@@ -526,7 +526,7 @@ public class TestOutcome {
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.nestedTestPath = calculateNestPath(testCase);
-        addSteps(testSteps);
+        setTestSteps(testSteps);
         this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
         this.additionalIssues = additionalIssues;
@@ -1455,6 +1455,11 @@ public class TestOutcome {
         renumberTestSteps(updatedSteps);
 //        testSteps = Collections.unmodifiableList(updatedSteps);
         testSteps = updatedSteps;
+    }
+
+    private void setTestSteps(List<TestStep> steps) {
+        this.testSteps = steps;
+        // renumberTestSteps(testSteps);
     }
 
     private void renumberTestSteps(List<TestStep> testSteps) {
@@ -2807,6 +2812,7 @@ public class TestOutcome {
 
     public TestOutcome fromStep(TestStep testStep) {
         List<TestStep> specifiedSteps = asList(testStep);
+
         TestOutcome specifiedOutcome = this.copy().withSteps(specifiedSteps);
         Optional<TestFailureCause> failureCause = TestFailureCause.from(specifiedOutcome.getFlattenedTestSteps());
         if (failureCause.isPresent()) {
@@ -2822,11 +2828,28 @@ public class TestOutcome {
     }
 
     public TestOutcome withExamplesMatching(Predicate<TestStep> condition) {
-        if (isDataDriven()) {
+        if (isDataDriven() && someStepsDoNotMatch(condition)) {
             return copy().removeTopLevelStepsNotMatching(condition);
         } else {
             return this;
         }
+    }
+
+    public TestOutcome withExamplesHavingResult(TestResult result) {
+        if (!isDataDriven() || containsOnlyExamplesWithResult(result) || containsNoExamplesWithResult(result) ) {
+            return this;
+        }
+        return copy().removeTopLevelStepsNotHavingResult(result);
+    }
+
+    private boolean containsNoExamplesWithResult(TestResult result) {
+        Set<TestResult> distinctResults = getDistinctResults();
+        return result.expanded().stream().noneMatch(distinctResults::contains);
+    }
+
+    private boolean containsOnlyExamplesWithResult(TestResult result) {
+        Set<TestResult> distinctResults = getDistinctResults();
+        return distinctResults.size() == 1 && result.expanded().contains(distinctResults.iterator().next());
     }
 
     public List<TestOutcome> asTestCases() {
@@ -2878,11 +2901,61 @@ public class TestOutcome {
         return this;
     }
 
+    public TestOutcome removeTopLevelStepsNotHavingResult(TestResult result) {
+        List<TestStep> updatedSteps = new ArrayList<>();
+        for (TestStep step : testSteps) {
+            if (result.expanded().contains(step.getResult())) {
+                updatedSteps.add(step);
+            }
+        }
+        this.testSteps = updatedSteps;
+        return this;
+    }
+    private boolean someStepsDoNotMatch(Predicate<TestStep> condition) {
+        return testSteps.stream().anyMatch(condition);
+    }
+
     public boolean containsAtLeastOneOutcomeWithResult(TestResult expectedResult) {
         if (isDataDriven()) {
-            return testSteps.stream().anyMatch(step -> step.getResult().equals(expectedResult));
+            return testSteps.stream().anyMatch(step -> expectedResult.expanded().contains(step.getResult()));
         } else {
-            return getResult().equals(expectedResult);
+            return expectedResult.expanded().contains(getResult());
         }
+    }
+
+    public Stream<TestResult> getAllResultsStream() {
+        if (isDataDriven()) {
+            return getTestSteps().stream().map(TestStep::getResult);
+        } else {
+            return Stream.of(getResult());
+        }
+    }
+
+    public List<TestResult> getAllResults() {
+        if (isDataDriven()) {
+            List<TestResult> results = new ArrayList<>();
+            for(TestStep step : getTestSteps()) {
+                results.add(step.getOverallResult());
+            }
+            return results;
+        } else {
+            return Collections.singletonList(getResult());
+        }
+    }
+
+    public Set<TestResult> getDistinctResults() {
+        Set<TestResult> results = new HashSet<>();
+        if (isDataDriven()) {
+            for(TestStep step : getTestSteps()) {
+                results.add(step.getResult());
+            }
+        } else {
+            results.add(getResult());
+        }
+        return results;
+    }
+
+    public boolean hasResult(TestResult result) {
+        return getAllResults().contains(result);
     }
 }

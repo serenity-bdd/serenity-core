@@ -1,9 +1,14 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.digest.Digest
+import net.thucydides.core.requirements.DefaultCapabilityTypes
 import spock.lang.Specification
 
 class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
+
+    def setup() {
+        DefaultCapabilityTypes.instance().clear()
+    }
 
     def "Should use parent directory with feature files if present"() {
         given:

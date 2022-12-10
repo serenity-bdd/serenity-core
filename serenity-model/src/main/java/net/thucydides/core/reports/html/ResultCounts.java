@@ -13,19 +13,19 @@ public class ResultCounts {
     private final Map<TestResult, Long> automatedTests = new HashMap<>();
     private final Map<TestResult, Long> manualTests = new HashMap<>();
     private final Map<TestResult, Long> totalTests = new HashMap<>();
-    private final int totalAutomatedTests;
-    private final int totalManualTests;
-    private final int totalTestCount;
+    private final long totalAutomatedTests;
+    private final long totalManualTests;
+    private final long totalTestCount;
 
     public ResultCounts(TestOutcomes testOutcomes) {
         this.testOutcomes = testOutcomes;
         for (TestResult result : TestResult.values()) {
-            automatedTests.put(result, testOutcomes.ofType(TestType.AUTOMATED).withResult(result).getTestCaseCount());
-            manualTests.put(result, testOutcomes.ofType(TestType.MANUAL).withResult(result).getTestCaseCount());
+            automatedTests.put(result, testOutcomes.countWithResult(TestType.AUTOMATED, result));
+            manualTests.put(result, testOutcomes.countWithResult(TestType.MANUAL, result));
             totalTests.put(result, automatedTests.get(result) + manualTests.get(result));
         }
-        this.totalAutomatedTests = testOutcomes.ofType(TestType.AUTOMATED).getTotal();
-        this.totalManualTests = testOutcomes.ofType(TestType.MANUAL).getTotal();
+        this.totalAutomatedTests = testOutcomes.countWithType(TestType.AUTOMATED);
+        this.totalManualTests = testOutcomes.countWithType(TestType.MANUAL);
         this.totalTestCount = testOutcomes.getTotal();
     }
 
@@ -53,15 +53,15 @@ public class ResultCounts {
         return allTestsCount;
     }
 
-    public Integer getTotalAutomatedTestCount() {
+    public Long getTotalAutomatedTestCount() {
         return totalAutomatedTests;
     }
 
-    public Integer getTotalManualTestCount() {
+    public Long getTotalManualTestCount() {
         return totalManualTests;
     }
 
-    public Integer getTotalOverallTestCount() {
+    public Long getTotalOverallTestCount() {
         return totalTestCount;
     }
 
@@ -104,8 +104,6 @@ public class ResultCounts {
         List<String> resultCounts = new ArrayList<>();
         for (String resultType : testResultTypes) {
             resultCounts.add(labeledValue(resultType, TestType.ANY));
-//            resultCounts.add(labeledValue(resultType, TestType.AUTOMATED));
-//            resultCounts.add(labeledValue(resultType, TestType.MANUAL));
         }
         return Arrays.toString(resultCounts.toArray());
     }

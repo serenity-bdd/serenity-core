@@ -442,6 +442,15 @@ public class TestStep implements Cloneable {
         }
     }
 
+    private TestResult overallResult;
+
+    public TestResult getOverallResult() {
+        if (overallResult == null) {
+            overallResult = getResult();
+        }
+        return overallResult;
+    }
+
     private boolean isManual() {
         return manual != null && manual;
     }

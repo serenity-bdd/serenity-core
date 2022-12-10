@@ -295,17 +295,21 @@ public class Story {
         return asQualifiedTag();// TestTag.withName(storyName).andType(type.toString());
     }
 
+    private TestTag qualifiedTag;
     public TestTag asQualifiedTag() {
-        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-        String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
-        String lastElementOfPath = LastElement.of(getPath());
-        String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
-        if(featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
-            parentName = null;
+        if (qualifiedTag == null) {
+            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+            String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
+            String lastElementOfPath = LastElement.of(getPath());
+            String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
+            if (featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
+                parentName = null;
+            }
+            qualifiedTag = (isNotEmpty(parentName)) ?
+                    TestTag.withName(parentName + "/" + storyName).andType(type) :
+                    TestTag.withName(storyName).andType(type);
         }
-        return (isNotEmpty(parentName)) ?
-                TestTag.withName(parentName + "/" + storyName).andType(type) :
-                TestTag.withName(storyName).andType(type);
+        return qualifiedTag;
     }
 
 }

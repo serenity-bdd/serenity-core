@@ -42,18 +42,24 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     public abstract Optional<ReleaseProvider> getReleaseProvider();
 
+    private static HashMap<TestOutcome, Optional<Requirement>> PARENT_REQUIREMENTS = new HashMap<>();
     public java.util.Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome) {
 
+        if (PARENT_REQUIREMENTS.containsKey(testOutcome)) {
+            return PARENT_REQUIREMENTS.get(testOutcome);
+        }
         try {
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
                 if (requirement.isPresent()) {
+                    PARENT_REQUIREMENTS.put(testOutcome,requirement);
                     return requirement;
                 }
             }
         } catch (RuntimeException handleTagProvidersElegantly) {
             LOGGER.error("Tag provider failure", handleTagProvidersElegantly);
         }
+        PARENT_REQUIREMENTS.put(testOutcome, Optional.empty());
         return java.util.Optional.empty();
     }
 
@@ -178,12 +184,16 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return releases;
     }
 
+    private List<String> requirementTypes;
     public List<String> getRequirementTypes() {
 
-        return requirementTypesDefinedIn(getRequirements())
-                .stream()
-                .distinct()
-                .collect(Collectors.toList());
+        if (requirementTypes == null) {
+            requirementTypes = requirementTypesDefinedIn(getRequirements())
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+        return requirementTypes;
     }
 
     private Set<String> allTypesIn(List<Requirement> requirements) {

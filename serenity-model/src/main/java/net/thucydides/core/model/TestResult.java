@@ -4,6 +4,11 @@ package net.thucydides.core.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Acceptance test results. 
  * Records the possible outcomes of tests within an acceptance test case
@@ -126,5 +131,24 @@ public enum TestResult {
 
     public boolean isEqualTo(String name) {
         return this.name().equalsIgnoreCase(name) || this.adjective.equalsIgnoreCase(name);
+    }
+
+    private static final Map<TestResult, Set<TestResult>> AS_SETS = new HashMap<>();
+    static {
+        for(TestResult value : values()) {
+            Set<TestResult> resultAsSet = new HashSet<>();
+            resultAsSet.add(value);
+            AS_SETS.put(value, resultAsSet);
+        }
+
+        Set<TestResult> unsuccessful = new HashSet<>();
+        unsuccessful.add(FAILURE);
+        unsuccessful.add(ERROR);
+        unsuccessful.add(COMPROMISED);
+        AS_SETS.put(UNSUCCESSFUL, unsuccessful);
+    }
+
+    public Set<TestResult> expanded() {
+        return AS_SETS.get(this);
     }
 }

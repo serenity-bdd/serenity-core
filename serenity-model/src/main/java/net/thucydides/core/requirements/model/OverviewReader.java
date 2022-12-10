@@ -9,7 +9,7 @@ import static java.util.Arrays.stream;
 
 public class OverviewReader {
 
-    public Optional<String> readOverviewFrom(String... featureDirectories)  {
+    public static Optional<String> readOverviewFrom(String... featureDirectories)  {
 
         Optional<File> overviewFile = stream(featureDirectories)
                                         .map(featureDirectory -> findOverviewFileIn(featureDirectory))
@@ -24,7 +24,7 @@ public class OverviewReader {
         }
     }
 
-    private Optional<File> findOverviewFileIn(String featureDirectory) {
+    private static Optional<File> findOverviewFileIn(String featureDirectory) {
 
         if (new File(featureDirectory + "/overview.txt").exists()) {
             return Optional.of(new File(featureDirectory + "/overview.txt"));

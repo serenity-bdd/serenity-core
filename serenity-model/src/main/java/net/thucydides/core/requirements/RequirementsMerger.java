@@ -19,7 +19,7 @@ public class RequirementsMerger {
             mergeNewRequirement(newRequirement, mergedRequirements);
         }
 
-        return new ArrayList<>(mergedRequirements);
+        return mergedRequirements;
     }
 
     private void mergeNewRequirement(Requirement newRequirement, List<Requirement> existingRequirements) {

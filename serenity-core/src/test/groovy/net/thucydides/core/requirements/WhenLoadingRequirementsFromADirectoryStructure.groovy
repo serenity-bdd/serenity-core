@@ -1,20 +1,33 @@
 package net.thucydides.core.requirements
 
+import net.thucydides.core.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
 
     def "Should be able to load capabilities from the default directory structure"() {
         given: "We are using the default requirements provider"
-            RequirementsService requirementsService= new FileSystemRequirementsService("sample-story-directories/capabilities_and_features");
+        RequirementsService requirementsService = new FileSystemRequirementsService("sample-story-directories/capabilities_and_features");
         when: "We load the available requirements"
 
-            def capabilities = requirementsService.requirements;
-            def capabilityNames = capabilities.collect { it.name }
-            def capabilityTypes = capabilities.collect { it.type }
+        def capabilities = requirementsService.requirements;
+        def capabilityNames = capabilities.collect { it.name }
+        def capabilityTypes = capabilities.collect { it.type }
         then: "the requirements should be loaded from the first-level sub-directories"
-            capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
-            capabilityTypes == ["capability","theme","capability"]
+        capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
+        capabilityTypes == ["capability", "theme", "capability"]
+    }
+
+    def "Should be able to load capabilities from a multi-source requirements provider"() {
+        given: "We are using the a multi-source requirements provider"
+        RequirementsService requirementsService = new MultiSourceRequirementsService();
+        when: "We load the available requirements"
+
+        def capabilities = requirementsService.requirements;
+        def capabilityNames = capabilities.collect { it.name }
+        def capabilityTypes = capabilities.collect { it.type }
+        then: "the requirements should be loaded from the first-level sub-directories"
+        capabilityNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat","Raise chickens"]
     }
 
     def "Should be able to use a Requirements object to simplify requirements configuration"() {

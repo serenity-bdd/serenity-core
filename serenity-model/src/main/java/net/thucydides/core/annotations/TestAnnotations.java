@@ -227,7 +227,7 @@ public class TestAnnotations {
         List<TestTag> allTags = new ArrayList<>(getClassTags());
         allTags.addAll(getTagsFor(methodName));
 
-        return new ArrayList<>(allTags);
+        return allTags;
     }
 
     public static List<TestTag> getTagsForMethod(Method method) {
@@ -235,7 +235,7 @@ public class TestAnnotations {
         List<TestTag> allTags = new ArrayList<>(getClassTags(method.getDeclaringClass()));
         allTags.addAll(TestFramework.support().getTagsFor(method));
 
-        return new ArrayList<>(allTags);
+        return allTags;
     }
 
     public List<TestTag> getClassTags() {

@@ -43,5 +43,5 @@ public class DataSet {
         return rows;
     }
 
-    public List<TestTag> getTags() { return new ArrayList<>(tags); }
+    public List<TestTag> getTags() { return tags; }
 }

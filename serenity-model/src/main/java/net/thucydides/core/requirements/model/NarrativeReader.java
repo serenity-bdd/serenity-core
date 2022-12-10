@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.model;
 
+import com.google.common.collect.ImmutableSet;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.requirements.RequirementsPath;
@@ -9,8 +10,10 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Load a narrative text from a directory.
@@ -49,24 +52,6 @@ public class NarrativeReader {
         return loadFrom(directory, 0);// levelOf(directory));
     }
 
-    private int levelOf(File directory) {
-        if (getClass().getClassLoader().getResource(rootDirectory) == null) {
-            return 0;
-        }
-        try {
-            String rootPath = getClass().getClassLoader().getResource(rootDirectory).toURI().getPath();
-            if (directory.getPath().startsWith(rootPath)) {
-                return directory.getPath()
-                                .substring(rootPath.length() + 1)
-                                .split(File.separator)
-                                .length;
-            }
-        } catch (URISyntaxException e) {
-            return 0;
-        }
-        return 0;
-
-    }
     public Optional<RequirementDefinition> loadFrom(File directory, int requirementsLevel) {
         File[] narrativeFiles = directory.listFiles(calledNarrativeOrOverview());
         if (narrativeFiles == null || narrativeFiles.length == 0) {
@@ -113,13 +98,6 @@ public class NarrativeReader {
         return getRequirementTypeForLevel(level);
     }
 
-    private boolean isNarrative(File narrativeFile) {
-        return narrativeFile.getName().equalsIgnoreCase("readme.md")
-                || narrativeFile.getName().equalsIgnoreCase("readme.txt")
-                || narrativeFile.getName().toLowerCase().endsWith("narrative.txt")
-                || narrativeFile.getName().toLowerCase().endsWith("narrative.md");
-    }
-
     private int calculateRequirementsLevel(int requirementsLevel, int directoryCount) {
         return requirementsLevel + directoryCount - 1;
     }
@@ -158,11 +136,10 @@ public class NarrativeReader {
         }
     }
 
+    private final static Set<String> NARRATIVE_OR_OVERVIEW_FILENAMES
+            = ImmutableSet.of("narrative.txt","narrative.md","readme.md","overview.txt","overview.md");
+
     private FilenameFilter calledNarrativeOrOverview() {
-        return (file, name) -> (name.toLowerCase().equals("narrative.txt")
-                                || name.toLowerCase().equals("narrative.md")
-                                || name.toLowerCase().equals("readme.md")
-                                || name.toLowerCase().equals("overview.txt")
-                                || name.toLowerCase().equals("overview.md"));
+        return (file, name) -> (NARRATIVE_OR_OVERVIEW_FILENAMES.contains(name.toLowerCase()));
     }
 }

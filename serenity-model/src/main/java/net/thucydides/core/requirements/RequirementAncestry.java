@@ -10,21 +10,14 @@ import static java.util.Collections.unmodifiableList;
 
 public class RequirementAncestry {
 
-    private static final List<Requirement> NO_REQUIREMENTS = Collections.synchronizedList(new ArrayList<>());
-
-    public static List<Requirement> addParentsTo(List<Requirement> requirements) {
-        return addParentsTo(requirements, null);
+    public static void addParentsTo(List<Requirement> requirements) {
+        addParentsTo(requirements, null);
     }
 
-    public static List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
-        List<Requirement> augmentedRequirements = new ArrayList<>();
+    public static void addParentsTo(List<Requirement> requirements, String parent) {
         for(Requirement requirement : requirements) {
-            List<Requirement> children = requirement.hasChildren()
-                    ? addParentsTo(requirement.getChildren(),requirement.getName()) : NO_REQUIREMENTS;
-            augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
+            addParentsTo(requirement.getChildren(), requirement.getName());
+            requirement.setParent(parent);
         }
-        //return unmodifiableList(augmentedRequirements);
-        return augmentedRequirements;
     }
-
 }

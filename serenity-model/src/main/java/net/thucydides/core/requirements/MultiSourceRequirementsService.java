@@ -7,10 +7,13 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.AnnotationBasedTagProvider;
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MultiSourceRequirementsService extends BaseRequirementsService implements RequirementsService {
 
@@ -31,16 +34,22 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
 
     @Override
     public List<Requirement> getRequirements() {
-        RequirementsMerger merger = new RequirementsMerger();
-
         if ((requirements == null) || (requirements.isEmpty())) {
-            requirements = new ArrayList();
-            for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
-                LOGGER.trace("Reading requirements from " + tagProvider);
-                requirements = merger.merge(requirements, RequirementsProvided.by(tagProvider));
-            }
-            requirements = RequirementAncestry.addParentsTo(requirements);
+            StopWatch stopWatch = StopWatch.createStarted();
+
+            requirements = getRequirementsTagProviders().stream()
+                    .parallel()
+                    .flatMap(RequirementsProvided::asStream)
+                    .collect(Collectors.toCollection(MergedRequirementList::new));
+
+            stopWatch.split();
+            LOGGER.debug("Requirements loaded in {}", stopWatch.formatSplitTime());
+
+            RequirementAncestry.addParentsTo(requirements);
             indexRequirements();
+
+            stopWatch.split();
+            LOGGER.debug("Requirements loaded and indexed in {}", stopWatch.formatTime());
         }
         return requirements;
     }

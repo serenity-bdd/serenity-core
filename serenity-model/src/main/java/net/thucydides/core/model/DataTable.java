@@ -92,7 +92,7 @@ public class DataTable {
     }
 
     public List<String> getHeaders() {
-        return (headers == null) ?  emptyHeaders() : new ArrayList<>(headers);
+        return (headers == null) ?  emptyHeaders() : headers;//new ArrayList<>(headers);
     }
 
     private List<String> emptyHeaders() {
@@ -100,7 +100,7 @@ public class DataTable {
     }
 
     public List<DataTableRow> getRows() {
-        return (rows == null) ? new ArrayList<>() : new ArrayList<>(rows);
+        return (rows == null) ? new ArrayList<>() : rows;// new ArrayList<>(rows);
     }
 
     public RowValueAccessor row(int rowNumber) {

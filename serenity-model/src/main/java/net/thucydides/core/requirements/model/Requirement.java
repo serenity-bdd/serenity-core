@@ -258,8 +258,10 @@ public class Requirement implements Comparable {
     }
 
     public void setChildren(List<Requirement> children) {
-//        this.children = Collections.unmodifiableList(children);
         this.children = children;
+    }
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 
     public Requirement withParent(String parent) {

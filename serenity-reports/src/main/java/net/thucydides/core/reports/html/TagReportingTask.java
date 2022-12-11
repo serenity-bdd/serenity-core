@@ -11,6 +11,7 @@ import net.thucydides.core.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     protected final ReportNameProvider reportNameProvider;
     private final TestTag tag;
-    private final List<TestTag> allTags;
+    private final Set<TestTag> allTags;
     private final TestOutcomes testOutcomes;
     private final String reportName;
 
@@ -33,7 +34,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                      final ReportNameProvider reportNameProvider,
                      final String reportName,
                      final TestTag tag,
-                     final List<TestTag> allTags,
+                     final Set<TestTag> allTags,
                      final TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
@@ -79,7 +80,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
         String csvReport = reportNameProvider.forCSVFiles().forTag(tag);
         context.put("csvReport", csvReport);
 
-        context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(tag).fromTagsIn(allTags));
+        context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(tag).fromTagsIn(new ArrayList<>(allTags)));
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, reportName);
         generateCSVReportFor(testOutcomesForTag, csvReport);
@@ -128,7 +129,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                          final EnvironmentVariables environmentVariables,
                                          final File outputDirectory,
                                          final ReportNameProvider reportName,
-                                         final List<TestTag> allTags,
+                                         final Set<TestTag> allTags,
                                          final List<String> requirementTypes,
                                          final List<String> knownRequirementReportNames) {
 

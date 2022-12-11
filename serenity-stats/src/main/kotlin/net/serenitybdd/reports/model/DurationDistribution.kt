@@ -180,4 +180,5 @@ class DurationDistribution(
         testCaseDurationsIn(testOutcome).map { testCaseDuration -> findMatchingBucketForTestCase(testCaseDuration) }
 
     fun getDurationTags(): List<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }
+    fun getDurationTagsSet(): Set<TestTag> = durationBuckets.map { bucket -> bucket.getTag() }.toSet()
 }

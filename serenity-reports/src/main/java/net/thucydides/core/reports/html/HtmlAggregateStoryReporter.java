@@ -243,7 +243,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                             environmentVariables,
                                             getOutputDirectory(),
                                             reportNameProvider.inContext(knownTag.getCompleteName()),
-                                            durationDistribution.getDurationTags(),
+                                            new HashSet<>(durationDistribution.getDurationTags()),
                                             requirementTypes,
                                             knownRequirementReportNames);
                             reportingTasks.addAll(nested);
@@ -262,7 +262,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 environmentVariables,
                 getOutputDirectory(),
                 reportNameProvider,
-                durationDistribution.getDurationTags(),
+                durationDistribution.getDurationTagsSet(),
                 requirementTypes,
                 knownRequirementReportNames);
     }

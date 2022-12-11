@@ -63,7 +63,6 @@ public class TestResultList {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -78,5 +77,4 @@ public class TestResultList {
             return false;
         }
     }
-
 }

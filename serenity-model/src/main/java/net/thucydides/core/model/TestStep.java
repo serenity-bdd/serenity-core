@@ -93,11 +93,19 @@ public class TestStep implements Cloneable {
     }
 
     public int renumberFrom(int count) {
-        setNumber(count++);
-        if (hasChildren()) {
+        this.number = count++;
+        if (!children.isEmpty()) {
             count = renumberChildrenFrom(count);
         }
         return count;
+
+//        this.number = count;
+//        return (children.isEmpty()) ? renumberChildrenFrom(count + 1) : count + 1;
+//        if (!children.isEmpty()) {
+//            count = renumberChildrenFrom(count);
+//        }
+//        return count;
+
     }
 
     private int renumberChildrenFrom(int count) {
@@ -269,9 +277,9 @@ public class TestStep implements Cloneable {
     public List<ScreenshotAndHtmlSource> getAllScreenshots() {
 
         Set<ScreenshotAndHtmlSource> allScreenshots
-                                                = children.stream()
-                                                          .flatMap( child -> child.getAllScreenshots().stream() )
-                                                          .collect(Collectors.toSet());
+                = children.stream()
+                .flatMap(child -> child.getAllScreenshots().stream())
+                .collect(Collectors.toSet());
 
         allScreenshots.addAll(screenshots);
 
@@ -289,7 +297,7 @@ public class TestStep implements Cloneable {
     public List<Screenshot> getRenderedScreenshots() {
         List<Screenshot> stepScreenshots = (screenshots == null) ? new ArrayList<>()
                 : screenshots.stream()
-                             .map(screenshot -> renderedScreenshotOf(screenshot, this.getLevel())).collect(Collectors.toList());
+                .map(screenshot -> renderedScreenshotOf(screenshot, this.getLevel())).collect(Collectors.toList());
 
         children.forEach(
                 child -> stepScreenshots.addAll(child.getRenderedScreenshots())
@@ -327,16 +335,18 @@ public class TestStep implements Cloneable {
     }
 
     private boolean thereAreNoScreenshotsInThisStep() {
-        return  (screenshots == null) || screenshots.isEmpty();
+        return (screenshots == null) || screenshots.isEmpty();
     }
 
     public List<Screenshot> getTopLevelScreenshots() {
-        if (screenshots == null) { return new ArrayList<>(); }
+        if (screenshots == null) {
+            return new ArrayList<>();
+        }
 
         return screenshots.stream().map(screenshot -> renderedScreenshotOf(screenshot, level)).collect(Collectors.toList());
     }
 
-    public  Screenshot renderedScreenshotOf(ScreenshotAndHtmlSource from, int level) {
+    public Screenshot renderedScreenshotOf(ScreenshotAndHtmlSource from, int level) {
         return new Screenshot(from.getScreenshot().getName(),
                 getDescription(),
                 widthOf(from.getScreenshot()),
@@ -357,7 +367,7 @@ public class TestStep implements Cloneable {
         return elements.get(0);
     }
 
-    private <T> T  lastOf(List<T> elements) {
+    private <T> T lastOf(List<T> elements) {
         return elements.get(elements.size() - 1);
     }
 
@@ -367,7 +377,7 @@ public class TestStep implements Cloneable {
     }
 
     public boolean hasData() {
-        return reportData != null && ! reportData.isEmpty();
+        return reportData != null && !reportData.isEmpty();
     }
 
     public RestQuery getRestQuery() {
@@ -398,15 +408,18 @@ public class TestStep implements Cloneable {
 
         List<Screenshot> screenshots = getRenderedScreenshots();
 
-        if (screenshots.isEmpty()) { return null; }
+        if (screenshots.isEmpty()) {
+            return null;
+        }
         return screenshots.get(0);
     }
 
 
-
     public Screenshot getLatestScreenshot() {
         List<Screenshot> screenshots = getRenderedScreenshots();
-        if (screenshots.isEmpty()) { return null; }
+        if (screenshots.isEmpty()) {
+            return null;
+        }
         return screenshots.get(screenshots.size() - 1);
     }
 
@@ -529,7 +542,7 @@ public class TestStep implements Cloneable {
     }
 
     public String getFormattedDuration() {
-        return  (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
+        return (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
     }
 
     /**
@@ -676,13 +689,13 @@ public class TestStep implements Cloneable {
 
     public int getActualScreenshotCount() {
         int screenshotCount = 0;
-        if(hasChildren()){
-            for(TestStep step:children){
-                screenshotCount +=  step.getActualScreenshotCount()+1;
+        if (hasChildren()) {
+            for (TestStep step : children) {
+                screenshotCount += step.getActualScreenshotCount() + 1;
             }
-            if(hasScreenshots()) screenshotCount += 1;
+            if (hasScreenshots()) screenshotCount += 1;
             return screenshotCount;
-        }else{
+        } else {
             return getScreenshotCount() - 1;
         }
     }

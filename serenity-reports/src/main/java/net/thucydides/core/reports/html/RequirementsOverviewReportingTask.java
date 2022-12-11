@@ -203,7 +203,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("automatedTestCases", automated(executedScenarios));
         context.put("manualTestCases", manual(executedScenarios));
 
-        addBreadcrumbs(requirementsOutcomes, context, filteredTestOutcomes.getTags());
+        addBreadcrumbs(requirementsOutcomes, context, new ArrayList<>(filteredTestOutcomes.getTags()));
 
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());

@@ -126,14 +126,12 @@ public class TestOutcomes {
     }
 
     public TestOutcomes withResultFilter(TestResult testResult) {
-        List<TestOutcome> filteredOutcomes = this.getOutcomes().stream()
-                .filter(outcome -> outcome.containsAtLeastOneOutcomeWithResult(testResult))
-                .map(outcome -> outcome.withExamplesHavingResult(testResult))
-                .collect(Collectors.toList());
-
-        List<TestOutcome> filteredOutcomeList = new ArrayList<>();
-
-
+        List<TestOutcome> filteredOutcomes = new ArrayList<>();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.containsAtLeastOneOutcomeWithResult(testResult)) {
+                filteredOutcomes.add(outcome.withExamplesHavingResult(testResult));
+            }
+        }
         return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label, testResult);
     }
 
@@ -214,9 +212,11 @@ public class TestOutcomes {
     }
 
     public long getResultCount() {
-        return outcomes.stream()
-                .flatMap(TestOutcome::getAllResultsStream)
-                .count();
+        long count = 0;
+        for(TestOutcome outcome : outcomes) {
+            count += outcome.getResultCount();
+        }
+        return count;
     }
 
     public List<TestResult> getAllResults() {
@@ -324,14 +324,18 @@ public class TestOutcomes {
                 .map(tag -> tag.getName().toLowerCase());
     }
 
+    private HashSet<TestTag> tags;
     /**
      * @return The list of all the different tags in these test outcomes
      */
-    public List<TestTag> getTags() {
-        return outcomes.stream()
-                .flatMap(outcome -> outcome.getAllTags().stream())
-                .distinct()
-                .collect(Collectors.toList());
+    public Set<TestTag> getTags() {
+        if (tags == null) {
+            tags = new HashSet<>();
+            for(TestOutcome outcome: outcomes) {
+                tags.addAll(outcome.getAllTags());
+            }
+        }
+        return tags;
     }
 
     /**
@@ -532,9 +536,13 @@ public class TestOutcomes {
     }
 
     private long stepsWithResultIn(List<TestStep> steps, TestResult... results) {
-        return steps.stream()
-                .filter(step -> hasResult(results, step.getResult()))
-                .count();
+        long stepCount = 0;
+        for(TestStep step : steps) {
+            if (hasResult(results, step.getResult())) {
+                stepCount++;
+            }
+        }
+        return stepCount;
     }
 
     private boolean dataTableRowResultsAreUndefinedIn(DataTable dataTable) {
@@ -563,11 +571,6 @@ public class TestOutcomes {
             }
         }
         return matchingResults;
-//        return getOutcomes().stream()
-//                .filter(outcome -> outcome.typeCompatibleWith(expectedType))
-//                .flatMap(TestOutcome::getAllResultsStream)
-//                .filter(result -> expectedResult.expanded().contains(result))
-//                .count();
     }
 
     public long countWithType(TestType expectedType) {
@@ -679,9 +682,12 @@ public class TestOutcomes {
     }
 
     public boolean containTestFor(Requirement requirement) {
-        return requirement.getTags().stream().anyMatch(
-                this::containsMatchingTag
-        );
+        for(TestTag tag : requirement.getTags()) {
+            if (containsMatchingTag(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static class TagFinder {
@@ -740,10 +746,12 @@ public class TestOutcomes {
      */
     public TestOutcomes withTag(String tagName) {
 
-        List<TestOutcome> testOutcomesWithTags = outcomes.stream()
-                .filter(outcome -> outcome.hasTagWithName(tagName))
-                .collect(Collectors.toList());
-
+        List<TestOutcome> testOutcomesWithTags = new ArrayList<>();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.hasTagWithName(tagName)) {
+                testOutcomesWithTags.add(outcome);
+            }
+        }
         return TestOutcomes.of(testOutcomesWithTags).withLabel(tagName).withRootOutcomes(getRootOutcomes());
     }
 
@@ -776,10 +784,13 @@ public class TestOutcomes {
     }
 
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
-        return outcomes.stream()
-                .filter(outcome -> hasMatchingTag(outcome, tag))
-                .map(outcome -> outcome.withDataRowsfilteredbyTag(tag))
-                .collect(Collectors.toList());
+        List<TestOutcome> matching = new ArrayList<>();
+        for(TestOutcome outcome : outcomes) {
+            if (hasMatchingTag(outcome, tag)) {
+                matching.add(outcome.withDataRowsfilteredbyTag(tag));
+            }
+        }
+        return matching;
     }
 
     private List<? extends TestOutcome> matchingOutcomesWithTagsFrom(List<? extends TestOutcome> outcomes, Collection<TestTag> tags) {

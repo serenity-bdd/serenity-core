@@ -318,7 +318,7 @@ public class Requirement implements Comparable {
     }
 
     public List<TestTag> getTags() {
-        return new ArrayList<>(tags);
+        return tags;
     }
 
     public Map<String, Collection<TestTag>> getScenarioTags() {

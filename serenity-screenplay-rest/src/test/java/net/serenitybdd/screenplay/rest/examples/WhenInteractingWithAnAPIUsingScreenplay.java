@@ -222,7 +222,7 @@ public class WhenInteractingWithAnAPIUsingScreenplay {
     public void update_a_user() {
 
         sam.attemptsTo(
-                Put.to("/api/users")
+                Put.to("/api/users/1")
                         .with(request -> request.header("Content-Type", "application/json")
                                 .body("{\"firstName\": \"jack\",\"lastName\": \"smith\"}")
                         )

@@ -79,7 +79,8 @@ public class TheDirectoryStructure {
     }
 
     private int numberOfElementsIn(Path relativePath) {
-        return Splitter.on(FILE_PATH_SEPARATORS).trimResults().omitEmptyStrings().splitToList(relativePath.toFile().getPath()).size();
+        return relativePath.toString().split(Pattern.quote(File.separator)).length;
+        //return Splitter.on(FILE_PATH_SEPARATORS).trimResults().omitEmptyStrings().splitToList(relativePath.toFile().getPath()).size();
     }
 
     private IOFileFilter normalDirectoriesOnly() {

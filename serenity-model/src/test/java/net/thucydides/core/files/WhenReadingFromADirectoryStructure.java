@@ -16,13 +16,13 @@ public class WhenReadingFromADirectoryStructure {
 
     @Test
     public void shouldReadTheDirectoryDepthOfAFeatureFolder() {
-        assertThat(TheDirectoryStructure.startingAt(singleLevelFolder).maxDepth()).isEqualTo(0);
+        assertThat(TheDirectoryStructure.startingAt(singleLevelFolder).maxDepth()).isEqualTo(1);
     }
 
     @Test
     public void shouldReadTheDirectoryDepthOfAFeatureFolderForAWindowsPath() {
         if(CurrentOS.isWindows()) {
-            assertThat(TheDirectoryStructure.startingAt(singleLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(0);
+            assertThat(TheDirectoryStructure.startingAt(singleLevelFolderWithWindowsPathSeparators).maxDepth()).isEqualTo(1);
         }
     }
 

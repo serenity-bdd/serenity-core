@@ -130,16 +130,16 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     @Override
     public int getElementTimeoutInSeconds() {
-        Optional<Integer> serenityDefinedTimeoutInSeconds = integerPropertyNamed(SERENITY_TIMEOUT);
-        Optional<Integer> implicitTimeoutInMilliseconds = integerPropertyNamed(WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT);
-
-        if (serenityDefinedTimeoutInSeconds.isPresent()) {
-            return serenityDefinedTimeoutInSeconds.get();
-        } else {
-            return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(DEFAULT_ELEMENT_TIMEOUT_SECONDS);
-        }
+        Optional<Long> implicitTimeoutInMilliseconds = webdriverCapabilitiesImplicitTimeoutFrom(environmentVariables);
+        return implicitTimeoutInMilliseconds.map(integer -> integer / 1000).orElse(2L).intValue();
 
 
+    }
+    private Optional<Long> webdriverCapabilitiesImplicitTimeoutFrom(EnvironmentVariables environmentVariables) {
+        return EnvironmentSpecificConfiguration
+                .from(environmentVariables)
+                .getOptionalProperty("webdriver.capabilities.timeouts.implicit","webdriver.timeouts.implicitlywait")
+                .map(Long::parseLong);
     }
 
     private Optional<Integer> integerValueOf(String value) {

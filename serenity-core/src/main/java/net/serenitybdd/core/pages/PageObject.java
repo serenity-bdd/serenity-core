@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -122,7 +123,7 @@ public abstract class PageObject {
     }
 
     private Duration getDefaultImplicitTimeout() {
-        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
+        Long configuredTimeout = new SystemTimeouts(environmentVariables).getImplicitTimeout();
         return Duration.ofMillis(configuredTimeout);
     }
 
@@ -198,9 +199,7 @@ public abstract class PageObject {
     public Duration getImplicitWaitTimeout() {
 
         if (waitForElementTimeout == null) {
-            int configuredWaitForTimeoutInMilliseconds =
-                    ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
+            long configuredWaitForTimeoutInMilliseconds = new SystemTimeouts(environmentVariables).getImplicitTimeout();
             waitForElementTimeout = Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
         }
         return waitForElementTimeout;

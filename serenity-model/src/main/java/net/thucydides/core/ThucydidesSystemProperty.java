@@ -396,7 +396,7 @@ public enum ThucydidesSystemProperty {
     /**
      * How long should the driver wait for elements not immediately visible, in seconds.
      *
-     * @deprecated Use WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT instead.
+     * @deprecated This property is no longer supported: use the W3C properties instead.
      */
     SERENITY_TIMEOUT,
 

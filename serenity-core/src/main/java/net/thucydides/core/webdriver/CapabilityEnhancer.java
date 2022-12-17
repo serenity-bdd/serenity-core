@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDriverCapabilities;
+import net.serenitybdd.core.webdriver.driverproviders.InsecureCertConfig;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.model.TestOutcome;
@@ -32,7 +33,7 @@ public class CapabilityEnhancer {
     public MutableCapabilities enhanced(MutableCapabilities capabilities, SupportedWebDriver driver) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         addExtraCapabilities(capabilities, capabilitySet);
-        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
+        if (InsecureCertConfig.acceptInsecureCertsDefinedIn(environmentVariables).orElse(false)) {
             if (capabilities instanceof DesiredCapabilities) {
                 ((DesiredCapabilities) capabilities).acceptInsecureCerts();
             }

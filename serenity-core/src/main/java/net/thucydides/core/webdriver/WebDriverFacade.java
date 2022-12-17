@@ -1,9 +1,11 @@
 package net.thucydides.core.webdriver;
 
 import io.appium.java_client.android.AndroidDriver;
+import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
@@ -56,23 +58,16 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
                            final WebDriverFactory webDriverFactory) {
         this.driverClass = driverClass;
         this.webDriverFactory = webDriverFactory;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         this.implicitTimeout = defaultImplicitWait();
     }
-//
-//    public WebDriverFacade(final Class<? extends WebDriver> driverClass,
-//                           final WebDriverFactory webDriverFactory,
-//                           final EnvironmentVariables environmentVariables ) {
-//        this.driverClass = driverClass;
-//        this.webDriverFactory = webDriverFactory;
-//        this.environmentVariables = environmentVariables;
-//        this.implicitTimeout = defaultImplicitWait();
-//    }
 
     public WebDriverFacade(final WebDriver driver,
                            final WebDriverFactory webDriverFactory) {
         this.driverClass = driver.getClass();
         this.proxiedWebDriver = driver;
         this.webDriverFactory = webDriverFactory;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         this.implicitTimeout = defaultImplicitWait();
     }
 
@@ -88,9 +83,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
     }
 
     private Duration defaultImplicitWait() {
-        int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                .integerFrom(getEnvironmentVariables(), (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
-
+        long configuredWaitForTimeoutInMilliseconds = new SystemTimeouts(environmentVariables).getImplicitTimeout();
         return Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
     }
 

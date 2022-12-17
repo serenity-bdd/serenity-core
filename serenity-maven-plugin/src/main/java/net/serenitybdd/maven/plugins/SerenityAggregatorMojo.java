@@ -5,6 +5,7 @@ import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.ExtendedReports;
 import net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.reports.TestOutcomes;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -110,6 +112,12 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     @Parameter
     public Map<String, String> systemPropertyVariables;
 
+    /**
+     * Set this to true if you want the aggregate task to ignore test failures and continue the build process
+     * If set to false (default value), the aggregate task will end with an error if any tests are broken.
+     */
+    @Parameter
+    public boolean ignoreFailedTests;
     protected void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
         getConfiguration().setOutputDirectory(this.outputDirectory);
@@ -189,13 +197,20 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         this.reporter = reporter;
     }
 
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         prepareExecution();
 
         try {
-            generateHtmlStoryReports();
+            TestResult testResult = generateHtmlStoryReports();
             generateExtraReports();
             generateCustomReports();
+            if (!ignoreFailedTests) {
+                switch (testResult) {
+                    case ERROR: throw new MojoFailureException("An error occurred in the Serenity tests");
+                    case FAILURE: throw new MojoFailureException("A failure occurred in the Serenity tests");
+                    case COMPROMISED: throw new MojoFailureException("There were compromised tests in the Serenity test suite");
+                }
+            }
         } catch (IOException e) {
             throw new MojoExecutionException("Error generating aggregate serenity reports", e);
         }
@@ -237,7 +252,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
 
     }
 
-    private void generateHtmlStoryReports() throws IOException {
+    private TestResult generateHtmlStoryReports() throws IOException {
         getReporter().setSourceDirectory(sourceDirectory);
         getReporter().setOutputDirectory(outputDirectory);
         getReporter().setIssueTrackerUrl(issueTrackerUrl);
@@ -251,7 +266,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
             getReporter().setGenerateTestOutcomeReports();
         }
         TestOutcomes outcomes = getReporter().generateReportsForTestResultsFrom(sourceDirectory);
-        new ResultChecker(outputDirectory).checkTestResults(outcomes);
+        return new ResultChecker(outputDirectory).checkTestResults(outcomes);
     }
 
     private void generateExtraReports() {

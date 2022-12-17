@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver;
 
+import net.serenitybdd.core.webdriver.driverproviders.InsecureCertConfig;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -20,7 +21,7 @@ public class FirefoxOptionsEnhancer {
 
     public void using(EnvironmentVariables environmentVariables) {
         options.setHeadless(HEADLESS_MODE.booleanFrom(environmentVariables,false));
-        options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false));
+        options.setAcceptInsecureCerts(InsecureCertConfig.acceptInsecureCertsDefinedIn(environmentVariables).orElse(false));
         FirefoxDriverLogLevel logLevel = FirefoxDriverLogLevel.fromString(FIREFOX_LOG_LEVEL.from(environmentVariables,"ERROR"));
         options.setLogLevel(logLevel);
     }

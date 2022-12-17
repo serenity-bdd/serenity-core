@@ -1,5 +1,6 @@
 package net.serenitybdd.core.photography;
 
+import net.serenitybdd.core.webdriver.IsMobile;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -39,7 +40,8 @@ public class WebDriverPhotoLens implements PhotoLens {
     }
 
     private boolean alertIsDisplayedFor(WebDriver driver) {
-        if (driver.switchTo() == null) { return false; }
+        if (IsMobile.driver(driver)) { return false; } // No alerts for mobile devices
+        if (driver.switchTo() == null) { return false; } // alerts not supported by the driver
 
         String currentWindow = null;
         try {

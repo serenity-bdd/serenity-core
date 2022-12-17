@@ -56,7 +56,7 @@ public class TestOutcomeLoader {
     public List<TestOutcome> loadFrom(final File reportDirectory) throws ReportLoadingFailedError {
 
         try {
-            final List<Callable<Set<TestOutcome>>> partitions = new ArrayList<>();
+            final List<Callable<List<TestOutcome>>> partitions = new ArrayList<>();
             final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
 
             for(File sourceFile : getAllOutcomeFilesFrom(reportDirectory)) {
@@ -64,10 +64,10 @@ public class TestOutcomeLoader {
             }
 
             final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
-            final List<Future<Set<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
+            final List<Future<List<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
 
             List<TestOutcome> testOutcomes = new ArrayList<>();
-            for(Future<Set<TestOutcome>> loadedTestOutcome : loadedTestOutcomes) {
+            for(Future<List<TestOutcome>> loadedTestOutcome : loadedTestOutcomes) {
                 testOutcomes.addAll(loadedTestOutcome.get());
             }
             executorPool.shutdown();
@@ -87,7 +87,7 @@ public class TestOutcomeLoader {
             new FlagsAugmenter()
     );
 
-    class TestOutcomeLoaderCallable implements Callable<Set<TestOutcome>> {
+    class TestOutcomeLoaderCallable implements Callable<List<TestOutcome>> {
 
         private final File sourceFile;
         private final AcceptanceTestLoader testOutcomeReporter;
@@ -98,13 +98,13 @@ public class TestOutcomeLoader {
         }
 
         @Override
-        public Set<TestOutcome> call() throws Exception {
+        public List<TestOutcome> call() throws Exception {
             java.util.Optional<TestOutcome> loadedTestOutcome = testOutcomeReporter.loadReportFrom(sourceFile);
 
             return loadedTestOutcome.map(Collections::singleton).orElse(Collections.emptySet())
                     .stream()
                     .map(this::augmented)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
 
         private TestOutcome augmented(final TestOutcome testOutcome) {

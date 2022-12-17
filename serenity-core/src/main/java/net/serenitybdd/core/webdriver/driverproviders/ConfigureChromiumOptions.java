@@ -64,7 +64,7 @@ public class ConfigureChromiumOptions {
         //
         // Legacy accept.insecure.certificates switch
         //
-        chromeOptions.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false));
+        chromeOptions.setAcceptInsecureCerts(InsecureCertConfig.acceptInsecureCertsDefinedIn(environmentVariables).orElse(false));
 
         //
         // Cater for legacy chrome.switches options

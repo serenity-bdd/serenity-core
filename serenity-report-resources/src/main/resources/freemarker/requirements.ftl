@@ -37,9 +37,8 @@
 
         $(document).ready(function () {
 
-            $('.scenario-result-table').DataTable({
-
-                "order": [],
+            $("#scenario-results").DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
                 "language": {
                     searchPlaceholder: "Filter",
                     search: ""
@@ -47,7 +46,14 @@
                 columnDefs: [
                     {type: 'time-elapsed-dhms', targets: 4}
                 ]
-            });
+            })
+            $("#manual-scenario-results").DataTable({
+                "order": [[0, "asc",], [1, "asc",]],
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+            })
 
             $('.example-table table').DataTable({
                 searching: false,
@@ -207,10 +213,10 @@
                             <div class="row">
 
                                 <#if isLeafRequirement && requirementTags?has_content >
-                                   <div class="col-sm-8">
-                                <#else>
+                                <div class="col-sm-8">
+                                    <#else>
                                     <div class="col-sm-12">
-                                 </#if>
+                                        </#if>
                                         <span>
                                             <h2><i class="bi bi-book"></i> ${parentType}: ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
                                         </span>
@@ -222,9 +228,11 @@
                                             <#list requirementTags as tag>
                                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                                                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                                                    <#assign tagStyle = styling.tagStyleFor(tag) >
-                                                    <span class="badge feature-tag tag-badge" style="${tagStyle}">
-                                                        <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.tagLabel(tag)}</a>
+                                                <#assign tagStyle = styling.tagStyleFor(tag) >
+                                                <span class="badge feature-tag tag-badge" style="${tagStyle}">
+                                                        <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink"
+                                                                                               style="${tagStyle}"
+                                                                                               href="${tagReport}">${formatter.tagLabel(tag)}</a>
                                                     </span>
                                             </#list>
                                             </p>
@@ -304,6 +312,78 @@
 
                                                 <div id="tree"></div>
 
+                                                <!-- STATS -->
+                                                <div>
+                                                    <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+                                                    <div>
+                                                        <table class="table table-striped table-hover">
+                                                            <tbody>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-card-checklist"></i> Number of Scenarios
+                                                                </td>
+                                                                <td>${testOutcomes.scenarioCount}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-caret-right"></i> Number of Test Cases
+                                                                </td>
+                                                                <td>${testOutcomes.testCaseCount}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-flag-fill"></i> Tests Started
+                                                                </td>
+                                                                <td>${startTimestamp}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-stop-circle"></i> Tests
+                                                                    Finished
+                                                                </td>
+                                                                <td>${endTimestamp}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-stopwatch"></i> Total
+                                                                    Duration
+                                                                </td>
+                                                                <td>${totalClockDuration}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-trophy"></i> Fastest Test
+                                                                </td>
+                                                                <td>${minTestDuration}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-skip-start"></i> Slowest
+                                                                    Test
+                                                                </td>
+                                                                <td>${maxTestDuration}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-stopwatch"></i> Average
+                                                                    Execution Time
+                                                                </td>
+                                                                <td>${averageTestDuration}</td>
+                                                            </tr>
+                                                            <tr scope="row">
+                                                                <td>
+                                                                    <i class="bi bi-stopwatch-fill"></i> Total
+                                                                    Execution Time
+                                                                </td>
+                                                                <td>${totalTestDuration}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- END STATS -->
+
+
                                                 <#else>
                                                 <!--- TOC --->
                                                 <div id="toc">
@@ -381,116 +461,121 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                    <h3>Scenarios</h3>
+                                                <h3>Scenarios</h3>
 
-                                                    <#list scenarioGroups as scenarioGroup>
-                                                        <a name="${scenarioGroup.id}"></a>
-                                                        <#if scenarioGroup.ruleName?has_content>
-                                                            <div class="rule-title">
-                                                                Rule: ${formatter.renderTitle(scenarioGroup.ruleName)}</div>
-                                                        </#if>
-                                                        <p class="rule-tags inline-tag">
-                                                            <#list scenarioGroup.filteredTags as tag>
+                                                <#list scenarioGroups as scenarioGroup>
+                                                    <a name="${scenarioGroup.id}"></a>
+                                                    <#if scenarioGroup.ruleName?has_content>
+                                                        <div class="rule-title">
+                                                            Rule: ${formatter.renderTitle(scenarioGroup.ruleName)}</div>
+                                                    </#if>
+                                                    <p class="rule-tags inline-tag">
+                                                        <#list scenarioGroup.filteredTags as tag>
                                                             <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                                                             <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
-                                                                <#assign tagStyle = styling.tagStyleFor(tag) >
-                                                                <span class="badge tag-badge" style="${tagStyle}">
+                                                            <#assign tagStyle = styling.tagStyleFor(tag) >
+                                                            <span class="badge tag-badge" style="${tagStyle}">
                                                                     <i class="bi bi-tag-fill"></i>&nbsp;
                                                                     <a class="tagLink" style="${tagStyle}"
                                                                        href="${tagReport}">${formatter.tagLabel(tag)}</a>
                                                                 </span>
-                                                            </#list>
-                                                        </p>
-                                                        <#if scenarioGroup.ruleDescription?has_content>
-                                                            <div class="scenario-comments">
-                                                                <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.ruleDescription)}
-                                                            </div>
-                                                        </#if>
-                                                        <#if scenarioGroup.hasBackground()>
-                                                            <div class="scenario-docs card">
-                                                                <div class="scenario-docs card-header" style="min-height:1.5em;">
+                                                        </#list>
+                                                    </p>
+                                                    <#if scenarioGroup.ruleDescription?has_content>
+                                                        <div class="scenario-comments">
+                                                            <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.ruleDescription)}
+                                                        </div>
+                                                    </#if>
+                                                    <#if scenarioGroup.hasBackground()>
+                                                        <div class="scenario-docs card">
+                                                            <div class="scenario-docs card-header"
+                                                                 style="min-height:1.5em;">
                                                                     <span class="scenario-heading">
                                                                     Background: <#if scenarioGroup.backgroundTitle?has_content>${formatter.renderText(scenarioGroup.backgroundTitle)}</#if></span>
-                                                                    </span>
-                                                                    <#if scenarioGroup.backgroundDescription?has_content>
-                                                                        <div class="scenario-comments">
-                                                                            <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.backgroundDescription)}
-                                                                        </div>
-                                                                    </#if>
-                                                                </div>
-                                                                <div class="scenario-docs card-body">
-                                                                    <#list scenarioGroup.backgroundSteps as step>
-                                                                        <p>${formatter.renderHtmlEscapedDescription(step)}</p>
-                                                                    </#list>
-                                                                </div>
+                                                                </span>
+                                                                <#if scenarioGroup.backgroundDescription?has_content>
+                                                                    <div class="scenario-comments">
+                                                                        <i class="bi bi-info-circle"></i>${formatter.renderText(scenarioGroup.backgroundDescription)}
+                                                                    </div>
+                                                                </#if>
                                                             </div>
-                                                        </#if>
+                                                            <div class="scenario-docs card-body">
+                                                                <#list scenarioGroup.backgroundSteps as step>
+                                                                    <p>${formatter.renderHtmlEscapedDescription(step)}</p>
+                                                                </#list>
+                                                            </div>
+                                                        </div>
+                                                    </#if>
 
-                                                        <#list scenarioGroup.mainScenarios as scenario>
-                                                            <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
+                                                    <#list scenarioGroup.mainScenarios as scenario>
+                                                        <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
 
-                                                            <div class="scenario-docs card" id="${scenario.id}">
-                                                                <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
-                                                                    <div>
+                                                        <div class="scenario-docs card" id="${scenario.id}">
+                                                            <div class="scenario-docs card-header ${scenario.resultStyle}"
+                                                                 style="min-height:1.5em;">
+                                                                <div>
                                                                         <span class="scenario-heading">
                                                                             <a href="${scenario.scenarioReport}"
                                                                                title="View test results">${scenario.type}: ${formatter.renderTitle(scenario.title)}</a>
                                                                         </span>
 
-                                                                        <#if scenario.scenarioTags??>
+                                                                    <#if scenario.scenarioTags??>
                                                                         <span class="example-tags inline-tag">
                                                                             <#list scenario.scenarioTags as tag>
                                                                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                                                                                 <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
                                                                                 <#assign tagStyle = styling.tagStyleFor(tag) >
-                                                                                <span class="badge tag-badge" style="${tagStyle}">
+                                                                                <span class="badge tag-badge"
+                                                                                      style="${tagStyle}">
                                                                                     <i class="bi bi-tag-fill"></i>&nbsp;
-                                                                                    <a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.tagLabel(tag)}</a>
+                                                                                    <a class="tagLink"
+                                                                                       style="${tagStyle}"
+                                                                                       href="${tagReport}">${formatter.tagLabel(tag)}</a>
                                                                                 </span>
                                                                             </#list>
                                                                         </span>
-                                                                        </#if>
-
-                                                                        <span class="scenario-result-icon">
-                                                                    <#if (scenario.isManual())> <i
-                                                                        class="bi bi-person manual"
-                                                                        title="Manual test"></i></#if>
-
-                                                                            <#if outcome_icon?has_content>
-                                                                                ${outcome_icon}
-                                                                            <#else>
-                                                                                <i class="bi bi-pause-circle"
-                                                                                   title="No test has been implemented yet"></i>
-                                                                            </#if>
-                                                                        </span>
-                                                                    </div>
-                                                                    <#--<#if outcome_icon?has_content>-->
-                                                                    <#--<div class="scenario-report-badges">-->
-                                                                    <#--<#list scenario.scenarioReportBadges as scenarioReporBadge>-->
-                                                                    <#--<span class="scenario-report-badge" style="float:right;">${scenarioReporBadge}</span>-->
-                                                                    <#--</#list>-->
-                                                                    <#--</div>-->
-                                                                    <#--</#if>-->
-
-                                                                </div>
-                                                                <div class="scenario-docs card-body">
-                                                                    <#if scenario.description?has_content>
-                                                                        <div class="scenario-text">
-                                                                            <i class="bi bi-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}
-                                                                        </div>
                                                                     </#if>
-                                                                    <#list scenario.steps as step>
-                                                                        <p>${formatter.renderHtmlEscapedDescription(step)}</p>
-                                                                    </#list>
-                                                                    <div class="examples">
-                                                                        <#list scenario.examples as example>
-                                                                            <p>${formatter.renderTableDescription(example, requirements)}</p>
-                                                                        </#list>
+
+                                                                    <span class="scenario-result-icon">
+                                                                    <#if (scenario.isManual())> <i
+                                                                            class="bi bi-person manual"
+                                                                            title="Manual test"></i></#if>
+
+                                                                        <#if outcome_icon?has_content>
+                                                                            ${outcome_icon}
+                                                                        <#else>
+                                                                            <i class="bi bi-pause-circle"
+                                                                               title="No test has been implemented yet"></i>
+                                                                        </#if>
+                                                                        </span>
+                                                                </div>
+                                                                <#--<#if outcome_icon?has_content>-->
+                                                                <#--<div class="scenario-report-badges">-->
+                                                                <#--<#list scenario.scenarioReportBadges as scenarioReporBadge>-->
+                                                                <#--<span class="scenario-report-badge" style="float:right;">${scenarioReporBadge}</span>-->
+                                                                <#--</#list>-->
+                                                                <#--</div>-->
+                                                                <#--</#if>-->
+
+                                                            </div>
+                                                            <div class="scenario-docs card-body">
+                                                                <#if scenario.description?has_content>
+                                                                    <div class="scenario-text">
+                                                                        <i class="bi bi-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}
                                                                     </div>
+                                                                </#if>
+                                                                <#list scenario.steps as step>
+                                                                    <p>${formatter.renderHtmlEscapedDescription(step)}</p>
+                                                                </#list>
+                                                                <div class="examples">
+                                                                    <#list scenario.examples as example>
+                                                                        <p>${formatter.renderTableDescription(example, requirements)}</p>
+                                                                    </#list>
                                                                 </div>
                                                             </div>
-                                                        </#list>
+                                                        </div>
                                                     </#list>
+                                                </#list>
                                                 </#if>
                                             </div>
                                         </div>
@@ -533,13 +618,10 @@
                                                 <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                 <#if (automatedTestCases?has_content)>
-                                                    <table class="scenario-result-table table"
-                                                           id="scenario-results">
+                                                    <table class="scenario-result-table table" id="scenario-results">
                                                         <thead>
                                                         <tr>
-                                                            <#if !isLeafRequirement>
-                                                                <th>${leafRequirementType}</th>
-                                                            </#if>
+                                                            <th>${leafRequirementType}</th>
                                                             <th class="test-name-column">Scenario</th>
                                                             <th>Steps</th>
                                                             <th>Started</th>
@@ -560,7 +642,8 @@
                                                                             </#if>
                                                                         </td>
                                                                         <td>
-                                                                            <i class="bi bi-table" title="Data Driven Scenario">
+                                                                            <i class="bi bi-table"
+                                                                               title="Data Driven Scenario">
                                                                                 <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
                                                                                 <#if exampleOutcome.hasSubtitle() >
                                                                                     <br/>${exampleOutcome.subtitle}
@@ -569,10 +652,12 @@
                                                                         <td>${exampleOutcome.stepCount}</td>
                                                                         <td>${exampleOutcome.formattedStartTime}</td>
                                                                         <td>${exampleOutcome.formattedDuration}</td>
-                                                                        <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
+                                                                        <td>${example_outcome_icon} <span
+                                                                                    style="display:none">${exampleOutcome.result}</span>
                                                                             <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                                 &nbsp;
-                                                                                <a href="${scenario.externalLink.url}" class="tag"
+                                                                                <a href="${scenario.externalLink.url}"
+                                                                                   class="tag"
                                                                                    title="${scenario.externalLink.type}">
                                                                                     <i class="fs-2 bi bi-camera-reels"></i>
                                                                                 </a>
@@ -587,14 +672,18 @@
                                                                             <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                         </#if>
                                                                     </td>
-                                                                    <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
+                                                                    <td>
+                                                                        <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                    </td>
                                                                     <td>${scenario.stepCount}</td>
                                                                     <td>${scenario.formattedStartTime}</td>
                                                                     <td>${scenario.formattedDuration}</td>
-                                                                    <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                                    <td>${outcome_icon} <span
+                                                                                style="display:none">${scenario.result}</span>
                                                                         <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                             &nbsp;
-                                                                            <a href="${scenario.externalLink.url}" class="tag"
+                                                                            <a href="${scenario.externalLink.url}"
+                                                                               class="tag"
                                                                                title="${scenario.externalLink.type}">
                                                                                 <i class="fs-2 bi bi-camera-reels"></i>
                                                                             </a>
@@ -617,16 +706,11 @@
                                                 <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                 <#if (manualTestCases?has_content)>
-                                                    <table class="scenario-result-table table"
-                                                           id="manual-scenario-results">
+                                                    <table class="scenario-result-table table" id="manual-scenario-results">
                                                         <thead>
                                                         <tr>
-                                                            <#if !isLeafRequirement>
-                                                                <th>${leafRequirementType}</th>
-                                                            </#if>
-                                                            <th class="test-name-column" style="width:60em;">
-                                                                Scenario
-                                                            </th>
+                                                            <th>${leafRequirementType}</th>
+                                                            <th class="test-name-column">Scenario</th>
                                                             <th>Steps</th>
                                                             <th>Result</th>
                                                         </tr>
@@ -634,25 +718,80 @@
                                                         <tbody>
                                                         <#list manualTestCases as scenario>
                                                             <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
-                                                            <tr class="scenario-result ${scenario.result}">
-                                                                <#if !isLeafRequirement>
+                                                            <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
+                                                                <#list scenario.getExampleOutcomes() as exampleOutcome>
+                                                                    <#assign example_outcome_icon = formatter.resultIcon().forResult(exampleOutcome.result) />
+                                                                    <tr class="scenario-result ${exampleOutcome.result}">
+                                                                        <td>
+                                                                            <#if scenario.parentName?has_content>
+                                                                                <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                                            </#if>
+                                                                        </td>
+                                                                        <td>
+                                                                            <i class="bi bi-table"
+                                                                               title="Data Driven Scenario">
+                                                                                <a href="${scenario.scenarioReport}">${exampleOutcome.title}</a>
+                                                                                <#if exampleOutcome.hasSubtitle() >
+                                                                                    <br/>${exampleOutcome.subtitle}
+                                                                                </#if>
+                                                                        </td>
+                                                                        <td>${exampleOutcome.stepCount}</td>
+                                                                        <td>${example_outcome_icon} <span
+                                                                                    style="display:none">${exampleOutcome.result}</span>
+                                                                            <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                                &nbsp;
+                                                                                <a href="${scenario.externalLink.url}"
+                                                                                   class="tag"
+                                                                                   title="${scenario.externalLink.type}">
+                                                                                    <i class="fs-2 bi bi-camera-reels"></i>
+                                                                                </a>
+                                                                            </#if>
+                                                                        </td>
+                                                                    </tr>
+                                                                </#list>
+                                                            <#else>
+                                                                <tr class="scenario-result ${scenario.result}">
                                                                     <td>
                                                                         <#if scenario.parentName?has_content>
                                                                             <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                         </#if>
                                                                     </td>
-                                                                </#if>
-                                                                <td>
-                                                                    <a href="${scenario.scenarioReport}">${scenario.title}</a>
-                                                                    <#if scenario.hasExamples() >
-                                                                        (${scenario.numberOfExamples})
-                                                                    </#if>
-                                                                </td>
-                                                                <td>${scenario.stepCount}</td>
-                                                                <td>${outcome_icon} <span
-                                                                            style="display:none">${scenario.result}</span>
-                                                                </td>
-                                                            </tr>
+                                                                    <td>
+                                                                        <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                    </td>
+                                                                    <td>${scenario.stepCount}</td>
+                                                                    <td>${outcome_icon} <span
+                                                                                style="display:none">${scenario.result}</span>
+                                                                        <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                            &nbsp;
+                                                                            <a href="${scenario.externalLink.url}"
+                                                                               class="tag"
+                                                                               title="${scenario.externalLink.type}">
+                                                                                <i class="fs-2 bi bi-camera-reels"></i>
+                                                                            </a>
+                                                                        </#if>
+                                                                    </td>
+                                                                </tr>
+                                                            </#if>
+
+                                                        <#--                                                            <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />-->
+                                                        <#--                                                            <tr class="scenario-result ${scenario.result}">-->
+                                                        <#--                                                                <#if !isLeafRequirement>-->
+                                                        <#--                                                                    <td>-->
+                                                        <#--                                                                        <#if scenario.parentName?has_content>-->
+                                                        <#--                                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>-->
+                                                        <#--                                                                        </#if>-->
+                                                        <#--                                                                    </td>-->
+                                                        <#--                                                                </#if>-->
+                                                        <#--                                                                <td>-->
+                                                        <#--                                                                    <a href="${scenario.scenarioReport}">${scenario.title}</a>-->
+                                                        <#--                                                                    <#if scenario.hasExamples() >-->
+                                                        <#--                                                                        (${scenario.numberOfExamples})-->
+                                                        <#--                                                                    </#if>-->
+                                                        <#--                                                                </td>-->
+                                                        <#--                                                                <td>${scenario.stepCount}</td>-->
+                                                        <#--                                                                <td>${outcome_icon} <span style="display:none">${scenario.result}</span></td>-->
+                                                        <#--                                                            </tr>-->
                                                         </#list>
                                                         </tbody>
                                                     </table>

@@ -9,8 +9,11 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Set;
 
 /**
@@ -43,17 +46,11 @@ public class WebDriverPhotoLens implements PhotoLens {
         if (IsMobile.driver(driver)) { return false; } // No alerts for mobile devices
         if (driver.switchTo() == null) { return false; } // alerts not supported by the driver
 
-        String currentWindow = null;
-        try {
-            currentWindow = driver.getWindowHandle();
-            driver.switchTo().alert().getText();
-            return true;
-        } catch (NoAlertPresentException | UnsupportedCommandException screenshotsNotSupportedIfAnAlertIsPresent) {
+        try{
+            return new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.alertIsPresent()) != null;
+        }
+        catch (Throwable e) {
             return false;
-        } finally {
-            if (currentWindow != null) {
-                driver.switchTo().window(currentWindow);
-            }
         }
     }
 

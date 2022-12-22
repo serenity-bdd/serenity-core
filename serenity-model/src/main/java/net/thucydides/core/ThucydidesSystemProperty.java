@@ -1657,7 +1657,12 @@ public enum ThucydidesSystemProperty {
     /**
      * The title to appear in the tag type table in the email reports
      */
-    REPORT_TAGTYPE_TITLE;
+    REPORT_TAGTYPE_TITLE,
+
+    /**
+     * Use this property to set how long webdriver should wait x second for an alert to be present before throwing an exception.
+     */
+    WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT("webdriver.wait.for.alert.timeout");
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

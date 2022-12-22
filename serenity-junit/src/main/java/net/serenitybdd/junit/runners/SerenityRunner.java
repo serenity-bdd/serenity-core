@@ -75,7 +75,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private FailureDetectingStepListener failureDetectingStepListener;
 
-
     /**
      * Retrieve the runner getConfiguration().from an external source.
      */

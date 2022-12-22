@@ -115,7 +115,6 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
             // LEGACY PROVIDERS
             driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
-//            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HTMLUnitDriverProvider(fixtureProviderService));
         }
         return driverProvidersByDriverType;
     }

@@ -1,17 +1,20 @@
 package net.serenitybdd.core.photography;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.IsMobile;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
-import java.util.Set;
+import java.time.Duration;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT;
 
 /**
  * Take a screenshot with a specified WebDriver instance.
@@ -43,17 +46,14 @@ public class WebDriverPhotoLens implements PhotoLens {
         if (IsMobile.driver(driver)) { return false; } // No alerts for mobile devices
         if (driver.switchTo() == null) { return false; } // alerts not supported by the driver
 
-        String currentWindow = null;
-        try {
-            currentWindow = driver.getWindowHandle();
-            driver.switchTo().alert().getText();
-            return true;
-        } catch (NoAlertPresentException | UnsupportedCommandException screenshotsNotSupportedIfAnAlertIsPresent) {
+        try{
+            return new WebDriverWait(driver, Duration.ofSeconds(
+                EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalInteger(String.valueOf(WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT))
+                    .orElse(0))).until(ExpectedConditions.alertIsPresent()) != null;
+        }
+        catch (Throwable e) {
             return false;
-        } finally {
-            if (currentWindow != null) {
-                driver.switchTo().window(currentWindow);
-            }
         }
     }
 

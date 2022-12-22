@@ -18,7 +18,6 @@ import java.util.Map;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.REMOTE_DRIVER;
-import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class DriverCapabilities {
 

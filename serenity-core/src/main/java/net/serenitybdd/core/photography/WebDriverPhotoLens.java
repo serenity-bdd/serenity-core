@@ -1,5 +1,6 @@
 package net.serenitybdd.core.photography;
 
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.IsMobile;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -12,6 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.time.Duration;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT;
 
 /**
  * Take a screenshot with a specified WebDriver instance.
@@ -44,7 +47,10 @@ public class WebDriverPhotoLens implements PhotoLens {
         if (driver.switchTo() == null) { return false; } // alerts not supported by the driver
 
         try{
-            return new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.alertIsPresent()) != null;
+            return new WebDriverWait(driver, Duration.ofSeconds(
+                EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getOptionalInteger(String.valueOf(WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT))
+                    .orElse(0))).until(ExpectedConditions.alertIsPresent()) != null;
         }
         catch (Throwable e) {
             return false;

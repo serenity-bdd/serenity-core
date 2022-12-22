@@ -4,6 +4,7 @@ import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
@@ -25,6 +26,10 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
 
         BrowserStackTestSession browserStackTestSession = new BrowserStackTestSession(userName, key, sessionId);
         browserStackTestSession.updateTestResultFor(testOutcome);
+
+        TestContext.forTheCurrentTest().recordBrowser(browserStackTestSession.getBrowser());
+        TestContext.forTheCurrentTest().recordPlatform(browserStackTestSession.getOS());
+        testOutcome.setContext(TestContext.forTheCurrentTest().getContext());
 
         String publicUrl = browserStackTestSession.getPublicUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));

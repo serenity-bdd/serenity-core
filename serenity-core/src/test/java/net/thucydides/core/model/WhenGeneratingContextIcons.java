@@ -20,14 +20,14 @@ public class WhenGeneratingContextIcons {
     public void should_produce_an_icon_when_the_context_specifies_a_recognised_name() {
         String icon = ContextIcon.forOutcome(outcomeWithContextSetTo("linux"));
 
-        assertThat(icon, is("<span class='context-icon'><i class='fa fa-linux' aria-hidden='true'></i></span>"));
+        assertThat(icon, is("<span class='context-icon'><i class='bi bi-ubuntu' title='Linux'></i></span>"));
     }
 
     @Test
     public void should_produce_two_icons_when_the_context_specifies_two_recognised_names() {
         String icon = ContextIcon.forOutcome(outcomeWithContextSetTo("ios,safari"));
 
-        assertThat(icon, is("<span class='context-icon'><i class='fa fa-apple' aria-hidden='true'></i> <i class='fa fa-safari' aria-hidden='true'></i></span>"));
+        assertThat(icon, is("<span class='context-icon'><i class='bi bi-apple' title='iOS'></i> <i class='bi bi-browser-safari' title='Safari or WebKit'></i></span>"));
     }
 
     @Test

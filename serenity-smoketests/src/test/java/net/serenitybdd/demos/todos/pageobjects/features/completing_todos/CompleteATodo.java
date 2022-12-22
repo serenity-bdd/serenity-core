@@ -17,6 +17,7 @@ import org.openqa.selenium.WebDriver;
         @WithTag("PageObjects pattern"),
         @WithTag("version:RELEASE-2"),
 })
+
 public class CompleteATodo {
 
     @Managed(uniqueSession = true)

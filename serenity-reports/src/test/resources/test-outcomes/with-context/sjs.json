@@ -1,0 +1,92 @@
+{
+  "id": "serenity-js-org-website;tells-people-what-they-re-reading;chrome-108-0-5359-124;mac-os-x",
+  "testCaseName": "spec.website",
+  "name": "tells people what they're reading",
+  "title": "tells people what they're reading",
+  "manual": false,
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Alice navigates to 'https://serenity-js.org'",
+      "startTime": 1671556509745,
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-mac-os-x-chrome-108.0.5359.124-alice-navigates-to-https-seren-923daaf35c.png",
+          "timeStamp": 1671556513440
+        }
+      ],
+      "duration": 3166,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 2,
+      "description": "Alice clicks on accept cookies button",
+      "startTime": 1671556513446,
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-mac-os-x-chrome-108.0.5359.124-alice-clicks-on-accept-cookies-bu-0e27b06f40.png",
+          "timeStamp": 1671556514031
+        }
+      ],
+      "duration": 83,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 3,
+      "description": "Alice ensures that <<current page>>.title() does include 'Serenity/JS'",
+      "startTime": 1671556514039,
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-mac-os-x-chrome-108.0.5359.124-alice-ensures-that-current-page-0e27b06f40.png",
+          "timeStamp": 1671556514561
+        }
+      ],
+      "duration": 14,
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "serenity-js-org-website",
+    "storyName": "serenity-js.org website",
+    "path": "spec",
+    "type": "feature"
+  },
+  "startTime": 1671556509720,
+  "context": "chrome,mac",
+  "driver": "chrome",
+  "tags": [
+    {
+      "name": "chrome 108.0.5359.124",
+      "type": "browser",
+      "browserName": "chrome",
+      "browserVersion": "108.0.5359.124",
+      "displayName": "chrome 108.0.5359.124"
+    },
+    {
+      "name": "mac os x",
+      "type": "platform",
+      "platformName": "mac os x",
+      "platformVersion": "",
+      "displayName": "mac os x"
+    },
+    {
+      "name": "serenity-js.org website",
+      "type": "feature",
+      "displayName": "serenity-js.org website"
+    }
+  ],
+  "featureTag": {
+    "name": "Spec/serenity-js.org website",
+    "type": "feature",
+    "displayName": "Spec/serenity-js.org website"
+  },
+  "testSource": "Mocha",
+  "result": "SUCCESS",
+  "duration": 4849
+}

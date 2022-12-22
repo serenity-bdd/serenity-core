@@ -36,6 +36,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private ExternalLink externalLink;
     private final Collection<TestTag> scenarioTags;
 
+    private final String context;
+
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
                                  String type,
@@ -53,7 +55,8 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
                                  Set<TestTag> tags,
                                  Rule rule,
                                  ExternalLink externalLink,
-                                 Collection<TestTag> scenarioTags) {
+                                 Collection<TestTag> scenarioTags,
+                                 String context) {
         this.name = name;
         this.simplifiedName = simplifiedName;
         this.type = type;
@@ -73,6 +76,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.rule = rule;
         this.externalLink = externalLink;
         this.scenarioTags = scenarioTags;
+        this.context = context;
     }
 
     public String toString() {
@@ -195,5 +199,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
 
     public Collection<TestTag> getScenarioTags() {
         return scenarioTags;
+    }
+
+    @Override
+    public String getContext() {
+        return context;
     }
 }

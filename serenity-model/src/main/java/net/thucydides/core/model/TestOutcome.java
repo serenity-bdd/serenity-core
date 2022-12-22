@@ -329,7 +329,28 @@ public class TestOutcome {
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
-        this.context = contextFrom(environmentVariables);
+        this.context = null;//contextFrom(environmentVariables);
+        if (testCase != null) {
+            setUserStory(leafRequirementDefinedIn().testCase(testCase));
+        }
+    }
+
+    public TestOutcome(final String name, final Class<?> testCase, String context, EnvironmentVariables environmentVariables) {
+        startTime = ZonedDateTime.now();
+        this.name = name;
+        this.id = identifierFrom(name, testCase, userStory);
+        this.testCase = testCase;
+        this.testCaseName = nameOf(testCase);
+        this.nestedTestPath = calculateNestPath(testCase);
+        this.additionalIssues = new ArrayList<>();
+        this.additionalVersions = new ArrayList<>();
+        this.actors = new ArrayList<>();
+        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
+        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.qualifier = Optional.empty();
+        this.environmentVariables = environmentVariables;
+        this.context = context;
         if (testCase != null) {
             setUserStory(leafRequirementDefinedIn().testCase(testCase));
         }
@@ -2040,10 +2061,10 @@ public class TestOutcome {
     }
 
     public String getContext() {
-        if (context == null) {
-            context = contextFrom(getEnvironmentVariables());
-        }
-
+//        if (context == null) {
+//            context = contextFrom(getEnvironmentVariables());
+//        }
+//
         return context;
     }
 
@@ -2932,8 +2953,6 @@ public class TestOutcome {
             }
         }
         this.testSteps = updatedSteps;
-//        List<TestStep> updatedSteps = testSteps.stream().filter(condition).collect(Collectors.toList());
-//        this.testSteps = updatedSteps;
         return this;
     }
 

@@ -15,6 +15,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
@@ -511,6 +512,10 @@ public class Formatter {
 
     public ResultIconFormatter resultIcon() {
         return new ResultIconFormatter();
+    }
+
+    public ContextIconFormatter contextIcon() {
+        return new ContextIconFormatter();
     }
 
     public ResultRankingFormatter resultRank() {

@@ -41,14 +41,13 @@ public class ParameterizedTestsOutcomeAggregator {
 
         for(int testOutcomeNumber = 0; testOutcomeNumber < allOutcomes.size(); testOutcomeNumber++) {
             TestOutcome testOutcome = allOutcomes.get(testOutcomeNumber);
-//        for (TestOutcome testOutcome : allOutcomes) {
             final String normalizedMethodName = baseMethodName(testOutcome);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
+            scenarioOutcome.setContext(testOutcome.getContext());
 
             if (testOutcome.isManual()) {
-                //scenarioOutcome = scenarioOutcome.asManualTest();
                 scenarioOutcome = scenarioOutcome.setToManual();
             }
 

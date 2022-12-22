@@ -4,6 +4,7 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
@@ -52,7 +53,11 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         //
         ChromeOptions enhancedOptions = ConfigureChromiumOptions.from(environmentVariables).into(chromeOptions);
         EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(enhancedOptions);
-
+        //
+        // Record browser and platform
+        //
+        TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+        TestContext.forTheCurrentTest().recordCurrentPlatform();
         //
         // Find the DriverService for the base config options
         //

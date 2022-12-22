@@ -87,6 +87,14 @@ class Reporter {
         }
     }
 
+    private String ultimateError(Throwable cause) {
+        if (cause.getCause() == null) {
+            return cause.getMessage();
+        } else {
+            return ultimateError(cause.getCause());
+        }
+    }
+
     private boolean showThreaddumpOnReportTimeout() {
         return REPORT_TIMEOUT_THREADDUMPS.booleanFrom(environmentVariables, false);
     }
@@ -130,9 +138,9 @@ class Reporter {
 
     private String errorCauseOf(Throwable e) {
         if (e.getCause() != null) {
-            return topElementFrom(e.getCause().getStackTrace());
+            return ultimateError(e) + System.lineSeparator() + topElementFrom(e.getCause().getStackTrace());
         } else {
-            return topElementFrom(e.getStackTrace());
+            return ultimateError(e) + System.lineSeparator() + topElementFrom(e.getStackTrace());
         }
     }
 

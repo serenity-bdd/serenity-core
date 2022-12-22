@@ -1,7 +1,9 @@
 package net.thucydides.core.statistics.service;
 
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.model.ContextIcon;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.CoreTagProvider;
@@ -10,9 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_ADD_CONTEXT_TAG;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_ADD_CONTEXT_TAG;
 
 /**
  * Allows tags to be added via the injected.tag system property.
@@ -32,11 +36,24 @@ public class ContextTagProvider implements TagProvider, CoreTagProvider {
 
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
 
-        if (StringUtils.isEmpty(testOutcome.getContext())) { return new HashSet<>(); }
+        if (StringUtils.isEmpty(testOutcome.getContext())) {
+            return new HashSet<>();
+        }
 
-        if (!THUCYDIDES_ADD_CONTEXT_TAG.booleanFrom(environmentVariables,true)) {
+        if (!SERENITY_ADD_CONTEXT_TAG.booleanFrom(environmentVariables, true)) {
             return Collections.unmodifiableSet(new HashSet<>());
         }
-        return NewSet.of(TestTag.withName(testOutcome.getContext()).andType("context"));
+
+        String contextLabelValue = ContextIcon.labelForOutcome(testOutcome);
+        List<String> contextLabels = Splitter.on(",").omitEmptyStrings().splitToList(contextLabelValue);
+        Set<TestTag> contextTags = new HashSet<>();
+
+        contextTags.add(TestTag.withName(String.join(", ", contextLabels)).andType("context"));
+        contextTags.addAll(
+                contextLabels.stream()
+                        .map(contextLabel -> TestTag.withName(contextLabel).andType("context"))
+                        .collect(Collectors.toSet())
+        );
+        return contextTags;
     }
 }

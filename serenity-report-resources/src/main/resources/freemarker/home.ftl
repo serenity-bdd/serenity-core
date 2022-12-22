@@ -42,7 +42,7 @@
     <script class="code" type="text/javascript">$(document).ready(function () {
 
             $("#scenario-results").DataTable({
-                "order": [[0, "asc",], [3, "asc",]],
+                "order": [[0, "asc",], [1, "asc",], [2, "asc",]],
                 "language": {
                     searchPlaceholder: "Filter",
                     search: ""
@@ -509,6 +509,7 @@
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
                                                                     <th class="test-name-column">Scenario</th>
+                                                                    <th>Context</th>
                                                                     <th>Steps</th>
                                                                     <th>Started</th>
                                                                     <th>Total Duration</th>
@@ -518,6 +519,8 @@
                                                                 <tbody>
                                                                 <#list automatedTestCases as scenario>
                                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
+                                                                    <#assign context_icon = formatter.contextIcon().forOutcome(scenario) />
+                                                                    <#assign context_label = formatter.contextIcon().labelForOutcome(scenario) />
                                                                     <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
                                                                         <#list scenario.getExampleOutcomes() as exampleOutcome>
                                                                             <#assign example_outcome_icon = formatter.resultIcon().forResult(exampleOutcome.result) />
@@ -534,6 +537,7 @@
                                                                                         <br/>${exampleOutcome.subtitle}
                                                                                     </#if>
                                                                                 </td>
+                                                                                <td>${context_icon}<span style="display:none">${context_label}</span> </td>
                                                                                 <td>${exampleOutcome.stepCount}</td>
                                                                                 <td>${exampleOutcome.formattedStartTime}</td>
                                                                                 <td>${exampleOutcome.formattedDuration}</td>
@@ -556,6 +560,7 @@
                                                                                 </#if>
                                                                             </td>
                                                                             <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
+                                                                            <td>${context_icon}<span style="display:none">${context_label}</span> </td>
                                                                             <td>${scenario.stepCount}</td>
                                                                             <td>${scenario.formattedStartTime}</td>
                                                                             <td>${scenario.formattedDuration}</td>
@@ -589,9 +594,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
-                                                                    <th class="test-name-column">
-                                                                        Scenario
-                                                                    </th>
+                                                                    <th class="test-name-column">Scenario</th>
+                                                                    <th>Context</th>
                                                                     <th>Steps</th>
                                                                     <th>Result</th>
                                                                 </tr>
@@ -599,6 +603,8 @@
                                                                 <tbody>
                                                                 <#list manualTestCases as scenario>
                                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
+                                                                    <#assign context_icon = formatter.contextIcon().forOutcome(scenario) />
+                                                                    <#assign context_label = formatter.contextIcon().labelForOutcome(scenario) />
                                                                     <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
                                                                         <#list scenario.getExampleOutcomes() as exampleOutcome>
                                                                             <#assign example_outcome_icon = formatter.resultIcon().forResult(exampleOutcome.result) />
@@ -615,6 +621,7 @@
                                                                                             <br/>${exampleOutcome.subtitle}
                                                                                         </#if>
                                                                                 </td>
+                                                                                <td>${context_icon}<span style="display:none">${context_label}</span> </td>
                                                                                 <td>${exampleOutcome.stepCount}</td>
                                                                                 <td>${example_outcome_icon} <span style="display:none">${exampleOutcome.result}</span>
                                                                                     <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
@@ -635,6 +642,7 @@
                                                                                 </#if>
                                                                             </td>
                                                                             <td><a href="${scenario.scenarioReport}">${scenario.title}</a></td>
+                                                                            <td>${context_icon}</td>
                                                                             <td>${scenario.stepCount}</td>
                                                                             <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
                                                                                 <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
@@ -647,26 +655,7 @@
                                                                             </td>
                                                                         </tr>
                                                                     </#if>
-
-<#--                                                                    <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />-->
-<#--                                                                    <tr>-->
-<#--                                                                        <td>-->
-<#--                                                                            <#if scenario.parentName?has_content>-->
-<#--                                                                                <a href="${scenario.parentReport}">${scenario.parentName}</a>-->
-<#--                                                                            </#if>-->
-<#--                                                                        </td>-->
-<#--                                                                        <td>-->
-<#--                                                                            <a href="${scenario.scenarioReport}">${scenario.title}</a>-->
-<#--                                                                            <#if scenario.hasExamples() >-->
-<#--                                                                                (${scenario.numberOfExamples})-->
-<#--                                                                            </#if>-->
-<#--                                                                        </td>-->
-<#--                                                                        <td>${scenario.stepCount}</td>-->
-<#--                                                                        <td>${outcome_icon} <span-->
-<#--                                                                                    style="display:none">${scenario.result}</span>-->
-<#--                                                                        </td>-->
-<#--                                                                    </tr>-->
-                                                                </#list>
+                                                               </#list>
                                                                 </tbody>
                                                             </table>
                                                         <#else>

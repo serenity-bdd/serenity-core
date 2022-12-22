@@ -79,7 +79,8 @@ public class ScenarioOutcomes {
         List<TestTag> scenarioTags = getTestTags(requirements, testOutcome);
 
         return new SingleScenarioOutcome(
-                testOutcome.getQualified().withContext().getTitleWithLinks(),
+//                testOutcome.getQualified().withContext().getTitleWithLinks(),
+                testOutcome.getQualified().getTitleWithLinks(),
                 testOutcome.getTitle(),
                 "Scenario",
                 testOutcome.getResult(),
@@ -96,7 +97,8 @@ public class ScenarioOutcomes {
                 testOutcome.getTags(),
                 testOutcome.getRule(),
                 testOutcome.getExternalLink(),
-                scenarioTags);
+                scenarioTags,
+                testOutcome.getContext());
     }
 
     private static List<TestTag> getTestTags(RequirementsService requirements, TestOutcome testOutcome) {
@@ -130,7 +132,8 @@ public class ScenarioOutcomes {
 
         List<ExampleOutcome> exampleOutcomes = ExampleOutcomes.from(testOutcome);
         return new ScenarioSummaryOutcome(
-                testOutcome.getQualified().withContext().getTitleWithLinks(),
+//                testOutcome.getQualified().withContext().getTitleWithLinks(),
+                testOutcome.getQualified().getTitleWithLinks(),
                 "Scenario Outline",
                 testOutcome.getResult(),
                 reportBadges,
@@ -148,7 +151,8 @@ public class ScenarioOutcomes {
                 testOutcome.getRule(),
                 testOutcome.getStartTime(),
                 testOutcome.getDuration(),
-                scenarioTags);
+                scenarioTags,
+                testOutcome.getContext());
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {

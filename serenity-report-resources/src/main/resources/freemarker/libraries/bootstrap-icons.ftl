@@ -1,1 +1,1 @@
-<link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css">
+<link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">

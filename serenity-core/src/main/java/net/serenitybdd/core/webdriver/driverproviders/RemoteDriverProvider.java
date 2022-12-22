@@ -8,6 +8,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
@@ -27,7 +28,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_DRIVER;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER;
 
 /**
- * A Remote Driver using SauceLabs or Browserstack (for remote web testing), or Selenium Grid.
+ * A Remote Driver using services like Browserstack, LambdaTest or SauceLabs (for remote web testing), or Selenium Grid.
  * This class should not be used for Appium testing, as Appium is already a remote driver.
  */
 public class RemoteDriverProvider implements DriverProvider {
@@ -77,6 +78,11 @@ public class RemoteDriverProvider implements DriverProvider {
             AddCustomDriverCapabilities.from(environmentVariables)
                     .withTestDetails(SupportedWebDriver.getDriverTypeFor(driverName), testOutcome)
                     .to(capabilities);
+            //
+            // Record browser and platform
+            //
+            TestContext.forTheCurrentTest().recordBrowserAndPlatformConfiguration(capabilities);
+
             return new RemoteWebDriver(remoteUrl, capabilities);
         }
     }

@@ -115,16 +115,19 @@
                         </td>
                         <td valign="top">
                             <p class="tag">
-                            <#list filteredTags as tag>
-                                <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
-                                <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
+                                <#list filteredTags as tag>
+                                    <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
+                                    <#assign tagTitle = tagInflector.ofTag(tag.type, tag.shortName).toFinalView() >
                                     <#assign tagStyle = styling.tagStyleFor(tag) >
                                     <span class="badge example-tag tag-badge" style="${tagStyle}">
-                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
-                                                                      href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
-                                    (${tag.type})</a>
+                                    <i class="bi bi-tag-fill"></i>&nbsp;
+                                        <a class="tagLink" style="${tagStyle}"
+                                           href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
+                                            (${tag.type})
+                                        </a>
                                 </span>
-                            </#list>
+                                </#list>
+                                ${formatter.contextIcon().forOutcome(testOutcome)}
                             </p>
                         </td>
                     </tr>
@@ -190,6 +193,7 @@
                                 <i class="bi bi-${flag.symbol} flag-color" alt="${flag.message}"
                                    title="${flag.message}"></i>
                             </#list>
+
                             <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
                                 <div class="discreet-requirement-narrative-title">
                                     <br/>
@@ -232,31 +236,32 @@
                                 <h4>
                                     <i class="fs-2 bi bi-person"></i>&nbsp;
                                     <span>
-                                        <a data-toggle="collapse" href="#abilities-${castMember.name}" aria-expanded="false" aria-controls="abilities">${castMember.name}</a>
+                                        <a data-toggle="collapse" href="#abilities-${castMember.name}"
+                                           aria-expanded="false" aria-controls="abilities">${castMember.name}</a>
                                         <#if castMember.description?has_content> is ${formatter.renderDescription(castMember.description!"")}</#if>
                                     </span>
                                 </h4>
                                 <div class="collapse multi-collapse" id="abilities-${castMember.name}">
-                                <#if (castMember.hasFacts())>
-                                    <div>
-                                        <span class="cast-description">${castMember.name} has:</span>
-                                        <ul>
-                                            <#list castMember.getHas() as fact>
-                                                <li>${fact}</li>
-                                            </#list>
-                                        </ul>
-                                    </div>
-                                </#if>
-                                <#if (castMember.hasAbilities())>
-                                    <div>
-                                        <span class="cast-description">${castMember.name} can:</span>
-                                        <ul>
-                                            <#list castMember.can as ability>
-                                                <li>${ability}</li>
-                                            </#list>
-                                        </ul>
-                                    </div>
-                                </#if>
+                                    <#if (castMember.hasFacts())>
+                                        <div>
+                                            <span class="cast-description">${castMember.name} has:</span>
+                                            <ul>
+                                                <#list castMember.getHas() as fact>
+                                                    <li>${fact}</li>
+                                                </#list>
+                                            </ul>
+                                        </div>
+                                    </#if>
+                                    <#if (castMember.hasAbilities())>
+                                        <div>
+                                            <span class="cast-description">${castMember.name} can:</span>
+                                            <ul>
+                                                <#list castMember.can as ability>
+                                                    <li>${ability}</li>
+                                                </#list>
+                                            </ul>
+                                        </div>
+                                    </#if>
                                 </div>
                             </td>
                         </#list>

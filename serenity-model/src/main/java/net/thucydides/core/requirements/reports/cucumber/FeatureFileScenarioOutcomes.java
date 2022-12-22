@@ -16,6 +16,7 @@ import net.thucydides.core.requirements.model.cucumber.AnnotatedFeature;
 import net.thucydides.core.requirements.reports.*;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -136,7 +137,8 @@ public class FeatureFileScenarioOutcomes {
                 null,
                 startTimeOfFirstTestIn(outcomes),
                 totalDurationOf(outcomes),
-                Collections.emptyList());
+                Collections.emptyList(),
+                firstContextIn(testOutcomes));
     }
 
     private ZonedDateTime startTimeOfFirstTestIn(List<TestOutcome> outcomes) {
@@ -231,7 +233,8 @@ public class FeatureFileScenarioOutcomes {
                 rule,
                 startTimeOfFirstTestIn(outcomes),
                 totalDurationOf(outcomes),
-                scenarioTags);
+                scenarioTags,
+                firstContextIn(testOutcomes));
     }
 
     private Set<TestTag> scenarioTagsDefinedIn(Scenario scenario) {
@@ -240,6 +243,14 @@ public class FeatureFileScenarioOutcomes {
         } else {
             return scenarioTagsIn(scenario);
         }
+    }
+
+    private String firstContextIn(TestOutcomes testOutcomes) {
+        return testOutcomes.getOutcomes().stream()
+                .filter(testOutcome -> StringUtils.isNotEmpty(testOutcome.getContext()))
+                .map(testOutcome -> testOutcome.getContext())
+                .findFirst()
+                .orElse("");
     }
 
     private boolean scenarioContainsExamples(Scenario scenario) {

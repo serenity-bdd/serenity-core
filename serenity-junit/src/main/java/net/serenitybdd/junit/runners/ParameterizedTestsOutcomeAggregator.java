@@ -33,10 +33,9 @@ public class ParameterizedTestsOutcomeAggregator {
         Map<String, TestOutcome> scenarioOutcomes = new HashMap();
 
         for (TestOutcome testOutcome : allOutcomes) {
-            final String normalizedMethodName = baseMethodName(testOutcome);
-
-            TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
+            TestOutcome scenarioOutcome = scenarioOutcomeFor(baseMethodName(testOutcome), testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
+            scenarioOutcome.setContext(testOutcome.getContext());
 
             if (testOutcome.isManual()) {
                 scenarioOutcome = scenarioOutcome.setToManual();
@@ -83,13 +82,6 @@ public class ParameterizedTestsOutcomeAggregator {
             scenarioOutcomes.put(normalizedMethodName, scenarioOutcome);
         }
         return scenarioOutcomes.get(normalizedMethodName);
-    }
-
-    private boolean rowResultsAreInconsistantWithOverallResult(TestOutcome testOutcome) {
-        TestResult overallRowResult = overallResultFrom(testOutcome.getDataTable().getRows());
-        return (testOutcome.isError() || testOutcome.isFailure() || testOutcome.isCompromised())
-                && (!testOutcome.getDataTable().getRows().isEmpty())
-                && (testOutcome.getResult() != overallRowResult);
     }
 
     private TestResult overallResultFrom(List<DataTableRow> rows) {

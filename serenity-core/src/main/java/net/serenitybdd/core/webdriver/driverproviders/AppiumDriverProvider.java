@@ -11,10 +11,12 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -90,10 +92,13 @@ public class AppiumDriverProvider implements DriverProvider {
         switch (appiumTargetPlatform(testEnvironmentVariables)) {
             case ANDROID:
                 LOGGER.info("  - Using android appium server at " + appiumUrl);
-                LOGGER.info("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID));
                 AndroidDriver androidDriver = null;
                 try {
-                    androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options, testEnvironmentVariables), ANDROID));
+                    MutableCapabilities enhancedOptions = enhancer.enhanced(appiumCapabilities(options, testEnvironmentVariables), ANDROID);
+                    LOGGER.info("  - Using appium capabilities " +  enhancedOptions);
+                    TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+                    TestContext.forTheCurrentTest().recordCurrentPlatform();
+                    androidDriver = new AndroidDriver(appiumUrl, enhancedOptions);
                 } catch(Throwable e) {
                     LOGGER.error("Creating ANDROID Driver failed " + androidDriver, e);
                     throw e;
@@ -104,8 +109,11 @@ public class AppiumDriverProvider implements DriverProvider {
                 return androidDriver;
             case IOS:
                 LOGGER.info("  - Using ios appium server at " + appiumUrl);
-                LOGGER.info("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
-                IOSDriver iosDriver = new IOSDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
+                MutableCapabilities enhancedOptions = enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE);
+                LOGGER.info("  - Using appium capabilities " +  enhancedOptions);
+                TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+                TestContext.forTheCurrentTest().recordCurrentPlatform();
+                IOSDriver iosDriver = new IOSDriver(appiumUrl, enhancedOptions);
 
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(iosDriver, deviceName));

@@ -357,15 +357,19 @@ public class StepEventBus {
         return resultTally;
     }
 
-    private void recordTestSource() {
-        TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+    private void recordTestMetadataFor(TestOutcome outcome) {
         outcome.setTestSource(testSource);
+        outcome.setContext(TestContext.forTheCurrentTest().getContext());
+    }
+
+    private void recordTestContext() {
+        TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
     }
 
     public void testFinished(boolean inDataDrivenTest) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         outcome = checkForEmptyScenarioIn(outcome);
-        recordTestSource();
+        recordTestMetadataFor(outcome);
 
         try {
             for (StepListener stepListener : getAllListeners()) {
@@ -604,7 +608,7 @@ public class StepEventBus {
      */
     public void testFailed(final Throwable cause) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
-        recordTestSource();
+        recordTestMetadataFor(outcome);
         for (StepListener stepListener : getAllListeners()) {
             try {
                 stepListener.testFailed(outcome, cause);
@@ -623,7 +627,7 @@ public class StepEventBus {
             stepListener.testPending();
         }
         suspendTest();
-        recordTestSource();
+        recordTestMetadataFor(getBaseStepListener().getCurrentTestOutcome());
     }
 
     /**
@@ -676,7 +680,7 @@ public class StepEventBus {
             stepListener.testIgnored();
         }
         suspendTest();
-        recordTestSource();
+        recordTestMetadataFor(getBaseStepListener().getCurrentTestOutcome());
     }
 
     public void testSkipped() {
@@ -684,7 +688,7 @@ public class StepEventBus {
             stepListener.testSkipped();
         }
         suspendTest();
-        recordTestSource();
+        recordTestMetadataFor(getBaseStepListener().getCurrentTestOutcome());
     }
 
     public void testAborted() {
@@ -692,7 +696,7 @@ public class StepEventBus {
             stepListener.testAborted();
         }
         suspendTest();
-        recordTestSource();
+        recordTestMetadataFor(getBaseStepListener().getCurrentTestOutcome());
     }
 
     public boolean areStepsRunning() {
@@ -977,7 +981,11 @@ public class StepEventBus {
 
     public boolean currentTestHasTag(TestTag tag) {
         if (isBaseStepListenerRegistered()) {
-            return getBaseStepListener().getCurrentTestOutcome().getTags().contains(tag);
+            if (getBaseStepListener().latestTestOutcome().isPresent()) {
+                return getBaseStepListener().getCurrentTestOutcome().getTags().contains(tag);
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

@@ -6,6 +6,7 @@ import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
@@ -53,6 +54,12 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
         // Check for extended classes to add extra ChromeOptions configuration
         //
         final FirefoxOptions enhancedOptions = EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(firefoxOptions);
+        //
+        // Record browser and platform
+        //
+        TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+        TestContext.forTheCurrentTest().recordCurrentPlatform();
+
         //
         // Record the driver capabilities for reporting
         //

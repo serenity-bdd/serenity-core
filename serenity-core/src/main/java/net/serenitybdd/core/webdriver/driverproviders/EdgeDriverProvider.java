@@ -6,6 +6,7 @@ import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
@@ -57,6 +58,11 @@ public class EdgeDriverProvider extends DownloadableDriverProvider implements Dr
         //
         EdgeOptions enhancedOptions = ConfigureChromiumOptions.from(environmentVariables).into(edgeOptions);
         EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(edgeOptions);
+        //
+        // Record browser and platform
+        //
+        TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+        TestContext.forTheCurrentTest().recordCurrentPlatform();
         //
         // Record the driver capabilities for reporting
         //

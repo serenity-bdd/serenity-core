@@ -47,7 +47,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
     @AfterClass
     public static void deleteReportDirectory() {
-        outputDirectory.delete();
+//        outputDirectory.delete();
     }
 
     private static File newTemporaryDirectory() throws IOException {

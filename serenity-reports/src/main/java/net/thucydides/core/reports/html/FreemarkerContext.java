@@ -242,7 +242,6 @@ public class FreemarkerContext {
                 .collect(Collectors.toList());
     }
 
-
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter();
         ReportFormatter reportFormatter = new ReportFormatter();

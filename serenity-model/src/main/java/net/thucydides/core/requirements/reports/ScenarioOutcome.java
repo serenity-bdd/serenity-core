@@ -73,4 +73,6 @@ public interface ScenarioOutcome {
         TagFilter tagFilter = new TagFilter();
         return new ArrayList<>(tagFilter.removeHiddenTagsFrom(getTags()));
     }
+
+    String getContext();
 }

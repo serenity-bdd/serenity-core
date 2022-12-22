@@ -4,6 +4,8 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.reports.html.ContextIconFormatter;
+import net.thucydides.core.reports.html.ResultIconFormatter;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.text.MessageFormat;
@@ -136,12 +138,15 @@ public class ReportFormatter {
 
     private List<String> inOrderOfDecreasingLength(List<String> issues) {
         List<String> sortedIssues = NewList.copyOf(issues);
-        Collections.sort(sortedIssues, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.length() - o1.length();
-            }
-        });
+        Collections.sort(sortedIssues, (o1, o2) -> o2.length() - o1.length());
         return sortedIssues;
+    }
+
+    public ResultIconFormatter resultIcon() {
+        return new ResultIconFormatter();
+    }
+
+    public ContextIconFormatter contextIcon() {
+        return new ContextIconFormatter();
     }
 }

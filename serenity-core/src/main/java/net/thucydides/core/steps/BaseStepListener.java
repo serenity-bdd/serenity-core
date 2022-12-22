@@ -400,10 +400,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public TestOutcome getCurrentTestOutcome() {
-        return latestTestOutcome().orElse(unavailableTestOutcome());
+        return latestTestOutcome().orElse(UNAVAILABLE_TEST_OUTCOME);
     }
 
-    private static final TestOutcome UNAVAILABLE_TEST_OUTCOME = new TestOutcome("Test outcome unavailable"); // new UnavailableTestOutcome("Test outcome unavailable");
+    private static final TestOutcome UNAVAILABLE_TEST_OUTCOME = new TestOutcome("Test outcome unavailable", null); // new UnavailableTestOutcome("Test outcome unavailable");
 
     private TestOutcome unavailableTestOutcome() {
         return UNAVAILABLE_TEST_OUTCOME;
@@ -509,8 +509,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testStarted(final String testMethod, final String id) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
-//        this.currentTestOutcome.set(newTestOutcome);
-//        recordNewTestOutcome(testMethod, currentTestOutcome.get());
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
 

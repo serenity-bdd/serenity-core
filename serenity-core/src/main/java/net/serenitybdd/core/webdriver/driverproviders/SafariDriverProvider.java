@@ -4,6 +4,7 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
@@ -43,6 +44,11 @@ public class SafariDriverProvider extends DownloadableDriverProvider implements 
         // Check for extended classes to add extra ChromeOptions configuration
 
         final SafariOptions enhancedOptions = EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(safariOptions);
+        //
+        // Record browser and platform
+        //
+        TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
+        TestContext.forTheCurrentTest().recordCurrentPlatform();
         //
         // Record the driver capabilities for reporting
         //

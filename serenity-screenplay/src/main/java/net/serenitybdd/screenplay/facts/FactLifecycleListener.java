@@ -59,7 +59,7 @@ public class FactLifecycleListener implements StepListener, Droppable {
 
     @Override
     public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
-
+        fact.teardown(actor);
     }
 
     @Override

@@ -59,7 +59,7 @@
         <commons.text.version>1.10.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.collections.version>3.2.2</commons.collections.version>
-        <commons.net.version>3.8.0</commons.net.version>
+        <commons.net.version>3.9.0</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.31</freemarker.version>
         <selenium.version>4.7.1</selenium.version>

@@ -3,10 +3,13 @@ package net.serenitybdd.rest;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class RestStepListener implements StepListener {
@@ -37,7 +40,17 @@ public class RestStepListener implements StepListener {
     }
 
     @Override
+    public void testStarted(String description, String id, ZonedDateTime startTime) {
+
+    }
+
+    @Override
     public void testFinished(TestOutcome result) {
+
+    }
+
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
 
     }
 
@@ -83,6 +96,11 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void stepFinished() {
+
+    }
+
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
 
     }
 
@@ -143,5 +161,10 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void testRunFinished() {
+    }
+
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
     }
 }

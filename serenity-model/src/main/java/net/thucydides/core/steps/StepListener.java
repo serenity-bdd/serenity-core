@@ -4,7 +4,10 @@ package net.thucydides.core.steps;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +39,7 @@ public interface StepListener {
      */
     void testStarted(final String description);
     void testStarted(final String description, final String id);
+    void testStarted(final String description, final String id, ZonedDateTime startTime);
 
     /**
      * Called when a test finishes.
@@ -46,6 +50,8 @@ public interface StepListener {
     default void testFinished(final TestOutcome result, boolean isInDataDrivenTest) {
         testFinished(result);
     }
+
+    void testFinished(final TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime);
 
     /**
      * The last test run is about to be restarted
@@ -82,7 +88,7 @@ public interface StepListener {
 
     /**
      * Called when a step will not be run, generally because a test method is annotated
-     * with {@link org.junit.Ignore}.
+     * with <code>org.junit.Ignore<code/>.
      */
     void stepIgnored();
 
@@ -101,6 +107,8 @@ public interface StepListener {
      * Called when an test step has finished successfully
      */
     void stepFinished();
+
+    void stepFinished(List<ScreenshotAndHtmlSource> screenshotList);
 
     /**
      * The test failed, but not while executing a step.
@@ -159,4 +167,6 @@ public interface StepListener {
     void assumptionViolated(String message);
 
     void testRunFinished();
+
+    void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots);
 }

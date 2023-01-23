@@ -54,7 +54,6 @@ class WhenRepresentingManualTestOutcomes extends Specification {
             def outcome = TestOutcome.forTestInStory("someTest", Story.withId("1","story"))
                                      .setToManual()
                                      .withIssues(["MYPROJ-123"]);
-            System.out.println("xxx outcome " + outcome.toJson())
         then:
             outcome.issues == ["MYPROJ-123"]
     }

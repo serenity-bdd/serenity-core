@@ -9,6 +9,7 @@ import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.failures.FailureAnalysis;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -140,6 +142,11 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    @Override
+    public void testStarted(String description, String id, ZonedDateTime startTime) {
+        testStarted(description,id);
+    }
+
     public void testFinished(TestOutcome result) {
         if (reportedOutcomes.contains(result)) {
             return;
@@ -176,6 +183,12 @@ public class ConsoleLoggingListener implements StepListener {
     public void testFinished(TestOutcome result, boolean isInDataDrivenTest) {
         testFinished(result);
     }
+
+    @Override
+    public void testFinished(final TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
+        testFinished(result);
+    }
+
 
     @Override
     public void testRetried() {
@@ -297,6 +310,11 @@ public class ConsoleLoggingListener implements StepListener {
         stepOut();
     }
 
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+
+    }
+
     public void stepFailed(StepFailure failure) {
 
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
@@ -407,6 +425,11 @@ public class ConsoleLoggingListener implements StepListener {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("FINISHING TEST RUN");
         }
+    }
+
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
     }
 
 }

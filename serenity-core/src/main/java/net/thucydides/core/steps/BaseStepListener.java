@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -115,6 +116,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.eventBus = eventBus;
     }
 
+
     public StepEventBus getEventBus() {
         if (eventBus == null) {
             eventBus = StepEventBus.getEventBus();
@@ -133,12 +135,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return outputDirectory;
     }
 
-    public java.util.Optional<TestStep> cloneCurrentStep() {
+    public Optional<TestStep> cloneCurrentStep() {
         return ((currentStepExists()) ? Optional.of(getCurrentStep().clone()) : Optional.empty());
     }
 
-    public java.util.Optional<TestResult> getAnnotatedResult() {
-        return java.util.Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
+    public Optional<TestResult> getAnnotatedResult() {
+        return Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
     }
 
     public void setAllStepsTo(TestResult result) {
@@ -413,11 +415,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return true;
     }
 
-    public java.util.Optional<TestOutcome> latestTestOutcome() {
+    public Optional<TestOutcome> latestTestOutcome() {
         if (testOutcomes.isEmpty()) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         } else {
-            return java.util.Optional.ofNullable(currentTestOutcome);
+            return Optional.ofNullable(currentTestOutcome);
         }
     }
 
@@ -515,8 +517,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
+     public void testStarted(final String testMethod, final String id, ZonedDateTime startTime) {
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id).withStartTime(startTime);
+        this.currentTestOutcome = newTestOutcome;
+        recordNewTestOutcome(testMethod, currentTestOutcome);
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
+    }
+
+
     private void recordNewTestOutcome(String testMethod, TestOutcome newTestOutcome) {
-        newTestOutcome.setTestSource(StepEventBus.getEventBus().getTestSource());
+        newTestOutcome.setTestSource(getEventBus().getTestSource());
         synchronized (testOutcomes) {
             testOutcomes.add(newTestOutcome);
         }
@@ -574,12 +584,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         testFinished(outcome, false);
     }
 
+    public void testFinished(final TestOutcome result, boolean isInDataDrivenTest) {
+        testFinished(result,isInDataDrivenTest,ZonedDateTime.now());
+    }
+
     /**
      * A test has finished.
      *
-     * @param outcome the result of the test that just finished.
      */
-    public void testFinished(final TestOutcome outcome, boolean inDataDrivenTest) {
+    public void testFinished(final TestOutcome outcome, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
 
         if (getTestOutcomes().isEmpty()) {
             return;
@@ -587,7 +600,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         LifecycleRegister.invokeMethodsAnnotatedBy(AfterScenario.class, getCurrentTestOutcome());
 
-        recordTestDuration();
+        recordTestDuration(finishTime);
         getCurrentTestOutcome().addIssues(storywideIssues);
         // TODO: Disable when run from an IDE
         getCurrentTestOutcome().addTags(storywideTags);
@@ -607,7 +620,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     outcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
-            if (inDataDrivenTest) {
+            if (isInDataDrivenTest) {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
             } else {
                 closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
@@ -647,10 +660,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
         testOutcomes.remove(getCurrentTestOutcome());
     }
 
-    private void recordTestDuration() {
+    private void recordTestDuration(ZonedDateTime finishTime) {
         if (!testOutcomes.isEmpty()) {
-            getCurrentTestOutcome().recordDuration();
+            getCurrentTestOutcome().recordDuration(finishTime);
         }
+    }
+
+    private void recordTestDuration() {
+        recordTestDuration(ZonedDateTime.now());
     }
 
     /**
@@ -695,8 +712,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     Stack<Method> currentStepMethodStack = new Stack<>();
 
-    public java.util.Optional<Method> getCurrentStepMethod() {
-        return currentStepMethodStack.empty() ? java.util.Optional.<Method>empty() : java.util.Optional.ofNullable(currentStepMethodStack.peek());
+    public Optional<Method> getCurrentStepMethod() {
+        return currentStepMethodStack.empty() ? Optional.<Method>empty() : Optional.ofNullable(currentStepMethodStack.peek());
     }
 
     private void recordStep(ExecutedStepDescription description) {
@@ -741,23 +758,23 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentGroupStack.push(getCurrentStep());
     }
 
-    private java.util.Optional<TestStep> currentStep() {
+    private Optional<TestStep> currentStep() {
         if (currentStepStack.isEmpty()) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
-        return (java.util.Optional.of(currentStepStack.peek()));
+        return (Optional.of(currentStepStack.peek()));
     }
 
     private TestStep getCurrentStep() {
         return currentStepStack.peek();
     }
 
-    private java.util.Optional<TestStep> getPreviousStep() {
+    private Optional<TestStep> getPreviousStep() {
         if (getCurrentTestOutcome().getTestStepCount() > 1) {
             List<TestStep> currentTestSteps = getCurrentTestOutcome().getTestSteps();
-            return java.util.Optional.of(currentTestSteps.get(currentTestSteps.size() - 2));
+            return Optional.of(currentTestSteps.get(currentTestSteps.size() - 2));
         } else {
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
     }
 
@@ -781,6 +798,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(SUCCESS);
         pauseIfRequired();
     }
+
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+        takeEndOfStepScreenshotForPlayback(SUCCESS,screenshotList);
+        currentStepDone(SUCCESS);
+        pauseIfRequired();
+    }
+
+
 
     private void updateExampleTableIfNecessary(TestResult result) {
         if (getCurrentTestOutcome().isDataDriven()) {
@@ -815,6 +840,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     FailureAnalysis failureAnalysis = new FailureAnalysis();
 
     public void stepFailed(StepFailure failure) {
+
+
         takeEndOfStepScreenshotFor(FAILURE);
 
         TestFailureCause failureCause = TestFailureCause.from(failure.getException());
@@ -901,6 +928,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
         ConfigCache.instance().clear();
     }
 
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+        takeEndOfStepScreenshotForRecording(SUCCESS,screenshots);
+    }
+
     public void currentStepDone(TestResult result) {
         if (!currentStepMethodStack.isEmpty()) {
             currentStepMethodStack.pop();
@@ -935,8 +967,23 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public java.util.Optional<TestResult> getForcedResult() {
-        return java.util.Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
+
+    private void takeEndOfStepScreenshotForRecording(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+        LOGGER.debug("SRP:TakeEndOfStepScreenshotforRecord " + result + " " + currentTestIsABrowserTest() +  " " +  shouldTakeEndOfStepScreenshotFor(result) );
+        if ((currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result))) {
+            takeRecord(MANDATORY_SCREENSHOT, result,screenshots);
+        }
+    }
+
+    private void takeEndOfStepScreenshotForPlayback(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+        LOGGER.debug("SRP:TakeEndOfStepScreenshotforPlayback " + result + " " + currentTestIsABrowserTest() +  " " +  shouldTakeEndOfStepScreenshotFor(result) );
+        if ((screenshots != null && screenshots.size() > 0)) {
+            takePlayback(MANDATORY_SCREENSHOT, result,screenshots);
+        }
+    }
+
+    public Optional<TestResult> getForcedResult() {
+        return Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
     }
 
     public void clearForcedResult() {
@@ -953,9 +1000,48 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 grabScreenshots(result).forEach(
                         screenshot -> recordScreenshotIfRequired(screenshotType, screenshot)
                 );
-                removeDuplicatedInitalScreenshotsIfPresent();
+                removeDuplicatedInitialScreenshotsIfPresent();
             } catch (ScreenshotException e) {
                 LOGGER.warn("Failed to take screenshot", e);
+            }
+        }
+    }
+
+    private void takeRecord(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+        if (shouldTakeScreenshotsWithoutCurrentStep(result)) {
+            try {
+                grabScreenshots(result).forEach(
+                        screenshot -> {
+                            boolean screenshotExisting = screenshots.stream().map(screens->screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
+                            if(screenshotExisting == false) {
+                                screenshots.add(screenshot);
+                                LOGGER.warn("SRP:RecordScreenshot " + screenshot);
+                            } else {
+                                LOGGER.warn("SRP:Found duplicate snapshot " + screenshot.getScreenshot().getName());
+                            }
+                        }
+                );
+                //clarify why there is no currentStep
+                if(currentStep().isPresent()) {
+                    removeDuplicatedInitialScreenshotsIfPresent();
+                }
+            } catch (ScreenshotException e) {
+                LOGGER.warn("Failed to take screenshot", e);
+            }
+        }
+    }
+
+
+    private void takePlayback(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+        if ( (screenshots!= null) && (screenshots.size() > 0)) {
+            if (screenshots != null) {
+                screenshots.forEach(screenshot-> {
+                    LOGGER.debug("SRP:addScreenshotInStep " + screenshot);
+                    currentStep().ifPresent(step -> step.addScreenshot(screenshot));}
+                );
+            }
+            if(currentStep().isPresent()) {
+                removeDuplicatedInitialScreenshotsIfPresent();
             }
         }
     }
@@ -964,18 +1050,29 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
             return false;
         }
-
         if (screenshots().areDisabledForThisAction(result)) {
             return false;
         }
-
-        return (currentStepExists()
+        return  (currentStepExists()
                 && browserIsOpen()
                 && !StepEventBus.getEventBus().isDryRun()
                 && !StepEventBus.getEventBus().currentTestIsSuspended());
     }
 
-    private void removeDuplicatedInitalScreenshotsIfPresent() {
+    private boolean shouldTakeScreenshotsWithoutCurrentStep(TestResult result) {
+        LOGGER.debug("SRP:ShouldTakeScreenshots " + result);
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
+            return false;
+        }
+        if (screenshots().areDisabledForThisAction(result)) {
+            return false;
+        }
+        return browserIsOpen()
+                && !StepEventBus.getEventBus().isDryRun()
+                && !StepEventBus.getEventBus().currentTestIsSuspended();
+    }
+
+    private void removeDuplicatedInitialScreenshotsIfPresent() {
         if (currentStepHasMoreThanOneScreenshot() && getPreviousStep().isPresent() && getPreviousStep().get().hasScreenshots()) {
             ScreenshotAndHtmlSource lastScreenshotOfPreviousStep = lastScreenshotOf(getPreviousStep().get());
             ScreenshotAndHtmlSource firstScreenshotOfThisStep = getCurrentStep().getFirstScreenshot();
@@ -1005,6 +1102,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+
     private boolean screenshotWasTaken(ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         return screenshotAndHtmlSource.getScreenshot() != null;
     }
@@ -1016,7 +1114,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return false;
         }
         return (screenshotType == MANDATORY_SCREENSHOT)
-                || getCurrentStep().getScreenshots().isEmpty()
+                || (!currentStep().isPresent() || getCurrentStep().getScreenshots().isEmpty())
                 || shouldTakeOptionalScreenshot(screenshotAndHtmlSource);
     }
 
@@ -1025,12 +1123,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 && (!screenshotAndHtmlSource.hasIdenticalScreenshotsAs(previousScreenshot().get())));
     }
 
-    private java.util.Optional<ScreenshotAndHtmlSource> previousScreenshot() {
+    private Optional<ScreenshotAndHtmlSource> previousScreenshot() {
         List<ScreenshotAndHtmlSource> screenshotsToDate = getCurrentTestOutcome().getScreenshotAndHtmlSources();
         if (screenshotsToDate.isEmpty()) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         } else {
-            return java.util.Optional.of(screenshotsToDate.get(screenshotsToDate.size() - 1));
+            return Optional.of(screenshotsToDate.get(screenshotsToDate.size() - 1));
         }
     }
 
@@ -1049,16 +1147,18 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
+        LOGGER.debug("SRP:GrabScreenshotsStart " + result);
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
-
-        return SerenityWebdriverManager.inThisTestThread()
+        List<ScreenshotAndHtmlSource> screenshots = SerenityWebdriverManager.inThisTestThread()
                 .getCurrentDrivers()
                 .stream()
                 .map(driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver)))
                 .filter(ScreenshotAndHtmlSource::wasTaken)
                 .collect(Collectors.toList());
+        LOGGER.debug("SRP:GrabScreenshotsEnd " + screenshots);
+        return screenshots;
     }
 
     private File screenshotFrom(WebDriver driver) {

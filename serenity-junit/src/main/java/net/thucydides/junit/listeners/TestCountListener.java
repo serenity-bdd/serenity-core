@@ -4,6 +4,7 @@ import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
@@ -12,6 +13,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
@@ -62,8 +65,18 @@ public class TestCountListener implements StepListener {
         testStarted(description);
     }
 
+    @Override
+    public void testStarted(String description, String id, ZonedDateTime startTime) {
+
+    }
+
 
     public void testFinished(TestOutcome result) {
+    }
+
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
+
     }
 
     public void testRetried() {
@@ -97,6 +110,11 @@ public class TestCountListener implements StepListener {
 
 
     public void stepFinished() {
+    }
+
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+
     }
 
 
@@ -151,6 +169,11 @@ public class TestCountListener implements StepListener {
 
     @Override
     public void testRunFinished() {
+
+    }
+
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 }

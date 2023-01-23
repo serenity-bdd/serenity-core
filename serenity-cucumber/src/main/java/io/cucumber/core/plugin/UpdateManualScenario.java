@@ -86,7 +86,7 @@ public class UpdateManualScenario {
             this.description = description;
         }
 
-        UpdateManualScenario inContext(BaseStepListener baseStepListener,
+        public UpdateManualScenario inContext(BaseStepListener baseStepListener,
                                        EnvironmentVariables environmentVariables) {
             return new UpdateManualScenario(baseStepListener, environmentVariables, description);
         }

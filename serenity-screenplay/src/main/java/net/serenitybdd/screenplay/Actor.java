@@ -13,9 +13,16 @@ import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.events.StepFinishedEvent;
+import net.thucydides.core.steps.events.StepPendingEvent;
+import net.thucydides.core.steps.events.StepStartedEvent;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -252,7 +259,8 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private <T extends Performable> void perform(T todo) {
         if (isPending(todo)) {
-            StepEventBus.getEventBus().stepPending();
+            stepPending();
+            //StepEventBus.getEventBus().stepPending();
         }
 
         try {
@@ -320,13 +328,42 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
         try {
             String groupTitle = injectActorInto(groupStepName);
-            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+            //StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+            stepStarted(groupTitle);
             should(consequences);
 
         } catch (Throwable error) {
             throw error;
         } finally {
+            //StepEventBus.getEventBus().stepFinished();
+            stepFinished();
+        }
+    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Actor.class);
+
+    private void stepStarted(String groupTitle) {
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+        } else {
+            TestSession.addEvent(new StepStartedEvent( ExecutedStepDescription.withTitle(groupTitle)));
+        }
+    }
+
+    private void stepFinished() {
+        if (TestSession.isSessionStarted()) {
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots();
+            TestSession.addEvent(new StepFinishedEvent(screenshotList));
+        } else {
             StepEventBus.getEventBus().stepFinished();
+        }
+    }
+
+    private void stepPending() {
+        if (TestSession.isSessionStarted()) {
+            TestSession.addEvent(new StepPendingEvent());
+        } else {
+            StepEventBus.getEventBus().stepPending();
         }
     }
 

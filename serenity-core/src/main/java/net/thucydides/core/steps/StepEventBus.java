@@ -14,6 +14,7 @@ import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -174,6 +176,11 @@ public class StepEventBus {
 
         BaseStepListener currentListener = currentBaseStepListener();
 
+        if(currentListener == null) {
+            LOGGER.error("CurrentListener is null");
+            Thread.dumpStack();
+        }
+
         Preconditions.checkNotNull(currentListener, "No BaseStepListener has been registered - are you running your test using the Serenity runners?");
 
         return currentListener;
@@ -196,6 +203,14 @@ public class StepEventBus {
         clear();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName, id);
+        }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
+    }
+
+    public void testStarted(final String testName, final String id, ZonedDateTime startTime) {
+        clear();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testStarted(testName, id, startTime);
         }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
@@ -366,14 +381,14 @@ public class StepEventBus {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
     }
 
-    public void testFinished(boolean inDataDrivenTest) {
+    public void testFinished(boolean inDataDrivenTest, ZonedDateTime finishTime) {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         outcome = checkForEmptyScenarioIn(outcome);
         recordTestMetadataFor(outcome);
 
         try {
             for (StepListener stepListener : getAllListeners()) {
-                stepListener.testFinished(outcome, inDataDrivenTest);
+                stepListener.testFinished(outcome, inDataDrivenTest, finishTime);
             }
         } catch(Throwable testFailedInTeardownOperations) {
             getBaseStepListener().stepFailedWithException(testFailedInTeardownOperations);
@@ -385,6 +400,11 @@ public class StepEventBus {
         TestLocalEnvironmentVariables.clear();
         clear();
     }
+
+    public void testFinished(boolean inDataDrivenTest) {
+        testFinished(inDataDrivenTest, ZonedDateTime.now());
+    }
+
 
     public void finishTestRun() {
         for (StepListener stepListener : getAllListeners()) {
@@ -485,6 +505,18 @@ public class StepEventBus {
         getResultTally().logExecutedTest();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.stepFinished();
+        }
+    }
+
+    /**
+     * Called from serial replay - StepFinishedEvent
+     * @param screenshots - screenshots that were recorded when the step was finished
+     */
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshots) {
+        stepDone();
+        getResultTally().logExecutedTest();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.stepFinished(screenshots);
         }
     }
 
@@ -1042,4 +1074,12 @@ public class StepEventBus {
         noCleanupForStickyBuses = noCleanup;
     }
 
+    public List<ScreenshotAndHtmlSource> takeScreenshots() {
+        LOGGER.debug("SRP:takeScreenshots");
+        List<ScreenshotAndHtmlSource> screenshots =  new ArrayList<>();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.takeScreenshots(screenshots);
+        }
+        return screenshots;
+    }
 }

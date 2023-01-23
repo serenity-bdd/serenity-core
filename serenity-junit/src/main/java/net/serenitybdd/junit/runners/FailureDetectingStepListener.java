@@ -4,11 +4,13 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.steps.TestFailureCause;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +65,18 @@ public class FailureDetectingStepListener implements StepListener {
         lastTestFailed = false;
     }
 
+    @Override
+    public void testStarted(String description, String id, ZonedDateTime startTime) {
+
+    }
+
 
     public void testFinished(TestOutcome result) {
+
+    }
+
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
 
     }
 
@@ -108,6 +120,11 @@ public class FailureDetectingStepListener implements StepListener {
 
 
     public void stepFinished() {
+
+    }
+
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
 
     }
 
@@ -168,6 +185,11 @@ public class FailureDetectingStepListener implements StepListener {
 
     @Override
     public void testRunFinished() {
+
+    }
+
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 

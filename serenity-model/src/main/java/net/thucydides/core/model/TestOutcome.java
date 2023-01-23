@@ -472,6 +472,11 @@ public class TestOutcome {
         this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
     }
 
+    protected TestOutcome(ZonedDateTime startTime,final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
+        this(name,testCase,userStory, environmentVariables);
+        this.startTime = startTime;
+    }
+
     private Optional<Story> storyDefinedIn(Class<?> testCase) {
         if (testCase == null) {
             return Optional.empty();
@@ -694,6 +699,38 @@ public class TestOutcome {
                 this.additionalIssues,
                 this.actors,
                 tags,
+                this.userStory,
+                this.testFailureCause,
+                this.testFailureClassname,
+                this.testFailureMessage,
+                this.testFailureSummary,
+                this.annotatedResult,
+                this.dataTable,
+                this.qualifier,
+                this.driver,
+                this.manual,
+                this.isManualTestingUpToDate,
+                this.lastTested,
+                this.manualTestEvidence,
+                this.projectKey,
+                this.environmentVariables,
+                this.externalLink,
+                this.context);
+    }
+
+    public TestOutcome withStartTime(ZonedDateTime startTime) {
+        return new TestOutcome(startTime,
+                this.duration,
+                this.title,
+                this.description,
+                this.name,
+                this.id,
+                this.testCase,
+                this.testSteps,
+                this.coreIssues,
+                this.additionalIssues,
+                this.actors,
+                this.tags,
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -2394,9 +2431,12 @@ public class TestOutcome {
     }
 
     public void recordDuration() {
-        setDuration(
-                ChronoUnit.MILLIS.between(startTime, ZonedDateTime.now())
-        );
+        recordDuration(ZonedDateTime.now());
+    }
+
+    public void recordDuration(ZonedDateTime finishTime) {
+        long duration = ChronoUnit.MILLIS.between(startTime, finishTime);
+        setDuration(duration);
     }
 
     public void setDuration(final long duration) {

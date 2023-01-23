@@ -4,11 +4,14 @@ import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.Droppable;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class FactLifecycleListener implements StepListener, Droppable {
@@ -45,8 +48,18 @@ public class FactLifecycleListener implements StepListener, Droppable {
     }
 
     @Override
+    public void testStarted(String description, String id, ZonedDateTime startTime) {
+
+    }
+
+    @Override
     public void testFinished(TestOutcome result) {
         fact.teardown(actor);
+    }
+
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
+
     }
 
     @Override
@@ -91,6 +104,11 @@ public class FactLifecycleListener implements StepListener, Droppable {
 
     @Override
     public void stepFinished() {
+
+    }
+
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
 
     }
 
@@ -156,6 +174,11 @@ public class FactLifecycleListener implements StepListener, Droppable {
 
     @Override
     public void testRunFinished() {
+
+    }
+
+    @Override
+    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 }

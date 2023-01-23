@@ -11,20 +11,11 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PUBLISH_QUIET_P
 import static org.junit.platform.engine.discovery.DiscoverySelectors.*;
 
 
-public class CucumberJUnit5Runner {
+public class CucumberJUnit5ParallelRunner {
 
 
     static final String ENGINE_ID = "cucumber";
 
-	/*public static void run(Class testClass) {
-		SummaryGeneratingListener summaryGeneratingListener = new SummaryGeneratingListener();
-		LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-          .selectors(selectClass(testClass))
-          .build();
-        Launcher launcher = LauncherFactory.create();
-        launcher.registerTestExecutionListeners(summaryGeneratingListener);
-        launcher.execute(request);
-    }*/
 
     public static EngineExecutionResults runFile(String fileName, String gluePath){
 		return EngineTestKit.engine(ENGINE_ID)
@@ -35,10 +26,11 @@ public class CucumberJUnit5Runner {
 				.execute();
 	}
 
-	 public static  EngineExecutionResults runFileFromClasspath(String classpathResource, String gluePath){
+	 public static  EngineExecutionResults runFileFromClasspathInParallel(String classpathResource, String gluePath){
 		return EngineTestKit.engine(ENGINE_ID)
+				.configurationParameter("cucumber.execution.parallel.enabled","true")
 				.configurationParameter(PLUGIN_PUBLISH_QUIET_PROPERTY_NAME, "true")
-				.configurationParameter(PLUGIN_PROPERTY_NAME, "io.cucumber.core.plugin.SerenityReporter")
+				.configurationParameter(PLUGIN_PROPERTY_NAME, "io.cucumber.core.plugin.SerenityReporterParallel")
 				.configurationParameter(GLUE_PROPERTY_NAME,gluePath)
 				.selectors(selectClasspathResource(classpathResource))
 				.execute();

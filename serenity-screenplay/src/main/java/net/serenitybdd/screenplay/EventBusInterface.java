@@ -4,27 +4,47 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
+import net.thucydides.core.steps.events.*;
+import net.thucydides.core.steps.session.TestSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 
 public class EventBusInterface {
 
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventBusInterface.class);
+
     public static void castActor(String name) {
         if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
             return;
         }
-        StepEventBus.getEventBus().castActor(name);
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().castActor(name);
+        }  else {
+            TestSession.addEvent(new CastActorEvent(name));
+        }
+
     }
 
     public void reportStepFailureFor(Performable todo, Throwable e) {
         ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "attemptsTo");
-        StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
+        }  else {
+            TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e)));
+        }
     }
 
     public <T> void reportStepFailureFor(Consequence<T> consequence, Throwable e) {
         ExecutedStepDescription consequenceDescription = ExecutedStepDescription.withTitle(consequence.toString());
-        StepEventBus.getEventBus().stepFailed(new StepFailure(consequenceDescription, e));
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepFailed(new StepFailure(consequenceDescription, e));
+        }  else {
+            TestSession.addEvent(new StepFailedEvent(new StepFailure(consequenceDescription, e)));
+        }
     }
 
     public int getRunningStepCount() {
@@ -37,20 +57,37 @@ public class EventBusInterface {
 
     public void updateOverallResult() {
         if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            StepEventBus.getEventBus().updateOverallResults();
+            if(!TestSession.isSessionStarted()) {
+                StepEventBus.getEventBus().updateOverallResults();
+            } else {
+                TestSession.addEvent(new UpdateOverallResultsEvent());
+            }
         }
     }
 
     public void startQuestion(String title) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
+        } else {
+            TestSession.addEvent(new StepStartedEvent(ExecutedStepDescription.withTitle(title).asAQuestion()));
+        }
     }
 
     public void finishQuestion() {
-        StepEventBus.getEventBus().stepFinished();
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepFinished();
+        } else {
+            TestSession.addEvent(new StepFinishedEvent());
+        }
     }
 
     public void reportStepFinished() {
-        StepEventBus.getEventBus().stepFinished();
+        if (!TestSession.isSessionStarted()) {
+            StepEventBus.getEventBus().stepFinished();
+        } else {
+            TestSession.addEvent(new StepFinishedEvent());
+        }
+
     }
 
     public void reportStepIgnored() {
@@ -115,9 +152,6 @@ public class EventBusInterface {
         StepEventBus.getEventBus().disableSoftAsserts();
     }
 
-    public boolean stepsAreRunning() {
-        return StepEventBus.getEventBus().areStepsRunning();
-    }
 
     public void assignFactToActor(Actor actor, String fact) {
         if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {

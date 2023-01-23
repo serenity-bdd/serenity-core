@@ -57,11 +57,11 @@ public class BaseListenerPools {
     public static void mergeParallelActivityFlows(ThreadGroup currentThreadGroup) {
         BaseStepListener mainStepListener = mainStepListener();
 
-        childStepListeners().forEach(
-                baseStepListener -> {
-                    System.out.println(baseStepListener);
-                }
-        );
+//        childStepListeners().forEach(
+//                baseStepListener -> {
+//                    System.out.println(baseStepListener);
+//                }
+//        );
         THREAD_GROUP_LISTENERS.remove(currentThreadGroup);
     }
 

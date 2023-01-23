@@ -5,7 +5,12 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ResultCounts
 
 fun countByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Long> {
-    return TestResult.values().associate { result -> Pair(result.toString(), testOutcomes.resultCount) }
+    return TestResult.values().associate { result ->
+        Pair(
+            result.toString(),
+            ResultCounts.forOutcomesIn(testOutcomes).getOverallTestCount(result.toString())
+        )
+    }
 }
 
 fun percentageByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Int> {

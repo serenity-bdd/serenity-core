@@ -34,21 +34,17 @@ public class ThucydidesEnabledExtension extends AbstractAnnotationDrivenExtensio
 
     @Override
     public void visitFeatureAnnotation(ThucydidesEnabled annotation, FeatureInfo feature) {
-        System.out.println("visitFeatureAnnotation");
     }
 
     @Override
     public void visitFixtureAnnotation(ThucydidesEnabled annotation, MethodInfo fixtureMethod) {
-        System.out.println("visitFixtureAnnotation");
     }
 
     @Override
     public void visitFieldAnnotation(ThucydidesEnabled annotation, FieldInfo field) {
-        System.out.println("visitFieldAnnotation");
     }
 
     @Override
     public void visitSpec(SpecInfo spec) {
-        System.out.println("visitSpec");
     }
 }

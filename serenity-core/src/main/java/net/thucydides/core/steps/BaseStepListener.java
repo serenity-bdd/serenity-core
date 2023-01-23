@@ -969,14 +969,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
     private void takeEndOfStepScreenshotForRecording(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
-        LOGGER.debug("SRP:TakeEndOfStepScreenshotforRecord " + result + " " + currentTestIsABrowserTest() +  " " +  shouldTakeEndOfStepScreenshotFor(result) );
         if ((currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result))) {
             takeRecord(MANDATORY_SCREENSHOT, result,screenshots);
         }
     }
 
     private void takeEndOfStepScreenshotForPlayback(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
-        LOGGER.debug("SRP:TakeEndOfStepScreenshotforPlayback " + result + " " + currentTestIsABrowserTest() +  " " +  shouldTakeEndOfStepScreenshotFor(result) );
         if ((screenshots != null && screenshots.size() > 0)) {
             takePlayback(MANDATORY_SCREENSHOT, result,screenshots);
         }
@@ -1013,9 +1011,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 grabScreenshots(result).forEach(
                         screenshot -> {
                             boolean screenshotExisting = screenshots.stream().map(screens->screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
-                            if(screenshotExisting == false) {
+                            if(!screenshotExisting) {
                                 screenshots.add(screenshot);
-                                LOGGER.warn("SRP:RecordScreenshot " + screenshot);
                             } else {
                                 LOGGER.warn("SRP:Found duplicate snapshot " + screenshot.getScreenshot().getName());
                             }
@@ -1034,12 +1031,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void takePlayback(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
         if ( (screenshots!= null) && (screenshots.size() > 0)) {
-            if (screenshots != null) {
-                screenshots.forEach(screenshot-> {
-                    LOGGER.debug("SRP:addScreenshotInStep " + screenshot);
-                    currentStep().ifPresent(step -> step.addScreenshot(screenshot));}
-                );
-            }
+            screenshots.forEach(screenshot -> {
+                        currentStep().ifPresent(step -> step.addScreenshot(screenshot));
+                    }
+            );
             if(currentStep().isPresent()) {
                 removeDuplicatedInitialScreenshotsIfPresent();
             }
@@ -1060,7 +1055,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean shouldTakeScreenshotsWithoutCurrentStep(TestResult result) {
-        LOGGER.debug("SRP:ShouldTakeScreenshots " + result);
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
             return false;
         }
@@ -1147,7 +1141,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
-        LOGGER.debug("SRP:GrabScreenshotsStart " + result);
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
@@ -1157,7 +1150,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 .map(driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver)))
                 .filter(ScreenshotAndHtmlSource::wasTaken)
                 .collect(Collectors.toList());
-        LOGGER.debug("SRP:GrabScreenshotsEnd " + screenshots);
         return screenshots;
     }
 

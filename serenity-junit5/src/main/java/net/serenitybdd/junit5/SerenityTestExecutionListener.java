@@ -376,7 +376,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (TestMethodConfiguration.forMethod(methodSource.getJavaMethod()).isManual()) {
             setToManual(testIdentifier, methodSource);
         }
-        expectedExceptions.stream().forEach(ex -> updateResultsForExpectedException(testIdentifier, ex));
+        expectedExceptions.forEach(ex -> updateResultsForExpectedException(testIdentifier, ex));
     }
 
     private void setToManual(TestIdentifier testIdentifier, MethodSource methodSource) {

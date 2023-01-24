@@ -24,8 +24,6 @@ public class EdgeDriverProvider extends DownloadableDriverProvider implements Dr
 
     private final DriverCapabilityRecord driverProperties;
 
-    private final DriverServicePool<ChromeDriverService> driverServicePool = new ChromeServicePool();
-
     private final FixtureProviderService fixtureProviderService;
 
     public EdgeDriverProvider(FixtureProviderService fixtureProviderService) {

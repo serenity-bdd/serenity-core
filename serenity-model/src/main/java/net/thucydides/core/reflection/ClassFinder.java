@@ -106,7 +106,7 @@ public class ClassFinder {
             List<Class<?>> classList = new ArrayList<>();
             for (String className : classes) {
                 try {
-                    if (className.startsWith(packageName) && isNotAnInnerClass(className)) {
+                    if (className.startsWith(packageName) && isNotAnInnerClass(className) && !(className.startsWith("."))) {
                         classList.add(Class.forName(className));
                     }
                 } catch (Throwable e) {

@@ -34,7 +34,8 @@ public class EnhanceDriver {
                 enhancerType -> {
                     try {
                         (enhancerType.getDeclaredConstructor().newInstance()).apply(environmentVariables, driver);
-                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                             InvocationTargetException e) {
                         throw new WebDriverInitialisationException("Failed to instantiate custom driver enhancer " + enhancerType.getName(), e);
                     }
                 }
@@ -63,12 +64,14 @@ public class EnhanceDriver {
     private List<Class<CustomDriverEnhancer>> customEnhancers() {
         List<String> extensionPackages = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getListOfValues(ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES);
-        return extensionPackages.stream().flatMap(
-                extensionPackage -> ClassFinder.loadClasses()
-                        .thatImplement(CustomDriverEnhancer.class)
-                        .fromPackage(extensionPackage)
-                        .stream().map(extension -> (Class<CustomDriverEnhancer>) extension)
-        ).collect(Collectors.toList());
+        return extensionPackages.stream()
+                .filter(extensionPackage -> !extensionPackage.isEmpty())
+                .flatMap(
+                        extensionPackage -> ClassFinder.loadClasses()
+                                .thatImplement(CustomDriverEnhancer.class)
+                                .fromPackage(extensionPackage)
+                                .stream().map(extension -> (Class<CustomDriverEnhancer>) extension)
+                ).collect(Collectors.toList());
     }
 
 }

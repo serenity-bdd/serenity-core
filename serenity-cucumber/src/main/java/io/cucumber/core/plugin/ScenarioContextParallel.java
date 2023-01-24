@@ -327,7 +327,7 @@ public class ScenarioContextParallel {
      * @param event
      */
     public void addHighPriorityStepEventBusEvent(String scenarioId, StepEventBusEvent event) {
-        LOGGER.warn("SRP:addHighPriorityStepEventBusEvent " + event + " " +  Thread.currentThread() + " " + scenarioId);
+        LOGGER.debug("SRP:addHighPriorityStepEventBusEvent " + event + " " +  Thread.currentThread() + " " + scenarioId);
         List<StepEventBusEvent> eventList = highPriorityEventBusEvents.computeIfAbsent(scenarioId,k->Collections.synchronizedList(new LinkedList<>()));
         eventList.add(event);
         event.setStepEventBus(stepEventBus);
@@ -338,7 +338,7 @@ public class ScenarioContextParallel {
             TestSession.addEvent(event);
             event.setStepEventBus(stepEventBus);
         } else {
-            LOGGER.warn("SRP:ignored event " + event + " " +  Thread.currentThread() + " because session not opened ", new Exception());
+            LOGGER.debug("SRP:ignored event " + event + " " +  Thread.currentThread() + " because session not opened ", new Exception());
         }
     }
 
@@ -361,16 +361,16 @@ public class ScenarioContextParallel {
      * Called with TestRunFinished - all tests events are replayed
      */
     public synchronized void playAllTestEvents() {
-        LOGGER.info("SRP:playAllTestEvents for URI " +  scenarioContextURI + "--" + allTestEventsByLine);
+        LOGGER.debug("SRP:playAllTestEvents for URI " +  scenarioContextURI + "--" + allTestEventsByLine);
         allTestEventsByLine.entrySet().forEach((entry) -> replayAllTestCaseEventsForLine(entry.getKey(),entry.getValue()));
         stepEventBus.clear();
         StepEventBus.getEventBus().clear();
     }
 
     private void replayAllTestCaseEventsForLine(Integer lineNumber, List<StepEventBusEvent> stepEventBusEvents) {
-        LOGGER.info("SRP:PLAY session events for line   " + lineNumber);
+        LOGGER.debug("SRP:PLAY session events for line   " + lineNumber);
         Optional<StepEventBusEvent> eventWithScenarioId = stepEventBusEvents.stream().filter(event -> !event.getScenarioId().isEmpty()).findFirst();
-        LOGGER.info("SRP:EventWithscenarioId   " + eventWithScenarioId);
+        LOGGER.debug("SRP:EventWithscenarioId   " + eventWithScenarioId);
         if(eventWithScenarioId.isPresent() && highPriorityEventBusEvents.get(eventWithScenarioId.get().getScenarioId()) != null){
             List<StepEventBusEvent> highPriorityEvents = highPriorityEventBusEvents.get(eventWithScenarioId.get().getScenarioId());
             for(StepEventBusEvent currentStepBusEvent : highPriorityEvents) {

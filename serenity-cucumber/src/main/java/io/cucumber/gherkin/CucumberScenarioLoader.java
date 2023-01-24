@@ -4,13 +4,11 @@ import com.google.common.collect.FluentIterable;
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.feature.Options;
 import io.cucumber.core.runtime.FeaturePathFeatureSupplier;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.*;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenario;
 import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
 import net.serenitybdd.cucumber.util.PathUtils;
-import org.codehaus.groovy.ast.builder.AstBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +18,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -101,7 +98,7 @@ public class CucumberScenarioLoader {
                         tagsFor(cucumberFeature, scenarioDefinition.get()),
                         scenarioCountFor(scenarioDefinition.get())))
                     .collect(toList());
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 throw new IllegalStateException(String.format("Could not extract scenarios from %s", mapsForFeatures.get(cucumberFeature)), e);
             }
         };

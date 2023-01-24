@@ -5,7 +5,6 @@ import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.gherkin.FeatureParserException;
 import io.cucumber.core.resource.Resource;
 import io.cucumber.messages.types.*;
-import io.cucumber.plugin.event.Node;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
@@ -86,7 +85,7 @@ public class CucumberParser {
                         descriptionInComments));
             }
             return Optional.empty();
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
             return Optional.empty();
         }

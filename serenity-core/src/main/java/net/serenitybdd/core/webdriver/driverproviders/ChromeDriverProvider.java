@@ -59,11 +59,6 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         TestContext.forTheCurrentTest().recordBrowserConfiguration(enhancedOptions);
         TestContext.forTheCurrentTest().recordCurrentPlatform();
         //
-        // Find the DriverService for the base config options
-        //
-        ChromeDriverService driverService = DriverServices.getChromeDriverService(enhancedOptions);
-
-        //
         // Add any arguments passed from the test itself
         //
         enhancedOptions.addArguments(argumentsIn(options));
@@ -75,7 +70,6 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
         LOGGER.info("Starting Chrome driver instance with capabilities:");
         LOGGER.info(enhancedOptions.toString());
 
-        return new ChromeDriver(driverService, enhancedOptions);
+        return new ChromeDriver(enhancedOptions);
     }
-
 }

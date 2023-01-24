@@ -136,10 +136,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     private FirefoxProfile buildFirefoxProfile() {
         String profileName = ThucydidesSystemProperty.WEBDRIVER_FIREFOX_PROFILE.from(environmentVariables);
         FilePathParser parser = new FilePathParser(environmentVariables);
-        DesiredCapabilities firefoxCapabilities = new DesiredCapabilities();
-        if (StringUtils.isNotEmpty(profileName)) {
-            firefoxCapabilities.setCapability(FirefoxDriver.Capability.PROFILE, parser.getInstanciatedPath(profileName));
-        }
 
         FirefoxProfile profile;
         if (profileName == null) {

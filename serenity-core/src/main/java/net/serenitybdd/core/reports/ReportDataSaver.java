@@ -5,6 +5,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.session.TestSession;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -32,9 +33,17 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
     @Override
     public void andContents(String contents) {
+        if(!TestSession.isSessionStarted()) {
+            doAddContents(contents);
+        } else {
+            TestSession.addEvent(new AddReportContentEvent(this,contents));
+        }
+    }
+
+    public void doAddContents(String contents) {
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
                 outcome -> currentStepOrBackgroundIn(outcome)
-                             .withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
+                        .withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
         );
     }
 

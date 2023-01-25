@@ -16,6 +16,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.di.DependencyInjectorService;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
@@ -257,7 +258,11 @@ public class Serenity {
     }
 
     public static WithTitle recordReportData() {
-        return new ReportDataSaver(StepEventBus.getEventBus());
+        if (TestSession.isSessionStarted()) {
+            return new ReportDataSaver(TestSession.getTestSessionContext().getStepEventBus());
+        } else {
+            return new ReportDataSaver(StepEventBus.getEventBus());
+        }
     }
 
     /**

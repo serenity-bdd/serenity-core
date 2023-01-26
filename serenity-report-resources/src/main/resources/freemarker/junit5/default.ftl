@@ -471,7 +471,7 @@
                                 <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                    style="display:block">
                                     <#--${step_outcome_icon}-->
-                                    <i class="bi bi-plus-square imgstepSection${step_number} ${step_outcome_style}"
+                                    <i class="bi bi-caret-right-square imgstepSection${step_number} ${step_outcome_style}"
                                        style="margin-left: ${step_indent}px; float:left; padding-right:5px"></i>
                                     <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
                                     <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
@@ -656,20 +656,12 @@
     </div>
 
     <script type="text/javascript">
-        function toggleDiv(divId) {
-            $("#" + divId).toggle();
-            var imgsrc = $(".img" + divId).attr('src');
-            if (imgsrc == 'images/plus.png') {
-                $(".img" + divId).attr("src", function () {
-                    return "images/minus.png";
-                });
-
-            } else {
-                $(".img" + divId).attr("src", function () {
-                    return "images/plus.png";
-                });
-            }
-        }
+      function toggleDiv(divId) {
+        $("#" + divId).toggle();
+        var $icon = $(".img" + divId);
+        $icon.toggleClass("bi-caret-right-square");
+        $icon.toggleClass("bi-caret-down-square");
+      }
     </script>
 
     <#--<script type="text/javascript">-->

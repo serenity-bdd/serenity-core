@@ -14,6 +14,7 @@ import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.steps.session.TestSession;
@@ -120,7 +121,7 @@ public class Serenity {
         File outputDirectory = configuration.getOutputDirectory();
         StepListener listener = new BaseStepListener(outputDirectory);
         stepListenerThreadLocal.set(listener);
-        StepEventBus.getEventBus().registerListener(getStepListener());
+        getStepEventBus().registerListener(getStepListener());
     }
 
     private static void setupWebDriverFactory() {
@@ -254,15 +255,15 @@ public class Serenity {
     }
 
     public static void takeScreenshot() {
-        StepEventBus.getEventBus().takeScreenshot();
+        getStepEventBus().takeScreenshot();
+    }
+
+    public static List<ScreenshotAndHtmlSource> takeScreenshots() {
+        return getStepEventBus().takeScreenshots();
     }
 
     public static WithTitle recordReportData() {
-        if (TestSession.isSessionStarted()) {
-            return new ReportDataSaver(TestSession.getTestSessionContext().getStepEventBus());
-        } else {
-            return new ReportDataSaver(StepEventBus.getEventBus());
-        }
+        return new ReportDataSaver(getStepEventBus());
     }
 
     /**
@@ -348,13 +349,20 @@ public class Serenity {
      * Any exceptions that occur will be reported and thrown
      */
     public static void reportThat(String message, Reportable reportableAction) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(message));
+        getStepEventBus().stepStarted(ExecutedStepDescription.withTitle(message));
         try {
             reportableAction.perform();
-            StepEventBus.getEventBus().stepFinished();
+            getStepEventBus().stepFinished();
         } catch (Throwable assertionFailed) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(message), assertionFailed));
+            getStepEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(message), assertionFailed));
             throw assertionFailed;
         }
+    }
+
+    private static StepEventBus getStepEventBus() {
+        if (TestSession.isSessionStarted()) {
+            return TestSession.getTestSessionContext().getStepEventBus();
+        }
+        return StepEventBus.getEventBus();
     }
 }

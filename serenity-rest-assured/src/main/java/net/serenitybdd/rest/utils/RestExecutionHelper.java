@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 
 
 /**
@@ -30,8 +30,8 @@ public class RestExecutionHelper {
         }
 
         return isEnabledDryCleanOnlyForCurrentClass()
-                || getEventBus().isDryRun()
-                || getEventBus().currentTestIsSuspended();
+                || getParallelEventBus().isDryRun()
+                || getParallelEventBus().currentTestIsSuspended();
     }
 
 

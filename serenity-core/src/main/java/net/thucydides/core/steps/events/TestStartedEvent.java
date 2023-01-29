@@ -11,6 +11,13 @@ public class TestStartedEvent extends StepEventBusEventBase {
 
 	private ZonedDateTime startTime;
 
+	public TestStartedEvent(final String testName) {
+		this.testName =  testName;
+		this.startTime = ZonedDateTime.now();
+	}
+
+
+
 	public TestStartedEvent(String scenarioId, final String testName, final String id) {
 		super(scenarioId);
 		this.testName =  testName;
@@ -21,7 +28,12 @@ public class TestStartedEvent extends StepEventBusEventBase {
 
 	@Override
 	public void play() {
-		getStepEventBus().testStarted(testName,id,startTime);
+		if(getScenarioId() != null) {
+			getStepEventBus().testStarted(testName, id, startTime);
+		}
+		else {
+			getStepEventBus().testStarted(testName);
+		}
 	}
 
 	public String toString() {

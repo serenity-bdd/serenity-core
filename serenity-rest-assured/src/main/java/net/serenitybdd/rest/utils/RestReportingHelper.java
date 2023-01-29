@@ -11,10 +11,13 @@ import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.rest.RestStepListener;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
+import net.serenitybdd.rest.event.RecordRestQueryEvent;
 import net.serenitybdd.rest.filters.FieldsRecordingFilter;
 import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
+import net.thucydides.core.steps.events.StepFailedEvent;
+import net.thucydides.core.steps.events.StepStartedEvent;
+import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 
@@ -33,7 +37,7 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 public class RestReportingHelper {
 
     public RestReportingHelper() {
-        getEventBus().registerListener(new RestStepListener());
+        getParallelEventBus().registerListener(new RestStepListener());
     }
 
     private static boolean shouldRecordResponseBodyFor(Response result) {
@@ -79,7 +83,12 @@ public class RestReportingHelper {
         restQuery = restQuery.withStatusCode(response.getStatusCode())
                 .withResponseHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""))
                 .withResponseCookies(firstNonNull(values.get(LogDetail.COOKIES), ""));
-        getEventBus().getBaseStepListener().recordRestQuery(restQuery);
+        if (TestSession.isSessionStarted()) {
+            TestSession.addEvent(new RecordRestQueryEvent(restQuery));
+        } else {
+            getEventBus().getBaseStepListener().recordRestQuery(restQuery);
+        }
+
     }
 
     public void registerCall(final RestMethod method, final RequestSpecificationDecorated spec, final String path,
@@ -87,9 +96,15 @@ public class RestReportingHelper {
         RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);
         ExecutedStepDescription description = ExecutedStepDescription.withTitle(restQuery.toString());
         StepFailure failure = new StepFailure(description, throwable);
-        StepEventBus.getEventBus().stepStarted(description);
-        getEventBus().getBaseStepListener().recordRestQuery(restQuery);
-        StepEventBus.getEventBus().stepFailed(failure);
+        if (TestSession.isSessionStarted()) {
+            TestSession.addEvent(new StepStartedEvent(description));
+            TestSession.addEvent(new RecordRestQueryEvent(restQuery));
+            TestSession.addEvent(new StepFailedEvent(failure));
+        } else {
+            getEventBus().stepStarted(description);
+            getEventBus().getBaseStepListener().recordRestQuery(restQuery);
+            getEventBus().stepFailed(failure);
+        }
         if (Serenity.shouldThrowErrorsImmediately()) {
             throw throwable;
         }

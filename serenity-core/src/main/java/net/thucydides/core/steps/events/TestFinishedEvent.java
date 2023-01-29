@@ -8,6 +8,10 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 
 	private ZonedDateTime finishingTime;
 
+	public TestFinishedEvent() {
+		this.finishingTime = ZonedDateTime.now();
+	}
+
 	public TestFinishedEvent(String scenarioId,boolean inDataDrivenTest) {
 		super(scenarioId);
 		this.inDataTest = inDataDrivenTest;
@@ -16,7 +20,11 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 
 	@Override
 	public void play() {
-		getStepEventBus().testFinished(inDataTest,finishingTime);
+		if (getScenarioId() != null) {
+			getStepEventBus().testFinished(inDataTest, finishingTime);
+		} else {
+			getStepEventBus().testFinished();
+		}
 	}
 
 	public String toString() {

@@ -15,6 +15,7 @@ import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
@@ -74,6 +75,18 @@ public class StepEventBus {
             }
         }
         return stepEventBusThreadLocal.get();
+    }
+
+    /**
+     * If called from a Cucumber parallel Test session will return the corresponding StepEventBus, otherwise
+     * will redirect to getEventBus()
+     */
+    public static StepEventBus getParallelEventBus() {
+        if (TestSession.isSessionStarted()) {
+            return TestSession.getTestSessionContext().getStepEventBus();
+        } else {
+            return getEventBus();
+        }
     }
 
     /**

@@ -2,6 +2,9 @@ package net.serenity.test.utils.rules;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepListener;
+import net.thucydides.core.steps.events.TestFinishedEvent;
+import net.thucydides.core.steps.events.TestStartedEvent;
+import net.thucydides.core.steps.session.TestSession;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -38,11 +41,11 @@ public class TestCase<T extends StepListener> implements MethodRule {
     }
 
     @SafeVarargs
-    public final void register(final T... listener) {
-        for (T regiter : listener) {
-            this.listeners.add(regiter);
-            StepEventBus.getEventBus().registerListener(regiter);
-            regiter.testStarted(name);
+    public final void register(final T... listeners) {
+        for (T listener : listeners) {
+            this.listeners.add(listener);
+            StepEventBus.getParallelEventBus().registerListener(listener);
+            listener.testStarted(name);
         }
     }
 
@@ -52,7 +55,11 @@ public class TestCase<T extends StepListener> implements MethodRule {
 
     public TestCase<T> finish() {
         if (!finished) {
-            StepEventBus.getEventBus().testFinished();
+            if(TestSession.isSessionStarted()) {
+                TestSession.addEvent(new TestFinishedEvent());
+            } else {
+                StepEventBus.getEventBus().testFinished();
+            }
             this.finished = true;
         }
         return this;
@@ -68,10 +75,14 @@ public class TestCase<T extends StepListener> implements MethodRule {
             @Override
             public void evaluate() throws Throwable {
                 try {
-                    for (T regiter : listeners) {
-                        StepEventBus.getEventBus().registerListener(regiter);
+                    for (T listener : listeners) {
+                        StepEventBus.getParallelEventBus().registerListener(listener);
                     }
-                    StepEventBus.getEventBus().testStarted(name);
+                    if (TestSession.isSessionStarted()) {
+                        TestSession.addEvent( new TestStartedEvent(name));
+                    } else {
+                        StepEventBus.getEventBus().testStarted(name);
+                    }
 
                     statement.evaluate();
                 } finally {

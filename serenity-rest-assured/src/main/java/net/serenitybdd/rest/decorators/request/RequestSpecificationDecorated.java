@@ -27,7 +27,7 @@ import static net.serenitybdd.core.rest.RestMethod.OPTIONS;
 import static net.serenitybdd.core.rest.RestMethod.PATCH;
 import static net.serenitybdd.core.rest.RestMethod.POST;
 import static net.serenitybdd.core.rest.RestMethod.PUT;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 import static org.apache.http.util.Args.notNull;
 
 /**
@@ -288,7 +288,7 @@ public abstract class RequestSpecificationDecorated
     }
 
     private void reportQuery(RestMethod method, String path, Response response, Object[] pathParams) {
-        if (getEventBus().isBaseStepListenerRegistered()) {
+        if (getParallelEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, response, this, path, pathParams);
         } else {
             log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
@@ -296,7 +296,7 @@ public abstract class RequestSpecificationDecorated
     }
 
     private void reportError(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
-        if (getEventBus().isBaseStepListenerRegistered()) {
+        if (getParallelEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, this, path, exception, pathParams);
         } else {
             log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);

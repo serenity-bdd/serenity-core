@@ -14,8 +14,8 @@ targetCompatibility = 16
 
 ext {
     slf4jVersion = '1.7.7'
-    serenityCoreVersion = '3.3.10'
-    serenityCucumberVersion = '3.3.10'
+    serenityCoreVersion = '3.6.8-SNAPSHOT'
+    serenityCucumberVersion = '3.6.8-SNAPSHOT'
     junitVersion = '4.12'
     assertJVersion = '3.22.0'
     logbackVersion = '1.2.3'
@@ -28,11 +28,17 @@ dependencies {
             "net.serenity-bdd:serenity-cucumber:${serenityCoreVersion}",
             "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
             "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-rest-assured:${serenityCoreVersion}",
+            "io.cucumber:cucumber-junit-platform-engine:7.11.0",
+            "org.junit.platform:junit-platform-suite-engine:1.9.2",
+            "org.junit.platform:junit-platform-suite:1.9.2",
             "junit:junit:${junitVersion}",
             "org.assertj:assertj-core:${assertJVersion}"
 }
 
 test {
+    useJUnitPlatform()
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
 }

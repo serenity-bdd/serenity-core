@@ -13,7 +13,6 @@ import io.cucumber.plugin.event.TestStepFinished;
 import io.cucumber.plugin.event.TestStepStarted;
 import io.cucumber.plugin.event.*;
 import io.cucumber.tagexpressions.Expression;
-import java.util.function.BiConsumer;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
@@ -86,7 +85,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Set<URI> contextURISet = new CopyOnWriteArraySet<>();
 
-    private ScenarioContext getContext() {
+    protected ScenarioContext getContext() {
         return localContext.get();
     }
 
@@ -126,35 +125,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         baseStepListeners.add(listeners.getBaseStepListener());
     }
 
-    public enum TypesOfEventCallback {
-        TestSourceRead, TestCaseStarted, TestCaseFinished, TestStepStarted, TestStepFinished, TestRunStarted, TestRunFinished
-    }
-    public enum LocationOfEventCallback {
-        METHOD_START, METHOD_END
-    }
-    private Map<String, BiConsumer<Event, ScenarioContext>> callbackMap = new HashMap<>();
-
-    public void registerCallback(TypesOfEventCallback cbType, LocationOfEventCallback order, BiConsumer<Event, ScenarioContext> callback) {
-        callbackMap.put(getCbKey(cbType,order), callback);
-    }
-
-    public BiConsumer<Event, ScenarioContext> unregisterCallback(TypesOfEventCallback cbType, LocationOfEventCallback order)  {
-        return callbackMap.remove(getCbKey(cbType,order));
-    }
-
-    private void handleCallback(Event event, LocationOfEventCallback order) {
-        Optional.ofNullable(callbackMap.get(getCbKey(event, order))).ifPresent(
-            callback -> callback.accept(event, getContext())
-        );
-    }
-
-    private String getCbKey(TypesOfEventCallback cbType, LocationOfEventCallback order) {
-        return cbType + "#" + order;
-    }
-    private String getCbKey(Event event, LocationOfEventCallback order) {
-        return event.getClass().getSimpleName() + "#" + order;
-    }
-
     private EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
     private EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
     private EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
@@ -164,10 +134,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     private EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
     private EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
-    private void handleTestRunStarted(TestRunStarted event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-        // Nothing to be done in Serenity as of now
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
+    protected void handleTestRunStarted(TestRunStarted event) {
     }
 
     @Override
@@ -182,9 +149,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         publisher.registerHandlerFor(WriteEvent.class, writeEventHandler);
     }
 
-    private void handleTestSourceRead(TestSourceRead event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-
+    protected void handleTestSourceRead(TestSourceRead event) {
         featureLoader.addTestSourceReadEvent(event);
         URI featurePath = event.getUri();
 
@@ -199,8 +164,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                     getStepEventBus(event.getUri()).testSuiteStarted(userStory);
                 }
         );
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
     private void resetEventBusFor(URI featurePath) {
@@ -227,7 +190,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         }
     }
 
-    Optional<Feature> featureFrom(URI featureFileUri) {
+    protected Optional<Feature> featureFrom(URI featureFileUri) {
 
         LOGGER.info("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
@@ -265,8 +228,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return userStory;
     }
 
-    private void handleTestCaseStarted(TestCaseStarted event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
+    protected void handleTestCaseStarted(TestCaseStarted event) {
 
         URI featurePath = event.getTestCase().getUri();
         getContext().currentFeaturePathIs(featurePath);
@@ -315,8 +277,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         if (rule != null) {
             getContext().stepEventBus().setRule(Rule.from(rule));
         }
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
     private io.cucumber.messages.types.Rule getRuleForTestCase(TestSourcesModel.AstNode astNode) {
@@ -345,9 +305,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return (Feature) astNode.node;
     }
 
-    private void handleTestCaseFinished(TestCaseFinished event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-
+    protected void handleTestCaseFinished(TestCaseFinished event) {
         if (getContext().examplesAreRunning()) {
             handleResult(event.getResult());
             finishExample();
@@ -358,8 +316,6 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             getStepEventBus(event.getTestCase().getUri()).testFinished(getContext().examplesAreRunning());
         }
         getContext().clearStepQueue();
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
     private boolean noAnnotatedResultIdDefinedFor(TestCaseFinished event) {
@@ -371,9 +327,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return testOutcomes.get(testOutcomes.size() - 1);
     }
 
-    private void handleTestStepStarted(TestStepStarted event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-
+    protected void handleTestStepStarted(TestStepStarted event) {
         StepDefinitionAnnotations.setScreenshotPreferencesTo(
                 StepDefinitionAnnotationReader
                         .withScreenshotLevel((TakeScreenshots) systemConfiguration.getScreenshotLevel()
@@ -403,33 +357,23 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                 }
             }
         }
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
-    private void handleWrite(WriteEvent event) {
+    protected void handleWrite(WriteEvent event) {
         getContext().stepEventBus().stepStarted(ExecutedStepDescription.withTitle(event.getText()));
         getContext().stepEventBus().stepFinished();
     }
 
-    private void handleTestStepFinished(TestStepFinished event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-
+    protected void handleTestStepFinished(TestStepFinished event) {
         if (!(event.getTestStep() instanceof HookTestStep)) {
             handleResult(event.getResult());
             StepDefinitionAnnotations.clear();
         }
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
-    private void handleTestRunFinished(TestRunFinished event) {
-        handleCallback(event, LocationOfEventCallback.METHOD_START);
-
+    protected void handleTestRunFinished(TestRunFinished event) {
         generateReports();
         assureTestSuiteFinished();
-
-        handleCallback(event, LocationOfEventCallback.METHOD_END);
     }
 
     private ReportService getReportService() {

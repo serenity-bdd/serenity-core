@@ -99,7 +99,8 @@ public class ChromiumOptionsBuilder {
             }
             Map<String, Object> browserSpecificOptions = NestedMap.called(capabilitySectionName).from(chromiumOptions.asMap());
             extraOptions.putAll(browserSpecificOptions);
-            chromiumOptions.setCapability(capabilitySectionName, extraOptions);
+            Map<String, Object> distinctExtraOptions = extraOptions.entrySet().stream().distinct().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            chromiumOptions.setCapability(capabilitySectionName, distinctExtraOptions);
         }
 
         // Log levels

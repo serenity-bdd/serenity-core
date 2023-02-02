@@ -91,7 +91,7 @@ public class ChromiumOptionsBuilder {
                         chromiumOptions.setExperimentalOption("prefs", NestedMap.called("prefs").from(options));
                         break;
                     case "excludeSwitches":
-                        chromiumOptions.setExperimentalOption("excludeSwitches", ListOfValues.from(options).forProperty("args"));
+                        chromiumOptions.setExperimentalOption("excludeSwitches", ListOfValues.from(options).forProperty("excludeSwitches"));
                         break;
                     default:
                         extraOptions.put(optionName, options.get(optionName));

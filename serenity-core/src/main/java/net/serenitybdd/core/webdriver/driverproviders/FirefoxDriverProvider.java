@@ -48,7 +48,7 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
         //
         firefoxOptions.addArguments(argumentsIn(options));
         if (ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables)) {
-            firefoxOptions.setHeadless(ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables));
+            firefoxOptions.addArguments("-headless");
         }
         //
         // Check for extended classes to add extra ChromeOptions configuration

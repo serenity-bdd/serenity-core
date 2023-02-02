@@ -1502,7 +1502,7 @@ public enum ThucydidesSystemProperty {
     SAFARI_USE_CLEAN_SESSION,
 
     /**
-     * Activate headless mode for chrome or firefox
+     * Activate headless mode for chrome, firefox or edge
      */
     HEADLESS_MODE,
 

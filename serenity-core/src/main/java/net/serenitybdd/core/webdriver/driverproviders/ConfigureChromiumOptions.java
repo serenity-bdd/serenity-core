@@ -60,7 +60,9 @@ public class ConfigureChromiumOptions {
         //
         // Headless mode from command line or headless.mode property
         //
-        chromeOptions.setHeadless(HEADLESS_MODE.booleanFrom(environmentVariables,false));
+        if (HEADLESS_MODE.booleanFrom(environmentVariables,false)) {
+            chromeOptions.addArguments("--headless=chrome");
+        }
         //
         // Legacy accept.insecure.certificates switch
         //

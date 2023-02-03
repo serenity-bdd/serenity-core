@@ -47,7 +47,7 @@ public class JUnit5CSVTestDataSource implements TestDataSource {
     private List<String> instantiated(List<String> paths) {
         List<String> instantiated = new ArrayList<>();
         for(String path : paths) {
-            instantiated.add(testDataSourcePath.getInstanciatedPath(path));
+            instantiated.add(testDataSourcePath.getInstanciatedPath(path).replace("\\", "/"));
         }
         return instantiated;
     }

@@ -71,15 +71,9 @@ public class RemoteDriverProvider implements DriverProvider {
             }
             //
             // Call any FixtureService and BeforeAWebdriverScenario classes
-            TestOutcome testOutcome =null;
-            if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()){
-                testOutcome =StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
-            } else {
-                testOutcome = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome();
-            }
             EnhanceCapabilitiesWithFixtures.using(fixtureProviderService).into(capabilities);
             AddCustomDriverCapabilities.from(environmentVariables)
-                    .withTestDetails(SupportedWebDriver.getDriverTypeFor(driverName), testOutcome)
+                    .withTestDetails(SupportedWebDriver.getDriverTypeFor(driverName), StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome())
                     .to(capabilities);
             //
             // Record browser and platform

@@ -130,10 +130,11 @@ public class JUnit5DataDrivenAnnotations {
 
     private void fillDataTablesFromCsvFileSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         CsvFileSource annotation = testDataMethod.getAnnotation(CsvFileSource.class);
+        String[] paths = annotation.resources().length == 0 ? annotation.files() : annotation.resources();
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
         try {
-            JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(annotation.resources()), CSVReader.DEFAULT_SEPARATOR);
+            JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(paths), CSVReader.DEFAULT_SEPARATOR);
             List<Map<String, String>> data = csvTestDataSource.getData();
             List<List<Object>> rows  = new ArrayList<>();
             for(Map<String,String> dataRowMap : data)

@@ -91,7 +91,7 @@ public class ChromiumOptionsBuilder {
                         chromiumOptions.setExperimentalOption("prefs", NestedMap.called("prefs").from(options));
                         break;
                     case "excludeSwitches":
-                        chromiumOptions.setExperimentalOption("excludeSwitches", ListOfValues.from(options).forProperty("args"));
+                        chromiumOptions.setExperimentalOption("excludeSwitches", ListOfValues.from(options).forProperty("excludeSwitches"));
                         break;
                     default:
                         extraOptions.put(optionName, options.get(optionName));
@@ -99,7 +99,8 @@ public class ChromiumOptionsBuilder {
             }
             Map<String, Object> browserSpecificOptions = NestedMap.called(capabilitySectionName).from(chromiumOptions.asMap());
             extraOptions.putAll(browserSpecificOptions);
-            chromiumOptions.setCapability(capabilitySectionName, extraOptions);
+            Map<String, Object> distinctExtraOptions = extraOptions.entrySet().stream().distinct().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            chromiumOptions.setCapability(capabilitySectionName, distinctExtraOptions);
         }
 
         // Log levels

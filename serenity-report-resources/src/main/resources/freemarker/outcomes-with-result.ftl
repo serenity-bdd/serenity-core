@@ -21,6 +21,7 @@
     <#include "components/duration-chart.ftl">
     <#include "components/functional-coverage-chart.ftl">
     <#include "components/tag_cloud.ftl">
+    <#include "components/key-statistics.ftl">
 
 <#assign manualTests = testOutcomes.count("manual")>
 <#assign automatedTests = testOutcomes.count("automated")>
@@ -216,69 +217,8 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-sm-4">
-                                                        <div>
-                                                            <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
-                                                            <div>
-                                                                <table class="table table-striped table-hover">
-                                                                    <tbody>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-card-checklist"></i> Number of Scenarios
-                                                                        </td>
-                                                                        <td>${testOutcomes.scenarioCount}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-caret-right"></i> Number of Test Cases
-                                                                        </td>
-                                                                        <td>${testOutcomes.testCaseCount}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-flag-fill"></i> Tests Started
-                                                                        </td>
-                                                                        <td>${startTimestamp}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-stop-circle"></i> Tests Finished
-                                                                        </td>
-                                                                        <td>${endTimestamp}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-stopwatch"></i> Total Duration
-                                                                        </td>
-                                                                        <td>${totalClockDuration}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-trophy"></i> Fastest Test
-                                                                        </td>
-                                                                        <td>${minTestDuration}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-skip-start"></i> Slowest Test
-                                                                        </td>
-                                                                        <td>${maxTestDuration}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-stopwatch"></i> Average Execution Time
-                                                                        </td>
-                                                                        <td>${averageTestDuration}</td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td>
-                                                                            <i class="bi bi-stopwatch-fill"></i> Total Execution Time
-                                                                        </td>
-                                                                        <td>${totalTestDuration}</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
+                                                        <@key_statistics testOutcomes=testOutcomes />
+
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>

@@ -1321,24 +1321,36 @@ public abstract class PageObject {
     }
 
     public Object evaluateJavascript(final String script) {
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
+            return "";
+        }
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeScript(script);
     }
 
     public Object evaluateAsyncJavascript(final String script) {
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
+            return "";
+        }
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeAsyncScript(script);
     }
 
     public Object evaluateJavascript(final String script, final Object... params) {
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
+            return "";
+        }
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeScript(script, params);
     }
 
     public Object evaluateAsyncJavascript(final String script, final Object... params) {
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
+            return "";
+        }
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeAsyncScript(script, params);

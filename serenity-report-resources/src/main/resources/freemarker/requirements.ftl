@@ -27,6 +27,8 @@
     <#include "components/duration-chart.ftl">
     <#include "components/functional-coverage-chart.ftl">
     <#include "components/tag_cloud.ftl">
+    <#include "components/key-statistics.ftl">
+    <#include "components/key-statistics-two-col.ftl">
 
     <#assign testResultData = resultCounts.byTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
     <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","aborted","failure","error","compromised") >
@@ -313,76 +315,8 @@
                                                 <div id="tree"></div>
 
                                                 <!-- STATS -->
-                                                <div>
-                                                    <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
-                                                    <div>
-                                                        <table class="table table-striped table-hover">
-                                                            <tbody>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-card-checklist"></i> Number of Scenarios
-                                                                </td>
-                                                                <td>${testOutcomes.scenarioCount}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-caret-right"></i> Number of Test Cases
-                                                                </td>
-                                                                <td>${testOutcomes.testCaseCount}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-flag-fill"></i> Tests Started
-                                                                </td>
-                                                                <td>${startTimestamp}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-stop-circle"></i> Tests
-                                                                    Finished
-                                                                </td>
-                                                                <td>${endTimestamp}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-stopwatch"></i> Total
-                                                                    Duration
-                                                                </td>
-                                                                <td>${totalClockDuration}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-trophy"></i> Fastest Test
-                                                                </td>
-                                                                <td>${minTestDuration}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-skip-start"></i> Slowest
-                                                                    Test
-                                                                </td>
-                                                                <td>${maxTestDuration}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-stopwatch"></i> Average
-                                                                    Execution Time
-                                                                </td>
-                                                                <td>${averageTestDuration}</td>
-                                                            </tr>
-                                                            <tr scope="row">
-                                                                <td>
-                                                                    <i class="bi bi-stopwatch-fill"></i> Total
-                                                                    Execution Time
-                                                                </td>
-                                                                <td>${totalTestDuration}</td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
+                                                <@key_statistics testOutcomes=testOutcomes />
                                                 <!-- END STATS -->
-
 
                                                 <#else>
                                                 <!--- TOC --->
@@ -615,6 +549,8 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-12">
+                                                <@key_statistics_two_columns testOutcomes=testOutcomes />
+
                                                 <h3><i class="bi bi-gear"></i> Automated Tests</h3>
 
                                                 <#if (automatedTestCases?has_content)>
@@ -743,7 +679,7 @@
                                                                                     <br/>${exampleOutcome.subtitle}
                                                                                 </#if>
                                                                         </td>
-                                                                        <td>${context_icon}<span style="display:none">${context_label}</span> </td>
+                                                                        <td><i class="bi bi-person"></i></td>
                                                                         <td>${exampleOutcome.stepCount}</td>
                                                                         <td>${example_outcome_icon} <span
                                                                                     style="display:none">${exampleOutcome.result}</span>
@@ -768,7 +704,7 @@
                                                                     <td>
                                                                         <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                     </td>
-                                                                    <td>${context_icon}</td>
+                                                                    <td><i class="bi bi-person"></i></td>
                                                                     <td>${scenario.stepCount}</td>
                                                                     <td>${outcome_icon}
                                                                         <span style="display:none">${scenario.result}</span>

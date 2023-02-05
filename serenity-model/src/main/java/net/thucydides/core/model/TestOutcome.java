@@ -57,6 +57,7 @@ import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.reverse;
 import static java.util.Arrays.asList;
 import static net.thucydides.core.model.TestType.ANY;
+import static net.thucydides.core.model.TestType.MANUAL;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -2175,7 +2176,9 @@ public class TestOutcome {
     }
 
     public int countResults(TestResult expectedResult, TestType expectedType) {
-        if (annotatedResult != null && !annotatedResult.executedResultsCount()) {
+        if (isManual() && (expectedType == ANY || expectedType == MANUAL)) {
+            return (getResult() == expectedResult) ? testCaseCount() : 0;
+        } else if (annotatedResult != null && !annotatedResult.executedResultsCount()) {
             return annotatedResultCount(expectedResult, expectedType);
         }
 
@@ -2184,6 +2187,14 @@ public class TestOutcome {
         }
 
         return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
+    }
+
+    private int testCaseCount() {
+        if (isDataDriven()) {
+            return testSteps.size();
+        } else {
+            return 1;
+        }
     }
 
     private int annotatedResultCount(TestResult expectedResult, TestType expectedType) {

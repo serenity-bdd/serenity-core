@@ -115,6 +115,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
     }
 
     public WebDriver getProxiedDriver() {
+        if (StepEventBus.getParallelEventBus().isDryRun()){
+            return new WebDriverStub();
+        }
         if (proxiedWebDriver == null) {
             proxiedWebDriver = newProxyDriver();
             WebdriverProxyFactory.getFactory().notifyListenersOfWebdriverCreationIn(this);

@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>3.6.10-SNAPSHOT</version>
+    <version>3.6.10</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -33,7 +33,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-        <tag>3.1.7</tag>
+        <tag>3.6.10</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,7 +88,7 @@
         <wiremock.version>1.58</wiremock.version>
         <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
         <javassist.version>3.29.2-GA</javassist.version>
-        <jackson.version>2.13.4.1</jackson.version>
+        <jackson.version>2.14.2</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <!-- Kotlin config -->
         <kotlin.version>1.7.21</kotlin.version>

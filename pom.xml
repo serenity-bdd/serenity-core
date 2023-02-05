@@ -728,6 +728,8 @@
         <module>serenity-cucumber</module>
         <module>serenity-maven-plugin</module>
         <module>serenity-single-page-report</module>
+        <module>serenity-jira-plugin</module>
+        <module>serenity-jira-requirements-provider</module>
         <module>serenity-json-summary-report</module>
         <module>serenity-navigator-report</module>
         <module>serenity-screenplay-rest</module>

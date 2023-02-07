@@ -15,9 +15,12 @@ import io.cucumber.core.filter.Filters;
 import io.cucumber.core.gherkin.Feature;
 import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.core.options.*;
+import io.cucumber.core.plugin.PluginFactory;
 import io.cucumber.core.plugin.Plugins;
+import io.cucumber.core.plugin.SerenityReporter;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.*;
+import io.cucumber.plugin.Plugin;
 import io.cucumber.tagexpressions.Expression;
 import java.net.URI;
 import java.time.Clock;
@@ -50,24 +53,54 @@ import org.junit.runners.model.Statement;
 public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
 
 
-    protected EventBus bus;
+    private EventBus bus;
 
-    protected Plugins plugins;
+    private Plugins plugins;
 
     private List<ParentRunner<?>> children;
 
-    protected List<Feature> features;
-    protected CucumberExecutionContext context;
+    private List<Feature> features;
+    private CucumberExecutionContext context;
 
     protected boolean multiThreadingAssumed = false;
 
 
-    static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>();
+    static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>(); // NOSONAR
 
-    private static RuntimeOptions DEFAULT_RUNTIME_OPTIONS;
+    private static RuntimeOptions DEFAULT_RUNTIME_OPTIONS; // NOSONAR
 
     public CucumberSerenityBaseRunner(Class clazz) throws InitializationError {
         super(clazz);
+    }
+
+    protected EventBus getEventBus() {
+        return bus;
+    }
+
+    protected List<Feature> getFeatures() {
+      return features;
+    }
+
+    protected void initiatePluginsList(RuntimeOptions runtimeOptions) {
+        plugins = new Plugins(new PluginFactory(), runtimeOptions);
+    }
+
+    protected void addPlugin(Plugin plugin) {
+        plugins.addPlugin(plugin);
+    }
+
+    protected boolean addPluginIfNotInList(Plugin plugin, Class<?> clazz) {
+        for (Plugin currentPlugin : plugins.getPlugins()) {
+            if (clazz.isInstance(currentPlugin)) {
+                return false;
+            }
+        }
+        plugins.addPlugin(plugin);
+        return true;
+    }
+
+    protected void initiateContext(ExitStatus exitStatus, ThreadLocalRunnerSupplier runnerSupplier) {
+        this.context = new CucumberExecutionContext(getEventBus(), exitStatus, runnerSupplier);
     }
 
 
@@ -129,7 +162,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
             return CucumberProperties.fromSystemProperties();
         } else {
             Map<String, String> systemProperties = new HashMap<>(CucumberProperties.fromSystemProperties());
-            SerenityOptions options = (SerenityOptions) clazz.getAnnotation(SerenityOptions.class);
+            SerenityOptions options = clazz.getAnnotation(SerenityOptions.class);
             stream(options.value().split(",")).forEach(
                 option -> {
                     String[] optionParts = option.split("=");
@@ -153,7 +186,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
     }
 
     private static String toCucumberTag(String from) {
-        String tag = from.replaceAll(":", "=");
+        String tag = from.replace(":", "=");
         if (tag.startsWith("~@") || tag.startsWith("@")) {
             return tag;
         }
@@ -182,13 +215,12 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
         this.features = featureSupplier.get();
     }
 
-    protected ThreadLocalRunnerSupplier initializeServices(Class clazz, RuntimeOptions runtimeOptions) {
+    protected ThreadLocalRunnerSupplier initializeServices(Class<?> clazz, RuntimeOptions runtimeOptions) {
         Supplier<ClassLoader> classLoader = ClassLoaders::getDefaultClassLoader;
         ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(classLoader, runtimeOptions);
         ObjectFactorySupplier objectFactorySupplier = new ThreadLocalObjectFactorySupplier(objectFactoryServiceLoader);
         BackendSupplier backendSupplier = new BackendServiceLoader(clazz::getClassLoader, objectFactorySupplier);
-        ThreadLocalRunnerSupplier runnerSupplier = new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier, objectFactorySupplier);
-        return runnerSupplier;
+        return new ThreadLocalRunnerSupplier(runtimeOptions, bus, backendSupplier, objectFactorySupplier);
     }
 
 

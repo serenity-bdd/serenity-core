@@ -63,19 +63,19 @@ public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
         parseFeaturesEarly();
 
         // Create plugins after feature parsing to avoid the creation of empty files on lexer errors.
-        plugins = new Plugins(new PluginFactory(), runtimeOptions);
+        initiatePluginsList(runtimeOptions);
         ExitStatus exitStatus = new ExitStatus(runtimeOptions);
-        plugins.addPlugin(exitStatus);
+        addPlugin(exitStatus);
 
         ThreadLocalRunnerSupplier runnerSupplier = initializeServices(clazz, runtimeOptions);
 
         Configuration systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
         SerenityReporter reporter = new SerenityReporter(systemConfiguration);
-        addSerenityReporterPlugin(plugins, reporter);
+        addPluginIfNotInList(reporter, SerenityReporter.class);
 
-        this.context = new CucumberExecutionContext(bus, exitStatus, runnerSupplier);
+        initiateContext(exitStatus, runnerSupplier);
 
-        createFeatureRunners(features, runtimeOptions, junitOptions);
+        createFeatureRunners(getFeatures(), runtimeOptions, junitOptions);
     }
 
 
@@ -103,14 +103,5 @@ public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
                 build();
 
         return runtime;
-    }
-
-    private static void addSerenityReporterPlugin(Plugins plugins, SerenityReporter plugin) {
-        for (Plugin currentPlugin : plugins.getPlugins()) {
-            if (currentPlugin instanceof SerenityReporter) {
-                return;
-            }
-        }
-        plugins.addPlugin(plugin);
     }
 }

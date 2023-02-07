@@ -17,7 +17,6 @@ import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.core.options.*;
 import io.cucumber.core.plugin.PluginFactory;
 import io.cucumber.core.plugin.Plugins;
-import io.cucumber.core.plugin.SerenityReporter;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.*;
 import io.cucumber.plugin.Plugin;
@@ -62,7 +61,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
     private List<Feature> features;
     private CucumberExecutionContext context;
 
-    protected boolean multiThreadingAssumed = false;
+    private boolean multiThreadingAssumed = false;
 
 
     static ThreadLocal<RuntimeOptions> RUNTIME_OPTIONS = new ThreadLocal<>(); // NOSONAR
@@ -132,9 +131,8 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
         return runtimeOptionsBuilder.build(runtimeOptions);
     }
 
-    protected EventBus initializeBus() {
+    protected void initializeBus() {
         bus = synchronize(new TimeServiceEventBus(Clock.systemUTC(), UUID::randomUUID));
-        return bus;
     }
 
     protected JUnitOptions createJUnitOptions(Class<?> clazz) {

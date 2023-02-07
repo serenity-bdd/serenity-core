@@ -2,42 +2,18 @@ package io.cucumber.junit;
 
 import io.cucumber.core.eventbus.EventBus;
 import io.cucumber.core.feature.FeatureParser;
-import io.cucumber.core.filter.Filters;
-import io.cucumber.core.gherkin.Feature;
-import io.cucumber.core.gherkin.Pickle;
-import io.cucumber.core.options.*;
-import io.cucumber.core.plugin.PluginFactory;
-import io.cucumber.core.plugin.Plugins;
+import io.cucumber.core.options.RuntimeOptions;
+import io.cucumber.core.options.RuntimeOptionsBuilder;
 import io.cucumber.core.plugin.SerenityReporter;
-import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
 import io.cucumber.core.runtime.*;
-import io.cucumber.plugin.Plugin;
-import net.serenitybdd.cucumber.SerenityOptions;
-import net.serenitybdd.cucumber.suiteslicing.ScenarioFilter;
-import net.serenitybdd.cucumber.suiteslicing.WeightedCucumberScenarios;
-import net.serenitybdd.cucumber.util.PathUtils;
+import java.time.Clock;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.function.Supplier;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
-import org.jetbrains.annotations.NotNull;
-import org.junit.runner.manipulation.NoTestsRemainException;
-import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.RunnerScheduler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.time.Clock;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-import static io.cucumber.junit.FileNameCompatibleNames.uniqueSuffix;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Glue code for running Cucumber via Serenity.
@@ -97,11 +73,10 @@ public class CucumberSerenityRunner extends CucumberSerenityBaseRunner {
         FeaturePathFeatureSupplier featureSupplier = new FeaturePathFeatureSupplier(classLoaderSupplier, runtimeOptions, parser);
 
         SerenityReporter serenityReporter = new SerenityReporter(systemConfiguration);
-        Runtime runtime = Runtime.builder().withClassLoader(classLoaderSupplier).withRuntimeOptions(runtimeOptions).
+
+        return Runtime.builder().withClassLoader(classLoaderSupplier).withRuntimeOptions(runtimeOptions).
                 withAdditionalPlugins(serenityReporter).
                 withEventBus(bus).withFeatureSupplier(featureSupplier).
                 build();
-
-        return runtime;
     }
 }

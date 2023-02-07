@@ -38,7 +38,6 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
@@ -183,7 +182,6 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
         this.features = featureSupplier.get();
     }
 
-    @NotNull
     protected ThreadLocalRunnerSupplier initializeServices(Class clazz, RuntimeOptions runtimeOptions) {
         Supplier<ClassLoader> classLoader = ClassLoaders::getDefaultClassLoader;
         ObjectFactoryServiceLoader objectFactoryServiceLoader = new ObjectFactoryServiceLoader(classLoader, runtimeOptions);

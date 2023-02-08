@@ -85,7 +85,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Set<URI> contextURISet = new CopyOnWriteArraySet<>();
 
-    private ScenarioContext getContext() {
+    protected ScenarioContext getContext() {
         return localContext.get();
     }
 
@@ -134,23 +134,22 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     private EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
     private EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
-    private void handleTestRunStarted(TestRunStarted event) {
+    protected void handleTestRunStarted(TestRunStarted event) {
     }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
-        publisher.registerHandlerFor(TestSourceRead.class, testSourceReadHandler);
         publisher.registerHandlerFor(TestRunStarted.class, runStartedHandler);
-        publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
+        publisher.registerHandlerFor(TestSourceRead.class, testSourceReadHandler);
         publisher.registerHandlerFor(TestCaseStarted.class, caseStartedHandler);
-        publisher.registerHandlerFor(TestCaseFinished.class, caseFinishedHandler);
         publisher.registerHandlerFor(TestStepStarted.class, stepStartedHandler);
         publisher.registerHandlerFor(TestStepFinished.class, stepFinishedHandler);
+        publisher.registerHandlerFor(TestCaseFinished.class, caseFinishedHandler);
+        publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
         publisher.registerHandlerFor(WriteEvent.class, writeEventHandler);
     }
 
-    private void handleTestSourceRead(TestSourceRead event) {
-
+    protected void handleTestSourceRead(TestSourceRead event) {
         featureLoader.addTestSourceReadEvent(event);
         URI featurePath = event.getUri();
 
@@ -191,7 +190,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         }
     }
 
-    private Optional<Feature> featureFrom(URI featureFileUri) {
+    protected Optional<Feature> featureFrom(URI featureFileUri) {
 
         LOGGER.info("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
@@ -229,7 +228,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return userStory;
     }
 
-    private void handleTestCaseStarted(TestCaseStarted event) {
+    protected void handleTestCaseStarted(TestCaseStarted event) {
 
         URI featurePath = event.getTestCase().getUri();
         getContext().currentFeaturePathIs(featurePath);
@@ -306,7 +305,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return (Feature) astNode.node;
     }
 
-    private void handleTestCaseFinished(TestCaseFinished event) {
+    protected void handleTestCaseFinished(TestCaseFinished event) {
         if (getContext().examplesAreRunning()) {
             handleResult(event.getResult());
             finishExample();
@@ -328,7 +327,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return testOutcomes.get(testOutcomes.size() - 1);
     }
 
-    private void handleTestStepStarted(TestStepStarted event) {
+    protected void handleTestStepStarted(TestStepStarted event) {
         StepDefinitionAnnotations.setScreenshotPreferencesTo(
                 StepDefinitionAnnotationReader
                         .withScreenshotLevel((TakeScreenshots) systemConfiguration.getScreenshotLevel()
@@ -360,20 +359,19 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         }
     }
 
-    private void handleWrite(WriteEvent event) {
+    protected void handleWrite(WriteEvent event) {
         getContext().stepEventBus().stepStarted(ExecutedStepDescription.withTitle(event.getText()));
         getContext().stepEventBus().stepFinished();
     }
 
-    private void handleTestStepFinished(TestStepFinished event) {
+    protected void handleTestStepFinished(TestStepFinished event) {
         if (!(event.getTestStep() instanceof HookTestStep)) {
             handleResult(event.getResult());
             StepDefinitionAnnotations.clear();
         }
-
     }
 
-    private void handleTestRunFinished(TestRunFinished event) {
+    protected void handleTestRunFinished(TestRunFinished event) {
         generateReports();
         assureTestSuiteFinished();
     }

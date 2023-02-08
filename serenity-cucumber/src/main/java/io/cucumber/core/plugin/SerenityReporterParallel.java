@@ -196,7 +196,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private Optional<Feature> featureFrom(URI featureFileUri) {
 
-        LOGGER.info("Running feature from " + featureFileUri.toString());
+        LOGGER.debug("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
             LOGGER.warn("Feature from " + featureFileUri + " is not under the 'features' directory. Requirements report will not be correctly generated!");
         }
@@ -336,7 +336,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
     private void handleTestCaseFinished(TestCaseFinished event) {
-        LOGGER.info("SRP:handleTestCaseFinished " + " " + event.getTestCase().getUri()
+        LOGGER.debug("SRP:handleTestCaseFinished " + " " + event.getTestCase().getUri()
                 + " " + Thread.currentThread() + " " + event.getTestCase().getId() + " at line " + event.getTestCase().getLocation().getLine());
         URI featurePath = event.getTestCase().getUri();
         Optional<Feature> currentFeature = featureFrom(featurePath);
@@ -1037,7 +1037,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void generateReports() {
         List<TestOutcome> allTestOutcomes = getAllTestOutcomes();
-        LOGGER.info("SRP:AllTestOutcomes " + allTestOutcomes.size());
+        LOGGER.debug("SRP:AllTestOutcomes " + allTestOutcomes.size());
         getReportService().generateReportsFor(allTestOutcomes);
     }
 
@@ -1045,7 +1045,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     public List<TestOutcome> getAllTestOutcomes() {
         List<BaseStepListener> allBaseStepListeners = new ArrayList<>();
         localContexts.forEach((uri, context) -> {
-                    LOGGER.info("SRP:AllTestOutcomes for uri " + uri);
+                    LOGGER.debug("SRP:AllTestOutcomes for uri " + uri);
                     context.collectAllBaseStepListeners(allBaseStepListeners);
                 }
         );

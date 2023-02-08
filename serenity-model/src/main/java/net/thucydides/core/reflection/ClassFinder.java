@@ -89,6 +89,9 @@ public class ClassFinder {
      * @return The classes
      */
     public static List<Class<?>> getClasses(String packageName) {
+        if (packageName.isEmpty()) {
+            return new ArrayList<>();
+        }
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             assert classLoader != null;

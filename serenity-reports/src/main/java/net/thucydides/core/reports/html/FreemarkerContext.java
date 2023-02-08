@@ -157,7 +157,8 @@ public class FreemarkerContext {
 
         context.put("testCount", testOutcomes.getOutcomes().size());
         context.put("scenarioCount", testOutcomes.getNumberOfTestScenarios());
-        context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
+//        context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
+        context.put("resultCounts", ResultCountCache.resultCountsFor(testOutcomes));
 
         context.put("scenarios", scenarios);
         context.put("filteredScenarios", scenarios);

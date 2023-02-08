@@ -193,7 +193,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Optional<Feature> featureFrom(URI featureFileUri) {
 
-        LOGGER.info("Running feature from " + featureFileUri.toString());
+        LOGGER.debug("Running feature from " + featureFileUri.toString());
         if (!featureFileUri.toString().contains(FEATURES_ROOT_PATH) && !featureFileUri.toString().contains(FEATURES_CLASSPATH_ROOT_PATH)) {
             LOGGER.warn("Feature from " + featureFileUri + " is not under the 'features' directory. Requirements report will not be correctly generated!");
         }

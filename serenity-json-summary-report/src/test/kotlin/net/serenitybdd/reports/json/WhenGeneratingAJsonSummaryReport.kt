@@ -70,8 +70,7 @@ class WhenGeneratingAJsonSummaryReport {
             generatedReport = reporter.generateReport()
             reportContents = generatedReport.toFile().readText()
 
-            val parser = JsonParser()
-            jsonTree = parser.parse(reportContents).asJsonObject
+            jsonTree = JsonParser.parseString(reportContents).asJsonObject
         }
 
         @Test

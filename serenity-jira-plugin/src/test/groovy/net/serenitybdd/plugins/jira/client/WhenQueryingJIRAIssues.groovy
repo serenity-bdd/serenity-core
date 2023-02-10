@@ -6,8 +6,11 @@ import spock.lang.Specification
 
 class WhenQueryingJIRAIssues extends Specification {
 
-    def globalJiraClient =  new JerseyJiraClient(JiraConnectionSettings.getJIRAWebserviceURL(),JiraConnectionSettings.getJIRAUserName(),
-            JiraConnectionSettings.getJIRAUserApiToken(),"DEMO");
+    def globalJiraClient =  new JerseyJiraClient(
+            JiraConnectionSettings.getJIRAWebserviceURL(),
+            JiraConnectionSettings.getJIRAUserName(),
+            JiraConnectionSettings.getJIRAUserApiToken(),
+            "DEMO");
 
     def "should be able to read the status of an issue"() {
         given:

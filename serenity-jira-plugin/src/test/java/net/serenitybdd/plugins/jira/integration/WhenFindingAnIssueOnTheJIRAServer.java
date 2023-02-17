@@ -1,5 +1,6 @@
 package net.serenitybdd.plugins.jira.integration;
 
+import net.serenitybdd.plugins.jira.JiraConnectionSettings;
 import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
 import net.serenitybdd.plugins.jira.domain.IssueComment;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
@@ -16,21 +17,17 @@ import static org.junit.Assert.assertThat;
 
 public class WhenFindingAnIssueOnTheJIRAServer {
 
-    private final static String JIRA_WEBSERVICE_URL = "https://thucydides.atlassian.net/";
-    private final static String USER_NAME = "serenity.jira@gmail.com";
-    private final static String USER_API_TOKEN = "sZePVVAsoFW7E7bzZuZy43BF";
-
-
     private String issueKey;
 
     private IssueHarness testIssueHarness;
 
-    private JerseyJiraClient jiraClient = new JerseyJiraClient(JIRA_WEBSERVICE_URL,USER_NAME, USER_API_TOKEN,IssueHarness.PROJECT) ;
+    private JerseyJiraClient jiraClient = new JerseyJiraClient(JiraConnectionSettings.getJIRAWebserviceURL(),
+                                                                JiraConnectionSettings.getJIRAUserName(),
+                                                                JiraConnectionSettings.getJIRAUserApiToken(),IssueHarness.PROJECT) ;
 
     @Before
     public void createTestIssue() throws Exception {
-
-        testIssueHarness = new IssueHarness(JIRA_WEBSERVICE_URL,USER_NAME, USER_API_TOKEN,IssueHarness.PROJECT);
+        testIssueHarness = new IssueHarness(JiraConnectionSettings.getJIRAWebserviceURL(),JiraConnectionSettings.getJIRAUserName(), JiraConnectionSettings.getJIRAUserApiToken(),IssueHarness.PROJECT);
         issueKey = testIssueHarness.createTestIssue();
     }
 

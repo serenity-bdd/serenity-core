@@ -846,7 +846,9 @@ public class StepEventBus {
      * Forces Thucydides to take a screenshot now.
      */
     public void takeScreenshot() {
-        getBaseStepListener().takeScreenshot();
+        if (!isDryRun()) {
+            getBaseStepListener().takeScreenshot();
+        }
     }
 
     public void notifyFailure() {
@@ -1088,11 +1090,14 @@ public class StepEventBus {
     }
 
     public List<ScreenshotAndHtmlSource> takeScreenshots() {
-        LOGGER.debug("SRP:takeScreenshots");
-        List<ScreenshotAndHtmlSource> screenshots =  new ArrayList<>();
-        for (StepListener stepListener : getAllListeners()) {
-            stepListener.takeScreenshots(screenshots);
+        if (!isDryRun()) {
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.takeScreenshots(screenshots);
+            }
+            return screenshots;
+        } else {
+            return new ArrayList<>();
         }
-        return screenshots;
     }
 }

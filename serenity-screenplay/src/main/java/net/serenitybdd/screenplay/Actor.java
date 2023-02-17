@@ -198,6 +198,11 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     }
 
     public final void attemptsTo(ErrorHandlingMode mode, Performable... tasks) {
+        // Do not perform tasks if the test is being run in dry-run mode (e.g. for manual tests)
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
+            return;
+        }
+
         beginPerformance();
         for (Performable task : tasks) {
             if (isNestedInSilentTask()) {

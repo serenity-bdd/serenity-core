@@ -91,13 +91,13 @@ class CoverageByTagType(
         return tagCoverage.size == tagCoverage.map { coverage -> coverage.tagName }.distinct().size
     }
 
-
     fun renderedTestCountsWithStatus(result: String): String {
         val resultCounts = tagCoverage.map { coverageByTag ->
-            coverageByTag.getCoverageSegments().find { segment -> segment.result.isEqualTo(result) }?.count
+            coverageByTag.getCoverageSegments().find { segment ->
+                segment.result.isEqualTo(result)
+            }?.count ?: 0
         }
-
-        return "[" + resultCounts.joinToString(",") + "]"
+        return if (resultCounts.isEmpty()) "[]" else "[" + resultCounts.joinToString(",") + "]"
     }
 
     private fun coverageForEachTagOfType(

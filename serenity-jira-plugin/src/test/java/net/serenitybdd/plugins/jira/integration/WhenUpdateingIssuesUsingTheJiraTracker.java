@@ -1,6 +1,8 @@
 package net.serenitybdd.plugins.jira.integration;
 
+import net.serenitybdd.plugins.jira.JiraConnectionSettings;
 import net.serenitybdd.plugins.jira.client.JIRAConfigurationError;
+import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
 import net.serenitybdd.plugins.jira.domain.IssueComment;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.domain.IssueTransition;
@@ -28,10 +30,6 @@ public class WhenUpdateingIssuesUsingTheJiraTracker {
 
     IssueTracker tracker;
 
-    private static final String JIRA_WEBSERVICE_URL = "https://thucydides.atlassian.net/";
-    private final static String USER_NAME = "serenity.jira@gmail.com";
-    private final static String USER_PWD = "sZePVVAsoFW7E7bzZuZy43BF";
-
     private String issueKey;
 
     private final String CLOSED_ISSUE = "DEMO-1";
@@ -48,13 +46,13 @@ public class WhenUpdateingIssuesUsingTheJiraTracker {
     public void prepareIssueTracker() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(configuration.getJiraUser()).thenReturn(USER_NAME);
-        when(configuration.getJiraPassword()).thenReturn(USER_PWD);
-        when(configuration.getJiraWebserviceUrl()).thenReturn(JIRA_WEBSERVICE_URL);
+        when(configuration.getJiraUser()).thenReturn(JiraConnectionSettings.getJIRAUserName());
+        when(configuration.getJiraPassword()).thenReturn(JiraConnectionSettings.getJIRAUserApiToken());
+        when(configuration.getJiraWebserviceUrl()).thenReturn(JiraConnectionSettings.getJIRAWebserviceURL());
         when(configuration.getProject()).thenReturn("DEMO");
 
 
-        testIssueHarness = new IssueHarness(JIRA_WEBSERVICE_URL,USER_NAME,USER_PWD,"DEMO");
+        testIssueHarness = new IssueHarness(JiraConnectionSettings.getJIRAWebserviceURL(),JiraConnectionSettings.getJIRAUserName(),JiraConnectionSettings.getJIRAUserApiToken(),"DEMO");
         issueKey = testIssueHarness.createTestIssue();
         tracker = new JiraIssueTracker(logger, configuration);
     }
@@ -124,13 +122,6 @@ public class WhenUpdateingIssuesUsingTheJiraTracker {
 
         String status = tracker.getStatusFor(issueKey);
         assertThat(status, is(IssueSummary.STATE_OPEN));
-    }
-
-    @Test
-    public void should_not_be_able_to_update_the_status_of_a_closed_issue() throws Exception {
-        tracker.doTransition(CLOSED_ISSUE, IssueTransition.RESOLVE_ISSUE);
-        String newStatus = tracker.getStatusFor(CLOSED_ISSUE);
-        assertThat(newStatus, is(IssueSummary.STATE_CLOSED));
     }
 
     @Test

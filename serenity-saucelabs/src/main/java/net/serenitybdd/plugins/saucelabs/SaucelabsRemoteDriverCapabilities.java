@@ -1,14 +1,13 @@
 package net.serenitybdd.plugins.saucelabs;
 
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
@@ -72,14 +71,14 @@ public class SaucelabsRemoteDriverCapabilities {
     }
 
     private void configureBrowserAndPlatformIfDefinedInSaucelabsBlock(MutableCapabilities sourceCapabilities, MutableCapabilities capabilities) {
-        if (sourceCapabilities.getBrowserName() != null) {
+        if (StringUtils.isNotBlank(sourceCapabilities.getBrowserName())) {
             String browserName = sourceCapabilities.getBrowserName();
             capabilities.setCapability("browserName", SAUCELABS_BROWSER_NAMES.getOrDefault(browserName, browserName));
         }
-        if (sourceCapabilities.getBrowserVersion() != null) {
+        if (StringUtils.isNotBlank(sourceCapabilities.getBrowserVersion())) {
             capabilities.setCapability("browserVersion", sourceCapabilities.getBrowserVersion());
         }
-        if (sourceCapabilities.getCapability("platformName") != null) {
+        if (sourceCapabilities.getCapability("platformName") != null && !sourceCapabilities.getCapability("platformName").toString().isEmpty()) {
             capabilities.setCapability("platformName", sourceCapabilities.getCapability("platformName"));
         }
     }
@@ -90,7 +89,7 @@ public class SaucelabsRemoteDriverCapabilities {
             capabilities.setCapability("name", testName);
         } else {
             Optional<String> guessedTestName;
-            Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
+            Optional<TestOutcome> latestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome();
 
             guessedTestName = latestOutcome.map(
                     testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())

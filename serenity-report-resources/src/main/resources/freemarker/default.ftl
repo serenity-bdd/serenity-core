@@ -127,7 +127,11 @@
                                         </a>
                                 </span>
                                 </#list>
-                                ${formatter.contextIcon().forOutcome(testOutcome)}
+                                <#if (testOutcome.manual)>
+                                    <i class="bi bi-person"></i>
+                                <#else >
+                                    ${formatter.contextIcon().forOutcome(testOutcome)}
+                                </#if>
                             </p>
                         </td>
                     </tr>
@@ -148,7 +152,6 @@
                                 </span>
                             </span>
                             <#if (testOutcome.manual)>
-
                                 <#if (testOutcome.lastTested?? && testOutcome.manualTestingUpToDate)>
                                 <#-- Last tested and up to date-->
                                     <div class="manual-test-result">

@@ -57,6 +57,7 @@ import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.reverse;
 import static java.util.Arrays.asList;
 import static net.thucydides.core.model.TestType.ANY;
+import static net.thucydides.core.model.TestType.MANUAL;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -472,8 +473,8 @@ public class TestOutcome {
         this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
     }
 
-    protected TestOutcome(ZonedDateTime startTime,final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
-        this(name,testCase,userStory, environmentVariables);
+    protected TestOutcome(ZonedDateTime startTime, final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
+        this(name, testCase, userStory, environmentVariables);
         this.startTime = startTime;
     }
 
@@ -992,7 +993,7 @@ public class TestOutcome {
     }
 
     public boolean hasTagWithName(String tagName) {
-        for(TestTag tag : Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())) {
+        for (TestTag tag : Optional.ofNullable(getAllTags()).orElse(Collections.emptySet())) {
             if (tag.getName().equalsIgnoreCase(tagName)) {
                 return true;
             }
@@ -1344,7 +1345,7 @@ public class TestOutcome {
     }
 
     public boolean hasScreenshots() {
-        for(TestStep step : getFlattenedTestSteps()) {
+        for (TestStep step : getFlattenedTestSteps()) {
             if (step.hasScreenshots()) {
                 return true;
             }
@@ -2175,7 +2176,9 @@ public class TestOutcome {
     }
 
     public int countResults(TestResult expectedResult, TestType expectedType) {
-        if (annotatedResult != null && !annotatedResult.executedResultsCount()) {
+        if (isManual() && (expectedType == ANY || expectedType == MANUAL)) {
+            return (getResult() == expectedResult) ? testCaseCount() : 0;
+        } else if (annotatedResult != null && !annotatedResult.executedResultsCount()) {
             return annotatedResultCount(expectedResult, expectedType);
         }
 
@@ -2184,6 +2187,14 @@ public class TestOutcome {
         }
 
         return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
+    }
+
+    private int testCaseCount() {
+        if (isDataDriven()) {
+            return testSteps.size();
+        } else {
+            return 1;
+        }
     }
 
     private int annotatedResultCount(TestResult expectedResult, TestType expectedType) {
@@ -2448,7 +2459,7 @@ public class TestOutcome {
             return duration;
         }
         long calculatedDuration = 0;
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             calculatedDuration += step.getDuration();
         }
         return calculatedDuration;
@@ -2921,7 +2932,7 @@ public class TestOutcome {
     }
 
     public TestOutcome withExamplesHavingResult(TestResult result) {
-        if (!isDataDriven() || containsOnlyExamplesWithResult(result) || containsNoExamplesWithResult(result) ) {
+        if (!isDataDriven() || containsOnlyExamplesWithResult(result) || containsNoExamplesWithResult(result)) {
             return this;
         }
         return copy().removeTopLevelStepsNotHavingResult(result);
@@ -2929,7 +2940,7 @@ public class TestOutcome {
 
     private boolean containsNoExamplesWithResult(TestResult result) {
         Set<TestResult> distinctResults = getDistinctResults();
-        for(TestResult actualResult : result.expanded()) {
+        for (TestResult actualResult : result.expanded()) {
             if (distinctResults.contains(actualResult)) {
                 return false;
             }
@@ -2946,7 +2957,7 @@ public class TestOutcome {
         if (isDataDriven()) {
             List<TestOutcome> testCases = new ArrayList<>();
             int rowNumber = 1;
-            for(TestStep step : testSteps) {
+            for (TestStep step : testSteps) {
                 testCases.add(testCaseInStep(step, rowNumber++));
             }
             return testCases;
@@ -2987,7 +2998,7 @@ public class TestOutcome {
 
     public TestOutcome removeTopLevelStepsNotMatching(Predicate<TestStep> condition) {
         List<TestStep> updatedSteps = new ArrayList<>();
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             if (condition.test(step)) {
                 updatedSteps.add(step);
             }
@@ -3006,13 +3017,14 @@ public class TestOutcome {
         this.testSteps = updatedSteps;
         return this;
     }
+
     private boolean someStepsDoNotMatch(Predicate<TestStep> condition) {
         return testSteps.stream().anyMatch(condition);
     }
 
     public boolean containsAtLeastOneOutcomeWithResult(TestResult expectedResult) {
         if (isDataDriven()) {
-            for(TestStep step : testSteps) {
+            for (TestStep step : testSteps) {
                 if (expectedResult.expanded().contains(step.getResult())) {
                     return true;
                 }
@@ -3032,15 +3044,12 @@ public class TestOutcome {
     }
 
     public List<TestResult> getAllResults() {
-        if (isDataDriven()) {
-            List<TestResult> results = new ArrayList<>();
-            for(TestStep step : testSteps) {
-                results.add(step.getOverallResult());
-            }
-            return results;
-        } else {
-            return Collections.singletonList(getResult());
+        if (isManual() && isDataDriven()) {
+            return testSteps.stream().map(step -> getResult()).collect(Collectors.toList());
+        } else if (!isManual() && isDataDriven()) {
+            return testSteps.stream().map(TestStep::getOverallResult).collect(Collectors.toList());
         }
+        return Collections.singletonList(getResult());
     }
 
     public long getResultCount() {
@@ -3056,7 +3065,7 @@ public class TestOutcome {
     public Set<TestResult> getDistinctResults() {
         Set<TestResult> results = new HashSet<>();
         if (isDataDriven()) {
-            for(TestStep step : getTestSteps()) {
+            for (TestStep step : getTestSteps()) {
                 results.add(step.getResult());
             }
         } else {

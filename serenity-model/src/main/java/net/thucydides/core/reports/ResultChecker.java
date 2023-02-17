@@ -68,6 +68,8 @@ public class ResultChecker {
     }
     private static final int COLUMN_WIDTH = 30;
     private void logOutcomesFrom(TestOutcomes testOutcomes) {
+
+
         logger.info(white("------------------------------------------------",0));
         logger.info(white("| SERENITY TESTS: ", COLUMN_WIDTH) + "  | " + colored(testOutcomes.getResult(), testOutcomes.getResult().toString()));
         logger.info(white("------------------------------------------------",0));
@@ -76,7 +78,15 @@ public class ResultChecker {
                  "Test scenarios executed",COLUMN_WIDTH), white(Long.toString(testOutcomes.getScenarioCount()),0)));
         logger.info(
                 resultLine(white(
-                 "Test cases executed",COLUMN_WIDTH), white(Long.toString(testOutcomes.getTestCaseCount()),0)));
+                        "Total Test cases executed",COLUMN_WIDTH), white(Long.toString(testOutcomes.getTestCaseCount()),0)));
+        if (testOutcomes.ofType(TestType.MANUAL).getTestCaseCount() > 0) {
+            logger.info(
+                    resultLine(white(
+                            "Automated Test cases executed", COLUMN_WIDTH), white(Long.toString(testOutcomes.ofType(TestType.AUTOMATED).getTestCaseCount()), 0)));
+            logger.info(
+                    resultLine(white(
+                            "Manual Test cases executed", COLUMN_WIDTH), white(Long.toString(testOutcomes.ofType(TestType.MANUAL).getTestCaseCount()), 0)));
+        }
         logger.info(
                 resultLine(green("Tests passed",COLUMN_WIDTH), green(Integer.toString(testOutcomes.count(TestType.ANY).withResult(TestResult.SUCCESS)),0))
         );

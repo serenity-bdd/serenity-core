@@ -46,7 +46,8 @@ public class PreScenarioFixtures {
                 enhancerType -> {
                     try {
                         enhancers.add(enhancerType.getDeclaredConstructor().newInstance());
-                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                             InvocationTargetException e) {
                         throw new WebDriverInitialisationException("Failed to instantiate custom capability enhancer " + enhancerType.getName(), e);
                     }
                 }
@@ -58,12 +59,14 @@ public class PreScenarioFixtures {
     private static List<Class<BeforeAWebdriverScenario>> customEnhancers(EnvironmentVariables environmentVariables) {
         List<String> extensionPackages = EnvironmentSpecificConfiguration.from(environmentVariables)
                 .getListOfValues(ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES);
-        return extensionPackages.stream().flatMap(
-                extensionPackage -> ClassFinder.loadClasses()
-                        .thatImplement(BeforeAWebdriverScenario.class)
-                        .fromPackage(extensionPackage)
-                        .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension)
-        ).collect(Collectors.toList());
+        return extensionPackages.stream()
+                .filter(packageName -> !packageName.isEmpty())
+                .flatMap(
+                        extensionPackage -> ClassFinder.loadClasses()
+                                .thatImplement(BeforeAWebdriverScenario.class)
+                                .fromPackage(extensionPackage)
+                                .stream().map(extension -> (Class<BeforeAWebdriverScenario>) extension)
+                ).collect(Collectors.toList());
     }
 
 }

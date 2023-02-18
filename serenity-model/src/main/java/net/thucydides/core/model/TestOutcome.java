@@ -2117,13 +2117,12 @@ public class TestOutcome {
     }
 
     private void addContextTagsFor(String context) {
-        addTag(TestTag.withName(context).andType("context"));
         List<String> contexts = Arrays.stream(context.split(",")).map(String::trim).map(StringUtils::capitalize).collect(Collectors.toList());
         contexts.forEach(
                 contextElement -> addTag(TestTag.withName(contextElement).andType("context"))
         );
         if (contexts.size() > 1) {
-            String allContexts = contexts.stream().collect(Collectors.joining("/"));
+            String allContexts = contexts.stream().collect(Collectors.joining(", "));
             addTag(TestTag.withName(allContexts).andType("context"));
         }
     }

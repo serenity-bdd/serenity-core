@@ -216,7 +216,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
         try {
             super.run(notifier);
         } finally {
-            StepEventBus.getEventBus().testSuiteFinished();
+            StepEventBus.getParallelEventBus().testSuiteFinished();
             generateReports();
         }
     }

@@ -42,7 +42,7 @@ public class SerenityBackend implements Backend {
      */
     @Override
     public void disposeWorld() {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             LOGGER.warn("It looks like you are running a feature using @RunWith(Cucumber.class) instead of @RunWith(CucumberWithSerenity.class). Are you sure this is what you meant to do?");
         }
     }

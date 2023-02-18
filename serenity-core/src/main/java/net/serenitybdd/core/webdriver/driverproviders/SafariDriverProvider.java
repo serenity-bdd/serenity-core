@@ -27,7 +27,7 @@ public class SafariDriverProvider extends DownloadableDriverProvider implements 
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         // If webdriver calls are suspended no need to create a new driver
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required

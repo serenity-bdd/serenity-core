@@ -336,7 +336,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     }
                     testExecutionResult.getThrowable().ifPresent(throwable -> this.summary.addFailure(testIdentifier, throwable));
                     eventBusFor(testIdentifier).testFailed(testExecutionResult.getThrowable().get());
-//                    StepEventBus.getEventBus().testFailed(testExecutionResult.getThrowable().get());
+//                    StepEventBus.getParallelEventBus().testFailed(testExecutionResult.getThrowable().get());
                     break;
                 }
                 default:
@@ -350,7 +350,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private void testFinished(TestIdentifier testIdentifier, MethodSource methodSource, TestExecutionResult testExecutionResult) {
         updateResultsUsingTestAnnotations(testIdentifier, methodSource);
-//        TestResult result = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getResult();
+//        TestResult result = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome().getResult();
         TestResult result = eventBusFor(testIdentifier).getBaseStepListener().getCurrentTestOutcome().getResult();
         if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED && result == TestResult.SUCCESS) {
             updateResultsUsingTestExecutionResult(testIdentifier,testExecutionResult);
@@ -422,14 +422,14 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             }
 
             eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
-//            StepEventBus.getEventBus().testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
+//            StepEventBus.getParallelEventBus().testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
 
             //
             // Check for @Pending tests
             //
             if (isPending(methodSource)) {
                 eventBusFor(testIdentifier).testPending();
-//                StepEventBus.getEventBus().testPending();
+//                StepEventBus.getParallelEventBus().testPending();
             }
         }
     }
@@ -488,7 +488,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         logger.trace(" - BASE STEP LISTENER: " + eventBusFor(testIdentifier).getBaseStepListener());
         List<TestOutcome> testOutcomes = eventBusFor(testIdentifier).getBaseStepListener().getTestOutcomes();
         logger.trace(" - EVENT TEST OUTCOMES: " + testOutcomes);
-        logger.trace(" - THREAD TEST OUTCOMES: " + StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes());
+        logger.trace(" - THREAD TEST OUTCOMES: " + StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes());
 
         return testOutcomes;
     }

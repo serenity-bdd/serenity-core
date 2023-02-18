@@ -19,7 +19,7 @@ public class WhenRunningANestedTest {
 
         TestLauncher.runTestForClass(JUnit5NestedExample.class);
 
-        List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+        List<TestOutcome> executedScenarios = StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedScenarios.size(), equalTo(3));
 
         List<String> executedTestNames = executedScenarios.stream().map(TestOutcome::getName).collect(Collectors.toList());

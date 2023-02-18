@@ -144,7 +144,7 @@ public class WhenRunningTasksInParallel {
         InParallel.theActors(actorA, actorB, actorC).eachAttemptTo(doSomething(), doSomethingThatFails());
         actorA.attemptsTo(doSomethingElse());
 
-        assertThat(StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getResult()).isEqualTo(TestResult.FAILURE);
+        assertThat(StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().get().getResult()).isEqualTo(TestResult.FAILURE);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class WhenRunningTasksInParallel {
     }
 
     private TestOutcome latestTestOutcome() {
-        return StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get();
+        return StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().get();
     }
 
     private List<String> testSteps() {

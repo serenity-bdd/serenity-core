@@ -77,8 +77,8 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> stepMethodOverride() {
-        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            Optional<Method> currentStepMethod = StepEventBus.getEventBus().getBaseStepListener().getCurrentStepMethod();
+        if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
+            Optional<Method> currentStepMethod = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentStepMethod();
             if (currentStepMethod != null && currentStepMethod.isPresent()) {
                 Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenScreenshotPreferenceFor(currentStepMethod.get());
                 if (overriddenScreenshotPreference.isPresent()) {
@@ -127,8 +127,8 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> classOverride() {
-        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            Optional<Method> currentStepMethod = StepEventBus.getEventBus().getBaseStepListener().getCurrentStepMethod();
+        if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
+            Optional<Method> currentStepMethod = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentStepMethod();
             if (currentStepMethod != null && currentStepMethod.isPresent()) {
                 return overriddenScreenshotPreferenceForClass(currentStepMethod.get().getDeclaringClass());
             }

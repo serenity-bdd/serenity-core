@@ -128,7 +128,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
     }
 
     public boolean isEnabled() {
-        return !StepEventBus.getEventBus().webdriverCallsAreSuspended();
+        return !StepEventBus.getParallelEventBus().webdriverCallsAreSuspended();
     }
 
     public void reset() {
@@ -154,7 +154,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
 
     private WebDriver newDriverInstance() {
         try {
-            if (StepEventBus.getEventBus().isDryRun()) {
+            if (StepEventBus.getParallelEventBus().isDryRun()) {
                 return new WebDriverStub();
             } else {
                 webDriverFactory.setupFixtureServices();

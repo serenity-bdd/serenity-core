@@ -87,7 +87,7 @@ public class WebCapableActorInjector implements DependencyInjector {
                     .withOptions(castMember.options())
                     .getWebdriverByName(castMember.name(), castMember.driver());
         }
-        if ((driver instanceof WebDriverFacade) && (!StepEventBus.getEventBus().isASingleBrowserScenario())) {
+        if ((driver instanceof WebDriverFacade) && (!StepEventBus.getParallelEventBus().isASingleBrowserScenario())) {
             ((WebDriverFacade) driver).reset();
         }
 

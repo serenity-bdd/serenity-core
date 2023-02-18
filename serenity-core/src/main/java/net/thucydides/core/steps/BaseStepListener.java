@@ -119,7 +119,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public StepEventBus getEventBus() {
         if (eventBus == null) {
-            eventBus = StepEventBus.getEventBus();
+            eventBus = StepEventBus.getParallelEventBus();
         }
         return eventBus;
     }
@@ -605,7 +605,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         // TODO: Disable when run from an IDE
         getCurrentTestOutcome().addTags(storywideTags);
 
-        if (StepEventBus.getEventBus().isDryRun() || getCurrentTestOutcome().getResult() == IGNORED) {
+        if (StepEventBus.getParallelEventBus().isDryRun() || getCurrentTestOutcome().getResult() == IGNORED) {
             testAndTopLevelStepsShouldBeIgnored();
         }
 
@@ -1042,7 +1042,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean shouldTakeScreenshots(TestResult result) {
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended() && !StepEventBus.getParallelEventBus().softAssertsActive()) {
             return false;
         }
         if (screenshots().areDisabledForThisAction(result)) {
@@ -1050,20 +1050,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
         return  (currentStepExists()
                 && browserIsOpen()
-                && !StepEventBus.getEventBus().isDryRun()
-                && !StepEventBus.getEventBus().currentTestIsSuspended());
+                && !StepEventBus.getParallelEventBus().isDryRun()
+                && !StepEventBus.getParallelEventBus().currentTestIsSuspended());
     }
 
     private boolean shouldTakeScreenshotsWithoutCurrentStep(TestResult result) {
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() && !StepEventBus.getEventBus().softAssertsActive()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended() && !StepEventBus.getParallelEventBus().softAssertsActive()) {
             return false;
         }
         if (screenshots().areDisabledForThisAction(result)) {
             return false;
         }
         return browserIsOpen()
-                && !StepEventBus.getEventBus().isDryRun()
-                && !StepEventBus.getEventBus().currentTestIsSuspended();
+                && !StepEventBus.getParallelEventBus().isDryRun()
+                && !StepEventBus.getParallelEventBus().currentTestIsSuspended();
     }
 
     private void removeDuplicatedInitialScreenshotsIfPresent() {

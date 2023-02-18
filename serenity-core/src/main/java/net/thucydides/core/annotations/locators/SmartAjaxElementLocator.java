@@ -196,7 +196,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
 
     private boolean inADisabledStep() {
-        return (StepEventBus.getEventBus().webdriverCallsAreSuspended());
+        return (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended());
     }
 
     /**

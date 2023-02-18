@@ -46,7 +46,7 @@ public class WhenManagingWebdriverInstances {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         initWebdriverManagers();
-        StepEventBus.getEventBus().clearStepFailures();
+        StepEventBus.getParallelEventBus().clearStepFailures();
     }
 
     @After

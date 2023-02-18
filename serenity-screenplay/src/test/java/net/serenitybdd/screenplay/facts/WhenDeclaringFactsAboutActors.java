@@ -22,8 +22,8 @@ public class WhenDeclaringFactsAboutActors {
     @Before
     public void startScerentyTest() {
         Serenity.initialize(this);
-        StepEventBus.getEventBus().testSuiteStarted(Story.called("sample story"));
-        StepEventBus.getEventBus().testStarted("sample test");
+        StepEventBus.getParallelEventBus().testSuiteStarted(Story.called("sample story"));
+        StepEventBus.getParallelEventBus().testStarted("sample test");
     }
 
     static List<String> knownAccounts = new ArrayList<>();
@@ -98,7 +98,7 @@ public class WhenDeclaringFactsAboutActors {
 
         tim.has(ASavingsAccount.numbered("Savings-123456"));
 
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testFinished();
 
         assertThat(knownAccounts).contains("Savings-123456");
         assertThat(existingSavingsAccounts).doesNotContain("Savings-123456");
@@ -111,7 +111,7 @@ public class WhenDeclaringFactsAboutActors {
 
         tim.has(ASavingsAccount.numbered("Savings-123456"));
 
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testFinished();
 
         assertThat(knownAccounts).contains("Savings-123456");
         assertThat(existingSavingsAccounts).doesNotContain("Savings-123456");
@@ -133,9 +133,9 @@ public class WhenDeclaringFactsAboutActors {
         givenThat(tim).has(AnAccount.numbered("123456"));
         tim.can((Ability)doHisAccounts);
 
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testFinished();
 
-        TestOutcome testOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get();
+        TestOutcome testOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().get();
 
         assertThat(testOutcome.getActors()).isNotEmpty();
         assertThat(testOutcome.getActors().size() == 1);

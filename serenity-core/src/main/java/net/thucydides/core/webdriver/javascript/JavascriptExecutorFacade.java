@@ -111,9 +111,9 @@ public class JavascriptExecutorFacade {
     }
 
     private boolean shouldExecuteJavascript() {
-        return (!StepEventBus.getEventBus().webdriverCallsAreSuspended()
-                && !StepEventBus.getEventBus().isDryRun()
-                && !StepEventBus.getEventBus().currentTestIsSuspended());
+        return (!StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()
+                && !StepEventBus.getParallelEventBus().isDryRun()
+                && !StepEventBus.getParallelEventBus().currentTestIsSuspended());
     }
 
 

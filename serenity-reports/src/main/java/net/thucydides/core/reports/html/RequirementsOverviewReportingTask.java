@@ -142,7 +142,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         context.put("colorScheme", ChartColorScheme.forEnvironment(environmentVariables));
         context.put("testOutcomes", filteredTestOutcomes);
-        context.put("resultCounts", ResultCounts.forOutcomesIn(filteredTestOutcomes));
+        context.put("resultCounts", ResultCountCache.resultCountsFor(testOutcomes));
         context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));
         context.put("allTestOutcomes", testOutcomes);
         context.put("timestamp", TestOutcomeTimestamp.from(filteredTestOutcomes));

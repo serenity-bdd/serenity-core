@@ -79,13 +79,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         stepFactory = StepFactory.getFactory();
         stepListener = new BaseStepListener(null, outputDirectory, configuration);
 
-        StepEventBus.getEventBus().reset();
-        StepEventBus.getEventBus().registerListener(stepListener);
+        StepEventBus.getParallelEventBus().reset();
+        StepEventBus.getParallelEventBus().registerListener(stepListener);
     }
 
     @After
     public void dropListener() {
-        StepEventBus.getEventBus().dropListener(stepListener);
+        StepEventBus.getParallelEventBus().dropListener(stepListener);
     }
 
 
@@ -115,14 +115,14 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void the_listener_should_record_basic_step_execution_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work", MyTestCase.class);
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
 
         steps.step_one();
         steps.step_two();
 
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         assertThat(results.size(), is(1));
@@ -133,16 +133,16 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void the_listener_should_record_the_tested_story_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work", MyTestCase.class);
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
 
         steps.step_one();
         steps.step_two();
 
-        StepEventBus.getEventBus().testFinished(testOutcome);
-        StepEventBus.getEventBus().testSuiteFinished();
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testSuiteFinished();
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
         assertThat(outcome.getUserStory().getName(), is("My story"));
     }
@@ -150,13 +150,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void the_step_listener_should_record_the_overall_test_result_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.step_two();
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         TestOutcome testOutcome = results.get(0);
@@ -168,13 +168,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void a_failing_step_should_record_the_failure_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.failingStep();
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         TestOutcome testOutcome = results.get(0);
@@ -184,13 +184,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void a_failing_step_should_record_the_failure_cause_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.failingStep();
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         TestOutcome testOutcome = results.get(0);
@@ -201,13 +201,13 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void grouped_test_steps_should_appear_as_nested_for_non_webtest_steps() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
 
         FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.grouped_steps();
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         TestOutcome testOutcome = results.get(0);
@@ -218,15 +218,15 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
     @Test
     public void if_all_child_steps_are_ignored_the_overall_step_should_be_ignored() {
 
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
 
         FlatScenarioStepsWithoutPages steps =  stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.failingAssumption();
         steps.step_one();
         steps.step_two();
         steps.step_three();
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
         TestOutcome testOutcome = results.get(0);

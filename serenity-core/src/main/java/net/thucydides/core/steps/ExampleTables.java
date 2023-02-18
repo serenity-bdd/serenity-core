@@ -60,8 +60,8 @@ public class ExampleTables {
     public void start() {
         DataTable table = DataTable.withHeaders(this.headers)
                 .andTitle(this.title).build();
-        StepEventBus.getEventBus().useExamplesFrom(table);
-        StepEventBus.getEventBus().enableSoftAsserts();
+        StepEventBus.getParallelEventBus().useExamplesFrom(table);
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
 
         TestLifecycleEvents.register(this);
     }

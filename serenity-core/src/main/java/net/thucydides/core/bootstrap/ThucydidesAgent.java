@@ -66,6 +66,6 @@ public final class ThucydidesAgent {
     }
 
     private StepEventBus notifyEventBus() {
-        return StepEventBus.getEventBus();
+        return StepEventBus.getParallelEventBus();
     }
 }

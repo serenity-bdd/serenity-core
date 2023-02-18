@@ -41,7 +41,7 @@ public class TestCase<T extends StepListener> implements MethodRule {
     public final void register(final T... listener) {
         for (T regiter : listener) {
             this.listeners.add(regiter);
-            StepEventBus.getEventBus().registerListener(regiter);
+            StepEventBus.getParallelEventBus().registerListener(regiter);
             regiter.testStarted(name);
         }
     }
@@ -52,7 +52,7 @@ public class TestCase<T extends StepListener> implements MethodRule {
 
     public TestCase<T> finish() {
         if (!finished) {
-            StepEventBus.getEventBus().testFinished();
+            StepEventBus.getParallelEventBus().testFinished();
             this.finished = true;
         }
         return this;
@@ -69,9 +69,9 @@ public class TestCase<T extends StepListener> implements MethodRule {
             public void evaluate() throws Throwable {
                 try {
                     for (T regiter : listeners) {
-                        StepEventBus.getEventBus().registerListener(regiter);
+                        StepEventBus.getParallelEventBus().registerListener(regiter);
                     }
-                    StepEventBus.getEventBus().testStarted(name);
+                    StepEventBus.getParallelEventBus().testStarted(name);
 
                     statement.evaluate();
                 } finally {

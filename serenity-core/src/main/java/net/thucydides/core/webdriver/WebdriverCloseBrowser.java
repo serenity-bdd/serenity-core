@@ -45,7 +45,7 @@ public class WebdriverCloseBrowser implements CloseBrowser {
 
         // The @singlebrowser tag overrides global config
         // For @singlebrowser features scenarios don't restart the browser here - we will restart only if this is a new feature event
-        if (StepEventBus.getEventBus().isUniqueSession() || (StepEventBus.getEventBus().currentTestHasTag(TestTag.withValue("singlebrowser")))) {
+        if (StepEventBus.getParallelEventBus().isUniqueSession() || (StepEventBus.getParallelEventBus().currentTestHasTag(TestTag.withValue("singlebrowser")))) {
             return (event == FEATURE || event == NEVER);
         }
 

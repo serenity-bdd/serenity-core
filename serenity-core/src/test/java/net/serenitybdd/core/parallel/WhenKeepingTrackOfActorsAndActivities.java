@@ -27,7 +27,7 @@ public class WhenKeepingTrackOfActorsAndActivities {
     public void registerAStepEventBus() throws IOException {
         File temporaryDirectory = Files.createTempDirectory("testdata").toFile();
         defaultStepListener = new BaseStepListener(temporaryDirectory);
-        StepEventBus.getEventBus().registerListener(defaultStepListener);
+        StepEventBus.getParallelEventBus().registerListener(defaultStepListener);
     }
 
     @After
@@ -74,13 +74,13 @@ public class WhenKeepingTrackOfActorsAndActivities {
     public void theAGENTsessionVariableDeterminesWhichListenerToUse() {
         Agent james = new SpecialAgent("James","007");
 
-        StepEventBus.getEventBus().registerAgent(james);
+        StepEventBus.getParallelEventBus().registerAgent(james);
 
-        assertThat(StepEventBus.getEventBus().getBaseStepListener()).isEqualTo(defaultStepListener);
+        assertThat(StepEventBus.getParallelEventBus().getBaseStepListener()).isEqualTo(defaultStepListener);
 
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(james);
 
-        assertThat(StepEventBus.getEventBus().getBaseStepListener()).isNotEqualTo(defaultStepListener);
+        assertThat(StepEventBus.getParallelEventBus().getBaseStepListener()).isNotEqualTo(defaultStepListener);
 
     }
 
@@ -88,7 +88,7 @@ public class WhenKeepingTrackOfActorsAndActivities {
     public void theAgentSpecificListenerIsIdenticalAcrossMultipleThreads() {
         Agent james = new SpecialAgent("James","007");
 
-        StepEventBus.getEventBus().registerAgent(james);
+        StepEventBus.getParallelEventBus().registerAgent(james);
 
         BaseStepListener expectedListener = Agency.getInstance().baseListenerFor(james).get();
 
@@ -105,7 +105,7 @@ public class WhenKeepingTrackOfActorsAndActivities {
         Agent james = new SpecialAgent("James","007");
         Agent max = new SpecialAgent("Max","87");
 
-        StepEventBus.getEventBus().registerAgents(james,max);
+        StepEventBus.getParallelEventBus().registerAgents(james,max);
         BaseStepListener listenerForJames = Agency.getInstance().baseListenerFor(james).get();
         BaseStepListener listenerForMax = Agency.getInstance().baseListenerFor(max).get();
 
@@ -119,7 +119,7 @@ public class WhenKeepingTrackOfActorsAndActivities {
 
     private void checkThatTheStepListenerIs(Agent agent, BaseStepListener expectedStepListener) {
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(agent);
-        assertThat(StepEventBus.getEventBus().getBaseStepListener()).isEqualTo(expectedStepListener);
+        assertThat(StepEventBus.getParallelEventBus().getBaseStepListener()).isEqualTo(expectedStepListener);
     }
 
     @Test
@@ -127,25 +127,25 @@ public class WhenKeepingTrackOfActorsAndActivities {
         Agent james = new SpecialAgent("James","007");
         Agent max = new SpecialAgent("Max","87");
 
-        StepEventBus.getEventBus().testStarted("simple test");
+        StepEventBus.getParallelEventBus().testStarted("simple test");
 
-        StepEventBus.getEventBus().registerAgents(james,max);
+        StepEventBus.getParallelEventBus().registerAgents(james,max);
 
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(james);
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("James does something"));
-        StepEventBus.getEventBus().stepFinished();
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("James does something else"));
-        StepEventBus.getEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("James does something"));
+        StepEventBus.getParallelEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("James does something else"));
+        StepEventBus.getParallelEventBus().stepFinished();
 
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(max);
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("Max does something"));
-        StepEventBus.getEventBus().stepFinished();
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("Max does something else"));
-        StepEventBus.getEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("Max does something"));
+        StepEventBus.getParallelEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("Max does something else"));
+        StepEventBus.getParallelEventBus().stepFinished();
 
-        StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(james, max);
+        StepEventBus.getParallelEventBus().mergeActivitiesToDefaultStepListener(james, max);
 
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testFinished();
 
         TestOutcome testOutcome = defaultStepListener.getTestOutcomes().get(0);
 
@@ -158,10 +158,10 @@ public class WhenKeepingTrackOfActorsAndActivities {
 
     private void performTwoStepsFor(Agent actor) {
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(actor);
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something"));
-        StepEventBus.getEventBus().stepFinished();
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something else"));
-        StepEventBus.getEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something"));
+        StepEventBus.getParallelEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(actor.getName() + " does something else"));
+        StepEventBus.getParallelEventBus().stepFinished();
         Serenity.clearSessionVariable(Agent.IN_THE_CURRENT_SESSION);
     }
 

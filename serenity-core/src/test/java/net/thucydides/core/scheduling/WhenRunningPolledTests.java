@@ -74,10 +74,10 @@ public class WhenRunningPolledTests {
 
         when(driver.navigate()).thenReturn(navigation);
 
-        StepEventBus.getEventBus().reset();
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
-        StepEventBus.getEventBus().testSuiteStarted(ATestClass.class);
-        StepEventBus.getEventBus().testStarted("someTest");
+        StepEventBus.getParallelEventBus().reset();
+        StepEventBus.getParallelEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
+        StepEventBus.getParallelEventBus().testSuiteStarted(ATestClass.class);
+        StepEventBus.getParallelEventBus().testStarted("someTest");
     }
 
     class SlowPage extends PageObject {
@@ -113,10 +113,10 @@ public class WhenRunningPolledTests {
         SlowPage page = new SlowPage(driver);
         Counter counter = new Counter();
 
-        StepEventBus.getEventBus().testSuiteStarted(ATestClass.class);
-        StepEventBus.getEventBus().testStarted("someTest");
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"));
-        StepEventBus.getEventBus().stepFailed(failure);
+        StepEventBus.getParallelEventBus().testSuiteStarted(ATestClass.class);
+        StepEventBus.getParallelEventBus().testStarted("someTest");
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"));
+        StepEventBus.getParallelEventBus().stepFailed(failure);
 
         page.waitForWithRefresh()
                 .withTimeoutOf(5000).milliseconds()

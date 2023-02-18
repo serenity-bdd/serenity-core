@@ -34,7 +34,7 @@ abstract class RemoteDriverBuilder {
     abstract WebDriver buildWithOptions(String options) throws MalformedURLException;
 
     WebDriver newRemoteDriver(URL remoteUrl, Capabilities remoteCapabilities, String options) {
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return RemoteWebdriverStub.from(environmentVariables);
         }
 

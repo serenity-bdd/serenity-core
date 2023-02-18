@@ -33,9 +33,9 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
     public void testStarted(final Description description) {
         if (testingThisDataSet(description)) {
             super.testStarted(description);
-            StepEventBus.getEventBus().useExamplesFrom(dataTableRow());
+            StepEventBus.getParallelEventBus().useExamplesFrom(dataTableRow());
             if (!ignoredOrPending(description))
-                StepEventBus.getEventBus().exampleStarted(parametersTable.row(parameterSetNumber).toStringMap());
+                StepEventBus.getParallelEventBus().exampleStarted(parametersTable.row(parameterSetNumber).toStringMap());
         }
     }
 
@@ -70,7 +70,7 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
     public void testFinished(final Description description) throws Exception {
         if (testingThisDataSet(description)) {
             super.testFinished(description);
-            StepEventBus.getEventBus().exampleFinished();
+            StepEventBus.getParallelEventBus().exampleFinished();
         }
     }
 
@@ -78,7 +78,7 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
     public void testFailure(final Failure failure) throws Exception {
         if (testingThisDataSet(failure.getDescription())) {
             super.testFailure(failure);
-            StepEventBus.getEventBus().exampleFinished();
+            StepEventBus.getParallelEventBus().exampleFinished();
         }
     }
 
@@ -88,7 +88,7 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
         {
             super.testIgnored(description);
             if (!ignoredOrPending(description)){
-                StepEventBus.getEventBus().exampleFinished();
+                StepEventBus.getParallelEventBus().exampleFinished();
             }
         }
     }

@@ -59,7 +59,7 @@ public class RenderedPageObjectView {
     }
 
     private boolean driverIsDisabled() {
-        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+        return StepEventBus.getParallelEventBus().webdriverCallsAreSuspended();
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {

@@ -49,8 +49,8 @@ public class WhenLocatingWebElements {
 
         field = SomePageObject.class.getField("someField");
 
-        StepEventBus.getEventBus().reset();
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
+        StepEventBus.getParallelEventBus().reset();
+        StepEventBus.getParallelEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
 
         when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
         when(driver.getCurrentImplicitTimeout()).thenReturn(Duration.ofSeconds(0));
@@ -61,10 +61,10 @@ public class WhenLocatingWebElements {
     @Test(timeout = 2000)
     public void should_find_element_immediately_if_a_previous_step_has_failed() throws IOException {
 
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
+        StepEventBus.getParallelEventBus().registerListener(new BaseStepListener(Files.createTempDirectory("out").toFile()));
 
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE);
-        StepEventBus.getEventBus().stepFailed(failure);
+        StepEventBus.getParallelEventBus().stepFailed(failure);
         locator.findElement();
     }
 

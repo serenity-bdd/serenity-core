@@ -13,7 +13,7 @@ public class ParameterizedTestsOutcomeAggregator {
     private List<TestOutcome> allTestOutcomes;
 
     public ParameterizedTestsOutcomeAggregator() {
-        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
         allTestOutcomes = baseStepListener.getTestOutcomes();
     }
 

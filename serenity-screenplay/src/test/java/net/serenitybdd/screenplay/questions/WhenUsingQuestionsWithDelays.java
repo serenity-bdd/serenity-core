@@ -19,7 +19,7 @@ public class WhenUsingQuestionsWithDelays {
     @Before
     public void setup() {
         Serenity.initialize(this);
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
     }
 
     @After
@@ -74,6 +74,6 @@ public class WhenUsingQuestionsWithDelays {
 
 
     private TestResult theTestResult() {
-        return StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0).getResult();
+        return StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes().get(0).getResult();
     }
 }

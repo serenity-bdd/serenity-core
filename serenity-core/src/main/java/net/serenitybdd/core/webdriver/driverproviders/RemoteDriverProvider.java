@@ -43,7 +43,7 @@ public class RemoteDriverProvider implements DriverProvider {
 
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return RemoteWebdriverStub.from(environmentVariables);
         } else {
             //

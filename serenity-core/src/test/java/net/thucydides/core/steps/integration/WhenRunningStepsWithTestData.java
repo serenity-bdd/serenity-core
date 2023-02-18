@@ -188,8 +188,8 @@ public class WhenRunningStepsWithTestData {
         MockitoAnnotations.initMocks(this);
         factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
-        StepEventBus.getEventBus().reset();
-        StepEventBus.getEventBus().registerListener(listener);
+        StepEventBus.getParallelEventBus().reset();
+        StepEventBus.getParallelEventBus().registerListener(listener);
         setDefaultStepFactory(null);
     }
 
@@ -223,7 +223,7 @@ public class WhenRunningStepsWithTestData {
 
         TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
 
         verify(driver).get("Bill");
@@ -236,7 +236,7 @@ public class WhenRunningStepsWithTestData {
 
         TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).fail_sometimes();
 
         verify(driver).get("Bill");
@@ -249,7 +249,7 @@ public class WhenRunningStepsWithTestData {
 
         TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv")
                 .usingFactory(factory)
                 .run(steps).fail_sometimes();
@@ -265,7 +265,7 @@ public class WhenRunningStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv")
                 .run(steps).step1();
 
@@ -279,7 +279,7 @@ public class WhenRunningStepsWithTestData {
 
         TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
 
         verify(driver).get("Bill");
@@ -294,7 +294,7 @@ public class WhenRunningStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").run(steps).step1();
 
         verify(driver).get("Bill");
@@ -309,7 +309,7 @@ public class WhenRunningStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/semicolon-test.csv").separatedBy(';').run(steps).step1();
 
         verify(driver).get("Bill");
@@ -323,7 +323,7 @@ public class WhenRunningStepsWithTestData {
         TestSteps steps =  factory.getSharedStepLibraryFor(TestSteps.class);
         DifferentTestSteps differentSteps = factory.getSharedStepLibraryFor(DifferentTestSteps.class);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         setDefaultStepFactory(factory);
 
         withTestDataFrom("testdata/test.csv").run(steps).name_and_dob();
@@ -341,7 +341,7 @@ public class WhenRunningStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").run(steps).nameStep();
 
         verify(driver).get("Bill");
@@ -356,7 +356,7 @@ public class WhenRunningStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").run(steps).nameStep();
     }
     
@@ -365,7 +365,7 @@ public class WhenRunningStepsWithTestData {
     	throws IOException {
 
 		TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
-        StepEventBus.getEventBus().testStarted("some test");
+        StepEventBus.getParallelEventBus().testStarted("some test");
 		withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).verifyPage();
 		verify(driver, times(3)).get("TestPageObject");
     }

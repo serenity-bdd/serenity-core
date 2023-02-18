@@ -25,6 +25,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.TagInflector;
 import net.thucydides.core.util.VersionProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 
@@ -32,7 +33,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.util.Arrays.stream;
 import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
@@ -164,6 +167,7 @@ public class FreemarkerContext {
         context.put("filteredScenarios", scenarios);
         context.put("testCases", executedScenarios);
         context.put("automatedTestCases", automated(executedScenarios));
+        context.put("executionContexts", executionContextsIn(executedScenarios));
         context.put("manualTestCases", manual(executedScenarios));
         context.put("evidence", EvidenceData.from(outcomeFilter.outcomesFilteredByTagIn(testOutcomes.getOutcomes())));
 
@@ -231,6 +235,19 @@ public class FreemarkerContext {
 
     private List<ScenarioOutcome> automated(List<ScenarioOutcome> executedScenariosIn) {
         return executedScenariosIn.stream().filter(scenarioOutcome -> !scenarioOutcome.isManual()).collect(Collectors.toList());
+    }
+
+    private List<TestExecutionContext> executionContextsIn(List<ScenarioOutcome> executedScenariosIn) {
+        return executedScenariosIn.stream()
+                .filter(outcome -> StringUtils.isNotEmpty(outcome.getContext()))
+                .flatMap(this::executionContextFor)
+                .collect(Collectors.toList());
+    }
+
+    private Stream<TestExecutionContext> executionContextFor(ScenarioOutcome outcome) {
+        return stream(outcome.getContext().split(",")).map(
+                contextValue -> new TestExecutionContext()
+        );
     }
 
     private List<ScenarioOutcome> manual(List<ScenarioOutcome> executedScenariosIn) {

@@ -36,7 +36,7 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
         injector = Guice.createInjector(new WebDriverModule());
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     @DefaultUrl("classpath:static-site/index.html")

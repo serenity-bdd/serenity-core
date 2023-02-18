@@ -43,10 +43,10 @@ public class JUnitStepListener extends RunListener {
     }
 
     public void registerThucydidesListeners() {
-        StepEventBus.getEventBus().registerListener(baseStepListener);
+        StepEventBus.getParallelEventBus().registerListener(baseStepListener);
 
         for(StepListener listener : extraListeners) {
-            StepEventBus.getEventBus().registerListener(listener);
+            StepEventBus.getParallelEventBus().registerListener(listener);
         }
     }
 
@@ -160,7 +160,7 @@ public class JUnitStepListener extends RunListener {
     }
 
     public void dropListeners() {
-        StepEventBus.getEventBus().dropListener(baseStepListener);
+        StepEventBus.getParallelEventBus().dropListener(baseStepListener);
         for(StepListener listener : extraListeners) {
             stepEventBus().dropListener(listener);
         }

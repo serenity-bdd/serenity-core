@@ -174,6 +174,6 @@ public class FlatScenarioSteps extends ScenarioSteps {
     }
     @Step
     public void step_with_screen_changes() {
-        StepEventBus.getEventBus().notifyScreenChange();
+        StepEventBus.getParallelEventBus().notifyScreenChange();
     }
 }

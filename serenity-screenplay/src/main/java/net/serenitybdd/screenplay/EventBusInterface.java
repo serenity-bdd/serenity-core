@@ -18,11 +18,11 @@ public class EventBusInterface {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventBusInterface.class);
 
     public static void castActor(String name) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().castActor(name);
+            StepEventBus.getParallelEventBus().castActor(name);
         }  else {
             TestSession.addEvent(new CastActorEvent(name));
         }
@@ -32,7 +32,7 @@ public class EventBusInterface {
     public void reportStepFailureFor(Performable todo, Throwable e) {
         ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "attemptsTo");
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
+            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(taskDescription, e));
         }  else {
             TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e)));
         }
@@ -41,24 +41,24 @@ public class EventBusInterface {
     public <T> void reportStepFailureFor(Consequence<T> consequence, Throwable e) {
         ExecutedStepDescription consequenceDescription = ExecutedStepDescription.withTitle(consequence.toString());
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(consequenceDescription, e));
+            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(consequenceDescription, e));
         }  else {
             TestSession.addEvent(new StepFailedEvent(new StepFailure(consequenceDescription, e)));
         }
     }
 
     public int getRunningStepCount() {
-        return StepEventBus.getEventBus().getBaseStepListener().getRunningStepCount();
+        return StepEventBus.getParallelEventBus().getBaseStepListener().getRunningStepCount();
     }
 
     public void mergePreviousStep() {
-        StepEventBus.getEventBus().mergePreviousStep();
+        StepEventBus.getParallelEventBus().mergePreviousStep();
     }
 
     public void updateOverallResult() {
-        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             if(!TestSession.isSessionStarted()) {
-                StepEventBus.getEventBus().updateOverallResults();
+                StepEventBus.getParallelEventBus().updateOverallResults();
             } else {
                 TestSession.addEvent(new UpdateOverallResultsEvent());
             }
@@ -67,7 +67,7 @@ public class EventBusInterface {
 
     public void startQuestion(String title) {
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
+            StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
         } else {
             TestSession.addEvent(new StepStartedEvent(ExecutedStepDescription.withTitle(title).asAQuestion()));
         }
@@ -75,7 +75,7 @@ public class EventBusInterface {
 
     public void finishQuestion() {
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepFinished();
+            StepEventBus.getParallelEventBus().stepFinished();
         } else {
             TestSession.addEvent(new StepFinishedEvent());
         }
@@ -83,7 +83,7 @@ public class EventBusInterface {
 
     public void reportStepFinished() {
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepFinished();
+            StepEventBus.getParallelEventBus().stepFinished();
         } else {
             TestSession.addEvent(new StepFinishedEvent());
         }
@@ -91,40 +91,40 @@ public class EventBusInterface {
     }
 
     public void reportStepIgnored() {
-        StepEventBus.getEventBus().stepIgnored();
+        StepEventBus.getParallelEventBus().stepIgnored();
     }
 
     public void reportStepSkippedFor(Performable todo) {
         ExecutedStepDescription taskDescription = ExecutedStepDescription.of(todo.getClass(), "performAs");
-        StepEventBus.getEventBus().stepStarted(taskDescription);
-        StepEventBus.getEventBus().stepIgnored();
+        StepEventBus.getParallelEventBus().stepStarted(taskDescription);
+        StepEventBus.getParallelEventBus().stepIgnored();
     }
 
     public boolean isBaseStepListenerRegistered() {
-        return StepEventBus.getEventBus().isBaseStepListenerRegistered();
+        return StepEventBus.getParallelEventBus().isBaseStepListenerRegistered();
     }
 
     public boolean aStepHasFailed() {
-        return isBaseStepListenerRegistered() && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed();
+        return isBaseStepListenerRegistered() && StepEventBus.getParallelEventBus().getBaseStepListener().aStepHasFailed();
     }
 
     public boolean aStepHasFailedInTheCurrentExample() {
-        return isBaseStepListenerRegistered() && StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample();
+        return isBaseStepListenerRegistered() && StepEventBus.getParallelEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample();
     }
 
     public FailureCause getFailureCause() {
-        return StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause();
+        return StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause();
     }
 
     public Optional<FailureCause> failureCause() {
-        if ((StepEventBus.getEventBus() == null)
-                || (!StepEventBus.getEventBus().isBaseStepListenerRegistered())
-                || (StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome() == null)) {
+        if ((StepEventBus.getParallelEventBus() == null)
+                || (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered())
+                || (StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome() == null)) {
             return Optional.empty();
         }
-        if (StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed()) {
-            if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().isPresent()) {
-                return Optional.ofNullable(StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause());
+        if (StepEventBus.getParallelEventBus().getBaseStepListener().aStepHasFailed()) {
+            if (StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().isPresent()) {
+                return Optional.ofNullable(StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome().getTestFailureCause());
             } else {
                 return Optional.empty();
             }
@@ -134,43 +134,43 @@ public class EventBusInterface {
     }
 
     public boolean shouldIgnoreConsequences() {
-        if (StepEventBus.getEventBus().isDryRun()) {
+        if (StepEventBus.getParallelEventBus().isDryRun()) {
             return true;
         }
 
-        if (StepEventBus.getEventBus().softAssertsActive() && !StepEventBus.getEventBus().currentTestIsSuspended()) {
+        if (StepEventBus.getParallelEventBus().softAssertsActive() && !StepEventBus.getParallelEventBus().currentTestIsSuspended()) {
             return false;
         }
-        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
+        return (StepEventBus.getParallelEventBus().currentTestIsSuspended() || StepEventBus.getParallelEventBus().aStepInTheCurrentTestHasFailed());
     }
 
     public void enableSoftAsserts() {
-        StepEventBus.getEventBus().enableSoftAsserts();
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
     }
 
     public void disableSoftAsserts() {
-        StepEventBus.getEventBus().disableSoftAsserts();
+        StepEventBus.getParallelEventBus().disableSoftAsserts();
     }
 
 
     public void assignFactToActor(Actor actor, String fact) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
-        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignFact(actor.getName(), fact)
         );
     }
 
     public void assignAbilityToActor(Actor actor, String ability) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             return;
         }
-        if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome() == null) {
+        if (StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome() == null) {
             return;
         }
 
-        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignAbility(actor.getName(), ability)
         );
     }

@@ -473,7 +473,7 @@ public abstract class PageObject {
     }
 
     private boolean driverIsDisabled() {
-        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+        return StepEventBus.getParallelEventBus().webdriverCallsAreSuspended();
     }
 
     /**
@@ -933,7 +933,7 @@ public abstract class PageObject {
      * Override this method
      */
     public void callWhenPageOpensMethods() {
-        if (StepEventBus.getEventBus().currentTestIsSuspended()) {
+        if (StepEventBus.getParallelEventBus().currentTestIsSuspended()) {
             return;
         }
 
@@ -1464,7 +1464,7 @@ public abstract class PageObject {
     }
 
     private void notifyScreenChange() {
-        StepEventBus.getEventBus().notifyScreenChange();
+        StepEventBus.getParallelEventBus().notifyScreenChange();
     }
 
     protected ThucydidesFluentAdapter fluent() {

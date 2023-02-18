@@ -45,19 +45,30 @@ public class BrowserStackTestSession {
     public void updateTestResultFor(TestOutcome testOutcome) {
 
         try {
-            HttpPut putRequest = new HttpPut(getSessionUri());
-            ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("status", browserstackCompatibleResultOf(testOutcome)));
-            nameValuePairs.add(new BasicNameValuePair("reason", testOutcome.getErrorMessage()));
-            nameValuePairs.add(new BasicNameValuePair("sessionName", TestOutcomeName.from(testOutcome)));
-            putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-            HttpClientBuilder.create().build().execute(putRequest);
+            updateStatus(testOutcome);
+            updateName(testOutcome);
         }
         catch (IOException e) {
             LOGGER.error("Failed to update Browserstack results", e);
         }
 
+    }
+
+    private void updateStatus(TestOutcome testOutcome) throws IOException {
+        HttpPut putRequest = new HttpPut(getSessionUri());
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
+        nameValuePairs.add(new BasicNameValuePair("status", browserstackCompatibleResultOf(testOutcome)));
+        nameValuePairs.add(new BasicNameValuePair("reason", testOutcome.getErrorMessage()));
+        putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        HttpClientBuilder.create().build().execute(putRequest);
+    }
+
+    private void updateName(TestOutcome testOutcome) throws IOException {
+        HttpPut putRequest = new HttpPut(getSessionUri());
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
+        nameValuePairs.add(new BasicNameValuePair("name", TestOutcomeName.from(testOutcome)));
+        putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        HttpClientBuilder.create().build().execute(putRequest);
     }
 
     public String getName() {

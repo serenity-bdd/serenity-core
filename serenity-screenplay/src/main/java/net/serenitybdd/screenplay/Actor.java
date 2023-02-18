@@ -181,7 +181,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
                     eventBusInterface.assignFactToActor(this, fact.toString());
                     FactLifecycleListener listener = new FactLifecycleListener(this, fact);
                     factListeners.add(listener);
-                    StepEventBus.getEventBus().registerListener(listener);
+                    StepEventBus.getParallelEventBus().registerListener(listener);
                 }
         );
     }
@@ -265,7 +265,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private <T extends Performable> void perform(T todo) {
         if (isPending(todo)) {
             stepPending();
-            //StepEventBus.getEventBus().stepPending();
+            //StepEventBus.getParallelEventBus().stepPending();
         }
 
         try {
@@ -291,7 +291,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     }
 
     private <T extends Performable> void performTask(T todo) {
-        if (!StepEventBus.getEventBus().currentTestIsSuspended()) {
+        if (!StepEventBus.getParallelEventBus().currentTestIsSuspended()) {
             EventBusInterface.castActor(name);
             todo.performAs(this);
         }
@@ -333,14 +333,14 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
         try {
             String groupTitle = injectActorInto(groupStepName);
-            //StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+            //StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
             stepStarted(groupTitle);
             should(consequences);
 
         } catch (Throwable error) {
             throw error;
         } finally {
-            //StepEventBus.getEventBus().stepFinished();
+            //StepEventBus.getParallelEventBus().stepFinished();
             stepFinished();
         }
     }
@@ -349,7 +349,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private void stepStarted(String groupTitle) {
         if (!TestSession.isSessionStarted()) {
-            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+            StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
         } else {
             TestSession.addEvent(new StepStartedEvent( ExecutedStepDescription.withTitle(groupTitle)));
         }
@@ -360,7 +360,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
             List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots();
             TestSession.addEvent(new StepFinishedEvent(screenshotList));
         } else {
-            StepEventBus.getEventBus().stepFinished();
+            StepEventBus.getParallelEventBus().stepFinished();
         }
     }
 
@@ -368,7 +368,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new StepPendingEvent());
         } else {
-            StepEventBus.getEventBus().stepPending();
+            StepEventBus.getParallelEventBus().stepPending();
         }
     }
 
@@ -469,12 +469,12 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
     private void endPerformance(ErrorHandlingMode mode) {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
-        boolean isAFixtureMethod = StepEventBus.getEventBus().inFixtureMethod();
+        boolean isAFixtureMethod = StepEventBus.getParallelEventBus().inFixtureMethod();
         if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod) {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
-                        StepEventBus.getEventBus().notifyFailure();
-                        //StepEventBus.getEventBus().testFinished(StepEventBus.getEventBus().currentTestOutcomeIsDataDriven());
+                        StepEventBus.getParallelEventBus().notifyFailure();
+                        //StepEventBus.getParallelEventBus().testFinished(StepEventBus.getParallelEventBus().currentTestOutcomeIsDataDriven());
                         if (cause.isCompromised()) {
                             throw cause.asCompromisedException();
                         } else if (cause.isAnError()) {
@@ -517,7 +517,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
 
     public void assignDescriptionToActor(String description) {
-        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 testOutcome -> testOutcome.assignDescriptionToActor(getName(), description)
         );
     }
@@ -534,7 +534,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     public void wrapUp() {
         getTeardowns().forEach(HasTeardown::tearDown);
         factListeners.forEach(
-                factLifecycleListener -> StepEventBus.getEventBus().dropListener(factLifecycleListener)
+                factLifecycleListener -> StepEventBus.getParallelEventBus().dropListener(factLifecycleListener)
         );
 
     }

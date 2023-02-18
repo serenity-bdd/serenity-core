@@ -20,7 +20,7 @@ public class SerenityListeners {
     private List<StepListener> stepListeners;
 
     public SerenityListeners(Configuration systemConfiguration) {
-        this(StepEventBus.getEventBus(), systemConfiguration);
+        this(StepEventBus.getParallelEventBus(), systemConfiguration);
     }
 
     public SerenityListeners(StepEventBus stepEventBus, Configuration systemConfiguration) {

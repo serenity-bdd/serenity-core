@@ -37,13 +37,13 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
 
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
 
     }
 
     @After
     public void teardown() {
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     @Test

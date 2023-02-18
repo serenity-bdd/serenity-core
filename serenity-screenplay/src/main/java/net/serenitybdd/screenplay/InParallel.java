@@ -64,7 +64,7 @@ public class InParallel {
 
     public void perform(String stepName, Runnable... tasks) {
         try {
-            StepEventBus.getEventBus().registerAgents(cast);
+            StepEventBus.getParallelEventBus().registerAgents(cast);
             ExecutorService executorService = Executors.newFixedThreadPool(environmentVariables.getPropertyAsInteger("screenplay.max.parallel.tasks", 16));
             List<Future<?>> futures = stream(tasks).map( task -> executorService.submit(task)).collect(Collectors.toList());
 
@@ -81,19 +81,19 @@ public class InParallel {
                 }
             });
         } finally {
-            StepEventBus.getEventBus().mergeActivitiesToDefaultStepListener(stepName, cast);
-            StepEventBus.getEventBus().dropAgents(cast);
+            StepEventBus.getParallelEventBus().mergeActivitiesToDefaultStepListener(stepName, cast);
+            StepEventBus.getParallelEventBus().dropAgents(cast);
             firstFailingStep().ifPresent(
                     step -> {
-                        StepEventBus.getEventBus().testFailed(step.getException().asException());
-                        StepEventBus.getEventBus().suspendTest();
+                        StepEventBus.getParallelEventBus().testFailed(step.getException().asException());
+                        StepEventBus.getParallelEventBus().suspendTest();
                     }
             );
         }
     }
 
     private Optional<TestStep> firstFailingStep() {
-        return StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getFlattenedTestSteps().stream()
+        return StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().get().getFlattenedTestSteps().stream()
                                   .filter(step -> step.getException() != null)
                                   .findFirst();
     }

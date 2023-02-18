@@ -142,7 +142,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
                     .setSnapshots(true);
 
                 Optional<String> guessedTestName;
-                Optional<TestOutcome> latestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome();
+                Optional<TestOutcome> latestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome();
 
                 guessedTestName = latestOutcome.map(
                     testOutcome -> Optional.of(testOutcome.getStoryTitle() + ": " + testOutcome.getTitle())
@@ -252,7 +252,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     public ScreenshotAndHtmlSource takeScreenShot() {
-        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
         Page currentPage = getCurrentPage();
 
         try {
@@ -269,7 +269,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
     }
 
     public void notifyScreenChange() {
-        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
         ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
         // Take screenshot for after each UI action when SERENITY_TAKE_SCREENSHOTS is FOR_EACH_ACTION
         if (screenshots.areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
@@ -327,7 +327,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
             );
         }
         if (playwright != null) {
-            BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+            BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
             ScreenshotPermission screenshots = new ScreenshotPermission(ConfiguredEnvironment.getConfiguration());
             // Take screenshot for failed test when SERENITY_TAKE_SCREENSHOTS is FOR_FAILURES
             if (baseStepListener.currentTestFailed() && screenshots.areAllowed(TakeScreenshots.FOR_FAILURES)) {

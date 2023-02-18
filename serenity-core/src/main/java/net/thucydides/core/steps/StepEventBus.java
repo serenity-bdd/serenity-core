@@ -208,7 +208,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName);
         }
-        StepEventBus.getEventBus().setTestSource(testSource);
+        StepEventBus.getParallelEventBus().setTestSource(testSource);
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 

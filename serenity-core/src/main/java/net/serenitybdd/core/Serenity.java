@@ -363,6 +363,6 @@ public class Serenity {
         if (TestSession.isSessionStarted()) {
             return TestSession.getTestSessionContext().getStepEventBus();
         }
-        return StepEventBus.getEventBus();
+        return StepEventBus.getParallelEventBus();
     }
 }

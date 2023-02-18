@@ -31,7 +31,7 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     /*@Test TODO clarify
@@ -39,7 +39,7 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
 
         runTestForClass(SamplePassingScenario.class);
 
-        List<TestOutcome> executedSteps = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+        List<TestOutcome> executedSteps = StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedSteps.size(), is(3));
 
         assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("happy_day_scenario").getTestSteps().size(), is(4));

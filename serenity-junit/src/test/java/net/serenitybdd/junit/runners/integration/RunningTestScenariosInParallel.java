@@ -26,7 +26,7 @@ public class RunningTestScenariosInParallel extends AbstractTestStepRunnerTest {
 
     @Before
     public void clearEventBus() throws Exception {
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
 
     }
 

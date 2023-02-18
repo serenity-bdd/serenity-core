@@ -46,7 +46,7 @@ public class MultiXPathOrCssTarget extends SearchableTarget {
     }
 
     private ElementNotFoundAfterTimeoutError notifyUnfoundElement(long timeoutInMillis) {
-        StepEventBus.getEventBus().notifyFailure();
+        StepEventBus.getParallelEventBus().notifyFailure();
         return new ElementNotFoundAfterTimeoutError("No element was found after " +
                 (timeoutInMillis / 1000) + "s for " + getName() + System.lineSeparator()
                 +"We tried with the following locators: " + Arrays.toString(cssOrXPathSelectors));

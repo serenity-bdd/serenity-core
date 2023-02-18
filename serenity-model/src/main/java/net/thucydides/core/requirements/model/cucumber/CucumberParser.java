@@ -51,6 +51,7 @@ public class CucumberParser {
     }
 
     public Optional<AnnotatedFeature> loadFeature(File narrativeFile) {
+        LOGGER.info("Loading feature {}", narrativeFile.toString());
         if (narrativeFile == null) {
             return Optional.empty();
         }
@@ -73,21 +74,43 @@ public class CucumberParser {
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
                 return Optional.empty();
             }
-            if(gherkinDocument.getFeature().isPresent()) {
-                List<Scenario> scenarioList = gherkinDocument.getFeature().get().getChildren().stream()
+            if (gherkinDocument.getFeature().isPresent()) {
+                Feature feature = gherkinDocument.getFeature().get();
+                if (feature.getName().isEmpty()) {
+                    throw new InvalidFeatureFileException(String.format("Empty feature name in file '%s'", narrativeFile));
+                }
+                List<Scenario> scenarioList = feature.getChildren().stream()
                         .map(FeatureChild::getScenario)
                         .filter(Objects::nonNull)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList());
-                return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature().get(),
+                Map<String, List<Scenario>> allScenariosByName = scenarioList.stream().collect(Collectors.groupingBy(Scenario::getName));
+                allScenariosByName.forEach(this::analyseDuplicateScenarioNames);
+                allScenariosByName.forEach(this::analyseEmptyScenarioNames);
+                return Optional.of(new AnnotatedFeature(feature,
                         scenarioList,
                         descriptionInComments));
             }
             return Optional.empty();
-        } catch (Throwable ex) {
+        } catch (InvalidFeatureFileException invalidFeatureFile) {
+             throw invalidFeatureFile;
+        }
+        catch (Throwable ex) {
             ex.printStackTrace();
             return Optional.empty();
+        }
+    }
+
+    private void analyseDuplicateScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
+        if (scenarios.size() > 1) {
+            throw new InvalidFeatureFileException(String.format("Duplicate scenario name '%s'", scenarioName));
+        }
+    }
+
+    private void analyseEmptyScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
+        if (scenarioName.isEmpty()) {
+            throw new InvalidFeatureFileException(String.format("Empty scenario name "));
         }
     }
 
@@ -192,34 +215,6 @@ public class CucumberParser {
                 scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
             }
         });
-//        feature.getChildren().forEach(
-//                child -> {
-//                    if (child.getScenario() != null) {
-//                        Scenario scenarioDefinition = child.getScenario();
-//                        if (!scenarioDefinition.getExamples().isEmpty()) {
-//                            List<Tag> scenarioOutlineTags = scenarioDefinition.getTags();
-//                            scenarioTags.put(scenarioDefinition.getName(), CucumberTagConverter.toSerenityTags(scenarioOutlineTags));
-//                            List<Examples> examples = scenarioDefinition.getExamples();
-//                            for (Examples currentExample : examples) {
-//                                List<Tag> allExampleTags = new ArrayList<>();
-//                                allExampleTags.addAll(scenarioOutlineTags);
-//                                allExampleTags.addAll(currentExample.getTags());
-//                                scenarioTags.put(scenarioDefinition.getName() + "_examples_at_line:" + currentExample.getLocation().getLine(),
-//                                        CucumberTagConverter.toSerenityTags(allExampleTags));
-//                            }
-//                        } else {
-//                            scenarioTags.put(scenarioDefinition.getName(), tagsFrom(scenarioDefinition));
-//                        }
-//                    }
-//                }
-//        );
-
-        // Scenario Names
-//        List<String> scenarios = feature.getChildren().stream()
-//                .map(FeatureChild::getScenario)
-//                .filter(Objects::nonNull)
-//                .map(Scenario::getName)
-//                .collect(Collectors.toList());
         List<String> scenarioNames = scenarios.stream().map(Scenario::getName).collect(Collectors.toList());
 
         FeatureBackgroundNarrative background = null;

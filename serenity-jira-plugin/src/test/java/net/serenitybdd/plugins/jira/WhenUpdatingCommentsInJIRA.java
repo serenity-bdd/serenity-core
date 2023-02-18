@@ -78,7 +78,7 @@ public class WhenUpdatingCommentsInJIRA {
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
 
         environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("jira.url", "http://my.jira.server");

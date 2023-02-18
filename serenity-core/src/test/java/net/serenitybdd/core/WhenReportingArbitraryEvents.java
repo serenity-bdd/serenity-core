@@ -18,13 +18,13 @@ public class WhenReportingArbitraryEvents {
     @Before
     public void setupEventBus() {
         Serenity.initializeTestSession();
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(tempDir));
-        StepEventBus.getEventBus().testStarted("Sample test");
+        StepEventBus.getParallelEventBus().registerListener(new BaseStepListener(tempDir));
+        StepEventBus.getParallelEventBus().testStarted("Sample test");
     }
 
     @After
     public void cleanup() {
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     @Test
@@ -51,6 +51,6 @@ public class WhenReportingArbitraryEvents {
     }
 
     private String stepName() {
-        return StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().get().getTestSteps().get(0).getDescription();
+        return StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().get().getTestSteps().get(0).getDescription();
     }
 }

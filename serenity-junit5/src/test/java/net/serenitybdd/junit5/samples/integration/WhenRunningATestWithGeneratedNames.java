@@ -20,7 +20,7 @@ public class WhenRunningATestWithGeneratedNames {
 
         TestLauncher.runTestForClass(JUnit5GeneratedExample.class);
 
-        List<TestOutcome> executedScenarios = StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes();
+        List<TestOutcome> executedScenarios = StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes();
         assertThat(executedScenarios.size(), equalTo(3));
 
         List<String> executedTestNames = executedScenarios.stream().map(TestOutcome::getName).collect(Collectors.toList());

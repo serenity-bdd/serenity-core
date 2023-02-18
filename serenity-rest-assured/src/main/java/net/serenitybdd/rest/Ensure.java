@@ -53,14 +53,14 @@ public class Ensure {
     }
 
     private static void doPerformSynchronousCheck(String description, Consumer<ValidatableResponse> check, String prefix) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(prefix + description));
+        StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(prefix + description));
         try {
             check.accept(SerenityRest.then());
         } catch (Throwable e) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(description), e));
+            StepEventBus.getParallelEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(description), e));
             return;
         }
-        StepEventBus.getEventBus().stepFinished();
+        StepEventBus.getParallelEventBus().stepFinished();
     }
 
 }

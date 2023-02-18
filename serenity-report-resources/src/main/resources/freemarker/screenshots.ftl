@@ -158,7 +158,10 @@
                                 <#assign tagStyle = styling.tagStyleFor(tag) >
                                 <span class="badge tag-badge" style="${tagStyle}"
                                     <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
-                                    (${tag.type})</a>
+                                    <#if tag.type != "context" && tag.type != "tag">
+                                        (${tag.type})
+                                    </#if>
+                                </a>
                                 </span>
                             </p>
                         </#list>

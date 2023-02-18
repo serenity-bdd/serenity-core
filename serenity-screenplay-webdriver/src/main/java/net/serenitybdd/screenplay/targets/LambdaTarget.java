@@ -49,7 +49,7 @@ public class LambdaTarget extends SearchableTarget {
             }
         }
         String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
-        StepEventBus.getEventBus().notifyFailure();
+        StepEventBus.getParallelEventBus().notifyFailure();
         if (lastThrownException != null) {
             throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
         } else {
@@ -107,7 +107,7 @@ public class LambdaTarget extends SearchableTarget {
             }
         }
         String errorMessage = "No element was found after " + (effectiveTimeout.toMillis() / 1000) + "s for " + getName();
-        StepEventBus.getEventBus().notifyFailure();
+        StepEventBus.getParallelEventBus().notifyFailure();
         if (lastThrownException != null) {
             throw new ElementNotFoundAfterTimeoutError(errorMessage, lastThrownException);
         } else {

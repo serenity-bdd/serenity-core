@@ -362,7 +362,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
             } finally {
                 context.runAfterAllHooks();
                 context.finishTestRun();
-                StepEventBus.getEventBus().testRunFinished();
+                StepEventBus.getParallelEventBus().testRunFinished();
             }
         }
     }

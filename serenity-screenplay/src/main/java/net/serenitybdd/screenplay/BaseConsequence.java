@@ -36,7 +36,7 @@ public abstract class BaseConsequence<T> implements Consequence<T> {
     }
 
     protected boolean thisStepShouldBeIgnored() {
-        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
+        return (StepEventBus.getParallelEventBus().currentTestIsSuspended() || StepEventBus.getParallelEventBus().aStepInTheCurrentTestHasFailed());
     }
 
     @Override

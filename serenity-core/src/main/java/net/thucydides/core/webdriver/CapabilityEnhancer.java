@@ -42,8 +42,8 @@ public class CapabilityEnhancer {
 
         AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
 
-        if (StepEventBus.getEventBus() != null && StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            Optional<TestOutcome> currentTestOutcome = StepEventBus.getEventBus()
+        if (StepEventBus.getParallelEventBus() != null && StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
+            Optional<TestOutcome> currentTestOutcome = StepEventBus.getParallelEventBus()
                     .getBaseStepListener()
                     .latestTestOutcome();
             // Technically not required but needed for some test scenarios

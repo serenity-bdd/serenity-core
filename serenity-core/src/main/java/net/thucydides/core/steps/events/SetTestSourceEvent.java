@@ -15,10 +15,10 @@ public class SetTestSourceEvent extends StepEventBusEventBase {
 	public void play() {
 		getStepEventBus().setTestSource(testSource);
 
-		//TODO - to be fixed - newTestOutcome.setTestSource(StepEventBus.getEventBus().getTestSource());
-		// BaseStepListener->recordNewTestOutcome: newTestOutcome.setTestSource(StepEventBus.getEventBus().getTestSource());
+		//TODO - to be fixed - newTestOutcome.setTestSource(StepEventBus.getParallelEventBus().getTestSource());
+		// BaseStepListener->recordNewTestOutcome: newTestOutcome.setTestSource(StepEventBus.getParallelEventBus().getTestSource());
 		getStepEventBus().setTestSource(testSource);
-		StepEventBus.getEventBus().setTestSource(testSource);
+		StepEventBus.getParallelEventBus().setTestSource(testSource);
 
 	}
 }

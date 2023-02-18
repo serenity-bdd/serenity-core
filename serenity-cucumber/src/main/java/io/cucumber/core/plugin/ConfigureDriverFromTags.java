@@ -40,8 +40,8 @@ public class ConfigureDriverFromTags {
     }
 
     public static void inTheCurrentTestOutcome() {
-        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            List<String> tags = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome()
+        if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
+            List<String> tags = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome()
                     .getTags().stream()
                     .map(tag -> "@" + tag.toString())
                     .collect(Collectors.toList());

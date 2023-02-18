@@ -35,7 +35,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public void evaluateFor(Actor actor) {
-        if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
+        if (thisStepShouldBeIgnored() && !StepEventBus.getParallelEventBus().softAssertsActive()) { return; }
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question, actor.getName()));
 

@@ -53,7 +53,7 @@ public class AppiumDriverProvider implements DriverProvider {
     private WebDriver newDriverUsingExternalServer(String options, EnvironmentVariables environmentVariables) {
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         switch (appiumTargetPlatform(environmentVariables)) {
@@ -86,7 +86,7 @@ public class AppiumDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(testEnvironmentVariables, fixtureProviderService);
 
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         switch (appiumTargetPlatform(testEnvironmentVariables)) {

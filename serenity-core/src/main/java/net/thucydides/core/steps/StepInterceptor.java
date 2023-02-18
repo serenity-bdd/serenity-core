@@ -251,7 +251,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             SuspendWebdriverCallsEvent suspendWebdriverCallsEvent = new SuspendWebdriverCallsEvent();
             TestSession.addEvent(suspendWebdriverCallsEvent);
         } else {
-            StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
+            StepEventBus.getParallelEventBus().temporarilySuspendWebdriverCalls();
         }
 
         Object result = runIfNestedMethodsShouldBeRun(obj, method, args, zuperMethod);
@@ -260,7 +260,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             ReenableWebdriverCallsEvent reenableWebdriverCallsEvent = new ReenableWebdriverCallsEvent();
             TestSession.addEvent(reenableWebdriverCallsEvent);
         } else {
-            StepEventBus.getEventBus().reenableWebdriverCalls();
+            StepEventBus.getParallelEventBus().reenableWebdriverCalls();
         }
 
         return result;
@@ -531,7 +531,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(stepFinishedEvent);
          }
          else {
-            StepEventBus.getEventBus().stepFinished();
+            StepEventBus.getParallelEventBus().stepFinished();
          }
     }
 
@@ -541,7 +541,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(stepIgnoredEvent);
          }
          else {
-            StepEventBus.getEventBus().stepIgnored();
+            StepEventBus.getParallelEventBus().stepIgnored();
          }
     }
 
@@ -550,7 +550,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(new StepPendingEvent(message));
         }
         else {
-            StepEventBus.getEventBus().stepPending(message);
+            StepEventBus.getParallelEventBus().stepPending(message);
         }
     }
 
@@ -559,7 +559,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(new AssumptionViolatedEvent(message));
          }
          else {
-            StepEventBus.getEventBus().assumptionViolated(message);
+            StepEventBus.getParallelEventBus().assumptionViolated(message);
          }
     }
 
@@ -568,7 +568,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(new StepIgnoredEvent());
          }
          else {
-            StepEventBus.getEventBus().stepIgnored();
+            StepEventBus.getParallelEventBus().stepIgnored();
          }
     }
 
@@ -585,9 +585,9 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             }
          } else {
             if (isPending(method)) {
-                StepEventBus.getEventBus().stepPending();
+                StepEventBus.getParallelEventBus().stepPending();
             } else {
-                StepEventBus.getEventBus().stepIgnored();
+                StepEventBus.getParallelEventBus().stepIgnored();
             }
          }
     }
@@ -604,7 +604,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(stepFailedEvent);
         }
         else {
-            StepEventBus.getEventBus().stepFailed(failure);
+            StepEventBus.getParallelEventBus().stepFailed(failure);
         }
         if (shouldThrowExceptionImmediately()) {
             finishAnyCucumberSteps();
@@ -619,7 +619,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(wrapupCurrentCucumberStepEvent);
         }
         else {
-            StepEventBus.getEventBus().wrapUpCurrentCucumberStep();
+            StepEventBus.getParallelEventBus().wrapUpCurrentCucumberStep();
         }
     }
 
@@ -636,7 +636,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             TestSession.addEvent(stepStartedEvent);
         }
         else {
-            StepEventBus.getEventBus().stepStarted(description);
+            StepEventBus.getParallelEventBus().stepStarted(description);
         }
 
     }
@@ -678,7 +678,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             return TestSession.getTestSessionContext().getStepEventBus();
          }
          else {
-            return StepEventBus.getEventBus();
+            return StepEventBus.getParallelEventBus();
          }
     }
 

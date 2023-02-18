@@ -36,13 +36,21 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
 
         // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
 
-        // Define the test name
-        capabilities.setCapability("sessionName", TestOutcomeName.from(testOutcome));
+        String projectName = environmentVariables.getProperty("serenity.project.name","");
+        String testName = TestOutcomeName.from(testOutcome);
+
+//        // Define the test name
+//        capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
+//        // Define the project name to appear in the Browserstack dashboard
+//        capabilities.setCapability("project", environmentVariables.getProperty("serenity.project.name",""));
 
         Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("bstack:options");
         if (currentOptions != null) {
             newOptions.putAll(currentOptions);
         }
+        newOptions.put("sessionName", TestOutcomeName.from(testOutcome));
+
+        // Add the Browserstack options to the capabilities
         capabilities.setCapability("bstack:options", newOptions);
         return capabilities;
     }

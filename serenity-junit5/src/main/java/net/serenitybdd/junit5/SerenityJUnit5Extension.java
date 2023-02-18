@@ -30,14 +30,14 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
     }
 
     private StepEventBus eventBusFor(ExtensionContext context) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             StepEventBus eventBus = StepEventBus.eventBusFor(context.getUniqueId());
             if (!eventBus.isBaseStepListenerRegistered()) {
                 eventBus.registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
             }
             StepEventBus.setCurrentBusToEventBusFor(context.getTestMethod());
         }
-        return StepEventBus.getEventBus();
+        return StepEventBus.getParallelEventBus();
     }
 
     @Override
@@ -56,10 +56,10 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
 
     @Override
     public void afterEach(ExtensionContext context) {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             LOGGER.warn("NO BASE STEP LISTENER FOUND IN THREAD " + Thread.currentThread());
         }
-        TestOutcome outcome = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome();
+        TestOutcome outcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
         String methodName = outcome.getQualifiedMethodName();
         context.getTestMethod().ifPresent(
                 method -> {

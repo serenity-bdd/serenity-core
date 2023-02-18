@@ -9,10 +9,10 @@ public class SerenityAfterEachCallback implements AfterEachCallback {
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+        if (!StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             System.out.println("NO BASE STEP LISTENER FOUND IN THREAD " + Thread.currentThread());
         }
-        TestOutcome outcome = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome();
+        TestOutcome outcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
         String methodName = outcome.getQualifiedMethodName();
         context.getTestMethod().ifPresent(
                 method -> {

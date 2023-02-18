@@ -603,6 +603,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="container-fluid">
+                                                <@tag_cloud />
+                                            </div>
                                         </div>
 
                                         <#if evidence?has_content>

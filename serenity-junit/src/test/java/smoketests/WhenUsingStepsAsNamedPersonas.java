@@ -157,7 +157,7 @@ public class WhenUsingStepsAsNamedPersonas {
     }
 
     private String stepDescriptionFor(String testName) {
-         Optional<TestOutcome> outcome = StepEventBus.getEventBus()
+         Optional<TestOutcome> outcome = StepEventBus.getParallelEventBus()
                 .getBaseStepListener()
                 .getTestOutcomes()
                 .stream()

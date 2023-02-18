@@ -575,7 +575,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private long getLocatorTimeout() {
-        if (StepEventBus.getEventBus().webdriverCallsAreSuspended() || (MethodTiming.forThisThread().isInQuickMethod())) {
+        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended() || (MethodTiming.forThisThread().isInQuickMethod())) {
             return 0;
         } else {
             return TimeUnit.SECONDS.convert(implicitTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
@@ -914,7 +914,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     protected boolean driverIsDisabled() {
-        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+        return StepEventBus.getParallelEventBus().webdriverCallsAreSuspended();
     }
 
     private boolean elementIsPresent() {
@@ -1259,7 +1259,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     protected void notifyScreenChange() {
-        StepEventBus.getEventBus().notifyScreenChange();
+        StepEventBus.getParallelEventBus().notifyScreenChange();
     }
 
     @Override

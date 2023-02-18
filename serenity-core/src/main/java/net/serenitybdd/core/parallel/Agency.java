@@ -25,7 +25,7 @@ public class Agency {
     }
 
     public void registerAgent(Agent agent) {
-        listeners.put(agent, StepEventBus.getEventBus().getBaseStepListener().spawn(agent.getName()));
+        listeners.put(agent, StepEventBus.getParallelEventBus().getBaseStepListener().spawn(agent.getName()));
     }
 
     public Optional<BaseStepListener> baseListenerFor(Agent agent) {

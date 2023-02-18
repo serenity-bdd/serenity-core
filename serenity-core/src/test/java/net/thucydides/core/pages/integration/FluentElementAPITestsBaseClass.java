@@ -30,7 +30,7 @@ public class FluentElementAPITestsBaseClass {
         WebDriverManager.chromedriver().setup();
         chromeService = new ChromeServicePool();
         chromeService.start();
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
 
         final DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         final ChromeOptions chromeOptions = new ChromeOptions();

@@ -116,7 +116,7 @@ public class WebdriverProxyFactory implements Serializable {
 
     public static void clearBrowserSession(WebDriver driver) {
 
-        if (StepEventBus.getEventBus().isDryRun()) { return; }
+        if (StepEventBus.getParallelEventBus().isDryRun()) { return; }
 
         if ((driver instanceof WebDriverFacade)
                 && ((WebDriverFacade) driver).isInstantiated()

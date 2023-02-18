@@ -232,14 +232,14 @@ public class WhenInstanciatingStepLibraries {
     @Before
     public void startTest() {
         Serenity.initialize(this);
-        StepEventBus.getEventBus().testSuiteStarted(Story.called("sample story"));
-        StepEventBus.getEventBus().testStarted("sample test");
+        StepEventBus.getParallelEventBus().testSuiteStarted(Story.called("sample story"));
+        StepEventBus.getParallelEventBus().testStarted("sample test");
     }
 
     @After
     public void finishTest() {
-        StepEventBus.getEventBus().testFinished();
-        StepEventBus.getEventBus().testSuiteFinished();
+        StepEventBus.getParallelEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testSuiteFinished();
     }
 
     @Test
@@ -340,13 +340,13 @@ public class WhenInstanciatingStepLibraries {
     public void should_support_calling_protected_steps_in_parent_classes() {
         MyInheritedStepLibrary myStepLibrary = stepFactory.getSharedStepLibraryFor(MyInheritedStepLibrary.class);
         assertThat(myStepLibrary.aStepWithAProtectedMethod(), is(true));
-        assertThat(StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed(), is(false));
+        assertThat(StepEventBus.getParallelEventBus().aStepInTheCurrentTestHasFailed(), is(false));
     }
 
     @Test
     public void should_support_calling_protected_methods_in_parent_classes() {
         MyInheritedStepLibrary myStepLibrary = stepFactory.getSharedStepLibraryFor(MyInheritedStepLibrary.class);
         assertThat(myStepLibrary.anotherStep(), is(true));
-        assertThat(StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed(), is(false));
+        assertThat(StepEventBus.getParallelEventBus().aStepInTheCurrentTestHasFailed(), is(false));
     }
 }

@@ -23,7 +23,7 @@ class SerenityStatement extends Statement {
         if (publisher instanceof BaseStepListener) {
             return ((BaseStepListener) publisher).getEventBus();
         }
-        return StepEventBus.getEventBus();
+        return StepEventBus.getParallelEventBus();
     }
 
     @Override
@@ -43,7 +43,7 @@ class SerenityStatement extends Statement {
     }
 
     private void updateCurrentEventBusFrom(StepPublisher publisher) {
-        if (StepEventBus.getEventBus() != stepEventBus()) {
+        if (StepEventBus.getParallelEventBus() != stepEventBus()) {
             StepEventBus.overrideEventBusWith(stepEventBus());
         }
     }

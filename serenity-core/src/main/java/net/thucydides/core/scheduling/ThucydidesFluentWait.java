@@ -92,7 +92,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
     }
 
     private boolean webdriverCallsAreSuspended() {
-        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+        return StepEventBus.getParallelEventBus().webdriverCallsAreSuspended();
     }
 
     public abstract void doWait() throws InterruptedException;

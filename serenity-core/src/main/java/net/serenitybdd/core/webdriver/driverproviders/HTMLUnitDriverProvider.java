@@ -34,7 +34,7 @@
 //
 //    @Override
 //    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
-//        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+//        if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
 //            return new WebDriverStub();
 //        }
 //

@@ -534,6 +534,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="container-fluid">
+                                                <@tag_cloud />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

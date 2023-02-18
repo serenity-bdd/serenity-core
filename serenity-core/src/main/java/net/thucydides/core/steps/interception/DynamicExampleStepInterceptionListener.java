@@ -26,7 +26,7 @@ public class DynamicExampleStepInterceptionListener implements StepInterceptionL
                 row.put(header, args[argumentIndex++].toString());
             }
 
-            StepEventBus.getEventBus().exampleStarted(row);
+            StepEventBus.getParallelEventBus().exampleStarted(row);
         }
     }
 
@@ -38,7 +38,7 @@ public class DynamicExampleStepInterceptionListener implements StepInterceptionL
     @Override
     public void end(Object obj, Method method, Object[] args, Method zuperMethod) {
         if (ExampleTables.isUsingAnExampleTable() && TestAnnotations.isAnExampleStep(method)) {
-            StepEventBus.getEventBus().exampleFinished();
+            StepEventBus.getParallelEventBus().exampleFinished();
         }
     }
 }

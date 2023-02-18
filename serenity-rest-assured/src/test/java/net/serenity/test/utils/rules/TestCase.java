@@ -58,7 +58,7 @@ public class TestCase<T extends StepListener> implements MethodRule {
             if(TestSession.isSessionStarted()) {
                 TestSession.addEvent(new TestFinishedEvent());
             } else {
-                StepEventBus.getEventBus().testFinished();
+                StepEventBus.getParallelEventBus().testFinished();
             }
             this.finished = true;
         }
@@ -81,7 +81,7 @@ public class TestCase<T extends StepListener> implements MethodRule {
                     if (TestSession.isSessionStarted()) {
                         TestSession.addEvent( new TestStartedEvent(name));
                     } else {
-                        StepEventBus.getEventBus().testStarted(name);
+                        StepEventBus.getParallelEventBus().testStarted(name);
                     }
 
                     statement.evaluate();

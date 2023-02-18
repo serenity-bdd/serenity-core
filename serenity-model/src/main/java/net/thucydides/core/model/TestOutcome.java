@@ -2113,6 +2113,18 @@ public class TestOutcome {
      */
     public void setContext(String context) {
         this.context = context;
+        addContextTagsFor(context);
+    }
+
+    private void addContextTagsFor(String context) {
+        List<String> contexts = Arrays.stream(context.split(",")).map(String::trim).map(StringUtils::capitalize).collect(Collectors.toList());
+        contexts.forEach(
+                contextElement -> addTag(TestTag.withName(contextElement).andType("context"))
+        );
+        if (contexts.size() > 1) {
+            String allContexts = contexts.stream().collect(Collectors.joining(", "));
+            addTag(TestTag.withName(allContexts).andType("context"));
+        }
     }
 
     /**

@@ -85,9 +85,9 @@ class ThucydidesContext {
 
     private void registerStepListeners(StepListener... additionalListeners) {
         stepListener = buildBaseStepListener();
-        StepEventBus.getEventBus().registerListener(stepListener);
+        StepEventBus.getParallelEventBus().registerListener(stepListener);
         for (StepListener listener : additionalListeners) {
-            StepEventBus.getEventBus().registerListener(listener);
+            StepEventBus.getParallelEventBus().registerListener(listener);
         }
     }
 
@@ -126,7 +126,7 @@ class ThucydidesContext {
     }
 
     public void dropListeners() {
-        StepEventBus.getEventBus().dropAllListeners();
+        StepEventBus.getParallelEventBus().dropAllListeners();
     }
 
 

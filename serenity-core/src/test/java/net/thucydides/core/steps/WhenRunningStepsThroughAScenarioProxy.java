@@ -349,19 +349,19 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
-        StepEventBus.getEventBus().reset();
+        StepEventBus.getParallelEventBus().reset();
         baseStepListener = new BaseStepListener(temp.newFolder());
 
-        StepEventBus.getEventBus().registerListener(baseStepListener);
-        StepEventBus.getEventBus().registerListener(listener);
+        StepEventBus.getParallelEventBus().registerListener(baseStepListener);
+        StepEventBus.getParallelEventBus().registerListener(listener);
 
-        StepEventBus.getEventBus().testSuiteStarted(SomeTestScenario.class);
-        StepEventBus.getEventBus().testStarted("should_do_something");
+        StepEventBus.getParallelEventBus().testSuiteStarted(SomeTestScenario.class);
+        StepEventBus.getParallelEventBus().testStarted("should_do_something");
     }
 
     @After
     public void deregisterListener() {
-        StepEventBus.getEventBus().dropListener(listener);
+        StepEventBus.getParallelEventBus().dropListener(listener);
     }
 
     @Test
@@ -692,12 +692,12 @@ public class WhenRunningStepsThroughAScenarioProxy {
     public void the_proxy_notifies_listeners_of_the_test_outome_when_the_test_is_finished() {
         SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioSteps");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioSteps");
         steps.step_one();
         steps.step2();
         steps.step3();
 
-        StepEventBus.getEventBus().testFinished(testOutcome);
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         ArgumentCaptor<TestOutcome> argument = ArgumentCaptor.forClass(TestOutcome.class);
         verify(listener).testFinished(argument.capture());
@@ -710,7 +710,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
     public void the_proxy_calls_nested_step_methods() {
         SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioSteps");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioSteps");
         steps.nested_steps();
 
         verify(driver).get("nested_steps");
@@ -727,7 +727,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
         steps.steps_with_failure();
 
         verify(databaseAPI, never()).call("nested.method");
@@ -741,7 +741,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
         steps.steps_with_error();
 
         verify(databaseAPI, never()).call("nested.method");
@@ -755,7 +755,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
         steps.steps_with_error();
 
         verify(databaseAPI, never()).call("nested.method");
@@ -768,7 +768,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
 
-        StepEventBus.getEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
+        StepEventBus.getParallelEventBus().testStarted("SimpleTestScenarioStepsWithNestedCallsDisabled");
         steps.steps_without_failure();
 
         verify(databaseAPI).call("nested.method");

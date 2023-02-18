@@ -75,8 +75,8 @@ public class SerenityObjectFactory implements ObjectFactory {
         }
         Serenity.initializeWithNoStepListener(instance).throwExceptionsImmediately();
 
-       if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            TestOutcome newTestOutcome = StepEventBus.getEventBus().getBaseStepListener().getCurrentTestOutcome();
+       if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
+            TestOutcome newTestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
             LifecycleRegister.register(instance);
             LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
        }

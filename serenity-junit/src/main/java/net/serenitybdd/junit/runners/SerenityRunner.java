@@ -249,7 +249,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
         try {
             RunNotifier localNotifier = initializeRunNotifier(notifier);
-            StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
+            StepEventBus.getParallelEventBus().registerListener(failureDetectingStepListener);
 
             super.run(localNotifier);
             fireNotificationsBasedOnTestResultsTo(notifier);
@@ -262,17 +262,17 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             Map<String, List<String>> failedTests = stepListener.getFailedTests();
             failureRerunner.recordFailedTests(failedTests);
             dropListeners(notifier);
-            StepEventBus.getEventBus().dropAllListeners();
+            StepEventBus.getParallelEventBus().dropAllListeners();
         }
     }
 
 
 
     private Optional<TestOutcome> latestOutcome() {
-        if (StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().isEmpty()) {
+        if (StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes().isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0));
+        return Optional.of(StepEventBus.getParallelEventBus().getBaseStepListener().getTestOutcomes().get(0));
     }
 
     private void fireNotificationsBasedOnTestResultsTo(RunNotifier notifier) {
@@ -284,9 +284,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     private void notifyTestSuiteFinished() {
         try {
             if (dataDrivenTest()) {
-                StepEventBus.getEventBus().exampleFinished();
+                StepEventBus.getParallelEventBus().exampleFinished();
             } else {
-                StepEventBus.getEventBus().testSuiteFinished();
+                StepEventBus.getParallelEventBus().testSuiteFinished();
             }
         } catch (Throwable listenerException) {
             // We report and ignore listener exceptions so as not to mess up the rest of the test mechanics.
@@ -358,7 +358,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
 
     protected void initStepEventBus() {
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     private void initPagesObjectUsing(final WebDriver driver) {
@@ -437,7 +437,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             processTestMethodAnnotationsFor(method);
         }
 
-        StepEventBus.getEventBus().initialiseSession();
+        StepEventBus.getParallelEventBus().initialiseSession();
 
         prepareBrowserForTest();
         additionalBrowserCleanup();
@@ -455,13 +455,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
         int attemptNum = maxRetries() - remainingTries + 1;
         logger.debug(rerunTest.toString() + ": attempt " + attemptNum);
-        StepEventBus.getEventBus().cancelPreviousTest();
+        StepEventBus.getParallelEventBus().cancelPreviousTest();
         rerunTest.perform();
 
         if (failureDetectingStepListener.lastTestFailed()) {
             retryAtMost(remainingTries - 1, rerunTest);
         } else {
-            StepEventBus.getEventBus().lastTestPassedAfterRetries(attemptNum,
+            StepEventBus.getParallelEventBus().lastTestPassedAfterRetries(attemptNum,
                                                                   failureDetectingStepListener.getFailureMessages(),failureDetectingStepListener.getTestFailureCause());
         }
     }
@@ -517,16 +517,16 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private void markAsPending(FrameworkMethod method) {
         testStarted(method);
-        StepEventBus.getEventBus().testPending();
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getParallelEventBus().testPending();
+        StepEventBus.getParallelEventBus().testFinished();
     }
 
     private Consumer<RunNotifier> markAsManual(FrameworkMethod method) {
         TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
 
         testStarted(method);
-        StepEventBus.getEventBus().testIsManual();
-        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+        StepEventBus.getParallelEventBus().testIsManual();
+        StepEventBus.getParallelEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
                 outcome -> {
                     outcome.setResult(theMethod.getManualResult());
                     if (theMethod.getManualResult() == FAILURE) {
@@ -538,28 +538,28 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
         switch(theMethod.getManualResult()) {
             case SUCCESS:
-                StepEventBus.getEventBus().testFinished();
+                StepEventBus.getParallelEventBus().testFinished();
                 return (notifier -> notifier.fireTestFinished(Description.EMPTY));
             case FAILURE:
                 Throwable failure = new ManualTestMarkedAsFailure(manualReasonDeclaredIn(theMethod));
-                StepEventBus.getEventBus().testFailed(failure);
+                StepEventBus.getParallelEventBus().testFailed(failure);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),failure)));
             case ERROR:
             case COMPROMISED:
             case UNSUCCESSFUL:
                 Throwable error = new ManualTestMarkedAsError(manualReasonDeclaredIn(theMethod));
-                StepEventBus.getEventBus().testFailed(error);
+                StepEventBus.getParallelEventBus().testFailed(error);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),error)));
             case IGNORED:
-                StepEventBus.getEventBus().testIgnored();
+                StepEventBus.getParallelEventBus().testIgnored();
                 return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
             case SKIPPED:
-                StepEventBus.getEventBus().testSkipped();
+                StepEventBus.getParallelEventBus().testSkipped();
                 return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
             default:
-                StepEventBus.getEventBus().testPending();
+                StepEventBus.getParallelEventBus().testPending();
                 return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
         }
     }
@@ -581,8 +581,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     private void processTestMethodAnnotationsFor(FrameworkMethod method) {
         if (isIgnored(method)) {
             testStarted(method);
-            StepEventBus.getEventBus().testIgnored();
-            StepEventBus.getEventBus().testFinished();
+            StepEventBus.getParallelEventBus().testIgnored();
+            StepEventBus.getParallelEventBus().testFinished();
         }
     }
 

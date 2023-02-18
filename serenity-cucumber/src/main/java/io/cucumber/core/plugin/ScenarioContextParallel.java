@@ -364,7 +364,7 @@ public class ScenarioContextParallel {
         LOGGER.debug("SRP:playAllTestEvents for URI " +  scenarioContextURI + "--" + allTestEventsByLine);
         allTestEventsByLine.entrySet().forEach((entry) -> replayAllTestCaseEventsForLine(entry.getKey(),entry.getValue()));
         stepEventBus.clear();
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
     }
 
     private void replayAllTestCaseEventsForLine(Integer lineNumber, List<StepEventBusEvent> stepEventBusEvents) {

@@ -12,7 +12,7 @@ import java.nio.file.Path;
 
 public class Photographer {
     public File takesAScreenshot(Page currentPage) {
-        BaseStepListener baseStepListener = StepEventBus.getEventBus().getBaseStepListener();
+        BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();
 
         byte[] screenshot = currentPage.screenshot(new Page.ScreenshotOptions().setFullPage(true));
 

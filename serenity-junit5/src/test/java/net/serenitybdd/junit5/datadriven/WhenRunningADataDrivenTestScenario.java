@@ -51,7 +51,7 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
         webDriverFactory = new WebDriverFactory(environmentVariables);
-        StepEventBus.getEventBus().clear();
+        StepEventBus.getParallelEventBus().clear();
         StepEventBus.setNoCleanupForStickyBuses(true);
     }
 

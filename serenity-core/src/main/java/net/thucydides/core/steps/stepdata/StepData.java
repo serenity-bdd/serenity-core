@@ -38,7 +38,7 @@ public final class StepData {
 
         useDefaultStepFactoryIfUnassigned();
 
-        StepEventBus.getEventBus().useExamplesFrom(dataTable(testdata));
+        StepEventBus.getParallelEventBus().useExamplesFrom(dataTable(testdata));
 
         Class<?> scenarioStepsClass = steps.getClass().getSuperclass();
         List<T> instanciatedSteps = (List<T>) testdata.getInstanciatedInstancesFrom(scenarioStepsClass, factory);

@@ -33,18 +33,18 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
         factory = StepFactory.getFactory();
 
         listener = new ConsoleStepListener();
-        StepEventBus.getEventBus().reset();
-        StepEventBus.getEventBus().registerListener(listener);
-        StepEventBus.getEventBus().registerListener(mockListener);
+        StepEventBus.getParallelEventBus().reset();
+        StepEventBus.getParallelEventBus().registerListener(listener);
+        StepEventBus.getParallelEventBus().registerListener(mockListener);
 
-        StepEventBus.getEventBus().testStarted("aTest");
+        StepEventBus.getParallelEventBus().testStarted("aTest");
 
     }
 
     @After
     public void deregisterListener() {
-        StepEventBus.getEventBus().dropListener(listener);
-        StepEventBus.getEventBus().dropListener(mockListener);
+        StepEventBus.getParallelEventBus().dropListener(listener);
+        StepEventBus.getParallelEventBus().dropListener(mockListener);
     }
 
     static class SimpleSteps {

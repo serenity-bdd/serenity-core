@@ -123,7 +123,9 @@
                                     <i class="bi bi-tag-fill"></i>&nbsp;
                                         <a class="tagLink" style="${tagStyle}"
                                            href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
-                                            (${tag.type})
+                                            <#if tag.type != "context" && tag.type != "tag">
+                                              (${tag.type})
+                                            </#if>
                                         </a>
                                 </span>
                                 </#list>

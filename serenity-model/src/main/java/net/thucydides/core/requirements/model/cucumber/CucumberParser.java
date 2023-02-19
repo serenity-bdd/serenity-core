@@ -97,19 +97,21 @@ public class CucumberParser {
              throw invalidFeatureFile;
         }
         catch (Throwable ex) {
-            ex.printStackTrace();
+            LOGGER.error("Invalid feature ",ex);
             return Optional.empty();
         }
     }
 
     private void analyseDuplicateScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
         if (scenarios.size() > 1) {
+            LOGGER.error("Duplicate scenario name '{}' ", scenarioName);
             throw new InvalidFeatureFileException(String.format("Duplicate scenario name '%s'", scenarioName));
         }
     }
 
     private void analyseEmptyScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
         if (scenarioName.isEmpty()) {
+            LOGGER.error("Empty scenario name ");
             throw new InvalidFeatureFileException(String.format("Empty scenario name "));
         }
     }

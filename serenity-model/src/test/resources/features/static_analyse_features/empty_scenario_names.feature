@@ -1,4 +1,4 @@
-Feature: A feature file with a syntax error
+Feature: A feature file with a empty scenario name
 
   Scenario:
     Given that Jane has a todo list containing Buy some milk, Walk the dog

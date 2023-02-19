@@ -77,6 +77,7 @@ public class CucumberParser {
             if (gherkinDocument.getFeature().isPresent()) {
                 Feature feature = gherkinDocument.getFeature().get();
                 if (feature.getName().isEmpty()) {
+                    LOGGER.error("Empty feature name in file '{}'", narrativeFile);
                     throw new InvalidFeatureFileException(String.format("Empty feature name in file '%s'", narrativeFile));
                 }
                 List<Scenario> scenarioList = feature.getChildren().stream()

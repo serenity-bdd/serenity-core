@@ -7,6 +7,7 @@ import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
@@ -36,8 +37,10 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
 
         // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
 
-        String projectName = environmentVariables.getProperty("serenity.project.name","");
         String testName = TestOutcomeName.from(testOutcome);
+        if(TestSession.isSessionStarted()) {
+            testName = TestSession.getTestSessionContext().getCurrentTestName();
+        }
 
 //        // Define the test name
 //        capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
@@ -48,7 +51,7 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         if (currentOptions != null) {
             newOptions.putAll(currentOptions);
         }
-        newOptions.put("sessionName", TestOutcomeName.from(testOutcome));
+        newOptions.put("sessionName", testName);
 
         // Add the Browserstack options to the capabilities
         capabilities.setCapability("bstack:options", newOptions);

@@ -1,19 +1,22 @@
 package net.serenitybdd.plugins.browserstack;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -66,7 +69,11 @@ public class BrowserStackTestSession {
     private void updateName(TestOutcome testOutcome) throws IOException {
         HttpPut putRequest = new HttpPut(getSessionUri());
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-        nameValuePairs.add(new BasicNameValuePair("name", TestOutcomeName.from(testOutcome)));
+        String testName = TestOutcomeName.from(testOutcome);
+        if(TestSession.isSessionStarted()) {
+            testName = TestSession.getTestSessionContext().getCurrentTestName();
+        }
+        nameValuePairs.add(new BasicNameValuePair("name", testName));
         putRequest.setEntity(new UrlEncodedFormEntity(nameValuePairs));
         HttpClientBuilder.create().build().execute(putRequest);
     }
@@ -170,11 +177,13 @@ public class BrowserStackTestSession {
         }
 
         try {
+            HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom().
+                                                            setCookieSpec(CookieSpecs.STANDARD).build()).build();
             HttpGet querySessionInfo = new HttpGet(getSessionUri());
-            HttpEntity sessionDetails = HttpClientBuilder.create().build().execute(querySessionInfo).getEntity();
+            HttpEntity sessionDetails = httpClient.execute(querySessionInfo).getEntity();
             String sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));
             sessionElement = gson.fromJson(sessionBody, JsonElement.class);
-        } catch (IOException | JsonSyntaxException e) {
+        } catch (IOException | JsonSyntaxException | JsonIOException e) {
             LOGGER.error("Failed to connect to Browserstack API.", e);
         }
 

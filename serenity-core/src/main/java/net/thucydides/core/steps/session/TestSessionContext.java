@@ -14,6 +14,8 @@ public class TestSessionContext {
 
 	private StepEventBus stepEventBus;
 
+	private String currentTestName;
+
 	private AtomicBoolean sessionStarted = new AtomicBoolean(false);
 
 	private List<StepEventBusEvent> stepEventBusEvents = Collections.synchronizedList(new LinkedList<>());
@@ -45,5 +47,13 @@ public class TestSessionContext {
 
 	public void setStepEventBus(StepEventBus stepEventBus) {
 		this.stepEventBus = stepEventBus;
+	}
+
+	public String getCurrentTestName() {
+		return currentTestName;
+	}
+
+	public void setCurrentTestName(String currentTestName) {
+		this.currentTestName = currentTestName;
 	}
 }

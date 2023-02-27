@@ -1,5 +1,7 @@
 package net.thucydides.core.steps.events;
 
+import net.thucydides.core.steps.session.TestSession;
+
 import java.time.ZonedDateTime;
 
 public class TestStartedEvent extends StepEventBusEventBase {
@@ -14,6 +16,9 @@ public class TestStartedEvent extends StepEventBusEventBase {
 	public TestStartedEvent(final String testName) {
 		this.testName =  testName;
 		this.startTime = ZonedDateTime.now();
+		if (TestSession.isSessionStarted()) {
+			TestSession.getTestSessionContext().setCurrentTestName(testName);
+		}
 	}
 
 
@@ -23,6 +28,9 @@ public class TestStartedEvent extends StepEventBusEventBase {
 		this.testName =  testName;
 		this.id = id;
 		this.startTime = ZonedDateTime.now();
+		if (TestSession.isSessionStarted()) {
+			TestSession.getTestSessionContext().setCurrentTestName(testName);
+		}
 	}
 
 

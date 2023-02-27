@@ -6,7 +6,6 @@ import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.util.EnvironmentVariables;

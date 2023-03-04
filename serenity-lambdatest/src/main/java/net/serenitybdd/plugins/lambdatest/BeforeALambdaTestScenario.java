@@ -8,6 +8,7 @@ import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
@@ -42,7 +43,11 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("accessKey", lambdaTestCredentials.getAccessKey());
 
         // Define the test name
-        newOptions.put("name", TestOutcomeName.from(testOutcome));
+        String testName = TestOutcomeName.from(testOutcome);
+        if(TestSession.isSessionStarted()) {
+            testName = TestSession.getTestSessionContext().getCurrentTestName();
+        }
+        newOptions.put("name", testName);
 
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));

@@ -30,6 +30,7 @@ import net.thucydides.core.model.screenshots.ScreenshotPermission;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.ConfigCache;
 import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
@@ -628,11 +629,32 @@ public class BaseStepListener implements StepListener, StepPublisher {
             }
         }
 
+        handlePostponedParallelExecution(outcome, isInDataDrivenTest);
+
         currentStepStack.clear();
         while (!currentGroupStack.isEmpty()) {
             finishGroup();
         }
         LifecycleRegister.clear();
+    }
+
+    private void handlePostponedParallelExecution(TestOutcome outcome, boolean isInDataDrivenTest) {
+        if (TestSession.getTestSessionContext().getWebDriver() != null) {
+            getCurrentTestOutcome().setDriver(TestSession.getTestSessionContext().getDriverUsedInThisTest());
+            updateSessionIdIfKnown();
+
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    outcome,
+                    TestSession.getTestSessionContext().getWebDriver());
+
+            if (isInDataDrivenTest) {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
+            } else {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+                ThucydidesWebDriverSupport.clearDefaultDriver();
+            }
+        }
     }
 
     private void testAndTopLevelStepsShouldBeIgnored() {

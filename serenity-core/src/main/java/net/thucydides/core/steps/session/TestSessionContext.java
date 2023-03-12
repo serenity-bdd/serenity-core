@@ -2,6 +2,8 @@ package net.thucydides.core.steps.session;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.events.StepEventBusEvent;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.SessionId;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -16,6 +18,7 @@ public class TestSessionContext {
 
 	private String currentTestName;
 
+
 	private AtomicBoolean sessionStarted = new AtomicBoolean(false);
 
 	private List<StepEventBusEvent> stepEventBusEvents = Collections.synchronizedList(new LinkedList<>());
@@ -23,6 +26,11 @@ public class TestSessionContext {
 	public AtomicBoolean getSessionStarted() {
 		return sessionStarted;
 	}
+
+	private String driverUsedInThisTest;
+
+	private WebDriver webDriver;
+
 
 	public List<StepEventBusEvent> getStepEventBusEvents() {
 		return stepEventBusEvents;
@@ -32,6 +40,8 @@ public class TestSessionContext {
 		event.setStepEventBus(stepEventBus);
 		stepEventBusEvents.add(event);
 	}
+
+	private SessionId webSessionId;
 
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
@@ -55,5 +65,29 @@ public class TestSessionContext {
 
 	public void setCurrentTestName(String currentTestName) {
 		this.currentTestName = currentTestName;
+	}
+
+	public SessionId getWebSessionId() {
+		return webSessionId;
+	}
+
+	public void setWebSessionId(SessionId webSessionId) {
+		this.webSessionId = webSessionId;
+	}
+
+	public String getDriverUsedInThisTest() {
+		return driverUsedInThisTest;
+	}
+
+	public void setDriverUsedInThisTest(String driverUsedInThisTest) {
+		this.driverUsedInThisTest = driverUsedInThisTest;
+	}
+
+	public WebDriver getWebDriver() {
+		return webDriver;
+	}
+
+	public void setWebDriver(WebDriver webDriver) {
+		this.webDriver = webDriver;
 	}
 }

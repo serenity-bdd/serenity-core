@@ -10,7 +10,6 @@ import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +119,7 @@ public class Pages implements Serializable {
             checkUrlPatterns(pageObjectClass, pageCandidate);
             cacheCurrentPage(pageCandidate);
             nextPage = pageCandidate;
-            nextPage.addJQuerySupport();
+            nextPage.addJQuerySupportIfRequired();
         }
         usePreviousPage = false;
         return nextPage;

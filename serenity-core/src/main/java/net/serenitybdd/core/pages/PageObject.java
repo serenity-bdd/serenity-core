@@ -883,7 +883,7 @@ public abstract class PageObject {
     }
 
     private void initializePage() {
-        addJQuerySupport();
+        addJQuerySupportIfRequired();
         callWhenPageOpensMethods();
     }
 
@@ -980,9 +980,7 @@ public abstract class PageObject {
     private void openPageAtUrl(final String startingUrl) {
         String url = NormalizeUrlForm.ofUrl(startingUrl);
         getDriver().get(url);
-        if (javascriptIsSupportedIn(getDriver())) {
-            addJQuerySupport();
-        }
+        addJQuerySupportIfRequired();
     }
 
     /**
@@ -1324,7 +1322,7 @@ public abstract class PageObject {
         if (StepEventBus.getParallelEventBus().isDryRun()) {
             return "";
         }
-        addJQuerySupport();
+        addJQuerySupportIfRequired();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeScript(script);
     }
@@ -1333,7 +1331,7 @@ public abstract class PageObject {
         if (StepEventBus.getParallelEventBus().isDryRun()) {
             return "";
         }
-        addJQuerySupport();
+        addJQuerySupportIfRequired();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeAsyncScript(script);
     }
@@ -1342,7 +1340,7 @@ public abstract class PageObject {
         if (StepEventBus.getParallelEventBus().isDryRun()) {
             return "";
         }
-        addJQuerySupport();
+        addJQuerySupportIfRequired();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeScript(script, params);
     }
@@ -1351,13 +1349,13 @@ public abstract class PageObject {
         if (StepEventBus.getParallelEventBus().isDryRun()) {
             return "";
         }
-        addJQuerySupport();
+        addJQuerySupportIfRequired();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         return js.executeAsyncScript(script, params);
     }
 
-    public void addJQuerySupport() {
-        if (pageIsLoaded() && jqueryIntegrationIsActivated() && driverIsJQueryCompatible()) {
+    public void addJQuerySupportIfRequired() {
+        if (javascriptIsSupportedIn(getDriver()) && jqueryIntegrationIsActivated() && driverIsJQueryCompatible() && pageIsLoaded()) {
             JQueryEnabledPage jQueryEnabledPage = JQueryEnabledPage.withDriver(getDriver());
             jQueryEnabledPage.activateJQuery();
         }

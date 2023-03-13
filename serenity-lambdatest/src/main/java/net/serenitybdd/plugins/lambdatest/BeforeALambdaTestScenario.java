@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
+
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
     @Override
@@ -41,6 +43,9 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
         newOptions.put("user", lambdaTestCredentials.getUser());
         newOptions.put("accessKey", lambdaTestCredentials.getAccessKey());
+        newOptions.put("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
+        newOptions.put("build", BuildName.from(testOutcome, environmentVariables));
+        newOptions.put("w3c", true);
 
         // Define the test name
         String testName = TestOutcomeName.from(testOutcome);

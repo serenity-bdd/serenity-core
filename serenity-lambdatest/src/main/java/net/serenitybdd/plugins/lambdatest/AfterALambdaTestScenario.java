@@ -53,9 +53,11 @@ public class AfterALambdaTestScenario implements AfterAWebdriverScenario {
 
     private void updateTestStatusFrom(TestOutcome testOutcome, EnvironmentVariables environmentVariables, String sessionId) {
         String testName = TestOutcomeName.from(testOutcome);
+        if (TestSession.getTestSessionContext().getCurrentTestName() != null) {
+            testName = TestSession.getTestSessionContext().getCurrentTestName();
+        }
         String testResult = resultFrom(testOutcome);
-        LOGGER.debug("Update test result for test " + testName + " testResult " + testResult);
-
+        LOGGER.debug("Update test result for test " + testName + " testResult " + testResult + " and session id " + sessionId);
         try {
             StringEntity updatePayload = new StringEntity(String.format(NAME_AND_STATUS_UPDATE, testName, testResult));
             URI uri = LambdaTestUri.definedIn(environmentVariables).getSessionUri(sessionId);

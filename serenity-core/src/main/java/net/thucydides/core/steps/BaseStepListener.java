@@ -612,24 +612,30 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         OverrideDriverCapabilities.clear();
 
-        if (currentTestIsABrowserTest()) {
-            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
-            updateSessionIdIfKnown();
+        if (TestSession.getTestSessionContext().getWebDriver() != null) {
+            handlePostponedParallelExecution(outcome, isInDataDrivenTest);
+        } else {
+            if (currentTestIsABrowserTest()) {
+                getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+                updateSessionIdIfKnown();
 
-            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
-                    getEventBus().getEnvironmentVariables(),
-                    outcome,
-                    SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
+                AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                        getEventBus().getEnvironmentVariables(),
+                        outcome,
+                        SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
-            if (isInDataDrivenTest) {
-                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
-            } else {
-                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
-                ThucydidesWebDriverSupport.clearDefaultDriver();
+                if (isInDataDrivenTest) {
+                    closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
+                } else {
+                    closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+                    ThucydidesWebDriverSupport.clearDefaultDriver();
+                }
             }
         }
 
-        handlePostponedParallelExecution(outcome, isInDataDrivenTest);
+
+
+
 
         currentStepStack.clear();
         while (!currentGroupStack.isEmpty()) {
@@ -639,21 +645,19 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void handlePostponedParallelExecution(TestOutcome outcome, boolean isInDataDrivenTest) {
-        if (TestSession.getTestSessionContext().getWebDriver() != null) {
-            getCurrentTestOutcome().setDriver(TestSession.getTestSessionContext().getDriverUsedInThisTest());
-            updateSessionIdIfKnown();
+        getCurrentTestOutcome().setDriver(TestSession.getTestSessionContext().getDriverUsedInThisTest());
+        updateSessionIdIfKnown();
 
-            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
-                    getEventBus().getEnvironmentVariables(),
-                    outcome,
-                    TestSession.getTestSessionContext().getWebDriver());
+        AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                getEventBus().getEnvironmentVariables(),
+                outcome,
+                TestSession.getTestSessionContext().getWebDriver());
 
-            if (isInDataDrivenTest) {
-                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
-            } else {
-                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
-                ThucydidesWebDriverSupport.clearDefaultDriver();
-            }
+        if (isInDataDrivenTest) {
+            closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
+        } else {
+            closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+            ThucydidesWebDriverSupport.clearDefaultDriver();
         }
     }
 
@@ -1390,7 +1394,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
             latestTestOutcome().get().moveToNextRow();
         }
         OverrideDriverCapabilities.clear();
-        if (currentTestIsABrowserTest()) {
+        if (TestSession.getTestSessionContext().getWebDriver() != null) {
+            getCurrentTestOutcome().setDriver(TestSession.getTestSessionContext().getDriverUsedInThisTest());
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    getCurrentTestOutcome(),
+                    TestSession.getTestSessionContext().getWebDriver());
+        } else if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             //    updateSessionIdIfKnown();
 
@@ -1399,6 +1409,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     getCurrentTestOutcome(),
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
         }
+
 
         closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
     }

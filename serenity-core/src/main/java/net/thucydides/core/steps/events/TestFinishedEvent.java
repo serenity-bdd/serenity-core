@@ -66,7 +66,7 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 	}
 
 	public String toString() {
-		return("EventBusEvent TEST_FINISHED_EVENT "  + " " + inDataTest);
+		return("EventBusEvent TEST_FINISHED_EVENT "  + " " + inDataTest + " scenario " + getScenarioId());
 	}
 
 	public SessionId getWebSessionId() {

@@ -380,7 +380,7 @@ public class ScenarioContextParallel {
             highPriorityEventBusEvents.remove(eventWithScenarioId.get().getScenarioId());
         }
         for(StepEventBusEvent currentStepBusEvent : stepEventBusEvents) {
-           LOGGER.trace("SRP:PLAY session event  " + currentStepBusEvent + " " +  Thread.currentThread());
+           LOGGER.trace("SRP:PLAY session event  " + currentStepBusEvent + " " +  Thread.currentThread() + " " + currentStepBusEvent.hashCode());
            currentStepBusEvent.play();
        }
     }

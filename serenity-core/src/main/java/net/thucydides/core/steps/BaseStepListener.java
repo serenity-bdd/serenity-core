@@ -633,10 +633,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
             }
         }
 
-
-
-
-
         currentStepStack.clear();
         while (!currentGroupStack.isEmpty()) {
             finishGroup();

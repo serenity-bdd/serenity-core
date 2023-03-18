@@ -66,7 +66,31 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 	}
 
 	public String toString() {
-		return("EventBusEvent TEST_FINISHED_EVENT "  + " " + inDataTest);
+		return("EventBusEvent TEST_FINISHED_EVENT "  + " " + inDataTest + " scenario " + getScenarioId());
+	}
+
+	public SessionId getWebSessionId() {
+		return webSessionId;
+	}
+
+	public void setWebSessionId(SessionId webSessionId) {
+		this.webSessionId = webSessionId;
+	}
+
+	public String getDriverUsedInThisTest() {
+		return driverUsedInThisTest;
+	}
+
+	public void setDriverUsedInThisTest(String driverUsedInThisTest) {
+		this.driverUsedInThisTest = driverUsedInThisTest;
+	}
+
+	public WebDriver getWebDriver() {
+		return webDriver;
+	}
+
+	public void setWebDriver(WebDriver webDriver) {
+		this.webDriver = webDriver;
 	}
 
 	public SessionId getWebSessionId() {

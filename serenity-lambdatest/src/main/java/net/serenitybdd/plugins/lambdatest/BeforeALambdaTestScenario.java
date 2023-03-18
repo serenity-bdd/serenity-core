@@ -49,7 +49,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
 
         // Define the test name
         String testName = TestOutcomeName.from(testOutcome);
-        if(TestSession.isSessionStarted()) {
+        if (TestSession.getTestSessionContext().getCurrentTestName() != null) {
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
         newOptions.put("name", testName);

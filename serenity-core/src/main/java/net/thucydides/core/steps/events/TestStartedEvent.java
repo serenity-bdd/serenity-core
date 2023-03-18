@@ -16,9 +16,7 @@ public class TestStartedEvent extends StepEventBusEventBase {
 	public TestStartedEvent(final String testName) {
 		this.testName =  testName;
 		this.startTime = ZonedDateTime.now();
-		if (TestSession.isSessionStarted()) {
-			TestSession.getTestSessionContext().setCurrentTestName(testName);
-		}
+		TestSession.getTestSessionContext().setCurrentTestName(testName);
 	}
 
 
@@ -28,14 +26,13 @@ public class TestStartedEvent extends StepEventBusEventBase {
 		this.testName =  testName;
 		this.id = id;
 		this.startTime = ZonedDateTime.now();
-		if (TestSession.isSessionStarted()) {
-			TestSession.getTestSessionContext().setCurrentTestName(testName);
-		}
+		TestSession.getTestSessionContext().setCurrentTestName(testName);
 	}
 
 
 	@Override
 	public void play() {
+		TestSession.getTestSessionContext().setCurrentTestName(testName);
 		if(getScenarioId() != null) {
 			getStepEventBus().testStarted(testName, id, startTime);
 		}
@@ -45,6 +42,6 @@ public class TestStartedEvent extends StepEventBusEventBase {
 	}
 
 	public String toString() {
-		return("EventBusEvent TEST_STARTED_EVENT " + testName + " " + id);
+		return("EventBusEvent TEST_STARTED_EVENT with name " + testName + " " + id);
 	}
 }

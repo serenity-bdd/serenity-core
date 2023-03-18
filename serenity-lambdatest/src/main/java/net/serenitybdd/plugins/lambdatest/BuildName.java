@@ -1,17 +1,20 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.joda.time.LocalDateTime;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
 
 public class BuildName {
-    public static String from(TestOutcome testOutcome, EnvironmentVariables environmentVariables) {
+
+    private static final String buildTimeStamp = LocalDateTime.now().toString("yyyy-MM-dd hh:mm");
+
+    public static String from(EnvironmentVariables environmentVariables) {
+        String projectName = SERENITY_PROJECT_NAME.from(environmentVariables, "Serenity BDD Test Suite");
         if (environmentVariables.getValue("BUILD_NUMBER") != null) {
-            return testOutcome.getStoryTitle() + " - build " + environmentVariables.getValue("BUILD_NUMBER");
+            return projectName + " - build " + environmentVariables.getValue("BUILD_NUMBER");
         } else {
-            return testOutcome.getStoryTitle() + " - build " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+            return projectName + " - " + buildTimeStamp;
         }
     }
 }

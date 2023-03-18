@@ -44,7 +44,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("user", lambdaTestCredentials.getUser());
         newOptions.put("accessKey", lambdaTestCredentials.getAccessKey());
         newOptions.put("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
-        newOptions.put("build", BuildName.from(testOutcome, environmentVariables));
+        newOptions.put("build", BuildName.from(environmentVariables));
         newOptions.put("w3c", true);
 
         // Define the test name

@@ -33,7 +33,7 @@
         <connection>scm:git:https://github.com/serenity-bdd/serenity-core.git</connection>
         <developerConnection>scm:git:https://github.com/serenity-bdd/serenity-core.git</developerConnection>
         <url>https://github.com/serenity-bdd/serenity-core</url>
-        <tag>3.6.10</tag>
+        <tag>3.6.15</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -844,7 +844,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

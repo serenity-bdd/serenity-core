@@ -9,9 +9,9 @@ class WhenLoadingFeatureFilesWithEmptyFeatureName extends Specification {
     def "Should display a meaningful error message if there are empty feature names"() {
         when:
         CucumberParser parser = new CucumberParser()
-        Optional<AnnotatedFeature> feature = parser.loadFeature(new File(emptyFeatureNameFile))
+        parser.loadFeature(new File(emptyFeatureNameFile))
         then:
         InvalidFeatureFileException ex = thrown()
-            ex.message.contains("Empty feature name")
+            ex.message.contains("The feature name in 'empty_feature_name.feature' is empty")
     }
 }

@@ -14,9 +14,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <maven.core.version>3.6.3</maven.core.version>
-        <maven.repoorting.version>3.0</maven.repoorting.version>
-        <maven.plugin.version>3.5</maven.plugin.version>
+        <maven.core.version>3.9.0</maven.core.version>
+        <maven.reporting.version>3.1.1</maven.reporting.version>
+        <maven.plugin.version>3.8.1</maven.plugin.version>
     </properties>
 
     <build>
@@ -114,7 +114,7 @@
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
             <artifactId>maven-reporting-api</artifactId>
-            <version>${maven.repoorting.version}</version>
+            <version>${maven.reporting.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

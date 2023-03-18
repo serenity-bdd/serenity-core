@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay.webtests.ui.integration
 
 
-import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.screenplay.questions.SamplePage
 import net.serenitybdd.screenplay.ui.PageElement
 import net.serenitybdd.screenplay.ui.RadioButton
@@ -9,9 +8,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.firefox.FirefoxOptions
-import org.openqa.selenium.support.locators.RelativeLocator
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,10 +18,10 @@ class WhenInteractingWithRadioButtons extends Specification {
     static SamplePage samplePage;
 
     def setupSpec() {
-        WebDriverManager.firefoxdriver().setup()
-        FirefoxOptions options = new FirefoxOptions()
-        options.setHeadless(true)
-        driver = new FirefoxDriver(options)
+        ChromeOptions options = new ChromeOptions()
+        options.addArguments("headless","remote-allow-origins=*")
+        driver = new ChromeDriver(options)
+
         samplePage = new SamplePage(driver)
     }
 

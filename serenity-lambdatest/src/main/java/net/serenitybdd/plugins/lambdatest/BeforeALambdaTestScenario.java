@@ -44,7 +44,6 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("user", lambdaTestCredentials.getUser());
         newOptions.put("accessKey", lambdaTestCredentials.getAccessKey());
         newOptions.put("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
-        newOptions.put("build", BuildName.from(environmentVariables));
         newOptions.put("w3c", true);
 
         // Define the test name
@@ -53,6 +52,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
         newOptions.put("name", testName);
+        newOptions.put("build", BuildName.from(environmentVariables));
 
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));

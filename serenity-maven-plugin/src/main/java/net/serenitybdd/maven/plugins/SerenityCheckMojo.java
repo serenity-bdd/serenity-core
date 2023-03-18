@@ -19,7 +19,8 @@ import java.io.File;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * This plugin checks for the presence of failing tests in the target directory
+ * This plugin checks for the presence of failing tests in the target directory.
+ * You typically run this goal directly after the aggregate goal, to ensure that the build fails if there are errors.
  */
 @Mojo(name = "check", requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class SerenityCheckMojo extends AbstractMojo {

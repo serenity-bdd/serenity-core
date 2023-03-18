@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.webtests.ui.integration
 
-import io.github.bonigarcia.wdm.WebDriverManager
+
 import net.serenitybdd.screenplay.questions.SamplePage
 import net.serenitybdd.screenplay.ui.PageElement
 import org.openqa.selenium.WebDriver
@@ -16,10 +16,10 @@ class WhenInteractingWithPageElements extends Specification {
     static SamplePage samplePage;
 
     def setupSpec() {
-        WebDriverManager.chromedriver().setup()
         ChromeOptions options = new ChromeOptions()
-        options.setHeadless(true)
+        options.addArguments("headless","remote-allow-origins=*")
         driver = new ChromeDriver(options)
+
         samplePage = new SamplePage(driver)
     }
 

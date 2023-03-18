@@ -533,7 +533,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public Requirement readRequirementFrom(File requirementDirectory) {
         requirementDirectory = normalised(requirementDirectory);
-        java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level - 1));
+//        java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level - 1));
+        java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level));
 
         if (requirementNarrative.isPresent()) {
             return requirementWithNarrative(requirementDirectory,

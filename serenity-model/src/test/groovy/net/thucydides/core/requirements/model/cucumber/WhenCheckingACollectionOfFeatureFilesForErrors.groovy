@@ -13,7 +13,7 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
         when:
         var featureFiles = finder.findFeatureFiles().collect(Collectors.toList())
         then:
-        featureFiles.size() == 9
+        featureFiles.size() == 11
     }
 
     def "Should pass for real-world examples"() {

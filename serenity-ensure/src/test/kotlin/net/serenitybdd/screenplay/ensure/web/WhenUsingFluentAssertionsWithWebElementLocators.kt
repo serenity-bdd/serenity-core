@@ -41,8 +41,9 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     init {
         WebDriverManager.chromedriver().setup();
         val options = ChromeOptions()
-        options.setHeadless(true)
+        options.addArguments("headless","remote-allow-origins=*")
         driver = ChromeDriver(options)
+
         outputDirectory = Files.createTempDirectory("output")
         val stepListener = BaseStepListener(outputDirectory.toFile())
         StepEventBus.getEventBus().registerListener(stepListener)

@@ -54,7 +54,6 @@ public class ExampleFinishedEvent extends StepEventBusEventBase {
 	}
 
 	public void setWebSessionId(SessionId webSessionId) {
-		System.out.println("XXXSetWebSessionId " + webSessionId);
 		this.webSessionId = webSessionId;
 	}
 

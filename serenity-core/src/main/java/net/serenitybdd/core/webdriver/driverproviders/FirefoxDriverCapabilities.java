@@ -48,6 +48,12 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     public FirefoxOptions getOptions() {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
 
+        //
+        // Set default capacities to avoid Firefox driver warnings
+        //
+        firefoxOptions.setCapability("fission.webContentIsolationStrategy", 0);
+        firefoxOptions.setCapability("fission.bfcacheInParent", false);
+
         Map<String, Object> firefoxCapabilities = BrowserPreferences.startingWith("firefox.").from(environmentVariables);
 
         //

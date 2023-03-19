@@ -86,7 +86,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     }
 
     @Nested
-    inner class WeCanCheckThat {
+    inner class gitWeCanCheckThat {
 
         @Nested
         inner class ThePage {

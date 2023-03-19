@@ -3,7 +3,6 @@ package net.serenitybdd.plugins.saucelabs;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.serenitybdd.plugins.CapabilityTags;
-import net.serenitybdd.plugins.saucelabs.SaucelabsRemoteDriverCapabilities;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;

@@ -458,9 +458,10 @@ class WhenUsingFluentAssertionsWithCollections {
                 shouldFailWhenChecking(that(listOf("red")).startsWith("red","green"))
             }
 
+
             @Test
             fun `when the list is empty`() {
-                shouldFailWhenChecking(that(emptyList<String>()).startsWith("red","green"))
+                shouldFailWhenChecking(that(kotlin.collections.emptyList<String>()).startsWith("red","green"))
             }
 
             @Test
@@ -494,7 +495,7 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when the list is empty`() {
-                shouldFailWhenChecking(that(emptyList<String>()).endsWith("red","green"))
+                shouldFailWhenChecking(that(kotlin.collections.emptyList<String>()).endsWith("red","green"))
             }
 
             @Test
@@ -516,7 +517,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when the list is empty`() {
 
-                shouldPassWhenChecking(that(emptyList<String>()).allMatch("4 characters long", hasALengthOfFour))
+                shouldPassWhenChecking(that(kotlin.collections.emptyList<String>()).allMatch("4 characters long", hasALengthOfFour))
             }
 
 
@@ -533,7 +534,7 @@ class WhenUsingFluentAssertionsWithCollections {
         inner class AListWhereSomeElementsMatch {
 
             val isRed = {it : String -> it == "red"}
-            val emptyList = emptyList<String>()
+            val emptyList = kotlin.collections.emptyList<String>()
 
             @Test
             fun `when there are matching elements`() {
@@ -562,7 +563,7 @@ class WhenUsingFluentAssertionsWithCollections {
 
             val isPurple = {it : String -> it == "purple"}
             val isRed = {it : String -> it == "red"}
-            val emptyList = emptyList<String>()
+            val emptyList = kotlin.collections.emptyList<String>()
 
             @Test
             fun `when there are matching elements`() {
@@ -591,7 +592,7 @@ class WhenUsingFluentAssertionsWithCollections {
 
             val isRed = {it : String -> it == "red"}
             val isBlue = {it : String -> it == "blue"}
-            val emptyList = emptyList<String>()
+            val emptyList = kotlin.collections.emptyList<String>()
 
             @Test
             fun `when there are enough matching elements`() {
@@ -614,7 +615,7 @@ class WhenUsingFluentAssertionsWithCollections {
         inner class AListWhereAMaximumNumberOfElementsMatch {
 
             val isRed = {it : String -> it == "red"}
-            val emptyList = emptyList<String>()
+            val emptyList = kotlin.collections.emptyList<String>()
 
             @Test
             fun `when there are enough matching elements`() {
@@ -637,7 +638,7 @@ class WhenUsingFluentAssertionsWithCollections {
 
             val isRed = {it : String -> it == "red"}
             val isBlue = {it : String -> it == "blue"}
-            val emptyList = emptyList<String>()
+            val emptyList = kotlin.collections.emptyList<String>()
 
             @Test
             fun `when there are exactly N matching elements`() {

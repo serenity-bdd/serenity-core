@@ -54,6 +54,10 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         newOptions.put("name", testName);
         newOptions.put("build", BuildName.from(environmentVariables));
 
+        capabilities.setCapability("name", testName);
+        capabilities.setCapability("build", BuildName.from(environmentVariables));
+        capabilities.setCapability("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
+
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 

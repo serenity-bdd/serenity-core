@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.6.20</version>
+        <version>3.6.21-SNAPSHOT</version>
     </parent>
 
     <artifactId>serenity-screenplay-playwright</artifactId>

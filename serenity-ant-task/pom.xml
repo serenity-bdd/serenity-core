@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.6.17-SNAPSHOT</version>
+        <version>3.6.17</version>
     </parent>
     <artifactId>serenity-ant-task</artifactId>
     <packaging>jar</packaging>

@@ -1,5 +1,6 @@
 package net.serenitybdd.plugins.lambdatest;
 
+import com.typesafe.config.Config;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -20,6 +21,8 @@ import java.util.Optional;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
 
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
+
+    private final static String LT_OPTIONS = "\"LT:Options\"";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -64,11 +67,25 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // The w3c option is set to true by default, unless it is deactivated explicity
         newOptions.put("w3c", true);
 
-        Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("LT:Options");
-        if (currentOptions != null) {
-            newOptions.putAll(currentOptions);
-        }
-        capabilities.setCapability("LT:Options", newOptions);
+        Config specifiedOptions = EnvironmentSpecificConfiguration.from(environmentVariables)
+                                                  .getConfig("webdriver.capabilities")
+                                                  .getConfig(LT_OPTIONS);
+
+        specifiedOptions.entrySet().forEach(entry -> {
+            newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+        });
+        capabilities.setCapability(LT_OPTIONS, newOptions);
+
+        // Browser name
+        String browserName = capabilities.getBrowserName();
+        // Operating system
+        String os = specifiedOptions.getString("platformName");
+        // Context from browserName and OS
+        String context = (os != null) ? browserName + ", " + os : browserName;
+
+        testOutcome.setContext(context);
+
+
         return capabilities;
     }
 

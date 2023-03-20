@@ -1,6 +1,7 @@
 package net.thucydides.core.model;
 
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,10 +35,7 @@ public class ContextIcon {
         CONTEXT_TITLES.put("ie", "Microsoft Internet Explorer");
         CONTEXT_TITLES.put("edge", "Microsoft Edge");
 
-        CONTEXT_TITLES.put("linux", "Linux");
         CONTEXT_TITLES.put("mac", "Mac OS X");
-        CONTEXT_TITLES.put("windows", "Windows");
-        CONTEXT_TITLES.put("android", "Android");
         CONTEXT_TITLES.put("iphone", "iPhone");
         CONTEXT_TITLES.put("ios", "iOS");
     }
@@ -81,13 +79,17 @@ public class ContextIcon {
     }
 
     private static String iconFor(String contextName) {
-        return ICON_CLASSES_FOR_COMMON_CONTEXTS.containsKey(contextName)
-                ? String.format(
-                "<i class='bi bi-%s' title='%s'></i>",
-                ICON_CLASSES_FOR_COMMON_CONTEXTS.get(contextName),
-                CONTEXT_TITLES.getOrDefault(contextName,contextName))
-                : contextName.toUpperCase();
+        // find the class for a context that starts with contextName
+        return ICON_CLASSES_FOR_COMMON_CONTEXTS.entrySet().stream()
+                .filter(entry -> contextName.toLowerCase().startsWith(entry.getKey().toLowerCase()))
+                .map(entry -> String.format(
+                        "<i class='bi bi-%s' title='%s'></i>",
+                        entry.getValue(),
+                        CONTEXT_TITLES.getOrDefault(entry.getKey(),StringUtils.capitalize(entry.getKey()))))
+                .findFirst()
+                .orElse(labelor(contextName));
     }
+
 
     private static String labelor(String contextName) {
         return CONTEXT_TITLES.containsKey(contextName)

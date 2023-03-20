@@ -1,5 +1,6 @@
 package net.serenitybdd.plugins.browserstack;
 
+import com.typesafe.config.Config;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
+
+    private final static String BSTACK_OPTIONS = "\"bstack:options\"";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -42,19 +45,30 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
 
-//        // Define the test name
-//        capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
-//        // Define the project name to appear in the Browserstack dashboard
-//        capabilities.setCapability("project", environmentVariables.getProperty("serenity.project.name",""));
+        Config specifiedOptions = EnvironmentSpecificConfiguration.from(environmentVariables)
+                .getConfig("webdriver.capabilities")
+                .getConfig(BSTACK_OPTIONS);
 
-        Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("bstack:options");
-        if (currentOptions != null) {
-            newOptions.putAll(currentOptions);
-        }
+        specifiedOptions.entrySet().forEach(entry -> {
+            newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+        });
+
+        // Add the test name to the capabilities
         newOptions.put("sessionName", testName);
 
         // Add the Browserstack options to the capabilities
-        capabilities.setCapability("bstack:options", newOptions);
+        capabilities.setCapability(BSTACK_OPTIONS, newOptions);
+
+        // Browser name
+        String browserName = capabilities.getBrowserName();
+        // Operating system
+        String os = specifiedOptions.getString("platformName");
+        // Context from browserName and OS
+        String context = (os != null) ? browserName + ", " + os : browserName;
+
+        testOutcome.setContext(context);
+
+
         return capabilities;
     }
 

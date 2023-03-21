@@ -1,6 +1,7 @@
 package net.serenitybdd.plugins.browserstack;
 
 import com.typesafe.config.Config;
+import net.serenitybdd.core.environment.CustomDriverConfig;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -16,6 +17,8 @@ import org.openqa.selenium.MutableCapabilities;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
 
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
@@ -38,19 +41,17 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         }
         HashMap<String, Object> newOptions = new HashMap<>();
 
-        // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
-
+        // Add the test name to the capabilities
         String testName = TestOutcomeName.from(testOutcome);
         if(TestSession.isSessionStarted()) {
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
 
-        Config specifiedOptions = EnvironmentSpecificConfiguration.from(environmentVariables)
-                .getConfig("webdriver.capabilities")
-                .getConfig(BSTACK_OPTIONS);
-
-        specifiedOptions.entrySet().forEach(entry -> {
-            newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+        // Add any other options specified in the webdriver.capabilities.LT:Options section
+        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, BSTACK_OPTIONS).ifPresent(ltOptions -> {
+            ltOptions.entrySet().forEach(entry -> {
+                newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+            });
         });
 
         // Add the test name to the capabilities
@@ -59,15 +60,8 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         // Add the Browserstack options to the capabilities
         capabilities.setCapability(BSTACK_OPTIONS, newOptions);
 
-        // Browser name
-        String browserName = capabilities.getBrowserName();
-        // Operating system
-        String os = specifiedOptions.getString("platformName");
-        // Context from browserName and OS
-        String context = (os != null) ? browserName + ", " + os : browserName;
-
+        String context = fetchContextFrom(capabilities, environmentVariables, BSTACK_OPTIONS);
         testOutcome.setContext(context);
-
 
         return capabilities;
     }

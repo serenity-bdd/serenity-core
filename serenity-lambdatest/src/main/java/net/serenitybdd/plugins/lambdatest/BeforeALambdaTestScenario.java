@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import com.typesafe.config.Config;
+import net.serenitybdd.core.environment.CustomDriverConfig;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -15,9 +15,9 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
 
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
@@ -67,27 +67,24 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // The w3c option is set to true by default, unless it is deactivated explicity
         newOptions.put("w3c", true);
 
-        Config specifiedOptions = EnvironmentSpecificConfiguration.from(environmentVariables)
-                                                  .getConfig("webdriver.capabilities")
-                                                  .getConfig(LT_OPTIONS);
-
-        specifiedOptions.entrySet().forEach(entry -> {
-            newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+        // Add any other options specified in the webdriver.capabilities.LT:Options section
+        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, LT_OPTIONS).ifPresent(ltOptions -> {
+            ltOptions.entrySet().forEach(entry -> {
+                newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+            });
         });
+
         capabilities.setCapability(LT_OPTIONS, newOptions);
 
-        // Browser name
-        String browserName = capabilities.getBrowserName();
         // Operating system
-        String os = specifiedOptions.getString("platformName");
         // Context from browserName and OS
-        String context = (os != null) ? browserName + ", " + os : browserName;
-
+        String context = fetchContextFrom(capabilities, environmentVariables, LT_OPTIONS);
         testOutcome.setContext(context);
 
 
         return capabilities;
     }
+
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {
         return LambdaTestConfiguration.isActiveFor(environmentVariables);

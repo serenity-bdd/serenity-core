@@ -112,6 +112,7 @@ public class WebDriverFactory {
             driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HTMLUnitDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
             // LEGACY PROVIDERS
             driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));

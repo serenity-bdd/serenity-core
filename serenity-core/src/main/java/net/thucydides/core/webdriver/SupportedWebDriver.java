@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,10 +59,10 @@ public enum SupportedWebDriver {
      */
     SAFARI(SafariDriver.class),
 
-//    /**
-//     * HtmlUnit
-//     */
-//    HTMLUNIT(HtmlUnitDriver.class),
+    /**
+     * HtmlUnit
+     */
+    HTMLUNIT(HtmlUnitDriver.class),
     /**
      * Appium
      */

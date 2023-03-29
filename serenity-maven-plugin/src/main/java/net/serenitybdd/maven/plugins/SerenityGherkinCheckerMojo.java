@@ -34,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  *   - Duplicate feature file names with the same parent folder names
  *   - Gherkin syntax errors
  */
-@Mojo(name = "check-gherkin", requiresDependencyResolution = ResolutionScope.RUNTIME)
+@Mojo(name = "check-gherkin", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class SerenityGherkinCheckerMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${session}")

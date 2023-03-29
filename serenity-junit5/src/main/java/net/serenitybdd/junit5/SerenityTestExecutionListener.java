@@ -187,8 +187,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             Class[] classesArray = new Class[methodParameterClasses.size()];
             return Class.forName(className).getMethod(methodName, methodParameterClasses.toArray(classesArray));
         }
+        // check whether the class with name className has a method with name methodName and return it if it exists
+        if (Arrays.stream(Class.forName(className).getDeclaredMethods()).anyMatch(method -> method.getName().equals(methodName))) {
+            return Class.forName(className).getDeclaredMethod(methodName);
+        }
         return Class.forName(className).getMethod(methodName);
-
     }
 
     private boolean isNullOrEmpty(List<Class> methodParameterClasses) {

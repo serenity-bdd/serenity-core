@@ -1677,7 +1677,7 @@ public enum ThucydidesSystemProperty {
     }
 
     ThucydidesSystemProperty() {
-        this.propertyName = name().replaceAll("_", ".").toLowerCase();
+        this.propertyName = name().replace("_", ".").toLowerCase();
     }
 
     public String getPropertyName() {
@@ -1714,11 +1714,11 @@ public enum ThucydidesSystemProperty {
     }
 
     private String withLegacyPrefix(String propertyName) {
-        return propertyName.replaceAll("serenity.", "thucydides.");
+        return propertyName.replace("serenity.", "thucydides.");
     }
 
     private String withSerenityPrefix(String propertyName) {
-        return propertyName.replaceAll("thucydides.", "serenity.");
+        return propertyName.replace("thucydides.", "serenity.");
     }
 
     public String preferredName() {

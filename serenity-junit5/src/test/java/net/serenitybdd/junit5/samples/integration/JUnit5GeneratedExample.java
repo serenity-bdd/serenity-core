@@ -16,7 +16,6 @@ public class JUnit5GeneratedExample {
     @Nested
     class Nested_Test_Cases {
 
-
         @Test
         void sample_nested_test() {
         }

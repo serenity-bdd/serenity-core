@@ -974,12 +974,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean currentStepExists() {
-//        return !currentStepStack.get().isEmpty();
         return !currentStepStack.isEmpty();
     }
 
     public int getCurrentLevel() {
-//        return currentStepStack.get().size();
         return currentStepStack.size();
     }
 
@@ -1103,7 +1101,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean currentStepHasMoreThanOneScreenshot() {
-        return getCurrentStep().getScreenshotCount() > 1;
+        return currentStepExists() && getCurrentStep().getScreenshotCount() > 1;
     }
 
     private ScreenshotAndHtmlSource lastScreenshotOf(TestStep testStep) {

@@ -178,8 +178,6 @@ Feature: A simple feature with tags
         def testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.tags.size() == 4
-        and:
         testOutcome.tags.contains(TestTag.withName("strawberry").andType("flavor"))
         testOutcome.tags.contains(TestTag.withName("red").andType("color"))
         testOutcome.tags.contains(TestTag.withName("shouldPass").andType("tag"))

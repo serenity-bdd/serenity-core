@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -492,7 +493,9 @@ public class TestStep implements Cloneable {
     private List<TestResult> getChildResults() {
         List<TestResult> childResults = new ArrayList<>();
         for (TestStep step : getChildren()) {
-            childResults.add(step.getResult());
+            if (step != null && step.getResult() != null) {
+                childResults.add(step.getResult());
+            }
         }
         return childResults;
     }

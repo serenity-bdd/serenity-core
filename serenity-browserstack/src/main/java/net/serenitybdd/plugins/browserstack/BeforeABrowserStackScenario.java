@@ -1,5 +1,7 @@
 package net.serenitybdd.plugins.browserstack;
 
+import com.typesafe.config.Config;
+import net.serenitybdd.core.environment.CustomDriverConfig;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -16,7 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
+
 public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
+
+    private final static String BSTACK_OPTIONS = "\"bstack:options\"";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -35,26 +41,28 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         }
         HashMap<String, Object> newOptions = new HashMap<>();
 
-        // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
-
+        // Add the test name to the capabilities
         String testName = TestOutcomeName.from(testOutcome);
         if(TestSession.isSessionStarted()) {
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
 
-//        // Define the test name
-//        capabilities.setCapability("name", TestOutcomeName.from(testOutcome));
-//        // Define the project name to appear in the Browserstack dashboard
-//        capabilities.setCapability("project", environmentVariables.getProperty("serenity.project.name",""));
+        // Add any other options specified in the webdriver.capabilities.LT:Options section
+        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, BSTACK_OPTIONS).ifPresent(ltOptions -> {
+            ltOptions.entrySet().forEach(entry -> {
+                newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+            });
+        });
 
-        Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("bstack:options");
-        if (currentOptions != null) {
-            newOptions.putAll(currentOptions);
-        }
+        // Add the test name to the capabilities
         newOptions.put("sessionName", testName);
 
         // Add the Browserstack options to the capabilities
-        capabilities.setCapability("bstack:options", newOptions);
+        capabilities.setCapability(BSTACK_OPTIONS, newOptions);
+
+        String context = fetchContextFrom(capabilities, environmentVariables, BSTACK_OPTIONS);
+        testOutcome.setContext(context);
+
         return capabilities;
     }
 

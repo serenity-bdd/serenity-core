@@ -2112,8 +2112,10 @@ public class TestOutcome {
      * @param context
      */
     public void setContext(String context) {
-        this.context = context;
-        addContextTagsFor(context);
+        if (this.context == null) {
+            this.context = context;
+            addContextTagsFor(context);
+        }
     }
 
     private void addContextTagsFor(String context) {

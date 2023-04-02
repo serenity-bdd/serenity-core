@@ -178,9 +178,12 @@ public class W3CCapabilities {
     }
 
     public ChromeOptions chromeOptions() {
-        return (ChromeOptions) ChromiumOptionsBuilder.fromDesiredCapabilities(asDesiredCapabilities(),
+        ChromeOptions options = (ChromeOptions) ChromiumOptionsBuilder.fromDesiredCapabilities(asDesiredCapabilities(),
                 new ChromeOptions(),
                 ChromeOptions.CAPABILITY);
+
+        options.addArguments("remote-allow-origins=*");
+        return options;
     }
 
     public EdgeOptions edgeOptions() {

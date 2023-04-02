@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.lang.System.lineSeparator;
+import static net.thucydides.core.requirements.model.cucumber.FeatureFileAnaysisErrors.*;
 
 
 /**
@@ -50,17 +51,17 @@ public class CucumberParser {
         this.encoding = ThucydidesSystemProperty.FEATURE_FILE_ENCODING.from(environmentVariables, Charset.defaultCharset().name());
     }
 
-    public Optional<AnnotatedFeature> loadFeature(File narrativeFile) {
-        LOGGER.info("Loading feature {}", narrativeFile.toString());
-        if (narrativeFile == null) {
+    public Optional<AnnotatedFeature> loadFeature(File featureFile) {
+        LOGGER.debug("Loading feature {}", featureFile.toString());
+        if (featureFile == null) {
             return Optional.empty();
         }
-        if (!narrativeFile.exists()) {
+        if (!featureFile.exists()) {
             return Optional.empty();
         }
 
         List<String> listOfFiles = new ArrayList<>();
-        listOfFiles.add(narrativeFile.getAbsolutePath());
+        listOfFiles.add(featureFile.getAbsolutePath());
 
         List<GherkinDocument> gherkinDocuments = loadCucumberFeatures(listOfFiles);
         try {
@@ -76,44 +77,95 @@ public class CucumberParser {
             }
             if (gherkinDocument.getFeature().isPresent()) {
                 Feature feature = gherkinDocument.getFeature().get();
-                if (feature.getName().isEmpty()) {
-                    LOGGER.error("Empty feature name in file '{}'", narrativeFile);
-                    throw new InvalidFeatureFileException(String.format("Empty feature name in file '%s'", narrativeFile));
-                }
                 List<Scenario> scenarioList = feature.getChildren().stream()
                         .map(FeatureChild::getScenario)
                         .filter(Objects::nonNull)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList());
-                Map<String, List<Scenario>> allScenariosByName = scenarioList.stream().collect(Collectors.groupingBy(Scenario::getName));
-                allScenariosByName.forEach(this::analyseDuplicateScenarioNames);
-                allScenariosByName.forEach(this::analyseEmptyScenarioNames);
-                return Optional.of(new AnnotatedFeature(feature,
-                        scenarioList,
-                        descriptionInComments));
+
+                feature.getChildren().stream()
+                        .map(FeatureChild::getRule)
+                        .filter(Objects::nonNull)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .flatMap(rule -> rule.getChildren().stream().map(RuleChild::getScenario))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .forEach(scenarioList::add);
+
+                performGherkinQualityChecks(featureFile, feature, scenarioList);
+
+                return Optional.of(new AnnotatedFeature(feature, scenarioList, descriptionInComments));
             }
             return Optional.empty();
         } catch (InvalidFeatureFileException invalidFeatureFile) {
-             throw invalidFeatureFile;
-        }
-        catch (Throwable ex) {
-            LOGGER.error("Invalid feature ",ex);
+            throw invalidFeatureFile;
+        } catch (Throwable ex) {
+            LOGGER.error("Invalid feature ", ex);
             return Optional.empty();
         }
     }
 
-    private void analyseDuplicateScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
-        if (scenarios.size() > 1) {
-            LOGGER.error("Duplicate scenario name '{}' ", scenarioName);
-            throw new InvalidFeatureFileException(String.format("Duplicate scenario name '%s'", scenarioName));
+    private void performGherkinQualityChecks(File featureFile, Feature feature, List<Scenario> scenarioList) {
+        Map<String, List<Scenario>> allScenariosByName = scenarioList.stream().collect(Collectors.groupingBy(Scenario::getName));
+
+        List<String> errors = new ArrayList<>();
+
+        // FEATURE NAME
+        if (feature.getName().isEmpty()) {
+            errors.add(String.format(EMPTY_FEATURE_NAME, featureFile.getName()));
+        }
+
+        // DUPLICATE SCENARIO NAMES
+        allScenariosByName.forEach(
+                (scenarioName, scenarios)
+                        -> analyseDuplicateScenarioNames(scenarioName, scenarios, featureFile)
+                        .ifPresent(errors::add)
+        );
+
+        // EMPTY SCENARIO NAMES
+        allScenariosByName.forEach((scenarioName, scenarios)
+                -> analyseEmptyScenarioNames(scenarioName, scenarios, featureFile)
+                .ifPresent(errors::add)
+        );
+
+        // EMPTY RULE NAMES
+        analyseEmptyRuleNames(feature, featureFile).ifPresent(errors::add);
+
+        if (!errors.isEmpty()) {
+            throw new InvalidFeatureFileException(errors.stream().collect(Collectors.joining(System.lineSeparator())));
         }
     }
 
-    private void analyseEmptyScenarioNames(String scenarioName, List<Scenario> scenarios) throws InvalidFeatureFileException {
+    private Optional<String> analyseEmptyRuleNames(Feature feature, File featureFile) {
+        List<Rule> ruleList = feature.getChildren().stream()
+                .map(FeatureChild::getRule)
+                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        if (ruleList.stream().anyMatch(rule -> rule.getName().isEmpty())) {
+            return Optional.of(String.format(EMPTY_RULE_NAME, featureFile.getName()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<String> analyseDuplicateScenarioNames(String scenarioName, List<Scenario> scenarios, File featureFile) throws InvalidFeatureFileException {
+        if (scenarios.size() > 1) {
+            return Optional.of(String.format(DUPLICATE_SCENARIO_NAME, scenarioName, featureFile.getName()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<String> analyseEmptyScenarioNames(String scenarioName, List<Scenario> scenarios, File featureFile) throws InvalidFeatureFileException {
         if (scenarioName.isEmpty()) {
-            LOGGER.error("Empty scenario name ");
-            throw new InvalidFeatureFileException(String.format("Empty scenario name "));
+            return Optional.of(String.format(EMPTY_SCENARIO_NAME, featureFile.getName()));
+        } else {
+            return Optional.empty();
         }
     }
 
@@ -295,7 +347,7 @@ public class CucumberParser {
     }
 
     private FeatureBackgroundNarrative backgroundElementFrom(Optional<Background> background) {
-        if(background.isPresent()) {
+        if (background.isPresent()) {
             return new FeatureBackgroundNarrative(background.get().getName(), background.get().getDescription());
         } else {
             return new FeatureBackgroundNarrative("", "");

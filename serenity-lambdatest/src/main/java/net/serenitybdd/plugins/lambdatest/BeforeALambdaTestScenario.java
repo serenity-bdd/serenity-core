@@ -1,5 +1,6 @@
 package net.serenitybdd.plugins.lambdatest;
 
+import net.serenitybdd.core.environment.CustomDriverConfig;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
@@ -14,10 +15,14 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFrom;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_PROJECT_NAME;
+
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
+
+    private final static String LT_OPTIONS = "\"LT:Options\"";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -41,6 +46,8 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // Username and access key generally come from the LT_USERNAME and LT_ACCESS_KEY environment variables
         newOptions.put("user", lambdaTestCredentials.getUser());
         newOptions.put("accessKey", lambdaTestCredentials.getAccessKey());
+        newOptions.put("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
+        newOptions.put("w3c", true);
 
         // Define the test name
         String testName = TestOutcomeName.from(testOutcome);
@@ -48,6 +55,11 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
             testName = TestSession.getTestSessionContext().getCurrentTestName();
         }
         newOptions.put("name", testName);
+        newOptions.put("build", BuildName.from(environmentVariables));
+
+        capabilities.setCapability("name", testName);
+        capabilities.setCapability("build", BuildName.from(environmentVariables));
+        capabilities.setCapability("projectName", SERENITY_PROJECT_NAME.from(environmentVariables,"Serenity BDD Test Suite"));
 
         // Add tags
         newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
@@ -55,13 +67,24 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
         // The w3c option is set to true by default, unless it is deactivated explicity
         newOptions.put("w3c", true);
 
-        Map<String, Object> currentOptions = (Map<String, Object>) capabilities.getCapability("LT:Options");
-        if (currentOptions != null) {
-            newOptions.putAll(currentOptions);
-        }
-        capabilities.setCapability("LT:Options", newOptions);
+        // Add any other options specified in the webdriver.capabilities.LT:Options section
+        CustomDriverConfig.webdriverCapabilitiesConfig(environmentVariables, LT_OPTIONS).ifPresent(ltOptions -> {
+            ltOptions.entrySet().forEach(entry -> {
+                newOptions.put(entry.getKey(), entry.getValue().unwrapped());
+            });
+        });
+
+        capabilities.setCapability(LT_OPTIONS, newOptions);
+
+        // Operating system
+        // Context from browserName and OS
+        String context = fetchContextFrom(capabilities, environmentVariables, LT_OPTIONS);
+        testOutcome.setContext(context);
+
+
         return capabilities;
     }
+
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {
         return LambdaTestConfiguration.isActiveFor(environmentVariables);

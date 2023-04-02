@@ -14,14 +14,13 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 
 	private boolean inDataTest;
 
-	private ZonedDateTime finishingTime;
+	private final ZonedDateTime finishingTime;
 
 	private SessionId webSessionId;
 
 	private String driverUsedInThisTest;
 
 	private WebDriver webDriver;
-
 
 	public TestFinishedEvent() {
 		this.finishingTime = ZonedDateTime.now();

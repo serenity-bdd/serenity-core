@@ -28,7 +28,7 @@ import java.util.Optional;
  * This allows extended reports to be generated independently of the full aggregate report, and opens the possibility
  * of more tailored next-generation reporting.
  */
-@Mojo(name = "reports", requiresProject = false, requiresDependencyResolution = ResolutionScope.RUNTIME)
+@Mojo(name = "reports", requiresProject = false, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class SerenityReportMojo extends AbstractMojo {
 
     /**

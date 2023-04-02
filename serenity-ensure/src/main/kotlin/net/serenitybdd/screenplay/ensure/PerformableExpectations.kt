@@ -42,7 +42,7 @@ open class PerformableExpectation<A, E>(
 
             if (BlackBox.isUsingSoftAssertions()) {
                 BlackBox.softlyAssert(exceptionMessage)
-                StepEventBus.getEventBus().baseStepListener.updateCurrentStepFailureCause(
+                StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(
                     AssertionError(exceptionMessageWithDescription)
                 )
             } else {

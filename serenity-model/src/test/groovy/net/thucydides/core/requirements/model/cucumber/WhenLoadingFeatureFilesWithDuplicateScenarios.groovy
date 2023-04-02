@@ -9,9 +9,9 @@ class WhenLoadingFeatureFilesWithDuplicateScenarios extends Specification {
     def "Should display a meaningful error message if there are duplicate scenario names"() {
         when:
         CucumberParser parser = new CucumberParser()
-        Optional<AnnotatedFeature> feature = parser.loadFeature(new File(duplicateScenariosFeatureFile))
+        parser.loadFeature(new File(duplicateScenariosFeatureFile))
         then:
         InvalidFeatureFileException ex = thrown()
-            ex.message.contains("Duplicate scenario name 'This scenario is duplicated'")
+            ex.message.contains("The scenario name 'This scenario is duplicated' was duplicated")
     }
 }

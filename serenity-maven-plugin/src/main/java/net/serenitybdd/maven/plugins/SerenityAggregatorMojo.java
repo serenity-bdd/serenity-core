@@ -34,8 +34,7 @@ import java.util.stream.Collectors;
 /**
  * Generate aggregate XML acceptance test reports.
  */
-//@Mojo(name = "aggregate", requiresProject = false, requiresDependencyResolution = ResolutionScope.RUNTIME, aggregator = true)
-@Mojo(name = "aggregate", requiresDependencyResolution = ResolutionScope.RUNTIME, aggregator = true)
+@Mojo(name = "aggregate", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, aggregator = true)
 public class SerenityAggregatorMojo extends AbstractMojo {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(SerenityAggregatorMojo.class);
@@ -97,15 +96,25 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     @Parameter(property = "thucydides.project.key", defaultValue = "default")
     public String projectKey;
 
+    /**
+     *
+     */
     @Parameter(property = "tags")
     public String tags;
 
     @Parameter(defaultValue = "${project}")
     public MavenProject project;
 
+    /**
+     * If set to true, the HTML reports for the individual tests will also be generated.
+     * This is not normally necessary as the individual test reports are generated when the tests are executed.
+     */
     @Parameter
     public boolean generateOutcomes;
 
+    /**
+     * Specify a comma-separated list of additional reports to be produced by the aggregate goal.
+     */
     @Parameter(property = "serenity.reports")
     public String reports;
 
@@ -113,11 +122,12 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     public Map<String, String> systemPropertyVariables;
 
     /**
-     * Set this to true if you want the aggregate task to ignore test failures and continue the build process
-     * If set to false (default value), the aggregate task will end with an error if any tests are broken.
+     * Set this to true (default value) if you want the aggregate task to ignore test failures and continue the build process
+     * If set to false, the aggregate task will end with an error if any tests are broken.
      */
-    @Parameter
+    @Parameter(defaultValue="true")
     public boolean ignoreFailedTests;
+
     protected void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
         getConfiguration().setOutputDirectory(this.outputDirectory);

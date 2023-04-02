@@ -13,12 +13,20 @@ import static net.serenitybdd.screenplay.ui.LocatorStrategies.containingTextAndM
 public class PageElement {
 
     private static final String BY_NAME_ID_OR_ARIA_LABEL = "css:[id='{0}' i],[name='{0}' i],[data-test='{0}' i],[aria-label='{0}' i]";
+    private static final String BY_TAG = "xpath://{0}";
 
     /**
      * Locate an element with a given name.
      */
     public static SearchableTarget withNameOrId(String name) {
-        return Target.the("the '" + name + "' element").locatedBy(BY_NAME_ID_OR_ARIA_LABEL).of(name);
+        return Target.the("an element with a name of '" + name + "'").locatedBy(BY_NAME_ID_OR_ARIA_LABEL).of(name);
+    }
+
+    /**
+     * Locate an element with a HTML tag
+     */
+    public static SearchableTarget withTag(String name) {
+        return Target.the("a '" + name + "' element").locatedBy(BY_TAG).of(name);
     }
 
     /**

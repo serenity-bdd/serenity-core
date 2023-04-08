@@ -34,9 +34,12 @@ import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.openqa.selenium.WebDriver;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -582,7 +585,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         }
     }
 
-    @NotNull
     private List<TestTag> tagsIn(Examples examples) {
         return examples.getTags().stream().map(tag -> TestTag.withValue(tag.getName().substring(1))).collect(Collectors.toList());
     }
@@ -741,6 +743,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         LOGGER.debug("SRP:startScenario" + " " + featurePath + " "
                 + Thread.currentThread() + " " + testCase.getId() + " at line " + testCase.getLocation().getLine());
 
+        reinitializeRemoteWebDriver();
+
         context.addHighPriorityStepEventBusEvent(scenarioId,
                 new TestStartedEvent(scenarioId,
                         scenarioName,
@@ -877,6 +881,9 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         Map<String, String> data = exampleRows(scenarioId, featurePath).get(lineNumber);
         getContext(featurePath).addStepEventBusEvent(
                 new ClearStepFailuresEvent());
+
+        reinitializeRemoteWebDriver();
+
         getContext(featurePath).addStepEventBusEvent(
                 new ExampleStartedEvent(data, scenarioName));
         if (exampleTags(featurePath).containsKey(lineNumber)) {
@@ -885,6 +892,14 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                     new AddTagsToCurrentTestEvent(convertCucumberTags(currentExampleTags)));
         }
     }
+
+    private void reinitializeRemoteWebDriver() {
+        WebDriver webDriver = SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
+        if ((webDriver !=  null) && (webDriver instanceof WebDriverFacade)) {
+            ((WebDriverFacade) webDriver).reinitializeRemoteWebDriver();
+        }
+    }
+
 
     private void finishProcessingExampleLine(String scenarioId, URI featurePath, TestCase testCase) {
         getContext(featurePath).addStepEventBusEvent(new ExampleFinishedEvent());

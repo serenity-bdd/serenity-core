@@ -1497,7 +1497,7 @@ public abstract class PageObject {
                 .inHumanReadableForm().toString();
     }
 
-    private ListOfWebElementFacades findAllWithRetry(Function<PageObject, ListOfWebElementFacades> finder) {
+    protected ListOfWebElementFacades findAllWithRetry(Function<PageObject, ListOfWebElementFacades> finder) {
         return new FindAllWithRetry(environmentVariables).find(finder, this);
     }
 }

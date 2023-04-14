@@ -229,7 +229,7 @@ public class WhenSettingW3CProperties {
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");
-        String homeDir = System.getenv("HOME");
+        String homeDir = System.getenv("JAVA_HOME");
         assertThat(chromeOptions.get("binary")).isEqualTo(homeDir + "/path/to/chromedriver");
     }
 }

@@ -3,22 +3,28 @@ package net.thucydides.core.webdriver.capabilities;
 import com.google.common.io.Resources;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.hamcrest.Matchers;
+import org.junit.Assume;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assume.assumeThat;
 
 public class WhenSettingW3CProperties {
 
     private static EnvironmentVariables from(String testConfig) {
-        Path configFilepath = Paths.get(Resources.getResource(testConfig).getPath());
+        Path configFilepath = new File(Resources.getResource(testConfig).getPath()).toPath();
         return SystemEnvironmentVariables.createEnvironmentVariables(configFilepath, new SystemEnvironmentVariables());
     }
 
@@ -170,6 +176,7 @@ public class WhenSettingW3CProperties {
 
     @Test
     public void shouldReadChromeOptions() {
+        Assume.assumeThat(System.getProperty("os.name").toLowerCase(), not(containsString("windows")));
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");
@@ -179,6 +186,7 @@ public class WhenSettingW3CProperties {
 
     @Test
     public void shouldReadLocalStateAsMapsOfObjects() {
+        Assume.assumeThat(System.getProperty("os.name").toLowerCase(), not(containsString("windows")));
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome/complete.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");
@@ -191,6 +199,7 @@ public class WhenSettingW3CProperties {
 
     @Test
     public void shouldReadPrefsAsMapsOfObjects() {
+        Assume.assumeThat(System.getProperty("os.name").toLowerCase(), not(containsString("windows")));
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome/complete.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");
@@ -204,6 +213,7 @@ public class WhenSettingW3CProperties {
 
     @Test
     public void shouldReadChromeOptionsWithNestedMaps() {
+        Assume.assumeThat(System.getProperty("os.name").toLowerCase(), not(containsString("windows")));
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");
@@ -215,6 +225,7 @@ public class WhenSettingW3CProperties {
     }
     @Test
     public void shouldSubstituteSystemPropertyTokens() {
+        Assume.assumeThat(System.getProperty("os.name").toLowerCase(), not(containsString("windows")));
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome.conf");
         DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
         Map<String,Object> chromeOptions = (Map<String,Object>) caps.getCapability("goog:chromeOptions");

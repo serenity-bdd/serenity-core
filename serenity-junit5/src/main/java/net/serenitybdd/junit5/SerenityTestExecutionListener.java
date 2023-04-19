@@ -27,12 +27,10 @@ import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;

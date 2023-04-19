@@ -10,15 +10,12 @@ public class JUnit5CustomDisplayNameExample {
 
     @Test
     void sample_custom_display_name_test() {
-        System.out.println("Sample Custom Display Name Generator Example");
     }
 
     //@DisplayName takes precedence over generation
     @Test
     @DisplayName("Sample Test With Display Name")
     void sample_display_name_test() {
-        System.out.println("Sample Display Name Generator Example");
     }
-
 
 }

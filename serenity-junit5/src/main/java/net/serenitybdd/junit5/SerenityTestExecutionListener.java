@@ -32,6 +32,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.thucydides.core.reports.ReportService.getDefaultReporters;
@@ -551,8 +552,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     static boolean isSerenityTestClass(Class<?> testClass) {
         return classNestStructure(testClass).stream()
-                .filter(clazz -> clazz.getAnnotation(ExtendWith.class) != null)
-                .map(clazz -> clazz.getAnnotation(ExtendWith.class))
+                .flatMap(clazz -> Stream.of(clazz.getAnnotationsByType(ExtendWith.class)))
                 .anyMatch(annotation -> Arrays.asList(annotation.value()).contains(SerenityJUnit5Extension.class));
     }
 

@@ -66,7 +66,7 @@
         <selenium.version>4.9.0</selenium.version>
         <htmlunit.driver.version>4.8.1</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
-        <jsoup.version>1.14.3</jsoup.version>
+        <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.12.2</joda-time.version>
         <xstream.version>1.4.20</xstream.version>
         <opencsv.version>2.0</opencsv.version>
@@ -77,7 +77,7 @@
         <appium.version>8.3.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <htmlunit.version>3.0.0</htmlunit.version>
-        <webdrivermanager.version>5.3.0</webdrivermanager.version>
+        <webdrivermanager.version>5.3.2</webdrivermanager.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
         <spring.version>5.3.25</spring.version>

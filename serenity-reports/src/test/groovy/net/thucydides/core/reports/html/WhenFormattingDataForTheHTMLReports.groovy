@@ -55,6 +55,18 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     }
 
     @Unroll
+    def "should remove markdown formatting"() {
+        expect:
+        def formatter = new Formatter();
+        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "## Level 1 Title"  | "Level 1 Title"
+        "### Level 2 Title" | "Level 2 Title"
+        "*Bold Title*"      | "Bold Title"
+    }
+
+    @Unroll
     def "should render story titles with foreign characters when markdown disabled"() {
         expect:
         def environmentVariables = new MockEnvironmentVariables()

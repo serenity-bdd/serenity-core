@@ -23,6 +23,7 @@ import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
 import org.apache.commons.lang3.text.translate.EntityArrays;
 import org.apache.commons.lang3.text.translate.LookupTranslator;
 import org.jetbrains.annotations.NotNull;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +107,14 @@ public class Formatter {
         String html = renderer.render(document);
 
         return stripSurroundingParagraphTagsFrom(html);
+    }
+
+    public String renderMarkdownWithoutTags(String text) {
+        if (text == null) {
+            return "";
+        }
+        Node document = parser.parse(text);
+        return Jsoup.parse(renderer.render(document)).text();
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
@@ -471,7 +480,7 @@ public class Formatter {
         String firstLine = fieldValue.toString().split("\\n")[0];
 
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.story)) ?
-                (htmlCompatible(renderMarkdown(firstLine))) : htmlCompatible(firstLine);
+                (htmlCompatible(renderMarkdownWithoutTags(firstLine))) : htmlCompatible(firstLine);
     }
 
     public String htmlCompatibleTestTitle(Object fieldValue) {

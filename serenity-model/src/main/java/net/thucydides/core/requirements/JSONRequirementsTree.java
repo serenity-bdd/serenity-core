@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.gson.Gson;
+import com.vladsch.flexmark.util.ast.Document;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
@@ -13,11 +14,15 @@ import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.tree.Node;
 import net.thucydides.core.util.Inflector;
+import org.jetbrains.annotations.NotNull;
+import org.jsoup.Jsoup;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 
 public class JSONRequirementsTree {
 
@@ -75,7 +80,18 @@ public class JSONRequirementsTree {
         String childCount = (children.isEmpty()) ? countScenariosIn(requirement, requirementsOutcomes) : countChildRequirementsIn(requirement);
 
         String report = new ReportNameProvider().forRequirement(requirement);
-        return new Node(requirement.getDisplayName(), requirement.getType(), report, label, childCount, children);
+
+        String requirementName = getRequirementNameFrom(requirement);
+
+        return new Node(requirementName, requirement.getType(), report, label, childCount, children);
+    }
+
+    @NotNull
+    private static String getRequirementNameFrom(Requirement requirement) {
+        Parser parser = Parser.builder().build();
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        Document document = parser.parse(requirement.getDisplayName());
+        return Jsoup.parse(renderer.render(document)).text();
     }
 
     private String countChildRequirementsIn(Requirement requirement) {

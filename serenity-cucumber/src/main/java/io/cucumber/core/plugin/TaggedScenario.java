@@ -32,7 +32,10 @@ public class TaggedScenario {
     }
 
     static boolean isManualTag(String tagName) {
-        return tagName.equalsIgnoreCase("@manual") || tagName.toLowerCase().startsWith("@manual:") || tagName.toLowerCase().startsWith("@manual-result");
+        return tagName.equalsIgnoreCase("@manual")
+                || tagName.toLowerCase().startsWith("@manual:")
+                || tagName.toLowerCase().startsWith("@manual-")
+                || tagName.toLowerCase().startsWith("@manual-result");
     }
 
     public static Optional<TestResult> manualResultDefinedIn(List<Tag> tags) {

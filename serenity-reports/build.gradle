@@ -30,7 +30,7 @@ dependencies {
     implementation project(':serenity-model')
     implementation project(':serenity-stats')
     api project(':serenity-reports-configuration')
-    api("com.vladsch.flexmark:flexmark-all:0.34.30") {
+    api("com.vladsch.flexmark:flexmark-all:0.62.2") {
         exclude group:'org.jsoup', module:'jsoup'
         exclude group:'junit', module:'junit'
     }

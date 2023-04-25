@@ -27,7 +27,7 @@ dependencies {
     api "io.cucumber:cucumber-java:${cucumberVersion}"
     api "com.google.code.gson:gson:${gsonVersion}"
     api "net.sf.opencsv:opencsv:${openCsvVersion}"
-    implementation "com.typesafe:config:${typesafeConfigVersion}"
+    api "com.typesafe:config:${typesafeConfigVersion}"
     implementation "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
     api "org.awaitility:awaitility:${awaitilityVersion}"
     api "org.freemarker:freemarker:${freemarkerVersion}"

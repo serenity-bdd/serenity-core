@@ -4,7 +4,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.7.1-SNAPSHOT</version>
+        <version>3.7.1</version>
     </parent>
     <artifactId>serenity-jira-requirements-provider</artifactId>
     <packaging>jar</packaging>

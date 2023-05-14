@@ -28,7 +28,14 @@ public class TaggedScenario {
     }
 
     static boolean isManual(List<Tag> tags) {
-        return tags.stream().anyMatch(tag -> tag.getName().toLowerCase().startsWith("@manual"));
+        return tags.stream().anyMatch(tag -> isManualTag(tag.getName()));
+    }
+
+    static boolean isManualTag(String tagName) {
+        return tagName.equalsIgnoreCase("@manual")
+                || tagName.toLowerCase().startsWith("@manual:")
+                || tagName.toLowerCase().startsWith("@manual-")
+                || tagName.toLowerCase().startsWith("@manual-result");
     }
 
     public static Optional<TestResult> manualResultDefinedIn(List<Tag> tags) {

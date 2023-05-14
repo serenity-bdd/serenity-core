@@ -3,6 +3,8 @@ package net.thucydides.core.webdriver.capabilities;
 import com.google.common.io.Resources;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.junit.Assume;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,12 +23,13 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
 @DisplayName("When converting W3C properties to a ChromeOptions object")
 class WhenConvertingW3CPropertiesToChromeOptions {
-
     private static EnvironmentVariables from(String testConfig) {
-        Path configFilepath = Paths.get(Resources.getResource(testConfig).getPath());
+        Path configFilepath = new File(Resources.getResource(testConfig).getPath()).toPath();
         return SystemEnvironmentVariables.createEnvironmentVariables(configFilepath, new SystemEnvironmentVariables());
     }
 

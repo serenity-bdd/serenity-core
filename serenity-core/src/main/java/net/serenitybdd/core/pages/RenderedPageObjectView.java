@@ -563,6 +563,25 @@ public class RenderedPageObjectView {
 //                .collect(Collectors.toList());
 //    }
 
+    public net.serenitybdd.core.pages.WebElementFacade $(ResolvableElement selector) {
+        return find(selector);
+    }
+
+    public net.serenitybdd.core.pages.WebElementFacade find(ResolvableElement selector) {
+        pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);
+        net.serenitybdd.core.pages.WebElementFacade result = selector.resolveFor(this.pageObject);
+        pageObject.resetImplicitTimeout();
+        return result;
+    }
+
+    public ListOfWebElementFacades findAll(ResolvableElement selector) {
+        pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);
+        ListOfWebElementFacades results = pageObject.findAllWithRetry((page) -> selector.resolveAllFor(this.pageObject));
+        pageObject.resetImplicitTimeout();
+        return results;
+    }
+
+
     public WebElementFacade find(By bySelector) {
         waitFor(bySelector);
         pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);

@@ -67,6 +67,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     public SerenityTestExecutionListener() {
         //BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(getOutputDirectory());
         //StepEventBus.eventBusFor(TEST_SOURCE_JUNIT5).registerListener(baseStepListener);
+
     }
 
     private static File getOutputDirectory() {
@@ -448,6 +449,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
             currentEventBus.registerListener(baseStepListener);
             logger.trace("  -> ADDED BASE LISTENER " + baseStepListener);
+            StepListener loggingListener = Listeners.getLoggingListener();
+            currentEventBus.registerListener(loggingListener);
+            logger.trace("  -> ADDED LOGGING LISTENER " + loggingListener);
         }
         logger.trace("SETTING EVENT BUS FOR THREAD " + Thread.currentThread() + " TO " + currentEventBus);
         StepEventBus.setCurrentBusToEventBusFor(uniqueTestId);

@@ -29,6 +29,7 @@ public class JSONRequirementsTree {
     private final List<Node> nodes;
     private final boolean displayAsParent;
     private final boolean hideEmptyRequirements;
+    private final Gson gson = new Gson();
 
     private JSONRequirementsTree(List<Node> nodes,
                                  boolean displayAsParent) {
@@ -128,7 +129,9 @@ public class JSONRequirementsTree {
         Optional<RequirementOutcome> matchingOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
 
         if (matchingOutcome.isPresent()) {
-            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0 || (requirement.getScenarioTags().size() > matchingOutcome.get().getTestOutcomes().getTotal())) {
+//            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0
+//                    || (requirement.getScenarioTags().size() > matchingOutcome.get().getTestOutcomes().getTotal())) {
+            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0) {
                 return Optional.of(TestResult.PENDING);
             } else if (unimplementedFeaturesExistFor(matchingOutcome.get(), requirementsOutcomes)) {
                 return Optional.of(TestResultList.overallResultFrom(Arrays.asList(TestResult.PENDING, matchingOutcome.get().getTestOutcomes().getResult())));
@@ -165,7 +168,6 @@ public class JSONRequirementsTree {
     }
 
     public String asString() {
-        Gson gson = new Gson();
         return gson.toJson(nodes);
     }
 

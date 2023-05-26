@@ -25,4 +25,4 @@ jobs:
         run: mvn clean install -T4 -DskipTests
 
       - name: Smoke Tests
-        run: cd serenity-smoketests && mvn verify -Denvironment=run_with_browserstack -Dbrowserstack.user=${{ secrets.BROWSERSTACK_USER }} -Dbrowserstack.key=${{ secrets.BROWSERSTACK_KEY }}
+        run: cd serenity-smoketests && mvn verify -Denvironment=browserstack -Dbrowserstack.user=${{ secrets.BROWSERSTACK_USER }} -Dbrowserstack.key=${{ secrets.BROWSERSTACK_KEY }}

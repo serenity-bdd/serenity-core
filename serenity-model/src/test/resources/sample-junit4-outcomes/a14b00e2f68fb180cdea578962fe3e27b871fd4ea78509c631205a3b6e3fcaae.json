@@ -1,0 +1,85 @@
+{
+  "name": "anotherNestedTest",
+  "id": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest:anotherNestedTest",
+  "testCaseName": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+  "userStory": {
+    "id": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+    "storyName": "A deeper nested story test",
+    "displayName": "A deeper nested story test",
+    "storyClassName": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+    "path": "smoketests.sample.nested.deep.deeper",
+    "pathElements": [
+      {
+        "name": "sample",
+        "description": ""
+      },
+      {
+        "name": "nested",
+        "description": ""
+      },
+      {
+        "name": "deep",
+        "description": ""
+      },
+      {
+        "name": "deeper",
+        "description": ""
+      }
+    ],
+    "type": "story",
+    "qualifiedTag": {
+      "name": "Deeper/A deeper nested story test",
+      "type": "story",
+      "displayName": "Deeper/A deeper nested story test"
+    }
+  },
+  "featureTag": {
+    "name": "Deeper/A deeper nested story test",
+    "type": "story",
+    "displayName": "Deeper/A deeper nested story test"
+  },
+  "title": "Another nested test",
+  "tags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Deeper/A deeper nested story test",
+      "type": "story",
+      "displayName": "Deeper/A deeper nested story test"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Deeper/A deeper nested story test",
+      "type": "story",
+      "displayName": "Deeper/A deeper nested story test"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-05-09T15:55:03.053635+01:00[Europe/London]",
+  "duration": 1,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit",
+  "order": 0,
+  "result": "SUCCESS"
+}

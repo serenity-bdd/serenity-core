@@ -35,7 +35,6 @@ public class CucumberScenarioLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberScenarioLoader.class);
     private final Supplier<ClassLoader> classLoader = CucumberScenarioLoader.class::getClassLoader;
-    private final FeatureParser parser = new FeatureParser(UUID::randomUUID);
     private final List<URI> featurePaths;
     private final TestStatistics statistics;
     private Map<Feature, URI> mapsForFeatures = new HashMap<>();
@@ -47,13 +46,8 @@ public class CucumberScenarioLoader {
 
     public WeightedCucumberScenarios load() {
         LOGGER.debug("Feature paths are {}", featurePaths);
+        FeatureParser parser = new FeatureParser(UUID::randomUUID);
         Options featureOptions = () -> featurePaths;
-
-        //Parser<GherkinDocument> gherkinParser = new Parser<>(new GherkinDocumentBuilder(new IncrementingIdGenerator(), "test.feature"));
-        //Parser<GherkinDocument> gherkinParser = new Parser();
-        //GherkinParser gherkinParser = GherkinParser.builder().includeGherkinDocument(true).build();
-        //Parser gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),gherkinFeature.getUri().toString()));
-
 
         FeaturePathFeatureSupplier supplier =
             new FeaturePathFeatureSupplier(classLoader, featureOptions, parser);
@@ -62,7 +56,7 @@ public class CucumberScenarioLoader {
             .forEach(i ->
             {
                 io.cucumber.core.gherkin.Feature feature = supplier.get().get(i);
-                Parser<GherkinDocument> gherkinParser = new Parser(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
+                Parser<GherkinDocument> gherkinParser = new Parser<>(new GherkinDocumentBuilder(new IncrementingIdGenerator(),feature.getUri().toString()));
                 mapsForFeatures.put(gherkinParser.parse(feature.getSource(),feature.getUri().toString()).getFeature().get(),
                                     feature.getUri());
             });

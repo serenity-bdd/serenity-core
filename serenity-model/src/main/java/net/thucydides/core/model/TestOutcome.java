@@ -910,11 +910,10 @@ public class TestOutcome {
     }
 
     public Optional<TestStep> getFailingStep() {
-        List<TestStep> stepsInReverseOrder = new ArrayList(getFlattenedTestSteps());
-        Collections.reverse(stepsInReverseOrder);
-        for (TestStep step : stepsInReverseOrder) {
-            if (step.isError() || step.isFailure()) {
-                return Optional.of(step);
+        List<TestStep> flattenedSteps = getFlattenedTestSteps();
+        for(int step = flattenedSteps.size() - 1; step >= 0; step--) {
+            if (flattenedSteps.get(step).isError() || flattenedSteps.get(step).isFailure()) {
+                return Optional.of(flattenedSteps.get(step));
             }
         }
         return Optional.empty();
@@ -1089,7 +1088,7 @@ public class TestOutcome {
     }
 
     public TestOutcome withSteps(List<TestStep> childSteps) {
-        this.testSteps = new ArrayList<>(childSteps);
+        updateTestSteps(childSteps);
         return this;
     }
 
@@ -1412,27 +1411,35 @@ public class TestOutcome {
         return (!stepsContainFailure && (getResult() == TestResult.ERROR || getResult() == TestResult.FAILURE || getResult() == TestResult.COMPROMISED));
     }
 
+    private List<TestStep> flattenedSteps = null;
     public List<TestStep> getFlattenedTestSteps() {
-        List<TestStep> flattenedTestSteps = new ArrayList<>();
-        for (TestStep step : getTestSteps()) {
-            flattenedTestSteps.add(step);
-            if (step.isAGroup()) {
-                flattenedTestSteps.addAll(step.getFlattenedSteps());
+        if (flattenedSteps == null) {
+            List<TestStep> flattenedTestSteps = new ArrayList<>();
+            for (TestStep step : getTestSteps()) {
+                flattenedTestSteps.add(step);
+                if (step.isAGroup()) {
+                    flattenedTestSteps.addAll(step.getFlattenedSteps());
+                }
             }
+            this.flattenedSteps = flattenedTestSteps;
         }
-        return flattenedTestSteps;
+        return flattenedSteps;
     }
 
+    private List<TestStep> leafSteps = null;
     public List<TestStep> getLeafTestSteps() {
-        List<TestStep> leafTestSteps = new ArrayList<TestStep>();
-        for (TestStep step : getTestSteps()) {
-            if (step.isAGroup()) {
-                leafTestSteps.addAll(step.getLeafTestSteps());
-            } else {
-                leafTestSteps.add(step);
+        if (leafSteps == null ) {
+            List<TestStep> leafTestSteps = new ArrayList<>();
+            for (TestStep step : getTestSteps()) {
+                if (step.isAGroup()) {
+                    leafTestSteps.addAll(step.getLeafTestSteps());
+                } else {
+                    leafTestSteps.add(step);
+                }
             }
+            this.leafSteps = leafTestSteps;
         }
-        return leafTestSteps;
+        return leafSteps;
     }
 
     /**
@@ -1515,20 +1522,12 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.add(step);
         renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
-    }
-
-    private synchronized void addSteps(List<TestStep> steps) {
-        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
-        updatedSteps.addAll(steps);
-        renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
     }
 
     private void setTestSteps(List<TestStep> steps) {
         this.testSteps = steps;
+        this.flattenedSteps = null;
         // renumberTestSteps(testSteps);
     }
 
@@ -2807,8 +2806,7 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.removeAll(stepsToReplace);
         renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
 
     }
 
@@ -3017,7 +3015,7 @@ public class TestOutcome {
                 updatedSteps.add(step);
             }
         }
-        this.testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
         return this;
     }
 
@@ -3028,8 +3026,14 @@ public class TestOutcome {
                 updatedSteps.add(step);
             }
         }
-        this.testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
         return this;
+    }
+
+    private void updateTestSteps(List<TestStep> updatedSteps) {
+        this.testSteps = updatedSteps;
+        this.flattenedSteps = null;
+        this.leafSteps = null;
     }
 
     private boolean someStepsDoNotMatch(Predicate<TestStep> condition) {

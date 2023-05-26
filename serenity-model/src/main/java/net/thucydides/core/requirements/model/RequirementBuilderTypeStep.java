@@ -21,6 +21,6 @@ public class RequirementBuilderTypeStep {
     }
 
     private String nonLifecycle(String narrativeText) {
-        return narrativeText.startsWith("Lifecycle:") ? "" : narrativeText;
+        return (narrativeText != null) && (narrativeText.startsWith("Lifecycle:")) ? "" : narrativeText;
     }
 }

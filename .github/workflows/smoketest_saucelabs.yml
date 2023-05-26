@@ -25,4 +25,4 @@ jobs:
         run: mvn clean install -T4 -DskipTests
 
       - name: Smoke Tests
-        run: cd serenity-smoketests && mvn verify -Denvironment=run_with_saucelabs -Dsaucelabs.username=${{ secrets.SAUCELABS_USER }} -Dsaucelabs.accessKey=${{ secrets.SAUCELABS_KEY }}
+        run: cd serenity-smoketests && mvn verify -Denvironment=saucelabs -Dsaucelabs.username=${{ secrets.SAUCELABS_USER }} -Dsaucelabs.accessKey=${{ secrets.SAUCELABS_KEY }}

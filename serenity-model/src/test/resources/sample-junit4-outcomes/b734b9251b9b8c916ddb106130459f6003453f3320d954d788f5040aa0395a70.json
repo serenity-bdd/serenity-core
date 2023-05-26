@@ -1,0 +1,81 @@
+{
+  "name": "anotherNestedTest",
+  "id": "smoketests.sample.nested.deep.ADeepNestedStoryTest:anotherNestedTest",
+  "testCaseName": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
+  "userStory": {
+    "id": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
+    "storyName": "A deep nested story test",
+    "displayName": "A deep nested story test",
+    "storyClassName": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
+    "path": "smoketests.sample.nested.deep",
+    "pathElements": [
+      {
+        "name": "sample",
+        "description": ""
+      },
+      {
+        "name": "nested",
+        "description": ""
+      },
+      {
+        "name": "deep",
+        "description": ""
+      }
+    ],
+    "type": "story",
+    "qualifiedTag": {
+      "name": "Deep/A deep nested story test",
+      "type": "story",
+      "displayName": "Deep/A deep nested story test"
+    }
+  },
+  "featureTag": {
+    "name": "Deep/A deep nested story test",
+    "type": "story",
+    "displayName": "Deep/A deep nested story test"
+  },
+  "title": "Another nested test",
+  "tags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Deep/A deep nested story test",
+      "type": "story",
+      "displayName": "Deep/A deep nested story test"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Deep/A deep nested story test",
+      "type": "story",
+      "displayName": "Deep/A deep nested story test"
+    }
+  ],
+  "startTime": "2023-05-09T15:55:03.071204+01:00[Europe/London]",
+  "duration": 1,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit",
+  "order": 0,
+  "result": "SUCCESS"
+}

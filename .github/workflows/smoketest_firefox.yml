@@ -28,4 +28,4 @@ jobs:
       - name: Smoke Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-           run: cd serenity-smoketests && mvn verify -Denvironment=run_with_firefox
+           run: cd serenity-smoketests && mvn verify -Denvironment=firefox

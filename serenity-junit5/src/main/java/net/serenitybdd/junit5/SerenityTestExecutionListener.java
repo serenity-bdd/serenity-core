@@ -6,6 +6,7 @@ import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.logging.ConsoleLoggingListener;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -447,6 +448,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             File outputDirectory = getOutputDirectory();
             BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
             currentEventBus.registerListener(baseStepListener);
+            currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
             logger.trace("  -> ADDED BASE LISTENER " + baseStepListener);
         }
         logger.trace("SETTING EVENT BUS FOR THREAD " + Thread.currentThread() + " TO " + currentEventBus);

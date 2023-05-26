@@ -43,13 +43,13 @@
         <junit.version>4.13.2</junit.version>
         <groovy.version>4.0.10</groovy.version>
         <spock.version>2.2-M1-groovy-4.0</spock.version>
-        <byte-buddy.version>1.14.2</byte-buddy.version>
+        <byte-buddy.version>1.14.4</byte-buddy.version>
         <guava.version>31.1-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
 <!--        <slf4j.version>1.7.30</slf4j.version>-->
         <slf4j.version>2.0.7</slf4j.version>
         <guice.version>5.1.0</guice.version>
-        <cucumber.version>7.11.0</cucumber.version>
+        <cucumber.version>7.12.0</cucumber.version>
         <gson.version>2.10.1</gson.version>
         <junit5.version>5.9.2</junit5.version>
         <mockito.version>3.3.3</mockito.version>
@@ -63,7 +63,7 @@
         <commons.net.version>3.9.0</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <selenium.version>4.9.0</selenium.version>
+        <selenium.version>4.9.1</selenium.version>
         <htmlunit.driver.version>4.8.1</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
@@ -91,6 +91,7 @@
         <javassist.version>3.29.2-GA</javassist.version>
         <jackson.version>2.15.0-rc1</jackson.version>
         <xchart.version>3.5.2</xchart.version>
+        <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
         <kotlin.version>1.8.10</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
@@ -501,17 +502,17 @@
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.11.0</version>
                     <configuration>
                         <!-- put your configurations here -->
                     </configuration>
@@ -552,7 +553,7 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.1.0</version>
                     <configuration>
                         <includes>
                             <include>**/When*</include>
@@ -604,7 +605,7 @@
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                     <artifactId>maven-jar-plugin</artifactId>
                 </plugin>
                 <plugin>
@@ -681,7 +682,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>1.5.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>

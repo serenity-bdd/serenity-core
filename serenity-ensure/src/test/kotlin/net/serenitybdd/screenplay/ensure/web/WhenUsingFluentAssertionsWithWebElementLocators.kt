@@ -224,6 +224,9 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 fun `when the element is on the page`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Heading"), wendy)
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasText("Heading"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasTextIgnoringCase("heading"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasTextContent("Heading"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#heading")).hasTextContentIgnoringCase("heading"), wendy)
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isGreaterThan("Aardvark"), wendy)
                 }
 

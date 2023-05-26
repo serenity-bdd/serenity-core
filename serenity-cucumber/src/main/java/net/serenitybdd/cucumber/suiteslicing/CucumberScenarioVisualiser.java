@@ -1,5 +1,6 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.cucumber.gherkin.CucumberScenarioLoader;
 import net.serenitybdd.cucumber.util.PathUtils;
@@ -21,6 +22,7 @@ public class CucumberScenarioVisualiser {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CucumberScenarioVisualiser.class);
     private final EnvironmentVariables environmentVariables;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public CucumberScenarioVisualiser(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -44,7 +46,7 @@ public class CucumberScenarioVisualiser {
             List<VisualisableCucumberScenarios> visualisedSlices = CucumberScenarioVisualiser.sliceIntoForks(forkCount, slices);
             String jsonFile = String.format("%s/%s-slice-config-%s-forks-in-each-of-%s-slices-using-%s.json", outputDirectory(), PathUtils
                 .getAsFile(rootFolderURI).getPath().replaceAll("[:/]", "-"), forkCount, sliceCount, testStatistics);
-            Files.write(Paths.get(jsonFile), new GsonBuilder().setPrettyPrinting().create().toJson(visualisedSlices).getBytes());
+            Files.write(Paths.get(jsonFile),gson.toJson(visualisedSlices).getBytes());
             LOGGER.debug("Wrote visualisation as JSON for {} slices -> {}", visualisedSlices.size(), jsonFile);
         } catch (Exception e) {
             throw new RuntimeException("failed to visualise scenarios", e);

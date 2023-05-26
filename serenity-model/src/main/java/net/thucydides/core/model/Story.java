@@ -1,9 +1,11 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.strings.FirstLine;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RootDirectory;
@@ -11,7 +13,11 @@ import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -27,9 +33,12 @@ public class Story {
     private String displayName;
     private String storyClassName;
     private String path;
+    private PathElements pathElements;
     private String narrative;
     private ApplicationFeature feature;
     private String type;
+
+    private static final PathElements NO_PATH_ELEMENTS = new PathElements();
 
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
@@ -38,7 +47,26 @@ public class Story {
         this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(humanize(userStoryClass.getSimpleName()));
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
+        // split path into a list of path elements
+        this.pathElements = pathToElements(path);
         this.type = FeatureType.STORY.toString();
+    }
+
+    private PathElements pathToElements(String path) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
+        // strip root path from path if present
+        if (isNotEmpty(rootPath) && path.startsWith(rootPath)) {
+            path = path.substring(rootPath.length() + 1);
+        }
+        if (path == null) {
+            return PathElements.from(new ArrayList<>());
+        }
+        // Record the path elements
+        return PathElements.from(Splitter.on(".").trimResults()
+                .splitToStream(path)
+                .map(pathElt -> new PathElement(pathElt,""))
+                .collect(Collectors.toList()));
     }
 
     private String pathOf(Class<?> userStoryClass) {
@@ -87,6 +115,7 @@ public class Story {
         this.displayName = displayName;
         this.feature = feature;
         this.path = path;
+        this.pathElements = pathToElements(path);
         this.narrative = null;
         this.type = FeatureType.STORY.toString();
     }
@@ -97,9 +126,10 @@ public class Story {
                  final String storyClassName,
                  final String displayName,
                  final String path,
+                 final PathElements pathElements,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName, storyClassName, displayName, path, feature, narrative, FeatureType.STORY.toString());
+        this(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, FeatureType.STORY.toString());
     }
 
 
@@ -108,6 +138,7 @@ public class Story {
                  final String storyClassName,
                  final String displayName,
                  final String path,
+                 final PathElements pathElements,
                  final ApplicationFeature feature,
                  final String narrative,
                  final String type) {
@@ -117,6 +148,7 @@ public class Story {
         this.displayName = displayName;
         this.feature = feature;
         this.path = path;
+        this.pathElements = pathElements;
         this.narrative = narrative;
         this.type = type;
     }
@@ -132,6 +164,7 @@ public class Story {
         this.storyClassName = null;
         this.feature = feature;
         this.path = path;
+        this.pathElements = pathToElements(path);
         this.type = FeatureType.STORY.toString();
     }
 
@@ -158,11 +191,11 @@ public class Story {
     }
 
     public Story withNarrative(String narrative) {
-        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, type);
     }
 
     public Story withType(String type) {
-        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, type);
     }
 
     public static Story withIdAndPath(final String storyId, final String storyName, final String storyPath) {
@@ -267,6 +300,10 @@ public class Story {
         return path;
     }
 
+    public PathElements getPathElements() {
+        return (pathElements == null) ? NO_PATH_ELEMENTS : pathElements;
+    }
+
     public String getStoryName() {
         return storyName;
     }
@@ -284,11 +321,11 @@ public class Story {
     }
 
     public Story withPath(String path) {
-        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
+        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, path, this.pathElements, this.feature, this.narrative, FeatureType.forFilename(path).toString());
     }
 
     public Story asFeature() {
-        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
+        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, this.path, this.pathElements, this.feature, this.narrative, FeatureType.FEATURE.toString());
     }
 
     public TestTag asTag() {

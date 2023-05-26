@@ -22,11 +22,9 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class GsonJSONConverter implements JSONConverter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GsonJSONConverter.class);
-
     private final EnvironmentVariables environmentVariables;
 
-    Gson gson;
+    private final Gson gson;
 
     protected Gson getGson() {
         return gson;

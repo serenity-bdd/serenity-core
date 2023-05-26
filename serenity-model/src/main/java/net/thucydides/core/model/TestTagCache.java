@@ -1,19 +1,39 @@
 package net.thucydides.core.model;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TestTagCache {
 
     private static class TestOutcomeTag {
-        private final TestOutcome testOutcome;
+        private final int testOutcome;
         private final TestTag testTag;
 
         private TestOutcomeTag(TestOutcome testOutcome, TestTag testTag) {
-            this.testOutcome = testOutcome;
+            this.testOutcome = testOutcome.hashCode();
             this.testTag = testTag;
         }
+
+//        @Override
+//        public boolean equals(Object o) {
+//            if (this == o) return true;
+//            if (o == null || getClass() != o.getClass()) return false;
+//
+//            TestOutcomeTag that = (TestOutcomeTag) o;
+//
+//            if (testOutcome != null ? !testOutcome.equals(that.testOutcome) : that.testOutcome != null) return false;
+//            return testTag != null ? testTag.equals(that.testTag) : that.testTag == null;
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            int result = testOutcome != null ? testOutcome.hashCode() : 0;
+//            result = 31 * result + (testTag != null ? testTag.hashCode() : 0);
+//            return result;
+//        }
+
 
         @Override
         public boolean equals(Object o) {
@@ -22,13 +42,13 @@ public class TestTagCache {
 
             TestOutcomeTag that = (TestOutcomeTag) o;
 
-            if (testOutcome != null ? !testOutcome.equals(that.testOutcome) : that.testOutcome != null) return false;
-            return testTag != null ? testTag.equals(that.testTag) : that.testTag == null;
+            if (testOutcome != that.testOutcome) return false;
+            return Objects.equals(testTag, that.testTag);
         }
 
         @Override
         public int hashCode() {
-            int result = testOutcome != null ? testOutcome.hashCode() : 0;
+            int result = testOutcome;
             result = 31 * result + (testTag != null ? testTag.hashCode() : 0);
             return result;
         }

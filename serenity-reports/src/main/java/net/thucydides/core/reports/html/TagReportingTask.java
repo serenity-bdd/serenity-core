@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -125,13 +126,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             this.testOutcomes = testOutcomes;
         }
 
-        public List<ReportingTask> using(final FreemarkerContext freemarker,
-                                         final EnvironmentVariables environmentVariables,
-                                         final File outputDirectory,
-                                         final ReportNameProvider reportName,
-                                         final Set<TestTag> allTags,
-                                         final List<String> requirementTypes,
-                                         final List<String> knownRequirementReportNames) {
+        public Stream<ReportingTask> using(final FreemarkerContext freemarker,
+                                           final EnvironmentVariables environmentVariables,
+                                           final File outputDirectory,
+                                           final ReportNameProvider reportName,
+                                           final Set<TestTag> allTags,
+                                           final List<String> requirementTypes,
+                                           final List<String> knownRequirementReportNames) {
 
             TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
             Set<TestTag> reportedTags = testOutcomes.getTags().stream()
@@ -158,8 +159,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                             reportName.forTag(tag),
                             tag,
                             allTags,
-                            testOutcomes))
-                    .collect(Collectors.toList());
+                            testOutcomes));
         }
 
         private boolean requirementTag(List<String> requirementTypes, TestTag tag) {

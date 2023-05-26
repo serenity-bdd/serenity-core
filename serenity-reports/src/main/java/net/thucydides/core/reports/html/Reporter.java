@@ -9,75 +9,68 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
 
-class Reporter {
+class Reporter implements Closeable {
 
     private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(600, TimeUnit.SECONDS);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 
-    private final Collection<ReportingTask> reportingTasks;
+    private final EnvironmentVariables environmentVariables;
 
-    private final EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+    private final ExecutorService executorPool;
 
-    private Reporter(Collection<ReportingTask> reportingTasks) {
-        this.reportingTasks = reportingTasks;
+    public Reporter(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        this.executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
+        LOGGER.info("GENERATING REPORTS USING {} THREADS", NumberOfThreads.forIOOperations());
     }
 
-    public static void generateReportsFor(Collection<ReportingTask> reportingTasks) {
-        new Reporter(reportingTasks).generateReports();
-    }
-
-    private void generateReports() {
+    public void generateReportsFor(Stream<ReportingTask> reportingTasks) {
         Stopwatch stopwatch = Stopwatch.started();
 
-        ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
-
         ErrorTally errorTally = new ErrorTally();
+        AtomicInteger reportCounter = new AtomicInteger();
         try {
-            final List<ReportExecutor> partitions
-                    = reportingTasks.stream()
-                    .map(ReportExecutor::new)
-                    .collect(Collectors.toList());
-
-            final List<ReportExecutorFuture> futures
-                    = partitions.stream()
-                    .map( partition -> new ReportExecutorFuture(executorPool.submit(partition), partition.getReportingTask()) )
-                    .collect(Collectors.toList());
-
             final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
 
-            for (ReportExecutorFuture executedTask : futures) {
-                try {
-                    executedTask.getFuture().get(timeout.getTimeout(), timeout.getUnit());
-                } catch (TimeoutException reportGenerationTimedOut) {
-                    String errorMessage = reportFailureMessage("Report generation timed out", executedTask, reportGenerationTimedOut);
-                    errorTally.recordReportFailure(errorMessage);
-                    LOGGER.warn(errorMessage);
-                } catch (InterruptedException reportGenerationInterrupted) {
-                    String errorMessage = reportFailureMessage("Report generation interrupted", executedTask, reportGenerationInterrupted);
-                    errorTally.recordReportFailure(errorMessage);
-                    LOGGER.warn(errorMessage);
-                } catch (ExecutionException reportGenerationFailed) {
-                    String errorMessage = reportFailureMessage("Failed to generate report", executedTask, reportGenerationFailed);
-                    errorTally.recordReportFailure(errorMessage);
-                    LOGGER.warn(errorMessage, reportGenerationFailed);
-                }
-            }
+            reportingTasks
+                    .map(ReportExecutor::new)
+                    .map(executorPool::submit)
+                    .parallel()
+                    .forEach(future -> {
+                        try {
+                            future.get(timeout.getTimeout(), timeout.getUnit());
+                            reportCounter.incrementAndGet();
+                        } catch (TimeoutException reportGenerationTimedOut) {
+                            String errorMessage = reportFailureMessage("Report generation timed out", reportGenerationTimedOut);
+                            errorTally.recordReportFailure(errorMessage);
+                            LOGGER.warn(errorMessage);
+                        } catch (InterruptedException reportGenerationInterrupted) {
+                            String errorMessage = reportFailureMessage("Report generation interrupted", reportGenerationInterrupted);
+                            errorTally.recordReportFailure(errorMessage);
+                            LOGGER.warn(errorMessage);
+                        } catch (ExecutionException reportGenerationFailed) {
+                            String errorMessage = reportFailureMessage("Failed to generate report", reportGenerationFailed);
+                            errorTally.recordReportFailure(errorMessage);
+                            LOGGER.warn(errorMessage, reportGenerationFailed);
+                        }
+                    });
         } catch (Exception e) {
             LOGGER.error("Report generation failed", e);
-        } finally {
-            executorPool.shutdown();
         }
-
-        LOGGER.debug("Test outcome reports generated in {} ms", stopwatch.stop());
+        LOGGER.debug("Generated {} pages in {} seconds", reportCounter.get(),(stopwatch.stop() / 1000));
         if (errorTally.hasErrors()) {
             LOGGER.warn(errorTally.errorSummary());
             if (showThreaddumpOnReportTimeout()) {
@@ -101,6 +94,19 @@ class Reporter {
 
     private String reportFailureMessage(String reason, ReportExecutorFuture executedTask, Exception e) {
         return String.format("%s for %s - %s\n%s", reason, executedTask, e, errorCauseOf(e));
+    }
+
+    private String reportFailureMessage(String reason, Exception e) {
+        return String.format("%s - %s\n%s", reason, e, errorCauseOf(e));
+    }
+
+    private String reportFailureMessage(String reason, ReportingTask executedTask, Exception e) {
+        return String.format("%s for %s - %s\n%s", reason, executedTask, e, errorCauseOf(e));
+    }
+
+    @Override
+    public void close() throws IOException {
+        executorPool.shutdown();
     }
 
     private static class ErrorRecord {

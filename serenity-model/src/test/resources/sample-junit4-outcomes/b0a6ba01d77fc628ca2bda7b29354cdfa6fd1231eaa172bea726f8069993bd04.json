@@ -1,0 +1,77 @@
+{
+  "name": "yetAnotherNestedTest",
+  "id": "smoketests.sample.nested.AnotherNestedStoryTest:yetAnotherNestedTest",
+  "testCaseName": "smoketests.sample.nested.AnotherNestedStoryTest",
+  "userStory": {
+    "id": "smoketests.sample.nested.AnotherNestedStoryTest",
+    "storyName": "Another nested story test",
+    "displayName": "Another nested story test",
+    "storyClassName": "smoketests.sample.nested.AnotherNestedStoryTest",
+    "path": "smoketests.sample.nested",
+    "pathElements": [
+      {
+        "name": "sample",
+        "description": ""
+      },
+      {
+        "name": "nested",
+        "description": ""
+      }
+    ],
+    "type": "story",
+    "qualifiedTag": {
+      "name": "Nested/Another nested story test",
+      "type": "story",
+      "displayName": "Nested/Another nested story test"
+    }
+  },
+  "featureTag": {
+    "name": "Nested/Another nested story test",
+    "type": "story",
+    "displayName": "Nested/Another nested story test"
+  },
+  "title": "Yet another nested test",
+  "tags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Nested/Another nested story test",
+      "type": "story",
+      "displayName": "Nested/Another nested story test"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Nested/Another nested story test",
+      "type": "story",
+      "displayName": "Nested/Another nested story test"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-05-09T15:55:02.593290+01:00[Europe/London]",
+  "duration": 47,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit",
+  "order": 0,
+  "result": "SUCCESS"
+}

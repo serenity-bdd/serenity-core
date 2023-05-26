@@ -1660,6 +1660,11 @@ public enum ThucydidesSystemProperty {
     REPORT_TAGTYPE_TITLE,
 
     /**
+     * The maximum number of features allowed in the requirements cache.
+     */
+    SERENITY_REQUIREMENTS_CACHE_HEAP_SIZE,
+
+    /**
      * Use this property to set how long webdriver should wait x second for an alert to be present before throwing an exception.
      */
     WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT("webdriver.wait.for.alert.timeout");

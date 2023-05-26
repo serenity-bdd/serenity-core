@@ -26,7 +26,6 @@ public class RequirementPersister {
         this.rootDirectory = rootDirectory;
         this.gson = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
-//                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter()).create();
 
     }

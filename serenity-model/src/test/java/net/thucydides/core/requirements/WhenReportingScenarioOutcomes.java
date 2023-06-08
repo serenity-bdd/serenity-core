@@ -5,6 +5,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
+import net.thucydides.core.requirements.reports.cucumber.FeatureCache;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,7 @@ public class WhenReportingScenarioOutcomes {
 
     @Before
     public void findSourceDirectories() {
+        FeatureCache.getCache().close();
         featuresDirectory = new File(ClassLoader.getSystemClassLoader().getResource("serenity-cucumber/features").getFile());
         outcomeDirectory =  new File(ClassLoader.getSystemClassLoader().getResource("serenity-cucumber/json").getFile());
     }

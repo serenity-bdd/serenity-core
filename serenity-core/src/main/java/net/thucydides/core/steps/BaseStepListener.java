@@ -440,6 +440,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         clearStorywideTagsAndIssues();
     }
 
+    public void testSuiteStarted(final Class<?> startedTestSuite, String testName) {
+        testSuite = startedTestSuite;
+        testedStory = findStoryFrom(startedTestSuite)
+                .withStoryName(testName)
+                .withDisplayName(testName);
+        suiteStarted = true;
+        clearStorywideTagsAndIssues();
+    }
+
     private void clearStorywideTagsAndIssues() {
         storywideIssues.clear();
         storywideTags.clear();
@@ -518,7 +527,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
-     public void testStarted(final String testMethod, final String id, ZonedDateTime startTime) {
+    public void testStarted(final String testMethod, final String id, ZonedDateTime startTime) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id).withStartTime(startTime);
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
@@ -586,7 +595,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testFinished(final TestOutcome result, boolean isInDataDrivenTest) {
-        testFinished(result,isInDataDrivenTest,ZonedDateTime.now());
+        testFinished(result, isInDataDrivenTest, ZonedDateTime.now());
     }
 
     /**
@@ -822,11 +831,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
-        takeEndOfStepScreenshotForPlayback(SUCCESS,screenshotList);
+        takeEndOfStepScreenshotForPlayback(SUCCESS, screenshotList);
         currentStepDone(SUCCESS);
         pauseIfRequired();
     }
-
 
 
     private void updateExampleTableIfNecessary(TestResult result) {
@@ -952,7 +960,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
-        takeEndOfStepScreenshotForRecording(SUCCESS,screenshots);
+        takeEndOfStepScreenshotForRecording(SUCCESS, screenshots);
     }
 
     public void currentStepDone(TestResult result) {
@@ -988,15 +996,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
 
-    private void takeEndOfStepScreenshotForRecording(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeEndOfStepScreenshotForRecording(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if ((currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result))) {
-            takeRecord(MANDATORY_SCREENSHOT, result,screenshots);
+            takeRecord(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
 
-    private void takeEndOfStepScreenshotForPlayback(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeEndOfStepScreenshotForPlayback(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if ((screenshots != null && screenshots.size() > 0)) {
-            takePlayback(MANDATORY_SCREENSHOT, result,screenshots);
+            takePlayback(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
 
@@ -1025,13 +1033,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private void takeRecord(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeRecord(final ScreenshotType screenshotType, TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if (shouldTakeScreenshotsWithoutCurrentStep(result)) {
             try {
                 grabScreenshots(result).forEach(
                         screenshot -> {
-                            boolean screenshotExisting = screenshots.stream().map(screens->screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
-                            if(!screenshotExisting) {
+                            boolean screenshotExisting = screenshots.stream().map(screens -> screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
+                            if (!screenshotExisting) {
                                 screenshots.add(screenshot);
                             } else {
                                 LOGGER.warn("SRP:Found duplicate snapshot " + screenshot.getScreenshot().getName());
@@ -1039,7 +1047,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         }
                 );
                 //clarify why there is no currentStep
-                if(currentStep().isPresent()) {
+                if (currentStep().isPresent()) {
                     removeDuplicatedInitialScreenshotsIfPresent();
                 }
             } catch (ScreenshotException e) {
@@ -1049,13 +1057,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
 
-    private void takePlayback(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
-        if ( (screenshots!= null) && (screenshots.size() > 0)) {
+    private void takePlayback(final ScreenshotType screenshotType, TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
+        if ((screenshots != null) && (screenshots.size() > 0)) {
             screenshots.forEach(screenshot -> {
                         currentStep().ifPresent(step -> step.addScreenshot(screenshot));
                     }
             );
-            if(currentStep().isPresent()) {
+            if (currentStep().isPresent()) {
                 removeDuplicatedInitialScreenshotsIfPresent();
             }
         }
@@ -1068,7 +1076,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (screenshots().areDisabledForThisAction(result)) {
             return false;
         }
-        return  (currentStepExists()
+        return (currentStepExists()
                 && browserIsOpen()
                 && !StepEventBus.getParallelEventBus().isDryRun()
                 && !StepEventBus.getParallelEventBus().currentTestIsSuspended());

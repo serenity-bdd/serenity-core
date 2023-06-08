@@ -30,6 +30,13 @@ public interface StepListener {
     void testSuiteStarted(final Story story);
 
     /**
+     * Start a test run using JUnit 5 with a specific name
+     */
+    default void testSuiteStarted(Class<?> testClass, String testCaseName) {
+        testSuiteStarted(Story.called(testCaseName));
+    }
+
+    /**
      * End of a test case or story.
      */
     void testSuiteFinished();
@@ -169,4 +176,5 @@ public interface StepListener {
     void testRunFinished();
 
     void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots);
+
 }

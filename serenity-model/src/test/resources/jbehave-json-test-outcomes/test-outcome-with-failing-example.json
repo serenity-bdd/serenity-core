@@ -1,0 +1,647 @@
+{
+  "name": "Viewing filtered items",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "[1] {tasks\u003dBuy some milk, Walk the dog, filter\u003dActive, expected\u003dBuy some milk}",
+      "duration": 6860,
+      "startTime": 1475259980132,
+      "screenshots": [
+        {
+          "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "Given that Jane has a todo list containing Buy some milk, Walk the dog",
+          "duration": 4298,
+          "startTime": 1475259980135,
+          "screenshots": [
+            {
+              "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 3,
+              "description": "Jane starts with a todo list containing Buy some milk, Walk the dog",
+              "duration": 4170,
+              "startTime": 1475259980137,
+              "screenshots": [
+                {
+                  "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 4,
+                  "description": "Jane opens the Application home page",
+                  "duration": 2423,
+                  "startTime": 1475259980148,
+                  "screenshots": [
+                    {
+                      "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                },
+                {
+                  "number": 5,
+                  "description": "Jane adds the todo items called: [Buy some milk, Walk the dog]",
+                  "duration": 1603,
+                  "startTime": 1475259982579,
+                  "screenshots": [
+                    {
+                      "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                    },
+                    {
+                      "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 6,
+                      "description": "Jane adds a todo item called: Buy some milk",
+                      "duration": 747,
+                      "startTime": 1475259982706,
+                      "screenshots": [
+                        {
+                          "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                        },
+                        {
+                          "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                        }
+                      ],
+                      "result": "SUCCESS",
+                      "children": [
+                        {
+                          "number": 7,
+                          "description": "Jane enters \u0027Buy some milk\u0027 into \u0027What needs to be done?\u0027 field",
+                          "duration": 436,
+                          "startTime": 1475259982830,
+                          "screenshots": [
+                            {
+                              "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                            },
+                            {
+                              "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                            }
+                          ],
+                          "result": "SUCCESS"
+                        }
+                      ]
+                    },
+                    {
+                      "number": 8,
+                      "description": "Jane adds a todo item called: Walk the dog",
+                      "duration": 603,
+                      "startTime": 1475259983455,
+                      "screenshots": [
+                        {
+                          "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                        },
+                        {
+                          "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                        }
+                      ],
+                      "result": "SUCCESS",
+                      "children": [
+                        {
+                          "number": 9,
+                          "description": "Jane enters \u0027Walk the dog\u0027 into \u0027What needs to be done?\u0027 field",
+                          "duration": 323,
+                          "startTime": 1475259983579,
+                          "screenshots": [
+                            {
+                              "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                            },
+                            {
+                              "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                            }
+                          ],
+                          "result": "SUCCESS"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 10,
+          "description": "And she has completed the task called \u0027Walk the dog\u0027",
+          "duration": 960,
+          "startTime": 1475259984433,
+          "screenshots": [
+            {
+              "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+            },
+            {
+              "screenshot": "234fa39240af0b6cfb78024f7ed5448c.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 11,
+              "description": "Jane completes the item called: Walk the dog",
+              "duration": 645,
+              "startTime": 1475259984584,
+              "screenshots": [
+                {
+                  "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+                },
+                {
+                  "screenshot": "bb20b228754e15ef1178009fd621b9f8.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 12,
+                  "description": "Jane clicks on Complete item tick box",
+                  "duration": 322,
+                  "startTime": 1475259984709,
+                  "screenshots": [
+                    {
+                      "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+                    },
+                    {
+                      "screenshot": "ce35bdf1403ee95bbafeb840ae37e939.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 13,
+          "description": "When she filters her list to show only Active tasks",
+          "duration": 942,
+          "startTime": 1475259985393,
+          "screenshots": [
+            {
+              "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+            },
+            {
+              "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 14,
+              "description": "Jane filters items by Active",
+              "duration": 656,
+              "startTime": 1475259985554,
+              "screenshots": [
+                {
+                  "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+                },
+                {
+                  "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 15,
+                  "description": "Jane clicks on filter by Active",
+                  "duration": 345,
+                  "startTime": 1475259985715,
+                  "screenshots": [
+                    {
+                      "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+                    },
+                    {
+                      "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 16,
+          "description": "Then her todo list should contain Buy some milk",
+          "duration": 533,
+          "startTime": 1475259986335,
+          "screenshots": [
+            {
+              "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 17,
+              "description": "Then the displayed todo items should be ([Buy some milk])",
+              "duration": 288,
+              "startTime": 1475259986457,
+              "screenshots": [
+                {
+                  "screenshot": "4a2838d0ecb1144f35cea331796f030a.png"
+                }
+              ],
+              "result": "SUCCESS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "description": "[1] {tasks\u003dBuy some milk, Walk the dog, filter\u003dCompleted, expected\u003dWalk the cat}",
+      "duration": 7962,
+      "startTime": 1475259987045,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 19,
+          "description": "Given that Jane has a todo list containing Buy some milk, Walk the dog",
+          "duration": 5776,
+          "startTime": 1475259987046,
+          "screenshots": [
+            {
+              "screenshot": "141617909adaecea9e5f8455d8186546.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 20,
+              "description": "Jane starts with a todo list containing Buy some milk, Walk the dog",
+              "duration": 5648,
+              "startTime": 1475259987049,
+              "screenshots": [
+                {
+                  "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 21,
+                  "description": "Jane opens the Application home page",
+                  "duration": 4009,
+                  "startTime": 1475259987052,
+                  "screenshots": [
+                    {
+                      "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                },
+                {
+                  "number": 22,
+                  "description": "Jane adds the todo items called: [Buy some milk, Walk the dog]",
+                  "duration": 1506,
+                  "startTime": 1475259991069,
+                  "screenshots": [
+                    {
+                      "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                    },
+                    {
+                      "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 23,
+                      "description": "Jane adds a todo item called: Buy some milk",
+                      "duration": 684,
+                      "startTime": 1475259991197,
+                      "screenshots": [
+                        {
+                          "screenshot": "c05e3c5ce8b9b202d81ea95126eb30e1.png"
+                        },
+                        {
+                          "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                        }
+                      ],
+                      "result": "SUCCESS",
+                      "children": [
+                        {
+                          "number": 24,
+                          "description": "Jane enters \u0027Buy some milk\u0027 into \u0027What needs to be done?\u0027 field",
+                          "duration": 433,
+                          "startTime": 1475259991325,
+                          "screenshots": [
+                            {
+                              "screenshot": "e042ac115f25253e8f39893ccb729a9e.png"
+                            },
+                            {
+                              "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                            }
+                          ],
+                          "result": "SUCCESS"
+                        }
+                      ]
+                    },
+                    {
+                      "number": 25,
+                      "description": "Jane adds a todo item called: Walk the dog",
+                      "duration": 570,
+                      "startTime": 1475259991882,
+                      "screenshots": [
+                        {
+                          "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                        },
+                        {
+                          "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                        }
+                      ],
+                      "result": "SUCCESS",
+                      "children": [
+                        {
+                          "number": 26,
+                          "description": "Jane enters \u0027Walk the dog\u0027 into \u0027What needs to be done?\u0027 field",
+                          "duration": 322,
+                          "startTime": 1475259992005,
+                          "screenshots": [
+                            {
+                              "screenshot": "936c404f3b1300f5bea5310aff98350c.png"
+                            },
+                            {
+                              "screenshot": "141617909adaecea9e5f8455d8186546.png"
+                            }
+                          ],
+                          "result": "SUCCESS"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 27,
+          "description": "And she has completed the task called \u0027Walk the dog\u0027",
+          "duration": 879,
+          "startTime": 1475259992822,
+          "screenshots": [
+            {
+              "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+            },
+            {
+              "screenshot": "20687c11dee52111596d12fe35da5a93.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 28,
+              "description": "Jane completes the item called: Walk the dog",
+              "duration": 603,
+              "startTime": 1475259992949,
+              "screenshots": [
+                {
+                  "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+                },
+                {
+                  "screenshot": "79b6dcbc2b1152c51d93a128d8f118eb.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 29,
+                  "description": "Jane clicks on Complete item tick box",
+                  "duration": 321,
+                  "startTime": 1475259993076,
+                  "screenshots": [
+                    {
+                      "screenshot": "e4585a5c800164a8a37170f66bf95346.png"
+                    },
+                    {
+                      "screenshot": "b3a27e9f243ec4e58652ffbdefcbfa96.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 30,
+          "description": "When she filters her list to show only Completed tasks",
+          "duration": 870,
+          "startTime": 1475259993701,
+          "screenshots": [
+            {
+              "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+            },
+            {
+              "screenshot": "8a643ff5c29e055804fe5db564027750.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 31,
+              "description": "Jane filters items by Completed",
+              "duration": 599,
+              "startTime": 1475259993850,
+              "screenshots": [
+                {
+                  "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+                },
+                {
+                  "screenshot": "8a643ff5c29e055804fe5db564027750.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 32,
+                  "description": "Jane clicks on filter by Completed",
+                  "duration": 316,
+                  "startTime": 1475259993978,
+                  "screenshots": [
+                    {
+                      "screenshot": "ff829d7edf074db0ef979c1cad0212fa.png"
+                    },
+                    {
+                      "screenshot": "8a643ff5c29e055804fe5db564027750.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 33,
+          "description": "Then her todo list should contain Walk the cat",
+          "duration": 434,
+          "startTime": 1475259994572,
+          "screenshots": [
+            {
+              "screenshot": "8a643ff5c29e055804fe5db564027750.png"
+            }
+          ],
+          "exception": {
+            "errorType": "java.lang.AssertionError",
+            "message": "\nExpected: \u003c[Walk the cat]\u003e\n     but: was \u003c[Walk the dog]\u003e",
+            "stackTrace": [
+              {
+                "declaringClass": "net.serenitybdd.demos.todos.cucumber.steps.TodoUserSteps",
+                "methodName": "todo_list_should_contain",
+                "fileName": "TodoUserSteps.java",
+                "lineNumber": 48
+              },
+              {
+                "declaringClass": "âœ½",
+                "methodName": "Then her todo list should contain Walk the cat",
+                "fileName": "filtering_todos.feature",
+                "lineNumber": 19
+              }
+            ]
+          },
+          "result": "FAILURE",
+          "children": [
+            {
+              "number": 34,
+              "description": "Then the displayed todo items should be ([Walk the cat])",
+              "duration": 306,
+              "startTime": 1475259994694,
+              "screenshots": [
+                {
+                  "screenshot": "8a643ff5c29e055804fe5db564027750.png"
+                },
+                {
+                  "screenshot": "8a643ff5c29e055804fe5db564027750.png",
+                  "htmlSource": "pagesource1009013002362423477.html.txt"
+                }
+              ],
+              "exception": {
+                "errorType": "java.lang.AssertionError",
+                "message": "\nExpected: \u003c[Walk the cat]\u003e\n     but: was \u003c[Walk the dog]\u003e",
+                "stackTrace": [
+                  {
+                    "declaringClass": "net.serenitybdd.demos.todos.cucumber.steps.TodoUserSteps",
+                    "methodName": "todo_list_should_contain",
+                    "fileName": "TodoUserSteps.java",
+                    "lineNumber": 48
+                  }
+                ]
+              },
+              "result": "FAILURE"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "filtering-todos",
+    "storyName": "Filtering todos",
+    "path": "filtering_todos.feature",
+    "narrative": "\nIn order to make me feel a sense of accomplishment\nAs a forgetful person\nI want to be to view all of things I have completed",
+    "type": "feature"
+  },
+  "featureTag": {
+    "name": "Filtering todos",
+    "type": "feature"
+  },
+  "title": "Viewing filtered items",
+  "description": "",
+  "tags": [
+    {
+      "name": "cucumber",
+      "type": "tag"
+    },
+    {
+      "name": "Assertion error",
+      "type": "error type"
+    },
+    {
+      "name": "Maintain my todo list",
+      "type": "capability"
+    },
+    {
+      "name": "Maintain my todo list/Filtering todos",
+      "type": "feature"
+    },
+    {
+      "name": "current",
+      "type": "tag"
+    },
+    {
+      "name": "Filtering todos",
+      "type": "feature"
+    }
+  ],
+  "startTime": 1475259980131,
+  "duration": 14876,
+  "testFailureCause": {
+    "errorType": "java.lang.AssertionError",
+    "message": "\nExpected: \u003c[Walk the cat]\u003e\n     but: was \u003c[Walk the dog]\u003e",
+    "stackTrace": [
+      {
+        "declaringClass": "net.serenitybdd.demos.todos.cucumber.steps.TodoUserSteps",
+        "methodName": "todo_list_should_contain",
+        "fileName": "TodoUserSteps.java",
+        "lineNumber": 48
+      }
+    ]
+  },
+  "testFailureClassname": "java.lang.AssertionError",
+  "testFailureMessage": "\nExpected: \u003c[Walk the cat]\u003e\n     but: was \u003c[Walk the dog]\u003e\n\nExpected: \u003c[Walk the cat]\u003e\n     but: was \u003c[Walk the dog]\u003e",
+  "annotatedResult": "FAILURE",
+  "sessionId": "4136920fd1a6876ebbd319d5ac42cdfd",
+  "driver": "chrome:jane",
+  "dataTable": {
+    "headers": [
+      "tasks",
+      "filter",
+      "expected"
+    ],
+    "rows": [
+      {
+        "values": [
+          "Buy some milk, Walk the dog",
+          "Active",
+          "Buy some milk"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "Buy some milk, Walk the dog",
+          "Completed",
+          "Walk the cat"
+        ],
+        "result": "FAILURE"
+      }
+    ],
+    "predefinedRows": true,
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0,
+        "name": "",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "FAILURE"
+}

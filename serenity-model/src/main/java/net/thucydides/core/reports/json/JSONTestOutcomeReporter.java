@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -98,7 +99,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         if (!reportFile.getName().toLowerCase().endsWith(".json")) {
             return Optional.empty();
         }
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(Files.newInputStream(reportFile.toPath()), encoding))) {
             return jsonConverter.fromJson(in);
         } catch (Throwable e) {
             LOGGER.debug("This file was not a valid JSON Serenity test report: " + reportFile.getName()

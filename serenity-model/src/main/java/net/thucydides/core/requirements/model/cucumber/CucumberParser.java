@@ -195,8 +195,7 @@ public class CucumberParser {
         try {
             return parseResource(cucumberResource);
         } catch (Throwable throwable) {
-            LOGGER.error("Failed to load feature file: {}", cucumberFilePath, throwable);
-            return Optional.empty();
+            throw new InvalidFeatureFileException("Failed to read feature file at " + cucumberFilePath, throwable);
         }
     }
 

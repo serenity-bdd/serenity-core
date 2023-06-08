@@ -287,7 +287,8 @@ public class FeatureFileScenarioOutcomes {
     }
 
     private File pathFromResourceOnClasspath(String path) {
-        URL featureFileURL = getClass().getClassLoader().getResource(featuresDirectory() + "/" + path);
+        String pathWithFeaturesDirectory = (path.startsWith(featuresDirectory())) ? path : featuresDirectory() + "/" + path;
+        URL featureFileURL = getClass().getClassLoader().getResource(pathWithFeaturesDirectory);
         String featureFilePath;
 
         if (featureFileURL != null) {

@@ -35,8 +35,9 @@ public class WhenReadingRequirementsFromThePackageStructure {
 
         List<Requirement> requirements = tagProvider.getRequirements();
 
-        assertThat(requirements.get(0).getType(), equalTo("capability"));
-        assertThat(requirements.get(0).getChildren().get(0).getType(), equalTo("feature"));
+        assertThat(requirements.get(0).getType(), equalTo("theme"));
+        assertThat(requirements.get(0).getChildren().get(0).getType(), equalTo("capability"));
+        assertThat(requirements.get(0).getChildren().get(0).getChildren().get(0).getType(), equalTo("feature"));
     }
 
 
@@ -50,8 +51,8 @@ public class WhenReadingRequirementsFromThePackageStructure {
 
         List<Requirement> requirements = tagProvider.getRequirements();
 
-        assertThat(requirements.get(0).getType(), equalTo("capability"));
-        assertThat(requirements.get(0).getChildren().get(0).getType(), equalTo("feature"));
+        assertThat(requirements.get(0).getType(), equalTo("theme"));
+        assertThat(requirements.get(0).getChildren().get(0).getType(), equalTo("capability"));
         assertThat(requirements.get(0).getChildren().get(0).getChildren().get(0).getType(), equalTo("feature"));
     }
 

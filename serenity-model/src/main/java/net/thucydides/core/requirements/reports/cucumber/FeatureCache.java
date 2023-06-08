@@ -52,7 +52,6 @@ public class FeatureCache {
 
     // Do not forget to close the CacheManager when your application ends
     public void close() {
-        System.out.println("INVALIDATE ALL");
         cache.invalidateAll();
     }
 }

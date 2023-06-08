@@ -4,6 +4,7 @@ package net.thucydides.core.statistics.service;
 import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
 import net.thucydides.core.requirements.PackageRequirementsTagProvider;
+import net.thucydides.core.requirements.TestOutcomeRequirementsTagProvider;
 import net.thucydides.core.steps.TestSourceType;
 
 
@@ -18,6 +19,7 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
     @Override
     public Iterable<? extends TagProvider> getTagProviders() {
         return NewSet.of(
+                new TestOutcomeRequirementsTagProvider(),
                 new PackageRequirementsTagProvider(),
                 new AnnotationBasedTagProvider(),
                 new FileSystemRequirementsTagProvider(),

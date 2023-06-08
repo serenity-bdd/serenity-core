@@ -46,7 +46,12 @@ public class Stopwatch {
     }
 
     public String lapTimeFormatted(Long executionTimeInMilliseconds) {
-        return (executionTimeInMilliseconds < 1000) ? (executionTimeInMilliseconds + " ms") : (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 1000.0) + " secs");
+        return (executionTimeInMilliseconds < 1000)
+                ? (executionTimeInMilliseconds + " ms") :
+                (executionTimeInMilliseconds < 60000) ?
+                        (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 1000.0) + " secs") :
+                        (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 60000.0) + " mins and " +
+                                new DecimalFormat("##.#").format((executionTimeInMilliseconds % 60000) / 1000.0) + " secs");
     }
 
     public long lapTime() {

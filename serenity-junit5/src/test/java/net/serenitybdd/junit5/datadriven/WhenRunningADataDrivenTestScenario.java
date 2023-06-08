@@ -575,7 +575,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws IOException {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SimpleSuccessfulParameterizedTestSample.class);

@@ -115,6 +115,12 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    public void testSuiteStarted(Class<?> storyClass, String testCaseName) {
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            getLogger().info("Test Suite Started: " + testCaseName);
+        }
+    }
+
 
     public void testSuiteStarted(Story story) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {

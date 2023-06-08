@@ -293,9 +293,9 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private boolean scenarioIsIncludedInARule(Scenario existingScenario, FeatureChild featureChild) {
         return featureChild.getRule() != null && featureChild.getRule().isPresent()
-        && featureChild.getRule().get().getChildren().stream().
-                filter(rc->rc.getScenario().isPresent()).
-                map(rc->rc.getScenario().get()).collect(Collectors.toList()).contains(existingScenario);
+                && featureChild.getRule().get().getChildren().stream().
+                filter(rc -> rc.getScenario().isPresent()).
+                map(rc -> rc.getScenario().get()).collect(Collectors.toList()).contains(existingScenario);
     }
 
     private Feature getFeatureForTestCase(TestSourcesModel.AstNode astNode) {
@@ -625,9 +625,9 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         getContext().stepEventBus().setTestSource(TestSourceType.TEST_SOURCE_CUCUMBER.getValue());
 
         getContext().stepEventBus()
-                    .testStarted(scenarioName,
-                                 scenarioIdFrom(TestSourcesModel.convertToId(currentFeature.getName()),
-                                                TestSourcesModel.convertToId(scenarioName)));
+                .testStarted(scenarioName,
+                        scenarioIdFrom(TestSourcesModel.convertToId(currentFeature.getName()),
+                                TestSourcesModel.convertToId(scenarioName)));
 
         getContext().stepEventBus().addDescriptionToCurrentTest(scenarioDefinition.getDescription());
         getContext().stepEventBus().addTagsToCurrentTest(convertCucumberTags(currentFeature.getTags()));
@@ -648,8 +648,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private List<TestTag> tagsInEnclosingRule(Feature feature, Scenario scenario) {
         List<io.cucumber.messages.types.Rule> nestedRules = feature.getChildren().stream()
-                .filter(fc->fc.getRule().isPresent())
-                .map(fc->fc.getRule().get())
+                .filter(fc -> fc.getRule().isPresent())
+                .map(fc -> fc.getRule().get())
                 .filter(Objects::nonNull)
                 .collect(toList());
 
@@ -716,8 +716,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             List<Tag> updatedTags = Lists.newArrayList(cucumberTags);
 
             Tag newManualTag = new Tag(unqualifiedManualTag(cucumberTags).get().getLocation(),
-                                      "@manual:pending",
-                                      UUID.randomUUID().toString());
+                    "@manual:pending",
+                    UUID.randomUUID().toString());
             updatedTags.add(newManualTag);
             return updatedTags;
         } else {
@@ -826,18 +826,18 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private void recordStepResult(Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep) {
 
-        if (getContext().stepEventBus().currentTestIsSuspended()) {
-            getContext().stepEventBus().stepIgnored();
-        } else if (Status.PASSED.equals(result.getStatus())) {
-            getContext().stepEventBus().stepFinished();
-        } else if (Status.FAILED.equals(result.getStatus())) {
-            failed(stepTitleFrom(currentStep, currentTestStep), result.getError());
-        } else if (Status.SKIPPED.equals(result.getStatus())) {
+        if (Status.SKIPPED.equals(result.getStatus())) {
             skipped(stepTitleFrom(currentStep, currentTestStep), result.getError());
         } else if (Status.PENDING.equals(result.getStatus())) {
             getContext().stepEventBus().stepPending();
         } else if (Status.UNDEFINED.equals(result.getStatus())) {
             getContext().stepEventBus().stepPending();
+        } else if (getContext().stepEventBus().currentTestIsSuspended()) {
+            getContext().stepEventBus().stepIgnored();
+        } else if (Status.PASSED.equals(result.getStatus())) {
+            getContext().stepEventBus().stepFinished();
+        } else if (Status.FAILED.equals(result.getStatus())) {
+            failed(stepTitleFrom(currentStep, currentTestStep), result.getError());
         }
     }
 

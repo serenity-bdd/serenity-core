@@ -507,6 +507,11 @@ public class Requirement implements Comparable<Requirement> {
         return path;
     }
 
+    public int getDepth() {
+        String separator = (path.contains("/")) ? "/" : ".";
+        return (path == null) ? 0 : Splitter.on(separator).splitToList(path).size();
+    }
+
     public Requirement withTags(List<TestTag> tags) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative,
                 children, examples, releaseVersions, customFields, featureFileName, tags, this.scenarioTags, containsNoScenarios, this.background);
@@ -547,12 +552,13 @@ public class Requirement implements Comparable<Requirement> {
         if (path != null) {
             String relativePath = path;
             if (isNotEmpty(rootPath) && path.startsWith(rootPath)) {
-                relativePath = path.substring(rootPath.length() + 1);
+                relativePath = (path.length() > rootPath.length()) ? path.substring(rootPath.length() + 1) : "";
             }
 
             String separator = relativePath.indexOf(".") > 0 ? "." : "/";
             List<PathElement> pathElements = Splitter.on(separator)
                     .splitToStream(relativePath)
+                    .filter(pathElement -> !pathElement.isEmpty())
                     .map(pathElement -> new PathElement(pathElement, ""))
                     .collect(Collectors.toList());
             return PathElements.from(pathElements);
@@ -562,6 +568,20 @@ public class Requirement implements Comparable<Requirement> {
 
     public PathElements getPathElements() {
         return getPathElements(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    public boolean hasParent(PathElements path) {
+        return parent != null && parent.equals(path.toString());
+    }
+
+    public boolean hasParent(String path) {
+        return parent != null && parent.equals(path);
+    }
+
+    public boolean matchesOrIsAParentOf(String testOutcomePath) {
+        String normalizedPath = testOutcomePath.replace(".", "/");
+        String packagePath = testOutcomePath.replace("/", ".");
+        return normalizedPath.startsWith(getPath()) || packagePath.startsWith(getPath());
     }
 
     public static class CustomFieldSetter {

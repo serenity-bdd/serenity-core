@@ -39,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.Transient;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
@@ -255,9 +256,10 @@ public class TestOutcome {
     TestResult result;
     List<String> issues;
     List<String> versions;
-
     List<String> nestedTestPath;
 
+    private transient List<TestStep> flattenedSteps = null;
+    private transient List<TestStep> leafSteps = null;
 
     /**
      * Scenario outline text.
@@ -460,8 +462,10 @@ public class TestOutcome {
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
-        if ((testCase != null) || (userStory != null)) {
-            setUserStory(storyDefinedIn(testCase).orElse(userStory));
+        if (userStory != null) {
+            setUserStory(userStory);
+        } else if ((testCase != null) && storyDefinedIn(testCase).isPresent()) {
+            setUserStory(storyDefinedIn(testCase).get());
         }
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
@@ -1411,7 +1415,6 @@ public class TestOutcome {
         return (!stepsContainFailure && (getResult() == TestResult.ERROR || getResult() == TestResult.FAILURE || getResult() == TestResult.COMPROMISED));
     }
 
-    private List<TestStep> flattenedSteps = null;
     public List<TestStep> getFlattenedTestSteps() {
         if (flattenedSteps == null) {
             List<TestStep> flattenedTestSteps = new ArrayList<>();
@@ -1426,7 +1429,6 @@ public class TestOutcome {
         return flattenedSteps;
     }
 
-    private List<TestStep> leafSteps = null;
     public List<TestStep> getLeafTestSteps() {
         if (leafSteps == null ) {
             List<TestStep> leafTestSteps = new ArrayList<>();
@@ -2098,10 +2100,6 @@ public class TestOutcome {
     }
 
     public String getContext() {
-//        if (context == null) {
-//            context = contextFrom(getEnvironmentVariables());
-//        }
-//
         return context;
     }
 

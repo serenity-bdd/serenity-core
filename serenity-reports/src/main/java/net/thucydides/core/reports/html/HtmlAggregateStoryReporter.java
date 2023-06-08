@@ -1,7 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.DurationDistribution;
@@ -144,10 +142,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         CopyFiles.from(sourceDirectory).to(getOutputDirectory());
     }
 
-    private static final LoadingCache<TestOutcomes, DurationDistribution> DISTRIBUTION_CACHE
-            = Caffeine.newBuilder().maximumSize(10000).build(outcomes -> new DurationDistribution(outcomes.getEnvironmentVariables(), outcomes));
-
-
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
@@ -155,7 +149,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
             LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
 
-            DurationDistribution durationDistribution = DISTRIBUTION_CACHE.get(testOutcomes);
+            DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
 
             enhanceWithDurationTags(durationDistribution, testOutcomes);
 

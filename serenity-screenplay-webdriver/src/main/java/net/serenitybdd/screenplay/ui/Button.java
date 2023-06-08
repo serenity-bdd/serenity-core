@@ -39,7 +39,6 @@ public class Button {
     /**
      * Locate a button element with a given text.
      */
-    
     public static SearchableTarget withText(String name) {
         return Target.the("'" + name + "' button").locatedByFirstMatching(WITH_TEXT).of(name);
     }

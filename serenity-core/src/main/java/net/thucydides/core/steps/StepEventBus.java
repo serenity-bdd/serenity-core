@@ -59,6 +59,8 @@ public class StepEventBus {
 
     private static boolean jUnit5ParallelMode = false;
 
+    private Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
+
     static {
         jUnit5ParallelMode =  isJUnit5ParallelMode();
     }
@@ -311,10 +313,27 @@ public class StepEventBus {
         clear();
         updateClassUnderTest(testClass);
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.testSuiteStarted(testClass);
+            if (testCaseDisplayNames.containsKey(testClass)) {
+                stepListener.testSuiteStarted(testClass, testCaseDisplayNames.get(testClass));
+            } else {
+                stepListener.testSuiteStarted(testClass);
+            }
         }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
     }
+
+    public void testSuiteStarted(final Class<?> testClass, String testCaseName) {
+        LOGGER.debug("Test suite started for {} in {}", testCaseName, testClass);
+        clear();
+        testCaseDisplayNames.put(testClass, testCaseName);
+        updateClassUnderTest(testClass);
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testSuiteStarted(testClass,testCaseName);
+        }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
+
+    }
+
 
     private void updateClassUnderTest(final Class<?> testClass) {
         classUnderTest = testClass;

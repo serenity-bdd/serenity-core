@@ -1,0 +1,100 @@
+{
+  "name": "Player runs out of tries and loses",
+  "id": "game-overview;player-runs-out-of-tries-and-loses",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given the target word is:\n| B | L | A | N | D |",
+      "duration": 0,
+      "startTime": "2023-06-06T17:44:52.915424+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "When the player enters the following letters:\n| B | E | A | S | T |\n| B | R | A | I | N |\n| P | L | A | I | N |\n| P | L | A | N | E |\n| P | L | A | N | T |\n| P | L | A | N | K |",
+      "duration": 0,
+      "startTime": "2023-06-06T17:44:52.915481+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "Then the player should lose the game",
+      "duration": 0,
+      "startTime": "2023-06-06T17:44:52.915521+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    }
+  ],
+  "userStory": {
+    "id": "game-overview",
+    "storyName": "Game Overview",
+    "displayName": "Game Overview",
+    "path": "classpath:features/game_overview.feature",
+    "pathElements": [
+      {
+        "name": "classpath:features/game_overview",
+        "description": ""
+      },
+      {
+        "name": "feature",
+        "description": ""
+      }
+    ],
+    "narrative": "  The rules of Wordle are simple. Your objective is to guess a secret five-letter word in as few guesses as possible.\n  To submit a guess, type any five-letter word and press enter.\n  All of your guesses must be real words, according to a dictionary of five-letter words that Wordle allows as guesses.\n\n  Players have to guess a five-letter word.\n  - Correctly placed letters are shown as GREEN\n  - Incorrectly placed letters are shown as YELLOW\n  - Letters not appearing in the word are represented as GRAY",
+    "type": "feature",
+    "qualifiedTag": {
+      "name": "Classpath:features/Game Overview",
+      "type": "feature",
+      "displayName": "Classpath:features/Game Overview"
+    }
+  },
+  "featureTag": {
+    "name": "Classpath:features/Game Overview",
+    "type": "feature",
+    "displayName": "Classpath:features/Game Overview"
+  },
+  "title": "Player runs out of tries and loses",
+  "description": "",
+  "tags": [
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Game Overview",
+      "type": "feature",
+      "displayName": "Game Overview"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "Classpath:features/Game Overview",
+      "type": "feature",
+      "displayName": "Classpath:features/Game Overview"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Game Overview",
+      "type": "feature",
+      "displayName": "Game Overview"
+    }
+  ],
+  "startTime": "2023-06-06T17:44:52.731484+01:00[Europe/London]",
+  "duration": 124,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "SUCCESS"
+}

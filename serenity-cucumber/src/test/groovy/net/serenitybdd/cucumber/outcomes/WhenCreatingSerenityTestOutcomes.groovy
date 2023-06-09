@@ -31,7 +31,6 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
-            System.out.println("XXXStepResults " + stepResults);
         then:
         testOutcome.result == TestResult.FAILURE
         and:

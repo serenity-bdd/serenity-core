@@ -147,7 +147,7 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private String baseMethodName(TestOutcome testOutcome) {
-        return testOutcome.getName().replaceAll("\\[\\d+\\]", "");
+        return testOutcome.getMethodName();
     }
 
     private String alternativeMethodName(TestOutcome testOutcome) {

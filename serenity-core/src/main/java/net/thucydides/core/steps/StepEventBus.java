@@ -214,6 +214,15 @@ public class StepEventBus {
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
+    public void testScenarioStarted(String testName, String testMethod, String testId, String scenarioId) {
+        clear();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testStarted(testName, testMethod, testId, scenarioId);
+        }
+        StepEventBus.getParallelEventBus().setTestSource(testSource);
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
+    }
+
     public void testStarted(final String testName, final String id) {
         clear();
         for (StepListener stepListener : getAllListeners()) {
@@ -247,6 +256,17 @@ public class StepEventBus {
         ensureThatTheTestSuiteStartedWith(testClass);
         if (newTestName != null) {
             testStarted(newTestName);
+        }
+    }
+
+    public void testStarted(final String newTestName,
+                            final Class<?> testClass,
+                            String testMethod,
+                            String uniqueId,
+                            String scenarioId) {
+        ensureThatTheTestSuiteStartedWith(testClass);
+        if (newTestName != null) {
+            testScenarioStarted(newTestName, testMethod, uniqueId, scenarioId);
         }
     }
 

@@ -320,6 +320,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public java.util.Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
         return firstRequirementFoundIn(
+                parentRequirementFromUserStory(testOutcome),
                 parentRequirementFromPackagePath(testOutcome),
                 requirementWithMatchingParentId(testOutcome),
                 requirementWithMatchingPath(testOutcome),
@@ -330,6 +331,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private java.util.Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {
         List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
         return lastRequirementFrom(storyPathElements);
+    }
+
+    private java.util.Optional<Requirement> parentRequirementFromUserStory(TestOutcome testOutcome) {
+        if (testOutcome.getUserStory() != null) {
+            return getMatchingRequirementFor(testOutcome.getUserStory().asSingleParentTag());
+        }
+        return Optional.empty();
     }
 
     private java.util.Optional<Requirement> parentRequirementFromPackagePath(TestOutcome testOutcome) {

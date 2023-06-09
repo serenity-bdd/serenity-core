@@ -50,7 +50,7 @@ public class Stopwatch {
                 ? (executionTimeInMilliseconds + " ms") :
                 (executionTimeInMilliseconds < 60000) ?
                         (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 1000.0) + " secs") :
-                        (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 60000.0) + " mins and " +
+                        (new DecimalFormat("#,###").format(executionTimeInMilliseconds / 60000) + " mins and " +
                                 new DecimalFormat("##.#").format((executionTimeInMilliseconds % 60000) / 1000.0) + " secs");
     }
 

@@ -519,10 +519,21 @@ public class BaseStepListener implements StepListener, StepPublisher {
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
-    public void testStarted(final String testMethod, final String id) {
-        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
+    public void testStarted(final String testName, final String id) {
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testName, testSuite, testedStory).withId(id);
         this.currentTestOutcome = newTestOutcome;
-        recordNewTestOutcome(testMethod, currentTestOutcome);
+        recordNewTestOutcome(testName, currentTestOutcome);
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
+    }
+
+    public void testStarted(final String testName, String methodName, final String id, String scenarioId) {
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testName, testSuite, testedStory)
+                                                .withId(id)
+                                                .withScenarioId(scenarioId)
+                                                .withTestMethodName(methodName);
+        this.currentTestOutcome = newTestOutcome;
+        recordNewTestOutcome(testName, currentTestOutcome);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }

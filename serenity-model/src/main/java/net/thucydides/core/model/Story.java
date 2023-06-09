@@ -14,10 +14,14 @@ import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -39,8 +43,6 @@ public class Story {
     private ApplicationFeature feature;
     private String type;
 
-    private static final PathElements NO_PATH_ELEMENTS = new PathElements();
-
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
@@ -50,11 +52,11 @@ public class Story {
         this.path = pathOf(userStoryClass);
         this.narrative = AnnotatedDescription.forClass(userStoryClass).orElse("");
         // split path into a list of path elements
-        this.pathElements = pathToElements(path);
+        this.pathElements = pathElementsFromPackagePath(path);
         this.type = FeatureType.STORY.toString();
     }
 
-    private PathElements pathToElements(String path) {
+    private PathElements pathElementsFromPackagePath(String path) {
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
         String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
         // strip root path from path if present
@@ -69,6 +71,17 @@ public class Story {
                 .splitToStream(path)
                 .map(pathElt -> new PathElement(pathElt,""))
                 .collect(Collectors.toList()));
+    }
+
+    private PathElements pathElementsFromDirectoryPath(String path) {
+        List<PathElement> pathElements = new ArrayList<>();
+        if (path != null) {
+            Path storyPath = Paths.get(path);
+            for (int i = 0; i < storyPath.getNameCount(); i++) {
+                pathElements.add(new PathElement(storyPath.getName(i).toString(), ""));
+            }
+        }
+        return PathElements.from(pathElements);
     }
 
     public static String pathOf(Class<?> userStoryClass) {
@@ -116,8 +129,8 @@ public class Story {
         this.storyClassName = storyClassName;
         this.displayName = displayName;
         this.feature = feature;
-        this.path = path;
-        this.pathElements = pathToElements(path);
+        this.path = normalisedPath(path);
+        this.pathElements = pathElementsFromDirectoryPath(this.path);
         this.narrative = null;
         this.type = FeatureType.STORY.toString();
     }
@@ -165,11 +178,10 @@ public class Story {
         this.displayName = displayName;
         this.storyClassName = null;
         this.feature = feature;
-        this.path = path;
-        this.pathElements = pathToElements(path);
-        this.type = FeatureType.STORY.toString();
+        this.path = normalisedPath(path);
+        this.pathElements = pathElementsFromDirectoryPath(this.path);
+        this.type = (path != null && path.endsWith(".feature")) ? FeatureType.FEATURE.toString() : FeatureType.STORY.toString();
     }
-
 
     public String getId() {
         return id;
@@ -313,9 +325,6 @@ public class Story {
     }
 
     public PathElements getPathElements() {
-        if (pathElements == null) {
-            pathElements = pathToElements(path);
-        }
         return pathElements;
     }
 
@@ -367,4 +376,51 @@ public class Story {
         return qualifiedTag;
     }
 
+
+    /**
+     * A tag with no more than one level of parents, that can be used to find matching requirements in the requirements hierarchy.
+     */
+    private TestTag singleParentTag;
+    public TestTag asSingleParentTag() {
+
+        if (singleParentTag == null) {
+            String lastElementOfPath = (getPathElements() == null || getPathElements().isEmpty()) ? "" : getPathElements().get(getPathElements().size() - 1).getName();
+            singleParentTag = (isNotEmpty(lastElementOfPath)) ?
+                    TestTag.withName(lastElementOfPath + "/" + storyName).andType(type) :
+                    TestTag.withName(storyName).andType(type);
+        }
+        return singleParentTag;
+    }
+
+    private String normalisedPath(String path) {
+        if (path == null) { return path; }
+        // Strip initial reference to 'classpath:features/' or 'src/test/resources/features/' at the start of the path
+        String normalisedPath = path;
+        if (normalisedPath.startsWith("classpath:features/")) {
+            normalisedPath = normalisedPath.substring("classpath:features/".length());
+        }
+        // Remove trailing feature file name if present
+        if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
+            normalisedPath = relativeFeaturePath(normalisedPath);
+        }
+        return normalisedPath;
+    }
+
+    private static String FEATURE_FILES_DIRECTORY = "src/test/resources/.*/";
+    private final static Pattern FEATURE_FILES_DIRECTORY_PATTERN = Pattern.compile(FEATURE_FILES_DIRECTORY);
+
+    private String relativeFeaturePath(String path) {
+        String normalisedPath = path;
+        Matcher matcher = FEATURE_FILES_DIRECTORY_PATTERN.matcher(path);
+        if (matcher.find()) {
+            normalisedPath = path.substring(matcher.end());
+        }
+
+        if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
+            Path featureFilePath = Paths.get(normalisedPath);
+            Path parentPath = featureFilePath.getParent();
+            normalisedPath = (parentPath != null) ? parentPath.toString() : "";
+        }
+        return normalisedPath;
+    }
 }

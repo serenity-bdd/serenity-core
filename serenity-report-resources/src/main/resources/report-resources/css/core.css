@@ -2460,12 +2460,13 @@ div.scenario-text:empty {
 }
 
 .scenario-docs th {
-    font-weight: bold;
+    /*font-weight: bold;*/
+    font-size: 14px;
     color: grey;
-    font-size: 12px;
     padding: 4px;
     border: 0.5px solid grey;
 }
+
 .scenario-docs td {
     padding: 4px;
     border: 0.5px solid grey;

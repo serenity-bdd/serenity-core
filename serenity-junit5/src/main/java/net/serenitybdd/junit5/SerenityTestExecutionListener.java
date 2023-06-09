@@ -222,7 +222,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     @Override
     public synchronized void executionStarted(TestIdentifier testIdentifier) {
-        Class<?> testClass = null;
+        Class<?> testClass;
         logger.trace("-->Execution started with TI " + testIdentifier);
         if (!testIdentifier.getSource().isPresent()) {
             logger.trace("No action done at executionStarted because testIdentifier is null");
@@ -418,15 +418,17 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 //ignore org.junit.platform.commons.PreconditionViolationException: Could not find method with name
             }
 
-            eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
-//            StepEventBus.getParallelEventBus().testStarted(Optional.ofNullable(testName).orElse("Initialisation"), methodSource.getJavaClass());
+            eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"),
+                                                    methodSource.getJavaClass(),
+                                                    methodSource.getMethodName(),
+                                                    testIdentifier.getUniqueId(),
+                                                    testIdentifier.getParentId().orElse(testIdentifier.getUniqueId()));
 
             //
             // Check for @Pending tests
             //
             if (isPending(methodSource)) {
                 eventBusFor(testIdentifier).testPending();
-//                StepEventBus.getParallelEventBus().testPending();
             }
         }
     }

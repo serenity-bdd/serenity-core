@@ -14,16 +14,13 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import static java.util.Collections.EMPTY_LIST;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
-
 
 public abstract class BaseRequirementsService implements RequirementsService {
     protected List<Requirement> requirements;

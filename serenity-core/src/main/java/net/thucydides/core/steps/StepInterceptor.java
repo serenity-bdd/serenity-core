@@ -45,7 +45,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMEN
  *
  * @author johnsmart
  */
-public class StepInterceptor implements MethodErrorReporter,Interceptor {
+public class StepInterceptor implements MethodErrorReporter, Interceptor {
 
     private final Class<?> testStepClass;
     private Throwable error = null;
@@ -64,6 +64,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private List<StepInterceptionListener> listeners = new ArrayList<>();
 
     CleanupMethodLocator cleanupMethodLocator;
+
     StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
@@ -109,13 +110,17 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private boolean isSilent(Class callingClass, Method method, Object obj) {
-        if (IsSilent.class.isAssignableFrom(callingClass)) { return true; }
+        if (IsSilent.class.isAssignableFrom(callingClass)) {
+            return true;
+        }
 
         if ((CanBeSilent.class.isAssignableFrom(callingClass) && method.getName().equals("isSilent"))) {
             return true;
         }
 
-        if (CanBeSilent.class.isAssignableFrom(callingClass)  && ((CanBeSilent) obj).isSilent()) { return true; }
+        if (CanBeSilent.class.isAssignableFrom(callingClass) && ((CanBeSilent) obj).isSilent()) {
+            return true;
+        }
 
         if (isNestedInSilentTask()) {
             return true;
@@ -187,7 +192,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private Object testStepResult(final Object obj, final Method method,
-            final Object[] args, final Method zuperMethod) throws Throwable {
+                                  final Object[] args, final Method zuperMethod) throws Throwable {
 
         if (!isATestStep(method)) {
             return runNormalMethod(obj, method, args, zuperMethod);
@@ -357,22 +362,22 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private Object primativeDefaultValueFor(Method method) {
         switch (returnTypeOf(method)) {
-        case VOID:
-            return null;
-        case STRING:
-            return "";
-        case LONG:
-            return 0L;
-        case INTEGER:
-            return 0;
-        case FLOAT:
-            return 0.0F;
-        case DOUBLE:
-            return 0.0D;
-        case BOOLEAN:
-            return Boolean.FALSE;
-        default:
-            return null;
+            case VOID:
+                return null;
+            case STRING:
+                return "";
+            case LONG:
+                return 0L;
+            case INTEGER:
+                return 0;
+            case FLOAT:
+                return 0.0F;
+            case DOUBLE:
+                return 0.0D;
+            case BOOLEAN:
+                return Boolean.FALSE;
+            default:
+                return null;
         }
     }
 
@@ -463,7 +468,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private Object runTestStep(final Object obj, final Method method,
-            final Object[] args, final Method zuperMethod) throws Throwable {
+                               final Object[] args, final Method zuperMethod) throws Throwable {
 
         String callingClass = testContext();
         LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).orElse(method.getName()));
@@ -526,30 +531,27 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
-         if (TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             StepFinishedEvent stepFinishedEvent = new StepFinishedEvent();
             TestSession.addEvent(stepFinishedEvent);
-         }
-         else {
+        } else {
             StepEventBus.getParallelEventBus().stepFinished();
-         }
+        }
     }
 
     private void notifySkippedStepFinishedFor(final Method method, final Object[] args) {
         if (TestSession.isSessionStarted()) {
             StepIgnoredEvent stepIgnoredEvent = new StepIgnoredEvent();
             TestSession.addEvent(stepIgnoredEvent);
-         }
-         else {
+        } else {
             StepEventBus.getParallelEventBus().stepIgnored();
-         }
+        }
     }
 
     private void notifyStepPending(String message) {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new StepPendingEvent(message));
-        }
-        else {
+        } else {
             StepEventBus.getParallelEventBus().stepPending(message);
         }
     }
@@ -557,85 +559,80 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifyAssumptionViolated(String message) {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new AssumptionViolatedEvent(message));
-         }
-         else {
+        } else {
             StepEventBus.getParallelEventBus().assumptionViolated(message);
-         }
+        }
     }
 
     private void notifyStepIgnored() {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new StepIgnoredEvent());
-         }
-         else {
+        } else {
             StepEventBus.getParallelEventBus().stepIgnored();
-         }
+        }
     }
 
     private String getTestNameFrom(final Method method, final Object[] args) {
-        return StepNamer.nameFor(method,args);
+        return StepNamer.nameFor(method, args);
     }
 
     private void notifyStepSkippedFor(final Method method, final Object[] args) {
-         if (TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             if (isPending(method)) {
                 TestSession.addEvent(new StepPendingEvent());
             } else {
                 TestSession.addEvent(new StepIgnoredEvent());
             }
-         } else {
+        } else {
             if (isPending(method)) {
                 StepEventBus.getParallelEventBus().stepPending();
             } else {
                 StepEventBus.getParallelEventBus().stepIgnored();
             }
-         }
+        }
     }
 
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
-            final Throwable cause) throws Throwable {
+                                     final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                                                                     .withDisplayedFields(fieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
 
-        if(TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             StepFailedEvent stepFailedEvent = new StepFailedEvent(failure);
             TestSession.addEvent(stepFailedEvent);
-        }
-        else {
+        } else {
             StepEventBus.getParallelEventBus().stepFailed(failure);
         }
-        if (shouldThrowExceptionImmediately()) {
+        if (shouldThrowExceptionsImmediately()) {
             finishAnyCucumberSteps();
             throw cause;
         }
     }
 
     private void finishAnyCucumberSteps() {
-        if(TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             WrapupCurrentCucumberStepEvent wrapupCurrentCucumberStepEvent = new WrapupCurrentCucumberStepEvent();
-            LOGGER.debug("SRP:Actor started event in session " + wrapupCurrentCucumberStepEvent + " " +  Thread.currentThread());
+            LOGGER.debug("SRP:Actor started event in session " + wrapupCurrentCucumberStepEvent + " " + Thread.currentThread());
             TestSession.addEvent(wrapupCurrentCucumberStepEvent);
-        }
-        else {
+        } else {
             StepEventBus.getParallelEventBus().wrapUpCurrentCucumberStep();
         }
     }
 
-    private boolean shouldThrowExceptionImmediately() {
-        return Serenity.shouldThrowErrorsImmediately();
+    private boolean shouldThrowExceptionsImmediately() {
+        return Serenity.shouldThrowExceptionsImmediately();
     }
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
-        if(TestSession.isSessionStarted()) {
+                .withDisplayedFields(fieldValuesIn(object));
+        if (TestSession.isSessionStarted()) {
             StepStartedEvent stepStartedEvent = new StepStartedEvent(description);
-            LOGGER.debug("SRP:Actor started event in session " + stepStartedEvent + " " +  Thread.currentThread());
+            LOGGER.debug("SRP:Actor started event in session " + stepStartedEvent + " " + Thread.currentThread());
             TestSession.addEvent(stepStartedEvent);
-        }
-        else {
+        } else {
             StepEventBus.getParallelEventBus().stepStarted(description);
         }
 
@@ -654,7 +651,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
 
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
         getStepEventBus().skippedStepStarted(description);
     }
 
@@ -673,13 +670,13 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         String[] classNameElements = StringUtils.split(className, ".");
         return classNameElements[classNameElements.length - 1];
     }
+
     private StepEventBus getStepEventBus() {
-         if (TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             return TestSession.getTestSessionContext().getStepEventBus();
-         }
-         else {
+        } else {
             return StepEventBus.getParallelEventBus();
-         }
+        }
     }
 
 }

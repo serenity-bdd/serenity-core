@@ -92,7 +92,6 @@
         <jackson.version>2.15.0-rc1</jackson.version>
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
-        <slf4j.version>2.0.7</slf4j.version>
         <!-- Kotlin config -->
         <kotlin.version>1.8.10</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>

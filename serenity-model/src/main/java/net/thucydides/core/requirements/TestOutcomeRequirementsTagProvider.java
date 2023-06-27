@@ -9,16 +9,15 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 import static net.thucydides.core.guice.Injectors.getInjector;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Read requirements from test outcomes, based on the path specified in each test outcome
@@ -27,11 +26,13 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     private final RequirementsConfiguration requirementsConfiguration;
     private EnvironmentVariables environmentVariables;
+    private final String testRoot;
 
     private List<Requirement> requirements;
+    private Map<Requirement, Requirement> requirementAliases;
     private List<Requirement> flattenedRequirements;
 
-    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of("JUnit","JUnit5");
+    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of("JUnit", "JUnit5");
 
     public TestOutcomeRequirementsTagProvider() {
         this(getInjector().getProvider(EnvironmentVariables.class).get());
@@ -40,6 +41,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     public TestOutcomeRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+        this.testRoot = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
     }
 
     @Override
@@ -73,30 +75,32 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     private Stream<TestOutcome> supportedOutcomesFrom(List<TestOutcome> outcomes) {
         return outcomes.stream()
-                .filter(outcome -> SUPPORTED_TEST_SOURCES.contains(outcome.getTestSource()));
+                .filter(outcome -> (outcome.getTestSource() == null) || SUPPORTED_TEST_SOURCES.contains(outcome.getTestSource()));
     }
 
     private List<Requirement> loadRequirements() {
         TestOutcomeLoader loader = new TestOutcomeLoader();
         File outputDirectory = new File(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables, "target/site/serenity"));
         List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
+        List<String> rootElements = rootPackageElements();
 
         int maxRequirementsDepth = supportedOutcomesFrom(outcomes)
-                .filter(outcome -> !outcome.getUserStory().getPathElements().isEmpty())
-                .mapToInt(outcome -> outcome.getUserStory().getPathElements().size())// - 1)
+                .filter(outcome -> !outcome.getUserStory().getParentPathElements().isEmpty())
+                .mapToInt(outcome -> outcome.getUserStory().getParentPathElements().size())// - 1)
                 .max()
                 .orElse(0);
 
         // Bottom-level requirements
         List<Requirement> leafLevelRequirements = supportedOutcomesFrom(outcomes)
                 .map(TestOutcome::getUserStory)
+//                .map(userStory -> stripeRootFrom(userStory,rootElements))
                 .distinct()
                 .map(this::requirementFrom)
                 .collect(Collectors.toList());
 
         // Non-leaf requirements indexed by path
         Map<PathElements, Requirement> nonLeafRequirements = supportedOutcomesFrom(outcomes)
-                .map(outcome -> outcome.getUserStory().getPathElements())
+                .map(outcome -> outcome.getUserStory().getParentPathElements())
                 .filter(pathElements -> !pathElements.isEmpty())
                 .distinct()
                 .map(pathElements -> relativePathFrom(pathElements))
@@ -118,7 +122,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         // Use the map to update the leaf requirements
         leafLevelRequirements.forEach(
                 requirement -> {
-                    PathElements parentPath = requirement.getPathElements(environmentVariables);
+                    PathElements parentPath = requirement.getParentPathElements(environmentVariables);
                     if (parentPath != null && !parentPath.isEmpty()) {
                         Requirement parentRequirement = nonLeafRequirements.get(parentPath);
                         if (parentRequirement != null) {
@@ -127,6 +131,18 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
                     }
                 }
         );
+
+        // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
+
+        this.requirementAliases = leafLevelRequirements.stream()
+                .filter(requirement -> nonLeafRequirements.containsKey(requirement.getPathElements()))
+                .collect(Collectors.toMap(
+                        requirement -> requirement,
+                        requirement -> nonLeafRequirements.get(requirement.getPathElements())));
+
+
+        // Remove any aliased requirements from the leaf requirements list
+        leafLevelRequirements.removeAll(requirementAliases.keySet());
 
         // Associate child requirements with each non-leaf requirement, including both non-leaf and leaf requirements
         nonLeafRequirements.forEach((path, requirement) -> {
@@ -143,13 +159,8 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
             requirement.setChildren(childRequirements);
         });
 
-        // Define a list of all requirements, leaf and non-leaf
-        List<Requirement> allRequirements = new ArrayList<>();
-        allRequirements.addAll(nonLeafRequirements.values());
-        allRequirements.addAll(leafLevelRequirements);
-
         // Return a list of the top-level or leaf requirements with no parent elements
-        return allRequirements.stream()
+        return Stream.concat(nonLeafRequirements.values().stream(), leafLevelRequirements.stream())
                 .filter(requirement -> requirement.getParent() == null)
                 .collect(Collectors.toList());
     }
@@ -192,8 +203,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     }
 
     private PathElements relativePathFrom(PathElements pathElements) {
-        String rootPackage = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables,"");
-        List<String> rootPackageElements = Splitter.on(".").omitEmptyStrings().splitToList(rootPackage);
+        List<String> rootPackageElements = rootPackageElements();
         List<PathElement> relativePathElements = new ArrayList<>(pathElements);
         for (String rootPackageElement : rootPackageElements) {
             if (relativePathElements.get(0).getName().equals(rootPackageElement)) {
@@ -203,7 +213,16 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         return PathElements.from(relativePathElements);
     }
 
+    @NotNull
+    private List<String> rootPackageElements() {
+        String rootPackage = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
+        List<String> rootPackageElements = Splitter.on(".").omitEmptyStrings().splitToList(rootPackage);
+        return rootPackageElements;
+    }
+
     private Requirement requirementFrom(Story userStory) {
+        List<String> rootPackageElements = rootPackageElements();
+
         return Requirement.named(userStory.getName()).withType(userStory.getType())
                 .withNarrative(userStory.getNarrative())
                 .withPath(userStory.getPath());
@@ -214,11 +233,26 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         if ((testOutcome.getUserStory() == null) || (testOutcome.getUserStory().getPath() == null)) {
             return Optional.empty();
         }
-        String testOutcomePath = testOutcome.getUserStory().getPath();
-        String normalizedPath = testOutcomePath.replace(".", "/");
-        return getFlattenedRequirements().stream()
-                .filter(requirement -> testOutcomePath.equals(requirement.getPath()) || normalizedPath.equals(requirement.getPath()))
+        Optional<Requirement> firstChoice = getFlattenedRequirements().stream()
+                .filter(requirement -> requirement.matchesUserStory(testOutcome.getUserStory()))
                 .findFirst();
+
+        Optional<Requirement> aliasedRequirement = Optional.empty();
+        if (!firstChoice.isPresent()) {
+            aliasedRequirement = requirementAliases.keySet().stream()
+                    .filter(requirement -> requirement.matchesUserStory(testOutcome.getUserStory()))
+                    .map(requirement -> requirementAliases.get(requirement))
+                    .findFirst();
+        }
+        return firstChoice.isPresent() ? firstChoice : aliasedRequirement;
+//
+//        testOutcome.getUserStory().getPathElements();
+//
+//        String testOutcomePath = testOutcome.getUserStory().getPath();
+//        String normalizedPath = testOutcomePath.replace(".", "/");
+//        return getFlattenedRequirements().stream()
+//                .filter(requirement -> testOutcomePath.equals(requirement.getPath()) || normalizedPath.equals(requirement.getPath()))
+//                .findFirst();
     }
 
     @Override

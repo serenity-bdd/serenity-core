@@ -1,0 +1,138 @@
+{
+  "name": "We make a move by posting a word to the with the /api/game/{id}/word end-point",
+  "id": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]/[method:makingAMove()]",
+  "scenarioId": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+  "methodName": "makingAMove",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 6,
+      "startTime": "2023-06-20T11:17:27.760241+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "Play the word \u0027FEAST\u0027",
+      "duration": 8,
+      "startTime": "2023-06-20T11:17:27.767422+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 3,
+          "description": "POST http://localhost:9000/api/game/11/word",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.774065+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "POST",
+            "path": "http://localhost:9000/api/game/11/word",
+            "content": "FEAST",
+            "contentType": "text/plain",
+            "requestHeaders": "Accept\u003d*/*\n\t\t\t\tContent-Type\u003dtext/plain; charset\u003dISO-8859-1",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GRAY\",\n        \"GRAY\",\n        \"YELLOW\",\n        \"GRAY\",\n        \"GRAY\"\n    ]\n]",
+            "statusCode": 201
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+    "storyName": "When playing the game",
+    "displayName": "When playing the game",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.APIExamples$PlayingTheGame",
+    "path": "com.serenitydojo.wordle.integrationtests.api.APIExamples",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      },
+      {
+        "name": "Wordle API Specs",
+        "description": ""
+      }
+    ],
+    "narrative": "",
+    "type": "story",
+    "qualifiedTag": {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    }
+  },
+  "featureTag": {
+    "name": "API examples/When playing the game",
+    "type": "story",
+    "displayName": "API examples/When playing the game"
+  },
+  "title": "We make a move by posting a word to the with the /api/game/{id}/word end-point",
+  "tags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:27.759646+01:00[Europe/London]",
+  "duration": 18,
+  "projectKey": "",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "SUCCESS",
+  "nestedTestPath": [
+    "APIExamples",
+    "PlayingTheGame"
+  ]
+}

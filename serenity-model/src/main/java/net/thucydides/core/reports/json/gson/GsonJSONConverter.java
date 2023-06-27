@@ -38,7 +38,6 @@ public class GsonJSONConverter implements JSONConverter {
         encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
-//                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
                 .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
                 .registerTypeAdapter(StackTraceElement.class, new StackTraceElementSerializer())
@@ -62,7 +61,7 @@ public class GsonJSONConverter implements JSONConverter {
     }
 
     private boolean isValid(TestOutcome testOutcome) {
-        if (isEmpty(testOutcome.getId())) {
+        if (testOutcome == null || isEmpty(testOutcome.getId())) {
             return false;
         }
         checkForRequiredFieldsIn(testOutcome);

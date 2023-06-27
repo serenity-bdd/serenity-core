@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
@@ -10,6 +11,10 @@ public class SamplePassingNonWebScenario {
     
     @Steps
     public SampleNonWebSteps steps;
+
+    public SamplePassingNonWebScenario() {
+        this.steps = Instrumented.instanceOf(SampleNonWebSteps.class).newInstance();
+    }
 
     @Test
     public void happy_day_scenario() throws Throwable {

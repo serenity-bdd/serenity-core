@@ -1,0 +1,153 @@
+{
+  "name": "shouldShowCellsWithColor",
+  "id": "com.serenitydojo.wordle.integrationtests.api.WhenDisplayingTheGame:shouldShowCellsWithColor",
+  "scenarioId": "com.serenitydojo.wordle.integrationtests.api.WhenDisplayingTheGame:shouldShowCellsWithColor",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.WhenDisplayingTheGame",
+  "methodName": "shouldShowCellsWithColor",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "GREEN cells are correct and in the correct position  {color\u003dGREEN, meaning\u003d correct and in the correct position}",
+      "duration": 2,
+      "startTime": "2023-06-20T11:17:29.335751+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "YELLOW cells are correct but in the wrong position  {color\u003dYELLOW, meaning\u003d correct but in the wrong position}",
+      "duration": 1,
+      "startTime": "2023-06-20T11:17:29.336546+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "GRAY cells are not in the word  {color\u003dGRAY, meaning\u003d not in the word}",
+      "duration": 1,
+      "startTime": "2023-06-20T11:17:29.336571+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.WhenDisplayingTheGame",
+    "storyName": "When displaying the game",
+    "displayName": "Displaying the results of a game",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.WhenDisplayingTheGame",
+    "path": "api",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      }
+    ],
+    "narrative": "Game results are represented in different colors",
+    "type": "feature",
+    "qualifiedTag": {
+      "name": "Api/When displaying the game",
+      "type": "feature",
+      "displayName": "Api/When displaying the game"
+    }
+  },
+  "featureTag": {
+    "name": "Api/When displaying the game",
+    "type": "feature",
+    "displayName": "Api/When displaying the game"
+  },
+  "title": "Should show cells with color",
+  "tags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Api",
+      "type": "capability",
+      "displayName": "Api"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Api/When displaying the game",
+      "type": "feature",
+      "displayName": "Api/When displaying the game"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Api",
+      "type": "capability",
+      "displayName": "Api"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "Api/When displaying the game",
+      "type": "feature",
+      "displayName": "Api/When displaying the game"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:29.334124+01:00[Europe/London]",
+  "duration": 0,
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "dataTable": {
+    "headers": [
+      "color",
+      "meaning"
+    ],
+    "rows": [
+      {
+        "values": [
+          "GREEN",
+          " correct and in the correct position"
+        ],
+        "lineNumber": 0,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "YELLOW",
+          " correct but in the wrong position"
+        ],
+        "lineNumber": 1,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "GRAY",
+          " not in the word"
+        ],
+        "lineNumber": 2,
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": false,
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0,
+        "name": "",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "result": "SUCCESS"
+}

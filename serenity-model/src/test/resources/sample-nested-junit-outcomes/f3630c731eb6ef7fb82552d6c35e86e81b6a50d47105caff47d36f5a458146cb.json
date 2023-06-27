@@ -1,0 +1,147 @@
+{
+  "name": "We can request a hint for the current game via GET /api/game/{id}/hint",
+  "id": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:WhenAskingForHints]/[method:requestingAHint()]",
+  "scenarioId": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:WhenAskingForHints]",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.APIExamples.WhenAskingForHints",
+  "methodName": "requestingAHint",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 457,
+      "startTime": "2023-06-20T11:17:25.932027+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "Create a new game with the word BLAND",
+      "duration": 16,
+      "startTime": "2023-06-20T11:17:26.392304+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "Request a hint",
+      "duration": 513,
+      "startTime": "2023-06-20T11:17:26.409175+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 4,
+          "description": "GET http://localhost:9000/api/game/2/hint",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:26.919763+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "http://localhost:9000/api/game/2/hint",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "Accept\u003d*/*",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:26 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    \"The word ends with the letter D\"\n]",
+            "statusCode": 200
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.APIExamples.WhenAskingForHints",
+    "storyName": "WhenAskingForHints",
+    "displayName": "WhenAskingForHints",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.APIExamples$WhenAskingForHints",
+    "path": "com.serenitydojo.wordle.integrationtests.api.APIExamples",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      },
+      {
+        "name": "Wordle API Specs",
+        "description": ""
+      }
+    ],
+    "narrative": "",
+    "type": "story",
+    "qualifiedTag": {
+      "name": "API examples/WhenAskingForHints",
+      "type": "story",
+      "displayName": "API examples/WhenAskingForHints"
+    }
+  },
+  "featureTag": {
+    "name": "API examples/WhenAskingForHints",
+    "type": "story",
+    "displayName": "API examples/WhenAskingForHints"
+  },
+  "title": "We can request a hint for the current game via GET /api/game/{id}/hint",
+  "tags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "API examples/WhenAskingForHints",
+      "type": "story",
+      "displayName": "API examples/WhenAskingForHints"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "API examples/WhenAskingForHints",
+      "type": "story",
+      "displayName": "API examples/WhenAskingForHints"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:25.748636+01:00[Europe/London]",
+  "duration": 1353,
+  "projectKey": "",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "SUCCESS",
+  "nestedTestPath": [
+    "APIExamples",
+    "WhenAskingForHints"
+  ]
+}

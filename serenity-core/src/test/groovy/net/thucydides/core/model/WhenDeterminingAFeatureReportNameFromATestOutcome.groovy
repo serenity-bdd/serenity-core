@@ -47,7 +47,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
         when:
         def reportName = story.getReportName()
         then:
-        reportName == Digest.ofTextValue("feature_reports_sl_reports_examples_sl_test_reports") + ".html"
+        reportName == Digest.ofTextValue("feature_reports_examples_sl_test_reports") + ".html"
     }
 
     def "Should use parent directory with junit test results for class-based directory structures"() {

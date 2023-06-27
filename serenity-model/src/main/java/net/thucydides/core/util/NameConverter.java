@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  */
 public final class NameConverter {
 
+    private static final String METHOD_NAME_WITH_PARENTHESES = ".*\\(\\w*\\)";
     private static final String INDEXED_METHOD_NAME = ".*\\[\\d+]";
     private static final String[] abbreviations = {"CSV", "XML", "JSON"};
 
@@ -131,7 +132,7 @@ public final class NameConverter {
     }
 
     public static String withNoArguments(final String methodName) {
-        return stripArgumentsFrom(stripIndexesFrom(methodName));
+        return stripArgumentsFrom(stripParenthesesFrom(stripIndexesFrom(methodName)));
     }
 
     public static String withNoIssueNumbers(final String methodName) {
@@ -170,6 +171,13 @@ public final class NameConverter {
             return null;
         }
         return (methodName.matches(INDEXED_METHOD_NAME)) ? methodName.substring(0, methodName.lastIndexOf('[')) : methodName;
+    }
+
+    public static String stripParenthesesFrom(final String methodName) {
+        if (methodName == null) {
+            return null;
+        }
+        return (methodName.matches(METHOD_NAME_WITH_PARENTHESES)) ? methodName.substring(0, methodName.lastIndexOf('(')) : methodName;
     }
 
     /**

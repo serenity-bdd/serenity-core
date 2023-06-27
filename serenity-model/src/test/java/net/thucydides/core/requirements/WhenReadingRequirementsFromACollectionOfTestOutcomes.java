@@ -39,17 +39,49 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
         // Read a test outcome from a JUnit 4 test with a single package level
         @Test
-        void shouldReadATestOutcomeFromAJUnit4TestWithASinglePackageLevel() {
+        void shouldReadATestOutcomeFromAJUnit4TestSuite() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
-            environmentVariables.setProperty("serenity.test.root", "smoketests.sample");
+            environmentVariables.setProperty("serenity.test.root", "smoketests");
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
-            assertThat(tagProvider.getRequirements()).hasSize(2);
+            assertThat(tagProvider.getRequirements()).hasSize(1);
             assertThat(tagProvider.getRequirements().get(0).hasChildren()).isTrue();
             assertThat(tagProvider.getRequirements().get(0).getChildren()).allMatch(
-                    child -> child.getParent().equals("nested")
+                    child -> child.getParent().equals("sample")
             );
+        }
 
+        // Read a test outcome from a JUnit 4 test with a single package level
+        @Test
+        void shouldReadATestOutcomeFromNestedJUnit5Tests() {
+            environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-nested-junit-outcomes"));
+            environmentVariables.setProperty("serenity.test.root", "com.serenitydojo.wordle.integrationtests");
+            TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
+            assertThat(tagProvider.getRequirements()).isNotEmpty();
+            assertThat(tagProvider.getRequirements()).hasSize(1);
+            assertThat(tagProvider.getRequirements().get(0).hasChildren()).isTrue();
+            assertThat(tagProvider.getRequirements().get(0).getChildren()).allMatch(
+                    child -> child.getParent().equals("api")
+            );
+        }
+
+        @Test
+        void shouldAssociateTestOutcomesToNestedJUnit5Requirements() throws IOException {
+
+            List<? extends TestOutcome> testOutcomes
+                    = TestOutcomeLoader.testOutcomesIn(new File(localResource("sample-nested-junit-outcomes"))).getOutcomes();
+
+            TestOutcome someOutcome = testOutcomes.get(1);
+
+            environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-nested-junit-outcomes"));
+            environmentVariables.setProperty("serenity.test.root", "com.serenitydojo.wordle.integrationtests");
+
+            TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
+
+            Optional<Requirement> correspondingRequirement = tagProvider.getParentRequirementOf(testOutcomes.get(0));
+
+            assertThat(correspondingRequirement.isPresent());
+            assertThat(correspondingRequirement.get().getName()).isEqualTo("When displaying the game");
         }
 
         @Test
@@ -99,7 +131,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcomes.get(0));
 
             assertThat(requirement).isPresent()
-                    .matches(req -> req.get().getType().equals("story"));
+                    .matches(req -> req.get().getName().equals("A top level story test"));
         }
 
         @Test

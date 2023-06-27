@@ -1,0 +1,328 @@
+{
+  "name": "This is an example of a complete game played via the API",
+  "id": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]/[method:playingAGame()]",
+  "scenarioId": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+  "methodName": "playingAGame",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 6,
+      "startTime": "2023-06-20T11:17:27.493894+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "Create a new game with the word BLAND",
+      "duration": 5,
+      "startTime": "2023-06-20T11:17:27.500473+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 3,
+      "description": "Play the word \u0027BEAST\u0027",
+      "duration": 25,
+      "startTime": "2023-06-20T11:17:27.506031+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 4,
+          "description": "POST http://localhost:9000/api/game/10/word",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.529329+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "POST",
+            "path": "http://localhost:9000/api/game/10/word",
+            "content": "BEAST",
+            "contentType": "text/plain",
+            "requestHeaders": "Accept\u003d*/*\n\t\t\t\tContent-Type\u003dtext/plain; charset\u003dISO-8859-1",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ]\n]",
+            "statusCode": 201
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "description": "Play the word \u0027BRAIN\u0027",
+      "duration": 11,
+      "startTime": "2023-06-20T11:17:27.532104+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 6,
+          "description": "POST http://localhost:9000/api/game/10/word",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.541211+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "POST",
+            "path": "http://localhost:9000/api/game/10/word",
+            "content": "BRAIN",
+            "contentType": "text/plain",
+            "requestHeaders": "Accept\u003d*/*\n\t\t\t\tContent-Type\u003dtext/plain; charset\u003dISO-8859-1",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ],\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"YELLOW\"\n    ]\n]",
+            "statusCode": 201
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "description": "Play the word \u0027BLAND\u0027",
+      "duration": 9,
+      "startTime": "2023-06-20T11:17:27.543731+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 8,
+          "description": "POST http://localhost:9000/api/game/10/word",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.551232+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "POST",
+            "path": "http://localhost:9000/api/game/10/word",
+            "content": "BLAND",
+            "contentType": "text/plain",
+            "requestHeaders": "Accept\u003d*/*\n\t\t\t\tContent-Type\u003dtext/plain; charset\u003dISO-8859-1",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ],\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"YELLOW\"\n    ],\n    [\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\"\n    ]\n]",
+            "statusCode": 201
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "description": "The game history should be correctly recorded",
+      "duration": 185,
+      "startTime": "2023-06-20T11:17:27.553791+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 10,
+          "description": "GET http://localhost:9000/api/game/10/history",
+          "duration": 3,
+          "startTime": "2023-06-20T11:17:27.584076+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "http://localhost:9000/api/game/10/history",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "Accept\u003d*/*",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ],\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"YELLOW\"\n    ],\n    [\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\"\n    ]\n]",
+            "statusCode": 200
+          },
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 11,
+          "description": "GET http://localhost:9000/api/game/10/history",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.726362+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "http://localhost:9000/api/game/10/history",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "Accept\u003d*/*",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ],\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"YELLOW\"\n    ],\n    [\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\"\n    ]\n]",
+            "statusCode": 200
+          },
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 12,
+          "description": "GET http://localhost:9000/api/game/10/history",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.735073+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "http://localhost:9000/api/game/10/history",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "Accept\u003d*/*",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "[\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"GRAY\"\n    ],\n    [\n        \"GREEN\",\n        \"GRAY\",\n        \"GREEN\",\n        \"GRAY\",\n        \"YELLOW\"\n    ],\n    [\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\",\n        \"GREEN\"\n    ]\n]",
+            "statusCode": 200
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "description": "The player wins",
+      "duration": 14,
+      "startTime": "2023-06-20T11:17:27.739060+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 14,
+          "description": "Get the game result",
+          "duration": 13,
+          "startTime": "2023-06-20T11:17:27.739294+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1,
+          "children": [
+            {
+              "number": 15,
+              "description": "GET http://localhost:9000/api/game/10/result",
+              "duration": 1,
+              "startTime": "2023-06-20T11:17:27.745295+01:00[Europe/London]",
+              "result": "SUCCESS",
+              "restQuery": {
+                "method": "GET",
+                "path": "http://localhost:9000/api/game/10/result",
+                "content": "",
+                "contentType": "null",
+                "requestHeaders": "Accept\u003d*/*",
+                "requestCookies": "",
+                "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+                "responseCookies": "",
+                "responseBody": "\"WIN\"",
+                "statusCode": 200
+              },
+              "precondition": false,
+              "level": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+    "storyName": "When playing the game",
+    "displayName": "When playing the game",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.APIExamples$PlayingTheGame",
+    "path": "com.serenitydojo.wordle.integrationtests.api.APIExamples",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      },
+      {
+        "name": "Wordle API Specs",
+        "description": ""
+      }
+    ],
+    "narrative": "",
+    "type": "story",
+    "qualifiedTag": {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    }
+  },
+  "featureTag": {
+    "name": "API examples/When playing the game",
+    "type": "story",
+    "displayName": "API examples/When playing the game"
+  },
+  "title": "This is an example of a complete game played via the API",
+  "tags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:27.493234+01:00[Europe/London]",
+  "duration": 261,
+  "projectKey": "",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "SUCCESS",
+  "nestedTestPath": [
+    "APIExamples",
+    "PlayingTheGame"
+  ]
+}

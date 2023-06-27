@@ -7,10 +7,7 @@ import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.logging.ConsoleLoggingListener;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.*;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
@@ -238,6 +235,16 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             logger.trace("-->Execution started " + testIdentifier + "----" + testIdentifier.getDisplayName() + "--" + testIdentifier.getType() + "--" + testIdentifier.getSource());
             logger.trace("-->TestSuiteStarted " + testClass);
 
+            // Keep track of the relationship between test classes and the display names
+            String testClassName = null;
+            if (testIdentifier.getSource().isPresent() && testIdentifier.getSource().get() instanceof ClassSource) {
+                testClassName = ((ClassSource) testIdentifier.getSource().get()).getClassName();
+            }
+            TestClassHierarchy.getInstance().testSuiteStarted(testClassName,
+                    testIdentifier.getUniqueId(),
+                    testIdentifier.getDisplayName(),
+                    testIdentifier.getParentId().orElse(null));
+
             eventBusFor(testIdentifier).getBaseStepListener().clearTestOutcomes();
             eventBusFor(testIdentifier).testSuiteStarted(testClass, testIdentifier.getDisplayName());
             testCaseDisplayNames.put(testClass, testIdentifier.getDisplayName());
@@ -249,7 +256,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                 testClass = ((MethodSource) testIdentifier.getSource().get()).getJavaClass();
                 testStarted(methodSource, testIdentifier, testClass);
             }
-            String sourceMethod = methodSource.getClassName() + "." + methodSource.getMethodName();
+            String sourceMethod = methodSource.getJavaClass().getCanonicalName() + "." + methodSource.getMethodName();
             DataTable dataTable = dataTables.get(sourceMethod);
             if (dataTable != null) {
                 logger.trace("FoundDataTable " + dataTable + " " + dataTable.getRows());

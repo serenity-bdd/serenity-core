@@ -50,19 +50,25 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
-        String unique = UUID.randomUUID().toString();
-        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
+//        String unique = UUID.randomUUID().toString();
+//        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
         report.createNewFile();
 
-        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+        LOGGER.debug("Generating JSON report for {} to file {})", testOutcome.getTitle(), report.getAbsolutePath());
 
-        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
+        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
             jsonConverter.toJson(storedTestOutcome, outputStream);
             outputStream.flush();
         }
 
-        SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
+//        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+//        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
+//            jsonConverter.toJson(storedTestOutcome, outputStream);
+//            outputStream.flush();
+//        }
+//
+//        SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
 
         return report;
     }

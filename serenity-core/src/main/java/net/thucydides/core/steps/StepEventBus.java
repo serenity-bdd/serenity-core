@@ -156,6 +156,16 @@ public class StepEventBus {
         this.outputDirectory = configuration.getOutputDirectory();
     }
 
+    /**
+     * Method used for testing purposes to find an event bus for a given test.
+     */
+    public static Optional<StepEventBus> eventBusForTest(String testName) {
+        return STICKY_EVENT_BUSES.keySet().stream()
+                .filter(key -> key.toString().contains(testName))
+                .map(STICKY_EVENT_BUSES::get)
+                .findFirst();
+    }
+
 
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;

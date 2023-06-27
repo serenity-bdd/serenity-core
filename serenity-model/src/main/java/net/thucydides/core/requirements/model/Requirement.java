@@ -7,6 +7,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.PathElement;
 import net.thucydides.core.model.PathElements;
+import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.collections.ListUtils;
@@ -545,7 +546,12 @@ public class Requirement implements Comparable<Requirement> {
         return background;
     }
 
-    public PathElements getPathElements(EnvironmentVariables environmentVariables) {
+    public PathElements getPathElements() {
+        PathElements pathElements = getParentPathElements().copy();
+        pathElements.add(new PathElement(getName(), getDisplayName()));
+        return pathElements;
+    }
+    public PathElements getParentPathElements(EnvironmentVariables environmentVariables) {
         String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
         // strip root path from path if present
 
@@ -566,8 +572,8 @@ public class Requirement implements Comparable<Requirement> {
         return PathElements.from(Collections.emptyList());
     }
 
-    public PathElements getPathElements() {
-        return getPathElements(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    public PathElements getParentPathElements() {
+        return getParentPathElements(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
     public boolean hasParent(PathElements path) {
@@ -582,6 +588,10 @@ public class Requirement implements Comparable<Requirement> {
         String normalizedPath = testOutcomePath.replace(".", "/");
         String packagePath = testOutcomePath.replace("/", ".");
         return normalizedPath.startsWith(getPath()) || packagePath.startsWith(getPath());
+    }
+
+    public boolean matchesUserStory(Story userStory) {
+        return userStory.getPathElements().equals(getPathElements());
     }
 
     public static class CustomFieldSetter {

@@ -35,7 +35,6 @@ public class SerenityObjectFactory implements ObjectFactory {
         Serenity.done(false);
     }
 
-
     @Override
     public boolean addClass(Class<?> glueClass) {
         classes.add(glueClass);

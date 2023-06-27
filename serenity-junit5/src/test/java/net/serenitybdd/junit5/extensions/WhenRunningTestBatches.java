@@ -47,11 +47,5 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
         assertThat(inTheTestOutcomes(executedSteps).theOutcomeFor("edge_case_2").getTestSteps().size(), is(2));
     }*/
 
-    private void runTestForClass(Class testClass){
-        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                .selectors(selectClass(testClass))
-                .build();
-        LauncherFactory.create().execute(request);
-    }
 
 }

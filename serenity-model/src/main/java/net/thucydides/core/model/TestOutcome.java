@@ -344,7 +344,7 @@ public class TestOutcome {
         this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
         this.context = null;//contextFrom(environmentVariables);
-        if (testCase != null) {
+        if (this.userStory == null && testCase != null) {
             setUserStory(leafRequirementDefinedIn().testCase(testCase));
         }
     }
@@ -535,7 +535,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -568,7 +569,8 @@ public class TestOutcome {
                           final String projectKey,
                           final EnvironmentVariables environmentVariables,
                           final ExternalLink externalLink,
-                          final String context) {
+                          final String context,
+                          final String testSource) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -607,6 +609,7 @@ public class TestOutcome {
         this.environmentVariables = environmentVariables;
         this.externalLink = externalLink;
         this.context = context;
+        this.testSource = testSource;
     }
 
     List<String> calculateNestPath(Class<?> testCase) {
@@ -676,7 +679,8 @@ public class TestOutcome {
                     this.projectKey,
                     this.environmentVariables,
                     this.externalLink,
-                    this.context);
+                    this.context,
+                    this.testSource);
         } else {
             return this;
         }
@@ -713,7 +717,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -747,7 +752,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     public TestOutcome withStartTime(ZonedDateTime startTime) {
@@ -781,7 +787,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     /**
@@ -814,10 +821,10 @@ public class TestOutcome {
      * @return the human-readable name for this test.
      */
     public String getTitle() {
-        if (title == null) {
-            title = obtainQualifiedTitleFromAnnotationOrMethodName();
+        if (this.title == null) {
+            this.title = obtainQualifiedTitleFromAnnotationOrMethodName();
         }
-        return title;
+        return this.title;
     }
 
     public String getTitle(boolean qualified) {
@@ -2878,7 +2885,8 @@ public class TestOutcome {
                 projectKey,
                 environmentVariables,
                 externalLink,
-                context);
+                context,
+                testSource);
     }
 
     public ExternalLink getExternalLink() {

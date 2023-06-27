@@ -115,7 +115,7 @@ public class WhenDefiningUserStoriesForTests {
     @Test
     public void a_story_path_for_a_class_is_derived_from_the_package() {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyUserStories.PurchaseNewWidget.class);
-        assertThat(story.getPath(), is("net.thucydides.core.model.WhenDefiningUserStoriesForTests.MyUserStories"));
+        assertThat(story.getPath(), is("net/thucydides/core/model/WhenDefiningUserStoriesForTests/MyUserStories"));
 
     }
 

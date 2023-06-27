@@ -1,0 +1,138 @@
+{
+  "name": "We can get the current game result by sending a GET to /api/game/{id}/result",
+  "id": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]/[method:fetchingTheGameState()]",
+  "scenarioId": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:PlayingTheGame]",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+  "methodName": "fetchingTheGameState",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 5,
+      "startTime": "2023-06-20T11:17:27.816300+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "Get the game result",
+      "duration": 9,
+      "startTime": "2023-06-20T11:17:27.821730+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 3,
+          "description": "GET http://localhost:9000/api/game/13/result",
+          "duration": 1,
+          "startTime": "2023-06-20T11:17:27.828587+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "http://localhost:9000/api/game/13/result",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "Accept\u003d*/*",
+            "requestCookies": "",
+            "responseHeaders": "Content-Type: application/json\nTransfer-Encoding: chunked\nDate: Tue, 20 Jun 2023 10:17:27 GMT\nKeep-Alive: timeout\u003d60\nConnection: keep-alive",
+            "responseCookies": "",
+            "responseBody": "\"IN_PROGRESS\"",
+            "statusCode": 200
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.APIExamples.PlayingTheGame",
+    "storyName": "When playing the game",
+    "displayName": "When playing the game",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.APIExamples$PlayingTheGame",
+    "path": "com.serenitydojo.wordle.integrationtests.api.APIExamples",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      },
+      {
+        "name": "Wordle API Specs",
+        "description": ""
+      }
+    ],
+    "narrative": "",
+    "type": "story",
+    "qualifiedTag": {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    }
+  },
+  "featureTag": {
+    "name": "API examples/When playing the game",
+    "type": "story",
+    "displayName": "API examples/When playing the game"
+  },
+  "title": "We can get the current game result by sending a GET to /api/game/{id}/result",
+  "tags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "API examples/When playing the game",
+      "type": "story",
+      "displayName": "API examples/When playing the game"
+    },
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:27.815577+01:00[Europe/London]",
+  "duration": 17,
+  "projectKey": "",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "SUCCESS",
+  "nestedTestPath": [
+    "APIExamples",
+    "PlayingTheGame"
+  ]
+}

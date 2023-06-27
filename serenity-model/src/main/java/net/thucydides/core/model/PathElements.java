@@ -2,6 +2,9 @@ package net.thucydides.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
 
 public class PathElements extends ArrayList<PathElement> {
 
@@ -38,11 +41,31 @@ public class PathElements extends ArrayList<PathElement> {
         return path.toString();
 
     }
+    public PathElements copy() {
+        return PathElements.from(this);
+    }
+
 
     public PathElements getParent() {
         if (isEmpty()) {
             return null;
         }
         return PathElements.from(subList(0, size() - 1));
+    }
+
+    public String asPath() {
+        return stream().map(PathElement::getName).collect(joining("/"));
+    }
+
+    public PathElements stripFirstElements(List<String> rootElements) {
+        if (size() < rootElements.size()) {
+            return this;
+        }
+        for (int index = 0; index < rootElements.size(); index++) {
+            if (!get(index).getName().equals(rootElements.get(index))) {
+                return this;
+            }
+        }
+        return PathElements.from(subList(rootElements.size(), size()));
     }
 }

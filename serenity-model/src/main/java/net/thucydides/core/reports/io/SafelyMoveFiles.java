@@ -5,6 +5,7 @@ import net.thucydides.core.guice.Injectors;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
@@ -27,11 +28,16 @@ public class SafelyMoveFiles {
 
     public Path to(Path destination) throws IOException {
         try {
+            if (Files.exists(destination)) {
+                return destination;
+            }
             return Files.move(origin,
-                        destination,
-                        StandardCopyOption.REPLACE_EXISTING,
-                        StandardCopyOption.ATOMIC_MOVE
+                    destination,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE
             );
+        } catch (NoSuchFileException fileAlreadyMoved) {
+            return destination;
         } catch (IOException e) {
             if (maxRetries == 0) { throw e; }
 

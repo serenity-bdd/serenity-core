@@ -1,0 +1,115 @@
+{
+  "name": "We create a new game with the /api/game end-point",
+  "id": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:CreatingANewGame]/[method:creatingANewGame()]",
+  "scenarioId": "[engine:junit-jupiter]/[class:com.serenitydojo.wordle.integrationtests.api.APIExamples]/[nested-class:CreatingANewGame]",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.APIExamples.CreatingANewGame",
+  "methodName": "creatingANewGame",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 4,
+      "startTime": "2023-06-20T11:17:27.882667+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "Create a new game",
+      "duration": 3,
+      "startTime": "2023-06-20T11:17:27.887779+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.APIExamples.CreatingANewGame",
+    "storyName": "When creating a new game",
+    "displayName": "When creating a new game",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.APIExamples$CreatingANewGame",
+    "path": "com.serenitydojo.wordle.integrationtests.api.APIExamples",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      },
+      {
+        "name": "Wordle API Specs",
+        "description": ""
+      }
+    ],
+    "narrative": "",
+    "type": "story",
+    "qualifiedTag": {
+      "name": "API examples/When creating a new game",
+      "type": "story",
+      "displayName": "API examples/When creating a new game"
+    }
+  },
+  "featureTag": {
+    "name": "API examples/When creating a new game",
+    "type": "story",
+    "displayName": "API examples/When creating a new game"
+  },
+  "title": "We create a new game with the /api/game end-point",
+  "tags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "API examples/When creating a new game",
+      "type": "story",
+      "displayName": "API examples/When creating a new game"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    },
+    {
+      "name": "API examples/When creating a new game",
+      "type": "story",
+      "displayName": "API examples/When creating a new game"
+    }
+  ],
+  "startTime": "2023-06-20T11:17:27.881924+01:00[Europe/London]",
+  "duration": 11,
+  "projectKey": "",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "SUCCESS",
+  "nestedTestPath": [
+    "APIExamples",
+    "CreatingANewGame"
+  ]
+}

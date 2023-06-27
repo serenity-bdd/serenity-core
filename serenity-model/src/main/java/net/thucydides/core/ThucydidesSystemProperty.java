@@ -946,7 +946,7 @@ public enum ThucydidesSystemProperty {
      * and keep a tally of the executed tests. It will also use this as the root package when determining the
      * requirements hierarchy associated with a test.
      *
-     * Technical note: If you are using the File System Requirements provider, Thucydides will expect this directory structure to exist
+     * Technical note: If you are using the File System Requirements provider, Serenity will expect this directory structure to exist
      * at the top of the requirements tree. If you want to exclude packages in a requirements definition and start at a
      * lower level in the hierarchy, use the thucydides.requirement.exclusions property.
      * This is also used by the PackageAnnotationBasedTagProvider to know where to look for annotated requirements.

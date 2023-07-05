@@ -4,6 +4,8 @@ import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -17,10 +19,10 @@ public class RequirementCache {
     private final Map<TestTag, Requirement> requirementsByTag;
 
     private RequirementCache() {
-        requirements = new ArrayList<>();
+        requirements = new CopyOnWriteArrayList<>();
         requirementAliases = new ConcurrentHashMap<>();
         requirementDisplayNames = new ConcurrentHashMap<>();
-        flattenedRequirements = new ArrayList<>();
+        flattenedRequirements = new CopyOnWriteArrayList<>();
         requirementsIndex = new ConcurrentHashMap<>();
         requirementsPathIndex = new ConcurrentHashMap<>();
         requirementsByTag = new ConcurrentHashMap<>();

@@ -27,7 +27,7 @@ public class ReportNameProvider {
 
 
     public ReportNameProvider(Optional<String> context, ReportNamer reportNamer) {
-        this(context, reportNamer,Injectors.getInjector().getInstance(RequirementsService.class));
+        this(context, reportNamer, Injectors.getInjector().getInstance(RequirementsService.class));
     }
 
     public ReportNameProvider(Optional<String> context, ReportNamer reportNamer, RequirementsService requirementsService) {
@@ -52,7 +52,7 @@ public class ReportNameProvider {
     }
 
     public ReportNameProvider(String context) {
-       this(Optional.ofNullable(context), ReportNamer.forReportType(ReportType.HTML), Injectors.getInjector().getInstance(RequirementsService.class));
+        this(Optional.ofNullable(context), ReportNamer.forReportType(ReportType.HTML), Injectors.getInjector().getInstance(RequirementsService.class));
 
     }
 
@@ -67,7 +67,7 @@ public class ReportNameProvider {
 
     public String getContext() {
         return context.orElse("");
-     }
+    }
 
     public ReportNameProvider forCSVFiles() {
         return new ReportNameProvider(this.context, ReportType.CSV);
@@ -113,12 +113,12 @@ public class ReportNameProvider {
             return new ReportNameProvider(NO_CONTEXT, reportNamer, requirementsService);
         } else {
             return new ReportNameProvider(Optional.of(tag.getType().toLowerCase() + ":" + tag.getName().toLowerCase()),
-                                          reportNamer,
-                                          requirementsService);
+                    reportNamer,
+                    requirementsService);
         }
     }
 
-    private String prefixUsing(Optional <String> context) {
+    private String prefixUsing(Optional<String> context) {
         if (context.isPresent() && isNotEmpty(getContext())) {
             return "context_" + NameConverter.underscore(context.get()) + "_";
         } else {
@@ -127,21 +127,25 @@ public class ReportNameProvider {
     }
 
     public String forRequirement(Requirement requirement) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + requirement.getType() + "_" + requirement.qualifiedName());
+        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_" + requirement.getPath());
     }
 
     public String forRequirement(TestTag tag) {
-        return forRequirement(tag.getName(), tag.getType());
+        if (!requirementsService.getRequirementFor(tag).isPresent()) {
+            return "#";
+        }
+        return forRequirement(requirementsService.getRequirementFor(tag).get());
     }
 
     public String forRequirementOrTag(TestTag tag) {
         return (requirementsService.isRequirementsTag(tag))
-                ? forRequirement(tag.getName(), tag.getType())
+                ? forRequirement(tag)
                 : forTag(tag);
     }
 
     public String forRequirement(String requirementName, String requirementType) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + requirementType + "_" + requirementName);
+        TestTag tag = TestTag.withName(requirementName).andType(requirementType);
+        return forRequirement(tag);
     }
 
     public String forRelease(Release release) {

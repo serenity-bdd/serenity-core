@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.Character.isTitleCase;
 import static java.util.Arrays.stream;
 
 /**
@@ -249,7 +250,7 @@ public class Inflector {
     }
 
     private final static Pattern LOWER_CAMEL_CASE = Pattern.compile("[a-z]+((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?");
-    private final static Pattern UPPER_CAMEL_CASE = Pattern.compile("([A-Z][a-z0-9]+)((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?");
+    private final static Pattern UPPER_CAMEL_CASE = Pattern.compile("^[A-Z][a-zA-Z0-9]*$");
 
     private boolean isCamelCase(String text) {
         return LOWER_CAMEL_CASE.matcher(text).matches() || UPPER_CAMEL_CASE.matcher(text).matches();

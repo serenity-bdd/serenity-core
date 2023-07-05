@@ -3,10 +3,7 @@ package net.thucydides.core.requirements;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.model.Release;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
@@ -65,7 +62,6 @@ public abstract class BaseRequirementsService implements RequirementsService {
     }
 
     public java.util.Optional<Requirement> getRequirementFor(TestTag tag) {
-
         try {
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 java.util.Optional<Requirement> requirement = tagProvider.getRequirementFor(tag);
@@ -319,5 +315,13 @@ public abstract class BaseRequirementsService implements RequirementsService {
     @Override
     public void resetRequirements() {
         requirements = null;
+    }
+
+    private static final List<Requirement> NO_PARENTS = new ArrayList<>();
+
+    @Override
+    public List<Requirement> getParentRequirementsOf(Requirement requirement) {
+        List<Requirement> ancestors = this.requirementAncestors.get(requirement);
+        return (ancestors == null || ancestors.isEmpty()) ? NO_PARENTS : ancestors.subList(0, ancestors.size() - 1);
     }
 }

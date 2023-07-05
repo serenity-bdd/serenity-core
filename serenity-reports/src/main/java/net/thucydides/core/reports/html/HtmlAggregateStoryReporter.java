@@ -266,7 +266,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory);//.withRequirementsTags();
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory).withRequirementsTags();
     }
 
     protected SerenitySystemProperties getSystemProperties() {

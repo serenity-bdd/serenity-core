@@ -20,7 +20,7 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
     public Iterable<? extends TagProvider> getTagProviders() {
         return NewSet.of(
                 new TestOutcomeRequirementsTagProvider(),
-                new PackageRequirementsTagProvider(),
+//                new PackageRequirementsTagProvider(),
                 new AnnotationBasedTagProvider(),
                 new FileSystemRequirementsTagProvider(),
                 new FeatureStoryTagProvider(),

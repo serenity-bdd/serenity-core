@@ -4,6 +4,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.AnnotationBasedTagProvider;
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
@@ -111,5 +112,10 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
                 prioritizedProviders.add(lowPriorityProviders.get(lowPriorityProvider));
             }
         }
+    }
+
+    @Override
+    public void addRequirementTagsTo(TestOutcome outcome) {
+        this.getRequirementsTagProviders().forEach(provider -> provider.addRequirementTagsTo(outcome));
     }
 }

@@ -6,6 +6,7 @@ import net.thucydides.core.requirements.DefaultCapabilityTypes;
 import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -78,5 +79,19 @@ public class RequirementsConfiguration {
 
     public String getRootPackage() {
         return rootPackage;
+    }
+
+    public String getRootDirectory() {
+        return root.map(Path::toString).orElseGet(this::getDefaultRootDirectory);
+    }
+
+    public String relativePathOfFeatureFile(File featureFilePath) {
+        if (root.isPresent() && featureFilePath.getPath().contains(root.get().toString())) {
+            int rootPathLength = root.get().toString().length();
+            String relativePath = featureFilePath.getPath().substring(featureFilePath.getPath().indexOf(root.get().toString()) + rootPathLength + 1);
+            return relativePath.substring(0, relativePath.lastIndexOf("."));
+        } else{
+            return featureFilePath.getPath().substring(0, featureFilePath.getPath().lastIndexOf("."));
+        }
     }
 }

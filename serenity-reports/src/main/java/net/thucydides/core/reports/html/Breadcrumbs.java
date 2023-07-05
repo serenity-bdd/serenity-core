@@ -1,16 +1,24 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Splitter;
+import net.thucydides.core.model.PathElement;
+import net.thucydides.core.model.RequirementCache;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Breadcrumbs {
 
     public static BreadcrumbsBuilder forRequirementsTag(TestTag tag) {
         return new BreadcrumbsBuilder(tag);
+    }
+
+    public static List<TestTag> forParentRequirements(List<Requirement> parents) {
+        return parents.stream().map(Requirement::asTag).collect(Collectors.toList());
     }
 
     public static class BreadcrumbsBuilder {
@@ -22,12 +30,16 @@ public class Breadcrumbs {
 
         public List<TestTag> fromTagsIn(List<TestTag> allTags) {
 
-            if (isAnOrphan(tag.getName())) { return new ArrayList<>(); }
+            if (isAnOrphan(tag.getName())) {
+                return new ArrayList<>();
+            }
 
             String parentName = parentElementOf(tag.getName());
             Optional<TestTag> parentTag = parentTagNamed(parentName).from(allTags);
 
-            if (!parentTag.isPresent()) { return new ArrayList<>(); }
+            if (!parentTag.isPresent()) {
+                return new ArrayList<>();
+            }
 
             List<TestTag> ancestorParents = removeTagFrom(allTags, parentTag.get());
 
@@ -68,7 +80,7 @@ public class Breadcrumbs {
             }
 
             public Optional<TestTag> from(List<TestTag> allTags) {
-                for(TestTag tag : allTags) {
+                for (TestTag tag : allTags) {
                     if (tag.getName().equals(parentName) || tag.getName().endsWith("/" + parentName)) {
                         return Optional.of(tag);
                     }

@@ -40,6 +40,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this.pristineProperties = pristineProperties;
     }
 
+
     public EnvironmentVariables copy() {
         return new SystemEnvironmentVariables(
                 new HashMap<>(this.properties),
@@ -58,11 +59,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        if (TestLocalEnvironmentVariables.getProperties().isEmpty()) {
-            return LOADED_ENVIRONMENT_VARIABLES.get();
-        } else {
-            return TestLocalEnvironmentVariables.getUpdatedEnvironmentVariables();
-        }
+        EnvironmentVariables environmentVariables = LOADED_ENVIRONMENT_VARIABLES.get().copy();
+        TestLocalEnvironmentVariables.getProperties().forEach(
+                (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
+        );
+        return environmentVariables;
     }
 
     public void setConfig(Config typesafeConfig) {

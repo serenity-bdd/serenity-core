@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import net.serenitybdd.core.strings.Joiner;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.ObjectUtils.compare;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -45,8 +46,14 @@ public class TestTag implements Comparable<TestTag> {
         return normalisedName;
     }
 
+    private static final Pattern PATTERN = Pattern.compile("[\\s_-]");
+
     private String normalised(String name) {
-        return name.replaceAll("[\\s_-]"," ").toLowerCase();
+        return PATTERN.matcher(name).replaceAll(" ").toLowerCase();
+    }
+
+    private String normalised(String name, String type) {
+        return name.replaceAll("[\\s_-]"," ").toLowerCase() + type.replaceAll("[\\s_-]"," ").toLowerCase();
     }
 
     public String normalisedType() {

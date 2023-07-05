@@ -13,7 +13,7 @@ class WhenDescribingUserStories extends Specification {
         when:
             def story = Stories.findStoryFrom(SomeTestCaseSample.class)
         then:
-            story.name == "Some test case sample"
+            story.name == "SomeTestCaseSample"
     }
 
     def "should be able obtain a story report from a story"() {
@@ -21,15 +21,7 @@ class WhenDescribingUserStories extends Specification {
             def story = Stories.findStoryFrom(SomeTestCaseSample.class)
             def htmlReportName = Stories.reportFor(story, ReportType.HTML)
         then:
-            htmlReportName == Digest.ofTextValue("some_test_case_sample") + ".html"
-    }
-
-    def "should be able obtain an XML story report name from a test class"() {
-        when:
-        def story = Stories.findStoryFrom(SomeTestCaseSample.class)
-        def htmlReportName = story.getReportName(ReportType.XML)
-        then:
-        htmlReportName == Digest.ofTextValue("some_test_case_sample") + ".xml"
+            htmlReportName == Digest.ofTextValue("sometestcasesample") + ".html"
     }
 
     @Shared def story = Stories.findStoryFrom(SomeTestCaseSample.class)

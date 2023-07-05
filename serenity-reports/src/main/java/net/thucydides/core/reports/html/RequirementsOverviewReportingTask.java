@@ -128,8 +128,6 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         RequirementsOutcomes filteredRequirementsOutcomes = requirementsOutcomes.filteredByDisplayTag();
         context.put("requirements", filteredRequirementsOutcomes);
         context.put("duplicateRequirementNamesPresent", DuplicateRequirementNames.presentIn(filteredRequirementsOutcomes));
-
-
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
         context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));
@@ -234,10 +232,12 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {
         if (this.requirementsOutcomes.getParentRequirement().isPresent()) {
-            context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
-                    .fromTagsIn(allTags));
+//            context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
+//                    .fromTagsIn(allTags));
+            List<Requirement> parents = requirementsService.getParentRequirementsOf(this.requirementsOutcomes.getParentRequirement().get());
+            context.put("breadcrumbs", Breadcrumbs.forParentRequirements(parents));
         } else {
-            context.put(gi"breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
+            context.put("breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
         }
     }
 

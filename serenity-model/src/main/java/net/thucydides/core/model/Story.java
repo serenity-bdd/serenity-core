@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -38,7 +39,7 @@ public class Story {
     private String path;
     private PathElements pathElements;
     private String parentName;
-    private String  narrative;
+    private String narrative;
     private ApplicationFeature feature;
     private String type;
 
@@ -53,8 +54,10 @@ public class Story {
         this.path = pathOf(userStoryClass);
         this.narrative = AnnotatedDescription.forClass(userStoryClass).orElse("");
         // split path into a list of path elements
-        this.pathElements = pathElementsFromPackagePath(completePathOf(userStoryClass));
-        this.type = FeatureType.STORY.toString();
+//        this.pathElements = pathElementsFromPackagePath(completePathOf(userStoryClass));
+        this.pathElements = pathElementsFromPackagePath(path);
+//        this.type = FeatureType.STORY.toString();
+        this.type = FeatureType.FEATURE.toString();
     }
 
     private PathElements pathElementsFromPackagePath(String path) {
@@ -80,11 +83,11 @@ public class Story {
         List<String> pathElementNames = Splitter.onPattern("\\.|\\$").omitEmptyStrings().splitToList(path);
         String cumulatedPath = "";
         List<PathElement> pathElements = new ArrayList<>();
-        for(String pathElement : pathElementNames) {
+        for (String pathElement : pathElementNames) {
             cumulatedPath = cumulatedPath + "." + pathElement;
             String completePath = rootPath + cumulatedPath;
             String displayName = displayNameOfPathElement(completePath, pathElement);
-            pathElements.add(new PathElement(displayName,""));
+            pathElements.add(new PathElement(pathElement, displayName));
         }
         return PathElements.from(pathElements);
     }
@@ -106,16 +109,15 @@ public class Story {
 
     public static String pathOf(Class<?> userStoryClass) {
         String canonicalName = userStoryClass.getCanonicalName();
-        String localPath = stripRootPathFrom(canonicalName);
-
-        int lastDot = localPath.lastIndexOf(".");
-
-        if (lastDot > 0) {
-            return localPath.substring(0, lastDot);
-//            return localPath;
-        } else {
-            return "";
-        }
+        return stripRootPathFrom(canonicalName);
+//        String localPath = stripRootPathFrom(canonicalName);
+//        int lastDot = localPath.lastIndexOf(".");
+//
+//        if (lastDot > 0) {
+//            return localPath.substring(0, lastDot);
+//        } else {
+//            return "";
+//        }
     }
 
     public static String completePathOf(Class<?> userStoryClass) {
@@ -123,7 +125,7 @@ public class Story {
 
         int lastDot = canonicalName.lastIndexOf(".");
         int lastDollar = canonicalName.lastIndexOf("$");
-        int lastSeparator = Math.max(lastDollar,lastDot);
+        int lastSeparator = Math.max(lastDollar, lastDot);
 
         if (lastSeparator > 0) {
             return canonicalName.substring(0, lastSeparator);
@@ -169,7 +171,8 @@ public class Story {
         this.path = normalisedPath(path);
         this.pathElements = pathElementsFromDirectoryPath(this.path);
         this.narrative = null;
-        this.type = FeatureType.STORY.toString();
+        this.type = FeatureType.FEATURE.toString();
+//        this.type = FeatureType.STORY.toString();
     }
 
 
@@ -181,7 +184,7 @@ public class Story {
                  final PathElements pathElements,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, FeatureType.STORY.toString());
+        this(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, FeatureType.FEATURE.toString());
     }
 
 
@@ -217,7 +220,7 @@ public class Story {
         this.feature = feature;
         this.path = normalisedPath(path);
         this.pathElements = pathElementsFromDirectoryPath(this.path);
-        this.type = (path != null && path.endsWith(".feature")) ? FeatureType.FEATURE.toString() : FeatureType.STORY.toString();
+        this.type = FeatureType.FEATURE.toString();
     }
 
     public String getId() {
@@ -376,8 +379,6 @@ public class Story {
     }
 
     public PathElements getPathElements() {
-        PathElements pathElements = PathElements.from(this.pathElements);
-        pathElements.add(new PathElement(this.storyName,this.displayName));
         return pathElements;
     }
 
@@ -412,23 +413,28 @@ public class Story {
         return asQualifiedTag();// TestTag.withName(storyName).andType(type.toString());
     }
 
-    private TestTag qualifiedTag;
+    //    private TestTag qualifiedTag;
     public TestTag asQualifiedTag() {
-        if (qualifiedTag == null) {
-            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-            String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
-//            String lastElementOfPath = LastElement.of(getPath());
-            String lastElementOfPath = (getParentPathElements() == null || getParentPathElements().isEmpty())
-                    ? LastElement.of(getPath()) : getParentPathElements().get(getParentPathElements().size() - 1).getName();
-            String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
-            if (featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
-                parentName = null;
-            }
-            qualifiedTag = (isNotEmpty(parentName)) ?
-                    TestTag.withName(parentName + "/" + storyName).andType(type) :
-                    TestTag.withName(storyName).andType(type);
-        }
-        return qualifiedTag;
+        String qualifiedName = getPathElements().stream()
+                .map(PathElement::getName)
+                .collect(Collectors.joining("/"));
+
+        return TestTag.withName(qualifiedName).andType(type).withDisplayName(getDisplayName());
+//        if (qualifiedTag == null) {
+//            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+//            String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
+////            String lastElementOfPath = LastElement.of(getPath());
+//            String lastElementOfPath = (getParentPathElements() == null || getParentPathElements().isEmpty())
+//                    ? LastElement.of(getPath()) : getParentPathElements().get(getParentPathElements().size() - 1).getName();
+//            String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
+//            if (featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
+//                parentName = null;
+//            }
+//            qualifiedTag = (isNotEmpty(parentName)) ?
+//                    TestTag.withName(parentName + "/" + storyName).andType(type) :
+//                    TestTag.withName(storyName).andType(type);
+//        }
+//        return qualifiedTag;
     }
 
 
@@ -436,6 +442,7 @@ public class Story {
      * A tag with no more than one level of parents, that can be used to find matching requirements in the requirements hierarchy.
      */
     private TestTag singleParentTag;
+
     public TestTag asSingleParentTag() {
 
         if (singleParentTag == null) {
@@ -448,7 +455,9 @@ public class Story {
     }
 
     private String normalisedPath(String path) {
-        if (path == null) { return path; }
+        if (path == null) {
+            return path;
+        }
         // Strip initial reference to 'classpath:features/' or 'src/test/resources/features/' at the start of the path
         String normalisedPath = path;
         if (normalisedPath.startsWith("classpath:features/")) {
@@ -456,7 +465,7 @@ public class Story {
         }
         // Remove trailing feature file name if present
         if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
-            normalisedPath = relativeFeaturePath(normalisedPath);
+            normalisedPath = normalisedPath.substring(0, normalisedPath.lastIndexOf("."));// relativeFeaturePath(normalisedPath);
         }
         return normalisedPath;
     }

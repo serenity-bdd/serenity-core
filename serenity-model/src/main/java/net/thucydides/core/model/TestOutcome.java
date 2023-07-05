@@ -131,7 +131,7 @@ public class TestOutcome {
     private List<String> additionalVersions;
 
     private Set<TestTag> tags;
-    private Set<TestTag> allTags;
+    private transient Set<TestTag> allTags;
 
     /**
      * When did this test start.
@@ -393,7 +393,7 @@ public class TestOutcome {
         this.issues = getIssues();
         this.versions = getVersions();
         this.tags = getTags();
-        this.allTags = addFeatureTagTo(this.tags);
+//        this.allTags = addFeatureTagTo(this.tags);
     }
 
     private String nameOf(Class<?> testCase) {
@@ -519,6 +519,7 @@ public class TestOutcome {
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -553,6 +554,7 @@ public class TestOutcome {
                           final List<String> additionalIssues,
                           final List<CastMember> actors,
                           final Set<TestTag> tags,
+                          final TestTag featureTag,
                           final Story userStory,
                           final FailureCause testFailureCause,
                           final String testFailureClassname,
@@ -588,6 +590,7 @@ public class TestOutcome {
         this.additionalIssues = additionalIssues;
         this.actors = actors;
         this.tags = tags;
+        this.featureTag = Optional.ofNullable(featureTag);
         this.allTags = addFeatureTagTo(this.tags);
         setUserStory(userStory);
         this.testFailureCause = testFailureCause;
@@ -663,6 +666,7 @@ public class TestOutcome {
                     this.additionalIssues,
                     this.actors,
                     this.tags,
+                    this.featureTag.orElse(null),
                     this.userStory,
                     this.testFailureCause,
                     this.testFailureClassname,
@@ -701,6 +705,7 @@ public class TestOutcome {
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -736,6 +741,7 @@ public class TestOutcome {
                 this.additionalIssues,
                 this.actors,
                 tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -771,6 +777,7 @@ public class TestOutcome {
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -1641,7 +1648,7 @@ public class TestOutcome {
 
     public void setUserStory(Story story) {
         this.userStory = story;
-        this.featureTag = FeatureTagAsDefined.in(story, getPath());
+//        this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }
 
     public void determineTestFailureCause(Throwable cause) {
@@ -1991,17 +1998,16 @@ public class TestOutcome {
     }
 
     public Set<TestTag> getAllTags() {
-        if (allTags == null) {
-            allTags = addFeatureTagTo(getTags());
-        }
-        return allTags;
+        return getTags();
+//        if (allTags == null) {
+//            allTags = addFeatureTagTo(getTags());
+//        }
+//        return allTags;
     }
 
     private Set<TestTag> addFeatureTagTo(Set<TestTag> tags) {
         Set<TestTag> allTags = (tags == null) ? new HashSet<>() : new HashSet<>(tags);
-        getFeatureTag().ifPresent(
-                featureTag -> allTags.add(featureTag)
-        );
+        getFeatureTag().ifPresent(allTags::add);
         return allTags;
     }
 
@@ -2048,14 +2054,14 @@ public class TestOutcome {
         Set<TestTag> updatedTags = new HashSet<>(getTags());
         updatedTags.addAll(tags);
         this.tags = updatedTags;
-        this.allTags = addFeatureTagTo(this.tags);
+        //this.allTags = addFeatureTagTo(this.tags);
     }
 
     public void addTag(TestTag tag) {
-        Set<TestTag> updatedTags = new HashSet<>(getTags());
+        Set<TestTag> updatedTags = (tags == null) ? new HashSet<>() : new HashSet<>(tags);
         updatedTags.add(tag);
         this.tags = updatedTags;
-        this.allTags = addFeatureTagTo(this.tags);
+        //this.allTags = addFeatureTagTo(this.tags);
     }
 
     public List<String> getIssueKeys() {
@@ -2869,6 +2875,7 @@ public class TestOutcome {
                 additionalIssues,
                 actors,
                 outcomeTagsWithoutRedundentTags,
+                featureTag.orElse(null),
                 userStory,
                 testFailureCause,
                 testFailureClassname,

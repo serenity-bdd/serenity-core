@@ -32,7 +32,8 @@ public class PackageBasedLeafRequirements {
         if (Story.testedInTestCase(testCase) != null) {
             story = Story.from(Story.testedInTestCase(testCase)).withType(typeFrom(testCase.getName()));
         } else if (containsJUnitTestCases(testCase)) {
-            story = Story.from(testCase).withType(FeatureType.STORY.toString())
+//            story = Story.from(testCase).withType(FeatureType.STORY.toString())
+            story = Story.from(testCase).withType(FeatureType.FEATURE.toString())
                     .withStoryName(storyName)
                     .withDisplayName(storyName);
         } else {
@@ -60,7 +61,7 @@ public class PackageBasedLeafRequirements {
     private String typeFrom(String path) {
         path = path.replaceAll("\\$", ".");
         if ((rootPackage == null) || requirementTypesProvider.getActiveRequirementTypes().isEmpty()) {
-            return FeatureType.STORY.toString();
+            return FeatureType.FEATURE.toString();
         }
         int requirementsLevel = PathElements.elementsOf(path, rootPackage).size() - 1;
 

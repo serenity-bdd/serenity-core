@@ -21,8 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+
+import static net.thucydides.core.util.NameConverter.humanize;
 
 public class JSONRequirementsTree {
 
@@ -78,13 +81,21 @@ public class JSONRequirementsTree {
 
         String label = new ResultIconFormatter().forResult(result, "#");
 
-        String childCount = (children.isEmpty()) ? countScenariosIn(requirement, requirementsOutcomes) : countChildRequirementsIn(requirement);
+        String childCount = (children.isEmpty()) ?
+                countScenariosIn(requirement, requirementsOutcomes)
+                : countChildRequirementsIn(requirement) + " " + countScenariosIn(requirement, requirementsOutcomes);
 
         String report = new ReportNameProvider().forRequirement(requirement);
 
-        String requirementName = getRequirementNameFrom(requirement);
+        String requirementName = humanize(getRequirementNameFrom(requirement));
 
         return new Node(requirementName, requirement.getType(), report, label, childCount, children);
+    }
+
+    private String requirementsAndScenariosFor(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        String requirementChildren = countChildRequirementsIn(requirement);
+        String scenarioCount = countScenariosIn(requirement, requirementsOutcomes);
+        return (scenarioCount.isEmpty()) ? requirementChildren : requirementChildren + ", " + scenarioCount;
     }
 
     @NotNull
@@ -109,14 +120,28 @@ public class JSONRequirementsTree {
 
         if (scenarioCount == 0) return "";
 
-        return "<span class='feature-count'>"
+
+        String scenarioCountText = "<span class='feature-count'>"
                 + scenarioCount + " "
                 + inflection.of(scenarioCount).times("scenario").inPluralForm().toString()
                 + "</span>";
+
+        long testCaseCount = testCasesUnder(requirement, requirementsOutcomes);
+
+        String testCaseCountText = "<span class='feature-count'>"
+                + testCaseCount + " "
+                + inflection.of(testCaseCount).times("test case").inPluralForm().toString()
+                + "</span>";
+
+        return scenarioCountText + ", " + testCaseCountText;
     }
 
     private long scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
-        return requirementsOutcomes.getTestOutcomes().forRequirement(requirement).getTestCount();
+        return requirementsOutcomes.getTestOutcomes().directlyUnder(requirement).getScenarioCount();
+    }
+
+    private long testCasesUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        return requirementsOutcomes.getTestOutcomes().directlyUnder(requirement).getTestCaseCount();
     }
 
     private Optional<TestResult> matchingOutcome(Requirement requirement,

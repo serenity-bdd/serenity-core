@@ -2500,7 +2500,8 @@ div.scenario-text:empty {
 }
 
 .treeview .badge {
-    background-color: white;
+    background-color: aliceblue;
+    border: lightblue 1px solid;
 }
 
 .toc-title {

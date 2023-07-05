@@ -72,7 +72,7 @@ public class WhenCountingRequirementsInOutcomes {
     }
 
     @Test
-    public void should_find_correct_requirement_outcome_count_for_requirements_without_tests_in_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
+    public void should_find_correct_requirement_outcome_count_for_requirements_without_tests_in_cucumber_jvm_outcomes() throws IOException {
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 

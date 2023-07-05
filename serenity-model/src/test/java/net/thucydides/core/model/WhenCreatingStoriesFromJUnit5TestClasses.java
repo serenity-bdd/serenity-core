@@ -10,14 +10,14 @@ public class WhenCreatingStoriesFromJUnit5TestClasses {
     void aUserStoryPathIsThePathAboveTheStoryClass() {
         Story story = Story.from(Purchases.class);
 
-        assertThat(story.asTag()).isEqualTo(TestTag.withValue("story:Model/Purchases"));
+        assertThat(story.asTag()).isEqualTo(TestTag.withValue("feature:net/thucydides/core/model/Purchases"));
     }
 
     @Test
     void nestedClassesIncludeTheParentClassInThePath() {
         Story story = Story.from(Purchases.FoodPurchases.class);
 
-        assertThat(story.asTag()).isEqualTo(TestTag.withValue("story:Purchases/Food purchases"));
+        assertThat(story.asTag()).isEqualTo(TestTag.withValue("feature:net/thucydides/core/model/Purchases/FoodPurchases"));
     }
 
 }

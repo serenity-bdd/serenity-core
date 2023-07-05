@@ -252,6 +252,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                 }
                 FeatureTracker.startNewFeature(event);
             }
+            ConfigureDriverFromTags.forTags(event.getTestCase().getTags());
 
             String scenarioName = event.getTestCase().getName();
             TestSourcesModel.AstNode astNode = featureLoader.getAstNode(featurePath, event.getTestCase().getLocation().getLine());

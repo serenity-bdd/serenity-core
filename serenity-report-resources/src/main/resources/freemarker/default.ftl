@@ -40,7 +40,9 @@
             <#assign breadcrumbTitle = breadcrumb.displayName > <!-- inflection.of(breadcrumb.displayName).asATitle()-->
             > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
-        > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}
+<#--        > ${formatter.htmlCompatibleTestTitle(formatter.renderTitle(testOutcome.title))}-->
+<#--        > ${formatter.htmlCompatibleTestTitle(testOutcome.title)}-->
+        > ${formatter.htmlCompatibleTestTitle(formatter.humanReadableFormOf(testOutcome.title))}
         </span>
         </div>
         <div class="rightbg"></div>

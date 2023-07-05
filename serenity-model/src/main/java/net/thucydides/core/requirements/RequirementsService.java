@@ -36,4 +36,8 @@ public interface RequirementsService extends ParentRequirementProvider {
     boolean containsEmptyRequirementWithTag(TestTag tag);
 
     void resetRequirements();
+
+    void addRequirementTagsTo(TestOutcome outcome);
+
+    List<Requirement> getParentRequirementsOf(Requirement requirement);
 }

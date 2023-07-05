@@ -159,7 +159,7 @@
 
 <#if (requirements.parentRequirement.isPresent())>
     <#assign parentRequirement = requirements.parentRequirement.get() >
-    <#assign parentTitle = inflection.of(parentRequirement.displayName).asATitle() >
+    <#assign parentTitle = formatter.humanReadableFormOf(parentRequirement.displayName) >
     <#assign parentType = inflection.of(parentRequirement.type).asATitle() >
     <#if (parentRequirement.cardNumber?has_content) >
         <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.cardNumber) + "]" >
@@ -177,12 +177,12 @@
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
                 <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
-                > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
+                > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(formatter.humanReadableFormOf(breadcrumbTitle))}</a>
             </#list>
 
                 <#if requirements.parentRequirement.isPresent()>
                     <#assign parent = requirements.parentRequirement.get()>
-                    <#assign parentTitle = inflection.of(parent.displayName).asATitle() >
+                    <#assign parentTitle = formatter.humanReadableFormOf(parent.displayName) >
 
                     > <span class="truncate-40">${formatter.htmlCompatibleStoryTitle(parentTitle)}</span>
                 </#if>
@@ -220,7 +220,7 @@
                                     <div class="col-sm-12">
                                         </#if>
                                         <span>
-                                            <h2><i class="bi bi-book"></i> ${parentType}: ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
+                                            <h2><i class="bi bi-book"></i> ${parentType}: ${formatter.htmlCompatibleStoryTitle(formatter.humanReadableTitle(parentTitle))}</h2>
                                         </span>
                                     </div>
                                     <#if isLeafRequirement && requirementTags?has_content >
@@ -317,7 +317,8 @@
                                                 <!-- STATS -->
                                                 <@key_statistics testOutcomes=testOutcomes />
                                                 <!-- END STATS -->
-
+<#--                                                </#if>-->
+<#--                                                <#if scenarioGroups?has_content>-->
                                                 <#else>
                                                 <!--- TOC --->
                                                 <div id="toc">
@@ -588,7 +589,9 @@
                                                                                     <br/>${exampleOutcome.subtitle}
                                                                                 </#if>
                                                                         </td>
-                                                                        <td>${context_icon}<span style="display:none">${context_label}</span> </td>
+                                                                        <td>${context_icon}<span
+                                                                                    style="display:none">${context_label}</span>
+                                                                        </td>
                                                                         <td>${exampleOutcome.stepCount}</td>
                                                                         <td>${exampleOutcome.formattedStartTime}</td>
                                                                         <td>${exampleOutcome.formattedDuration}</td>
@@ -615,7 +618,9 @@
                                                                     <td>
                                                                         <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                     </td>
-                                                                    <td>${context_icon}<span style="display:none">${context_label}</span> </td>
+                                                                    <td>${context_icon}<span
+                                                                                style="display:none">${context_label}</span>
+                                                                    </td>
                                                                     <td>${scenario.stepCount}</td>
                                                                     <td>${scenario.formattedStartTime}</td>
                                                                     <td>${scenario.formattedDuration}</td>
@@ -647,7 +652,8 @@
                                                 <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                 <#if (manualTestCases?has_content)>
-                                                    <table class="scenario-result-table table" id="manual-scenario-results">
+                                                    <table class="scenario-result-table table"
+                                                           id="manual-scenario-results">
                                                         <thead>
                                                         <tr>
                                                             <th>${leafRequirementType}</th>

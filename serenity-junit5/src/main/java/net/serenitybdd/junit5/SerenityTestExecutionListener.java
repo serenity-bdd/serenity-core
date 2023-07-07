@@ -63,10 +63,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private boolean isSerenityTest = false;
 
-    public SerenityTestExecutionListener() {
-        //BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(getOutputDirectory());
-        //StepEventBus.eventBusFor(TEST_SOURCE_JUNIT5).registerListener(baseStepListener);
-    }
+    public SerenityTestExecutionListener() {}
 
     private static File getOutputDirectory() {
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
@@ -93,13 +90,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             dataTables.putAll(parameterTablesForClass);
         }
     }
-//
-//    private void configureParameterizedTestDataFor(Class<?> javaClass) {
-//        Map<String, DataTable> parameterTablesForClass = JUnit5DataDrivenAnnotations.forClass(javaClass).getParameterTables();
-//        if (!parameterTablesForClass.isEmpty()) {
-//            dataTables.putAll(parameterTablesForClass);
-//        }
-//    }
 
     @Override
     public synchronized void testPlanExecutionFinished(TestPlan testPlan) {
@@ -339,7 +329,6 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
                     }
                     testExecutionResult.getThrowable().ifPresent(throwable -> this.summary.addFailure(testIdentifier, throwable));
                     eventBusFor(testIdentifier).testFailed(testExecutionResult.getThrowable().get());
-//                    StepEventBus.getParallelEventBus().testFailed(testExecutionResult.getThrowable().get());
                     break;
                 }
                 default:
@@ -450,6 +439,9 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             currentEventBus.registerListener(baseStepListener);
             currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
             logger.trace("  -> ADDED BASE LISTENER " + baseStepListener);
+            StepListener loggingListener = Listeners.getLoggingListener();
+            currentEventBus.registerListener(loggingListener);
+            logger.trace("  -> ADDED LOGGING LISTENER " + loggingListener);
         }
         logger.trace("SETTING EVENT BUS FOR THREAD " + Thread.currentThread() + " TO " + currentEventBus);
         StepEventBus.setCurrentBusToEventBusFor(uniqueTestId);

@@ -52,7 +52,7 @@ public class FeatureFileScenarioOutcomes {
     }
 
     public List<ScenarioOutcome> forOutcomesIn(RequirementsOutcomes requirementsOutcomes) {
-        Optional<AnnotatedFeature> feature = FeatureCache.getCache().loadFeature(pathFromResourceOnClasspath(normalizedFormOf(requirement.getPath())));
+        Optional<AnnotatedFeature> feature = FeatureCache.getCache().loadFeature(pathFromResourceOnClasspath(requirement.getPath()));
 
         if (!feature.isPresent()) {
             return Collections.emptyList();
@@ -287,14 +287,15 @@ public class FeatureFileScenarioOutcomes {
     }
 
     private File pathFromResourceOnClasspath(String path) {
-        String pathWithFeaturesDirectory = (path.startsWith(featuresDirectory())) ? path : featuresDirectory() + "/" + path;
-        URL featureFileURL = getClass().getClassLoader().getResource(pathWithFeaturesDirectory);
+
+        String featureFile = path + ".feature";
+        URL featureFileURL = getClass().getClassLoader().getResource(featuresDirectory() + "/" + featureFile);
         String featureFilePath;
 
         if (featureFileURL != null) {
             featureFilePath = featureFileURL.getFile();
         } else {
-            featureFilePath = new File("src/test/resources/" + featuresDirectory() + "/" + path).getAbsolutePath();
+            featureFilePath = new File("src/test/resources/" + featuresDirectory() + "/" + featureFile).getAbsolutePath();
         }
         return (featureFilePath == null) ? null : new File(featureFilePath);
     }

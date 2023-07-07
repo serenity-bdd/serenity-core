@@ -415,26 +415,14 @@ public class Story {
 
     //    private TestTag qualifiedTag;
     public TestTag asQualifiedTag() {
+        if (getPathElements() == null) {
+            return TestTag.withName(storyName).andType(type);
+        }
         String qualifiedName = getPathElements().stream()
                 .map(PathElement::getName)
                 .collect(Collectors.joining("/"));
 
         return TestTag.withName(qualifiedName).andType(type).withDisplayName(getDisplayName());
-//        if (qualifiedTag == null) {
-//            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-//            String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
-////            String lastElementOfPath = LastElement.of(getPath());
-//            String lastElementOfPath = (getParentPathElements() == null || getParentPathElements().isEmpty())
-//                    ? LastElement.of(getPath()) : getParentPathElements().get(getParentPathElements().size() - 1).getName();
-//            String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
-//            if (featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
-//                parentName = null;
-//            }
-//            qualifiedTag = (isNotEmpty(parentName)) ?
-//                    TestTag.withName(parentName + "/" + storyName).andType(type) :
-//                    TestTag.withName(storyName).andType(type);
-//        }
-//        return qualifiedTag;
     }
 
 
@@ -466,24 +454,6 @@ public class Story {
         // Remove trailing feature file name if present
         if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
             normalisedPath = normalisedPath.substring(0, normalisedPath.lastIndexOf("."));// relativeFeaturePath(normalisedPath);
-        }
-        return normalisedPath;
-    }
-
-    private static String FEATURE_FILES_DIRECTORY = "src/test/resources/.*/";
-    private final static Pattern FEATURE_FILES_DIRECTORY_PATTERN = Pattern.compile(FEATURE_FILES_DIRECTORY);
-
-    private String relativeFeaturePath(String path) {
-        String normalisedPath = path;
-        Matcher matcher = FEATURE_FILES_DIRECTORY_PATTERN.matcher(path);
-        if (matcher.find()) {
-            normalisedPath = path.substring(matcher.end());
-        }
-
-        if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
-            Path featureFilePath = Paths.get(normalisedPath);
-            Path parentPath = featureFilePath.getParent();
-            normalisedPath = (parentPath != null) ? parentPath.toString() : "";
         }
         return normalisedPath;
     }

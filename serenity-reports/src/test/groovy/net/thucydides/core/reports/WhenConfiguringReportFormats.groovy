@@ -10,25 +10,14 @@ class WhenConfiguringReportFormats extends Specification {
 
     def environmentVars = new MockEnvironmentVariables()
 
-    def "should produce JSON and HTML by default"() {
+    def "should produce JSON by default"() {
         given:
             FormatConfiguration formatConfiguration = new FormatConfiguration(environmentVars)
         when:
             List<String> formats = formatConfiguration.getFormats()
         then:
-            formats == [OutcomeFormat.JSON, OutcomeFormat.HTML]
+            formats == [OutcomeFormat.JSON]
     }
-
-    def "should be able to make XML the preference"() {
-        given:
-            environmentVars.setProperty("output.formats","xml, json")
-            FormatConfiguration formatConfiguration = new FormatConfiguration(environmentVars)
-        when:
-            List<String> formats = formatConfiguration.getFormats()
-        then:
-            formats == [OutcomeFormat.XML,OutcomeFormat.JSON]
-    }
-
 
     def "should be able to define a unique format"() {
         given:
@@ -69,7 +58,7 @@ class WhenConfiguringReportFormats extends Specification {
         when:
         List<String> formats = formatConfiguration.getFormats()
         then:
-        formats == [OutcomeFormat.JSON, OutcomeFormat.HTML]
+        formats == [OutcomeFormat.JSON]
     }
 
     def "should use first in list as the preferred format for imports"() {

@@ -1,68 +1,38 @@
 {
   "name": "aTopLevelTest",
   "id": "smoketests.sample.ATopLevelStoryTest:aTopLevelTest",
+  "scenarioId": "smoketests.sample.ATopLevelStoryTest:aTopLevelTest",
   "testCaseName": "smoketests.sample.ATopLevelStoryTest",
+  "methodName": "aTopLevelTest",
   "userStory": {
     "id": "smoketests.sample.ATopLevelStoryTest",
-    "storyName": "A top level story test",
-    "displayName": "A top level story test",
+    "storyName": "ATopLevelStoryTest",
+    "displayName": "ATopLevelStoryTest",
     "storyClassName": "smoketests.sample.ATopLevelStoryTest",
-    "path": "smoketests.sample",
+    "path": "sample.ATopLevelStoryTest",
     "pathElements": [
       {
         "name": "sample",
-        "description": ""
+        "description": "sample"
+      },
+      {
+        "name": "ATopLevelStoryTest",
+        "description": "ATopLevelStoryTest"
       }
     ],
-    "type": "story",
-    "qualifiedTag": {
-      "name": "Sample/A top level story test",
-      "type": "story",
-      "displayName": "Sample/A top level story test"
-    }
-  },
-  "featureTag": {
-    "name": "Sample/A top level story test",
-    "type": "story",
-    "displayName": "Sample/A top level story test"
+    "narrative": "",
+    "type": "feature"
   },
   "title": "A top level test",
   "tags": [
     {
-      "name": "Mac OS X",
-      "type": "context",
-      "displayName": "Mac OS X"
-    },
-    {
-      "name": "Sample/A top level story test",
-      "type": "story",
-      "displayName": "Sample/A top level story test"
-    },
-    {
       "name": "Mac",
       "type": "context",
       "displayName": "Mac"
     }
   ],
-  "allTags": [
-    {
-      "name": "Mac OS X",
-      "type": "context",
-      "displayName": "Mac OS X"
-    },
-    {
-      "name": "Sample/A top level story test",
-      "type": "story",
-      "displayName": "Sample/A top level story test"
-    },
-    {
-      "name": "Mac",
-      "type": "context",
-      "displayName": "Mac"
-    }
-  ],
-  "startTime": "2023-05-09T15:55:03.033849+01:00[Europe/London]",
-  "duration": 2,
+  "startTime": "2023-07-06T10:36:22.068910+01:00[Europe/London]",
+  "duration": 46,
   "projectKey": "",
   "isManualTestingUpToDate": false,
   "context": "mac",

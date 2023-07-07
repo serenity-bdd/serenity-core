@@ -1,76 +1,46 @@
 {
   "name": "anotherNestedTest",
   "id": "smoketests.sample.nested.deep.ADeepNestedStoryTest:anotherNestedTest",
+  "scenarioId": "smoketests.sample.nested.deep.ADeepNestedStoryTest:anotherNestedTest",
   "testCaseName": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
+  "methodName": "anotherNestedTest",
   "userStory": {
     "id": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
-    "storyName": "A deep nested story test",
-    "displayName": "A deep nested story test",
+    "storyName": "ADeepNestedStoryTest",
+    "displayName": "ADeepNestedStoryTest",
     "storyClassName": "smoketests.sample.nested.deep.ADeepNestedStoryTest",
-    "path": "smoketests.sample.nested.deep",
+    "path": "sample.nested.deep.ADeepNestedStoryTest",
     "pathElements": [
       {
         "name": "sample",
-        "description": ""
+        "description": "sample"
       },
       {
         "name": "nested",
-        "description": ""
+        "description": "nested"
       },
       {
         "name": "deep",
-        "description": ""
+        "description": "deep"
+      },
+      {
+        "name": "ADeepNestedStoryTest",
+        "description": "ADeepNestedStoryTest"
       }
     ],
-    "type": "story",
-    "qualifiedTag": {
-      "name": "Deep/A deep nested story test",
-      "type": "story",
-      "displayName": "Deep/A deep nested story test"
-    }
-  },
-  "featureTag": {
-    "name": "Deep/A deep nested story test",
-    "type": "story",
-    "displayName": "Deep/A deep nested story test"
+    "narrative": "",
+    "type": "feature"
   },
   "title": "Another nested test",
   "tags": [
     {
-      "name": "Mac OS X",
-      "type": "context",
-      "displayName": "Mac OS X"
-    },
-    {
       "name": "Mac",
       "type": "context",
       "displayName": "Mac"
-    },
-    {
-      "name": "Deep/A deep nested story test",
-      "type": "story",
-      "displayName": "Deep/A deep nested story test"
     }
   ],
-  "allTags": [
-    {
-      "name": "Mac OS X",
-      "type": "context",
-      "displayName": "Mac OS X"
-    },
-    {
-      "name": "Mac",
-      "type": "context",
-      "displayName": "Mac"
-    },
-    {
-      "name": "Deep/A deep nested story test",
-      "type": "story",
-      "displayName": "Deep/A deep nested story test"
-    }
-  ],
-  "startTime": "2023-05-09T15:55:03.071204+01:00[Europe/London]",
-  "duration": 1,
+  "startTime": "2023-07-06T10:34:53.728432+01:00[Europe/London]",
+  "duration": 0,
   "projectKey": "",
   "isManualTestingUpToDate": false,
   "context": "mac",

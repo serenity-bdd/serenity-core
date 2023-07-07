@@ -411,34 +411,84 @@ public class RequirementsOutcomes {
 
     public List<RequirementOutcome> getLeafRequirementOutcomes() {
         if (leafRequirementOutcomes == null) {
-            leafRequirementOutcomes = geLeafRequirementOutcomes(getFlattenedRequirementOutcomes(requirementOutcomes));
+            leafRequirementOutcomes = getLeafRequirementOutcomes(getFlattenedRequirementOutcomes(requirementOutcomes));
         }
         return leafRequirementOutcomes;
     }
 
-    public List<RequirementOutcome> geLeafRequirementOutcomes(List<RequirementOutcome> outcomes) {
+    public List<RequirementOutcome> getLeafRequirementOutcomes(List<RequirementOutcome> outcomes) {
         return outcomes.stream().filter(outcome -> !outcome.getRequirement().hasChildren()).collect(Collectors.toList());
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {
+
+        // Find the list of all the nested requirements in this requirement outcome list.
+        List<Requirement> allRequirements = new ArrayList<>();
+        for (RequirementOutcome outcome : outcomes) {
+            addFlattenedRequirements(outcome.getRequirement(), allRequirements);
+        }
+
+        // Now find the RequirementOutcome for each requirement in the list.
+        List<RequirementOutcome> flattenedOutcomes = new ArrayList<>();
+        for (Requirement requirement : allRequirements) {
+            RequirementOutcome requirementOutcome = getRequirementOutcomes(requirement);
+            flattenedOutcomes.add(requirementOutcome);
+        }
+
+        return flattenedOutcomes;
+    }
+
+    public List<RequirementOutcome> getFlattenedRequirementOutcomesOld(List<RequirementOutcome> outcomes) {
         List<RequirementOutcome> flattenedOutcomes = new ArrayList<>();
 
-        for (RequirementOutcome requirementOutcome : outcomes) {
-            flattenedOutcomes.add(requirementOutcome);
-            for (Requirement requirement : requirementOutcome.getRequirement().getChildren()) {
+        // For each requirement outcome, we add the outcome for the requirement itself, and then add requirement outcomes for each of the child requirements.
+        for (RequirementOutcome outcome : outcomes) {
+            flattenedOutcomes.add(outcome);
+            flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(outcome.getRequirement().getChildren(), outcome));
+        }
+//        for (RequirementOutcome requirementOutcome : outcomes) {
+//            flattenedOutcomes.add(requirementOutcome);
+//
+//            if (requirementOutcome.getRequirement().hasChildren()) {
+//                flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(requirementOutcome.getRequirement().getChildren(), requirementOutcome));
+//            }
+//            for (Requirement requirement : requirementOutcome.getRequirement().getChildren()) {
+//
+//                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().forRequirement(requirement);
+//
+//                flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
+//
+//                for (Requirement childRequirement : requirement.getChildren()) {
+//                    TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
+//                    RequirementsOutcomes childOutcomes
+//                            = new RequirementsOutcomes(singletonList(childRequirement), testOutcomesForChildRequirement, issueTracking,
+//                            environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+//                    flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
+//                }
+//            }
+//        }
+        return flattenedOutcomes;
+    }
 
-                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().forRequirement(requirement);
+    RequirementOutcome getRequirementOutcomes(Requirement requirement) {
+        TestOutcomes testOutcomesForRequirement = testOutcomes.forRequirement(requirement);
+        return new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking);
+    }
 
-                flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
+    private RequirementOutcome getRequirementOutcomes(Requirement requirement, RequirementOutcome requirementOutcome) {
+        TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(requirement);
+        RequirementsOutcomes childOutcomes = new RequirementsOutcomes(singletonList(requirement), testOutcomesForChildRequirement, issueTracking,
+                environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+        return childOutcomes.getRequirementOutcomes().get(0);
+    }
 
-                for (Requirement childRequirement : requirement.getChildren()) {
-                    TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
-                    RequirementsOutcomes childOutcomes
-                            = new RequirementsOutcomes(singletonList(childRequirement), testOutcomesForChildRequirement, issueTracking,
-                            environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
-                    flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
-                }
-            }
+    private List<RequirementOutcome> getFlattenedRequirementOutcomes(List<Requirement> requirements, RequirementOutcome requirementOutcome) {
+        List<RequirementOutcome> flattenedOutcomes = new ArrayList<>();
+        for (Requirement childRequirement : requirements) {
+            TestOutcomes testOutcomesForChildRequirement = requirementOutcome.getTestOutcomes().forRequirement(childRequirement);
+            RequirementsOutcomes childOutcomes = new RequirementsOutcomes(singletonList(childRequirement), testOutcomesForChildRequirement, issueTracking,
+                    environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
+            flattenedOutcomes.addAll(childOutcomes.getRequirementOutcomes());
         }
         return flattenedOutcomes;
     }

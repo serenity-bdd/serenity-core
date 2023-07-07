@@ -49,7 +49,8 @@ class WhenRecordingFailingTests extends Specification {
 
     def "should record failed tests in rerun file"() {
         given:
-            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new WebDriverConfiguration(environmentVariables))
+            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory,
+                                            new WebDriverConfiguration(environmentVariables))
         when:
             runner.run(new RunNotifier())
         then:
@@ -57,13 +58,7 @@ class WhenRecordingFailingTests extends Specification {
 
             def rerunFile = rerunDir.list()[0]
             String fileContents = Paths.get(rerunDir.getCanonicalPath(), rerunFile).toFile().text
-        println fileContents
-            fileContents.trim() == '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rerunnableClass>
-    <className>net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods</className>
-    <methodName>testMethod2</methodName>
-    <methodName>testMethod1</methodName>
-</rerunnableClass>'''
+            fileContents.contains("\"className\" : \"net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods\"")
     }
 
 

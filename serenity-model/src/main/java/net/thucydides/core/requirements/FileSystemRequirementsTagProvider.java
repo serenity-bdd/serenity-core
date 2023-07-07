@@ -65,8 +65,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final int level;
 
     private final RequirementsConfiguration requirementsConfiguration;
-
-    //    @Transient
     private volatile List<Requirement> requirements;
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
@@ -174,18 +172,21 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      * at the working directory.
      */
     public List<Requirement> getRequirements() {
-
         if (requirements == null) {
-            List<Requirement> loadedRequirements = getRootDirectoryPaths()
-                    .stream()
-                    .flatMap(this::capabilitiesAndStoriesIn)
-                    .sorted()
-                    .collect(Collectors.toList());
-            if (addParents) {
-                RequirementAncestry.addParentsTo(loadedRequirements);
+            synchronized (this) {
+                if (requirements == null) { // double-checked locking
+                    List<Requirement> loadedRequirements = getRootDirectoryPaths()
+                            .stream()
+                            .flatMap(this::capabilitiesAndStoriesIn)
+                            .sorted()
+                            .collect(Collectors.toList());
+                    if (addParents) {
+                        RequirementAncestry.addParentsTo(loadedRequirements);
+                    }
+                    this.requirements = loadedRequirements;
+                    this.requirementsByPath = indexByPath(requirements);
+                }
             }
-            this.requirements = loadedRequirements;
-            this.requirementsByPath = indexByPath(requirements);
         }
         return requirements;
     }
@@ -687,12 +688,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String requirementType = getRequirementTypeOf(requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
-        String path = relativeDirectoryOf(requirementDirectory.getPath());
+//        String path = relativeDirectoryOf(requirementDirectory.getPath());
+        String path = new FeatureFilePath(environmentVariables).relativePathFor(requirementDirectory.getPath());
         return Requirement.named(shortName)
                 .withId(path)
                 .withType(requirementType)
                 .withNarrative("")
                 .withPath(path)
+                .withParent(parentFrom(path))
                 .withChildren(children);
     }
 
@@ -744,11 +747,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Requirement storyNamed(String storyName, String path) {
         String shortName = humanReadableVersionOf(storyName);
+        String relativePath = new FeatureFilePath(environmentVariables).relativePathFor(path);
         return Requirement.named(shortName)
-                .withId(path)
+                .withId(relativePath)
                 .withType(STORY_EXTENSION)
                 .withNarrative(shortName)
-                .withPath(relativeDirectoryOf(path));
+                .withParent(parentFrom(relativePath))
+                .withPath(relativePath);
     }
 
     private Requirement leafRequirementWithNarrative(String shortName, String path, RequirementDefinition requirementNarrative) {
@@ -756,14 +761,16 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
+        String relativePath = new FeatureFilePath(environmentVariables).relativePathFor(path);
         return Requirement.named(shortName)
-                .withId(path)
-                .withOptionalParent(parentFrom(path))
+                .withId(relativePath)
+                .withOptionalParent(parentFrom(relativePath))
                 .withOptionalDisplayName(displayName)
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
-                .withPath(relativeDirectoryOf(path))
+                .withPath(relativePath)
+                .withParent(parentFrom(relativePath))
                 .withReleaseVersions(releaseVersions)
                 .withTags(requirementNarrative.getTags())
                 .withScenarioTags(requirementNarrative.getScenarioTags());
@@ -776,7 +783,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
         List<Requirement> children = readChildrenFrom(requirementDirectory);
-        String path = relativeDirectoryOf(requirementDirectory.getPath());
+//        String path = relativeDirectoryOf(requirementDirectory.getPath());
+        String path = new FeatureFilePath(environmentVariables).relativePathFor(requirementDirectory.getPath());
         return Requirement.named(shortName)
                 .withId(path)
                 .withOptionalParent(parentFrom(path))
@@ -786,6 +794,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withNarrative(requirementNarrative.getText())
                 .withReleaseVersions(releaseVersions)
                 .withPath(path)
+                .withParent(parentFrom(path))
                 .withChildren(children);
     }
 

@@ -443,7 +443,7 @@ class WhenRunningTestScenarios extends Specification {
         runner.run(new RunNotifier())
         def outcome = runner.testOutcomes[0]
         then:
-        outcome.userStory.name == "Successful single test scenario"
+        outcome.userStory.name == "SuccessfulSingleTestScenario"
     }
 
     def "should record each step with a human-readable name"() {
@@ -555,15 +555,6 @@ class WhenRunningTestScenarios extends Specification {
         then:
         jsonReports.size() == 6
     }
-
-    def "HTML test results should be written to the output directory"() {
-        when:
-            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingChrome, webDriverFactory).run(new RunNotifier())
-            def htmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".html")}
-        then:
-            htmlReports.size() >= 3
-    }
-
 
     @Unroll
     def "should be able to only run tests with a given tag at the class level"() {

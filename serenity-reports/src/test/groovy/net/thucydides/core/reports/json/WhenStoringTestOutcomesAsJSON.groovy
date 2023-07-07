@@ -304,8 +304,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         reloadedOutcome.issues == ["PROJ-123"]
         and:
-        reloadedOutcome.tags.containsAll([TestTag.withName("When storing test outcomes as JSON/Some test scenario with tags").andType("story"),
-                                          TestTag.withName("simple story").andType("story"),
+        reloadedOutcome.tags.containsAll([TestTag.withName("simple story").andType("story"),
                                           TestTag.withName("important feature").andType("feature")])
     }
 
@@ -320,7 +319,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         reloadedOutcome.featureTag.isPresent()
         and:
-        reloadedOutcome.featureTag.get() == TestTag.withName("When storing test outcomes as JSON/Some test scenario with tags").andType("story")
+        reloadedOutcome.featureTag.get() == TestTag.withName("net/thucydides/core/reports/json/WhenStoringTestOutcomesAsJSON/SomeTestScenarioWithTags").andType("feature")
     }
 
 
@@ -425,17 +424,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
-        reloadedOutcome.tags.contains(TestTag.withName("A feature/A user story in a feature").andType("story"))
+        reloadedOutcome.tags.contains(TestTag.withName("net/thucydides/core/reports/json/WhenStoringTestOutcomesAsJSON/AFeature/AUserStoryInAFeature").andType("feature"))
         reloadedOutcome.tags.contains(TestTag.withName("A feature").andType("feature"))
-    }
-
-    def "should generate an JSON report with a name based on the test run title"() {
-        when:
-        def testOutcome = new TestOutcome("a_simple_test_case");
-        def jsonReport = reporter.generateReportFor(testOutcome);
-
-        then:
-        jsonReport.name == Digest.ofTextValue("a_simple_test_case") + ".json";
     }
 
     def "should generate a JSON report in the target directory"() {

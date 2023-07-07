@@ -1,11 +1,13 @@
 package net.thucydides.core.requirements;
 
 import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.core.model.RequirementCache;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomeLoader;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+    @BeforeEach
+    void clearCaches() {
+        RequirementCache.getInstance().clear();
+    }
 
     @Nested
     class WhenTheTestOutcomesAreFromJUnit4Tests {
@@ -59,9 +66,11 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
             assertThat(tagProvider.getRequirements()).hasSize(1);
-            assertThat(tagProvider.getRequirements().get(0).hasChildren()).isTrue();
-            assertThat(tagProvider.getRequirements().get(0).getChildren()).allMatch(
-                    child -> child.getParent().equals("api")
+
+            Requirement rootRequirement = tagProvider.getRequirements().get(0);
+            assertThat(rootRequirement.hasChildren()).isTrue();
+            assertThat(rootRequirement.getChildren()).allMatch(
+                    child -> child.getParent().equals(rootRequirement.getId())
             );
         }
 
@@ -71,8 +80,6 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             List<? extends TestOutcome> testOutcomes
                     = TestOutcomeLoader.testOutcomesIn(new File(localResource("sample-nested-junit-outcomes"))).getOutcomes();
 
-            TestOutcome someOutcome = testOutcomes.get(1);
-
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-nested-junit-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "com.serenitydojo.wordle.integrationtests");
 
@@ -80,8 +87,9 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
             Optional<Requirement> correspondingRequirement = tagProvider.getParentRequirementOf(testOutcomes.get(0));
 
-            assertThat(correspondingRequirement.isPresent());
-            assertThat(correspondingRequirement.get().getName()).isEqualTo("When displaying the game");
+            assertThat(correspondingRequirement.isPresent()).isTrue();
+            assertThat(correspondingRequirement.get().getName()).isEqualTo("CreatingANewGame");
+            assertThat(correspondingRequirement.get().getDisplayName()).isEqualTo("When creating a new game");
         }
 
         @Test
@@ -90,7 +98,10 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             environmentVariables.setProperty("serenity.test.root", "smoketests.sample");
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
-            Requirement parent = tagProvider.getRequirements().get(0);
+            Requirement parent = tagProvider.getRequirements()
+                                            .stream().filter(req -> req.getName().equals("nested"))
+                                            .findFirst().get();
+
             Requirement child = parent.getChildren().get(0);
             assertThat(tagProvider.getParentRequirementOf(child)).isPresent().get().isEqualTo(parent);
         }
@@ -116,7 +127,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
-            assertThat(tagProvider.getActiveRequirementTypes()).containsExactly("theme", "capability", "feature", "story");
+            assertThat(tagProvider.getActiveRequirementTypes()).containsExactly("theme", "capability", "feature");
         }
 
         @Test
@@ -131,7 +142,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcomes.get(0));
 
             assertThat(requirement).isPresent()
-                    .matches(req -> req.get().getName().equals("A top level story test"));
+                    .matches(req -> req.get().getName().equals("ATopLevelStoryTest"));
         }
 
         @Test
@@ -144,7 +155,6 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
                     = TestOutcomeLoader.testOutcomesIn(new File(localResource("sample-junit4-outcomes"))).getOutcomes();
 
             TestOutcome outcome = testOutcomes.get(1);
-
             Set<TestTag> matchingTags = tagProvider.getTagsFor(outcome);
 
             assertThat(matchingTags).isNotEmpty();

@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.model;
 
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.DefaultCapabilityTypes;
 import net.thucydides.core.requirements.RootDirectory;
@@ -16,11 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class RequirementsConfiguration {
-    public final static List<String> DEFAULT_CAPABILITY_TYPES = NewList.of("capability", "feature", "story");
-    private static final String DEFAULT_ROOT_DIRECTORY = "stories";
+    private static final String DEFAULT_ROOT_DIRECTORY = "/features";
 
     private final EnvironmentVariables environmentVariables;
-    private Optional<Path> root;
+    private final Optional<Path> root;
     private final String rootPackage;
 
     public RequirementsConfiguration(EnvironmentVariables environmentVariables) {

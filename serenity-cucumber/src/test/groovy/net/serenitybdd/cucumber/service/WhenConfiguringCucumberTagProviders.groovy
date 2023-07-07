@@ -72,7 +72,7 @@ class WhenConfiguringCucumberTagProviders extends Specification {
             def tags = tagProvider.getTagsFor(testOutcome)
         then:
             System.err.println tags
-            tags.contains(TestTag.withValue("feature:Calculator/More complex Arithmetic")) && tags.contains(TestTag.withValue("capability:Calculator"))
+            tags.contains(TestTag.withValue("feature:calculator/complex_arithmetic")) && tags.contains(TestTag.withValue("capability:Calculator"))
     }
 
 }

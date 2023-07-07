@@ -264,6 +264,9 @@ public class RootDirectory {
                 }
             }
         }
+        // Look in standard resource path locations, e.g. under src/test/resources/...
+
+
         return Optional.empty();
     }
 

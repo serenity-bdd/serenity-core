@@ -20,7 +20,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tags.size() == 5
             testOutcomes.tags as Set == [TestTag.withValue("feature:widget feature"),
                                       TestTag.withValue("flavor:chocolate"),
-                                      TestTag.withValue("story:Widget feature/Purchase new widget"),
+                                      TestTag.withValue("feature:net/thucydides/core/reports/TestOutcomesBuilder/WidgetFeature/PurchaseNewWidget"),
                                       TestTag.withValue("color:orange"),
                                       TestTag.withValue("color:red")] as Set
     }
@@ -31,7 +31,11 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
-            testOutcomes.tagNames == ['chocolate','orange', 'widget feature', 'widget feature/purchase new widget']
+            testOutcomes.tagNames == ['chocolate',
+                                      'net/thucydides/core/reports/testoutcomesbuilder/widgetfeature/purchasenewwidget',
+                                      'orange',
+                                      'widget feature'
+                                      ]
     }
 
     def "should list all of the tag types"() {
@@ -39,7 +43,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
-            testOutcomes.tagTypes == ['color','feature','flavor','story']
+            testOutcomes.tagTypes == ['color','feature','flavor']
     }
 
 

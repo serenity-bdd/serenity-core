@@ -253,7 +253,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         then:
             releasedOutcomes.requirementOutcomes.size() == 2
         and:
-            releasedOutcomes.flattenedRequirementOutcomes.size() == 5
+            releasedOutcomes.flattenedRequirementOutcomes.size() == 4
         and:
             releasedOutcomes.testOutcomes.outcomes.size() == 4
     }
@@ -271,7 +271,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         then:
             releasedOutcomes.requirementOutcomes.size() == 1
         and:
-            releasedOutcomes.flattenedRequirementOutcomes.size() == 3
+            releasedOutcomes.flattenedRequirementOutcomes.size() == 2
         and:
             releasedOutcomes.testOutcomes.outcomes.size() == 2
     }
@@ -288,7 +288,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         then:
             releasedOutcomes.requirementOutcomes.size() == 1
         and:
-            releasedOutcomes.testOutcomes.outcomes.size() == 3
+            releasedOutcomes.testOutcomes.outcomes.size() == 5
     }
 
     def someTestResults() {

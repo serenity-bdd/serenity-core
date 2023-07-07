@@ -144,7 +144,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
         StepEventBus.getParallelEventBus().testSuiteFinished();
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test

@@ -11,12 +11,12 @@ public interface FailureRerunner {
      *
      * @param failedTests map keys are class names, values lists with failed method names
      */
-    public void recordFailedTests(Map<String, List<String>> failedTests);
+    void recordFailedTests(Map<String, List<String>> failedTests);
 
     /**
      * Returns true if a test given by className and method name has to be run.
      * @param className
      * @param methodName
      */
-    public boolean hasToRunTest(String className, String methodName);
+    boolean hasToRunTest(String className, String methodName);
 }

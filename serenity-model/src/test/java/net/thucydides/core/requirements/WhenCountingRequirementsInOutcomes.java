@@ -45,7 +45,9 @@ public class WhenCountingRequirementsInOutcomes {
 
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
 
-        assertThat(outcomes.count(TestType.ANY).getTotal(), is(6));
+        assertThat(outcomes.count(TestType.ANY).getTotal(), is(17));
+        assertThat(outcomes.getScenarioCount(), is(11L));
+        assertThat(outcomes.getTestCaseCount(), is(17L));
     }
 
     @Test

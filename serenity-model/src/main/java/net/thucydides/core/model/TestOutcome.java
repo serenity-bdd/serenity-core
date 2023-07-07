@@ -265,7 +265,6 @@ public class TestOutcome {
     TestResult result;
     List<String> issues;
     List<String> versions;
-    List<String> nestedTestPath;
 
     private transient List<TestStep> flattenedSteps = null;
     private transient List<TestStep> leafSteps = null;
@@ -334,7 +333,6 @@ public class TestOutcome {
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.methodName = name;
-        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -357,7 +355,6 @@ public class TestOutcome {
         this.testCase = testCase;
         this.methodName = name;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -473,7 +470,6 @@ public class TestOutcome {
         this.testCase = testCase;
         this.methodName = name;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -583,7 +579,6 @@ public class TestOutcome {
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.methodName = methodName;
-        this.nestedTestPath = calculateNestPath(testCase);
         setTestSteps(testSteps);
         this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
@@ -2926,10 +2921,6 @@ public class TestOutcome {
             specifiedOutcome.noTestFailureIsDefined();
         }
         return specifiedOutcome;
-    }
-
-    public List<String> getNestedTestPath() {
-        return nestedTestPath;
     }
 
     public TestOutcome withExamplesMatching(Predicate<TestStep> condition) {

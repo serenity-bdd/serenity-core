@@ -182,7 +182,7 @@ public class WhenRecordingNewTestOutcomes {
     public void a_test_outcome_can_be_initialized_directly_from_a_story() {
         testOutcome = TestOutcome.forTest("should_do_this", AUserStory.class);
 
-        Assert.assertThat(testOutcome.getUserStory().getName(), is("A user story"));
+        Assert.assertThat(testOutcome.getUserStory().getName(), is("AUserStory"));
     }
 
     @Test
@@ -1077,7 +1077,7 @@ public class WhenRecordingNewTestOutcomes {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyApp.MyUserStory.class);
         TestOutcome testOutcome = TestOutcome.forTestInStory("some_test", story);
 
-        assertThat(testOutcome.getUserStory().getName(), is("My user story"));
+        assertThat(testOutcome.getUserStory().getName(), is("MyUserStory"));
     }
 
     @Test
@@ -1085,20 +1085,20 @@ public class WhenRecordingNewTestOutcomes {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyApp.MyUserStory.class);
         TestOutcome testOutcome = TestOutcome.forTestInStory("some_test", story);
 
-        assertThat(testOutcome.getStoryTitle(), is("My user story"));
+        assertThat(testOutcome.getStoryTitle(), is("MyUserStory"));
     }
 
     @Test
     public void the_complete_test_name_should_include_the_story_and_the_method_name() {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyApp.MyUserStory.class);
         TestOutcome testOutcome = TestOutcome.forTestInStory("some_test", story);
-        assertThat(testOutcome.getCompleteName(), is("My user story:some_test"));
+        assertThat(testOutcome.getCompleteName(), is("MyUserStory:some_test"));
     }
 
     @Test
     public void the_complete_test_name_should_include_the_test_case_if_defined_and_the_method_name() {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SimpleTestScenario.class);
-        assertThat(testOutcome.getCompleteName(), is("Simple test scenario:should_do_this"));
+        assertThat(testOutcome.getCompleteName(), is("SimpleTestScenario:should_do_this"));
     }
 
     @Test
@@ -1157,13 +1157,13 @@ public class WhenRecordingNewTestOutcomes {
     }
 
 
-    @Test
-    public void should_be_able_to_record_nested_test_information() {
-        TestOutcome outcome = TestOutcome.forTest("should_do_something_else", ATestScenarioWithNestedClass.NestedClass.class);
-
-        assertThat(outcome.getNestedTestPath().size(),is(3) );
-
-    }
+//    @Test
+//    public void should_be_able_to_record_nested_test_information() {
+//        TestOutcome outcome = TestOutcome.forTest("should_do_something_else", ATestScenarioWithNestedClass.NestedClass.class);
+//
+//        assertThat(outcome.getNestedTestPath().size(),is(3) );
+//
+//    }
 
 
 //    @Test

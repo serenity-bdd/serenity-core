@@ -109,7 +109,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.featureTag.get() == TestTag.withName("A simple feature showing how features can have long names").andType("feature")
+        testOutcome.featureTag.get() == TestTag.withName("simple_scenario_with_a_long_name").andType("feature")
     }
 
     def "should record the capability tag based on the directory of the feature if known"() {
@@ -122,7 +122,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.featureTag.get() == TestTag.withName("A simple feature showing how features can have long names").andType("feature")
+        testOutcome.featureTag.get() == TestTag.withName("simple_scenario_with_a_long_name").andType("feature")
     }
 
     def "should record background steps"() {

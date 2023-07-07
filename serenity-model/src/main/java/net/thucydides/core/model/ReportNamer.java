@@ -51,7 +51,16 @@ public class ReportNamer {
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
-        return NameConverter.withNoIssueNumbers(testOutcome.getQualifiedId());
+        if (isJUnit5(testOutcome.getQualifiedId())) {
+            return testOutcome.getUserStory().getId() + "." + testOutcome.getMethodName();
+        } else {
+            String pathWithoutSlashes = testOutcome.getPath() != null ? testOutcome.getPath().replace(".", "_").replace("/", "_SL_") : "";
+            return NameConverter.withNoIssueNumbers(pathWithoutSlashes + "." + testOutcome.getQualifiedId());
+        }
+    }
+
+    private boolean isJUnit5(String qualifiedId) {
+        return qualifiedId.startsWith("[engine:");
     }
 
 

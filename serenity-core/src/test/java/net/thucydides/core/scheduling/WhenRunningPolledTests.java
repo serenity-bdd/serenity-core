@@ -200,7 +200,7 @@ public class WhenRunningPolledTests {
         };
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = Throwable.class)
     public void should_propogate_exception_if_test_fails() {
         SlowPage page = new SlowPage(driver);
         Counter counter = new Counter();

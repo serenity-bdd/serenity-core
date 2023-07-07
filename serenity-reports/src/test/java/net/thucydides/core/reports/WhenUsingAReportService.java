@@ -94,12 +94,11 @@ public class WhenUsingAReportService {
     }
 
     @Test
-    public void default_reporters_should_include_xml_html_and_json() {
+    public void default_reporters_should_include_json() {
         List reporters = ReportService.getDefaultReporters();
-        assertThat(reporters.size(), is(2));
-        Matcher calledHtml = hasProperty("name", is("html"));
+        assertThat(reporters.size(), is(1));
         Matcher calledJSON = hasProperty("name", is("json"));
-        assertThat(reporters, allOf(hasItem(calledHtml), hasItem(calledJSON)));
+        assertThat(reporters, allOf(hasItem(calledJSON)));
     }
 
     @Test

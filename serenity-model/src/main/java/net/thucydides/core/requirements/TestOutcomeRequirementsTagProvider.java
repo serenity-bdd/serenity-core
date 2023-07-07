@@ -24,20 +24,39 @@ import static net.thucydides.core.guice.Injectors.getInjector;
  */
 public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider, RequirementTypesProvider {
 
+    public static final String JUNIT5_FORMAT = "JUnit5";
+    public static final String JUNIT4_FORMAT = "JUnit";
+    public static final String JAVASCRIPT_FORMAT = "JS";
+    public static final String DEFAULT_TARGET_DIR = "target/site/serenity";
+
     private final RequirementsConfiguration requirementsConfiguration;
     private final EnvironmentVariables environmentVariables;
 
-    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of("JUnit", "JUnit5");
+    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of(JUNIT5_FORMAT, JUNIT4_FORMAT,JAVASCRIPT_FORMAT);
 
+    /**
+     * Default constructor. Initializes an instance of the TestOutcomeRequirementsTagProvider class with default environment variables.
+     */
     public TestOutcomeRequirementsTagProvider() {
         this(getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
+    /**
+     * Constructor with EnvironmentVariables parameter. Initializes an instance of the TestOutcomeRequirementsTagProvider class with the provided environment variables.
+     *
+     * @param environmentVariables The EnvironmentVariables to be used for the TestOutcomeRequirementsTagProvider.
+     */
     public TestOutcomeRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
     }
 
+    /**
+     * Get active requirement types based on the depth of each requirement.
+     * The requirement types are listed in order of depth.
+     *
+     * @return List of active requirement types sorted by depth.
+     */
     @Override
     public List<String> getActiveRequirementTypes() {
 
@@ -57,6 +76,11 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Get the requirements from the RequirementCache or load them if not present in the cache.
+     *
+     * @return List of Requirement objects.
+     */
     @Override
     public List<Requirement> getRequirements() {
         return RequirementCache.getInstance().getRequirements(this::loadRequirements);
@@ -69,108 +93,27 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     private List<Requirement> loadRequirements() {
         TestOutcomeLoader loader = new TestOutcomeLoader();
-        File outputDirectory = new File(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables, "target/site/serenity"));
+        File outputDirectory = new File(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables, DEFAULT_TARGET_DIR));
         List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
-        Map<Requirement, Requirement> requirementAliases = new HashMap<>();
 
-        int maxRequirementsDepth = supportedOutcomesFrom(outcomes)
-                .filter(outcome -> !outcome.getUserStory().getParentPathElements().isEmpty())
-                .mapToInt(outcome -> outcome.getUserStory().getParentPathElements().size())// - 1)
-                .max()
-                .orElse(0);
+        int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
 
         // Bottom-level requirements
-        Map<PathElements, Requirement> leafLevelRequirements = supportedOutcomesFrom(outcomes)
-                .map(TestOutcome::getUserStory)
-                .map(this::requirementFrom)
-                .distinct()
-                .collect(Collectors.toMap(
-                        Requirement::getPathElements,
-                        requirement -> requirement
-                ));
-
-        // Record intermediate display names by path for later use
-        supportedOutcomesFrom(outcomes)
-                .map(outcome -> outcome.getUserStory().getPathElements())
-                .forEach(path -> recordDisplayNameFor(path));
-
-        List<PathElements> pathElementsInTestOutcomes = supportedOutcomesFrom(outcomes)
-                .map(outcome -> outcome.getUserStory().getPathElements())
-                .distinct()
-                .map(this::relativePathFrom)
-                .filter(pathElements -> !pathElements.isEmpty())
-                .collect(Collectors.toList());
+        Map<PathElements, Requirement> leafLevelRequirements = getLeafLevelRequirementsFrom(outcomes);
 
         Set<PathElements> leafPathElements = leafLevelRequirements.keySet();
 
         Map<PathElements, Requirement> requirementsByPath = new HashMap<>();
 
         // Non-leaf requirements indexed by path
-        pathElementsInTestOutcomes.forEach(pathElements -> {
-            Requirement requirement = nonLeafRequirementFrom(pathElements, maxRequirementsDepth);
-            // Immediate parent requirements
-            if (leafPathElements.contains(requirement.getPathElements())) {
-                requirementsByPath.put(pathElements, leafLevelRequirements.get(requirement.getPathElements()));
-            } else {
-                requirementsByPath.put(pathElements, requirement);
-            }
-            // Add any higher level requirements
-            PathElements parentPath = pathElements.getParent();
-            while (parentPath != null) {
-                if (!parentPath.isEmpty() && !requirementsByPath.containsKey(parentPath) && !leafPathElements.contains(parentPath)) {
-                    Requirement nonLeafRequirement = nonLeafRequirementFrom(parentPath, maxRequirementsDepth);
-                    // Non-leaf requirements might already have scenarios associated with them, in which case
-                    // we don't need to included them here
-                    if (leafPathElements.contains(nonLeafRequirement.getPathElements())) {
-                        requirementsByPath.put(pathElements, leafLevelRequirements.get(nonLeafRequirement.getPathElements()));
-                    } else {
-                        requirementsByPath.put(parentPath, nonLeafRequirement);
-                    }
-                }
-                parentPath = parentPath.getParent();
-            }
-        });
+        findPathElementsIn(outcomes).forEach(pathElements -> processPathElements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath));
 
         Collection<Requirement> allRequirements = requirementsByPath.values();
-//        new ArrayList<>(leafLevelRequirements.values());
-//        allRequirements.addAll(requiremntsByPath.values());
-
-        // Use the map to update the parent requirements
-//        nonLeafRequirements.forEach((path, requirement) -> {
-//            PathElements parentPath = path.getParent();
-//            if (parentPath != null) {
-//                Requirement parentRequirement = nonLeafRequirements.get(parentPath);
-//                if (parentRequirement != null) {
-//                    requirement.setParent(parentRequirement.getPath());
-//                }
-//            }
-//        });
 
         // Use the map to update the leaf requirements
-        allRequirements.forEach(
-                requirement -> {
-                    PathElements parentPath = requirement.getPathElements().getParent();
-                    if (parentPath != null && !parentPath.isEmpty()) {
-                        Requirement parentRequirement = requirementsByPath.get(parentPath);
-                        if (parentRequirement != null) {
-                            requirement.setParent(parentRequirement.getPath());
-                        }
-                    }
-                }
-        );
+        updateParentFieldsIn(requirementsByPath, allRequirements);
 
         // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
-//        leafLevelRequirements.stream()
-//                .filter(requirement -> nonLeafRequirements.containsKey(requirement.getPathElements()))
-//                .forEach(
-//                        requirement
-//                                -> requirementAliases.put(requirement, nonLeafRequirements.get(requirement.getPathElements())
-//                        ));
-//
-//        RequirementCache.getInstance().setRequirementAliases(requirementAliases);
-//        // Remove any aliased requirements from the leaf requirements list
-//        leafLevelRequirements.removeAll(RequirementCache.getInstance().getRequirementAliases().keySet());
-        // Associate child requirements with each non-leaf requirement, including both non-leaf and leaf requirements
 
         populateChildren(requirementsByPath, allRequirements);
 
@@ -182,12 +125,101 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
                 .collect(Collectors.toList());
     }
 
+    private void processPathElements(PathElements pathElements, int maxRequirementsDepth, Set<PathElements> leafPathElements,
+                                     Map<PathElements, Requirement> leafLevelRequirements, Map<PathElements, Requirement> requirementsByPath) {
+
+        Requirement requirement = nonLeafRequirementFrom(pathElements, maxRequirementsDepth);
+
+        addImmediateParentRequirement(pathElements, requirement, leafPathElements, leafLevelRequirements, requirementsByPath);
+        addHigherLevelRequirements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath);
+    }
+
+    private void addImmediateParentRequirement(PathElements pathElements, Requirement requirement, Set<PathElements> leafPathElements,
+                                               Map<PathElements, Requirement> leafLevelRequirements, Map<PathElements, Requirement> requirementsByPath) {
+
+        if (leafPathElements.contains(requirement.getPathElements())) {
+            requirementsByPath.put(pathElements, leafLevelRequirements.get(requirement.getPathElements()));
+        } else {
+            requirementsByPath.put(pathElements, requirement);
+        }
+    }
+
+    private void addHigherLevelRequirements(PathElements pathElements, int maxRequirementsDepth, Set<PathElements> leafPathElements,
+                                            Map<PathElements, Requirement> leafLevelRequirements, Map<PathElements, Requirement> requirementsByPath) {
+
+        PathElements parentPath = pathElements.getParent();
+
+        while (parentPath != null) {
+            if (!parentPath.isEmpty() && !requirementsByPath.containsKey(parentPath) && !leafPathElements.contains(parentPath)) {
+                Requirement nonLeafRequirement = nonLeafRequirementFrom(parentPath, maxRequirementsDepth);
+                if (leafPathElements.contains(nonLeafRequirement.getPathElements())) {
+                    requirementsByPath.put(pathElements, leafLevelRequirements.get(nonLeafRequirement.getPathElements()));
+                } else {
+                    requirementsByPath.put(parentPath, nonLeafRequirement);
+                }
+            }
+            parentPath = parentPath.getParent();
+        }
+    }
+
+    private static void updateParentFieldsIn(Map<PathElements, Requirement> requirementsByPath, Collection<Requirement> allRequirements) {
+        allRequirements.forEach(
+                requirement -> {
+                    PathElements parentPath = requirement.getPathElements().getParent();
+                    if (parentPath != null && !parentPath.isEmpty()) {
+                        Requirement parentRequirement = requirementsByPath.get(parentPath);
+                        if (parentRequirement != null) {
+                            requirement.setParent(parentRequirement.getPath());
+                        }
+                    }
+                }
+        );
+    }
+
+    @NotNull
+    private List<PathElements> findPathElementsIn(List<TestOutcome> outcomes) {
+        return supportedOutcomesFrom(outcomes)
+                .map(outcome -> outcome.getUserStory().getPathElements())
+                .distinct()
+                .map(this::relativePathFrom)
+                .filter(pathElements -> !pathElements.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    private Map<PathElements, Requirement> getLeafLevelRequirementsFrom(List<TestOutcome> outcomes) {
+        Map<PathElements, Requirement> leafLevelRequirements = supportedOutcomesFrom(outcomes)
+                .map(TestOutcome::getUserStory)
+                .map(this::requirementFrom)
+                .distinct()
+                .collect(Collectors.toMap(
+                        Requirement::getPathElements,
+                        requirement -> requirement
+                ));
+        return leafLevelRequirements;
+    }
+
+    private int getMaxRequirementsDepthFrom(List<TestOutcome> outcomes) {
+        int maxRequirementsDepth = supportedOutcomesFrom(outcomes)
+                .filter(outcome -> !outcome.getUserStory().getParentPathElements().isEmpty())
+                .mapToInt(outcome -> outcome.getUserStory().getParentPathElements().size())// - 1)
+                .max()
+                .orElse(0);
+        return maxRequirementsDepth;
+    }
+
 
     /**
-     * Update the test outcome with the requirements tags.
+     * Adds requirement tags to the given TestOutcome.
+     * The method gets the parent requirement from the RequirementCache and adds tags from the requirement hierarchy to the TestOutcome.
+     *
+     * @param outcome The TestOutcome to which the requirement tags are to be added.
      */
     @Override
     public void addRequirementTagsTo(TestOutcome outcome) {
+        if (outcome.getPath() == null) {
+            return;
+        }
         Map<String, Requirement> index = RequirementCache.getInstance().getRequirementsPathIndex();
         Requirement parentRequirement = index.get(outcome.getPath());
         if (parentRequirement != null) {
@@ -222,36 +254,6 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         return tags;
     }
 
-    private void recordDisplayNameFor(PathElements path) {
-        while (path != null) {
-            RequirementCache.getInstance().setRequirementDisplayName(path.asPath(), path.getDisplayName());
-            path = path.getParent();
-        }
-    }
-
-    /*
-       Max Depth = 4
-       + sample theme                                   0 -> theme
-         + nested capability                            1 -> capability
-           + deep - feature                             2 -> feature
-             + deeper - feature                         3 -> feature
-                + ADeeperNestedStory.java  - story
-             + ADeepNestedStory.java  - story
-
-         Max Depth = 3
-         + nested                                       0 -> theme
-           + deep                                       1 -> capability
-             + deeper                                   2 -> feature
-                + ADeeperNestedStory.java  - story
-             + ADeepNestedStory.java  - story
-
-         Max Depth = 2
-         + nested                                       0 -> capability
-             + deep                                     1 -> feature
-                + ADeeperNestedStory.java  - story
-             + ADeepNestedStory.java  - story
-
-     */
     private Requirement nonLeafRequirementFrom(PathElements relativePath, int maxRequirementsDepth) {
         PathElement requirementLeaf = relativePath.get(relativePath.size() - 1);
         String path = relativePath.toString();
@@ -282,8 +284,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     @NotNull
     private List<String> rootPackageElements() {
         String rootPackage = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
-        List<String> rootPackageElements = Splitter.on(".").omitEmptyStrings().splitToList(rootPackage);
-        return rootPackageElements;
+        return Splitter.on(".").omitEmptyStrings().splitToList(rootPackage);
     }
 
     private Requirement requirementFrom(Story userStory) {//
@@ -293,36 +294,27 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
                 .withId(userStory.getPathElements().toString())
                 .withType(userStory.getType())
                 .withNarrative(userStory.getNarrative())
-                .withDisplayName(requirementLeaf.getDescription())
+                .withDisplayName(userStory.getDisplayName())
                 .withParent(parent)
                 .withPath(userStory.getPath());
     }
 
+    /**
+     * Fetches the parent requirement of a given TestOutcome.
+     * If the TestOutcome has no user story or path, returns an empty Optional.
+     * If no requirement matches the user story in the flattened requirements, an aliased requirement is fetched.
+     *
+     * @param testOutcome The TestOutcome whose parent requirement is to be fetched.
+     * @return Optional containing the parent requirement if it exists, else an empty Optional.
+     */
     @Override
     public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
         if ((testOutcome.getUserStory() == null) || (testOutcome.getUserStory().getPath() == null)) {
             return Optional.empty();
         }
-        Optional<Requirement> firstChoice = getFlattenedRequirements().stream()
+        return getFlattenedRequirements().stream()
                 .filter(requirement -> requirement.matchesUserStory(testOutcome.getUserStory()))
                 .findFirst();
-
-        Optional<Requirement> aliasedRequirement = Optional.empty();
-        if (!firstChoice.isPresent()) {
-            aliasedRequirement = RequirementCache.getInstance().getRequirementAliases().keySet().stream()
-                    .filter(requirement -> requirement.matchesUserStory(testOutcome.getUserStory()))
-                    .map(requirement -> RequirementCache.getInstance().getRequirementAliases().get(requirement))
-                    .findFirst();
-        }
-        return firstChoice.isPresent() ? firstChoice : aliasedRequirement;
-//
-//        testOutcome.getUserStory().getPathElements();
-//
-//        String testOutcomePath = testOutcome.getUserStory().getPath();
-//        String normalizedPath = testOutcomePath.replace(".", "/");
-//        return getFlattenedRequirements().stream()
-//                .filter(requirement -> testOutcomePath.equals(requirement.getPath()) || normalizedPath.equals(requirement.getPath()))
-//                .findFirst();
     }
 
     @Override

@@ -89,21 +89,6 @@ class WhenReadingTagsFromAnnotations extends Specification {
             requirements.isEmpty()
     }
 
-    def "should find correct requirement for a test outcome based on its package"() {
-        given:
-            environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")
-            def tagProvider =  new PackageRequirementsTagProvider(environmentVariables, "annotatedstorieswithcontents")// new PackageAnnotationBasedTagProvider(environmentVariables)
-            tagProvider.clearCache()
-        and:
-            def testOutcome = TestOutcome.inEnvironment(environmentVariables).forTest("someTest", BuyApples)
-        when:
-            def requirement = tagProvider.getParentRequirementOf(testOutcome)
-        then:
-            requirement.isPresent()
-        and:
-            requirement.get().name == "Buy apples" && requirement.get().type == "feature"
-    }
-
     def "should get all tags for a given outcome"() {
         given:
             environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")

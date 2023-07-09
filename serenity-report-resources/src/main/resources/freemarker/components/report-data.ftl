@@ -1,4 +1,13 @@
 <#macro reportData(reportData, number) >
+
+    <script>
+        function copyContent(id) {
+            console.log("copy content of " + id)
+            const content = document.getElementById(id).innerText
+            navigator.clipboard.writeText(content);
+        }
+    </script>
+
     <#if reportData.contents?has_content>
                 <a name="${reportData.id}"></a>
                 <span>
@@ -13,9 +22,14 @@
                         <div class="card">
                             <h4 class="card-header" id="restModalLabel">
                                 ${reportData.title}
+                            <a role="button" class="btn btn-xs copy-button" onclick="copyContent('reportDataContent-${number}')">
+                                <i class="bi bi-clipboard"></i>&nbsp;Copy
+                            </a>
                             </h4>
                         </div>
-                        <div class="card-body"><pre>${(formatter.renderText(reportData.contents))!}</pre></div>
+                        <div class="card-body">
+                            <pre id="reportDataContent-${number}">${(formatter.renderText(reportData.contents))!}</pre>
+                        </div>
                     </div>
                 </div>
     <#else>

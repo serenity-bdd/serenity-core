@@ -3,7 +3,6 @@ package net.thucydides.core.statistics.service;
 
 import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.requirements.PackageRequirementsTagProvider;
 import net.thucydides.core.requirements.TestOutcomeRequirementsTagProvider;
 import net.thucydides.core.steps.TestSourceType;
 

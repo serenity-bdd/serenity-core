@@ -1287,7 +1287,7 @@ public class TestOutcome {
     }
 
     public String getReportName(final ReportType type) {
-        return ReportNamer.forReportType(type).getNormalizedTestNameFor(this);
+        return ReportNamer.forReportType(type).getNormalizedReportNameFor(this);
     }
 
     public String getSimpleReportName(final ReportType type) {

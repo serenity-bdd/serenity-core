@@ -472,7 +472,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         if (isMethodSource(testIdentifier)) {
             Class<?> testCase = ((MethodSource) testIdentifier.getSource().get()).getJavaClass();
             logger.trace("-->TestSuiteStarted " + testCase);
-            String testSuiteName = testCaseDisplayNames.getOrDefault(testCase, testCase.getName());
+            String testSuiteName = testCaseDisplayNames.getOrDefault(testCase, testCase.getSimpleName());
             eventBusFor(testIdentifier).testSuiteStarted(((MethodSource) testIdentifier.getSource().get()).getJavaClass(), testSuiteName);
         }
     }

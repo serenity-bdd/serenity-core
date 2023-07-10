@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.vladsch.flexmark.formatter.Formatter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
@@ -9,6 +8,7 @@ import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.files.TheDirectoryStructure;
+import net.thucydides.core.model.PathElements;
 import net.thucydides.core.model.RequirementCache;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -32,11 +32,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
@@ -88,19 +86,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this(filePathFormOf(rootDirectory), level, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
-    private String baseDirectory() {
-        if (level == 0) {
-            return rootDirectory;
-        }
-        Path baseDirectory = Paths.get(rootDirectory);
-        for (int step = 0; step < level; step++) {
-            if (baseDirectory.getParent() != null) {
-                baseDirectory = baseDirectory.getParent();
-            }
-        }
-        return baseDirectory.toString();
-    }
-
     /**
      * Convert a package name to a file path if necessary.
      */
@@ -112,23 +97,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private int maxDepth;
     private final String topLevelDirectory;
-    private Set<String> requirementsDirectoryPaths;
 
     public FileSystemRequirementsTagProvider(String rootDirectory, EnvironmentVariables environmentVariables) {
         super(environmentVariables, rootDirectory);
 
         topLevelDirectory = rootDirectory;
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
-//                .withRequirementTypes(getRequirementTypes(rootDirectory));
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
         directoryPaths = rootDirectories(rootDirectory, environmentVariables);
 
         this.level = requirementsConfiguration.startLevelForADepthOf(maxDirectoryDepthIn(directoryPaths) + 1);
-        maxDepth = maxDirectoryDepthIn(directoryPaths);
-        requirementsDirectoryPaths = RootDirectory.definedIn(environmentVariables).requirementsDirectoryNames();
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level, EnvironmentVariables environmentVariables) {
@@ -140,11 +120,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         this.topLevelDirectory = topLevelDirectory;
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
-//                .withRequirementTypes(getRequirementTypes());
         directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-        this.level = level;//requirementsConfiguration.initialLevel();
-        maxDepth = maxDirectoryDepthIn(directoryPaths);
+        this.level = level;
     }
 
     private static Set<String> rootDirectories(String rootDirectory, EnvironmentVariables environmentVariables) {
@@ -154,10 +132,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public FileSystemRequirementsTagProvider(String rootDirectory) {
         this(filePathFormOf(rootDirectory), SystemEnvironmentVariables.currentEnvironmentVariables());
     }
-
-    private final Object requirementsLock = new Object();
-
-    private Map<String, Requirement> requirementsByPath;
 
     private boolean addParents = true;
 
@@ -184,17 +158,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                         RequirementAncestry.addParentsTo(loadedRequirements);
                     }
                     this.requirements = loadedRequirements;
-                    this.requirementsByPath = indexByPath(requirements);
+                    RequirementCache.getInstance().indexRequirements(indexByPath(requirements));
                 }
             }
         }
         return requirements;
     }
 
-    private Map<String, Requirement> indexByPath(List<Requirement> requirements) {
-        Map<String, Requirement> index = new ConcurrentHashMap<>();
+    private Map<PathElements, Requirement> indexByPath(List<Requirement> requirements) {
+        Map<PathElements, Requirement> index = new HashMap<>();
         requirements.forEach(
-                requirement -> index.put(requirement.getPath(), requirement)
+                requirement -> index.put(requirement.getPathElements(), requirement)
         );
         return index;
     }

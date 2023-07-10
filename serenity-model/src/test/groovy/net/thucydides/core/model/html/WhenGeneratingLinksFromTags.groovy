@@ -9,7 +9,6 @@ import spock.lang.Specification
 
 class WhenGeneratingLinksFromTags extends Specification {
 
-
     def environmentVariables = new MockEnvironmentVariables();
     def reportNamer = new ReportNamer(ReportType.HTML, false)
     def reportNameProvider = new ReportNameProvider(ReportNameProvider.NO_CONTEXT, reportNamer)
@@ -20,7 +19,7 @@ class WhenGeneratingLinksFromTags extends Specification {
         when:
             def reportName = reportNameProvider.forRequirementOrTag(featureTag)
         then:
-            reportName == "feature_grow_apples.html"
+            reportName == "ec1d09f6cf4c5b516620310b7fdd4850_feature_grow_apples.html"
     }
 
     def "should report tag reports for normal tags"() {
@@ -29,7 +28,7 @@ class WhenGeneratingLinksFromTags extends Specification {
         when:
         def reportName = reportNameProvider.forRequirementOrTag(featureTag)
         then:
-        reportName == "color_red.html"
+        reportName == "28a1e66ee7b035c52fb1585590fa942a_color_red.html"
     }
 
     def "should report tag reports for simple tags"() {
@@ -38,7 +37,7 @@ class WhenGeneratingLinksFromTags extends Specification {
         when:
         def reportName = reportNameProvider.forRequirementOrTag(featureTag)
         then:
-        reportName == "tag_blue.html"
+        reportName == "188e2395e3d3f65750c9288b5cab5b2d_tag_blue.html"
     }
 
     def "should report issue link for JIRA issue tags"() {

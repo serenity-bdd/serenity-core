@@ -74,15 +74,15 @@ public class ReportNameProvider {
     }
 
     public String forTestResult(String result) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "result_" + result);
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "result_" + result);
     }
 
     public String forTag(String tag) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.toLowerCase());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + tag.toLowerCase());
     }
 
     public String forErrorType(String errorType) {
-        return reportNamer.getNormalizedTestNameFor("errortype_" + errorType.toLowerCase());
+        return reportNamer.getNormalizedReportNameFor("errortype_" + errorType.toLowerCase());
     }
 
     public String forTag(TestTag tag) {
@@ -91,17 +91,17 @@ public class ReportNameProvider {
             ReportFormatter reportFormatter = new ReportFormatter(issueTracking, environmentVariables);
             return reportFormatter.asIssueLink(tag.getName());
         } else {
-            return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
+            return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
         }
     }
 
 
     public String forTagType(String tagType) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "tagtype_" + tagType.toLowerCase());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "tagtype_" + tagType.toLowerCase());
     }
 
     public String forRequirementType(String tagType) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_type_" + tagType.toLowerCase());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "requirement_type_" + tagType.toLowerCase());
     }
 
     public ReportNameProvider withPrefix(String prefix) {
@@ -127,7 +127,7 @@ public class ReportNameProvider {
     }
 
     public String forRequirement(Requirement requirement) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_" + requirement.getPath());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "requirement_" + requirement.getPath());
     }
 
     public String forRequirement(TestTag tag) {
@@ -149,11 +149,11 @@ public class ReportNameProvider {
     }
 
     public String forRelease(Release release) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "release_" + release.getName());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "release_" + release.getName());
     }
 
     public String forRelease(String releaseName) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "release_" + releaseName);
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "release_" + releaseName);
     }
 
     public ReportNameProvider inLinkableForm() {

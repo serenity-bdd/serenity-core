@@ -2546,6 +2546,14 @@ div.scenario-text:empty {
     background-color: rgba(238,0,0,0.3);
 }
 
+.copy-button {
+    float: right;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    margin-right: 5px; !important;
+    font-size: 1em;
+}
+
 .missing-scenario-warning {
     color:#ff1631
 }

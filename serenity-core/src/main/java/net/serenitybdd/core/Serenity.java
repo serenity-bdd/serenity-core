@@ -329,6 +329,10 @@ public class Serenity {
         throwExceptionsImmediately = true;
     }
 
+    public static boolean shouldThrowExceptionsImmediately() {
+        return throwExceptionsImmediately = true;
+    }
+
     public static boolean shouldThrowErrorsImmediately() {
         return throwExceptionsImmediately;
     }

@@ -606,7 +606,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         else {
             StepEventBus.getParallelEventBus().stepFailed(failure);
         }
-        if (shouldThrowExceptionsImmediately()) {
+        if (shouldThrowExceptionImmediately()) {
             finishAnyCucumberSteps();
             throw cause;
         }
@@ -623,8 +623,8 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         }
     }
 
-    private boolean shouldThrowExceptionsImmediately() {
-        return Serenity.shouldThrowExceptionsImmediately();
+    private boolean shouldThrowExceptionImmediately() {
+        return Serenity.shouldThrowErrorsImmediately();
     }
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {

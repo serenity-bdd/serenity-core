@@ -2,6 +2,7 @@ package net.thucydides.core.requirements;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.*;
 import net.thucydides.core.reports.TestOutcomeLoader;
@@ -93,7 +94,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     private List<Requirement> loadRequirements() {
         TestOutcomeLoader loader = new TestOutcomeLoader();
-        File outputDirectory = new File(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables, DEFAULT_TARGET_DIR));
+        File outputDirectory = ConfiguredEnvironment.getConfiguration().getOutputDirectory();
         List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
 
         int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);

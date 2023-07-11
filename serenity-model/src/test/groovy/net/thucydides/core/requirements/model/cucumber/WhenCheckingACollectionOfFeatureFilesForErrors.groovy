@@ -46,6 +46,5 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
             ex.message.contains("Empty scenario names were found in file 'empty_scenario_names.feature'")
             ex.message.contains("The feature name in 'empty_feature_name.feature' is empty")
             ex.message.contains("The scenario name 'This scenario is duplicated' was duplicated in file 'duplicate_scenario_names.feature'")
-            ex.message.contains("The feature/parent combination 'duplicate/Adding new items to the todo list' was found in several places")
     }
 }

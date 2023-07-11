@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.steps.StepEventBus;
@@ -92,7 +93,8 @@ public class WhenManagingWebdriverInstances {
 
     @Test
     public void the_default_output_directory_can_be_overrided_via_a_system_property() {
-        environmentVariables.setProperty("thucydides.outputDirectory","out");
+        environmentVariables.setProperty("serenity.outputDirectory","out");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
 
         SystemPropertiesConfiguration config = new SystemPropertiesConfiguration(environmentVariables);
 

@@ -41,7 +41,7 @@ public class WhenObtainingTheOutputDirectory {
 
     @Test
     public void the_default_output_directory_can_be_overriden_if_the_maven_output_directory_is_overridden_as_a_relative_path() {
-        environmentVariables.setProperty("project.build.directory", "subprojectst");
+        environmentVariables.setProperty("project.build.directory", "subproject");
         File outputDirectory = configuration.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("subproject/target/site/serenity")));

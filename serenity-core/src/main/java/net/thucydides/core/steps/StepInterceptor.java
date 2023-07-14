@@ -488,8 +488,10 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
+        if (StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
+            return;
+        }
         notifyOfStepFailure(object, method, args, assertionError);
-
         LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
     }
 

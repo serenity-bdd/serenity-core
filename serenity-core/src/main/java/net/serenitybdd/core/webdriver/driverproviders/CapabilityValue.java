@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 public class CapabilityValue {
     public static Object fromString(Object value) {
         if (isaBoolean(value)) {
-            return Boolean.getBoolean(value.toString());
+            return Boolean.parseBoolean(value.toString());
         }
         if (isAnInteger(value)) {
             return Integer.parseInt(value.toString());

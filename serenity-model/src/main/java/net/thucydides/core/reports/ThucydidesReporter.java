@@ -1,5 +1,9 @@
 package net.thucydides.core.reports;
 
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.webdriver.Configuration;
+
 import java.io.File;
 
 /**
@@ -8,14 +12,22 @@ import java.io.File;
 public class ThucydidesReporter {
     private File outputDirectory;
     private File sourceDirectory;
+    private final Configuration configuration;
 
+    public ThucydidesReporter() {
+        this.configuration = Injectors.getInjector().getInstance(Configuration.class);
+    }
 
     public File getSourceDirectory() {
         return sourceDirectory;
     }
 
+    /**
+     * Override the default source directory (target/site/serenity) for test reports.
+     */
     public void setSourceDirectory(File sourceDirectory) {
         this.sourceDirectory = sourceDirectory;
+        configuration.setSourceDirectory(sourceDirectory);
     }
 
     /**
@@ -25,8 +37,13 @@ public class ThucydidesReporter {
         return outputDirectory;
     }
 
+    /**
+     * Override the default output directory (target/site/serenity) for test reports.
+     * @param outputDirectory
+     */
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
+        configuration.setOutputDirectory(sourceDirectory);
     }
 
 

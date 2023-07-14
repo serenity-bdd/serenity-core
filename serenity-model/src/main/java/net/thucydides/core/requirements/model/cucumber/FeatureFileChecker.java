@@ -45,13 +45,13 @@ public class FeatureFileChecker {
                 .collect(Collectors.toList());
 
         // Check for duplicate feature paths
-        List<String> featureNameErrors = pathNamesToFeatureFiles.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().size() > 1)
-                .map(entry -> duplicateFeaturePathsError(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
-        errorMessages.addAll(featureNameErrors);
+//        List<String> featureNameErrors = pathNamesToFeatureFiles.entrySet()
+//                .stream()
+//                .filter(entry -> entry.getValue().size() > 1)
+//                .map(entry -> duplicateFeaturePathsError(entry.getKey(), entry.getValue()))
+//                .collect(Collectors.toList());
+//
+//        errorMessages.addAll(featureNameErrors);
 
         if (!errorMessages.isEmpty()) {
             throw new InvalidFeatureFileException(errorMessages.stream().collect(Collectors.joining(System.lineSeparator())));

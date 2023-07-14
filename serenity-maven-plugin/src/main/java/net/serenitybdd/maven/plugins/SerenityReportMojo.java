@@ -34,14 +34,13 @@ public class SerenityReportMojo extends AbstractMojo {
     /**
      * Reports are generated here
      */
-    @Parameter(property = "serenity.outputDirectory")
-
+    @Parameter(property = "serenity.outputDirectory", defaultValue = "${basedir}/target/site/serenity")
     public File outputDirectory;
 
     /**
      * Serenity test reports are read from here
      */
-    @Parameter(property = "serenity.sourceDirectory")
+    @Parameter(property = "serenity.sourceDirectory", defaultValue = "${basedir}/target/site/serenity")
     public File sourceDirectory;
 
     /**

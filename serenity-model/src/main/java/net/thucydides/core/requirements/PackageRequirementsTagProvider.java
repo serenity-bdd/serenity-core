@@ -32,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * This will typically be the directory structure containing the tests (for JUnit) or stories (e.g. for JBehave).
  * By default, the tests
  */
+@Deprecated
 public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvider
         implements RequirementsTagProvider, OverridableTagProvider, RequirementTypesProvider {
 

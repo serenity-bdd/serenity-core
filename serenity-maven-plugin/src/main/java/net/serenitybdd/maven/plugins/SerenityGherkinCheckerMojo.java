@@ -43,7 +43,7 @@ public class SerenityGherkinCheckerMojo extends AbstractMojo {
     /**
      * The root directory containing the Cucumber feature files
      */
-    @Parameter(defaultValue = "src/test/resources/features")
+    @Parameter(defaultValue = "${basedir}/src/test/resources/features")
     protected String featureFilesDirectory;
 
 

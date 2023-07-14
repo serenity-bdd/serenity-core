@@ -1,8 +1,10 @@
 package net.thucydides.core.configuration;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.Configuration;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -63,10 +65,7 @@ public class MavenOrGradleBuildPath {
     }
 
     private String projectOutputDirectory() {
-        String thucydidesOutputDurectory = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY);
-        String serenityOutputDurectory = environmentVariables.getProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY);
-
-        return (serenityOutputDurectory != null) ? serenityOutputDurectory : thucydidesOutputDurectory;
+        return ConfiguredEnvironment.getConfiguration().getOutputDirectory().getPath();
     }
 
     public String getHistoryDirectory() {

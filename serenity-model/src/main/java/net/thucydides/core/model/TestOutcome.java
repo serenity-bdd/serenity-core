@@ -1099,6 +1099,20 @@ public class TestOutcome {
         return this;
     }
 
+    public TestResult getStepResult(int stepNumber) {
+        if (stepNumber >= getTestSteps().size()) {
+            return TestResult.UNDEFINED;
+        }
+        List<TestResult> results = getTestSteps()
+                .get(stepNumber)
+                .getFlattenedSteps()
+                .stream()
+                .map(TestStep::getResult)
+                .collect(Collectors.toList());
+
+        return TestResultList.overallResultFrom(results);
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 

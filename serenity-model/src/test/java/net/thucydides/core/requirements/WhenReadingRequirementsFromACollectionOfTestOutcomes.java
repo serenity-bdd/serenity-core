@@ -107,8 +107,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
             Requirement parent = tagProvider.getRequirements()
-                    .stream().filter(req -> req.getName().equals("nested"))
-                    .findFirst().get();
+                                            .stream().filter(req -> req.getName().equals("nested"))
+                                            .findFirst().get();
 
             Requirement child = parent.getChildren().get(0);
             assertThat(tagProvider.getParentRequirementOf(child)).isPresent().get().isEqualTo(parent);

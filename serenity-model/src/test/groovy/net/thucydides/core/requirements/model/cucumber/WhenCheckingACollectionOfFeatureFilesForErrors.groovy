@@ -37,14 +37,14 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
 
     def "Should display a meaningful error message if there are empty scenario names"() {
         given:
-        FeatureFileChecker checker = new FeatureFileChecker();
-        FeatureFileFinder finder = new FeatureFileFinder("src/test/resources/features/static_analyse_features")
+            FeatureFileChecker checker = new FeatureFileChecker();
+            FeatureFileFinder finder = new FeatureFileFinder("src/test/resources/features/static_analyse_features")
         when:
-        checker.check(finder.findFeatureFiles())
+            checker.check(finder.findFeatureFiles())
         then:
-        InvalidFeatureFileException ex = thrown()
-        ex.message.contains("Empty scenario names were found in file 'empty_scenario_names.feature'")
-        ex.message.contains("The feature name in 'empty_feature_name.feature' is empty")
-        ex.message.contains("The scenario name 'This scenario is duplicated' was duplicated in file 'duplicate_scenario_names.feature'")
+            InvalidFeatureFileException ex = thrown()
+            ex.message.contains("Empty scenario names were found in file 'empty_scenario_names.feature'")
+            ex.message.contains("The feature name in 'empty_feature_name.feature' is empty")
+            ex.message.contains("The scenario name 'This scenario is duplicated' was duplicated in file 'duplicate_scenario_names.feature'")
     }
 }

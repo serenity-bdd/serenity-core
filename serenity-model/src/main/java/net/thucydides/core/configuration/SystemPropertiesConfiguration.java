@@ -184,16 +184,17 @@ public class SystemPropertiesConfiguration implements Configuration {
         String projectBuildDirectory = environmentVariables.optionalProperty("project.build.directory").orElse(null);
 
         // Absolute dirs always prime
-        if (serenityOutputDirectory != null && new File(serenityOutputDirectory).isAbsolute()){
+        if (serenityOutputDirectory != null && new File(serenityOutputDirectory).isAbsolute()) {
             return new File(serenityOutputDirectory);
         }
 
         //
         // serenity.outputDirectory is used to override the default output directory for the Serenity reports
         //
+        //
         if (isNotEmpty(serenityOutputDirectory)) {
             String baseDir = Optional.ofNullable(projectBuildDirectory).map(dir -> dir + "/")
-                            .orElse(Optional.ofNullable(projectReportingOutputDirectory).map(dir -> dir + "/").orElse(""));
+                    .orElse(Optional.ofNullable(projectReportingOutputDirectory).map(dir -> dir + "/").orElse(""));
             return new File(baseDir + serenityOutputDirectory);
         }
         //
@@ -208,7 +209,9 @@ public class SystemPropertiesConfiguration implements Configuration {
         else if (isNotEmpty(projectBuildDirectory)) {
             return new File(projectBuildDirectory + "/target/site/serenity");
         }
+        // Default directory
         return new File("target/site/serenity");
+
     }
 
     public File getSourceDirectory() {

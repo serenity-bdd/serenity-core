@@ -21,7 +21,7 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
         FeatureFileFinder finder = new FeatureFileFinder("src/test/resources/features/ecommerce_features")
         FeatureFileChecker checker = new FeatureFileChecker();
         when:
-        checker.check(finder.findFeatureFiles())
+        checker.check(finder.findFeatureFiles(), true)
         then:
         notThrown(Exception)
     }
@@ -40,7 +40,7 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
             FeatureFileChecker checker = new FeatureFileChecker();
             FeatureFileFinder finder = new FeatureFileFinder("src/test/resources/features/static_analyse_features")
         when:
-            checker.check(finder.findFeatureFiles())
+            checker.check(finder.findFeatureFiles(), true)
         then:
             InvalidFeatureFileException ex = thrown()
             ex.message.contains("Empty scenario names were found in file 'empty_scenario_names.feature'")

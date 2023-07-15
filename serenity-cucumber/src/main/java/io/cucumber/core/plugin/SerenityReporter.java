@@ -223,7 +223,9 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private Story userStoryFrom(Feature feature, String featureFileUri) {
         String relativePath = new FeatureFilePath(systemConfiguration.getEnvironmentVariables()).relativePathFor(featureFileUri);
-        Story userStory = Story.withIdAndPath(TestSourcesModel.convertToId(feature.getName()), feature.getName(), relativePath).asFeature();
+        // obtain an id by removing the ".feature" extension and replacing illegal characters with underscores
+        String id = relativePath.replace(".feature", "");
+        Story userStory = Story.withIdAndPath(id, feature.getName(), relativePath).asFeature();
         if (!isEmpty(feature.getDescription())) {
             userStory = userStory.withNarrative(feature.getDescription());
         }

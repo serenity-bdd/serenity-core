@@ -47,7 +47,7 @@ public class WhenManagingGlobalConfiguration {
         String outputDirectory = changeSeparatorIfRequired("build/reports/thucydides");
         environmentVariables.setProperty("serenity.outputDirectory", outputDirectory);
         configuration = new SystemPropertiesConfiguration(environmentVariables);
-        
+
         assertThat(configuration.getOutputDirectory().getAbsoluteFile().toString(), endsWith(outputDirectory));
     }
 

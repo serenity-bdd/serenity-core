@@ -17,66 +17,66 @@ class WhenConfiguringTheOutputDirectory extends Specification {
 
     def "the default output directory is target/site/serenity"() {
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("target/site/serenity")
+        config.getOutputDirectory().toPath() == Paths.get("target/site/serenity")
     }
 
     def "the default output directory can be overridden"() {
         given:
-            environmentVariables.setProperty("serenity.outputDirectory","/my/target")
+        environmentVariables.setProperty("serenity.outputDirectory","/my/target")
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("/my/target")
+        config.getOutputDirectory().toPath() == Paths.get("/my/target")
     }
 
 
     def "for a maven project the default output directory should be based on the project directory"() {
         given:
-            environmentVariables.setProperty("project.build.directory","/my/maven/project")
+        environmentVariables.setProperty("project.build.directory","/my/maven/project")
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/target/site/serenity")
+        config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/target/site/serenity")
     }
 
     def "for a maven project an overridden absolute output directory should be absolute"() {
         given:
-            String absolutePath = (SystemUtils.IS_OS_WINDOWS)? "C:\\my\\target" : "/my/target";
+        String absolutePath = (SystemUtils.IS_OS_WINDOWS)? "C:\\my\\target" : "/my/target";
 
-            environmentVariables.setProperty("project.build.directory","/my/maven/project")
-            environmentVariables.setProperty("serenity.outputDirectory",absolutePath)
+        environmentVariables.setProperty("project.build.directory","/my/maven/project")
+        environmentVariables.setProperty("serenity.outputDirectory",absolutePath)
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
 
-            config.getOutputDirectory().toPath() == Paths.get(absolutePath)
+        config.getOutputDirectory().toPath() == Paths.get(absolutePath)
     }
 
     def "the default Maven output directory is target/site/serenity"() {
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("target/site/serenity")
+        config.getOutputDirectory().toPath() == Paths.get("target/site/serenity")
     }
 
     def "the default Maven output directory can be overridden with project.build.directory"() {
         given:
-            environmentVariables.setProperty("project.build.directory","/my/maven/project")
+        environmentVariables.setProperty("project.build.directory","/my/maven/project")
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/target/site/serenity")
+        config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/target/site/serenity")
     }
 
     def "the default Maven output directory can be overridden with project.reporting.OutputDirectory"() {
         given:
-            environmentVariables.setProperty("project.reporting.OutputDirectory","/my/maven/project/reports")
+        environmentVariables.setProperty("project.reporting.OutputDirectory","/my/maven/project/reports")
         when:
-            def config = new SystemPropertiesConfiguration(environmentVariables);
+        def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
-            config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/reports/serenity")
+        config.getOutputDirectory().toPath() == Paths.get("/my/maven/project/reports/serenity")
     }
 
 }

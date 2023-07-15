@@ -16,8 +16,9 @@ public class FeatureFileChecker {
 
     CucumberParser cucumberParser = new CucumberParser();
 
-    public void check(Stream<File> files) {
+    public void check(Stream<File> files, boolean allowDuplicateFeatureNames) {
 
+        List<String> featureFileNames = new ArrayList<>();
         // Features can have duplicate names but a feature file name and parent directory name should be unique
         ConcurrentHashMap<String, List<File>> pathNamesToFeatureFiles = new ConcurrentHashMap<>();
 
@@ -27,9 +28,12 @@ public class FeatureFileChecker {
                     try {
                         Optional<AnnotatedFeature> loadedFeature = cucumberParser.loadFeature(featureFile);
                         loadedFeature.ifPresent(
-                                annotatedFeature -> recordFeaturePath(pathNamesToFeatureFiles,
-                                                                      featureFile,
-                                                                      annotatedFeature)
+                                annotatedFeature -> {
+                                    recordFeaturePath(pathNamesToFeatureFiles,
+                                            featureFile,
+                                            annotatedFeature);
+                                    featureFileNames.add(annotatedFeature.getFeature().getName());
+                                }
                         );
                         return Optional.empty();
                     } catch (Throwable invalidFeatureFile) {
@@ -44,18 +48,28 @@ public class FeatureFileChecker {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
-        // Check for duplicate feature paths
-//        List<String> featureNameErrors = pathNamesToFeatureFiles.entrySet()
-//                .stream()
-//                .filter(entry -> entry.getValue().size() > 1)
-//                .map(entry -> duplicateFeaturePathsError(entry.getKey(), entry.getValue()))
-//                .collect(Collectors.toList());
-//
-//        errorMessages.addAll(featureNameErrors);
+        // Check for duplicate feature names
+        // Feature file names should be unique, or unique within a folder
+        if (!allowDuplicateFeatureNames) {
+            errorMessages.addAll(
+                    checkForDuplicateFeatureNames(featureFileNames)
+            );
+        }
 
         if (!errorMessages.isEmpty()) {
             throw new InvalidFeatureFileException(errorMessages.stream().collect(Collectors.joining(System.lineSeparator())));
         }
+    }
+
+    private Collection<String> checkForDuplicateFeatureNames(List<String> featureFileNames) {
+        // Return the list of duplicate feature names in featureFileNames
+        return featureFileNames.stream()
+                .collect(Collectors.groupingBy(name -> name))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().size() > 1)
+                .map(entry -> "Duplicate feature name found: '" + entry.getKey() + "'")
+                .collect(Collectors.toList());
     }
 
     private String duplicateFeaturePathsError(String key, List<File> value) {

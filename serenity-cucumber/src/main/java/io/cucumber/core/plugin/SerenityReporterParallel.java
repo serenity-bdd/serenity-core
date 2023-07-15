@@ -28,6 +28,7 @@ import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
 import net.thucydides.core.reports.ReportService;
+import net.thucydides.core.requirements.FeatureFilePath;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.events.*;
@@ -227,8 +228,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         }
     }
 
-    private Story userStoryFrom(Feature feature, String featureFileUriString) {
-        Story userStory = Story.withIdAndPath(TestSourcesModel.convertToId(feature.getName()), feature.getName(), featureFileUriString).asFeature();
+    private Story userStoryFrom(Feature feature, String featureFileUri) {
+        String relativePath = new FeatureFilePath(systemConfiguration.getEnvironmentVariables()).relativePathFor(featureFileUri);
+        String id = relativePath.replace(".feature", "");
+        Story userStory = Story.withIdAndPath(id, feature.getName(), featureFileUri).asFeature();
         if (!isEmpty(feature.getDescription())) {
             userStory = userStory.withNarrative(feature.getDescription());
         }

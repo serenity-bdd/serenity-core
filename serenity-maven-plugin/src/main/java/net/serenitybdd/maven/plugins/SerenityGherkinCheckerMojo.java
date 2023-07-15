@@ -46,6 +46,13 @@ public class SerenityGherkinCheckerMojo extends AbstractMojo {
     @Parameter(defaultValue = "${basedir}/src/test/resources/features")
     protected String featureFilesDirectory;
 
+    /**
+     * Duplicate feature names are not allowed by default. Set this to true to allow duplicate feature names.
+     * This is not recommended, as it can cause confusion in the reports and duplicate feature files may not be executed
+     * correctly by the Cucumber runners classes.
+     */
+    @Parameter(defaultValue = "false")
+    protected boolean allowDuplicateFeatureNames;
 
     @Parameter(defaultValue = "${project}")
     public MavenProject project;
@@ -59,7 +66,7 @@ public class SerenityGherkinCheckerMojo extends AbstractMojo {
 
         FeatureFileFinder finder = new FeatureFileFinder(featureFilesDirectory);
         try {
-            checker.check(finder.findFeatureFiles());
+            checker.check(finder.findFeatureFiles(), allowDuplicateFeatureNames);
         } catch (InvalidFeatureFileException e) {
             throw new MojoFailureException(e.getMessage());
         } catch (Throwable e) {

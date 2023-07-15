@@ -257,24 +257,19 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             getContext().setCurrentScenarioDefinitionFrom(astNode);
 
             //the sources are read in parallel, global current feature cannot be used
-            String scenarioId = scenarioIdFrom(event.getTestCase().getId().toString(),
-                                               currentFeature.get().getName(),
-                                               TestSourcesModel.convertToId(getContext().currentScenarioDefinition.getName()));
+            String scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(getContext().currentScenarioDefinition.getName()));
             boolean newScenario = !scenarioId.equals(getContext().getCurrentScenario());
             if (newScenario) {
                 configureDriver(currentFeature.get(), getContext().currentFeaturePath());
                 if (getContext().isAScenarioOutline()) {
                     getContext().startNewExample();
-                    handleExamples(event,
-                            currentFeature.get(),
+                    handleExamples(currentFeature.get(),
                             getContext().currentScenarioOutline().getTags(),
                             getContext().currentScenarioOutline().getName(),
                             getContext().currentScenarioOutline().getExamples());
                 }
-                startOfScenarioLifeCycle(event, currentFeature.get(), scenarioName, getContext().currentScenarioDefinition, event.getTestCase().getLocation().getLine());
-                getContext().currentScenario = scenarioIdFrom(event.getTestCase().getId().toString(),
-                                                              currentFeature.get().getName(),
-                                                              TestSourcesModel.convertToId(getContext().currentScenarioDefinition.getName()));
+                startOfScenarioLifeCycle(currentFeature.get(), scenarioName, getContext().currentScenarioDefinition, event.getTestCase().getLocation().getLine());
+                getContext().currentScenario = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(getContext().currentScenarioDefinition.getName()));
             } else {
                 if (getContext().isAScenarioOutline()) {
                     startExample(Long.valueOf(event.getTestCase().getLocation().getLine()), scenarioName);
@@ -428,7 +423,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         return requestedDriver;
     }
 
-    private void handleExamples(TestCaseStarted event, Feature currentFeature, List<Tag> scenarioOutlineTags, String id, List<Examples> examplesList) {
+    private void handleExamples(Feature currentFeature, List<Tag> scenarioOutlineTags, String id, List<Examples> examplesList) {
         lineFilters = LineFilters.forCurrentContext();
         String featureName = currentFeature.getName();
         List<Tag> currentFeatureTags = currentFeature.getTags();
@@ -455,7 +450,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                         exampleTags().put(examplesTableRows.get(i).getLocation().getLine(), examples.getTags());
                     }
                 }
-                String scenarioId = scenarioIdFrom(event.getTestCase().getId().toString(), featureName, id);
+                String scenarioId = scenarioIdFrom(featureName, id);
                 boolean newScenario = !getContext().hasScenarioId(scenarioId);
 
                 String exampleTableName = trim(examples.getName());
@@ -559,8 +554,8 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         exampleRows().put(currentTableRow.getLocation().getLine(), row);
     }
 
-    private String scenarioIdFrom(String testCaseId, String featureId, String scenarioIdOrExampleId) {
-        return (featureId != null && scenarioIdOrExampleId != null) ? String.format("%s:%s;%s", testCaseId, featureId, scenarioIdOrExampleId) : testCaseId;
+    private String scenarioIdFrom(String featureId, String scenarioIdOrExampleId) {
+        return (featureId != null && scenarioIdOrExampleId != null) ? String.format("%s;%s", featureId, scenarioIdOrExampleId) : "";
     }
 
     private void initializeExamples() {
@@ -612,13 +607,13 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
                 .collect(toList());
     }
 
-    private void startOfScenarioLifeCycle(TestCaseStarted event, Feature feature, String scenarioName, Scenario scenario, Integer currentLine) {
+    private void startOfScenarioLifeCycle(Feature feature, String scenarioName, Scenario scenario, Integer currentLine) {
 
-        boolean newScenario = !scenarioIdFrom(event.getTestCase().getId().toString(), TestSourcesModel.convertToId(feature.getName()), TestSourcesModel.convertToId(scenario.getName())).equals(getContext().currentScenario);
-        getContext().currentScenario = scenarioIdFrom(event.getTestCase().getId().toString(),TestSourcesModel.convertToId(feature.getName()), TestSourcesModel.convertToId(scenario.getName()));
+        boolean newScenario = !scenarioIdFrom(TestSourcesModel.convertToId(feature.getName()), TestSourcesModel.convertToId(scenario.getName())).equals(getContext().currentScenario);
+        getContext().currentScenario = scenarioIdFrom(TestSourcesModel.convertToId(feature.getName()), TestSourcesModel.convertToId(scenario.getName()));
         if (getContext().examplesAreRunning()) {
             if (newScenario) {
-                startScenario(event, feature, scenario, scenario.getName());
+                startScenario(feature, scenario, scenario.getName());
                 getContext().stepEventBus().useExamplesFrom(getContext().getTable());
                 getContext().stepEventBus().useScenarioOutline(ScenarioOutlineDescription.from(scenario).getDescription());
             } else {
@@ -626,17 +621,16 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
             }
             startExample(Long.valueOf(currentLine), scenarioName);
         } else {
-            startScenario(event, feature, scenario, scenarioName);
+            startScenario(feature, scenario, scenarioName);
         }
     }
 
-    private void startScenario(TestCaseStarted event, Feature currentFeature, Scenario scenarioDefinition, String scenarioName) {
+    private void startScenario(Feature currentFeature, Scenario scenarioDefinition, String scenarioName) {
         getContext().stepEventBus().setTestSource(TestSourceType.TEST_SOURCE_CUCUMBER.getValue());
 
         getContext().stepEventBus()
                 .testStarted(scenarioName,
-                        scenarioIdFrom(event.getTestCase().getId().toString(),
-                                TestSourcesModel.convertToId(currentFeature.getName()),
+                        scenarioIdFrom(TestSourcesModel.convertToId(currentFeature.getName()),
                                 TestSourcesModel.convertToId(scenarioName)));
 
         getContext().stepEventBus().addDescriptionToCurrentTest(scenarioDefinition.getDescription());

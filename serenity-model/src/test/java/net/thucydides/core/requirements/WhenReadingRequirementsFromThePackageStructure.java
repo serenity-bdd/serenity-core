@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.environment.MockEnvironmentVariables;
@@ -18,6 +19,8 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "packagerequirements");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();
@@ -31,6 +34,8 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "twolevelpackagerequirements");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();
@@ -47,6 +52,8 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "unevenpackagerequirements");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();

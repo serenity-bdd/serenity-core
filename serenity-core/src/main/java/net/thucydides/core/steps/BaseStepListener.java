@@ -529,9 +529,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testStarted(final String testName, String methodName, final String id, String scenarioId) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testName, testSuite, testedStory)
-                                                .withId(id)
-                                                .withScenarioId(scenarioId)
-                                                .withTestMethodName(methodName);
+                .withId(id)
+                .withScenarioId(scenarioId)
+                .withTestMethodName(methodName);
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testName, currentTestOutcome);
 
@@ -611,7 +611,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     /**
      * A test has finished.
-     *
      */
     public void testFinished(final TestOutcome outcome, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
 
@@ -882,23 +881,28 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void stepFailed(StepFailure failure) {
 
+        if (!aStepHasFailed()) {
+            // This is the actual failure, so record all the details
+            takeEndOfStepScreenshotFor(FAILURE);
 
-        takeEndOfStepScreenshotFor(FAILURE);
+            TestFailureCause failureCause = TestFailureCause.from(failure.getException());
+            getCurrentTestOutcome().appendTestFailure(failureCause);
 
-        TestFailureCause failureCause = TestFailureCause.from(failure.getException());
-        getCurrentTestOutcome().appendTestFailure(failureCause);
-
-        recordFailureDetails(failure);
+            recordFailureDetails(failure);
+        }
+        // In all cases, mark the step as done with the appropriate result
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
     public void stepFailedWithException(Throwable failure) {
-        takeEndOfStepScreenshotFor(FAILURE);
+        if (!aStepHasFailed()) {
+            takeEndOfStepScreenshotFor(FAILURE);
 
-        TestFailureCause failureCause = TestFailureCause.from(failure);
-        getCurrentTestOutcome().appendTestFailure(failureCause);
+            TestFailureCause failureCause = TestFailureCause.from(failure);
+            getCurrentTestOutcome().appendTestFailure(failureCause);
 
-        recordFailureDetails(failure);
+            recordFailureDetails(failure);
+        }
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
@@ -979,13 +983,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
             currentStepMethodStack.pop();
         }
         if (currentStepExists()) {
-//            TestStep finishedStep = currentStepStack.get().pop();
             TestStep finishedStep = currentStepStack.pop();
             finishedStep.recordDuration();
             if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
-            if ((finishedStep == getCurrentGroup())) {
+            if (finishedStep == getCurrentGroup()) {
                 finishGroup();
             }
         }

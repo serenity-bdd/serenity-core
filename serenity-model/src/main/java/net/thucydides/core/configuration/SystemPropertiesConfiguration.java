@@ -103,6 +103,13 @@ public class SystemPropertiesConfiguration implements Configuration {
         return newOutputDirectory;
     }
 
+    /**
+     * If some property that can change output directory@Override was changed this method should be called
+     */
+    public void reloadOutputDirectory() {
+        setOutputDirectory(loadOutputDirectoryFromSystemProperties());
+    }
+
     @Override
     public int getStepDelay() {
         int stepDelay = 0;

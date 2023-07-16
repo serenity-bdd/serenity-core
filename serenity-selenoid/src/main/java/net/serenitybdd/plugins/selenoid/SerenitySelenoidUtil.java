@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class SerenitySelenoidUtil {
@@ -32,7 +32,7 @@ public class SerenitySelenoidUtil {
 
     public static String getVideoDataPrefix() {
         String dataFormat = env.getProperty(SELENOID + "videoDataPrefixFormat", "yyyy-MM-dd");
-        return new SimpleDateFormat(dataFormat).format(new Date());
+        return DateTimeFormatter.ofPattern(dataFormat).format(LocalDateTime.now());
     }
 
     public static String getVideoNameSuffix() {

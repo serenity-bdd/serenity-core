@@ -2,6 +2,9 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 public class CapabilityValue {
     public static Object fromString(Object value) {
+        if (value == null) {
+            return null;
+        }
         if (isaBoolean(value)) {
             return Boolean.parseBoolean(value.toString());
         }

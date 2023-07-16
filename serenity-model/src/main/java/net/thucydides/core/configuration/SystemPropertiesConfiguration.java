@@ -1,11 +1,13 @@
 package net.thucydides.core.configuration;
 
 import com.google.inject.Inject;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Optional;
@@ -20,11 +22,8 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public class SystemPropertiesConfiguration implements Configuration {
 
-    /**
-     * Default timeout when waiting for AJAX elements in pages, in seconds.
-     */
-    public static final int DEFAULT_ELEMENT_TIMEOUT_SECONDS = 5;
 
+    @Deprecated
     public static final Integer DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT = 5;
 
     /**
@@ -38,22 +37,16 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * This property is used when maven/gradle build conta subprojects by serenity  plugins
      */
-    /**
-     * By default, when accepting untrusted SSL certificates, assume that these certificates will come from an
-     * untrusted issuer or will be self signed. Due to limitation within Firefox, it is easy to find out if the
-     * certificate has expired or does not match the host it was served for, but hard to find out if the issuer of
-     * the certificate is untrusted. By default, it is assumed that the certificates were not be issued from a trusted
-     * CA. If you are receive an "untrusted site" prompt on Firefox when using a certificate that was issued by valid
-     * issuer, but has expired or is being served served for a different host (e.g. production certificate served in
-     * a testing environment) set this to false.
-     */
-    public static final String REFUSE_UNTRUSTED_CERTIFICATES
-            = ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName();
 
     /**
-     * HTML and XML reports will be generated in this directory.
+     * HTML reports will be generated in this directory.
      */
     protected File outputDirectory;
+
+    /**
+     * JSON reports will be read from here
+     */
+    protected File sourceDirectory;
 
     private File historyDirectory;
 
@@ -86,6 +79,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public File loadOutputDirectoryFromSystemProperties() {
 
         String systemDefinedDirectory = MavenOrGradleBuildPath.specifiedIn(environmentVariables).getBuildDirectory();
+//        String systemDefinedDirectory = ConfiguredEnvironment.getConfiguration().getOutputDirectory().getPath();
 
         systemDefinedDirectory = filePathParser.getInstanciatedPath(systemDefinedDirectory);
 
@@ -109,13 +103,6 @@ public class SystemPropertiesConfiguration implements Configuration {
         return newOutputDirectory;
     }
 
-    /**
-     * If some property that can change output directory@Override was changed this method should be called
-     */
-    public void reloadOutputDirectory() {
-        setOutputDirectory(loadOutputDirectoryFromSystemProperties());
-    }
-
     @Override
     public int getStepDelay() {
         int stepDelay = 0;
@@ -135,10 +122,11 @@ public class SystemPropertiesConfiguration implements Configuration {
 
 
     }
+
     private Optional<Long> webdriverCapabilitiesImplicitTimeoutFrom(EnvironmentVariables environmentVariables) {
         return EnvironmentSpecificConfiguration
                 .from(environmentVariables)
-                .getOptionalProperty("webdriver.capabilities.timeouts.implicit","webdriver.timeouts.implicitlywait")
+                .getOptionalProperty("webdriver.capabilities.timeouts.implicit", "webdriver.timeouts.implicitlywait")
                 .map(Long::parseLong);
     }
 
@@ -166,17 +154,71 @@ public class SystemPropertiesConfiguration implements Configuration {
         this.outputDirectory = outputDirectory;
     }
 
+    public void setSourceDirectory(final File sourceDirectory) {
+        this.sourceDirectory = sourceDirectory;
+    }
+
     /**
      * The output directory is where the test runner writes the XML and HTML
      * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
+     *
+     * - serenity.outputDirectory is used to override the default output directory for the Serenity reports
+     * - project.reporting.OutputDirectory is used by Maven to define the output directory for the whole project (e.g. target/site)
+     * - project.build.directory is used by Maven to define the build directory for the whole project (e.g. target)
      */
     public File getOutputDirectory() {
+
         if (outputDirectory == null) {
-            outputDirectory = loadOutputDirectoryFromSystemProperties();
+            outputDirectory = findOutputDirectory();
         }
         return outputDirectory;
+    }
+
+    @Nullable
+    private File findOutputDirectory() {
+        // The project.reporting.OutputDirectory property can be used to override the output directory used by Maven
+        String serenityOutputDirectory = environmentVariables.optionalProperty("serenity.outputDirectory").orElse(null);
+        String projectReportingOutputDirectory = environmentVariables.optionalProperty("project.reporting.OutputDirectory").orElse(null);
+        String projectBuildDirectory = environmentVariables.optionalProperty("project.build.directory").orElse(null);
+
+        // Absolute dirs always prime
+        if (serenityOutputDirectory != null && new File(serenityOutputDirectory).isAbsolute()) {
+            return new File(serenityOutputDirectory);
+        }
+
+        //
+        // serenity.outputDirectory is used to override the default output directory for the Serenity reports
+        //
+        //
+        if (isNotEmpty(serenityOutputDirectory)) {
+            String baseDir = Optional.ofNullable(projectBuildDirectory).map(dir -> dir + "/")
+                    .orElse(Optional.ofNullable(projectReportingOutputDirectory).map(dir -> dir + "/").orElse(""));
+            return new File(baseDir + serenityOutputDirectory);
+        }
+        //
+        // project.reporting.OutputDirectory is used by Maven to define the output directory for the whole project (e.g. target/site)
+        //
+        if (isNotEmpty(projectReportingOutputDirectory)) {
+            return new File(projectReportingOutputDirectory + "/serenity");
+        }
+        //
+        // project.build.directory is used by Maven to define the build directory for the whole project (e.g. target)
+        //
+        else if (isNotEmpty(projectBuildDirectory)) {
+            return new File(projectBuildDirectory + "/target/site/serenity");
+        }
+        // Default directory
+        return new File("target/site/serenity");
+
+    }
+
+    public File getSourceDirectory() {
+        if (sourceDirectory == null) {
+            sourceDirectory = new File(SERENITY_OUTPUT_DIRECTORY.optionalFrom(environmentVariables).orElse("target/site/serenity"));
+        }
+        return sourceDirectory;
     }
 
     @Override
@@ -194,7 +236,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     @SuppressWarnings("deprecation")
     public boolean onlySaveFailingScreenshots() {
         return Boolean.parseBoolean(propertyNamed(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS, "false"));
-//        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_ONLY_SAVE_FAILING_SCREENSHOTS.getPropertyName(), false);
     }
 
     @SuppressWarnings("deprecation")
@@ -251,7 +292,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     private Optional<Integer> integerPropertyNamed(ThucydidesSystemProperty property) {
         return EnvironmentSpecificConfiguration.from(environmentVariables)
-                                               .getOptionalInteger(property.getPropertyName(), property.getLegacyPropertyName());
+                .getOptionalInteger(property.getPropertyName(), property.getLegacyPropertyName());
     }
 
     private Integer integerPropertyNamed(ThucydidesSystemProperty property, int defaultValue) {

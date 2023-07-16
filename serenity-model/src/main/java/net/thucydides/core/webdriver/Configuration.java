@@ -58,4 +58,6 @@ public interface Configuration<T extends Configuration> {
     T withEnvironmentVariables(EnvironmentVariables environmentVariables);
 
     EnvironmentVariables getEnvironmentVariables();
+
+    void setSourceDirectory(File sourceDirectory);
 }

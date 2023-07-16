@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.environment.MockEnvironmentVariables;
 import net.thucydides.core.model.RequirementCache;
 import net.thucydides.core.model.TestOutcome;
@@ -40,6 +41,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void testOutcomesShouldBeReadFromTheTargetDirectory() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
         }
@@ -49,6 +51,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldReadATestOutcomeFromAJUnit4TestSuite() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
             assertThat(tagProvider.getRequirements()).hasSize(1);
@@ -63,6 +66,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldReadATestOutcomeFromNestedJUnit5Tests() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-nested-junit-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "com.serenitydojo.wordle.integrationtests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
             assertThat(tagProvider.getRequirements()).hasSize(1);
@@ -82,6 +87,7 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-nested-junit-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "com.serenitydojo.wordle.integrationtests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
 
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
@@ -96,6 +102,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldFindTheParentOfARequirement() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests.sample");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
             Requirement parent = tagProvider.getRequirements()
@@ -111,6 +119,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldReadATestOutcomeFromAJUnit4TestWithNestedPackages() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
             assertThat(tagProvider.getRequirements()).hasSize(1);
@@ -126,6 +136,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldListTheRequirementTypesBasedOnTheDepthOfTheRequirementsHierarchy() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getActiveRequirementTypes()).containsExactly("theme", "capability", "feature");
         }
@@ -134,6 +146,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldFindParentRequirementsForTestOutcomes() throws IOException {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
             List<? extends TestOutcome> testOutcomes
@@ -149,6 +163,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldIdentifyTestTagsForATestOutcome() throws IOException {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
 
             List<? extends TestOutcome> testOutcomes
@@ -167,6 +183,8 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldIgnoreCucumberTestOutcomes() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-cucumber-and-junit-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
             assertThat(tagProvider.getRequirements()).isNotEmpty();
         }

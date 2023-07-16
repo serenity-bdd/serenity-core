@@ -107,9 +107,9 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
     @Test
     public void the_output_directory_can_be_defined_by_a_system_property() throws InitializationError {
 
-        environmentVariables.setProperty("thucydides.outputDirectory", "target" + FILE_SEPARATOR
+        environmentVariables.setProperty("serenity.outputDirectory", "target" + FILE_SEPARATOR
                 + "reports" + FILE_SEPARATOR
-                + "thucydides");
+                + "serenity");
 
         SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
@@ -117,7 +117,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
         assertThat(outputDirectory.getPath(), is("target" + FILE_SEPARATOR
                 + "reports" + FILE_SEPARATOR
-                + "thucydides"));
+                + "serenity"));
 
     }
 
@@ -126,13 +126,13 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
         SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
-        environmentVariables.setProperty("thucydides.outputDirectory", "target/reports/thucydides");
+        environmentVariables.setProperty("serenity.outputDirectory", "target/reports/serenity");
 
         File outputDirectory = runner.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(), is("target" + FILE_SEPARATOR
                 + "reports" + FILE_SEPARATOR
-                + "thucydides"));
+                + "serenity"));
 
     }
 

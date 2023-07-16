@@ -4,6 +4,7 @@ import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 
@@ -36,8 +37,8 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 
 
 	private void saveCurrentWebDriverContext() {
-		WebDriver currentDriver = SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
-		if (currentDriver != null) {
+		WebDriverFacade currentDriver = (WebDriverFacade) SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
+		if (currentDriver != null && currentDriver.isInstantiated()) {
 			SessionId sessionId = RemoteDriver.of(currentDriver).getSessionId();
 			setWebSessionId(sessionId);
 			setWebDriver(currentDriver);

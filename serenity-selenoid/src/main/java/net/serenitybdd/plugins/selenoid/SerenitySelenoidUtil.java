@@ -4,14 +4,14 @@ import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.ExternalLink;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SerenitySelenoidUtil {
 

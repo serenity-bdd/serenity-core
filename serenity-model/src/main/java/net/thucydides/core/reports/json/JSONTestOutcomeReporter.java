@@ -9,7 +9,6 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.io.SafelyMoveFiles;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

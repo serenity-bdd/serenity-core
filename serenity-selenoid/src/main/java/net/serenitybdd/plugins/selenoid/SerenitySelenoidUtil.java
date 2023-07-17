@@ -32,7 +32,7 @@ public class SerenitySelenoidUtil {
 
     public static String getVideoDataPrefix() {
         String dataFormat = env.getProperty(SELENOID + "videoDataPrefixFormat", "yyyy-MM-dd");
-        return DateTimeFormatter.ofPattern(dataFormat).format(LocalDateTime.now());
+        return DateTimeFormatter.ofPattern(dataFormat).format(LocalDateTime.now(ZoneId.systemDefault()));
     }
 
     public static String getVideoNameSuffix() {

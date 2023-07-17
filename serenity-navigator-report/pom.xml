@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.9.6-SNAPSHOT</version>
+        <version>3.9.6</version>
     </parent>
     <artifactId>serenity-navigator-report</artifactId>
     <packaging>jar</packaging>

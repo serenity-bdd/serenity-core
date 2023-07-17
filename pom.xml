@@ -761,6 +761,7 @@
         <module>serenity-cli</module>
         <module>serenity-screenplay-playwright</module>
         <module>serenity-bitbar</module>
+        <module>serenity-selenoid</module>
     </modules>
     <profiles>
         <profile>

@@ -165,7 +165,7 @@ public class Requirement implements Comparable<Requirement> {
 
 
     private String normalized(String path) {
-        return path.replaceAll("\\\\","/");
+        return path.replaceAll("\\\\", "/");
     }
 
     public Requirement withNoScenarios() {
@@ -275,6 +275,7 @@ public class Requirement implements Comparable<Requirement> {
     public void setChildren(List<Requirement> children) {
         this.children = children;
     }
+
     public void setParent(String parent) {
         this.parent = parent;
     }
@@ -520,7 +521,7 @@ public class Requirement implements Comparable<Requirement> {
     }
 
     public Requirement withScenarioTags(Map<String, Collection<TestTag>> scenarioTags) {
-        if(!tags.isEmpty() && this.scenarioTags.isEmpty()) {
+        if (!tags.isEmpty() && this.scenarioTags.isEmpty()) {
             List<TestTag> testTags = tags.stream().filter(testTag -> DEFAULT_TAG_TYPE.equals(testTag.getType())).collect(Collectors.toList());
             for (Collection<TestTag> currentScenarioTag : scenarioTags.values()) {
                 currentScenarioTag.addAll(testTags);
@@ -552,6 +553,7 @@ public class Requirement implements Comparable<Requirement> {
 //        pathElements.add(new PathElement(getName(), getDisplayName()));
         return getParentPathElements();
     }
+
     public PathElements getParentPathElements(EnvironmentVariables environmentVariables) {
         String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
         // strip root path from path if present
@@ -593,6 +595,21 @@ public class Requirement implements Comparable<Requirement> {
 
     public boolean matchesUserStory(Story userStory) {
         return userStory.getPathElements().equals(getPathElements());
+    }
+
+    public List<TestTag> getAggregateTags() {
+        // Find the tags of this requirement as well as all the aggregate tags of its children
+        List<TestTag> aggregateTags = new ArrayList<>();
+        aggregateTags.addAll(getTags());
+        aggregateTags.addAll(getChildren()
+                     .stream()
+                     .flatMap(child -> child.getAggregateTags().stream())
+                     .collect(Collectors.toList()));
+        aggregateTags.addAll(getScenarioTags().values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()));
+        return aggregateTags;
     }
 
     public static class CustomFieldSetter {

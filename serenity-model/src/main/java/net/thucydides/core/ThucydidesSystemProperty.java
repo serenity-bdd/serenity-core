@@ -1116,11 +1116,6 @@ public enum ThucydidesSystemProperty {
     TAGS,
 
     /**
-     * Display only test results and requirements containing any of the specified tags
-     */
-    REPORT_ON_TAGS,
-
-    /**
      * If provided, each test in a test run will have these tags added.
      */
     INJECTED_TAGS,

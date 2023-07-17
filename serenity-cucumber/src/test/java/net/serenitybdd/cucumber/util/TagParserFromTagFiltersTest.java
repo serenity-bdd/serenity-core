@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class TagParserFromTagFiltersTest {
 
     @Test
-    public void startSimpleWithASingleExlude() {
+    public void startSimpleWithASingleExclude() {
         Expression expression = TagParser.parseFromTagFilters(asList("not @wip"));
         assertThat(expression.evaluate(asList("@wip")), is(false));
         assertThat(expression.evaluate(asList("@wip", "@smoke")), is(false));

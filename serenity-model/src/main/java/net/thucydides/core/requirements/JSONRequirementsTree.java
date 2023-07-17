@@ -1,15 +1,19 @@
 package net.thucydides.core.requirements;
 
+import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.vladsch.flexmark.util.ast.Document;
+import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestResultList;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.ResultIconFormatter;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.TagParser;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.tree.Node;
@@ -18,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,21 +35,27 @@ import static net.thucydides.core.util.NameConverter.humanize;
 public class JSONRequirementsTree {
 
     private final List<Node> nodes;
+    private final List<String> tags;
     private final boolean displayAsParent;
     private final boolean hideEmptyRequirements;
     private final Gson gson = new Gson();
 
     private JSONRequirementsTree(List<Node> nodes,
-                                 boolean displayAsParent) {
+                                 boolean displayAsParent,
+                                 List<String> tags) {
         this.hideEmptyRequirements = EnvironmentSpecificConfiguration.from(SystemEnvironmentVariables.currentEnvironmentVariables())
                 .getBooleanProperty(ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
         this.nodes = nodes;
         this.displayAsParent = displayAsParent;
+        this.tags = tags;
     }
 
-    public JSONRequirementsTree(List<Requirement> requirements, RequirementsOutcomes requirementsOutcomes) {
+    public JSONRequirementsTree(List<Requirement> requirements,
+                                RequirementsOutcomes requirementsOutcomes,
+                                String tagsExpression) {
         hideEmptyRequirements = EnvironmentSpecificConfiguration.from(SystemEnvironmentVariables.currentEnvironmentVariables())
                 .getBooleanProperty(ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);
+        tags = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(tagsExpression);
         nodes = requirements.stream()
                 .filter(requirement -> shouldShow(requirement, requirementsOutcomes))
                 .map(requirement -> toNode(requirement, requirementsOutcomes))
@@ -54,24 +65,42 @@ public class JSONRequirementsTree {
     }
 
     private boolean shouldShow(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        // If tags are specified, only show requirements that match the tag expression
+        if (!tags.isEmpty()) {
+            Expression expression = TagParser.parseFromTagFilters(tags);
+            List<String> tagsForThisRequirement = requirement.getAggregateTags()
+                    .stream()
+                    .map(TestTag::getName)
+                    .map(tag -> addTagPrefixTo(tag))
+                    .collect(Collectors.toList());
+
+
+            if (!expression.evaluate(tagsForThisRequirement)) {
+                return false;
+            }
+        }
+        // We can opt to always show requirements even if there are no associated tests by setting the hideEmptyRequirements property to false
         if (!hideEmptyRequirements) {
             return true;
         }
+        // Otherwise, only show the requirement if it has tests
         return requirementsOutcomes.requirementOutcomeFor(requirement).getTestCount() > 0;
     }
 
-    public static JSONRequirementsTree forRequirements(List<Requirement> requirements,
-                                                       RequirementsOutcomes requirementsOutcomes) {
-        return new JSONRequirementsTree(requirements, requirementsOutcomes);
+    private String addTagPrefixTo(String tag) {
+        return tag.startsWith("@") ? tag : "@" + tag;
     }
 
-    public static JSONRequirementsTree forRequirements(List<Requirement> requirements) {
-        return new JSONRequirementsTree(requirements, null);
+    public static JSONRequirementsTree forRequirements(List<Requirement> requirements,
+                                                       RequirementsOutcomes requirementsOutcomes,
+                                                       String tags) {
+        return new JSONRequirementsTree(requirements, requirementsOutcomes, tags);
     }
 
     private Node toNode(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
         List<Node> children = requirement.getChildren()
                 .stream()
+                .filter(childRequirement -> shouldShow(childRequirement, requirementsOutcomes))
                 .map(child -> toNode(child, requirementsOutcomes))
                 .distinct()
                 .sorted()
@@ -197,7 +226,7 @@ public class JSONRequirementsTree {
     }
 
     public JSONRequirementsTree asAParentRequirement() {
-        return new JSONRequirementsTree(nodes, true);
+        return new JSONRequirementsTree(nodes, true, tags);
     }
 
     public Boolean isALeafNode() {

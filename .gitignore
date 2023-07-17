@@ -5,6 +5,7 @@ lib
 target
 *.iml
 *.log
+*.xml.ReleaseBackup
 out
 .DS_Store
 /serenity-core.ipr

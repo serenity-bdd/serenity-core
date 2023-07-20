@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.questions
 
-import com.beust.jcommander.internal.Lists
 import com.google.common.collect.Sets
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Question
@@ -114,7 +113,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> ages = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return Lists.newArrayList("Cat", "Dog", "Alligator")
+                return Arrays.asList("Cat", "Dog", "Alligator")
             }
         }
         then:
@@ -130,7 +129,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> pets = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+                return Arrays.asList("Cat", "Alligator", "Pigeon")
             }
         }
         then:
@@ -146,7 +145,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> pets = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+                return Arrays.asList("Cat", "Alligator", "Pigeon")
             }
         }
         then:
@@ -162,7 +161,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> pets = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+                return Arrays.asList("Cat", "Alligator", "Pigeon")
             }
         }
         then:
@@ -188,7 +187,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> ages = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return Lists.newArrayList("10", "20", "30")
+                return Arrays.asList("10", "20", "30")
             }
         }
         then:

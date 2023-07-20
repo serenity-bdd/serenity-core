@@ -84,7 +84,7 @@ public class ScenarioOutcomes {
                 testOutcome.getTitle(),
                 "Scenario",
                 testOutcome.getResult(),
-                ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome),
+                ReportNamer.forReportType(ReportType.HTML).getNormalizedReportNameFor(testOutcome),
                 testOutcome.getStartTime(),
                 testOutcome.getDuration(),
                 testOutcome.isManual(),
@@ -137,7 +137,7 @@ public class ScenarioOutcomes {
                 "Scenario Outline",
                 testOutcome.getResult(),
                 reportBadges,
-                ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome),
+                ReportNamer.forReportType(ReportType.HTML).getNormalizedReportNameFor(testOutcome),
                 testOutcome.getDescription(),
                 steps,
                 EMPTY_LIST, // No rendered examples available here

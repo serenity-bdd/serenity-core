@@ -2,7 +2,6 @@ package net.thucydides.core.model;
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.digest.Digest;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
@@ -35,7 +34,7 @@ public class ReportNamer {
      * Return a filesystem-friendly version of the test case name. The file system
      * version should have no spaces and have the XML file suffix.
      */
-    public String getNormalizedTestNameFor(final TestOutcome testOutcome) {
+    public String getNormalizedReportNameFor(final TestOutcome testOutcome) {
         String testName = getBaseTestNameFor(testOutcome);
         String testNameWithoutIndex = NameConverter.stripIndexesFrom(testName);
         return normalizedVersionOf(NameConverter.filesystemSafe(testNameWithoutIndex));
@@ -47,11 +46,24 @@ public class ReportNamer {
     }
 
     public String optionallyCompressed(String text) {
-        return compressedFilename ? Digest.ofTextValue(text) : text;
+        return compressedFilename ? Digest.ofTextValue(text) : Digest.ofTextValue(text, shortened(text));
+    }
+
+    private String shortened(String text) {
+        return text.substring(Math.max(0, text.length() - 30));
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
-        return NameConverter.withNoIssueNumbers(testOutcome.getQualifiedId());
+        if (isJUnit5(testOutcome.getQualifiedId())) {
+            return testOutcome.getUserStory().getId() + "." + testOutcome.getMethodName();
+        } else {
+            String pathWithoutSlashes = testOutcome.getPath() != null ? testOutcome.getPath().replace(".", "_").replace("/", "_SL_") : "";
+            return testOutcome.getQualifiedId() + ":" + NameConverter.withNoIssueNumbers(pathWithoutSlashes);
+        }
+    }
+
+    private boolean isJUnit5(String qualifiedId) {
+        return qualifiedId.startsWith("[engine:");
     }
 
 
@@ -63,16 +75,16 @@ public class ReportNamer {
         return optionallyCompressed(appendSuffixTo(NameConverter.withNoIssueNumbers(testOutcome.getQualifiedId())));
     }
 
-    public String getNormalizedTestNameFor(final Story userStory) {
-        return getNormalizedTestNameFor(userStory.getName());
+    public String getNormalizedReportNameFor(final Story userStory) {
+        return getNormalizedReportNameFor(userStory.getName());
     }
 
-    public String getNormalizedTestNameFor(String name) {
+    public String getNormalizedReportNameFor(String name) {
         return normalizedVersionOf(NameConverter.underscore(name.toLowerCase()));
     }
 
     private String normalizedVersionOf(String text) {
-        return prefix + ((compressedFilename) ? appendSuffixTo(Digest.ofTextValue(text)) : appendSuffixTo(text));
+        return prefix + appendSuffixTo(optionallyCompressed(text));
     }
 
     private String appendSuffixTo(final String testNameWithUnderscores) {

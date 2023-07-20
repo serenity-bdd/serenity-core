@@ -1,7 +1,9 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestTag;
@@ -28,6 +30,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
+import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 class RequirementsOverviewReportingTask extends BaseReportingTask implements ReportingTask {
@@ -120,7 +123,14 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(toList());
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements), requirementsOutcomes.filteredByDisplayTag());
+        //
+        // If the cucumber.filter.tags parameter has been provided, we only display requirements with that tag type in the requirements tree
+        //
+        Optional<String> cucumberTags = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("cucumber.filter.tags");
+        JSONRequirementsTree requirementsTree
+                = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
+                                                       requirementsOutcomes.filteredByDisplayTag(),
+                                                       cucumberTags.orElse(""));
         if (asParentRequirement) {
             requirementsTree = requirementsTree.asAParentRequirement();
         }
@@ -128,8 +138,6 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         RequirementsOutcomes filteredRequirementsOutcomes = requirementsOutcomes.filteredByDisplayTag();
         context.put("requirements", filteredRequirementsOutcomes);
         context.put("duplicateRequirementNamesPresent", DuplicateRequirementNames.presentIn(filteredRequirementsOutcomes));
-
-
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
         context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));
@@ -234,8 +242,10 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {
         if (this.requirementsOutcomes.getParentRequirement().isPresent()) {
-            context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
-                    .fromTagsIn(allTags));
+//            context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
+//                    .fromTagsIn(allTags));
+            List<Requirement> parents = requirementsService.getParentRequirementsOf(this.requirementsOutcomes.getParentRequirement().get());
+            context.put("breadcrumbs", Breadcrumbs.forParentRequirements(parents));
         } else {
             context.put("breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
         }

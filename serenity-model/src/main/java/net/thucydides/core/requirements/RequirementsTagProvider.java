@@ -22,4 +22,9 @@ public interface RequirementsTagProvider extends TagProvider {
     Optional<Requirement> getParentRequirementOf(final Requirement requirement);
     Optional<Requirement> getRequirementFor(TestTag testTag);
     default Optional<String> getOverview() { return Optional.empty(); }
+
+    /**
+     * If the requirements provider is able to provide a list of requirement tags for a given test outcome, it should do so.
+     */
+    default void addRequirementTagsTo(TestOutcome outcome) {}
 }

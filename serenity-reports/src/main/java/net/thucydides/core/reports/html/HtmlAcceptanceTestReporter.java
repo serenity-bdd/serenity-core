@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -221,8 +222,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private void addBreadcrumbs(TestOutcome testOutcome, Map<String, Object> context) {
-        requirementsService.getAncestorRequirementsFor(testOutcome);
-        List<TestTag> breadcrumbs = new BreadcrumbTagFilter(requirementsService).getRequirementBreadcrumbsFrom(testOutcome);
+        List<TestTag> breadcrumbs
+                = requirementsService.getAncestorRequirementsFor(testOutcome).stream().map(Requirement::asTag).collect(Collectors.toList());
+//        List<TestTag> breadcrumbs = new BreadcrumbTagFilter(requirementsService).getRequirementBreadcrumbsFrom(testOutcome);
         context.put("breadcrumbs", breadcrumbs);
     }
 

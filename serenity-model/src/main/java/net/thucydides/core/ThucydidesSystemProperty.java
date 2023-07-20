@@ -946,7 +946,7 @@ public enum ThucydidesSystemProperty {
      * and keep a tally of the executed tests. It will also use this as the root package when determining the
      * requirements hierarchy associated with a test.
      *
-     * Technical note: If you are using the File System Requirements provider, Thucydides will expect this directory structure to exist
+     * Technical note: If you are using the File System Requirements provider, Serenity will expect this directory structure to exist
      * at the top of the requirements tree. If you want to exclude packages in a requirements definition and start at a
      * lower level in the hierarchy, use the thucydides.requirement.exclusions property.
      * This is also used by the PackageAnnotationBasedTagProvider to know where to look for annotated requirements.
@@ -1114,11 +1114,6 @@ public enum ThucydidesSystemProperty {
      * For example, -Dtags="iteration:I1" or -Dtags="color:red,flavor:strawberry"
      */
     TAGS,
-
-    /**
-     * Display only test results and requirements containing any of the specified tags
-     */
-    REPORT_ON_TAGS,
 
     /**
      * If provided, each test in a test run will have these tags added.
@@ -1658,6 +1653,11 @@ public enum ThucydidesSystemProperty {
      * The title to appear in the tag type table in the email reports
      */
     REPORT_TAGTYPE_TITLE,
+
+    /**
+     * The maximum number of features allowed in the requirements cache.
+     */
+    SERENITY_REQUIREMENTS_CACHE_HEAP_SIZE,
 
     /**
      * Use this property to set how long webdriver should wait x second for an alert to be present before throwing an exception.

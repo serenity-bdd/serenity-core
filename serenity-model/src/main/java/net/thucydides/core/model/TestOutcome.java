@@ -87,11 +87,21 @@ public class TestOutcome {
     private String id;
 
     /**
+     * Unique identifier for the test scenario, which will be different to the id for parameterized tests.
+     */
+    private String scenarioId;
+
+    /**
      * The class containing the test method, if the test is implemented in a Java class.
      */
     private transient Class<?> testCase;
 
     private String testCaseName;
+
+    /**
+     * The name of the test method in a JUnit test case.
+     */
+    private String methodName;
 
     /**
      * The list of steps recorded in this test execution.
@@ -121,7 +131,7 @@ public class TestOutcome {
     private List<String> additionalVersions;
 
     private Set<TestTag> tags;
-    private Set<TestTag> allTags;
+    private transient Set<TestTag> allTags;
 
     /**
      * When did this test start.
@@ -256,8 +266,8 @@ public class TestOutcome {
     List<String> issues;
     List<String> versions;
 
-    List<String> nestedTestPath;
-
+    private transient List<TestStep> flattenedSteps = null;
+    private transient List<TestStep> leafSteps = null;
 
     /**
      * Scenario outline text.
@@ -319,9 +329,10 @@ public class TestOutcome {
         startTime = ZonedDateTime.now();
         this.name = name;
         this.id = identifierFrom(name, testCase, userStory);
+        this.scenarioId = id;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
+        this.methodName = name;
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -331,7 +342,7 @@ public class TestOutcome {
         this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
         this.context = null;//contextFrom(environmentVariables);
-        if (testCase != null) {
+        if (this.userStory == null && testCase != null) {
             setUserStory(leafRequirementDefinedIn().testCase(testCase));
         }
     }
@@ -340,9 +351,10 @@ public class TestOutcome {
         startTime = ZonedDateTime.now();
         this.name = name;
         this.id = identifierFrom(name, testCase, userStory);
+        this.scenarioId = id;
         this.testCase = testCase;
+        this.methodName = name;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -378,7 +390,7 @@ public class TestOutcome {
         this.issues = getIssues();
         this.versions = getVersions();
         this.tags = getTags();
-        this.allTags = addFeatureTagTo(this.tags);
+//        this.allTags = addFeatureTagTo(this.tags);
     }
 
     private String nameOf(Class<?> testCase) {
@@ -454,14 +466,17 @@ public class TestOutcome {
         startTime = ZonedDateTime.now();
         this.name = name;
         this.id = identifierFrom(name, testCase, userStory);
+        this.scenarioId = id;
         this.testCase = testCase;
+        this.methodName = name;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
-        if ((testCase != null) || (userStory != null)) {
-            setUserStory(storyDefinedIn(testCase).orElse(userStory));
+        if (userStory != null) {
+            setUserStory(userStory);
+        } else if ((testCase != null) && storyDefinedIn(testCase).isPresent()) {
+            setUserStory(storyDefinedIn(testCase).get());
         }
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
@@ -492,12 +507,15 @@ public class TestOutcome {
                 this.description,
                 this.name,
                 this.id,
+                this.scenarioId,
+                this.methodName,
                 this.testCase,
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -514,7 +532,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -523,12 +542,15 @@ public class TestOutcome {
                           final String description,
                           final String name,
                           final String id,
+                          final String scenarioId,
+                          final String methodName,
                           final Class<?> testCase,
                           final List<TestStep> testSteps,
                           final List<String> issues,
                           final List<String> additionalIssues,
                           final List<CastMember> actors,
                           final Set<TestTag> tags,
+                          final TestTag featureTag,
                           final Story userStory,
                           final FailureCause testFailureCause,
                           final String testFailureClassname,
@@ -545,22 +567,25 @@ public class TestOutcome {
                           final String projectKey,
                           final EnvironmentVariables environmentVariables,
                           final ExternalLink externalLink,
-                          final String context) {
+                          final String context,
+                          final String testSource) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
         this.description = description;
         this.name = name;
         this.id = id;
+        this.scenarioId = scenarioId;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
-        this.nestedTestPath = calculateNestPath(testCase);
+        this.methodName = methodName;
         setTestSteps(testSteps);
         this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
         this.additionalIssues = additionalIssues;
         this.actors = actors;
         this.tags = tags;
+        this.featureTag = Optional.ofNullable(featureTag);
         this.allTags = addFeatureTagTo(this.tags);
         setUserStory(userStory);
         this.testFailureCause = testFailureCause;
@@ -582,6 +607,7 @@ public class TestOutcome {
         this.environmentVariables = environmentVariables;
         this.externalLink = externalLink;
         this.context = context;
+        this.testSource = testSource;
     }
 
     List<String> calculateNestPath(Class<?> testCase) {
@@ -627,12 +653,15 @@ public class TestOutcome {
                     this.description,
                     this.name,
                     this.id,
+                    this.scenarioId,
+                    this.methodName,
                     this.testCase,
                     this.testSteps,
                     this.coreIssues,
                     this.additionalIssues,
                     this.actors,
                     this.tags,
+                    this.featureTag.orElse(null),
                     this.userStory,
                     this.testFailureCause,
                     this.testFailureClassname,
@@ -649,7 +678,8 @@ public class TestOutcome {
                     this.projectKey,
                     this.environmentVariables,
                     this.externalLink,
-                    this.context);
+                    this.context,
+                    this.testSource);
         } else {
             return this;
         }
@@ -662,12 +692,15 @@ public class TestOutcome {
                 this.description,
                 this.name,
                 this.id,
+                this.scenarioId,
+                this.methodName,
                 this.testCase,
                 this.testSteps,
                 (issues == null) ? issues : new ArrayList<>(issues),
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -684,7 +717,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -694,12 +728,15 @@ public class TestOutcome {
                 this.description,
                 this.name,
                 this.id,
+                this.scenarioId,
+                this.methodName,
                 this.testCase,
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
                 this.actors,
                 tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -716,7 +753,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
+                this.context,
+                this.testSource);
     }
 
     public TestOutcome withStartTime(ZonedDateTime startTime) {
@@ -726,12 +764,15 @@ public class TestOutcome {
                 this.description,
                 this.name,
                 this.id,
+                this.scenarioId,
+                this.methodName,
                 this.testCase,
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
                 this.actors,
                 this.tags,
+                this.featureTag.orElse(null),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -748,43 +789,8 @@ public class TestOutcome {
                 this.projectKey,
                 this.environmentVariables,
                 this.externalLink,
-                this.context);
-    }
-
-    public TestOutcome withMethodName(String methodName) {
-        if (methodName != null) {
-            return new TestOutcome(this.startTime,
-                    this.duration,
-                    this.title,
-                    this.description,
-                    methodName,
-                    identifierFrom(methodName, testCase, userStory),
-                    this.testCase,
-                    this.getTestSteps(),
-                    this.coreIssues,
-                    this.additionalIssues,
-                    this.actors,
-                    this.tags,
-                    this.userStory,
-                    this.testFailureCause,
-                    this.testFailureClassname,
-                    this.testFailureMessage,
-                    this.testFailureSummary,
-                    this.annotatedResult,
-                    this.dataTable,
-                    this.qualifier,
-                    this.driver,
-                    this.manual,
-                    this.isManualTestingUpToDate,
-                    this.lastTested,
-                    this.manualTestEvidence,
-                    this.projectKey,
-                    this.environmentVariables,
-                    this.externalLink,
-                    this.context);
-        } else {
-            return this;
-        }
+                this.context,
+                this.testSource);
     }
 
     /**
@@ -817,10 +823,10 @@ public class TestOutcome {
      * @return the human-readable name for this test.
      */
     public String getTitle() {
-        if (title == null) {
-            title = obtainQualifiedTitleFromAnnotationOrMethodName();
+        if (this.title == null) {
+            this.title = obtainQualifiedTitleFromAnnotationOrMethodName();
         }
-        return title;
+        return this.title;
     }
 
     public String getTitle(boolean qualified) {
@@ -910,11 +916,10 @@ public class TestOutcome {
     }
 
     public Optional<TestStep> getFailingStep() {
-        List<TestStep> stepsInReverseOrder = new ArrayList(getFlattenedTestSteps());
-        Collections.reverse(stepsInReverseOrder);
-        for (TestStep step : stepsInReverseOrder) {
-            if (step.isError() || step.isFailure()) {
-                return Optional.of(step);
+        List<TestStep> flattenedSteps = getFlattenedTestSteps();
+        for(int step = flattenedSteps.size() - 1; step >= 0; step--) {
+            if (flattenedSteps.get(step).isError() || flattenedSteps.get(step).isFailure()) {
+                return Optional.of(flattenedSteps.get(step));
             }
         }
         return Optional.empty();
@@ -923,6 +928,10 @@ public class TestOutcome {
     public String getId() {
         updateIdIfNotDefinedForLegacyPersistedFormats();
         return id;
+    }
+
+    public String getScenarioId() {
+        return scenarioId;
     }
 
     public String getParentId() {
@@ -940,35 +949,13 @@ public class TestOutcome {
     }
 
     public TestOutcome withId(String id) {
-        return new TestOutcome(this.startTime,
-                this.duration,
-                this.title,
-                this.description,
-                this.name,
-                id,
-                this.testCase,
-                this.testSteps,
-                this.coreIssues,
-                this.additionalIssues,
-                this.actors,
-                tags,
-                this.userStory,
-                this.testFailureCause,
-                this.testFailureClassname,
-                this.testFailureMessage,
-                this.testFailureSummary,
-                this.annotatedResult,
-                this.dataTable,
-                this.qualifier,
-                this.driver,
-                this.manual,
-                this.isManualTestingUpToDate,
-                this.lastTested,
-                this.manualTestEvidence,
-                this.projectKey,
-                this.environmentVariables,
-                this.externalLink,
-                this.context);
+        this.id = id;
+        return this;
+    }
+
+    public TestOutcome withScenarioId(String scenarioId) {
+        this.scenarioId = scenarioId;
+        return this;
     }
 
     public void updateTopLevelStepResultsTo(TestResult result) {
@@ -1089,7 +1076,7 @@ public class TestOutcome {
     }
 
     public TestOutcome withSteps(List<TestStep> childSteps) {
-        this.testSteps = new ArrayList<>(childSteps);
+        updateTestSteps(childSteps);
         return this;
     }
 
@@ -1105,6 +1092,25 @@ public class TestOutcome {
         if (dataTable != null && dataTable.getSize() > row) {
             dataTable.updateRowResult(row, result);
         }
+    }
+
+    public TestOutcome withTestMethodName(String methodName) {
+        this.methodName = methodName;
+        return this;
+    }
+
+    public TestResult getStepResult(int stepNumber) {
+        if (stepNumber >= getTestSteps().size()) {
+            return TestResult.UNDEFINED;
+        }
+        List<TestResult> results = getTestSteps()
+                .get(stepNumber)
+                .getFlattenedSteps()
+                .stream()
+                .map(TestStep::getResult)
+                .collect(Collectors.toList());
+
+        return TestResultList.overallResultFrom(results);
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1295,7 +1301,7 @@ public class TestOutcome {
     }
 
     public String getReportName(final ReportType type) {
-        return ReportNamer.forReportType(type).getNormalizedTestNameFor(this);
+        return ReportNamer.forReportType(type).getNormalizedReportNameFor(this);
     }
 
     public String getSimpleReportName(final ReportType type) {
@@ -1413,26 +1419,32 @@ public class TestOutcome {
     }
 
     public List<TestStep> getFlattenedTestSteps() {
-        List<TestStep> flattenedTestSteps = new ArrayList<>();
-        for (TestStep step : getTestSteps()) {
-            flattenedTestSteps.add(step);
-            if (step.isAGroup()) {
-                flattenedTestSteps.addAll(step.getFlattenedSteps());
+        if (flattenedSteps == null) {
+            List<TestStep> flattenedTestSteps = new ArrayList<>();
+            for (TestStep step : getTestSteps()) {
+                flattenedTestSteps.add(step);
+                if (step.isAGroup()) {
+                    flattenedTestSteps.addAll(step.getFlattenedSteps());
+                }
             }
+            this.flattenedSteps = flattenedTestSteps;
         }
-        return flattenedTestSteps;
+        return flattenedSteps;
     }
 
     public List<TestStep> getLeafTestSteps() {
-        List<TestStep> leafTestSteps = new ArrayList<TestStep>();
-        for (TestStep step : getTestSteps()) {
-            if (step.isAGroup()) {
-                leafTestSteps.addAll(step.getLeafTestSteps());
-            } else {
-                leafTestSteps.add(step);
+        if (leafSteps == null ) {
+            List<TestStep> leafTestSteps = new ArrayList<>();
+            for (TestStep step : getTestSteps()) {
+                if (step.isAGroup()) {
+                    leafTestSteps.addAll(step.getLeafTestSteps());
+                } else {
+                    leafTestSteps.add(step);
+                }
             }
+            this.leafSteps = leafTestSteps;
         }
-        return leafTestSteps;
+        return leafSteps;
     }
 
     /**
@@ -1515,20 +1527,12 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.add(step);
         renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
-    }
-
-    private synchronized void addSteps(List<TestStep> steps) {
-        List<TestStep> updatedSteps = new ArrayList<>(testSteps);
-        updatedSteps.addAll(steps);
-        renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
     }
 
     private void setTestSteps(List<TestStep> steps) {
         this.testSteps = steps;
+        this.flattenedSteps = null;
         // renumberTestSteps(testSteps);
     }
 
@@ -1653,7 +1657,7 @@ public class TestOutcome {
 
     public void setUserStory(Story story) {
         this.userStory = story;
-        this.featureTag = FeatureTagAsDefined.in(story, getPath());
+//        this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }
 
     public void determineTestFailureCause(Throwable cause) {
@@ -1888,6 +1892,8 @@ public class TestOutcome {
         return testCaseName;
     }
 
+    public String getMethodName() { return methodName; }
+
     private boolean thereAre(Collection<String> anyIssues) {
         return ((anyIssues != null) && (!anyIssues.isEmpty()));
     }
@@ -2001,17 +2007,16 @@ public class TestOutcome {
     }
 
     public Set<TestTag> getAllTags() {
-        if (allTags == null) {
-            allTags = addFeatureTagTo(getTags());
-        }
-        return allTags;
+        return getTags();
+//        if (allTags == null) {
+//            allTags = addFeatureTagTo(getTags());
+//        }
+//        return allTags;
     }
 
     private Set<TestTag> addFeatureTagTo(Set<TestTag> tags) {
         Set<TestTag> allTags = (tags == null) ? new HashSet<>() : new HashSet<>(tags);
-        getFeatureTag().ifPresent(
-                featureTag -> allTags.add(featureTag)
-        );
+        getFeatureTag().ifPresent(allTags::add);
         return allTags;
     }
 
@@ -2058,14 +2063,14 @@ public class TestOutcome {
         Set<TestTag> updatedTags = new HashSet<>(getTags());
         updatedTags.addAll(tags);
         this.tags = updatedTags;
-        this.allTags = addFeatureTagTo(this.tags);
+        //this.allTags = addFeatureTagTo(this.tags);
     }
 
     public void addTag(TestTag tag) {
-        Set<TestTag> updatedTags = new HashSet<>(getTags());
+        Set<TestTag> updatedTags = (tags == null) ? new HashSet<>() : new HashSet<>(tags);
         updatedTags.add(tag);
         this.tags = updatedTags;
-        this.allTags = addFeatureTagTo(this.tags);
+        //this.allTags = addFeatureTagTo(this.tags);
     }
 
     public List<String> getIssueKeys() {
@@ -2099,10 +2104,6 @@ public class TestOutcome {
     }
 
     public String getContext() {
-//        if (context == null) {
-//            context = contextFrom(getEnvironmentVariables());
-//        }
-//
         return context;
     }
 
@@ -2807,8 +2808,7 @@ public class TestOutcome {
         List<TestStep> updatedSteps = new ArrayList<>(testSteps);
         updatedSteps.removeAll(stepsToReplace);
         renumberTestSteps(updatedSteps);
-//        testSteps = Collections.unmodifiableList(updatedSteps);
-        testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
 
     }
 
@@ -2876,12 +2876,15 @@ public class TestOutcome {
                 description,
                 name,
                 id,
+                scenarioId,
+                this.methodName,
                 testCase,
                 filteredSteps,
                 issues,
                 additionalIssues,
                 actors,
                 outcomeTagsWithoutRedundentTags,
+                featureTag.orElse(null),
                 userStory,
                 testFailureCause,
                 testFailureClassname,
@@ -2898,7 +2901,8 @@ public class TestOutcome {
                 projectKey,
                 environmentVariables,
                 externalLink,
-                context);
+                context,
+                testSource);
     }
 
     public ExternalLink getExternalLink() {
@@ -2931,10 +2935,6 @@ public class TestOutcome {
             specifiedOutcome.noTestFailureIsDefined();
         }
         return specifiedOutcome;
-    }
-
-    public List<String> getNestedTestPath() {
-        return nestedTestPath;
     }
 
     public TestOutcome withExamplesMatching(Predicate<TestStep> condition) {
@@ -3017,7 +3017,7 @@ public class TestOutcome {
                 updatedSteps.add(step);
             }
         }
-        this.testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
         return this;
     }
 
@@ -3028,8 +3028,14 @@ public class TestOutcome {
                 updatedSteps.add(step);
             }
         }
-        this.testSteps = updatedSteps;
+        updateTestSteps(updatedSteps);
         return this;
+    }
+
+    private void updateTestSteps(List<TestStep> updatedSteps) {
+        this.testSteps = updatedSteps;
+        this.flattenedSteps = null;
+        this.leafSteps = null;
     }
 
     private boolean someStepsDoNotMatch(Predicate<TestStep> condition) {

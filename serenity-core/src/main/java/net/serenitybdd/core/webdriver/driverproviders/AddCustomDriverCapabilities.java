@@ -1,10 +1,14 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
+import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddCustomDriverCapabilities {
 
@@ -27,9 +31,13 @@ public class AddCustomDriverCapabilities {
     }
 
     public MutableCapabilities to(MutableCapabilities capabilities) {
-        PreScenarioFixtures.executeBeforeAWebdriverScenario().stream()
-                        .filter(beforeAWebdriverScenario -> beforeAWebdriverScenario.isActivated(environmentVariables))
-                                .forEach(beforeAWebdriverScenario -> beforeAWebdriverScenario.apply(environmentVariables, driver, testOutcome, capabilities));
+        List<BeforeAWebdriverScenario> fixtures = PreScenarioFixtures.executeBeforeAWebdriverScenario().stream()
+                .filter(beforeAWebdriverScenario -> beforeAWebdriverScenario.isActivated(environmentVariables))
+                .collect(Collectors.toList());
+
+        for(BeforeAWebdriverScenario beforeAWebdriverScenario : fixtures) {
+            beforeAWebdriverScenario.apply(environmentVariables, driver, testOutcome, capabilities);
+        }
         return capabilities;
     }
 }

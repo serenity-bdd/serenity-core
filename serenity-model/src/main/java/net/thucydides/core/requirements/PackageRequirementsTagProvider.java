@@ -32,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * This will typically be the directory structure containing the tests (for JUnit) or stories (e.g. for JBehave).
  * By default, the tests
  */
+@Deprecated
 public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvider
         implements RequirementsTagProvider, OverridableTagProvider, RequirementTypesProvider {
 
@@ -111,11 +112,12 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private java.util.Optional<List<Requirement>> reloadedRequirements() {
-        try {
-            return requirementsStore.read();
-        } catch (IOException e) {
-            return java.util.Optional.empty();
-        }
+        return java.util.Optional.empty();
+//        try {
+//            return requirementsStore.read();
+//        } catch (IOException e) {
+//            return java.util.Optional.empty();
+//        }
     }
 
     private Optional<List<Requirement>> requirementsReadFromClasspath() {
@@ -352,4 +354,65 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         int endingLevel = allRequirementTypes.size();
         return allRequirementTypes.subList(startingLevel, endingLevel);
     }
+
+    /**
+     * Returns a list of all classes loaded by the given class loader.
+     */
+    public static List<Class<?>> getClassesLoadedBy(ClassLoader classLoader) {
+        List<Class<?>> classes = new ArrayList<>();
+        // Get all loaded classes by iterating over the loaded class names
+        for (String className : getLoadedClassNames(classLoader)) {
+            try {
+                // Load each class by name using the class loader
+                Class<?> cls = Class.forName(className, false, classLoader);
+                classes.add(cls);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return classes;
+    }
+
+    /**
+     * Returns a list of the names of all classes loaded by the given class loader.
+     */
+    private static List<String> getLoadedClassNames(ClassLoader classLoader) {
+        List<String> classNames = new ArrayList<>();
+        // Get the class loader's parent, if any
+        ClassLoader parent = classLoader.getParent();
+        if (parent != null) {
+            // Recursively get the loaded class names of the parent class loader
+            classNames.addAll(getLoadedClassNames(parent));
+        }
+        // Get the loaded class names of this class loader
+        if (classLoader instanceof java.net.URLClassLoader) {
+            java.net.URLClassLoader urlClassLoader = (java.net.URLClassLoader) classLoader;
+            for (java.net.URL url : urlClassLoader.getURLs()) {
+                try {
+                    java.net.URLConnection connection = url.openConnection();
+                    if (connection instanceof java.net.JarURLConnection) {
+                        java.net.JarURLConnection jarConnection = (java.net.JarURLConnection) connection;
+                        java.util.jar.JarFile jarFile = jarConnection.getJarFile();
+                        for (java.util.jar.JarEntry entry : java.util.Collections.list(jarFile.entries())) {
+                            if (entry.getName().endsWith(".class")) {
+                                String className = entry.getName().replace('/', '.').substring(0, entry.getName().length() - ".class".length());
+                                classNames.add(className);
+                            }
+                        }
+                    } else {
+                        String path = url.getPath();
+                        if (path.endsWith(".class")) {
+                            String className = path.replace('/', '.').substring(0, path.length() - ".class".length());
+                            classNames.add(className);
+                        }
+                    }
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return classNames;
+    }
+
+
 }

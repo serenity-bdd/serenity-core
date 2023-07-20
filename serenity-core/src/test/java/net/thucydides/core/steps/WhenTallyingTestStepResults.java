@@ -144,7 +144,7 @@ public class WhenTallyingTestStepResults {
         BaseStepListener stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory);
         stepListener.testSuiteStarted(MyStory.class);
         stepListener.testStarted("app_should_work");
-        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("My story"));
+        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class WhenTallyingTestStepResults {
         BaseStepListener stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory);
         stepListener.testSuiteStarted(MyStory.class);
         stepListener.testStarted("the app should work");
-        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("My story"));
+        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -187,7 +187,7 @@ public class WhenTallyingTestStepResults {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyStory.class);
         stepListener.testSuiteStarted(story);
         stepListener.testStarted("the app should work");
-        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("My story"));
+        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -211,7 +211,7 @@ public class WhenTallyingTestStepResults {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyStory.class);
         stepListener.testSuiteStarted(story);
         stepListener.testStarted("the app should work");
-        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("My story"));
+        assertThat(stepListener.getCurrentTestOutcome().getUserStory().getName(), is("MyStory"));
     }
 
 

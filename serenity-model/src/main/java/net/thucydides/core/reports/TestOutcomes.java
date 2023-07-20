@@ -417,6 +417,17 @@ public class TestOutcomes {
         );
     }
 
+    public TestOutcomes directlyUnder(Requirement requirement) {
+        Set<TestOutcome> testOutcomesForThisRequirement  = this.getTests().stream()
+                .filter(testOutcome -> testOutcome.getUserStory().asTag().equals(requirement.asTag()))
+                .collect(Collectors.toSet());
+
+        return TestOutcomes.of(testOutcomesForThisRequirement)
+                .withLabel(requirement.getDisplayName())
+                .withTestTag(requirement.asTag())
+                .withRootOutcomes(getRootOutcomes());
+    }
+
     public TestOutcomes forRequirement(Requirement requirement) {
 
         Set<TestOutcome> testOutcomesForThisRequirement = new HashSet<>();
@@ -626,14 +637,9 @@ public class TestOutcomes {
 //    }
 
     public TestOutcomes withRequirementsTags() {
-        for (TestOutcome outcome : outcomes) {
-            List<TestTag> outcomeTags = new ArrayList<>(outcome.getAllTags());
-            List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
-            for (Requirement requirement : parentRequirements) {
-                outcomeTags.add(requirement.asTag());
-            }
-            outcome.addTags(outcomeTags);
-        }
+
+        requirementsService.getRequirements();
+        outcomes.stream().parallel().forEach(requirementsService::addRequirementTagsTo);
         return this;
     }
 

@@ -5,17 +5,14 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import static net.thucydides.core.reports.html.RequirementsTypeReportingTask.requirementTypeReports;
 
@@ -56,94 +53,148 @@ public class RequirementsReports {
 //        this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
-
     }
 
-    public static List<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
-                                                            EnvironmentVariables environmentVariables,
-                                                            File outputDirectory,
-                                                            ReportNameProvider reportNameProvider,
-                                                            RequirementsOutcomeFactory requirementsFactory,
-                                                            RequirementsService requirementsService,
-                                                            String relativeLink,
-                                                            TestOutcomes testOutcomes,
-                                                            RequirementsOutcomes requirementsOutcomes) throws IOException {
-
-        List<ReportingTask> reportingTasks = new ArrayList<>();
+    public static Stream<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
+                                                               EnvironmentVariables environmentVariables,
+                                                               File outputDirectory,
+                                                               ReportNameProvider reportNameProvider,
+                                                               RequirementsOutcomeFactory requirementsFactory,
+                                                               RequirementsService requirementsService,
+                                                               String relativeLink,
+                                                               TestOutcomes testOutcomes,
+                                                               RequirementsOutcomes requirementsOutcomes) throws IOException {
 
         RequirementsReports reporter = new RequirementsReports(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementsFactory, requirementsService, relativeLink, testOutcomes);
 
-        reportingTasks.addAll(requirementTypeReports(requirementsService.getRequirementTypes(),
-                                                     requirementsOutcomes,
-                                                     freemarker,
-                                                     environmentVariables,
-                                                     outputDirectory,
-                                                     reportNameProvider));
+        return Stream.of(
+                // REQUIREMENT TYPES
+                requirementTypeReports(requirementsService.getRequirementTypes(),
+                        requirementsOutcomes,
+                        freemarker,
+                        environmentVariables,
+                        outputDirectory,
+                        reportNameProvider),
 
-        reportingTasks.add(new RequirementsOverviewReportingTask(freemarker,
-                environmentVariables,
-                outputDirectory,
-                reportNameProvider,
-                requirementsService,
-                requirementsOutcomes.withoutUnrelatedRequirements(),
-                relativeLink,
-                testOutcomes).asParentRequirement());
-
-        reportingTasks.addAll(reporter.reportsForChildRequirements(requirementsOutcomes));
-
-        // Release reports have been removed from version 1.2.1
-        // generateReleasesReportFor(testOutcomes, requirementsOutcomes);
-
-        return reportingTasks;
-    }
-
-    private  List<ReportingTask> reportsForChildRequirements(RequirementsOutcomes requirementsOutcomes) throws IOException {
-
-        List<ReportingTask> reportingTasks = new ArrayList<>();
-        for (RequirementOutcome outcome : requirementsOutcomes.getRequirementOutcomes()) {
-            Requirement requirement = outcome.getRequirement();
-            TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
-            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement).withoutUnrelatedRequirements();
-
-            reportingTasks.addAll(nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement));
-        }
-        return reportingTasks;
-    }
-
-    private List<ReportingTask> nestedRequirementsReportsFor(Requirement parentRequirement, RequirementsOutcomes requirementsOutcomes) throws IOException {
-        List<ReportingTask> reportingTasks = new ArrayList<>();
-
-        String reportName = reportNameProvider.forRequirement(parentRequirement);
-
-        reportingTasks.add(
-                new RequirementsOverviewReportingTask(freemarker,
+                // REQUIREMENT OVERVIEW REPORTS
+                Stream.of(new RequirementsOverviewReportingTask(freemarker,
                         environmentVariables,
                         outputDirectory,
                         reportNameProvider,
                         requirementsService,
-                        requirementsOutcomes,
+                        requirementsOutcomes.withoutUnrelatedRequirements(),
                         relativeLink,
-                        requirementsOutcomes.getTestOutcomes(),
-                        reportName).asLeafRequirement()
-        );
+                        testOutcomes).asParentRequirement()),
+                reporter.reportsForChildRequirements(requirementsOutcomes)
+        ).flatMap(stream -> stream);
 
-        reportingTasks.addAll(requirementsReportsForChildRequirements(requirementsOutcomes));
+//        List<ReportingTask> reportingTasks = new ArrayList<>();
 
-        return reportingTasks;
+//        RequirementsReports reporter = new RequirementsReports(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementsFactory, requirementsService, relativeLink, testOutcomes);
+//
+//        reportingTasks.addAll(requirementTypeReports(requirementsService.getRequirementTypes(),
+//                                                     requirementsOutcomes,
+//                                                     freemarker,
+//                                                     environmentVariables,
+//                                                     outputDirectory,
+//                                                     reportNameProvider));
+
+//        reportingTasks.add(new RequirementsOverviewReportingTask(freemarker,
+//                environmentVariables,
+//                outputDirectory,
+//                reportNameProvider,
+//                requirementsService,
+//                requirementsOutcomes.withoutUnrelatedRequirements(),
+//                relativeLink,
+//                testOutcomes).asParentRequirement());
+
+//        reportingTasks.addAll(reporter.reportsForChildRequirements(requirementsOutcomes));
+
+        // Release reports have been removed from version 1.2.1
+        // generateReleasesReportFor(testOutcomes, requirementsOutcomes);
+
+//        return reportingTasks;
     }
 
-    private List<ReportingTask> requirementsReportsForChildRequirements(RequirementsOutcomes requirementsOutcomes) throws IOException {
-        List<ReportingTask> reportingTasks = new ArrayList<>();
+    private Stream<ReportingTask> reportsForChildRequirements(RequirementsOutcomes requirementsOutcomes) throws IOException {
 
-        List<RequirementOutcome> requirementOutcomes = requirementsOutcomes.getRequirementOutcomes();
-        for (RequirementOutcome outcome : requirementOutcomes) {
-            Requirement requirement = outcome.getRequirement();
-            TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
-            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement);
-            reportingTasks.addAll(nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement));
-        }
+        return requirementsOutcomes.getRequirementOutcomes().stream().flatMap(
+                outcome -> {
+                    Requirement requirement = outcome.getRequirement();
+                    TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
+                    RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement).withoutUnrelatedRequirements();
+                    return nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement);
+                }
+        );
+//        List<ReportingTask> reportingTasks = new ArrayList<>();
+//        for (RequirementOutcome outcome : requirementsOutcomes.getRequirementOutcomes()) {
+//            Requirement requirement = outcome.getRequirement();
+//            TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
+//            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement).withoutUnrelatedRequirements();
+//
+//            reportingTasks.addAll(nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement));
+//        }
+//        return reportingTasks;
+    }
 
-        return reportingTasks;
+    private Stream<ReportingTask> nestedRequirementsReportsFor(Requirement parentRequirement, RequirementsOutcomes requirementsOutcomes) {
+        return Stream.concat(
+                Stream.of(
+                        new RequirementsOverviewReportingTask(freemarker,
+                                environmentVariables,
+                                outputDirectory,
+                                reportNameProvider,
+                                requirementsService,
+                                requirementsOutcomes,
+                                relativeLink,
+                                requirementsOutcomes.getTestOutcomes(),
+                                reportNameProvider.forRequirement(parentRequirement)).asLeafRequirement()
+                        ),
+                requirementsReportsForChildRequirements(requirementsOutcomes)
+        );
+//        String reportName = reportNameProvider.forRequirement(parentRequirement);
+//        List<ReportingTask> reportingTasks = new ArrayList<>();
+//
+//
+//        reportingTasks.add(
+//                new RequirementsOverviewReportingTask(freemarker,
+//                        environmentVariables,
+//                        outputDirectory,
+//                        reportNameProvider,
+//                        requirementsService,
+//                        requirementsOutcomes,
+//                        relativeLink,
+//                        requirementsOutcomes.getTestOutcomes(),
+//                        reportName).asLeafRequirement()
+//        );
+//
+//        reportingTasks.addAll(requirementsReportsForChildRequirements(requirementsOutcomes));
+//
+//        return reportingTasks.stream();
+    }
+
+    private Stream<ReportingTask> requirementsReportsForChildRequirements(RequirementsOutcomes requirementsOutcomes) {
+
+        return requirementsOutcomes.getRequirementOutcomes().stream().flatMap(
+                outcome -> {
+                    Requirement requirement = outcome.getRequirement();
+                    TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
+                    RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement).withoutUnrelatedRequirements();
+                    return nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement);
+                }
+        );
+
+//        List<ReportingTask> reportingTasks = new ArrayList<>();
+//
+//        List<RequirementOutcome> requirementOutcomes = requirementsOutcomes.getRequirementOutcomes();
+//        for (RequirementOutcome outcome : requirementOutcomes) {
+//            Requirement requirement = outcome.getRequirement();
+//            TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
+//            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement);
+//            reportingTasks.addAll(nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement));
+//        }
+//
+//        return reportingTasks;
     }
 
     public List<String> getRequirementTypes() {

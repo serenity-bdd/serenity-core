@@ -175,6 +175,10 @@ public class Formatter {
         return renderedTitle.toString();
     }
 
+    public String breadcrumbFormat(String parent, String child) {
+        return parent.replace("/"," > ") + " > " + child;
+    }
+
     public String renderHtmlEscapedDescription(final String text) {
         return renderDescription(RenderMarkdown.preprocessMarkdownTables(withEscapedParameterFields(text)));
     }

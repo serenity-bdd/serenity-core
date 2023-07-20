@@ -2,8 +2,10 @@ package net.thucydides.samples;
 
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,16 @@ public class SampleNonWebSteps {
     @Step
     public void stepThatFails() {
         throw new AssertionError("Oh bother!");
+    }
+
+    @Step
+    public void stepWithAFailingJUnit4Assertion() {
+        Assert.assertTrue(false);
+    }
+
+    @Step
+    public void stepWithAFailingJUnit5Assertion() {
+        Assertions.assertTrue(false);
     }
 
     @Step

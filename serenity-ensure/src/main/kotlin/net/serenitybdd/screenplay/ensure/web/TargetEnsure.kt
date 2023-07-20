@@ -60,6 +60,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     fun hasText(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text value").isEqualTo(expectedValue)
 
     /**
+     * Verifies that the text value of an element exacly matches the specified value
+     */
+    fun hasTextIgnoringCase(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text value").isEqualToIgnoringCase(expectedValue)
+
+    /**
      * Verifies the text value of the specified element
      */
     fun textValues(): CollectionEnsure<String> = CollectionEnsure(textValuesOf(value), "$targetDescription with text values")
@@ -73,6 +78,11 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
      * Verifies the text content of the specified element is equal to the expected value
      */
     fun hasTextContent(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text content").isEqualTo(expectedValue)
+
+    /**
+     * Verifies the text content of the specified element is equal to the expected value (ignoring case)
+     */
+    fun hasTextContentIgnoringCase(expectedValue: String) = StringEnsure(textValueOf(value), "$targetDescription with text content (ignoring case)").isEqualToIgnoringCase(expectedValue)
 
     /**
      * Verifies the trimmed text content (excluding surrounding spaces) of the specified element is equal to the expected value

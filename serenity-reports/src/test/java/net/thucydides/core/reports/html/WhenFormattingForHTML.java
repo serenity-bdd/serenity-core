@@ -318,6 +318,16 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void should_convert_single_row_text_tables_into_html_tables() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter();
+
+        String formattedValue = formatter.convertAnyTables("|Bill|20|");
+
+        assertThat(formattedValue, is("<table class='embedded'><tbody><tr><td>Bill</td><td>20</td></tr></tbody></table>"));
+    }
+
+    @Test
     public void should_convert_embedded_text_tables_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
         Formatter formatter = new Formatter();

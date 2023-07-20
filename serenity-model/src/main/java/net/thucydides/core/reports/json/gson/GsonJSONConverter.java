@@ -22,11 +22,9 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class GsonJSONConverter implements JSONConverter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GsonJSONConverter.class);
-
     private final EnvironmentVariables environmentVariables;
 
-    Gson gson;
+    private final Gson gson;
 
     protected Gson getGson() {
         return gson;
@@ -40,7 +38,6 @@ public class GsonJSONConverter implements JSONConverter {
         encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
-//                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
                 .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
                 .registerTypeAdapter(StackTraceElement.class, new StackTraceElementSerializer())
@@ -60,15 +57,15 @@ public class GsonJSONConverter implements JSONConverter {
     @Override
     public java.util.Optional<TestOutcome> fromJson(Reader jsonReader) {
         TestOutcome testOutcome = gson.fromJson(jsonReader, TestOutcome.class);
-        return isValid(testOutcome) ? java.util.Optional.of(testOutcome) : java.util.Optional.<TestOutcome>empty();
+        return isValid(testOutcome) ? java.util.Optional.of(testOutcome) : java.util.Optional.empty();
     }
 
     private boolean isValid(TestOutcome testOutcome) {
-        boolean isValidJsonForm = isNotEmpty(testOutcome.getId());
-        if (isValidJsonForm) {
-            checkForRequiredFieldsIn(testOutcome);
+        if (testOutcome == null || isEmpty(testOutcome.getId())) {
+            return false;
         }
-        return isValidJsonForm;
+        checkForRequiredFieldsIn(testOutcome);
+        return true;
     }
 
     private void checkForRequiredFieldsIn(TestOutcome testOutcome) {
@@ -87,6 +84,6 @@ public class GsonJSONConverter implements JSONConverter {
     }
 
     private boolean usePrettyPrinting() {
-        return Boolean.parseBoolean(ThucydidesSystemProperty.JSON_PRETTY_PRINTING.from(environmentVariables,"false"));
+        return Boolean.parseBoolean(ThucydidesSystemProperty.JSON_PRETTY_PRINTING.from(environmentVariables, "false"));
     }
 }

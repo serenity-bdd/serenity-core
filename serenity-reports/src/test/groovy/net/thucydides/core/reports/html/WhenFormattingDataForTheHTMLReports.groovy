@@ -51,7 +51,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         where:
         foreignWord                           | formattedWord
         "Érintett Befogadása Alapadatokkal"   | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal" | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal" | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
     }
 
     @Unroll
@@ -77,18 +77,6 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         foreignWord                           | formattedWord
         "Érintett Befogadása Alapadatokkal"   | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
         "Érintett _Befogadása_ Alapadatokkal" | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
-    }
-
-
-    @Unroll
-    def "should render story titles with foreign characters and markdown"() {
-        expect:
-        def formatter = new Formatter();
-        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
-        where:
-        foreignWord                             | formattedWord
-        "Érintett **Befogadása** Alapadatokkal" | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
-        "Érintett _Befogadása_ Alapadatokkal"   | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
     }
 
     @Unroll

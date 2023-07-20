@@ -9,13 +9,13 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.io.SafelyMoveFiles;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -49,19 +49,25 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
-        String unique = UUID.randomUUID().toString();
-        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
+//        String unique = UUID.randomUUID().toString();
+//        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
         report.createNewFile();
 
-        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+        LOGGER.debug("Generating JSON report for {} to file {})", testOutcome.getTitle(), report.getAbsolutePath());
 
-        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
+        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
             jsonConverter.toJson(storedTestOutcome, outputStream);
             outputStream.flush();
         }
 
-        SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
+//        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+//        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
+//            jsonConverter.toJson(storedTestOutcome, outputStream);
+//            outputStream.flush();
+//        }
+//
+//        SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
 
         return report;
     }
@@ -98,7 +104,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         if (!reportFile.getName().toLowerCase().endsWith(".json")) {
             return Optional.empty();
         }
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(Files.newInputStream(reportFile.toPath()), encoding))) {
             return jsonConverter.fromJson(in);
         } catch (Throwable e) {
             LOGGER.debug("This file was not a valid JSON Serenity test report: " + reportFile.getName()

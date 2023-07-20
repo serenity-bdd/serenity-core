@@ -80,7 +80,7 @@ public class JUnit5DataDrivenAnnotations {
 
     private void fillDataTablesFromEnumSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfEnumSourceObjectsFrom(testDataMethod);
         logger.debug("GetParameterTablesEnumSource: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
@@ -88,7 +88,7 @@ public class JUnit5DataDrivenAnnotations {
 
     private void fillDataTablesFromValueSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromValueSource(testDataMethod);
         logger.debug("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
@@ -112,7 +112,7 @@ public class JUnit5DataDrivenAnnotations {
             deliminator = String.valueOf(csvSource.delimiter());
         }
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
 
         String testData = csvSource.textBlock();
         List<List<Object>> rows = listOfCsvObjectsFrom(testData.split("\\R"),deliminator);
@@ -122,7 +122,7 @@ public class JUnit5DataDrivenAnnotations {
 
     private void fillDataTablesFromCsvSourceValues(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfCsvObjectsFrom(testDataMethod);
         logger.debug("GetParameterTables: Put parameter dataTableName " + dataTableName + " -- " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
@@ -132,7 +132,7 @@ public class JUnit5DataDrivenAnnotations {
         CsvFileSource annotation = testDataMethod.getAnnotation(CsvFileSource.class);
         String[] paths = annotation.resources().length == 0 ? annotation.files() : annotation.resources();
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         try {
             JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(paths), CSVReader.DEFAULT_SEPARATOR);
             List<Map<String, String>> data = csvTestDataSource.getData();
@@ -154,14 +154,30 @@ public class JUnit5DataDrivenAnnotations {
 
      private void fillDataTablesFromMethodSource(Map<String, DataTable> dataTables, Method testDataMethod) {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testClass.getCanonicalName() + "." + testDataMethod.getName();
+        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromMethodSource(testDataMethod);
         logger.info("GetParameterTablesFromMethodSource: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
         dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
     }
 
     List<Method> findTestDataMethods() {
-        return Arrays.asList(testClass.getDeclaredMethods()).stream().filter(this::findParameterizedTests).collect(Collectors.toList());
+        return findTestDataMethods(testClass);
+    }
+
+    List<Method> findTestDataMethods(Class<?> testClass) {
+
+        List<Method> dataDrivenMethods = new ArrayList<>();
+
+        // Add all the data driven methods in this class
+        List<Method> allMethods = Arrays.asList(testClass.getDeclaredMethods());
+        allMethods.stream().filter(this::findParameterizedTests).forEach(dataDrivenMethods::add);
+
+        // Add all the data driven methods in any nested classes
+        List<Class<?>> nestedClasses = Arrays.asList(testClass.getDeclaredClasses());
+        nestedClasses.forEach(
+                nestedClass -> dataDrivenMethods.addAll(findTestDataMethods(nestedClass))
+        );
+        return dataDrivenMethods;
     }
 
     String createColumnNamesFromParameterNames(Method method) {

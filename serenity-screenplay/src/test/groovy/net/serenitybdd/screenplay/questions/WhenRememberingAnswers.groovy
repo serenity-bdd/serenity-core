@@ -1,12 +1,8 @@
 package net.serenitybdd.screenplay.questions
 
-import com.beust.jcommander.internal.Lists
-import com.google.common.collect.Sets
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.Question
 import net.thucydides.core.model.Story
-import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 

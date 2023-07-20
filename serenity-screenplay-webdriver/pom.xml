@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.7.2-SNAPSHOT</version>
+        <version>3.9.8-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-screenplay-webdriver</artifactId>
     <packaging>jar</packaging>
@@ -40,7 +40,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.1.0</version>
                 <configuration>
                     <parallel>all</parallel>
                     <threadCount>8</threadCount>

@@ -16,7 +16,7 @@ public class RequirementAncestry {
 
     public static void addParentsTo(List<Requirement> requirements, String parent) {
         for(Requirement requirement : requirements) {
-            addParentsTo(requirement.getChildren(), requirement.getName());
+            addParentsTo(requirement.getChildren(), requirement.getId());
             requirement.setParent(parent);
         }
     }

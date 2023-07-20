@@ -340,7 +340,7 @@
                                                                             <tr>
                                                                                 <td>
                                                                                     <#if (!tagCoverageByType.featureNamesAreUnique && tagCoverage.parentName?has_content) >
-                                                                                        <#assign displayedTagName = tagCoverage.parentName + " > " + tagCoverage.tagName />
+                                                                                        <#assign displayedTagName = formatter.breadcrumbFormat(tagCoverage.parentName, tagCoverage.tagName) />
                                                                                     <#else>
                                                                                         <#assign displayedTagName = tagCoverage.tagName />
                                                                                     </#if>

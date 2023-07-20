@@ -19,7 +19,7 @@ import java.util.Optional;
 public class FileSystemRequirementsStore implements RequirementsStore {
     private final File outputDirectory;
     private final String storeName;
-    Gson gson;
+    private final Gson gson;
 
     public FileSystemRequirementsStore(File outputDirectory, String storeName) {
         this.outputDirectory = outputDirectory;

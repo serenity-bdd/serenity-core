@@ -8,12 +8,14 @@ public class CurrentTestResult {
         if (isCucumber(testOutcome) && testOutcome.isDataDriven() && !testOutcome.getTestSteps().isEmpty()) {
             if (currentExample > 0) {
                 if (testOutcome.getTestSteps().size() >= currentExample) {
-                    return testOutcome.fromStep(currentExample - 1).getResult();
+                    return testOutcome.getStepResult(currentExample - 1);
+                    //return testOutcome.fromStep(currentExample - 1).getResult();
                 } else {
                     return TestResult.UNDEFINED;
                 }
             } else {
-                return testOutcome.fromStep(0).getResult();
+                return testOutcome.getStepResult(0);
+                // return testOutcome.fromStep(0).getResult();
             }
         } else {
             return testOutcome.getResult();

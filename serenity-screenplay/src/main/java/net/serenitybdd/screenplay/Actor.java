@@ -265,7 +265,6 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private <T extends Performable> void perform(T todo) {
         if (isPending(todo)) {
             stepPending();
-            //StepEventBus.getParallelEventBus().stepPending();
         }
 
         try {
@@ -279,7 +278,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
                 eventBusInterface.mergePreviousStep();
             }
         } catch (Throwable exception) {
-            if (!pendingOrIgnore(exception)) {
+            if (!pendingOrIgnore(exception) && !thisIsAnExceptionBubblingUpFromAPreviousFailure()) {
                 eventBusInterface.reportStepFailureFor(todo, exception);
             }
             if (Serenity.shouldThrowErrorsImmediately() || isAnAssumptionFailure(exception)) {
@@ -288,6 +287,10 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
         } finally {
             eventBusInterface.updateOverallResult();
         }
+    }
+
+    private static boolean thisIsAnExceptionBubblingUpFromAPreviousFailure() {
+        return StepEventBus.getParallelEventBus().getBaseStepListener().aStepHasFailed();
     }
 
     private <T extends Performable> void performTask(T todo) {
@@ -333,7 +336,6 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
 
         try {
             String groupTitle = injectActorInto(groupStepName);
-            //StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
             stepStarted(groupTitle);
             should(consequences);
 

@@ -1,10 +1,12 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.environment.MockEnvironmentVariables;
 import org.apache.commons.lang3.SystemUtils;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,6 +25,11 @@ public class WhenObtainingTheOutputDirectory {
     public void setupEnvironment() {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
+    }
+
+    @After
+    public void cleanup() {
+        ConfiguredEnvironment.reset();
     }
 
     @Test
@@ -51,6 +58,8 @@ public class WhenObtainingTheOutputDirectory {
     @Test
     public void the_default_output_directory_can_be_overriden_if_the_maven_site_output_directory_is_overridden() {
         environmentVariables.setProperty("project.reporting.OutputDirectory", "custom-reports-directory");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         File outputDirectory = configuration.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("custom-reports-directory/serenity")));
@@ -58,7 +67,9 @@ public class WhenObtainingTheOutputDirectory {
 
     @Test
     public void the_default_output_directory_can_be_overriden_using_a_thucydides_system_property() {
-        environmentVariables.setProperty("thucydides.outputDirectory", "thucydides-reports");
+        environmentVariables.setProperty("serenity.outputDirectory", "thucydides-reports");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         File outputDirectory = configuration.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(), is("thucydides-reports"));
@@ -71,7 +82,9 @@ public class WhenObtainingTheOutputDirectory {
 
         String absolutePath = (SystemUtils.IS_OS_WINDOWS)? "C:\\thucydides-reports" : "/thucydides-reports";
 
-        environmentVariables.setProperty("thucydides.outputDirectory", absolutePath);
+        environmentVariables.setProperty("serenity.outputDirectory", absolutePath);
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         File outputDirectory = configuration.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(),  is(absolutePath));
@@ -81,7 +94,9 @@ public class WhenObtainingTheOutputDirectory {
     public void a_relative_thucydides_system_property_uses_the_maven_build_dir() {
         environmentVariables.setProperty("project.build.directory", "build");
         environmentVariables.setProperty("project.reporting.OutputDirectory", "custom-reports-directory");
-        environmentVariables.setProperty("thucydides.outputDirectory", "thucydides-reports");
+        environmentVariables.setProperty("serenity.outputDirectory", "thucydides-reports");
+        ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
         File outputDirectory = configuration.getOutputDirectory();
 
         assertThat(outputDirectory.getPath(), Matchers.anyOf(is("build/thucydides-reports"),

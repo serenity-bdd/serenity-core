@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.reports.model.DurationDistribution;
-import net.thucydides.core.model.OutcomeCounter;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
@@ -10,41 +9,36 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ResultReports {
 
-    public static List<ReportingTask> resultReportsFor(TestOutcomes testOutcomes,
-                                                       FreemarkerContext freemarker,
-                                                       EnvironmentVariables environmentVariables,
-                                                       File outputDirectory,
-                                                       ReportNameProvider reportNameProvider) {
-        List<ReportingTask> reportingTasks = new ArrayList<>();
+    public static Stream<ReportingTask> resultReportsFor(TestOutcomes testOutcomes,
+                                                         FreemarkerContext freemarker,
+                                                         EnvironmentVariables environmentVariables,
+                                                         File outputDirectory,
+                                                         ReportNameProvider reportNameProvider) {
 
-        reportingTasks.addAll(
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+
+        return Stream.of(
+                // RESULT REPORTS
                 resultReportsFor(
                         freemarker,
                         environmentVariables,
                         outputDirectory,
                         testOutcomes,
                         reportNameProvider,
-                        TestTag.EMPTY_TAG)
-        );
-
-        reportingTasks.addAll(
+                        TestTag.EMPTY_TAG),
+                // DURATION REPORTS
                 durationReportsFor(
                         freemarker,
                         environmentVariables,
                         outputDirectory,
                         testOutcomes,
                         reportNameProvider,
-                        TestTag.EMPTY_TAG)
-        );
-
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
-
-        // RESULT REPORTS
-        reportingTasks.addAll(
+                        TestTag.EMPTY_TAG),
+                // TAG REPORTS
                 testOutcomes.getTags().stream()
                         .filter(exclusions::doNotExclude)
                         .flatMap(tag -> resultReportsFor(
@@ -52,11 +46,9 @@ public class ResultReports {
                                 environmentVariables,
                                 outputDirectory,
                                 testOutcomes.withTag(tag),
-                                new ReportNameProvider(tag.getName()), tag).stream()
-                        ).collect(Collectors.toList()));
-
-        // DURATION REPORTS
-        reportingTasks.addAll(
+                                new ReportNameProvider(tag.getName()), tag)
+                        ),
+                // DURATIONS PER TAG
                 testOutcomes.getTags().stream()
                         .filter(exclusions::doNotExclude)
                         .flatMap(tag -> durationReportsFor(
@@ -64,14 +56,12 @@ public class ResultReports {
                                 environmentVariables,
                                 outputDirectory,
                                 testOutcomes.withTag(tag),
-                                new ReportNameProvider(tag.getName()), tag).stream()
-                        ).collect(Collectors.toList())
-        );
+                                new ReportNameProvider(tag.getName()), tag))
 
-        return reportingTasks;
+        ).flatMap(stream -> stream);
     }
 
-    private static List<ReportingTask> resultReportsFor(final FreemarkerContext freemarker,
+    private static Stream<ReportingTask> resultReportsFor(final FreemarkerContext freemarker,
                                                         final EnvironmentVariables environmentVariables,
                                                         final File outputDirectory,
                                                         final TestOutcomes testOutcomesForThisTag,
@@ -118,11 +108,11 @@ public class ResultReports {
 //        if (totalTests.withResult(TestResult.SKIPPED) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.havingResult(TestResult.SKIPPED), reportName, tag, "skipped"));
         }
-        return tasks;
+        return tasks.stream();
     }
 
 
-    private static List<ReportingTask> durationReportsFor(final FreemarkerContext freemarker,
+    private static Stream<ReportingTask> durationReportsFor(final FreemarkerContext freemarker,
                                                           final EnvironmentVariables environmentVariables,
                                                           final File outputDirectory,
                                                           final TestOutcomes testOutcomesForThisTag,
@@ -149,7 +139,7 @@ public class ResultReports {
                     }
                 }
         );
-        return tasks;
+        return tasks.stream();
     }
 
     private static ReportingTask resultReport(final FreemarkerContext freemarker,

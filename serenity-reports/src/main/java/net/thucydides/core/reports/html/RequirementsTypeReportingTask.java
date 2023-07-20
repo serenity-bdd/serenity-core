@@ -11,8 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class RequirementsTypeReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -36,12 +35,12 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
         this.reportName = reportNameProvider.forRequirementType(requirementType);
     }
 
-    static Set<ReportingTask> requirementTypeReports(final List<String> requirementTypes,
-                                                     final RequirementsOutcomes requirementsOutcomes,
-                                                     final FreemarkerContext freemarker,
-                                                     final EnvironmentVariables environmentVariables,
-                                                     final File outputDirectory,
-                                                     final ReportNameProvider reportNameProvider) {
+    static Stream<ReportingTask> requirementTypeReports(final List<String> requirementTypes,
+                                                        final RequirementsOutcomes requirementsOutcomes,
+                                                        final FreemarkerContext freemarker,
+                                                        final EnvironmentVariables environmentVariables,
+                                                        final File outputDirectory,
+                                                        final ReportNameProvider reportNameProvider) {
 
         return requirementTypes.stream()
                 .map(
@@ -51,7 +50,7 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
                                 reportNameProvider,
                                 requirementsOutcomes,
                                 type)
-                ).collect(Collectors.toSet());
+                );
 
     }
 

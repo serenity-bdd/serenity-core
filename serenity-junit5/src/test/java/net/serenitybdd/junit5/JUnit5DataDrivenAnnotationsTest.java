@@ -33,6 +33,12 @@ public class JUnit5DataDrivenAnnotationsTest {
     }
 
     @Test
+    public void testFindNestedMethodSourceAnnotatedMethods() throws Exception{
+        JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(NestedDataDrivenTestScenariosWithValueSource.class);
+        assertEquals(2,dda.findTestDataMethods().size());
+    }
+
+    @Test
     public void testFindMethodSourceAnnotatedMethodsNoName() throws Exception{
         JUnit5DataDrivenAnnotations dda =  new JUnit5DataDrivenAnnotations(SimpleDataDrivenTestScenarioWithMethodSourceNoName.class);
         assertEquals(1,dda.findTestDataMethods().size());

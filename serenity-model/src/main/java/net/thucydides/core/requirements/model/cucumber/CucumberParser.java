@@ -1,8 +1,10 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Supplier;
 import io.cucumber.core.feature.FeatureParser;
 import io.cucumber.core.gherkin.FeatureParserException;
+import io.cucumber.core.gherkin.messages.GherkinMessagesFeatureParser;
 import io.cucumber.core.resource.Resource;
 import io.cucumber.messages.types.*;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -12,10 +14,15 @@ import net.thucydides.core.reports.html.CucumberTagConverter;
 import net.thucydides.core.requirements.model.FeatureBackgroundNarrative;
 import net.thucydides.core.requirements.model.RequirementDefinition;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.*;
@@ -24,6 +31,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.lang.System.lineSeparator;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 import static net.thucydides.core.requirements.model.cucumber.FeatureFileAnaysisErrors.*;
 
 
@@ -34,6 +43,7 @@ public class CucumberParser {
 
     private final String locale;
     private final String encoding;
+    private final static Supplier<UUID> ID_SUPPLIER = UUID::randomUUID;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CucumberParser.class);
 
@@ -53,29 +63,20 @@ public class CucumberParser {
 
     public Optional<AnnotatedFeature> loadFeature(File featureFile) {
         LOGGER.debug("Loading feature {}", featureFile.toString());
-        if (featureFile == null) {
-            return Optional.empty();
-        }
-        if (!featureFile.exists()) {
+        if (featureFile == null || !featureFile.exists()) {
             return Optional.empty();
         }
 
-        List<String> listOfFiles = new ArrayList<>();
-        listOfFiles.add(featureFile.getAbsolutePath());
-
-        List<GherkinDocument> gherkinDocuments = loadCucumberFeatures(listOfFiles);
+        Optional<GherkinDocument> possibleGherkinDocument = loadCucumberFeature(featureFile.toPath());
         try {
-            if (gherkinDocuments.size() == 0) {
-                return Optional.empty();
-            }
-            GherkinDocument gherkinDocument = gherkinDocuments.get(0);
+            if (possibleGherkinDocument.isPresent() && possibleGherkinDocument.get().getFeature().isPresent()) {
+                GherkinDocument gherkinDocument = possibleGherkinDocument.get();
 
-            String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getComments());
+                String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getComments());
 
-            if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
-                return Optional.empty();
-            }
-            if (gherkinDocument.getFeature().isPresent()) {
+                if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
+                    return Optional.empty();
+                }
                 Feature feature = gherkinDocument.getFeature().get();
                 List<Scenario> scenarioList = feature.getChildren().stream()
                         .map(FeatureChild::getScenario)
@@ -169,57 +170,44 @@ public class CucumberParser {
         }
     }
 
-    private List<GherkinDocument> loadCucumberFeatures(List<String> listOfFiles) {
-        for (String cucumberFile : listOfFiles) {
-            searchForCucumberSyntaxErrorsIn(cucumberFile);
-        }
-        List<GherkinDocument> loadedFeatures = new ArrayList<>();
-        List<?> envelopes = getFeatures(listOfFiles)
-                .stream()
-                .flatMap(feature -> StreamSupport.stream(feature.getParseEvents().spliterator(), false))
-                .collect(Collectors.toList());
+    private Optional<GherkinDocument> loadCucumberFeature(Path cucumberFile) {
+        Optional<io.cucumber.core.gherkin.Feature> possibleFeature = getFeature(cucumberFile);
 
-        List<GherkinDocument> gherkinDocuments = envelopes
-                .stream()
-                .map(o -> ((Envelope) o).getGherkinDocument())
+        List<Envelope> envelopes = new ArrayList<>();
+
+        possibleFeature.ifPresent(
+                feature -> feature.getParseEvents().forEach(
+                        parseEvent -> envelopes.add((Envelope) parseEvent)
+                )
+        );
+
+        return envelopes.stream()
+                .map(Envelope::getGherkinDocument)
                 .filter(Objects::nonNull)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
-
-        for (GherkinDocument gherkinDocument : gherkinDocuments) {
-            if (gherkinDocument != null && gherkinDocument.getFeature() != null && gherkinDocument.getFeature().isPresent()) {
-                loadedFeatures.add(gherkinDocument);
-                LOGGER.trace("Added feature {}", gherkinDocument.getFeature().get().getName());
-            } else {
-                LOGGER.warn("Couldn't read the feature file: {} - it will be ignored", gherkinDocument != null ? gherkinDocument.getUri() : "<null>");
-            }
-        }
-        return loadedFeatures;
+                .filter(gherkinDocument -> gherkinDocument.getFeature() != null && gherkinDocument.getFeature().isPresent())
+                .findFirst();
     }
 
-    private void searchForCucumberSyntaxErrorsIn(String cucumberFile) {
-        FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
-        Path cucumberFilePath = new File(cucumberFile).toPath();
-
+    private Optional<io.cucumber.core.gherkin.Feature> getFeature(Path cucumberFilePath) {
         Resource cucumberResource = new URIResource(cucumberFilePath);
         try {
-            featureParser.parseResource(cucumberResource);
+            return parseResource(cucumberResource);
         } catch (Throwable throwable) {
-            reportAnyCucumberSyntaxErrorsIn(throwable);
+            throw new InvalidFeatureFileException("Failed to read feature file at " + cucumberFilePath, throwable);
         }
     }
 
-    private List<io.cucumber.core.gherkin.Feature> getFeatures(List<String> paths) {
-        FeatureParser featureParser = new FeatureParser(UUID::randomUUID);
-        List<io.cucumber.core.gherkin.Feature> results = new ArrayList<>();
-        paths.forEach(path -> {
-            Path cucumberFilePath = new File(path).toPath();
-            Resource cucumberResource = new URIResource(cucumberFilePath);
-            Optional<io.cucumber.core.gherkin.Feature> maybeFeature = featureParser.parseResource(cucumberResource);
-            maybeFeature.ifPresent(results::add);
-        });
-        return results;
+    public Optional<io.cucumber.core.gherkin.Feature> parseResource(Resource resource) {
+        requireNonNull(resource);
+        URI uri = resource.getUri();
+        io.cucumber.core.gherkin.FeatureParser featureParser = new GherkinMessagesFeatureParser();
+        try (InputStream source = resource.getInputStream()) {
+            return featureParser.parse(uri, source, ID_SUPPLIER);
+        } catch (IOException e) {
+            throw new FeatureParserException("Failed to parse resource at: " + uri, e);
+        }
     }
 
     private void reportAnyCucumberSyntaxErrorsIn(Throwable gherkinError) {
@@ -228,15 +216,19 @@ public class CucumberParser {
         }
     }
 
-
     public Optional<RequirementDefinition> loadFeatureDefinition(File featureFile) {
 
         Optional<AnnotatedFeature> loadedFeature = loadFeature(featureFile);
 
         if (!loadedFeature.isPresent()) {
             return Optional.empty();
+        } else {
+            return getRequirementsDefinitionFrom(loadedFeature);
         }
+    }
 
+    @NotNull
+    private synchronized Optional<RequirementDefinition> getRequirementsDefinitionFrom(Optional<AnnotatedFeature> loadedFeature) {
         Feature feature = loadedFeature.get().getFeature();
 
         String cardNumber = findCardNumberInTags(tagsDefinedIn(feature));

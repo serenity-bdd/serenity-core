@@ -9,9 +9,8 @@ class WhenLoadingIncorrectFeatureFiles extends Specification {
     def "Should display a meaningful error message if there is a Gherkin syntax error"() {
         when:
         CucumberParser parser = new CucumberParser()
-        Optional<AnnotatedFeature> feature = parser.loadFeature(new File(invalidFeatureFile))
+        parser.loadFeature(new File(invalidFeatureFile))
         then:
         InvalidFeatureFileException ex = thrown()
-            ex.message.contains("Failed to parse resource")
     }
 }

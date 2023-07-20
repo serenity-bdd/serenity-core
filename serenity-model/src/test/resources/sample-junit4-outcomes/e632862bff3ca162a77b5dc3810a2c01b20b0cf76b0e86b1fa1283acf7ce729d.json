@@ -1,0 +1,55 @@
+{
+  "name": "aNestedTest",
+  "id": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest:aNestedTest",
+  "scenarioId": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest:aNestedTest",
+  "testCaseName": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+  "methodName": "aNestedTest",
+  "userStory": {
+    "id": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+    "storyName": "ADeeperNestedStoryTest",
+    "displayName": "ADeeperNestedStoryTest",
+    "storyClassName": "smoketests.sample.nested.deep.deeper.ADeeperNestedStoryTest",
+    "path": "sample.nested.deep.deeper.ADeeperNestedStoryTest",
+    "pathElements": [
+      {
+        "name": "sample",
+        "description": "sample"
+      },
+      {
+        "name": "nested",
+        "description": "nested"
+      },
+      {
+        "name": "deep",
+        "description": "deep"
+      },
+      {
+        "name": "deeper",
+        "description": "deeper"
+      },
+      {
+        "name": "ADeeperNestedStoryTest",
+        "description": "ADeeperNestedStoryTest"
+      }
+    ],
+    "narrative": "",
+    "type": "feature"
+  },
+  "title": "A nested test",
+  "tags": [
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-07-06T10:34:53.712725+01:00[Europe/London]",
+  "duration": 0,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit",
+  "order": 0,
+  "result": "SUCCESS"
+}

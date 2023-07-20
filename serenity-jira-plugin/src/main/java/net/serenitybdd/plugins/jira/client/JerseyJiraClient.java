@@ -1,6 +1,5 @@
 package net.serenitybdd.plugins.jira.client;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
@@ -302,7 +301,7 @@ public class JerseyJiraClient {
     }
 
     private Map<String, String> renderedFieldValuesFrom(JsonObject renderedFields) {
-        Map<String, String> renderedFieldMap = Maps.newHashMap();
+        Map<String, String> renderedFieldMap = new HashMap<>();
         Set<Map.Entry<String, JsonElement>> entries = renderedFields.entrySet();
         for (Map.Entry<String, JsonElement> currentEntry : entries) {
             String fieldName = currentEntry.getKey();
@@ -324,7 +323,7 @@ public class JerseyJiraClient {
     }
 
     private Map<String, Object> customFieldValuesIn(JsonObject fields, JsonObject renderedFields) {
-        Map<String, Object> customFieldValues = Maps.newHashMap();
+        Map<String, Object> customFieldValues = new HashMap<>();
         for (String customFieldName : customFields) {
             CustomField customField = getCustomFieldsIndex().get(customFieldName);
             if (customFieldDefined(fields, renderedFields, customField)) {
@@ -597,7 +596,7 @@ public class JerseyJiraClient {
 
 
     private Map<String, String> indexCustomFieldNames() {
-        Map<String, String> index = Maps.newHashMap();
+        Map<String, String> index = new HashMap<>();
         for (CustomField field : getExistingCustomFields()) {
             index.put(field.getId(), field.getName());
         }
@@ -606,7 +605,7 @@ public class JerseyJiraClient {
 
 
     private Map<String, CustomField> indexCustomFields() {
-        Map<String, CustomField> index = Maps.newHashMap();
+        Map<String, CustomField> index = new HashMap<>();
         for (CustomField field : getExistingCustomFields()) {
             index.put(field.getName(), field);
         }

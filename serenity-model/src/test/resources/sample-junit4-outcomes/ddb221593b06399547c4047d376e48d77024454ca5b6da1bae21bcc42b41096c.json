@@ -1,0 +1,47 @@
+{
+  "name": "anotherNestedTest",
+  "id": "smoketests.sample.nested.ANestedStoryTest:anotherNestedTest",
+  "scenarioId": "smoketests.sample.nested.ANestedStoryTest:anotherNestedTest",
+  "testCaseName": "smoketests.sample.nested.ANestedStoryTest",
+  "methodName": "anotherNestedTest",
+  "userStory": {
+    "id": "smoketests.sample.nested.ANestedStoryTest",
+    "storyName": "ANestedStoryTest",
+    "displayName": "ANestedStoryTest",
+    "storyClassName": "smoketests.sample.nested.ANestedStoryTest",
+    "path": "sample.nested.ANestedStoryTest",
+    "pathElements": [
+      {
+        "name": "sample",
+        "description": "sample"
+      },
+      {
+        "name": "nested",
+        "description": "nested"
+      },
+      {
+        "name": "ANestedStoryTest",
+        "description": "ANestedStoryTest"
+      }
+    ],
+    "narrative": "",
+    "type": "feature"
+  },
+  "title": "Another nested test",
+  "tags": [
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-07-06T10:34:53.740368+01:00[Europe/London]",
+  "duration": 0,
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit",
+  "order": 0,
+  "result": "SUCCESS"
+}

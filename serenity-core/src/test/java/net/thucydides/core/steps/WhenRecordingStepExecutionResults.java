@@ -296,7 +296,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -316,11 +316,11 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
         TestOutcome outcome2 = stepListener.getTestOutcomes().get(1);
-        assertThat(outcome2.getUserStory().getName(), is("My story"));
+        assertThat(outcome2.getUserStory().getName(), is("MyStory"));
         TestOutcome outcome3 = stepListener.getTestOutcomes().get(2);
-        assertThat(outcome3.getUserStory().getName(), is("My other story"));
+        assertThat(outcome3.getUserStory().getName(), is("MyOtherStory"));
     }
 
     @Test
@@ -332,7 +332,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -344,7 +344,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -357,7 +357,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -373,13 +373,13 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
 
         TestOutcome outcome2 = stepListener.getTestOutcomes().get(1);
-        assertThat(outcome2.getUserStory().getName(), is("My story"));
+        assertThat(outcome2.getUserStory().getName(), is("MyStory"));
 
         TestOutcome outcome3 = stepListener.getTestOutcomes().get(2);
-        assertThat(outcome3.getUserStory().getName(), is("Another story"));
+        assertThat(outcome3.getUserStory().getName(), is("AnotherStory"));
 
     }
 
@@ -392,7 +392,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
     }
 
     @Test
@@ -406,10 +406,10 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My story"));
+        assertThat(outcome.getUserStory().getName(), is("MyStory"));
 
         TestOutcome outcome2 = stepListener.getTestOutcomes().get(1);
-        assertThat(outcome2.getUserStory().getName(), is("My story"));
+        assertThat(outcome2.getUserStory().getName(), is("MyStory"));
 
     }
 
@@ -429,13 +429,13 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome1 = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome1.getUserStory().getName(), is("My story"));
+        assertThat(outcome1.getUserStory().getName(), is("MyStory"));
 
         TestOutcome outcome2 = stepListener.getTestOutcomes().get(1);
-        assertThat(outcome2.getUserStory().getName(), is("My story"));
+        assertThat(outcome2.getUserStory().getName(), is("MyStory"));
 
         TestOutcome outcome3 = stepListener.getTestOutcomes().get(2);
-        assertThat(outcome3.getUserStory().getName(), is("My other story"));
+        assertThat(outcome3.getUserStory().getName(), is("MyOtherStory"));
 
 
     }
@@ -454,7 +454,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getParallelEventBus().testFinished(testOutcome);
 
         TestOutcome outcome = stepListener.getTestOutcomes().get(0);
-        assertThat(outcome.getUserStory().getName(), is("My test case without a story"));
+        assertThat(outcome.getUserStory().getName(), is("MyTestCaseWithoutAStory"));
     }
 
 

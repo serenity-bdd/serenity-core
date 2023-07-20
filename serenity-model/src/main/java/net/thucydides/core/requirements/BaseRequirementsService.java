@@ -1,10 +1,9 @@
 package net.thucydides.core.requirements;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.model.Release;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
@@ -32,8 +31,14 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseRequirementsService.class);
 
+    private final LoadingCache<TestOutcome, Optional> parentRequirementCache;
+
     public BaseRequirementsService(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        parentRequirementCache = Caffeine.newBuilder()
+                .maximumSize(1024)
+                .build(this::findParentRequirementFor);
+
     }
 
     public abstract List<Requirement> getRequirements();
@@ -42,29 +47,21 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     public abstract Optional<ReleaseProvider> getReleaseProvider();
 
-    private static HashMap<TestOutcome, Optional<Requirement>> PARENT_REQUIREMENTS = new HashMap<>();
     public java.util.Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome) {
+        return parentRequirementCache.get(testOutcome);
+    }
 
-        if (PARENT_REQUIREMENTS.containsKey(testOutcome)) {
-            return PARENT_REQUIREMENTS.get(testOutcome);
-        }
-        try {
-            for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
-                java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
-                if (requirement.isPresent()) {
-                    PARENT_REQUIREMENTS.put(testOutcome,requirement);
-                    return requirement;
-                }
+    private Optional<Requirement> findParentRequirementFor(TestOutcome testOutcome) {
+        for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
+            Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
+            if (requirement.isPresent()) {
+                return requirement;
             }
-        } catch (RuntimeException handleTagProvidersElegantly) {
-            LOGGER.error("Tag provider failure", handleTagProvidersElegantly);
         }
-        PARENT_REQUIREMENTS.put(testOutcome, Optional.empty());
-        return java.util.Optional.empty();
+        return Optional.empty();
     }
 
     public java.util.Optional<Requirement> getRequirementFor(TestTag tag) {
-
         try {
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 java.util.Optional<Requirement> requirement = tagProvider.getRequirementFor(tag);
@@ -318,5 +315,13 @@ public abstract class BaseRequirementsService implements RequirementsService {
     @Override
     public void resetRequirements() {
         requirements = null;
+    }
+
+    private static final List<Requirement> NO_PARENTS = new ArrayList<>();
+
+    @Override
+    public List<Requirement> getParentRequirementsOf(Requirement requirement) {
+        List<Requirement> ancestors = this.requirementAncestors.get(requirement);
+        return (ancestors == null || ancestors.isEmpty()) ? NO_PARENTS : ancestors.subList(0, ancestors.size() - 1);
     }
 }

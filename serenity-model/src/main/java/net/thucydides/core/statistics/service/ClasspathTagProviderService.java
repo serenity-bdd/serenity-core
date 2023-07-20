@@ -35,6 +35,9 @@ public class ClasspathTagProviderService implements TagProviderService {
         List<TagProvider> newTagProviders = new ArrayList<>();
         Iterable<? extends TagProvider> tagProviderServiceLoader = loadTagProvidersFromPath(testSource);
         for (TagProvider tagProvider : tagProviderServiceLoader) {
+            if (newTagProviders.stream().anyMatch(provider -> provider.getClass().equals(tagProvider.getClass()))) {
+                continue;
+            }
             newTagProviders.add(tagProvider);
         }
         return filter.removeOverriddenProviders(newTagProviders);

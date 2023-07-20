@@ -106,13 +106,6 @@ public class SerenityAggregatorMojo extends AbstractMojo {
     public MavenProject project;
 
     /**
-     * If set to true, the HTML reports for the individual tests will also be generated.
-     * This is not normally necessary as the individual test reports are generated when the tests are executed.
-     */
-    @Parameter
-    public boolean generateOutcomes;
-
-    /**
      * Specify a comma-separated list of additional reports to be produced by the aggregate goal.
      */
     @Parameter(property = "serenity.reports")
@@ -271,10 +264,7 @@ public class SerenityAggregatorMojo extends AbstractMojo {
         getReporter().setJiraUsername(jiraUsername);
         getReporter().setJiraPassword(jiraPassword);
         getReporter().setTags(tags);
-
-        if (generateOutcomes) {
-            getReporter().setGenerateTestOutcomeReports();
-        }
+        getReporter().setGenerateTestOutcomeReports();
         TestOutcomes outcomes = getReporter().generateReportsForTestResultsFrom(sourceDirectory);
         return new ResultChecker(outputDirectory).checkTestResults(outcomes);
     }

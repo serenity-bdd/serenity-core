@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.7.2-SNAPSHOT</version>
+        <version>3.9.8-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-junit</artifactId>
     <packaging>jar</packaging>
@@ -93,6 +93,16 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.3</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 </project>

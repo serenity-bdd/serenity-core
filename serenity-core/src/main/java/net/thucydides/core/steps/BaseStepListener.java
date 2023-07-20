@@ -440,6 +440,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         clearStorywideTagsAndIssues();
     }
 
+    public void testSuiteStarted(final Class<?> startedTestSuite, String testName) {
+        testSuite = startedTestSuite;
+        testedStory = findStoryFrom(startedTestSuite)
+                .withStoryName(testName)
+                .withDisplayName(testName);
+        suiteStarted = true;
+        clearStorywideTagsAndIssues();
+    }
+
     private void clearStorywideTagsAndIssues() {
         storywideIssues.clear();
         storywideTags.clear();
@@ -510,15 +519,26 @@ public class BaseStepListener implements StepListener, StepPublisher {
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
-    public void testStarted(final String testMethod, final String id) {
-        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
+    public void testStarted(final String testName, final String id) {
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testName, testSuite, testedStory).withId(id);
         this.currentTestOutcome = newTestOutcome;
-        recordNewTestOutcome(testMethod, currentTestOutcome);
+        recordNewTestOutcome(testName, currentTestOutcome);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
 
-     public void testStarted(final String testMethod, final String id, ZonedDateTime startTime) {
+    public void testStarted(final String testName, String methodName, final String id, String scenarioId) {
+        TestOutcome newTestOutcome = TestOutcome.forTestInStory(testName, testSuite, testedStory)
+                .withId(id)
+                .withScenarioId(scenarioId)
+                .withTestMethodName(methodName);
+        this.currentTestOutcome = newTestOutcome;
+        recordNewTestOutcome(testName, currentTestOutcome);
+
+        LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
+    }
+
+    public void testStarted(final String testMethod, final String id, ZonedDateTime startTime) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id).withStartTime(startTime);
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
@@ -586,12 +606,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testFinished(final TestOutcome result, boolean isInDataDrivenTest) {
-        testFinished(result,isInDataDrivenTest,ZonedDateTime.now());
+        testFinished(result, isInDataDrivenTest, ZonedDateTime.now());
     }
 
     /**
      * A test has finished.
-     *
      */
     public void testFinished(final TestOutcome outcome, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
 
@@ -822,11 +841,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
-        takeEndOfStepScreenshotForPlayback(SUCCESS,screenshotList);
+        takeEndOfStepScreenshotForPlayback(SUCCESS, screenshotList);
         currentStepDone(SUCCESS);
         pauseIfRequired();
     }
-
 
 
     private void updateExampleTableIfNecessary(TestResult result) {
@@ -863,23 +881,28 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void stepFailed(StepFailure failure) {
 
+        if (!aStepHasFailed()) {
+            // This is the actual failure, so record all the details
+            takeEndOfStepScreenshotFor(FAILURE);
 
-        takeEndOfStepScreenshotFor(FAILURE);
+            TestFailureCause failureCause = TestFailureCause.from(failure.getException());
+            getCurrentTestOutcome().appendTestFailure(failureCause);
 
-        TestFailureCause failureCause = TestFailureCause.from(failure.getException());
-        getCurrentTestOutcome().appendTestFailure(failureCause);
-
-        recordFailureDetails(failure);
+            recordFailureDetails(failure);
+        }
+        // In all cases, mark the step as done with the appropriate result
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
     public void stepFailedWithException(Throwable failure) {
-        takeEndOfStepScreenshotFor(FAILURE);
+        if (!aStepHasFailed()) {
+            takeEndOfStepScreenshotFor(FAILURE);
 
-        TestFailureCause failureCause = TestFailureCause.from(failure);
-        getCurrentTestOutcome().appendTestFailure(failureCause);
+            TestFailureCause failureCause = TestFailureCause.from(failure);
+            getCurrentTestOutcome().appendTestFailure(failureCause);
 
-        recordFailureDetails(failure);
+            recordFailureDetails(failure);
+        }
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
@@ -952,7 +975,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
-        takeEndOfStepScreenshotForRecording(SUCCESS,screenshots);
+        takeEndOfStepScreenshotForRecording(SUCCESS, screenshots);
     }
 
     public void currentStepDone(TestResult result) {
@@ -960,13 +983,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
             currentStepMethodStack.pop();
         }
         if (currentStepExists()) {
-//            TestStep finishedStep = currentStepStack.get().pop();
             TestStep finishedStep = currentStepStack.pop();
             finishedStep.recordDuration();
             if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
-            if ((finishedStep == getCurrentGroup())) {
+            if (finishedStep == getCurrentGroup()) {
                 finishGroup();
             }
         }
@@ -988,15 +1010,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
 
-    private void takeEndOfStepScreenshotForRecording(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeEndOfStepScreenshotForRecording(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if ((currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result))) {
-            takeRecord(MANDATORY_SCREENSHOT, result,screenshots);
+            takeRecord(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
 
-    private void takeEndOfStepScreenshotForPlayback(final TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeEndOfStepScreenshotForPlayback(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if ((screenshots != null && screenshots.size() > 0)) {
-            takePlayback(MANDATORY_SCREENSHOT, result,screenshots);
+            takePlayback(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
 
@@ -1025,13 +1047,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private void takeRecord(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
+    private void takeRecord(final ScreenshotType screenshotType, TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
         if (shouldTakeScreenshotsWithoutCurrentStep(result)) {
             try {
                 grabScreenshots(result).forEach(
                         screenshot -> {
-                            boolean screenshotExisting = screenshots.stream().map(screens->screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
-                            if(!screenshotExisting) {
+                            boolean screenshotExisting = screenshots.stream().map(screens -> screens.getScreenshot().getName()).collect(Collectors.toList()).contains(screenshot.getScreenshot().getName());
+                            if (!screenshotExisting) {
                                 screenshots.add(screenshot);
                             } else {
                                 LOGGER.warn("SRP:Found duplicate snapshot " + screenshot.getScreenshot().getName());
@@ -1039,7 +1061,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         }
                 );
                 //clarify why there is no currentStep
-                if(currentStep().isPresent()) {
+                if (currentStep().isPresent()) {
                     removeDuplicatedInitialScreenshotsIfPresent();
                 }
             } catch (ScreenshotException e) {
@@ -1049,13 +1071,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
 
-    private void takePlayback(final ScreenshotType screenshotType, TestResult result,List<ScreenshotAndHtmlSource> screenshots) {
-        if ( (screenshots!= null) && (screenshots.size() > 0)) {
+    private void takePlayback(final ScreenshotType screenshotType, TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
+        if ((screenshots != null) && (screenshots.size() > 0)) {
             screenshots.forEach(screenshot -> {
                         currentStep().ifPresent(step -> step.addScreenshot(screenshot));
                     }
             );
-            if(currentStep().isPresent()) {
+            if (currentStep().isPresent()) {
                 removeDuplicatedInitialScreenshotsIfPresent();
             }
         }
@@ -1068,7 +1090,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (screenshots().areDisabledForThisAction(result)) {
             return false;
         }
-        return  (currentStepExists()
+        return (currentStepExists()
                 && browserIsOpen()
                 && !StepEventBus.getParallelEventBus().isDryRun()
                 && !StepEventBus.getParallelEventBus().currentTestIsSuspended());

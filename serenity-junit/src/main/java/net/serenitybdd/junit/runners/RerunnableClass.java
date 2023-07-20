@@ -1,19 +1,15 @@
 package net.serenitybdd.junit.runners;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
 
-@XmlRootElement(name="rerunnableClass")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class RerunnableClass {
 
+    @JsonProperty
     String className;
 
-    @XmlElement(name="methodName")
+    @JsonProperty("methodName")
     Set<String> methodNames = new HashSet<>();
 
     public void setClassName(String className) {

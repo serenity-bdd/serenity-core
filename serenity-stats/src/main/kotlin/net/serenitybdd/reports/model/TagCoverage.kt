@@ -148,13 +148,14 @@ class CoverageByTagType(
         val successRate = testOutcomesForTag.formattedPercentage.withResult(SUCCESS, 0)
 
         return CoverageByTag(
-            humanize(shortened(testTag.name)),
+            humanize(shortened(testTag.displayName)),
             humanize(parent(testTag.name)),
+//            humanize(""),
             testOutcomesForTag.scenarioCount,
             testOutcomesForTag.testCaseCount,
             successRate,
             testOutcomesForTag.result,
-            ReportNameProvider().forTag(testTag),
+            ReportNameProvider().forRequirementOrTag(testTag),
             countByResultLabelFrom(testOutcomesForTag),
             percentageByResultFrom(testOutcomesForTag)
         )
@@ -162,6 +163,16 @@ class CoverageByTagType(
 
     private fun shortened(name: String): String = name.substringAfterLast("/")
     private fun parent(name: String): String = name.substringBeforeLast("/")
+//    private fun parent(name: String): String = secondLastElement(name)
+
+    private fun secondLastElement(s: String): String {
+        val parts = s.split("/")
+        return if (parts.size > 1) {
+            parts[parts.size - 2]
+        } else {
+            ""
+        }
+    }
 }
 
 class CoverageByTag(

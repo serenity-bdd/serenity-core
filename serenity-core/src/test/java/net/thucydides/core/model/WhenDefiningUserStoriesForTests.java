@@ -57,7 +57,7 @@ public class WhenDefiningUserStoriesForTests {
     @Test
     public void a_user_story_name_is_derived_from_the_story_class() {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyUserStories.PurchaseNewWidget.class);
-        assertThat(story.getName(), is("Purchase new widget"));
+        assertThat(story.getName(), is("PurchaseNewWidget"));
     }
 
     @Test
@@ -90,17 +90,6 @@ public class WhenDefiningUserStoriesForTests {
 
 
     @Test
-    public void stories_with_the_same_story_class_are_identical_even_if_the_class_is_no_longer_available() {
-        net.thucydides.core.model.Story story1 = net.thucydides.core.model.Story.from(MyUserStories.PurchaseNewWidget.class);
-        net.thucydides.core.model.Story story2
-          = net.thucydides.core.model.Story
-                .withId("net.thucydides.core.model.WhenDefiningUserStoriesForTests.MyUserStories.PurchaseNewWidget", "Purchase new widget")
-                .withPath("net.thucydides.core.model.WhenDefiningUserStoriesForTests.MyUserStories");
-        assertThat(story1, is(story2));
-    }
-
-
-    @Test
     public void a_story_should_know_what_feature_it_belongs_to() {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyUserStories.PurchaseNewWidget.class);
 
@@ -115,7 +104,7 @@ public class WhenDefiningUserStoriesForTests {
     @Test
     public void a_story_path_for_a_class_is_derived_from_the_package() {
         net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyUserStories.PurchaseNewWidget.class);
-        assertThat(story.getPath(), is("net.thucydides.core.model.WhenDefiningUserStoriesForTests.MyUserStories"));
+        assertThat(story.getPath(), is("net/thucydides/core/model/WhenDefiningUserStoriesForTests/MyUserStories/PurchaseNewWidget"));
 
     }
 

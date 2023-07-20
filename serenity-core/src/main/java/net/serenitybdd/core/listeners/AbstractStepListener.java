@@ -16,6 +16,10 @@ public abstract class AbstractStepListener implements StepListener {
     }
 
     @Override
+    public void testSuiteStarted(Class<?> storyClass, String storyName) {
+    }
+
+    @Override
     public void testSuiteStarted(Story story) {
 
     }

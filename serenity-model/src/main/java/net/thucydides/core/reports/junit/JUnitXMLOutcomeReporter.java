@@ -48,7 +48,7 @@ public class JUnitXMLOutcomeReporter {
 
     private String reportFilenameFor(TestOutcome testOutcome) {
         ReportNamer reportNamer = ReportNamer.forReportType(ReportType.XML);
-        return FILE_PREFIX + reportNamer.getNormalizedTestNameFor(testOutcome);
+        return FILE_PREFIX + reportNamer.getNormalizedReportNameFor(testOutcome);
     }
 
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {

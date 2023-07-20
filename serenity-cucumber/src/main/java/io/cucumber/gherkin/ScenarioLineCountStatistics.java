@@ -23,10 +23,10 @@ import static java.util.stream.Collectors.toList;
 public class ScenarioLineCountStatistics implements TestStatistics {
 
     private final Supplier<ClassLoader> classLoader = CucumberScenarioLoader.class::getClassLoader;
-    private final FeatureParser parser = new FeatureParser(UUID::randomUUID);
     private final List<TestScenarioResult> results;
 
     private ScenarioLineCountStatistics(List<URI> featurePaths) {
+        FeatureParser parser = new FeatureParser(UUID::randomUUID);
         Options featureOptions = () -> featurePaths;
 
         FeaturePathFeatureSupplier supplier =

@@ -101,9 +101,11 @@ public class ConsoleHeading {
     }
 
     static String titleWithBorder(ConsoleEvent consoleEvent) {
-        String title = "- " + consoleEvent.getTitle().toUpperCase() + " -";
-        String border = StringUtils.repeat("-", title.length());
-        return border + "\n" + title + "\n" + border + "\n";
+//        String title = "- " + consoleEvent.getTitle().toUpperCase() + " -";
+//        String border = StringUtils.repeat("-", title.length());
+//        return border + "\n" + title + "\n" + border + "\n";
+
+        return "- " + consoleEvent.getTitle().toUpperCase();
     }
 
     private final ConsoleHeadingStyle headingStyle;

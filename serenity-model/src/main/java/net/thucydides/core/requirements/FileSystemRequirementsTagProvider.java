@@ -1,10 +1,15 @@
 package net.thucydides.core.requirements;
 
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.files.TheDirectoryStructure;
+import net.thucydides.core.model.PathElements;
+import net.thucydides.core.model.RequirementCache;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.*;
@@ -14,6 +19,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
@@ -58,8 +63,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final int level;
 
     private final RequirementsConfiguration requirementsConfiguration;
-
-    //    @Transient
     private volatile List<Requirement> requirements;
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
@@ -83,19 +86,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this(filePathFormOf(rootDirectory), level, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
-    private String baseDirectory() {
-        if (level == 0) {
-            return rootDirectory;
-        }
-        Path baseDirectory = Paths.get(rootDirectory);
-        for (int step = 0; step < level; step++) {
-            if (baseDirectory.getParent() != null) {
-                baseDirectory = baseDirectory.getParent();
-            }
-        }
-        return baseDirectory.toString();
-    }
-
     /**
      * Convert a package name to a file path if necessary.
      */
@@ -107,23 +97,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private int maxDepth;
     private final String topLevelDirectory;
-    private Set<String> requirementsDirectoryPaths;
 
     public FileSystemRequirementsTagProvider(String rootDirectory, EnvironmentVariables environmentVariables) {
         super(environmentVariables, rootDirectory);
 
         topLevelDirectory = rootDirectory;
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
-//                .withRequirementTypes(getRequirementTypes(rootDirectory));
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
         directoryPaths = rootDirectories(rootDirectory, environmentVariables);
 
         this.level = requirementsConfiguration.startLevelForADepthOf(maxDirectoryDepthIn(directoryPaths) + 1);
-        maxDepth = maxDirectoryDepthIn(directoryPaths);
-        requirementsDirectoryPaths = RootDirectory.definedIn(environmentVariables).requirementsDirectoryNames();
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level, EnvironmentVariables environmentVariables) {
@@ -135,11 +120,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         this.topLevelDirectory = topLevelDirectory;
         this.narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, rootDirectory);
-//                .withRequirementTypes(getRequirementTypes());
         directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-        this.level = level;//requirementsConfiguration.initialLevel();
-        maxDepth = maxDirectoryDepthIn(directoryPaths);
+        this.level = level;
     }
 
     private static Set<String> rootDirectories(String rootDirectory, EnvironmentVariables environmentVariables) {
@@ -150,8 +133,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this(filePathFormOf(rootDirectory), SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
-    private final Object requirementsLock = new Object();
+    private boolean addParents = true;
 
+    private RequirementsTagProvider withoutAddingParents() {
+        addParents = false;
+        return this;
+    }
     /**
      * We look for file system requirements in the root directory path (by default, 'stories').
      * First, we look on the classpath. If we don't find anything on the classpath (e.g. if the task is
@@ -159,17 +146,31 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      * at the working directory.
      */
     public List<Requirement> getRequirements() {
-
         if (requirements == null) {
-            List<Requirement> loadedRequirements = getRootDirectoryPaths()
-                    .stream()
-                    .flatMap(this::capabilitiesAndStoriesIn)
-                    .sorted()
-                    .collect(Collectors.toList());
-            RequirementAncestry.addParentsTo(loadedRequirements);
-            this.requirements = loadedRequirements;
+            synchronized (this) {
+                if (requirements == null) { // double-checked locking
+                    List<Requirement> loadedRequirements = getRootDirectoryPaths()
+                            .stream()
+                            .flatMap(this::capabilitiesAndStoriesIn)
+                            .sorted()
+                            .collect(Collectors.toList());
+                    if (addParents) {
+                        RequirementAncestry.addParentsTo(loadedRequirements);
+                    }
+                    this.requirements = loadedRequirements;
+                    RequirementCache.getInstance().indexRequirements(indexByPath(requirements));
+                }
+            }
         }
         return requirements;
+    }
+
+    private Map<PathElements, Requirement> indexByPath(List<Requirement> requirements) {
+        Map<PathElements, Requirement> index = new HashMap<>();
+        requirements.forEach(
+                requirement -> index.put(requirement.getPathElements(), requirement)
+        );
+        return index;
     }
 
     private Stream<Requirement> capabilitiesAndStoriesIn(String path) {
@@ -320,6 +321,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public java.util.Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
         return firstRequirementFoundIn(
+                parentRequirementFromUserStory(testOutcome),
                 parentRequirementFromPackagePath(testOutcome),
                 requirementWithMatchingParentId(testOutcome),
                 requirementWithMatchingPath(testOutcome),
@@ -330,6 +332,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private java.util.Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {
         List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
         return lastRequirementFrom(storyPathElements);
+    }
+
+    private java.util.Optional<Requirement> parentRequirementFromUserStory(TestOutcome testOutcome) {
+        if (testOutcome.getUserStory() != null) {
+            return getMatchingRequirementFor(testOutcome.getUserStory().asSingleParentTag());
+        }
+        return Optional.empty();
     }
 
     private java.util.Optional<Requirement> parentRequirementFromPackagePath(TestOutcome testOutcome) {
@@ -429,13 +438,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .findFirst();
     }
 
-    public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
+    @Override
+    public Optional<Requirement> getRequirementFor(TestTag testTag) {
+        Requirement matchingRequirement
+                = RequirementCache.getInstance().getRequirementsByTag(testTag, this::findRequirementByTag);
+        return Optional.ofNullable(matchingRequirement);
+    }
+
+    public Requirement findRequirementByTag(TestTag testTag) {
         return AllRequirements.asStreamFrom(getRequirements())
-                .filter(
-                        requirement -> (requirement.getName().equalsIgnoreCase(testTag.getName())
-                                && requirement.getType().equalsIgnoreCase(testTag.getType()))
-                )
-                .findFirst();
+                .filter(requirement -> (requirement.asTag().equals(testTag)))
+                .findFirst()
+                .orElse(null);
     }
 
     private java.util.Optional<Requirement> lastRequirementFrom(List<String> storyPathElements) {
@@ -531,6 +545,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .map(Optional::get);
     }
 
+    private final Parser parser = Parser.builder().build();
+    private final HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+    public String renderMarkdownWithoutTags(String text) {
+        if (text == null) {
+            return "";
+        }
+        Node document = parser.parse(text);
+        return Jsoup.parse(renderer.render(document)).text();
+    }
+
     public Requirement readRequirementFrom(File requirementDirectory) {
         requirementDirectory = normalised(requirementDirectory);
         java.util.Optional<RequirementDefinition> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, Math.max(0, level));
@@ -558,12 +583,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         try {
             java.util.Optional<RequirementDefinition> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
+            String storyPath = requirementsConfiguration.relativePathOfFeatureFile(storyFile);
             String storyName = storyNameFrom(narrative, type, storyFile);
-
             Requirement requirement;
             if (narrative.isPresent()) {
                 requirement = leafRequirementWithNarrative(storyName,
-                        storyFile.getPath(),
+                        storyPath,
                         narrative.get()).withType(type.toString());
 
                 if (narrative.get().background().isPresent()) {
@@ -573,7 +598,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     requirement = requirement.withNoScenarios();
                 }
             } else {
-                requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
+                requirement = storyNamed(storyName, storyPath).withType(type.toString());
             }
 
             return Optional.of(requirement.definedInFile(storyFile));
@@ -637,10 +662,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String requirementType = getRequirementTypeOf(requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
+//        String path = relativeDirectoryOf(requirementDirectory.getPath());
+        String path = new FeatureFilePath(environmentVariables).relativePathFor(requirementDirectory.getPath());
         return Requirement.named(shortName)
+                .withId(path)
                 .withType(requirementType)
                 .withNarrative("")
-                .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
+                .withPath(path)
+                .withParent(parentFrom(path))
                 .withChildren(children);
     }
 
@@ -681,8 +710,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private String relativeDirectoryOf(String path) {
-
-        String baseDirectory = baseDirectory();
+        String baseDirectory = requirementsConfiguration.getRootDirectory();
         if (path.contains(baseDirectory)) {
             int relativePathStartsAt = path.indexOf(baseDirectory) + baseDirectory.length() + 1;
             return (relativePathStartsAt < path.length()) ? path.substring(relativePathStartsAt) : "";
@@ -693,10 +721,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Requirement storyNamed(String storyName, String path) {
         String shortName = humanReadableVersionOf(storyName);
+        String relativePath = new FeatureFilePath(environmentVariables).relativePathFor(path);
         return Requirement.named(shortName)
+                .withId(relativePath)
                 .withType(STORY_EXTENSION)
                 .withNarrative(shortName)
-                .withPath(relativeDirectoryOf(path));
+                .withParent(parentFrom(relativePath))
+                .withPath(relativePath);
     }
 
     private Requirement leafRequirementWithNarrative(String shortName, String path, RequirementDefinition requirementNarrative) {
@@ -704,13 +735,16 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
+        String relativePath = new FeatureFilePath(environmentVariables).relativePathFor(path);
         return Requirement.named(shortName)
-                .withId(requirementNarrative.getId().orElse(path))
+                .withId(relativePath)
+                .withOptionalParent(parentFrom(relativePath))
                 .withOptionalDisplayName(displayName)
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
-                .withPath(relativeDirectoryOf(path))
+                .withPath(relativePath)
+                .withParent(parentFrom(relativePath))
                 .withReleaseVersions(releaseVersions)
                 .withTags(requirementNarrative.getTags())
                 .withScenarioTags(requirementNarrative.getScenarioTags());
@@ -723,24 +757,33 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
         List<Requirement> children = readChildrenFrom(requirementDirectory);
+//        String path = relativeDirectoryOf(requirementDirectory.getPath());
+        String path = new FeatureFilePath(environmentVariables).relativePathFor(requirementDirectory.getPath());
         return Requirement.named(shortName)
+                .withId(path)
+                .withOptionalParent(parentFrom(path))
                 .withOptionalDisplayName(displayName)
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
                 .withReleaseVersions(releaseVersions)
-                .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
+                .withPath(path)
+                .withParent(parentFrom(path))
                 .withChildren(children);
+    }
+
+    private String parentFrom(String path) {
+        return path.contains("/") ? path.substring(0,path.lastIndexOf("/")) : "";
     }
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
         requirementDirectory = normalised(requirementDirectory);
         String childDirectory = rootDirectory + "/" + requirementDirectory.getName();
         if (childrenExistFor(childDirectory)) {
-            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(rootDirectory, childDirectory, level + 1, environmentVariables);
+            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(rootDirectory, childDirectory, level + 1, environmentVariables).withoutAddingParents();
             return childReader.getRequirements();
         } else if (childrenExistFor(requirementDirectory.getPath())) {
-            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(rootDirectory, requirementDirectory.getPath(), level + 1, environmentVariables);
+            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(rootDirectory, requirementDirectory.getPath(), level + 1, environmentVariables).withoutAddingParents();
             return childReader.getRequirements();
         } else {
             return NO_REQUIREMENTS;
@@ -797,7 +840,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String getTitleFromNarrativeOrDirectoryName(RequirementDefinition requirementNarrative, String nameIfNoNarrativePresent) {
         if (requirementNarrative.getTitle().isPresent() && isNotBlank(requirementNarrative.getTitle().get())) {
-            return requirementNarrative.getTitle().get();
+            return renderMarkdownWithoutTags(requirementNarrative.getTitle().get());
         }
         return nameIfNoNarrativePresent;
     }

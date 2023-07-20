@@ -26,60 +26,46 @@ public class BreadcrumbTagFilter {
         this(Injectors.getInjector().getInstance(RequirementsService.class));
     }
 
-    public boolean isRequirementTag(TestTag tag) {
-        return requirementsService.isRequirementsTag(tag);
-    }
-
-    public List<TestTag> getRequirementBreadcrumbsFrom(Collection<TestTag> tags) {
-        List<TestTag> requirementTypeTags = new ArrayList<>();
-        for(String requirementType : requirementsService.getRequirementTypes()) {
-            requirementTagOfType(requirementType).in(tags).ifPresent(requirementTypeTags::add);
-        }
-        return requirementTypeTags;
-    }
-
-    public List<TestTag> getRequirementBreadcrumbsFrom(TestTag tag) {
-        List<TestTag> requirementTypeTags = new ArrayList<>();
-        java.util.Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
-
-        return displayedRequirement.isPresent()
-                ? NewList.of(displayedRequirement.get().asTag()) : NewList.<TestTag>of();
-    }
-
     public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {
-
-        List<Requirement> ancestors = requirementsService.getAncestorRequirementsFor(testOutcome);
-
-        if (ancestors == null) { return new ArrayList<>(); }
-
-        return ancestors.stream().map(Requirement::asTag).collect(Collectors.toList());
+        List<TestTag> ancestors = new ArrayList<>();
+        requirementsService.getParentRequirementFor(testOutcome).ifPresent(
+                requirement -> {
+                    ancestors.add(requirement.asTag());
+                    requirementsService.getParentRequirementsOf(requirement).forEach(
+                            parent -> ancestors.add(parent.asTag())
+                    );
+                }
+        );
+        return ancestors;
+//        Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
+//        if (parentRequirement.isPresent()) {
+//            ancestors.add(parentRequirement.get().asTag());
+//            requirementsService.getParentRequirementsOf(parentRequirement.get()).forEach(
+//                    requirement -> ancestors.add(requirement.asTag())
+//            );
+////            return tagsForParentRequirements(ancestors);
+//        } else {
+//            return new ArrayList<>();
+//        }
+//        return ancestors;
     }
 
-    private RequirementTagFilter requirementTagOfType(String requirementType) {
-        return new RequirementTagFilter(requirementType);
+    private Requirement last(List<Requirement> ancestors) {
+        return (ancestors.isEmpty()) ? null : ancestors.get(ancestors.size() - 1);
     }
+
+    private List<TestTag> tagsForParentRequirements(List<Requirement> parents) {
+        return parents.stream().map(
+                requirement -> TestTag.withName(requirement.getDisplayName()).andType(requirement.getType())
+        ).collect(Collectors.toList());
+    }
+
 
     public List<TestTag> getRequirementBreadcrumbsFrom(RequirementsOutcomes requirementsOutcomes) {
         List<TestTag> breadcrumbs = new ArrayList<>();
         if (requirementsOutcomes.getParentRequirement().isPresent()) {
-           breadcrumbs.add(requirementsOutcomes.getParentRequirement().get().asTag());
+            breadcrumbs.add(requirementsOutcomes.getParentRequirement().get().asTag());
         }
         return breadcrumbs;
-    }
-
-    public static class RequirementTagFilter {
-        private String requirementType;
-        public RequirementTagFilter(String requirementType) {
-            this.requirementType = requirementType;
-        }
-
-        public Optional<TestTag> in(Collection<TestTag> tags) {
-            for(TestTag tag : tags) {
-                if (tag.getType().equals(requirementType)) {
-                    return Optional.of(tag);
-                }
-            }
-            return Optional.empty();
-        }
     }
 }

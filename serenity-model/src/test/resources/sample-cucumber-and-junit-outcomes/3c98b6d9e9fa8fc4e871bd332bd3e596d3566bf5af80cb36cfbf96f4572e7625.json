@@ -1,0 +1,1503 @@
+{
+  "name": "checkStatus",
+  "id": "com.serenitydojo.wordle.integrationtests.api.GameAPI:checkStatus",
+  "testCaseName": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 5,
+      "startTime": "2023-06-06T17:46:18.123346+01:00[Europe/London]",
+      "exception": {
+        "errorType": "java.net.ConnectException",
+        "message": "Connection refused",
+        "stackTrace": [
+          {
+            "declaringClass": "org.apache.http.conn.scheme.PlainSocketFactory",
+            "methodName": "connectSocket",
+            "fileName": "PlainSocketFactory.java",
+            "lineNumber": 121
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.DefaultClientConnectionOperator",
+            "methodName": "openConnection",
+            "fileName": "DefaultClientConnectionOperator.java",
+            "lineNumber": 180
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.ManagedClientConnectionImpl",
+            "methodName": "open",
+            "fileName": "ManagedClientConnectionImpl.java",
+            "lineNumber": 326
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "tryConnect",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 605
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "execute",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 440
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.AbstractHttpClient",
+            "methodName": "doExecute",
+            "fileName": "AbstractHttpClient.java",
+            "lineNumber": 835
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.CloseableHttpClient",
+            "methodName": "execute",
+            "fileName": "CloseableHttpClient.java",
+            "lineNumber": 83
+          },
+          {
+            "declaringClass": "io.restassured.internal.RestAssuredHttpBuilder",
+            "methodName": "doRequest",
+            "fileName": "RestAssuredHttpBuilder.java",
+            "lineNumber": 141
+          },
+          {
+            "declaringClass": "io.restassured.internal.http.HTTPBuilder",
+            "methodName": "post",
+            "fileName": "HTTPBuilder.java",
+            "lineNumber": 349
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1209
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.SendRequestFilter",
+            "methodName": "filter",
+            "fileName": "SendRequestFilter.groovy",
+            "lineNumber": 30
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.filter.time.TimingFilter",
+            "methodName": "filter",
+            "fileName": "TimingFilter.java",
+            "lineNumber": 56
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.CsrfFilter",
+            "methodName": "filter",
+            "fileName": "CsrfFilter.groovy",
+            "lineNumber": 70
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1704
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1710
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 176
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPIFacade",
+            "methodName": "newGame",
+            "fileName": "GameAPIFacade.java",
+            "lineNumber": 14
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+            "methodName": "newGame",
+            "fileName": "GameAPI.java",
+            "lineNumber": 30
+          }
+        ]
+      },
+      "result": "ERROR",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "GET ",
+      "duration": 2,
+      "startTime": "2023-06-06T17:46:18.537468+01:00[Europe/London]",
+      "exception": {
+        "errorType": "java.net.ConnectException",
+        "message": "Connection refused",
+        "stackTrace": [
+          {
+            "declaringClass": "org.apache.http.conn.scheme.PlainSocketFactory",
+            "methodName": "connectSocket",
+            "fileName": "PlainSocketFactory.java",
+            "lineNumber": 121
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.DefaultClientConnectionOperator",
+            "methodName": "openConnection",
+            "fileName": "DefaultClientConnectionOperator.java",
+            "lineNumber": 180
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.ManagedClientConnectionImpl",
+            "methodName": "open",
+            "fileName": "ManagedClientConnectionImpl.java",
+            "lineNumber": 326
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "tryConnect",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 605
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "execute",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 440
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.AbstractHttpClient",
+            "methodName": "doExecute",
+            "fileName": "AbstractHttpClient.java",
+            "lineNumber": 835
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.CloseableHttpClient",
+            "methodName": "execute",
+            "fileName": "CloseableHttpClient.java",
+            "lineNumber": 83
+          },
+          {
+            "declaringClass": "io.restassured.internal.RestAssuredHttpBuilder",
+            "methodName": "doRequest",
+            "fileName": "RestAssuredHttpBuilder.java",
+            "lineNumber": 141
+          },
+          {
+            "declaringClass": "io.restassured.internal.http.HTTPBuilder",
+            "methodName": "post",
+            "fileName": "HTTPBuilder.java",
+            "lineNumber": 349
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1209
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.SendRequestFilter",
+            "methodName": "filter",
+            "fileName": "SendRequestFilter.groovy",
+            "lineNumber": 30
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.filter.time.TimingFilter",
+            "methodName": "filter",
+            "fileName": "TimingFilter.java",
+            "lineNumber": 56
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.CsrfFilter",
+            "methodName": "filter",
+            "fileName": "CsrfFilter.groovy",
+            "lineNumber": 70
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1704
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1710
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 176
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPIFacade",
+            "methodName": "newGame",
+            "fileName": "GameAPIFacade.java",
+            "lineNumber": 14
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+            "methodName": "newGame",
+            "fileName": "GameAPI.java",
+            "lineNumber": 30
+          }
+        ]
+      },
+      "result": "ERROR",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 3,
+          "description": "GET ",
+          "duration": 1,
+          "startTime": "2023-06-06T17:46:18.537539+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "",
+            "requestCookies": ""
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+    "storyName": "Game API",
+    "displayName": "Wordle API Specs",
+    "storyClassName": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+    "path": "com.serenitydojo.wordle.integrationtests.api",
+    "pathElements": [
+      {
+        "name": "api",
+        "description": ""
+      }
+    ],
+    "type": "story",
+    "qualifiedTag": {
+      "name": "Api/Game API",
+      "type": "story",
+      "displayName": "Api/Game API"
+    }
+  },
+  "featureTag": {
+    "name": "Api/Game API",
+    "type": "story",
+    "displayName": "Api/Game API"
+  },
+  "title": "Check status",
+  "tags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Api/Game API",
+      "type": "story",
+      "displayName": "Api/Game API"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "allTags": [
+    {
+      "name": "integration",
+      "type": "tag",
+      "displayName": "integration"
+    },
+    {
+      "name": "Mac OS X",
+      "type": "context",
+      "displayName": "Mac OS X"
+    },
+    {
+      "name": "Api/Game API",
+      "type": "story",
+      "displayName": "Api/Game API"
+    },
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-06-06T17:46:18.121302+01:00[Europe/London]",
+  "duration": 422,
+  "testFailureCause": {
+    "errorType": "java.net.ConnectException",
+    "message": "Connection refused",
+    "stackTrace": [
+      {
+        "declaringClass": "org.apache.http.conn.scheme.PlainSocketFactory",
+        "methodName": "connectSocket",
+        "fileName": "PlainSocketFactory.java",
+        "lineNumber": 121
+      },
+      {
+        "declaringClass": "org.apache.http.impl.conn.DefaultClientConnectionOperator",
+        "methodName": "openConnection",
+        "fileName": "DefaultClientConnectionOperator.java",
+        "lineNumber": 180
+      },
+      {
+        "declaringClass": "org.apache.http.impl.conn.ManagedClientConnectionImpl",
+        "methodName": "open",
+        "fileName": "ManagedClientConnectionImpl.java",
+        "lineNumber": 326
+      },
+      {
+        "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+        "methodName": "tryConnect",
+        "fileName": "DefaultRequestDirector.java",
+        "lineNumber": 605
+      },
+      {
+        "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+        "methodName": "execute",
+        "fileName": "DefaultRequestDirector.java",
+        "lineNumber": 440
+      },
+      {
+        "declaringClass": "org.apache.http.impl.client.AbstractHttpClient",
+        "methodName": "doExecute",
+        "fileName": "AbstractHttpClient.java",
+        "lineNumber": 835
+      },
+      {
+        "declaringClass": "org.apache.http.impl.client.CloseableHttpClient",
+        "methodName": "execute",
+        "fileName": "CloseableHttpClient.java",
+        "lineNumber": 83
+      },
+      {
+        "declaringClass": "io.restassured.internal.RestAssuredHttpBuilder",
+        "methodName": "doRequest",
+        "fileName": "RestAssuredHttpBuilder.java",
+        "lineNumber": 141
+      },
+      {
+        "declaringClass": "io.restassured.internal.http.HTTPBuilder",
+        "methodName": "post",
+        "fileName": "HTTPBuilder.java",
+        "lineNumber": 349
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "sendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": 1209
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "this$2$sendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "groovy.lang.MetaMethod",
+        "methodName": "doMethodInvoke",
+        "fileName": "MetaMethod.java",
+        "lineNumber": 328
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "doInvokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1331
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1086
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1006
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 789
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "invokeMethod",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "io.restassured.internal.filter.SendRequestFilter",
+        "methodName": "filter",
+        "fileName": "SendRequestFilter.groovy",
+        "lineNumber": 30
+      },
+      {
+        "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+        "methodName": "next",
+        "fileName": "FilterContextImpl.groovy",
+        "lineNumber": 72
+      },
+      {
+        "declaringClass": "io.restassured.filter.time.TimingFilter",
+        "methodName": "filter",
+        "fileName": "TimingFilter.java",
+        "lineNumber": 56
+      },
+      {
+        "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+        "methodName": "next",
+        "fileName": "FilterContextImpl.groovy",
+        "lineNumber": 72
+      },
+      {
+        "declaringClass": "io.restassured.internal.filter.CsrfFilter",
+        "methodName": "filter",
+        "fileName": "CsrfFilter.groovy",
+        "lineNumber": 70
+      },
+      {
+        "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+        "methodName": "next",
+        "fileName": "FilterContextImpl.groovy",
+        "lineNumber": 72
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "applyPathParamsAndSendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": 1704
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "this$2$applyPathParamsAndSendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "groovy.lang.MetaMethod",
+        "methodName": "doMethodInvoke",
+        "fileName": "MetaMethod.java",
+        "lineNumber": 328
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "doInvokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1331
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1086
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1006
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 789
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "invokeMethod",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "applyPathParamsAndSendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": 1710
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "this$2$applyPathParamsAndSendRequest",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "groovy.lang.MetaMethod",
+        "methodName": "doMethodInvoke",
+        "fileName": "MetaMethod.java",
+        "lineNumber": 328
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "doInvokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1331
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1086
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 1006
+      },
+      {
+        "declaringClass": "groovy.lang.MetaClassImpl",
+        "methodName": "invokeMethod",
+        "fileName": "MetaClassImpl.java",
+        "lineNumber": 789
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "invokeMethod",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "post",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": 176
+      },
+      {
+        "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+        "methodName": "post",
+        "fileName": "RequestSpecificationImpl.groovy",
+        "lineNumber": -1
+      },
+      {
+        "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPIFacade",
+        "methodName": "newGame",
+        "fileName": "GameAPIFacade.java",
+        "lineNumber": 14
+      },
+      {
+        "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+        "methodName": "newGame",
+        "fileName": "GameAPI.java",
+        "lineNumber": 30
+      }
+    ]
+  },
+  "testFailureClassname": "java.net.ConnectException",
+  "testFailureMessage": "Connection refused",
+  "testFailureSummary": "ERROR;java.net.ConnectException;Connection refused;PlainSocketFactory.java",
+  "projectKey": "",
+  "annotatedResult": "ERROR",
+  "driver": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "manual": false,
+  "testSource": "JUnit5",
+  "order": 0,
+  "result": "ERROR",
+  "flattenedSteps": [
+    {
+      "number": 1,
+      "description": "Create a new game",
+      "duration": 5,
+      "startTime": "2023-06-06T17:46:18.123346+01:00[Europe/London]",
+      "exception": {
+        "errorType": "java.net.ConnectException",
+        "message": "Connection refused",
+        "stackTrace": [
+          {
+            "declaringClass": "org.apache.http.conn.scheme.PlainSocketFactory",
+            "methodName": "connectSocket",
+            "fileName": "PlainSocketFactory.java",
+            "lineNumber": 121
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.DefaultClientConnectionOperator",
+            "methodName": "openConnection",
+            "fileName": "DefaultClientConnectionOperator.java",
+            "lineNumber": 180
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.ManagedClientConnectionImpl",
+            "methodName": "open",
+            "fileName": "ManagedClientConnectionImpl.java",
+            "lineNumber": 326
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "tryConnect",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 605
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "execute",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 440
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.AbstractHttpClient",
+            "methodName": "doExecute",
+            "fileName": "AbstractHttpClient.java",
+            "lineNumber": 835
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.CloseableHttpClient",
+            "methodName": "execute",
+            "fileName": "CloseableHttpClient.java",
+            "lineNumber": 83
+          },
+          {
+            "declaringClass": "io.restassured.internal.RestAssuredHttpBuilder",
+            "methodName": "doRequest",
+            "fileName": "RestAssuredHttpBuilder.java",
+            "lineNumber": 141
+          },
+          {
+            "declaringClass": "io.restassured.internal.http.HTTPBuilder",
+            "methodName": "post",
+            "fileName": "HTTPBuilder.java",
+            "lineNumber": 349
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1209
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.SendRequestFilter",
+            "methodName": "filter",
+            "fileName": "SendRequestFilter.groovy",
+            "lineNumber": 30
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.filter.time.TimingFilter",
+            "methodName": "filter",
+            "fileName": "TimingFilter.java",
+            "lineNumber": 56
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.CsrfFilter",
+            "methodName": "filter",
+            "fileName": "CsrfFilter.groovy",
+            "lineNumber": 70
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1704
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1710
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 176
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPIFacade",
+            "methodName": "newGame",
+            "fileName": "GameAPIFacade.java",
+            "lineNumber": 14
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+            "methodName": "newGame",
+            "fileName": "GameAPI.java",
+            "lineNumber": 30
+          }
+        ]
+      },
+      "result": "ERROR",
+      "precondition": false,
+      "level": 0
+    },
+    {
+      "number": 2,
+      "description": "GET ",
+      "duration": 2,
+      "startTime": "2023-06-06T17:46:18.537468+01:00[Europe/London]",
+      "exception": {
+        "errorType": "java.net.ConnectException",
+        "message": "Connection refused",
+        "stackTrace": [
+          {
+            "declaringClass": "org.apache.http.conn.scheme.PlainSocketFactory",
+            "methodName": "connectSocket",
+            "fileName": "PlainSocketFactory.java",
+            "lineNumber": 121
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.DefaultClientConnectionOperator",
+            "methodName": "openConnection",
+            "fileName": "DefaultClientConnectionOperator.java",
+            "lineNumber": 180
+          },
+          {
+            "declaringClass": "org.apache.http.impl.conn.ManagedClientConnectionImpl",
+            "methodName": "open",
+            "fileName": "ManagedClientConnectionImpl.java",
+            "lineNumber": 326
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "tryConnect",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 605
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.DefaultRequestDirector",
+            "methodName": "execute",
+            "fileName": "DefaultRequestDirector.java",
+            "lineNumber": 440
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.AbstractHttpClient",
+            "methodName": "doExecute",
+            "fileName": "AbstractHttpClient.java",
+            "lineNumber": 835
+          },
+          {
+            "declaringClass": "org.apache.http.impl.client.CloseableHttpClient",
+            "methodName": "execute",
+            "fileName": "CloseableHttpClient.java",
+            "lineNumber": 83
+          },
+          {
+            "declaringClass": "io.restassured.internal.RestAssuredHttpBuilder",
+            "methodName": "doRequest",
+            "fileName": "RestAssuredHttpBuilder.java",
+            "lineNumber": 141
+          },
+          {
+            "declaringClass": "io.restassured.internal.http.HTTPBuilder",
+            "methodName": "post",
+            "fileName": "HTTPBuilder.java",
+            "lineNumber": 349
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1209
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$sendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.SendRequestFilter",
+            "methodName": "filter",
+            "fileName": "SendRequestFilter.groovy",
+            "lineNumber": 30
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.filter.time.TimingFilter",
+            "methodName": "filter",
+            "fileName": "TimingFilter.java",
+            "lineNumber": 56
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.CsrfFilter",
+            "methodName": "filter",
+            "fileName": "CsrfFilter.groovy",
+            "lineNumber": 70
+          },
+          {
+            "declaringClass": "io.restassured.internal.filter.FilterContextImpl",
+            "methodName": "next",
+            "fileName": "FilterContextImpl.groovy",
+            "lineNumber": 72
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1704
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 1710
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "this$2$applyPathParamsAndSendRequest",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "groovy.lang.MetaMethod",
+            "methodName": "doMethodInvoke",
+            "fileName": "MetaMethod.java",
+            "lineNumber": 328
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "doInvokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1331
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1086
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 1006
+          },
+          {
+            "declaringClass": "groovy.lang.MetaClassImpl",
+            "methodName": "invokeMethod",
+            "fileName": "MetaClassImpl.java",
+            "lineNumber": 789
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "invokeMethod",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": 176
+          },
+          {
+            "declaringClass": "io.restassured.internal.RequestSpecificationImpl",
+            "methodName": "post",
+            "fileName": "RequestSpecificationImpl.groovy",
+            "lineNumber": -1
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPIFacade",
+            "methodName": "newGame",
+            "fileName": "GameAPIFacade.java",
+            "lineNumber": 14
+          },
+          {
+            "declaringClass": "com.serenitydojo.wordle.integrationtests.api.GameAPI",
+            "methodName": "newGame",
+            "fileName": "GameAPI.java",
+            "lineNumber": 30
+          }
+        ]
+      },
+      "result": "ERROR",
+      "precondition": false,
+      "level": 0,
+      "children": [
+        {
+          "number": 3,
+          "description": "GET ",
+          "duration": 1,
+          "startTime": "2023-06-06T17:46:18.537539+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "restQuery": {
+            "method": "GET",
+            "path": "",
+            "content": "",
+            "contentType": "null",
+            "requestHeaders": "",
+            "requestCookies": ""
+          },
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "description": "GET ",
+      "duration": 1,
+      "startTime": "2023-06-06T17:46:18.537539+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "restQuery": {
+        "method": "GET",
+        "path": "",
+        "content": "",
+        "contentType": "null",
+        "requestHeaders": "",
+        "requestCookies": ""
+      },
+      "precondition": false,
+      "level": 1
+    }
+  ]
+}

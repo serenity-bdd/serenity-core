@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.7.2-SNAPSHOT</version>
+        <version>3.9.8-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-ensure</artifactId>
     <packaging>jar</packaging>
@@ -23,6 +23,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>serenity-junit</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

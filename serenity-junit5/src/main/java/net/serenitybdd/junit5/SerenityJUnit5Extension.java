@@ -4,6 +4,7 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.logging.ConsoleLoggingListener;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
@@ -34,6 +35,7 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
             StepEventBus eventBus = StepEventBus.eventBusFor(context.getUniqueId());
             if (!eventBus.isBaseStepListenerRegistered()) {
                 eventBus.registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
+                eventBus.registerListener(new ConsoleLoggingListener(ConfiguredEnvironment.getEnvironmentVariables()));
             }
             StepEventBus.setCurrentBusToEventBusFor(context.getTestMethod());
         }
@@ -47,6 +49,7 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
                 AnnotatedEnvironmentProperties.apply(method);
                 if (!eventBusFor(context).isBaseStepListenerRegistered()) {
                     eventBusFor(context).registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
+                    eventBusFor(context).registerListener(new ConsoleLoggingListener(ConfiguredEnvironment.getEnvironmentVariables()));
                 }
                 eventBusFor(context).getBaseStepListener().addTagsToCurrentStory(JUnit5Tags.forMethod(method));
                 eventBusFor(context).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
@@ -61,10 +64,12 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
         }
         TestOutcome outcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();
         String methodName = outcome.getQualifiedMethodName();
+        String displayName = context.getDisplayName();
+
         context.getTestMethod().ifPresent(
                 method -> {
                     // Make sure it's the right test - not sure when this gets called in parallel testing.
-                    if (method.getName().equals(methodName)) {
+                    if (methodName != null && (methodName.equals(method.getName())|| methodName.equals(displayName))) {
                         // Failing test
                         if (outcome.getTestFailureCause() != null) {
                             throw outcome.getTestFailureCause().asRuntimeException();

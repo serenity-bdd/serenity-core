@@ -2,7 +2,6 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
-import net.serenitybdd.reports.model.DurationBucket;
 import net.serenitybdd.reports.model.DurationDistribution;
 import net.serenitybdd.reports.model.FrequentFailure;
 import net.serenitybdd.reports.model.FrequentFailures;
@@ -27,6 +26,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
@@ -145,119 +145,96 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
-        LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
+        try (Reporter reporter = new Reporter(environmentVariables)) {
 
-        enhanceWithDurationTags(testOutcomes);
+            LOGGER.debug("Generating test results for {} tests", testOutcomes.getTestCount());
 
-        FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
+            DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
 
-        RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
+            enhanceWithDurationTags(durationDistribution, testOutcomes);
 
-        LOGGER.debug("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+            FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
+
+            RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
+
+            LOGGER.debug("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
 //        requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
 
-        LOGGER.debug("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
+            LOGGER.debug("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
-        List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
+            List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
-        List<ReportingTask> reportingTasks = new ArrayList<>();
+            if (generateTestOutcomeReports) {
+                reporter.generateReportsFor(HtmlTestOutcomeReportingTask.testOutcomeReportsFor(testOutcomes)
+                        .using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
+            }
 
-        if (generateTestOutcomeReports) {
-            reportingTasks.addAll(HtmlTestOutcomeReportingTask.testOutcomeReportsFor(testOutcomes).using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
+            List<String> requirementTypes = requirementsConfiguration.getRequirementTypes();
+            LOGGER.info("GENERATING SUMMARY REPORTS...");
+            reporter.generateReportsFor(
+                    Stream.of(
+                            // SUMMARY REPORTS
+                            Stream.of(
+                                    new TextSummaryReportTask(context, environmentVariables, getOutputDirectory(), testOutcomes),
+                                    new CopyResourcesTask(),
+                                    new CopyTestResultsTask(),
+                                    new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes)
+                            ),
+                            // CUSTOM TAG REPORTS
+                            TagReportingTask.tagReportsFor(testOutcomes)
+                                    .using(context,
+                                            environmentVariables,
+                                            getOutputDirectory(),
+                                            reportNameProvider,
+                                            testOutcomes.getTags(),
+                                            requirementTypes,
+                                            knownRequirementReportNames),
+                            // DURATION REPORTS
+                            tagReports(durationDistribution, testOutcomes, context, requirementTypes, knownRequirementReportNames)
+                    ).flatMap(stream -> stream)
+            );
+
+            // REQUIREMENTS REPORTS
+            LOGGER.info("GENERATING REQUIREMENTS REPORTS...");
+            reporter.generateReportsFor(
+                    RequirementsReports.requirementsReportsFor(
+                            context, environmentVariables, getOutputDirectory(),
+                            reportNameProvider,
+                            requirements.getRequirementsOutcomeFactory(),
+                            requirements.getRequirementsService(),
+                            relativeLink,
+                            testOutcomes,
+                            requirementsOutcomes
+                    )
+            );
+
+            // REPORTS FOR EACH RESULT
+            LOGGER.info("GENERATING RESULT REPORTS...");
+            reporter.generateReportsFor(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
+
+            // ERROR REPORTS
+            LOGGER.info("GENERATING ERROR REPORTS...");
+            List<FrequentFailure> failures = FrequentFailures.from(testOutcomes).withMaxOf(REPORT_SCOREBOARD_SIZE.integerFrom(environmentVariables, 5));
+            reporter.generateReportsFor(
+                    failures.stream()
+                            .map(failure -> new ErrorTypeReportingTask(context,
+                                    environmentVariables,
+                                    requirements.getRequirementsService(),
+                                    getOutputDirectory(),
+                                    reportNameProvider,
+                                    testOutcomes.withErrorType(failure.getType()).withLabel("Tests with error: " + failure.getName()),
+                                    failure.getType()))
+            );
         }
-
-        reportingTasks.add(new TextSummaryReportTask(context, environmentVariables, getOutputDirectory(), testOutcomes));
-        reportingTasks.add(new CopyResourcesTask());
-        reportingTasks.add(new CopyTestResultsTask());
-        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
-
-        List<String> requirementTypes =  requirementsConfiguration.getRequirementTypes();
-        // CUSTOM TAG REPORTS
-        reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes)
-                .using(context,
-                        environmentVariables,
-                        getOutputDirectory(),
-                        reportNameProvider,
-                        testOutcomes.getTags(),
-                        requirementTypes,
-                        knownRequirementReportNames));
-
-        // NESTED TAGS
-        // Set<ReportingTask> nestedReports = nestedTagReports(testOutcomes, context, requirementTypes, knownRequirementReportNames);
-        // reportingTasks.addAll(nestedReports);
-
-        // ADD DURATION REPORTS
-        reportingTasks.addAll(durationReports(testOutcomes, context, requirementTypes, knownRequirementReportNames));
-
-        // REPORTS FOR EACH RESULT
-        reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
-
-        // REQUIREMENTS REPORTS
-        reportingTasks.addAll(
-                RequirementsReports.requirementsReportsFor(
-                        context, environmentVariables, getOutputDirectory(),
-                        reportNameProvider,
-                        requirements.getRequirementsOutcomeFactory(),
-                        requirements.getRequirementsService(),
-                        relativeLink,
-                        testOutcomes,
-                        requirementsOutcomes
-                ));
-
-        List<FrequentFailure> failures = FrequentFailures.from(testOutcomes).withMaxOf(REPORT_SCOREBOARD_SIZE.integerFrom(environmentVariables, 5));
-
-        // ERROR REPORTS
-        for(FrequentFailure failure : failures) {
-            reportingTasks.add(new ErrorTypeReportingTask(context,
-                    environmentVariables,
-                    requirements.getRequirementsService(),
-                    getOutputDirectory(),
-                    reportNameProvider,
-                    testOutcomes.withErrorType(failure.getType()).withLabel("Tests with error: " + failure.getName()),
-                    failure.getType()));
-        }
-
-        Reporter.generateReportsFor(reportingTasks);
-
         LOGGER.info("Test results for {} tests generated in {} in directory: {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted(), getOutputDirectory().toURI());
     }
 
-    private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes,
-                                                 FreemarkerContext context,
-                                                 List<String> requirementTypes,
-                                                 List<String> knownRequirementReportNames) {
-        Set<ReportingTask> reportingTasks = new HashSet<>();
-
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
-        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
-
-        testOutcomes.getTags().stream()
-                .filter(tag -> !requirements.getTypes().contains(tag.getType()))
-                .filter(tag -> !tag.getType().equals("Duration"))
-                .filter(exclusions::doNotExclude)
-                .forEach(
-                        knownTag -> {
-                            List<ReportingTask> nested = TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag))
-                                    .using(context.withParentTag(knownTag),
-                                            environmentVariables,
-                                            getOutputDirectory(),
-                                            reportNameProvider.inContext(knownTag.getCompleteName()),
-                                            new HashSet<>(durationDistribution.getDurationTags()),
-                                            requirementTypes,
-                                            knownRequirementReportNames);
-                            reportingTasks.addAll(nested);
-                        }
-                );
-        return reportingTasks;
-    }
-
-    private List<ReportingTask> durationReports(TestOutcomes testOutcomes,
-                                                FreemarkerContext context,
-                                                List<String> requirementTypes,
-                                                List<String> knownRequirementReportNames) {
-        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
-
+    private Stream<ReportingTask> tagReports(DurationDistribution durationDistribution,
+                                             TestOutcomes testOutcomes,
+                                             FreemarkerContext context,
+                                             List<String> requirementTypes,
+                                             List<String> knownRequirementReportNames) {
         return TagReportingTask.tagReportsFor(testOutcomes).using(context,
                 environmentVariables,
                 getOutputDirectory(),
@@ -267,16 +244,14 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 knownRequirementReportNames);
     }
 
-    private void enhanceWithDurationTags(TestOutcomes testOutcomes) {
-        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomes);
-        for(TestOutcome testOutcome : testOutcomes.getOutcomes()) {
-            enhanceWithDuration(testOutcome, durationDistribution);
+    private void enhanceWithDurationTags(DurationDistribution distribution, TestOutcomes testOutcomes) {
+        for (TestOutcome testOutcome : testOutcomes.getOutcomes()) {
+            enhanceWithDuration(testOutcome, distribution);
         }
     }
 
     private void enhanceWithDuration(TestOutcome testOutcome, DurationDistribution durationDistribution) {
-        Collection<DurationBucket> buckets = durationDistribution.findMatchingBucketsForTestOutcome(testOutcome);
-        buckets.forEach(
+        durationDistribution.findMatchingBucketsForTestOutcome(testOutcome).forEach(
                 bucket -> testOutcome.addTag(TestTag.withName(bucket.getDuration()).andType("Duration"))
         );
 
@@ -291,7 +266,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory);//.withRequirementsTags();
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory).withRequirementsTags();
     }
 
     protected SerenitySystemProperties getSystemProperties() {

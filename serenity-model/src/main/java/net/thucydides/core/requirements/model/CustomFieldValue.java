@@ -47,6 +47,9 @@ public class CustomFieldValue {
     }
 
     private String withLineBreaks(String text) {
+        if (text == null) {
+            return "";
+        }
         return asList(text.split(("\\r?\\n"))).stream()
                 .map(line -> line + "  ")
                 .collect(Collectors.joining(System.lineSeparator()));

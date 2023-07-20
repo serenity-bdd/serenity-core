@@ -31,7 +31,6 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
         TestOutcome testOutcome = recordedTestOutcomes[0]
         List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
-            System.out.println("XXXStepResults " + stepResults);
         then:
         testOutcome.result == TestResult.FAILURE
         and:
@@ -110,7 +109,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.featureTag.get() == TestTag.withName("Samples/A simple feature showing how features can have long names").andType("feature")
+        testOutcome.featureTag.get() == TestTag.withName("simple_scenario_with_a_long_name").andType("feature")
     }
 
     def "should record the capability tag based on the directory of the feature if known"() {
@@ -123,7 +122,7 @@ class WhenCreatingSerenityTestOutcomes extends Specification {
         TestOutcome testOutcome = recordedTestOutcomes[0]
 
         then:
-        testOutcome.featureTag.get() == TestTag.withName("Samples/A simple feature showing how features can have long names").andType("feature")
+        testOutcome.featureTag.get() == TestTag.withName("simple_scenario_with_a_long_name").andType("feature")
     }
 
     def "should record background steps"() {

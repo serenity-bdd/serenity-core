@@ -3,9 +3,15 @@ package net.serenitybdd.junit5;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.core.steps.StepEventBus;
 import org.junit.Before;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
 
 import java.util.List;
+
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public abstract class AbstractTestStepRunnerTest {
 
@@ -19,12 +25,6 @@ public abstract class AbstractTestStepRunnerTest {
     public void initEnvironment() {
         environmentVariables = new MockEnvironmentVariables();
     }
-
-    /*protected SerenityRunner getTestRunnerUsing(Class<?> testClass) throws InitializationError {
-        Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);
-        WebDriverFactory factory = new WebDriverFactory(environmentVariables);
-        return new SerenityRunner(testClass, factory, configuration);
-    }*/
 
     public TestOutcomeChecker inTheTestOutcomes(List<TestOutcome> testOutcomes) {
         return new TestOutcomeChecker(testOutcomes);
@@ -54,5 +54,17 @@ public abstract class AbstractTestStepRunnerTest {
             }
             throw new AssertionError("No matching test method called " + methodName);
         }
+    }
+
+    public void runTestForClass(Class testClass){
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(selectClass(testClass))
+                .build();
+        LauncherFactory.create().execute(request);
+    }
+
+
+    public static TestOutcome getTestOutcomeFor(String testName) {
+        return StepEventBus.eventBusForTest(testName).get().getBaseStepListener().getTestOutcomes().get(0);
     }
 }

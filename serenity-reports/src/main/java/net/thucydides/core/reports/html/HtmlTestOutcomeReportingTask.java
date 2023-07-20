@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HtmlTestOutcomeReportingTask implements ReportingTask {
 
@@ -65,13 +66,12 @@ public class HtmlTestOutcomeReportingTask implements ReportingTask {
             this.testOutcomes = testOutcomes;
         }
 
-        public List<ReportingTask> using(final EnvironmentVariables environmentVariables,
-                                         final RequirementsService requirementsService,
-                                         final File outputDirectory,
-                                         final IssueTracking issueTracking) {
+        public Stream<ReportingTask> using(final EnvironmentVariables environmentVariables,
+                                           final RequirementsService requirementsService,
+                                           final File outputDirectory,
+                                           final IssueTracking issueTracking) {
             return testOutcomes.getOutcomes().parallelStream()
-                    .map(outcome -> new HtmlTestOutcomeReportingTask(outcome, outputDirectory, requirementsService, environmentVariables, issueTracking))
-                    .collect(Collectors.toList());
+                    .map(outcome -> new HtmlTestOutcomeReportingTask(outcome, outputDirectory, requirementsService, environmentVariables, issueTracking));
         }
     }
 }

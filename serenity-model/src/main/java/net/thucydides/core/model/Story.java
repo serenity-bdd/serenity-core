@@ -1,9 +1,12 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.strings.FirstLine;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.AnnotatedDescription;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RootDirectory;
@@ -11,7 +14,14 @@ import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -27,6 +37,8 @@ public class Story {
     private String displayName;
     private String storyClassName;
     private String path;
+    private PathElements pathElements;
+    private String parentName;
     private String narrative;
     private ApplicationFeature feature;
     private String type;
@@ -34,27 +46,97 @@ public class Story {
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
-        this.storyName = humanize(userStoryClass.getSimpleName());
-        this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(humanize(userStoryClass.getSimpleName()));
+//        this.storyName = humanize(userStoryClass.getSimpleName());
+        this.storyName = userStoryClass.getSimpleName();
+//        this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(humanize(userStoryClass.getSimpleName()));
+        this.displayName = AnnotatedStoryTitle.forClass(userStoryClass).orElse(userStoryClass.getSimpleName());
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
-        this.type = FeatureType.STORY.toString();
+        this.narrative = AnnotatedDescription.forClass(userStoryClass).orElse("");
+        // split path into a list of path elements
+//        this.pathElements = pathElementsFromPackagePath(completePathOf(userStoryClass));
+        this.pathElements = pathElementsFromPackagePath(path);
+//        this.type = FeatureType.STORY.toString();
+        this.type = FeatureType.FEATURE.toString();
     }
 
-    private String pathOf(Class<?> userStoryClass) {
+    private PathElements pathElementsFromPackagePath(String path) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        String configuredRootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
+
+        // The actual root path used in this path - empty if the configured root path is different from the path
+        String rootPath = "";
+
+        // strip root path from path if present and retain the actual root path used for this path.
+        if (isNotEmpty(configuredRootPath) && path.startsWith(configuredRootPath)) {
+            path = (path.equals(configuredRootPath)) ? "" : path.substring(configuredRootPath.length() + 1);
+            rootPath = configuredRootPath;
+        }
+
+        if (path == null) {
+            return PathElements.from(new ArrayList<>());
+        }
+        // We need to convert each element of the path excluding the root path into the display name version where necessary
+        // For example: com.serenitydojo.wordle.integrationtests.api.APIExamples$WhenCreatingANewGame
+        // becomes: Wordle API Specs, Creating a new game
+
+        List<String> pathElementNames = Splitter.onPattern("\\.|\\$").omitEmptyStrings().splitToList(path);
+        String cumulatedPath = "";
+        List<PathElement> pathElements = new ArrayList<>();
+        for (String pathElement : pathElementNames) {
+            cumulatedPath = cumulatedPath + "." + pathElement;
+            String completePath = rootPath + cumulatedPath;
+            String displayName = displayNameOfPathElement(completePath, pathElement);
+            pathElements.add(new PathElement(pathElement, displayName));
+        }
+        return PathElements.from(pathElements);
+    }
+
+    private String displayNameOfPathElement(String completePath, String pathElement) {
+        return TestClassHierarchy.getInstance().displayNameFor(completePath).orElse(pathElement);
+    }
+
+    private PathElements pathElementsFromDirectoryPath(String path) {
+        List<PathElement> pathElements = new ArrayList<>();
+        if (path != null) {
+            Path storyPath = Paths.get(path);
+            for (int i = 0; i < storyPath.getNameCount(); i++) {
+                pathElements.add(new PathElement(storyPath.getName(i).toString(), ""));
+            }
+        }
+        return PathElements.from(pathElements);
+    }
+
+    public static String pathOf(Class<?> userStoryClass) {
         String canonicalName = userStoryClass.getCanonicalName();
-        String localPath = stripRootPathFrom(canonicalName);
+        return stripRootPathFrom(canonicalName);
+//        String localPath = stripRootPathFrom(canonicalName);
+//        int lastDot = localPath.lastIndexOf(".");
+//
+//        if (lastDot > 0) {
+//            return localPath.substring(0, lastDot);
+//        } else {
+//            return "";
+//        }
+    }
 
-        int lastDot = localPath.lastIndexOf(".");
+    public static String completePathOf(Class<?> userStoryClass) {
+        String canonicalName = userStoryClass.getCanonicalName();
 
-        if (lastDot > 0) {
-            return localPath.substring(0, lastDot);
+        int lastDot = canonicalName.lastIndexOf(".");
+        int lastDollar = canonicalName.lastIndexOf("$");
+        int lastSeparator = Math.max(lastDollar, lastDot);
+
+        if (lastSeparator > 0) {
+            return canonicalName.substring(0, lastSeparator);
+//            return localPath;
         } else {
             return "";
         }
     }
 
-    private String stripRootPathFrom(String testOutcomePath) {
+
+    private static String stripRootPathFrom(String testOutcomePath) {
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
         if (testOutcomePath == null) {
@@ -86,9 +168,11 @@ public class Story {
         this.storyClassName = storyClassName;
         this.displayName = displayName;
         this.feature = feature;
-        this.path = path;
+        this.path = normalisedPath(path);
+        this.pathElements = pathElementsFromDirectoryPath(this.path);
         this.narrative = null;
-        this.type = FeatureType.STORY.toString();
+        this.type = FeatureType.FEATURE.toString();
+//        this.type = FeatureType.STORY.toString();
     }
 
 
@@ -97,9 +181,10 @@ public class Story {
                  final String storyClassName,
                  final String displayName,
                  final String path,
+                 final PathElements pathElements,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName, storyClassName, displayName, path, feature, narrative, FeatureType.STORY.toString());
+        this(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, FeatureType.FEATURE.toString());
     }
 
 
@@ -108,6 +193,7 @@ public class Story {
                  final String storyClassName,
                  final String displayName,
                  final String path,
+                 final PathElements pathElements,
                  final ApplicationFeature feature,
                  final String narrative,
                  final String type) {
@@ -117,6 +203,7 @@ public class Story {
         this.displayName = displayName;
         this.feature = feature;
         this.path = path;
+        this.pathElements = pathElements;
         this.narrative = narrative;
         this.type = type;
     }
@@ -131,10 +218,10 @@ public class Story {
         this.displayName = displayName;
         this.storyClassName = null;
         this.feature = feature;
-        this.path = path;
-        this.type = FeatureType.STORY.toString();
+        this.path = normalisedPath(path);
+        this.pathElements = pathElementsFromDirectoryPath(this.path);
+        this.type = FeatureType.FEATURE.toString();
     }
-
 
     public String getId() {
         return id;
@@ -158,15 +245,25 @@ public class Story {
     }
 
     public Story withNarrative(String narrative) {
-        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, type);
     }
 
     public Story withType(String type) {
-        return new Story(id, storyName, storyClassName, displayName, path, feature, narrative, type);
+        return new Story(id, storyName, storyClassName, displayName, path, pathElements, feature, narrative, type);
     }
 
     public static Story withIdAndPath(final String storyId, final String storyName, final String storyPath) {
         return new Story(storyId, storyName, null, storyName, storyPath, null);
+    }
+
+    public Story withDisplayName(String name) {
+        this.displayName = name;
+        return this;
+    }
+
+    public Story withStoryName(String name) {
+        this.storyName = name;
+        return this;
     }
 
     public static Story called(final String storyName) {
@@ -264,7 +361,25 @@ public class Story {
     }
 
     public String getPath() {
-        return path;
+        if (pathElements == null || pathElements.isEmpty()) {
+            return path;
+        }
+        return pathElements.asPath();
+    }
+
+    public String getRelativePath(List<String> rootElements) {
+        if (pathElements.isEmpty()) {
+            return path;
+        }
+        return pathElements.asPath();
+    }
+
+    public PathElements getParentPathElements() {
+        return pathElements;
+    }
+
+    public PathElements getPathElements() {
+        return pathElements;
     }
 
     public String getStoryName() {
@@ -284,32 +399,62 @@ public class Story {
     }
 
     public Story withPath(String path) {
-        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, path, this.feature, this.narrative, FeatureType.forFilename(path).toString());
+        this.path = path;
+        this.type = FeatureType.forFilename(path).toString();
+        return this;
     }
 
     public Story asFeature() {
-        return new Story(this.id, this.storyName, this.storyClassName, this.displayName, this.path, this.feature, this.narrative, FeatureType.FEATURE.toString());
+        this.type = FeatureType.FEATURE.toString();
+        return this;
     }
 
     public TestTag asTag() {
         return asQualifiedTag();// TestTag.withName(storyName).andType(type.toString());
     }
 
-    private TestTag qualifiedTag;
+    //    private TestTag qualifiedTag;
     public TestTag asQualifiedTag() {
-        if (qualifiedTag == null) {
-            EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-            String featureDirectoryName = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
-            String lastElementOfPath = LastElement.of(getPath());
-            String parentName = (getPath() != null) ? humanize(lastElementOfPath) : null;
-            if (featureDirectoryName.equalsIgnoreCase(lastElementOfPath)) {
-                parentName = null;
-            }
-            qualifiedTag = (isNotEmpty(parentName)) ?
-                    TestTag.withName(parentName + "/" + storyName).andType(type) :
-                    TestTag.withName(storyName).andType(type);
+        if (getPathElements() == null) {
+            return TestTag.withName(storyName).andType(type);
         }
-        return qualifiedTag;
+        String qualifiedName = getPathElements().stream()
+                .map(PathElement::getName)
+                .collect(Collectors.joining("/"));
+
+        return TestTag.withName(qualifiedName).andType(type).withDisplayName(getDisplayName());
     }
 
+
+    /**
+     * A tag with no more than one level of parents, that can be used to find matching requirements in the requirements hierarchy.
+     */
+    private TestTag singleParentTag;
+
+    public TestTag asSingleParentTag() {
+
+        if (singleParentTag == null) {
+            String lastElementOfPath = (getParentPathElements() == null || getParentPathElements().isEmpty()) ? "" : getParentPathElements().get(getParentPathElements().size() - 1).getName();
+            singleParentTag = (isNotEmpty(lastElementOfPath)) ?
+                    TestTag.withName(lastElementOfPath + "/" + storyName).andType(type) :
+                    TestTag.withName(storyName).andType(type);
+        }
+        return singleParentTag;
+    }
+
+    private String normalisedPath(String path) {
+        if (path == null) {
+            return path;
+        }
+        // Strip initial reference to 'classpath:features/' or 'src/test/resources/features/' at the start of the path
+        String normalisedPath = path;
+        if (normalisedPath.startsWith("classpath:features/")) {
+            normalisedPath = normalisedPath.substring("classpath:features/".length());
+        }
+        // Remove trailing feature file name if present
+        if (normalisedPath.endsWith(".feature") || normalisedPath.endsWith(".story")) {
+            normalisedPath = normalisedPath.substring(0, normalisedPath.lastIndexOf("."));// relativeFeaturePath(normalisedPath);
+        }
+        return normalisedPath;
+    }
 }

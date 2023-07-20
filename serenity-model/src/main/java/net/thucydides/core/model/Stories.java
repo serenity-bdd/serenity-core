@@ -22,7 +22,7 @@ public class Stories {
 
     public static String reportFor(final Story story, final ReportType type) {
         ReportNamer reportNamer = ReportNamer.forReportType(type);
-        return reportNamer.getNormalizedTestNameFor(story);
+        return reportNamer.getNormalizedReportNameFor(story);
     }
 
     private static Story storyFrom(final Class<?> testClass) {

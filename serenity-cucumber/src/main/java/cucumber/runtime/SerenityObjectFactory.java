@@ -35,7 +35,6 @@ public class SerenityObjectFactory implements ObjectFactory {
         Serenity.done(false);
     }
 
-
     @Override
     public boolean addClass(Class<?> glueClass) {
         classes.add(glueClass);
@@ -43,7 +42,6 @@ public class SerenityObjectFactory implements ObjectFactory {
     }
 
     public <T> T getInstance(Class<T> type) {
-        ConfigureDriverFromTags.inTheCurrentTestOutcome();
         T instance = type.cast(instances.get(type));
         if (instance == null) {
             instance = cacheNewInstance(type);

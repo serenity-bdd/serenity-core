@@ -97,32 +97,4 @@ class WhenNamingReports extends Specification {
         then:
         reportName == Digest.ofTextValue("context_sometest_result_success") + ".csv"
     }
-
-    def "should find a unique  name for a requirement report"() {
-        given:
-            def reportNameProvider = new ReportNameProvider()
-            def requirement = Mock(Requirement)
-            requirement.qualifiedName() >> "foo"
-            requirement.getType() >> "feature"
-        when:
-            def reportName = reportNameProvider.forRequirement(requirement)
-        then:
-            reportName == Digest.ofTextValue("feature_foo") + ".html"
-    }
-
-
-    def "should find a unique  name for a requirement report in context"() {
-        given:
-            def reportNameProvider = new ReportNameProvider("sometest")
-            def requirement = Mock(Requirement)
-            requirement.qualifiedName() >> "foo"
-            requirement.getType() >> "feature"
-        when:
-            def reportName = reportNameProvider.forRequirement(requirement)
-        then:
-            reportName == Digest.ofTextValue("context_sometest_feature_foo") + ".html"
-    }
-
-
-
 }

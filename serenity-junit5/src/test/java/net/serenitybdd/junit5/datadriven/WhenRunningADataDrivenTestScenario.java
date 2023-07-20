@@ -90,13 +90,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
         assertTrue(StepEventBus.getStickyEventBuses().size()==0);*/
     }
 
-    private void runTestForClass(Class testClass){
-        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                .selectors(selectClass(testClass))
-                .build();
-        LauncherFactory.create().execute(request);
-    }
-
     @Test
     public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() {
         runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
@@ -575,7 +568,6 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws IOException {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-        //File outputDirectory = tempFolder.newFolder("serenity");
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         runTestForClass(SimpleSuccessfulParameterizedTestSample.class);

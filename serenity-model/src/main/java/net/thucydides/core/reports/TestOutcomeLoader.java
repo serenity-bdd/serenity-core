@@ -12,12 +12,15 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -59,11 +62,16 @@ public class TestOutcomeLoader {
             final List<Callable<List<TestOutcome>>> partitions = new ArrayList<>();
             final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
 
-            for(File sourceFile : getAllOutcomeFilesFrom(reportDirectory)) {
-                partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile));
-            }
+//            for(File sourceFile : getAllOutcomeFilesFrom(reportDirectory)) {
+//                partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile));
+//            }
+//
+            allOutcomeFilesFrom(reportDirectory).forEach(
+                    sourceFile -> partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile.toFile()))
+            );
 
-            final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
+//            final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
+            final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
             final List<Future<List<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
 
             List<TestOutcome> testOutcomes = new ArrayList<>();
@@ -116,7 +124,16 @@ public class TestOutcomeLoader {
         }
     }
 
+
+    private Stream<Path> allOutcomeFilesFrom(final File reportsDirectory) throws IOException {
+
+        SerializedOutcomeFilenameFilter filter = new SerializedOutcomeFilenameFilter();
+        return Files.list(reportsDirectory.toPath())
+                .filter(file -> isAJsonTestOutcome(file));
+    }
+
     private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException{
+
         File[] matchingFiles = reportsDirectory.listFiles(new SerializedOutcomeFilenameFilter());
         if (matchingFiles == null) {
             throw new IOException("Could not find directory " + reportsDirectory);
@@ -184,5 +201,13 @@ public class TestOutcomeLoader {
                     && (!filename.endsWith("manifest.json"))
                     && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX))) ;
         }
+    }
+
+    private boolean isAJsonTestOutcome(Path path) {
+        String filename = path.toFile().getName();
+        return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension())
+                && (!filename.endsWith(".features.json"))
+                && (!filename.endsWith("manifest.json"))
+                && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX))) ;
     }
 }

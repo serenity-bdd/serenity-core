@@ -59,6 +59,8 @@ public class StepEventBus {
 
     private static boolean jUnit5ParallelMode = false;
 
+    private Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
+
     static {
         jUnit5ParallelMode =  isJUnit5ParallelMode();
     }
@@ -154,6 +156,16 @@ public class StepEventBus {
         this.outputDirectory = configuration.getOutputDirectory();
     }
 
+    /**
+     * Method used for testing purposes to find an event bus for a given test.
+     */
+    public static Optional<StepEventBus> eventBusForTest(String testName) {
+        return STICKY_EVENT_BUSES.keySet().stream()
+                .filter(key -> key.toString().contains(testName))
+                .map(STICKY_EVENT_BUSES::get)
+                .findFirst();
+    }
+
 
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
@@ -212,6 +224,15 @@ public class StepEventBus {
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
+    public void testScenarioStarted(String testName, String testMethod, String testId, String scenarioId) {
+        clear();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testStarted(testName, testMethod, testId, scenarioId);
+        }
+        StepEventBus.getParallelEventBus().setTestSource(testSource);
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
+    }
+
     public void testStarted(final String testName, final String id) {
         clear();
         for (StepListener stepListener : getAllListeners()) {
@@ -245,6 +266,17 @@ public class StepEventBus {
         ensureThatTheTestSuiteStartedWith(testClass);
         if (newTestName != null) {
             testStarted(newTestName);
+        }
+    }
+
+    public void testStarted(final String newTestName,
+                            final Class<?> testClass,
+                            String testMethod,
+                            String uniqueId,
+                            String scenarioId) {
+        ensureThatTheTestSuiteStartedWith(testClass);
+        if (newTestName != null) {
+            testScenarioStarted(newTestName, testMethod, uniqueId, scenarioId);
         }
     }
 
@@ -311,10 +343,27 @@ public class StepEventBus {
         clear();
         updateClassUnderTest(testClass);
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.testSuiteStarted(testClass);
+            if (testCaseDisplayNames.containsKey(testClass)) {
+                stepListener.testSuiteStarted(testClass, testCaseDisplayNames.get(testClass));
+            } else {
+                stepListener.testSuiteStarted(testClass);
+            }
         }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
     }
+
+    public void testSuiteStarted(final Class<?> testClass, String testCaseName) {
+        LOGGER.debug("Test suite started for {} in {}", testCaseName, testClass);
+        clear();
+        testCaseDisplayNames.put(testClass, testCaseName);
+        updateClassUnderTest(testClass);
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testSuiteStarted(testClass,testCaseName);
+        }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
+
+    }
+
 
     private void updateClassUnderTest(final Class<?> testClass) {
         classUnderTest = testClass;
@@ -1021,7 +1070,7 @@ public class StepEventBus {
 
 
     public void wrapUpCurrentCucumberStep() {
-        if (CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome()) && getBaseStepListener().currentStepDepth() == 1) {
+        if (isBaseStepListenerRegistered() && CurrentTestResult.isCucumber(getBaseStepListener().getCurrentTestOutcome()) && getBaseStepListener().currentStepDepth() == 1) {
             getBaseStepListener().currentStepDone(TestResult.UNDEFINED);
         }
     }

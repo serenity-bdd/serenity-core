@@ -113,7 +113,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
     }
 
     private File summaryFileFor(TestOutcome testOutcome) {
-        String summaryFilename = ReportNamer.forReportType(ReportType.JSON).withPrefix("summary-").getNormalizedTestNameFor(testOutcome);
+        String summaryFilename = ReportNamer.forReportType(ReportType.JSON).withPrefix("summary-").getNormalizedReportNameFor(testOutcome);
         return historyDirectory.resolve(summaryFilename).toFile();
     }
 

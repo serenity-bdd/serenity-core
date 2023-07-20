@@ -57,7 +57,7 @@ class WhenSettingUpReportServices extends Specification {
         when:
             int numberOfThreads = new NumberOfThreads(environmentVariables, singleCPURuntime).forIO();
         then:
-            numberOfThreads == 1;
+            numberOfThreads == 2;
 
     }
 

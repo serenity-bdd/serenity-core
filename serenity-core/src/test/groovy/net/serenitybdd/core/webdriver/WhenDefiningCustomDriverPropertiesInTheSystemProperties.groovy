@@ -43,7 +43,7 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
 
         where:
         driver    | configueredProperty                          | configuredValue | expectedProperty                | expectedValue
-        IEXPLORER | "driver_capabilities.common.takesScreenshot" | "false"         | CapabilityType.TAKES_SCREENSHOT | false
+        IEXPLORER | "driver_capabilities.common.acceptInsecureCerts" | "false"         | CapabilityType.ACCEPT_INSECURE_CERTS | false
     }
 
     def "configured driver capabilities should not include capabilities from other drivers"() {

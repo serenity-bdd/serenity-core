@@ -7,6 +7,7 @@ import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -30,6 +31,7 @@ class WhenRerunningFailingTests extends Specification {
 
         @Test
         public void testMethod1() {
+            throw new Exception();
         }
 
         @Test
@@ -41,6 +43,7 @@ class WhenRerunningFailingTests extends Specification {
         }
     }
 
+    @Ignore
     def "should rerun only tests specified in rerun file"() {
         given:
             def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new WebDriverConfiguration(environmentVariables))

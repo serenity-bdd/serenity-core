@@ -1,0 +1,76 @@
+{
+  "name": "Logging on with an expired account",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Registering for the site",
+      "duration": 18,
+      "startTime": 1401169624974,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "Given {Joe} is a Frequent Flyer member",
+          "duration": 2,
+          "startTime": 1401169624983,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "And {Joe} has registered online with a password of 'secret'",
+          "duration": 2,
+          "startTime": 1401169624985,
+          "result": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "description": "Given the account has expired",
+      "duration": 1,
+      "startTime": 1401169624999,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 5,
+      "description": "When {Joe} logs on with password 'wrong'",
+      "duration": 1,
+      "startTime": 1401169625001,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 6,
+      "description": "Then he should be informed that his account has expired",
+      "duration": 1,
+      "startTime": 1401169625003,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 7,
+      "description": "And he should be invited to renew his account",
+      "duration": 2,
+      "startTime": 1401169625004,
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "logging_on",
+    "storyName": "Logging on",
+    "path": "stories/authentication/logging_on.story"
+  },
+  "title": "Logging on with an expired account",
+  "tags": [
+    {
+      "name": "Authentication",
+      "type": "capability"
+    },
+    {
+      "name": "Logging on",
+      "type": "story"
+    }
+  ],
+  "startTime": 1401169624974,
+  "duration": 48,
+  "manual": false,
+  "result": "SUCCESS"
+}

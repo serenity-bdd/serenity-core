@@ -2,6 +2,7 @@ package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.requirements.model.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,11 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
         }
         return requirements;
 
+    }
+
+    @Override
+    public void addRequirementTagsTo(TestOutcome outcome) {
+        fileSystemRequirementsTagProvider.addRequirementTagsTo(outcome);
     }
 
     @Override

@@ -166,7 +166,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         this.requestedDriver = getSpecifiedDriver(klass);
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
         this.failureDetectingStepListener = new FailureDetectingStepListener();
-        this.failureRerunner = new FailureRerunnerXml(configuration);
+        this.failureRerunner = new FailureRerunnerJson(configuration);
 
         if (TestCaseAnnotations.supportsWebTests(klass)) {
             checkRequestedDriverType();

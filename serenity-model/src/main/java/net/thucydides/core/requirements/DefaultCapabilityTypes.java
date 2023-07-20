@@ -42,8 +42,6 @@ public class DefaultCapabilityTypes {
         } else {
             synchronized (requirementsCache) {
                 List<String> requriementTypes = configuredRequirementTypes(environmentVariables).orElse(getDefaultCapabilityTypes(root));
-//                List<String> requriementTypes = root.isPresent()
-//                        ? getDefaultCapabilityTypes(root) : configuredRequirementTypes(environmentVariables).orElse(DEFAULT_CAPABILITY_TYPES);
                 requirementsCache.put(key(environmentVariables, root), requriementTypes);
                 return requriementTypes;
             }

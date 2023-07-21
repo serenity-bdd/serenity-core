@@ -70,10 +70,9 @@ public class ConsoleLoggingListener implements StepListener {
     private final ConsoleColors colored;
     
     private ExecutedStepDescription currentStep;
-    private Set<ExecutedStepDescription> flaggedSteps = new HashSet<>();
-    private Set<TestOutcome> reportedOutcomes = new HashSet<>();
-
-    private Stack<String> nestedSteps = new Stack<>();
+    private final Set<ExecutedStepDescription> flaggedSteps = new HashSet<>();
+    private final Set<TestOutcome> reportedOutcomes = new HashSet<>();
+    private final Stack<String> nestedSteps = new Stack<>();
 
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables,
                                   Logger logger) {
@@ -330,6 +329,13 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
+            stepFailed(failure);
+        }
+    }
+
     private synchronized void stepOut() {
         synchronized(this) {
             if (!nestedSteps.isEmpty()) {
@@ -435,6 +441,11 @@ public class ConsoleLoggingListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 

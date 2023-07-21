@@ -16,7 +16,9 @@ import net.serenitybdd.markers.IsSilent;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.adapters.TestFramework;
 import net.thucydides.core.annotations.*;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
@@ -601,8 +603,9 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
         StepFailure failure = new StepFailure(description, cause);
 
-        if(TestSession.isSessionStarted()) {
-            StepFailedEvent stepFailedEvent = new StepFailedEvent(failure);
+        if (TestSession.isSessionStarted()) {
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
+            StepFailedEvent stepFailedEvent = new StepFailedEvent(failure,screenshotList);
             TestSession.addEvent(stepFailedEvent);
         }
         else {

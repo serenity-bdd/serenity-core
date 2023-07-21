@@ -4,6 +4,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
@@ -100,8 +101,10 @@ public class FailureDetectingStepListener implements StepListener {
 
     }
 
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
 
-
+    }
 
 
     public void stepIgnored() {
@@ -135,11 +138,6 @@ public class FailureDetectingStepListener implements StepListener {
 
     @Override
     public void testSkipped() {
-
-    }
-
-    @Override
-    public void testAborted() {
 
     }
 
@@ -190,6 +188,11 @@ public class FailureDetectingStepListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 

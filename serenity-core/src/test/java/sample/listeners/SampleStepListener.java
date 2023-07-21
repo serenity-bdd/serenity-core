@@ -3,6 +3,7 @@ package sample.listeners;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
@@ -60,6 +61,11 @@ public class SampleStepListener implements StepListener {
 
     public void stepFailed(StepFailure failure) {
         
+    }
+
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
     }
 
     public void lastStepFailed(StepFailure failure) {
@@ -153,6 +159,11 @@ public class SampleStepListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 }

@@ -4,6 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.Droppable;
 import net.thucydides.core.steps.ExecutedStepDescription;
@@ -79,6 +80,11 @@ public class FactLifecycleListener implements StepListener, Droppable {
 
     @Override
     public void stepFailed(StepFailure failure) {
+
+    }
+
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
 
     }
 
@@ -179,6 +185,11 @@ public class FactLifecycleListener implements StepListener, Droppable {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 }

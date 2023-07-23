@@ -4,6 +4,7 @@ package net.thucydides.core.steps;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 
 import java.time.ZonedDateTime;
@@ -93,6 +94,14 @@ public interface StepListener {
     void stepFailed(final StepFailure failure);
 
     /**
+     * Called when a test step fails.
+     *
+     * @param failure describes the test that failed and the exception that was thrown
+     */
+    void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList);
+
+
+    /**
      * Declare that a step has failed after it has finished.
      */
     void lastStepFailed(StepFailure failure);
@@ -141,7 +150,7 @@ public interface StepListener {
     /**
      * The test as a whole was aborted.
      */
-    default void testAborted() {};
+    default void testAborted() {}
 
     /**
      * The test as a whole should be marked as 'pending'.
@@ -180,5 +189,8 @@ public interface StepListener {
     void testRunFinished();
 
     void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots);
+
+    void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots);
+
 
 }

@@ -599,6 +599,18 @@ public class StepEventBus {
         stepFailed = true;
     }
 
+    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+        stepDone();
+        getResultTally().logFailure(failure);
+
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.stepFailed(failure,screenshotList);
+        }
+        stepFailed = true;
+    }
+
+
     public void lastStepFailed(final StepFailure failure) {
 
         getResultTally().logFailure(failure);
@@ -1143,6 +1155,18 @@ public class StepEventBus {
             List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
             for (StepListener stepListener : getAllListeners()) {
                 stepListener.takeScreenshots(screenshots);
+            }
+            return screenshots;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<ScreenshotAndHtmlSource> takeScreenshots(TestResult testResult) {
+        if (!isDryRun()) {
+            List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.takeScreenshots(testResult, screenshots);
             }
             return screenshots;
         } else {

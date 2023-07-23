@@ -894,6 +894,23 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
+
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+        if (!aStepHasFailed()) {
+            // This is the actual failure, so record all the details
+            takeEndOfStepScreenshotForPlayback(FAILURE, screenshotList);
+
+            TestFailureCause failureCause = TestFailureCause.from(failure.getException());
+            getCurrentTestOutcome().appendTestFailure(failureCause);
+
+            recordFailureDetails(failure);
+        }
+        // In all cases, mark the step as done with the appropriate result
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
+
+
     public void stepFailedWithException(Throwable failure) {
         if (!aStepHasFailed()) {
             takeEndOfStepScreenshotFor(FAILURE);
@@ -976,6 +993,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
         takeEndOfStepScreenshotForRecording(SUCCESS, screenshots);
+    }
+
+    @Override
+    public void takeScreenshots(TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
+        takeEndOfStepScreenshotForRecording(result, screenshots);
     }
 
     public void currentStepDone(TestResult result) {
@@ -1186,13 +1208,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
-        List<ScreenshotAndHtmlSource> screenshots = SerenityWebdriverManager.inThisTestThread()
+        return SerenityWebdriverManager.inThisTestThread()
                 .getCurrentDrivers()
                 .stream()
                 .map(driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver)))
                 .filter(ScreenshotAndHtmlSource::wasTaken)
                 .collect(Collectors.toList());
-        return screenshots;
     }
 
     private File screenshotFrom(WebDriver driver) {

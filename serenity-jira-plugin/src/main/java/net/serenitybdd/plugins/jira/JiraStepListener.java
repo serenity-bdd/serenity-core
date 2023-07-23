@@ -4,10 +4,7 @@ import com.google.inject.Inject;
 import net.serenitybdd.plugins.jira.guice.Injectors;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestOutcomeSummary;
+import net.thucydides.core.model.*;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
@@ -100,6 +97,11 @@ public class JiraStepListener implements StepListener {
 
     public void stepFailed(StepFailure stepFailure) {}
 
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+    }
+
     public void lastStepFailed(StepFailure stepFailure) {}
 
     public void stepIgnored() {}
@@ -117,6 +119,11 @@ public class JiraStepListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 

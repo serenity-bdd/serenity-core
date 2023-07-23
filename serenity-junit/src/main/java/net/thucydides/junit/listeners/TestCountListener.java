@@ -4,6 +4,7 @@ import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.steps.ExecutedStepDescription;
@@ -93,6 +94,11 @@ public class TestCountListener implements StepListener {
     public void stepFailed(StepFailure failure) {
     }
 
+    @Override
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+    }
+
 
     public void lastStepFailed(StepFailure failure) {
     }
@@ -174,6 +180,11 @@ public class TestCountListener implements StepListener {
 
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
+
+    }
+
+    @Override
+    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
 
     }
 }

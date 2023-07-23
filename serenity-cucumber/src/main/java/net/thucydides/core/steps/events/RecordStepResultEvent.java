@@ -19,11 +19,11 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
     private static final String CLOSE_PARAM_CHAR = "\uff60";
 
 
-	private Result result;
-	private io.cucumber.messages.types.Step currentStep;
-	private TestStep currentTestStep;
+	private final Result result;
+	private final io.cucumber.messages.types.Step currentStep;
+	private final TestStep currentTestStep;
 
-    private List<ScreenshotAndHtmlSource> screenshotList;
+    private final List<ScreenshotAndHtmlSource> screenshotList;
 	public RecordStepResultEvent(Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep,List<ScreenshotAndHtmlSource> screenshotList){
 		this.result = result;
 		this.currentStep = currentStep;
@@ -38,7 +38,7 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
         } else if (Status.PASSED.equals(result.getStatus())) {
             getStepEventBus().stepFinished(screenshotList);
         } else if (Status.FAILED.equals(result.getStatus())) {
-            failed(SerenityReporterParallel.stepTitleFrom(currentStep, currentTestStep), result.getError());
+            failed(SerenityReporterParallel.stepTitleFrom(currentStep, currentTestStep), result.getError(), screenshotList);
         } else if (Status.SKIPPED.equals(result.getStatus())) {
             skipped(SerenityReporterParallel.stepTitleFrom(currentStep, currentTestStep), result.getError());
         } else if (Status.PENDING.equals(result.getStatus())) {
@@ -49,7 +49,7 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
 	}
 
 
-    private void failed(String stepTitle, Throwable cause) {
+    private void failed(String stepTitle, Throwable cause, List<ScreenshotAndHtmlSource> screenshots) {
         if (!errorOrFailureRecordedForStep(stepTitle, cause)) {
             if (!isEmpty(stepTitle)) {
                 getStepEventBus().updateCurrentStepTitle(stepTitle);
@@ -58,7 +58,7 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
             if (isAssumptionFailure(rootCause)) {
                 getStepEventBus().assumptionViolated(rootCause.getMessage());
             } else {
-                getStepEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(normalized(currentStepTitle())), rootCause));
+                getStepEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(normalized(currentStepTitle())), rootCause),screenshots);
             }
         }
     }

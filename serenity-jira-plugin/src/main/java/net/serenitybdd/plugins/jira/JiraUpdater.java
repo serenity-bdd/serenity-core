@@ -2,11 +2,11 @@ package net.serenitybdd.plugins.jira;
 
 
 import net.serenitybdd.plugins.jira.domain.IssueComment;
-import net.serenitybdd.plugins.jira.guice.Injectors;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.model.NamedTestResult;
 import net.serenitybdd.plugins.jira.model.TestResultComment;
 import net.serenitybdd.plugins.jira.service.JIRAConfiguration;
+import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.service.NoSuchIssueException;
 import net.serenitybdd.plugins.jira.workflow.ClasspathWorkflowLoader;
 import net.serenitybdd.plugins.jira.workflow.Workflow;
@@ -47,7 +47,7 @@ public class JiraUpdater {
                        WorkflowLoader loader) {
         this.issueTracker = issueTracker;
         this.environmentVariables = environmentVariables;
-        configuration = Injectors.getInjector().getInstance(JIRAConfiguration.class);
+        configuration = JIRAInfrastructure.getConfiguration();
         workflow = loader.load();
         this.projectPrefix = environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_PROJECT.getPropertyName());
         logStatus(environmentVariables);
@@ -55,7 +55,7 @@ public class JiraUpdater {
 
     private void logStatus(EnvironmentVariables environmentVariables) {
         String jiraUrl = environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_URL.getPropertyName());
-        String reportUrl = ThucydidesSystemProperty.THUCYDIDES_PUBLIC_URL.from(environmentVariables, "");
+        String reportUrl = ThucydidesSystemProperty.SERENITY_PUBLIC_URL.from(environmentVariables, "");
         LOGGER.debug("JIRA LISTENER STATUS");
         LOGGER.debug("JIRA URL: {} ", jiraUrl);
         LOGGER.debug("REPORT URL: {} ", reportUrl);

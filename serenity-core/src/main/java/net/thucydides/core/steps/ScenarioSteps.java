@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -25,12 +25,12 @@ public class ScenarioSteps implements Serializable {
     private final SystemClock clock;
 
     public ScenarioSteps() {
-        this.clock = Injectors.getInjector().getInstance(SystemClock.class);
+        this.clock = SerenityInfrastructure.getClock();
     }
 
     public ScenarioSteps(final Pages pages) {
         this.pages = pages;
-        this.clock = Injectors.getInjector().getInstance(SystemClock.class);
+        this.clock = SerenityInfrastructure.getClock();
     }
 
     public WebDriver getDriver() {

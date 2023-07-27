@@ -460,7 +460,7 @@ public class StepEventBus {
 
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
 
-        SystemEnvironmentVariables.currentEnvironmentVariables().reset();
+        SystemEnvironmentVariables.currentEnvironment().reset();
         TestLocalEnvironmentVariables.clear();
         clear();
     }

@@ -1,7 +1,6 @@
 package net.thucydides.core.logging;
 
 
-import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.model.DataTable;
@@ -68,7 +67,7 @@ public class ConsoleLoggingListener implements StepListener {
     private final FailureAnalysis analysis;
     private final ConsoleHeading consoleHeading;
     private final ConsoleColors colored;
-    
+
     private ExecutedStepDescription currentStep;
     private final Set<ExecutedStepDescription> flaggedSteps = new HashSet<>();
     private final Set<TestOutcome> reportedOutcomes = new HashSet<>();
@@ -85,7 +84,6 @@ public class ConsoleLoggingListener implements StepListener {
         logBanner();
     }
 
-    @Inject
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables) {
         this(environmentVariables, LoggerFactory.getLogger(""));
     }
@@ -208,7 +206,7 @@ public class ConsoleLoggingListener implements StepListener {
         coloredLogs.put(TestResult.SKIPPED, (log, msg) -> log.info(colored.yellow(msg)));
         coloredLogs.put(TestResult.IGNORED, (log, msg) -> log.info(colored.yellow(msg)));
         coloredLogs.put(TestResult.COMPROMISED, (log, msg) -> log.error(colored.purple(msg)));
-        coloredLogs.put(TestResult.UNDEFINED, (log, msg) -> log.info(msg));
+        coloredLogs.put(TestResult.UNDEFINED, Logger::info);
 
         return coloredLogs;
     }

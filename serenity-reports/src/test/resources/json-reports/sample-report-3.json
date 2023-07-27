@@ -12,7 +12,7 @@
         "id": "net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
         "name": "A user story in a feature"
     },
-    "test-steps": [
+    "testSteps": [
         {
             "result": "SUCCESS",
             "description": "The customer navigates from metro jobs link.",

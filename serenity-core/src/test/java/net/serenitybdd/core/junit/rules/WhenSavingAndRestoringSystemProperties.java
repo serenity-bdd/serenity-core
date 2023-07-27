@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 
 public class WhenSavingAndRestoringSystemProperties {
 
-    private static final String SYSTEM_PROPERTY = ThucydidesSystemProperty.THUCYDIDES_REPORT_RESOURCES.getPropertyName();
+    private static final String SYSTEM_PROPERTY = ThucydidesSystemProperty.SERENITY_REPORT_RESOURCES.getPropertyName();
     @Mock
     Statement statement;
 

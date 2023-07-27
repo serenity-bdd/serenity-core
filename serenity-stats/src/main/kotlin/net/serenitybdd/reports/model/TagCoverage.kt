@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.model
 
+import net.serenitybdd.core.di.ModelInfrastructure
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.model.TestTag
@@ -20,7 +20,7 @@ class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcom
     companion object {
         @JvmStatic
         fun from(testOutcomes: TestOutcomes) =
-            TagCoverageBuilder(testOutcomes, Injectors.getInjector().getInstance(EnvironmentVariables::class.java))
+            TagCoverageBuilder(testOutcomes, ModelInfrastructure.getEnvironmentVariables())
     }
 }
 

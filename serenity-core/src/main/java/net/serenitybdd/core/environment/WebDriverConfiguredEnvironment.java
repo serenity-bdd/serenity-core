@@ -1,6 +1,6 @@
 package net.serenitybdd.core.environment;
 
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -26,7 +26,7 @@ public class WebDriverConfiguredEnvironment {
         if (testConfiguration.get() != null) {
             return testConfiguration.get();
         }
-        return WebDriverInjectors.getInjector().getInstance(DriverConfiguration.class);
+        return SerenityInfrastructure.getDriverConfiguration();
     }
 
     public static void reset() {

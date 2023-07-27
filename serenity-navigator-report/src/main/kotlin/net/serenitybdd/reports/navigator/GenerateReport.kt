@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.navigator
 
+import net.serenitybdd.core.di.ModelInfrastructure
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
 import net.serenitybdd.reports.io.testOutcomesIn
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.util.EnvironmentVariables
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
@@ -34,7 +34,7 @@ class GenerateReport(
     private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
 
-  constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
+  constructor() : this(ModelInfrastructure.getEnvironmentVariables())
 
   override fun getName(): String = "navigator"
   override fun getDescription(): String = "Full Report As React Based Single Page Application"

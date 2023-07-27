@@ -11,7 +11,6 @@ public class SpringDependencyInjector implements DependencyInjector {
 
     /**
      * Setup Spring dependencies in a step library, based on the Spring ContextConfiguration annotation.
-     * @param target
      */
     public void injectDependenciesInto(Object target) {
         if (springIsOnClasspath() && (annotatedWithSpringContext(target) || annotatedWithSpringBootTest(target))) {

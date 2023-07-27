@@ -33,8 +33,8 @@ public class SpringIntegrationMethodRule extends SpringIntegrationRuleBase imple
             base,
             testClass,
             target,
-            new StatementWrapper() { @Override public Statement apply(Statement next, TestContextManager testContextManager) { return new RunBeforeTestMethodCallbacks(next, target, testMethod, testContextManager); } },
-			new StatementWrapper() { @Override public Statement apply(Statement next, TestContextManager testContextManager) { return new RunAfterTestMethodCallbacks(next, target, testMethod, testContextManager); } }
+                (next, testContextManager) -> new RunBeforeTestMethodCallbacks(next, target, testMethod, testContextManager),
+                (next, testContextManager) -> new RunAfterTestMethodCallbacks(next, target, testMethod, testContextManager)
         );
     }
 }

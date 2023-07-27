@@ -18,6 +18,7 @@ public class OpenPageWithName implements Interaction {
     public OpenPageWithName(String pageName) {
         this.pageName = pageName;
         this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+        System.out.println(environmentVariables);
     }
 
     @Step("{0} opens the #pageName page")

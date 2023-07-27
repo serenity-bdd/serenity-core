@@ -1,9 +1,0 @@
-<acceptance-test-run title="Another test that failed, but no steps" name="noStepFailure" steps="0" successful="0" failures="0" skipped="0" ignored="0" pending="0" result="FAILURE" duration="34" timestamp='2013-01-03T00:00:00.000-05:00'>
-    <user-story id="net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature" name="A user story in a feature">
-        <feature id='net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature' name='A feature'/>
-    </user-story>
-    <tags>
-        <tag name="a feature" type="feature"/>
-        <tag name="another story" type="story"/>
-    </tags>
-</acceptance-test-run>

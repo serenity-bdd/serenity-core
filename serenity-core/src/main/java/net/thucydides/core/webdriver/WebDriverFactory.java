@@ -3,10 +3,9 @@ package net.thucydides.core.webdriver;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.SystemTimeouts;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
@@ -17,7 +16,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,15 +56,18 @@ public class WebDriverFactory {
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, WebDriverInjectors.getInjector().getInstance(FixtureProviderService.class));
+        this(environmentVariables,
+            SerenityInfrastructure.getFixtureProviderService(),
+                SerenityInfrastructure.getCloseBrowser());
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,
-                            FixtureProviderService fixtureProviderService) {
+                            FixtureProviderService fixtureProviderService,
+                            CloseBrowser closeBrowser) {
         this.environmentVariables = environmentVariables;
         this.fixtureProviderService = fixtureProviderService;
         this.timeoutStack = new TimeoutStack();
-        this.closeBrowser = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowser = closeBrowser;
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,

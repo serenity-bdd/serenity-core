@@ -1,7 +1,5 @@
 package net.thucydides.core.configuration;
 
-import com.google.inject.Inject;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TakeScreenshots;
@@ -21,10 +19,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * configuration elements can be set using system properties.
  */
 public class SystemPropertiesConfiguration implements Configuration {
-
-
-    @Deprecated
-    public static final Integer DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT = 5;
 
     /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
@@ -56,7 +50,6 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     private final FilePathParser filePathParser;
 
-    @Inject
     public SystemPropertiesConfiguration(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         filePathParser = new FilePathParser(environmentVariables);
@@ -237,7 +230,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public double getEstimatedAverageStepCount() {
-        return integerPropertyNamed(SERENITY_ESTIMATED_AVERAGE_STEP_COUNT, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return integerPropertyNamed(SERENITY_ESTIMATED_AVERAGE_STEP_COUNT, 1);
     }
 
     @SuppressWarnings("deprecation")

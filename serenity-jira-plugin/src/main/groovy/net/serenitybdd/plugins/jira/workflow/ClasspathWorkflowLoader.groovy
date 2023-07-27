@@ -1,7 +1,5 @@
 package net.serenitybdd.plugins.jira.workflow
 
-import com.google.inject.Inject
-import com.google.inject.name.Named
 import net.thucydides.core.util.EnvironmentVariables
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,8 +15,7 @@ class ClasspathWorkflowLoader implements WorkflowLoader {
     private final String defaultWorkflow;
     private final EnvironmentVariables environmentVariables;
 
-    @Inject
-    ClasspathWorkflowLoader(@Named("defaultWorkflow") String defaultWorkflow,
+    ClasspathWorkflowLoader(String defaultWorkflow,
                             EnvironmentVariables environmentVariables) {
         this.defaultWorkflow = defaultWorkflow
         this.environmentVariables = environmentVariables;

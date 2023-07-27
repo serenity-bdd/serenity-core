@@ -1,0 +1,55 @@
+{
+    "title": "A different acceptance test run",
+    "name": "a_different_acceptance_test_run",
+    "steps": "4",
+    "successful": "4",
+    "failures": "0",
+    "skipped": "0",
+    "ignored": "0",
+    "pending": "0",
+    "duration": "1000",
+    "result": "SUCCESS",
+
+    "userStory": {
+        "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
+        "name": "A user story in a feature",
+        "feature": {
+            "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature",
+            "name": "A feature"
+        }
+    },
+
+    "tags": [
+        {
+            "name": "an epic",
+            "type": "epic"
+        },
+        {
+            "name": "another different story",
+            "type": "story"
+        }
+    ],
+
+    "testSteps": [
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates from metro jobs link.",
+            "screenshot": "the_customer_navigates_from_metro_jobs_link1.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates to the metro masthead site.",
+            "screenshot": "the_customer_navigates_to_the_metro_masthead_site2.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates to classified place ad page.",
+            "screenshot": "the_customer_navigates_to_classified_place_ad_page3.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer chooses the jobs section.",
+            "screenshot": "the_customer_chooses_the_jobs_section4.png"
+        }
+    ]
+}

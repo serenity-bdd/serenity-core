@@ -1,8 +1,8 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.logging.ConsoleColors;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.TestOutcome;
@@ -35,7 +35,6 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private String resourceDirectory = DEFAULT_RESOURCE_DIRECTORY;
     private final TemplateManager templateManager;
     protected final EnvironmentVariables environmentVariables;
-    private final Charset charset;
     protected final ConsoleColors colored;
 
     protected static final String TIMESTAMP_FORMAT = "dd-MM-yyyy HH:mm:ss";
@@ -47,18 +46,12 @@ public abstract class HtmlReporter extends ThucydidesReporter {
 
     public HtmlReporter(final EnvironmentVariables environmentVariables) {
         super();
-        this.templateManager = Injectors.getInjector().getInstance(TemplateManager.class);
+        this.templateManager = ModelInfrastructure.getTemplateManager();
         this.environmentVariables = environmentVariables;
         this.colored = new ConsoleColors(environmentVariables);
-        this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables,
-                                                                                  StandardCharsets.UTF_8.name()));
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReporter.class);
-
-    private TemplateManager getTemplateManager() {
-        return templateManager;
-    }
 
     /**
      * Resources such as CSS stylesheets or images.

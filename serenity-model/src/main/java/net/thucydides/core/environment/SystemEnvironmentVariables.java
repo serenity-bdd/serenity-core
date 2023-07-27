@@ -2,7 +2,6 @@ package net.thucydides.core.environment;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigValueType;
 import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
@@ -12,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
  */
 public class SystemEnvironmentVariables implements EnvironmentVariables {
 
-    private Map<String, String> properties;
-    private final Map<String, String> systemValues;
-    private Config config;
+    private final Map<String, String> properties = new ConcurrentHashMap<>();
+    private final Map<String, String> systemValues = new ConcurrentHashMap<>();
+    private volatile Config config;
 
     private static final ThreadLocal<EnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
             = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
@@ -31,39 +31,37 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     /**
      * System properties as loaded from the system, without test-specific configuration
      */
-    private Map<String, String> pristineProperties;
+    private Map<String, String> pristineProperties = new ConcurrentHashMap<>();
 
     private SystemEnvironmentVariables(Map<String, String> properties, Map<String, String> systemValues, Config config, Map<String, String> pristineProperties) {
-        this.properties = properties;
-        this.systemValues = systemValues;
+        this.properties.putAll(properties);
+        this.systemValues.putAll(systemValues);
         this.config = config;
-        this.pristineProperties = pristineProperties;
+        this.pristineProperties.putAll(pristineProperties);
     }
-
 
     public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(
-                new HashMap<>(this.properties),
-                new HashMap<>(this.systemValues),
-                this.config,
-                new HashMap<>(this.pristineProperties));
+        return new SystemEnvironmentVariables(this.properties,this.systemValues,this.config,this.pristineProperties);
     }
-
 
     public SystemEnvironmentVariables() {
         this(System.getProperties(), System.getenv());
     }
 
+    public static EnvironmentUpdater currentEnvironment() {
+        return new EnvironmentUpdater(LOADED_ENVIRONMENT_VARIABLES.get());
+    }
     /**
      * Get the current environment variables, including any values updated for the scope of this test.
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        EnvironmentVariables environmentVariables = LOADED_ENVIRONMENT_VARIABLES.get().copy();
-        TestLocalEnvironmentVariables.getProperties().forEach(
-                (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
-        );
-        return environmentVariables;
+        return LOADED_ENVIRONMENT_VARIABLES.get().copy();
+//        EnvironmentVariables environmentVariables = LOADED_ENVIRONMENT_VARIABLES.get().copy();
+//        TestLocalEnvironmentVariables.getProperties().forEach(
+//                (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
+//        );
+//        return environmentVariables;
     }
 
     public void setConfig(Config typesafeConfig) {
@@ -72,14 +70,14 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
 
     public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
-        this.systemValues = NewMap.copyOf(systemValues);
+        this.systemValues.putAll(systemValues);
 
         Map<String, String> propertyValues = new HashMap<>();
         for (String property : systemProperties.stringPropertyNames()) {
             String value = systemProperties.getProperty(property);
             propertyValues.put(property, value);
         }
-        this.properties = NewMap.copyOf(propertyValues);
+        this.properties.putAll(propertyValues);
         this.pristineProperties = NewMap.copyOf(propertyValues);
 
     }
@@ -139,7 +137,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public boolean aValueIsDefinedFor(String property) {
-        boolean pathIsDefined = ((config != null) && config.hasPath(property));
         return properties.containsKey(property);
     }
 
@@ -213,18 +210,12 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     private final Lock propertySetLock = new ReentrantLock();
 
     public void setProperty(String name, String value) {
-
         propertySetLock.lock();
-
-        HashMap<String, String> workingCopy = new HashMap<>(properties);
-        workingCopy.put(name, value);
-        properties = NewMap.copyOf(workingCopy);
-
+        properties.put(name, value);
         propertySetLock.unlock();
     }
 
     public void setProperties(Map<String, String> properties) {
-
         propertySetLock.lock();
         this.properties.putAll(properties);
         propertySetLock.unlock();
@@ -233,11 +224,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     public void clearProperty(String name) {
         propertySetLock.lock();
-
-        HashMap<String, String> workingCopy = new HashMap(properties);
-        workingCopy.remove(name);
-        properties = NewMap.copyOf(workingCopy);
-
+        properties.remove(name);
         propertySetLock.unlock();
     }
 
@@ -266,7 +253,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentVariables createEnvironmentVariables() {
-        return createEnvironmentVariables(new SystemEnvironmentVariables());
+        return createEnvironmentVariables(new SystemEnvironmentVariables()).copy();
     }
 
     public static EnvironmentVariables createEnvironmentVariables(Path configurationFile) {
@@ -298,5 +285,21 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
             return config.getConfig(prefix);
         }
         return ConfigFactory.empty();
+    }
+
+    public static class EnvironmentUpdater {
+        private final EnvironmentVariables environmentVariables;
+
+        public EnvironmentUpdater(EnvironmentVariables environmentVariables) {
+            this.environmentVariables = environmentVariables;
+        }
+
+        public void setProperty(String name, String value) {
+            environmentVariables.setProperty(name, value);
+        }
+
+        public void reset() {
+            environmentVariables.reset();
+        }
     }
 }

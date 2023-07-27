@@ -6,7 +6,7 @@ import net.serenitybdd.plugins.jira.client.JIRAConfigurationError;
 import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.model.JQLException;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +23,11 @@ public class ConfigurableJiraClient extends JerseyJiraClient {
 
     public ConfigurableJiraClient(String url, String username, String password, String project) {
         super(url, username, password, project, customFields());
-        environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
     }
 
     private static List<String> customFields() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
         // TODO: Are the custom fields supposed to come from the environment variables?
         return Lists.newArrayList();
     }

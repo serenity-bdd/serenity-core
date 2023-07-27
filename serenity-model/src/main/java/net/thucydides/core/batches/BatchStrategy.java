@@ -12,7 +12,7 @@ public enum BatchStrategy {
 
     private Class<? extends BatchManager> batchManagerClass;
 
-    private BatchStrategy(Class<? extends BatchManager> batchManagerClass) {
+    BatchStrategy(Class<? extends BatchManager> batchManagerClass) {
         this.batchManagerClass = batchManagerClass;
     }
 

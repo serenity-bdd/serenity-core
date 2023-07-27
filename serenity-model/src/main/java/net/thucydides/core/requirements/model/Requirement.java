@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.PathElement;
 import net.thucydides.core.model.PathElements;
 import net.thucydides.core.model.Story;
@@ -576,7 +576,7 @@ public class Requirement implements Comparable<Requirement> {
     }
 
     public PathElements getParentPathElements() {
-        return getParentPathElements(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        return getParentPathElements(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     public boolean hasParent(PathElements path) {

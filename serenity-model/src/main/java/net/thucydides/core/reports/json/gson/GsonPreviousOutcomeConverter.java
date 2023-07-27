@@ -2,7 +2,7 @@ package net.thucydides.core.reports.json.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.history.PreviousTestOutcome;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -28,10 +28,10 @@ public class GsonPreviousOutcomeConverter {
 
     private final String encoding;
 
-    @Inject
+    
     public GsonPreviousOutcomeConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
+        encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder();
         this.gson = (usePrettyPrinting()) ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();
     }

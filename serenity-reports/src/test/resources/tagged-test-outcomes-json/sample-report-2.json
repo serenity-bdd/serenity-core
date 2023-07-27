@@ -1,36 +1,49 @@
 {
-    "title": "Should do this",
-    "name": "should_do_this",
+    "title": "Another acceptance test run",
+    "name": "another_acceptance_test_run",
     "steps": "6",
     "successful": "5",
     "failures": "0",
     "skipped": "0",
     "ignored": "0",
     "pending": "1",
+    "duration": "500",
     "result": "PENDING",
+
     "userStory": {
-        "id": "net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
+        "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
         "name": "A user story in a feature",
-        "displayName": "To a list with existing entries",
-        "storyClassName": "todomvc.WhenAddingTasks$ToAListWithExistingEntries",
-        "path": "WhenAddingTasks",
-        "type": "story"
+        "feature": {
+            "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature",
+            "name": "A feature"
+        }
     },
+
+    "issues": [
+        "ISSUE-2"
+    ],
+
     "tags": [
         {
-            "name":"a Feature",
-            "type":"Feature"
+            "name": "ISSUE-2",
+            "type": "issue",
+            "displayName": "ISSUE-2"
         },
         {
-            "name":"A story",
-            "type":"Story"
+            "name": "a feature",
+            "type": "Feature"
         },
         {
-            "name":"another story",
-            "type":"Story"
+            "name": "A Story",
+            "type": "Story"
+        },
+        {
+            "name": "another story",
+            "type": "Story"
         }
     ],
-    "test-steps": [
+
+    "testSteps": [
         {
             "result": "SUCCESS",
             "description": "The customer navigates from metro jobs link.",

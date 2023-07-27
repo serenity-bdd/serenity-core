@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.annotations.TestData;
-import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Arrays;
 import java.util.Collection;
 
-@RunWith(ThucydidesParameterizedRunner.class)
+@RunWith(SerenityParameterizedRunner.class)
 public class SampleDataDrivenIgnoredScenario {
 
 

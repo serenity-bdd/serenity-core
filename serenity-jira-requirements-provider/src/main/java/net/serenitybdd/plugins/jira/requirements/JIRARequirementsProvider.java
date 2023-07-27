@@ -11,7 +11,7 @@ import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.model.JQLException;
 import net.serenitybdd.plugins.jira.service.JIRAConfiguration;
 import net.serenitybdd.plugins.jira.service.SystemPropertiesJIRAConfiguration;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsList;
@@ -44,12 +44,12 @@ public class JIRARequirementsProvider implements RequirementsTagProvider {
     private final Logger logger = LoggerFactory.getLogger(JIRARequirementsProvider.class);
 
     public JIRARequirementsProvider() {
-        this(new SystemPropertiesJIRAConfiguration(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(new SystemPropertiesJIRAConfiguration(SerenityInfrastructure.getEnvironmentVariables()),
+                SerenityInfrastructure.getEnvironmentVariables() );
     }
 
     public JIRARequirementsProvider(JIRAConfiguration jiraConfiguration) {
-        this(jiraConfiguration, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(jiraConfiguration, SerenityInfrastructure.getEnvironmentVariables());
     }
 
     public JIRARequirementsProvider(JIRAConfiguration jiraConfiguration, EnvironmentVariables environmentVariables) {

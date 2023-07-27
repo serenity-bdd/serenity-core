@@ -6,7 +6,6 @@ import com.typesafe.config.ConfigRenderOptions;
 import com.typesafe.config.ConfigValueFactory;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -15,7 +14,6 @@ import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -52,7 +50,7 @@ public class ReportService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
-    @Inject
+    
     public ReportService(final Configuration configuration) {
         this(configuration.getOutputDirectory(), getDefaultReporters(), configuration.getEnvironmentVariables());
     }

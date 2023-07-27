@@ -4,9 +4,9 @@ import com.google.common.base.Splitter;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class BuildInfoProvider {
 
     public BuildInfoProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        this.driverCapabilityRecord = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverCapabilityRecord = ModelInfrastructure.getDriverCapabilityRecord();
         this.sections = new HashMap<>();
     }
 

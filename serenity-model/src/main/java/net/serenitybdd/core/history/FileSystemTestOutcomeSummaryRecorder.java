@@ -1,6 +1,6 @@
 package net.serenitybdd.core.history;
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.ReportNamer;
@@ -37,7 +37,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
             );
 
 
-    @Inject
+    
     public FileSystemTestOutcomeSummaryRecorder(EnvironmentVariables environmentVariables) {
         this(Paths.get(SERENITY_HISTORY_DIRECTORY.from(environmentVariables, "history"),""), false);
     }

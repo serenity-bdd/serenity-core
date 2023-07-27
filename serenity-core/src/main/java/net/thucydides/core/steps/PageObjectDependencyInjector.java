@@ -2,12 +2,12 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.webdriver.Configuration;
@@ -38,7 +38,7 @@ public class PageObjectDependencyInjector implements DependencyInjector {
 
     public PageObjectDependencyInjector() {
         this.environmentDependencyInjector = new EnvironmentDependencyInjector();
-        this.configuration = Injectors.getInjector().getInstance(Configuration.class);
+        this.configuration = SerenityInfrastructure.getConfiguration();
     }
 
     public void injectDependenciesInto(Object target) {

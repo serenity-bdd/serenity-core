@@ -1,8 +1,9 @@
 package net.serenitybdd.plugins.jira;
 
-import com.google.inject.Inject;
-import net.serenitybdd.plugins.jira.guice.Injectors;
+
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
+import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
 import net.thucydides.core.model.*;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
@@ -24,13 +25,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class JiraStepListener implements StepListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JiraStepListener.class);
-
-    private static TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-    private static Set<String> testSuiteIssues = new CopyOnWriteArraySet();
+    private TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
+    private Set<String> testSuiteIssues = new CopyOnWriteArraySet();
+//    private static TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
+//    private static Set<String> testSuiteIssues = new CopyOnWriteArraySet();
     private JiraUpdater jiraUpdater;
 
-    @Inject
+    
     public JiraStepListener(IssueTracker issueTracker,
                             EnvironmentVariables environmentVariables,
                             WorkflowLoader loader) {
@@ -38,9 +39,9 @@ public class JiraStepListener implements StepListener {
     }
 
     public JiraStepListener() {
-        this(Injectors.getInjector().getInstance(IssueTracker.class),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get(),
-                Injectors.getInjector().getInstance(WorkflowLoader.class));
+        this(JIRAInfrastructure.getIssueTracker(),
+                ModelInfrastructure.getEnvironmentVariables(),
+                JIRAInfrastructure.getWorkflowLoader());
     }
 
     public void testSuiteStarted(final Class<?> testCase) {

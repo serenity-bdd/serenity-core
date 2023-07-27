@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.jira.service;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.PropertiesFileLocalPreferences;
@@ -26,7 +26,7 @@ public class SystemPropertiesJIRAConfiguration implements JIRAConfiguration {
     private final Logger logger = LoggerFactory.getLogger(SystemPropertiesJIRAConfiguration.class);
 
     public SystemPropertiesJIRAConfiguration() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(SerenityInfrastructure.getEnvironmentVariables());
     }
 
 

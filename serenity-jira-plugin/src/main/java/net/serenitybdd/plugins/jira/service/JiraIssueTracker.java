@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.jira.service;
 
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.plugins.jira.domain.IssueComment;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.serenitybdd.plugins.jira.domain.IssueTransition;
@@ -31,7 +31,7 @@ public class JiraIssueTracker implements IssueTracker {
     private final JIRAConnection jiraConnection;
     private final Marker warn = MarkerFactory.getMarker("WARN");
 
-    @Inject
+    
     public JiraIssueTracker(JIRAConfiguration jiraConfiguration) {
         this(LoggerFactory.getLogger(JiraIssueTracker.class), jiraConfiguration);
     }

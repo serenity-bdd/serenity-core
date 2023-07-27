@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.samples.DemoSiteSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
  * @author johnsmart
  *
  */
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class OpenStaticDemoPageWithFailureSample {
 
     @Managed(uniqueSession=true, driver = "chrome", options = "--headless")

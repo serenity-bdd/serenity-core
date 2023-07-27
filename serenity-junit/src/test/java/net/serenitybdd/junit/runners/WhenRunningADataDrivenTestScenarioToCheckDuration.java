@@ -1,7 +1,8 @@
 package net.serenitybdd.junit.runners;
 
+import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.model.TestOutcome;
@@ -52,7 +53,7 @@ public class WhenRunningADataDrivenTestScenarioToCheckDuration {
     protected SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {
         DriverConfiguration configuration = new WebDriverConfiguration(environmentVariables);
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);
-        BatchManager batchManager = new BatchManagerProvider(configuration).get();
+        BatchManager batchManager = SerenityInfrastructure.getBatchManager();
         return new SerenityParameterizedRunner(testClass, configuration, factory, batchManager);
     }
 

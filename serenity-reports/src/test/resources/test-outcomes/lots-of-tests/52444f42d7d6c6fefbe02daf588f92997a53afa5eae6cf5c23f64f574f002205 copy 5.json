@@ -36,7 +36,7 @@
       "type": "feature"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "Given I want to purchase a cat",
       "duration": 5623,

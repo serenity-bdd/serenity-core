@@ -7,7 +7,7 @@ public class PeriodicRestart {
     private final int restartFrequency;
 
     public PeriodicRestart(EnvironmentVariables environmentVariables) {
-        this.restartFrequency = ThucydidesSystemProperty.THUCYDIDES_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables, 0);
+        this.restartFrequency = ThucydidesSystemProperty.SERENITY_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables, 0);
 
     }
 

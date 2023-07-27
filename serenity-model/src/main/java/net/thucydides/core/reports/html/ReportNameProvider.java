@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.model.Release;
@@ -27,7 +27,7 @@ public class ReportNameProvider {
 
 
     public ReportNameProvider(Optional<String> context, ReportNamer reportNamer) {
-        this(context, reportNamer, Injectors.getInjector().getInstance(RequirementsService.class));
+        this(context, reportNamer, ModelInfrastructure.getRequirementsService());
     }
 
     public ReportNameProvider(Optional<String> context, ReportNamer reportNamer, RequirementsService requirementsService) {
@@ -52,7 +52,7 @@ public class ReportNameProvider {
     }
 
     public ReportNameProvider(String context) {
-        this(Optional.ofNullable(context), ReportNamer.forReportType(ReportType.HTML), Injectors.getInjector().getInstance(RequirementsService.class));
+        this(Optional.ofNullable(context), ReportNamer.forReportType(ReportType.HTML), ModelInfrastructure.getRequirementsService());
 
     }
 
@@ -62,7 +62,7 @@ public class ReportNameProvider {
     }
 
     protected ReportNameProvider(Optional<String> context, ReportType type) {
-        this(context, ReportNamer.forReportType(type), Injectors.getInjector().getInstance(RequirementsService.class));
+        this(context, ReportNamer.forReportType(type), ModelInfrastructure.getRequirementsService());
     }
 
     public String getContext() {
@@ -88,7 +88,7 @@ public class ReportNameProvider {
     public String forTag(TestTag tag) {
         if (tag.getType().equalsIgnoreCase("issue")) {
             IssueTracking issueTracking = new SystemPropertiesIssueTracking(environmentVariables);
-            ReportFormatter reportFormatter = new ReportFormatter(issueTracking, environmentVariables);
+            ReportFormatter reportFormatter = new ReportFormatter(issueTracking);
             return reportFormatter.asIssueLink(tag.getName());
         } else {
             return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());

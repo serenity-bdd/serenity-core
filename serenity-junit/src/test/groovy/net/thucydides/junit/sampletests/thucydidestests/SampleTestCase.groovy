@@ -1,10 +1,10 @@
 package net.thucydides.junit.sampletests.thucydidestests
 
-import net.thucydides.junit.runners.ThucydidesRunner
+import net.serenitybdd.junit.runners.SerenityRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(ThucydidesRunner)
+@RunWith(SerenityRunner)
 class SampleTestCase {
 
     @Test

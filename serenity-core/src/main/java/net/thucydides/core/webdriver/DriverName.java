@@ -28,6 +28,6 @@ public class DriverName {
     }
 
     private Boolean differentBrowserForEachActor() {
-        return ThucydidesSystemProperty.THUCYDIDES_DIFFERENT_BROWSER_FOR_EACH_ACTOR.booleanFrom(environmentVariables, true);
+        return ThucydidesSystemProperty.SERENITY_DIFFERENT_BROWSER_FOR_EACH_ACTOR.booleanFrom(environmentVariables, true);
     }
 }

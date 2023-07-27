@@ -1,0 +1,33 @@
+{
+  "title": "Test with no steps that had an error",
+  "name": "noStepError",
+  "steps": "0",
+  "successful": "0",
+  "failures": "0",
+  "skipped": "0",
+  "ignored": "0",
+  "pending": "0",
+  "result": "ERROR",
+  "duration": "34",
+  "timestamp": "2013-01-05T00:00:00.000-05:00",
+
+  "userStory": {
+    "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
+    "name": "A user story in a feature",
+    "feature": {
+      "id": "net.thucydides.core.net.serenitybdd.reports.integration.WhenGeneratingAnXMLReport.AFeature",
+      "name": "A feature"
+    }
+  },
+
+  "tags": [
+    {
+      "name": "a feature",
+      "type": "feature"
+    },
+    {
+      "name": "another story",
+      "type": "story"
+    }
+  ]
+}

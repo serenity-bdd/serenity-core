@@ -6,7 +6,7 @@ import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.webdriver.MobilePlatform;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBys;
@@ -163,7 +163,8 @@ public class SmartAnnotations extends Annotations {
     }
 
     public SmartAnnotations(Field field, MobilePlatform platform) {
-        this(field, platform, WebDriverInjectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+//        this(field, platform, WebDriverInjectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+        this(field, platform, SerenityInfrastructure.getCustomFindByAnnotationProviderService());
     }
 
     public SmartAnnotations(Field field, MobilePlatform platform,

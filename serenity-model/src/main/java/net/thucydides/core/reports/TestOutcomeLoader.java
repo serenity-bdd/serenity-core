@@ -1,12 +1,11 @@
 package net.thucydides.core.reports;
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
-import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class TestOutcomeLoader {
         this(SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
-    @Inject
+    
     public TestOutcomeLoader(EnvironmentVariables environmentVariables) {
         this(environmentVariables, new FormatConfiguration(environmentVariables));
     }
@@ -185,8 +184,6 @@ public class TestOutcomeLoader {
 
     private AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
-            case XML:
-                return new XMLTestOutcomeReporter();
             case JSON:
                 return new JSONTestOutcomeReporter();
             default:

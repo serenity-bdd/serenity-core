@@ -2,6 +2,7 @@ package net.thucydides.core.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.TheErrorType;
@@ -11,7 +12,6 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
@@ -283,9 +283,9 @@ public class TestOutcome {
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new CopyOnWriteArrayList<>();
-        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
-        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
-        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.issueTracking = ModelInfrastructure.getIssueTracking();
+        this.linkGenerator = ModelInfrastructure.getLinkGenerator();
+        this.flagProvider = ModelInfrastructure.getFlagProvider();
         this.qualifier = Optional.empty();
         this.context = null;
         this.groupStack = new Stack<>();
@@ -336,9 +336,9 @@ public class TestOutcome {
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
-        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
-        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
-        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.issueTracking = ModelInfrastructure.getIssueTracking();
+        this.linkGenerator = ModelInfrastructure.getLinkGenerator();
+        this.flagProvider = ModelInfrastructure.getFlagProvider();
         this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
         this.context = null;//contextFrom(environmentVariables);
@@ -358,9 +358,9 @@ public class TestOutcome {
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         this.actors = new ArrayList<>();
-        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
-        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
-        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.issueTracking = ModelInfrastructure.getIssueTracking();
+        this.linkGenerator = ModelInfrastructure.getLinkGenerator();
+        this.flagProvider = ModelInfrastructure.getFlagProvider();
         this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
         this.context = context;
@@ -404,7 +404,7 @@ public class TestOutcome {
 
     private TagProviderService getTagProviderService() {
         if (tagProviderService == null) {
-            tagProviderService = Injectors.getInjector().getInstance(TagProviderService.class);
+            tagProviderService = ModelInfrastructure.getTagProviderService();
         }
         return tagProviderService;
     }
@@ -478,14 +478,14 @@ public class TestOutcome {
         } else if ((testCase != null) && storyDefinedIn(testCase).isPresent()) {
             setUserStory(storyDefinedIn(testCase).get());
         }
-        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
-        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
-        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.issueTracking = ModelInfrastructure.getIssueTracking();
+        this.linkGenerator = ModelInfrastructure.getLinkGenerator();
+        this.flagProvider = ModelInfrastructure.getFlagProvider();
         this.environmentVariables = environmentVariables;
         this.context = contextFrom(environmentVariables);
         this.order = TestCaseOrder.definedIn(testCase, name);
 
-        this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
+        this.projectKey = ThucydidesSystemProperty.SERENITY_PROJECT_KEY.from(environmentVariables, "");
     }
 
     protected TestOutcome(ZonedDateTime startTime, final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
@@ -595,9 +595,9 @@ public class TestOutcome {
         this.qualifier = qualifier;
         this.annotatedResult = annotatedResult;
         this.dataTable = dataTable;
-        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
-        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
-        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
+        this.issueTracking = ModelInfrastructure.getIssueTracking();
+        this.linkGenerator = ModelInfrastructure.getLinkGenerator();
+        this.flagProvider = ModelInfrastructure.getFlagProvider();
         this.driver = driver;
         this.manual = manualTest;
         this.manualTestEvidence = testEvidence;
@@ -1237,7 +1237,7 @@ public class TestOutcome {
     }
 
     public String toJson() {
-        JSONConverter jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
+        JSONConverter jsonConverter = ModelInfrastructure.getJsonConverter();
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             jsonConverter.toJson(this, outputStream);
             return outputStream.toString(Charset.defaultCharset());
@@ -1837,7 +1837,12 @@ public class TestOutcome {
     }
 
     public List<String> getIssues() {
-        List<String> allIssues = new ArrayList<>(issues());
+        List<String> allIssues = new ArrayList<>();
+        if (issues != null) {
+           allIssues.addAll(issues);
+        } else {
+            allIssues.addAll(issues());
+        }
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
@@ -2345,7 +2350,7 @@ public class TestOutcome {
     }
 
     private SystemClock getSystemClock() {
-        return Injectors.getInjector().getInstance(SystemClock.class);
+        return ModelInfrastructure.getClock();
     }
 
     private ZonedDateTime now() {

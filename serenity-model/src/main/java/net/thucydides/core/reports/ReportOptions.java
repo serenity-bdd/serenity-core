@@ -1,14 +1,12 @@
 package net.thucydides.core.reports;
 
 import com.google.common.base.Splitter;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 
@@ -40,7 +38,7 @@ public class ReportOptions {
 //        return REPORT_OPTIONS.get(environmentVariables);
     }
     public ReportOptions(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, Injectors.getInjector().getInstance(RequirementsService.class));
+        this(environmentVariables, ModelInfrastructure.getRequirementsService());
     }
 
     public ReportOptions(EnvironmentVariables environmentVariables, RequirementsService requirementsService) {

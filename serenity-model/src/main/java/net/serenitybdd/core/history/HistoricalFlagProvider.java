@@ -1,6 +1,6 @@
 package net.serenitybdd.core.history;
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -23,7 +23,7 @@ public class HistoricalFlagProvider implements FlagProvider {
 
     private final Set<? extends Flag> NO_FLAGS = NewSet.of();
 
-    @Inject
+    
     public HistoricalFlagProvider(EnvironmentVariables environmentVariables,
                                   TestOutcomeSummaryRecorder summaryRecorder) {
 

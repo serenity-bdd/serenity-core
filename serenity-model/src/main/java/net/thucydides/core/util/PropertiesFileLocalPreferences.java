@@ -1,7 +1,7 @@
 package net.thucydides.core.util;
 
 import com.google.common.io.Resources;
-import com.google.inject.Inject;
+
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
@@ -20,6 +20,8 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -33,19 +35,19 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     public static final String TYPESAFE_CONFIG_FILE = "serenity.conf";
-    private File workingDirectory;
-    private File homeDirectory;
-    private File mavenModuleDirectory;
+    private volatile File workingDirectory;
+    private volatile File homeDirectory;
+    private volatile File mavenModuleDirectory;
     private final EnvironmentVariables environmentVariables;
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileLocalPreferences.class);
 
-    private static final Config systemProperties = ConfigFactory.systemProperties();
+    private final Lock lock = new ReentrantLock();
+
     /**
      * Configuration file path provided programmatically - used for testing
      */
     private Path configurationFilePath;
 
-    @Inject
     public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.homeDirectory = new File(System.getProperty("user.home"));
@@ -69,28 +71,36 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     public void setHomeDirectory(File homeDirectory) {
-        this.homeDirectory = homeDirectory;
+        lock.lock();
+        try {
+            this.homeDirectory = homeDirectory;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public void loadPreferences() throws IOException {
+        lock.lock();
+        try {
+            updatePreferencesFrom(
+                    preferencesIn(preferencesFileWithAbsolutePath()),
+                    preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                    typesafeConfigPreferencesInCustomDefinedConfigFile(),
+                    typesafeConfigPreferences(),
+                    preferencesIn(preferencesFileInMavenModuleDirectory()),
+                    preferencesIn(preferencesFileInMavenParentModuleDirectory()),
+                    preferencesIn(preferencesFileInWorkingDirectory()),
+                    preferencesIn(legacyPreferencesFileInWorkingDirectory()),
+                    preferencesIn(preferencesFileInHomeDirectory()),
+                    preferencesIn(legacyPreferencesFileInHomeDirectory()),
+                    preferencesInClasspath());
 
-        updatePreferencesFrom(
-                preferencesIn(preferencesFileWithAbsolutePath()),
-                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
-                typesafeConfigPreferencesInCustomDefinedConfigFile(),
-                typesafeConfigPreferences(),
-                preferencesIn(preferencesFileInMavenModuleDirectory()),
-                preferencesIn(preferencesFileInMavenParentModuleDirectory()),
-                preferencesIn(preferencesFileInWorkingDirectory()),
-                preferencesIn(legacyPreferencesFileInWorkingDirectory()),
-                preferencesIn(preferencesFileInHomeDirectory()),
-                preferencesIn(legacyPreferencesFileInHomeDirectory()),
-                preferencesInClasspath());
-
-        if (typesafeConfigFileExists()) {
-            environmentVariables.setConfig(typesafeConfig());
+            if (typesafeConfigFileExists()) {
+                environmentVariables.setConfig(typesafeConfig());
+            }
+        } finally {
+            lock.unlock();
         }
-
     }
 
     private Properties preferencesInClasspath() throws IOException {
@@ -183,7 +193,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             String localPropertyValue = localPreferences.getProperty(propertyName);
             String currentPropertyValue = environmentVariables.getProperty(propertyName);
 
-            if (isEmpty(currentPropertyValue) && isNotEmpty(localPropertyValue)) {
+            if (isEmpty(currentPropertyValue) && isNotEmpty(localPropertyValue) && !propertyName.equals("//") && !propertyName.equals("#")) {
                 LOGGER.trace("{} = {}",propertyName, localPropertyValue);
                 environmentVariables.setProperty(propertyName, localPropertyValue);
             }

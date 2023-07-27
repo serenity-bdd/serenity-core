@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
+
 import io.cucumber.core.resource.ClassLoaders;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
@@ -149,7 +149,7 @@ public class StepEventBus {
     private final CleanupMethodLocator cleanupMethodLocator;
     private final File outputDirectory;
 
-    @Inject
+    
     public StepEventBus(EnvironmentVariables environmentVariables, Configuration configuration) {
         this.environmentVariables = environmentVariables;
         this.cleanupMethodLocator = new CleanupMethodLocator();
@@ -402,6 +402,8 @@ public class StepEventBus {
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();
+        isDryRun = Optional.empty();
+        suspendedTest = false;
 
         Broadcaster.unregisterAllListeners();
         dropClosableListeners();
@@ -948,7 +950,7 @@ public class StepEventBus {
         if (this.isDryRun.isPresent()) {
             return this.isDryRun.get();
         } else {
-            return ThucydidesSystemProperty.THUCYDIDES_DRY_RUN.booleanFrom(environmentVariables);
+            return ThucydidesSystemProperty.SERENITY_DRY_RUN.booleanFrom(environmentVariables);
         }
     }
 

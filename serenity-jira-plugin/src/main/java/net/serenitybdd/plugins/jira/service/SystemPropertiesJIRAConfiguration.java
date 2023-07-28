@@ -3,7 +3,7 @@ package net.serenitybdd.plugins.jira.service;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
-import net.thucydides.core.util.PropertiesFileLocalPreferences;
+import net.thucydides.core.util.PropertiesLocalPreferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class SystemPropertiesJIRAConfiguration implements JIRAConfiguration {
 
 
     private void updateEnvironmentVariablesFromPropertiesFiles(EnvironmentVariables environmentVariables) {
-        LocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
+        LocalPreferences localPreferences = new PropertiesLocalPreferences(environmentVariables);
         try {
             localPreferences.loadPreferences();
         } catch (IOException e) {

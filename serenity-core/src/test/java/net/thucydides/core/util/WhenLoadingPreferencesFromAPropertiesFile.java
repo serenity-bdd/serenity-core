@@ -1,7 +1,6 @@
 package net.thucydides.core.util;
 
 import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,35 +11,37 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-public class WhenLoadingPreferencesFromALocalPropertiesFile {
+public class WhenLoadingPreferencesFromAPropertiesFile {
 
-    Logger LOGGER = LoggerFactory.getLogger(WhenLoadingPreferencesFromALocalPropertiesFile.class);
+    Logger LOGGER = LoggerFactory.getLogger(WhenLoadingPreferencesFromAPropertiesFile.class);
 
     @Rule
     public ExtendedTemporaryFolder temporaryFolder = new ExtendedTemporaryFolder();
 
     File homeDirectory;
     File thucydidesPropertiesFile;
-    EnvironmentVariables environmentVariables;
-    PropertiesFileLocalPreferences localPreferences;
+    Map<String,String> environmentVariables;
+    PropertiesLocalPreferences localPreferences;
 
     @Before
     public void setupDirectories() throws IOException {
-        environmentVariables = new MockEnvironmentVariables();
-        localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
+        environmentVariables = new HashMap<>();
+        localPreferences = new PropertiesLocalPreferences(environmentVariables);
 
         homeDirectory = temporaryFolder.newFolder();
         localPreferences.setHomeDirectory(homeDirectory);
     }
 
     @Test
-    public void the_default_preferences_directory_is_the_users_home_directory() throws Exception {
-        PropertiesFileLocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
+    public void the_default_preferences_directory_is_the_users_home_directory() {
+        PropertiesLocalPreferences localPreferences = new PropertiesLocalPreferences(environmentVariables);
 
         String homeDirectory = System.getProperty("user.home");
 
@@ -55,7 +56,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("webdriver.driver"), is("opera"));
+        assertThat(environmentVariables.get("webdriver.driver"), is("opera"));
     }
 
     @Test
@@ -66,19 +67,19 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("test.property"), is("reset"));
+        assertThat(environmentVariables.get("test.property"), is("reset"));
     }
 
     @Test
     public void local_preferences_should_not_override_system_preferences() throws Exception {
         writeToPropertiesFile("webdriver.driver = opera");
 
-        environmentVariables.setProperty("webdriver.driver", "iexplorer");
+        environmentVariables.put("webdriver.driver", "iexplorer");
         localPreferences.setHomeDirectory(homeDirectory);
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("webdriver.driver"), is("iexplorer"));
+        assertThat(environmentVariables.get("webdriver.driver"), is("iexplorer"));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("webdriver.driver"), is("safari"));
+        assertThat(environmentVariables.get("webdriver.driver"), is("safari"));
 
         System.clearProperty("properties");
     }
@@ -106,7 +107,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("webdriver.driver"), is("safari"));
+        assertThat(environmentVariables.get("webdriver.driver"), is("safari"));
 
         System.clearProperty("properties");
     }
@@ -120,7 +121,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("webdriver.driver"), is(nullValue()));
+        assertThat(environmentVariables.get("webdriver.driver"), is(nullValue()));
 
         System.clearProperty("properties");
 
@@ -143,7 +144,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("serenity.logging"), is("VERBOSE"));
+        assertThat(environmentVariables.get("serenity.logging"), is("VERBOSE"));
     }
 
     @Test
@@ -152,23 +153,9 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("environment.uat"), is("uat-server"));
+        assertThat(environmentVariables.get("environment.uat"), is("uat-server"));
     }
-
-    @Test
-    public void users_can_define_optional_custom_properties() {
-
-        // WHEN
-        environmentVariables.setProperty("env","QA");
-
-        // THEN
-        assertThat(environmentVariables.optionalProperty("env").isPresent(), is(true));
-
-        // BUT
-        assertThat(environmentVariables.optionalProperty("undefined").isPresent(), is(false));
-
-    }
-
+    
     @SuppressWarnings("static-access")
     private String writeToPropertiesFileCalled(String filename, String... lines) throws IOException, InterruptedException {
         thucydidesPropertiesFile = new File(homeDirectory, filename);

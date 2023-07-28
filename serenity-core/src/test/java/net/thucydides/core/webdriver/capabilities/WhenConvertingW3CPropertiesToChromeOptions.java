@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.not;
 class WhenConvertingW3CPropertiesToChromeOptions {
     private static EnvironmentVariables from(String testConfig) {
         Path configFilepath = new File(Resources.getResource(testConfig).getPath()).toPath();
-        return SystemEnvironmentVariables.createEnvironmentVariables(configFilepath, new SystemEnvironmentVariables());
+        return SystemEnvironmentVariables.createEnvironmentVariables(configFilepath);
     }
 
     @DisplayName("If no webdriver section is present, use a standard ChromeOptions object")

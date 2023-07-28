@@ -5,7 +5,8 @@ import com.typesafe.config.ConfigFactory;
 import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.LocalPreferences;
-import net.thucydides.core.util.PropertiesFileLocalPreferences;
+//import net.thucydides.core.util.PropertiesFileLocalPreferences;
+import net.thucydides.core.util.PropertiesLocalPreferences;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -24,8 +25,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     private final Map<String, String> properties = new ConcurrentHashMap<>();
     private final Map<String, String> systemValues = new ConcurrentHashMap<>();
     private volatile Config config;
+    private volatile boolean configLoaded = false;
 
-    private static final ThreadLocal<EnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
+    private static final ThreadLocal<SystemEnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
             = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
 
     /**
@@ -38,10 +40,16 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this.systemValues.putAll(systemValues);
         this.config = config;
         this.pristineProperties.putAll(pristineProperties);
+        loadLocalConfig();
+    }
+
+    private void clearConfig() {
+        this.config = null;
+        this.configLoaded = false;
     }
 
     public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(this.properties,this.systemValues,this.config,this.pristineProperties);
+        return new SystemEnvironmentVariables(this.properties, this.systemValues, this.config, this.pristineProperties).loadLocalConfig();
     }
 
     public SystemEnvironmentVariables() {
@@ -49,25 +57,27 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentUpdater currentEnvironment() {
-        return new EnvironmentUpdater(LOADED_ENVIRONMENT_VARIABLES.get());
+        return new EnvironmentUpdater(LOADED_ENVIRONMENT_VARIABLES.get().loadLocalConfig());
     }
+
     /**
      * Get the current environment variables, including any values updated for the scope of this test.
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
         return LOADED_ENVIRONMENT_VARIABLES.get().copy();
-//        EnvironmentVariables environmentVariables = LOADED_ENVIRONMENT_VARIABLES.get().copy();
-//        TestLocalEnvironmentVariables.getProperties().forEach(
-//                (key, value) -> environmentVariables.setProperty(key, environmentVariables.injectSystemPropertiesInto(value))
-//        );
-//        return environmentVariables;
     }
 
     public void setConfig(Config typesafeConfig) {
         this.config = typesafeConfig.resolve();
     }
 
+    public SystemEnvironmentVariables(Map<String, String> propertyValues, Map<String, String> systemValues) {
+        this.systemValues.putAll(systemValues);
+        this.properties.putAll(propertyValues);
+        this.pristineProperties = NewMap.copyOf(propertyValues);
+        loadLocalConfig();
+    }
 
     public SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
         this.systemValues.putAll(systemValues);
@@ -79,7 +89,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         }
         this.properties.putAll(propertyValues);
         this.pristineProperties = NewMap.copyOf(propertyValues);
-
+        loadLocalConfig();
     }
 
     public String getValue(final String name) {
@@ -252,32 +262,58 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this.properties.putAll(pristineProperties);
     }
 
-    public static EnvironmentVariables createEnvironmentVariables() {
-        return createEnvironmentVariables(new SystemEnvironmentVariables()).copy();
+    public static SystemEnvironmentVariables createEnvironmentVariables() {
+        return createEnvironmentVariables(new SystemEnvironmentVariables());
     }
 
-    public static EnvironmentVariables createEnvironmentVariables(Path configurationFile) {
-        return createEnvironmentVariables(configurationFile, new SystemEnvironmentVariables());
+    public static SystemEnvironmentVariables createEnvironmentVariables(Path configurationFile) {
+        return createEnvironmentVariables(configurationFile, new SystemEnvironmentVariables().withEmptyConfig());
     }
 
-    public static EnvironmentVariables createEnvironmentVariables(Path configurationFile, EnvironmentVariables environmentVariables) {
-        LocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables, configurationFile);
+    private SystemEnvironmentVariables withEmptyConfig() {
+        this.config = null;
+        this.configLoaded = false;
+        return this;
+    }
+
+    public static SystemEnvironmentVariables createEnvironmentVariables(Path configurationFile, SystemEnvironmentVariables environmentVariables) {
+        LocalPreferences localPreferences = new PropertiesLocalPreferences(environmentVariables.properties, configurationFile);
         try {
             localPreferences.loadPreferences();
+            environmentVariables.setConfig(localPreferences.getConfig());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return environmentVariables;
     }
 
-    private static EnvironmentVariables createEnvironmentVariables(EnvironmentVariables environmentVariables) {
-        LocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
+    private static SystemEnvironmentVariables createEnvironmentVariables(SystemEnvironmentVariables environmentVariables) {
+        LocalPreferences localPreferences = new PropertiesLocalPreferences(environmentVariables.properties);
         try {
             localPreferences.loadPreferences();
+            environmentVariables.setConfig(localPreferences.getConfig());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return environmentVariables;
+    }
+
+    ReentrantLock configLock = new ReentrantLock();
+
+    private EnvironmentVariables loadLocalConfig() {
+        if (!configLoaded) {
+            configLock.lock();
+            LocalPreferences localPreferences = new PropertiesLocalPreferences(this.properties);
+            try {
+                localPreferences.loadPreferences();
+                this.setConfig(localPreferences.getConfig());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            configLoaded = true;
+            configLock.unlock();
+        }
+        return this;
     }
 
     public Config getConfig(String prefix) {
@@ -285,6 +321,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
             return config.getConfig(prefix);
         }
         return ConfigFactory.empty();
+    }
+
+    @Override
+    public Map<String, String> properties() {
+        return properties;
     }
 
     public static class EnvironmentUpdater {

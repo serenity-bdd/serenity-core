@@ -1,14 +1,10 @@
 package net.thucydides.core.util;
 
-import com.google.common.io.Resources;
-
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.requirements.SearchForFilesWithName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +28,14 @@ import static org.apache.commons.lang3.StringUtils.*;
  * working directory override values on the classpath, and values in the home directory override values in the working
  * directory. Values can always be overridden on the command line.
  */
-public class PropertiesFileLocalPreferences implements LocalPreferences {
+public class PropertiesLocalPreferences implements LocalPreferences {
 
     public static final String TYPESAFE_CONFIG_FILE = "serenity.conf";
     private volatile File workingDirectory;
     private volatile File homeDirectory;
     private volatile File mavenModuleDirectory;
-    private final EnvironmentVariables environmentVariables;
-    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileLocalPreferences.class);
+    private final Map<String, String> currentProperties;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesLocalPreferences.class);
 
     private final Lock lock = new ReentrantLock();
 
@@ -48,8 +44,8 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
      */
     private Path configurationFilePath;
 
-    public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
+    public PropertiesLocalPreferences(Map<String, String> properties) {
+        this.currentProperties = properties;
         this.homeDirectory = new File(System.getProperty("user.home"));
         this.workingDirectory = new File(System.getProperty("user.dir"));
         final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
@@ -60,10 +56,13 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         }
     }
 
-    public PropertiesFileLocalPreferences(EnvironmentVariables environmentVariables, Path configurationFilePath) {
-        this(environmentVariables);
+    public PropertiesLocalPreferences(Map<String, String> currentProperties, Path configurationFilePath) {
+        this(currentProperties);
         this.configurationFilePath = configurationFilePath;
+    }
 
+    public PropertiesLocalPreferences(EnvironmentVariables environmentVariables) {
+        this(environmentVariables.properties());
     }
 
     public File getHomeDirectory() {
@@ -77,6 +76,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public Config getConfig() {
+        return typesafeConfig();
     }
 
     public void loadPreferences() throws IOException {
@@ -94,10 +98,6 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                     preferencesIn(preferencesFileInHomeDirectory()),
                     preferencesIn(legacyPreferencesFileInHomeDirectory()),
                     preferencesInClasspath());
-
-            if (typesafeConfigFileExists()) {
-                environmentVariables.setConfig(typesafeConfig());
-            }
         } finally {
             lock.unlock();
         }
@@ -191,11 +191,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         while (propertyNames.hasMoreElements()) {
             String propertyName = (String) propertyNames.nextElement();
             String localPropertyValue = localPreferences.getProperty(propertyName);
-            String currentPropertyValue = environmentVariables.getProperty(propertyName);
+            String currentPropertyValue = currentProperties.get(propertyName);
 
             if (isEmpty(currentPropertyValue) && isNotEmpty(localPropertyValue) && !propertyName.equals("//") && !propertyName.equals("#")) {
                 LOGGER.trace("{} = {}",propertyName, localPropertyValue);
-                environmentVariables.setProperty(propertyName, localPropertyValue);
+                currentProperties.put(propertyName, localPropertyValue);
             }
         }
     }

@@ -93,4 +93,6 @@ public interface EnvironmentVariables {
                 .omitEmptyStrings()
                 .splitToList(getProperty("environment", ""));
     }
+
+    Map<String, String> properties();
 }

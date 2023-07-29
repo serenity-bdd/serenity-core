@@ -39,7 +39,7 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
     @Test
     public void a_test_reporter_can_subscribe_to_the_runner() throws Exception {
         
-        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
+        SerenityRunner runner = new SerenityRunner(AnnotatedSingleTestScenario.class);
         runner.subscribeReporter(mockReporter);
 
         runner.run(new RunNotifier());

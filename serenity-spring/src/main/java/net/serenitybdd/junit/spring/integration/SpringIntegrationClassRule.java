@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.statements.RunBeforeTestClassCall
 
 /**
  * A {@link org.junit.rules.TestRule} to be used with @{@link org.junit.ClassRule} to run the @BeforeClass and @AfterClass modifiers that are part of {@link org.springframework.test.context.junit4.SpringJUnit4ClassRunner}.
+ *
  * @author scott.dennison@costcutter.com
  */
 public class SpringIntegrationClassRule extends SpringIntegrationRuleBase implements TestRule {
@@ -18,20 +19,21 @@ public class SpringIntegrationClassRule extends SpringIntegrationRuleBase implem
 
     /**
      * Wraps {@link RunBeforeTestClassCallbacks} and {@link RunAfterTestClassCallbacks} around the provided statement.
-     * @param base The base statement
+     *
+     * @param base        The base statement
      * @param description Information about the test class being run.
      * @return The wrapped statement.
      */
     @Override
     public Statement apply(Statement base, Description description) {
         Class<?> testClass = description.getTestClass();
-        LOG.debug("Applying class rule to class {}",testClass.getName());
+        LOG.debug("Applying class rule to class {}", testClass.getName());
         return super.apply(
-            base,
-            testClass,
-            null,
-            new StatementWrapper() { @Override public Statement apply(Statement next, TestContextManager testContextManager) { return new RunBeforeTestClassCallbacks(next,testContextManager); }},
-			new StatementWrapper() { @Override public Statement apply(Statement next, TestContextManager testContextManager) { return new RunAfterTestClassCallbacks(next,testContextManager); }}
+                base,
+                testClass,
+                null,
+                (next, testContextManager) -> new RunBeforeTestClassCallbacks(next, testContextManager),
+                (next, testContextManager) -> new RunAfterTestClassCallbacks(next, testContextManager)
         );
     }
 }

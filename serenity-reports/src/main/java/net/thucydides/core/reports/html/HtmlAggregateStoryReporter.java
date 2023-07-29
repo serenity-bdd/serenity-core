@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.DurationDistribution;
 import net.serenitybdd.reports.model.FrequentFailure;
@@ -30,7 +31,6 @@ import java.util.stream.Stream;
 
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
-import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -65,8 +65,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public HtmlAggregateStoryReporter(final String projectName, final Requirements requirements) {
         this(projectName,
                 "",
-                getInjector().getInstance(IssueTracking.class),
-                getInjector().getProvider(EnvironmentVariables.class).get(),
+                ModelInfrastructure.getIssueTracking(),
+                ModelInfrastructure.getEnvironmentVariables(),
                 requirements);
 
     }
@@ -74,16 +74,16 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public HtmlAggregateStoryReporter(final String projectName, final String relativeLink) {
         this(projectName,
                 relativeLink,
-                getInjector().getInstance(IssueTracking.class),
-                getInjector().getProvider(EnvironmentVariables.class).get());
+                ModelInfrastructure.getIssueTracking(),
+                ModelInfrastructure.getEnvironmentVariables());
     }
 
     public HtmlAggregateStoryReporter(final String projectName,
                                       final IssueTracking issueTracking) {
         this(projectName,
                 "",
-                issueTracking,
-                getInjector().getProvider(EnvironmentVariables.class).get(),
+                ModelInfrastructure.getIssueTracking(),
+                ModelInfrastructure.getEnvironmentVariables(),
                 new DefaultRequirements());
     }
 

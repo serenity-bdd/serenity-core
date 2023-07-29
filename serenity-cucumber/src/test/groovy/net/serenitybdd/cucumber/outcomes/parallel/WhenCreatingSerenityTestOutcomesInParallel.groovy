@@ -1,8 +1,7 @@
 package net.serenitybdd.cucumber.outcomes.parallel
 
 import io.cucumber.junit.CucumberJUnit5ParallelRunner
-import net.serenitybdd.cucumber.integration.FailingScenario
-import net.thucydides.core.guice.Injectors
+import net.serenitybdd.core.di.SerenityInfrastructure
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestStep
@@ -11,8 +10,6 @@ import net.thucydides.core.reports.TestOutcomeLoader
 import net.thucydides.core.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification
-
-import static io.cucumber.junit.CucumberRunner.serenityRunnerForCucumberTestRunner
 
 class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
 
@@ -28,7 +25,7 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
 
     def "should record failures for a failing scenario"() {
         given:
-            Configuration configuration = Injectors.getInjector().getProvider(Configuration.class).get();
+            Configuration configuration = SerenityInfrastructure.configuration
             configuration.setOutputDirectory(outputDirectory);
         when:
             CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/failing_scenario.feature","net.serenitybdd.cucumber.integration.steps");
@@ -44,7 +41,7 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
 
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
-        Configuration configuration = Injectors.getInjector().getProvider(Configuration.class).get();
+        Configuration configuration = SerenityInfrastructure.configuration
         configuration.setOutputDirectory(outputDirectory);
 
         when:
@@ -60,7 +57,7 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
 
     def "should record results for each step"() {
         given:
-              Configuration configuration = Injectors.getInjector().getProvider(Configuration.class).get();
+              Configuration configuration = SerenityInfrastructure.configuration
         configuration.setOutputDirectory(outputDirectory);
 
         when:

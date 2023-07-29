@@ -1,14 +1,14 @@
 package net.serenitybdd.core.environment;
 
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 
 public class ConfiguredEnvironment {
 
-    private static ThreadLocal<Configuration> currentConfiguration = ThreadLocal.withInitial(() -> Injectors.getInjector().getInstance(Configuration.class));
+    private static ThreadLocal<Configuration> currentConfiguration = ThreadLocal.withInitial(() -> ModelInfrastructure.getConfiguration());
 
     public static EnvironmentVariables getEnvironmentVariables() {
         return SystemEnvironmentVariables.currentEnvironmentVariables();
@@ -23,7 +23,7 @@ public class ConfiguredEnvironment {
     }
 
     public static void reset() {
-        currentConfiguration.set(Injectors.getInjector().getInstance(Configuration.class));
+        currentConfiguration.set(ModelInfrastructure.getConfiguration());
     }
 }
 

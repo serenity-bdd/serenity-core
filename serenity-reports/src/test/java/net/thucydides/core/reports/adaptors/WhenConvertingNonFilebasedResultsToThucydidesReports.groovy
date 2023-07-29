@@ -39,7 +39,6 @@ class WhenConvertingNonFilebasedResultsToThucydidesReports extends Specification
             reporter.generateReports()
         then:
         generatedJsonFiles().size() == 2
-        generatedHtmlFiles().size() == 2
     }
 
     def generatedJsonFiles() {

@@ -5,14 +5,14 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.annotations.Qualifier;
-import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-@RunWith(ThucydidesParameterizedRunner.class)
+@RunWith(SerenityParameterizedRunner.class)
 public class SampleTestSpecificCSVDataDrivenScenario {
 
     private String name;

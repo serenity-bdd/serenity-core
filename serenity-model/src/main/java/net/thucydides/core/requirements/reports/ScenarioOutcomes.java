@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -53,7 +53,7 @@ public class ScenarioOutcomes {
     }
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
-        return outcomeFrom(testOutcome, Injectors.getInjector().getInstance(RequirementsService.class));
+        return outcomeFrom(testOutcome, ModelInfrastructure.getRequirementsService());
     }
 
     public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome, RequirementsService requirements) {

@@ -1,12 +1,12 @@
 package net.thucydides.core.steps;
 
-import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.annotations.events.AfterExample;
 import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.annotations.events.BeforeExample;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.photography.Darkroom;
@@ -22,7 +22,6 @@ import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.failures.FailureAnalysis;
@@ -352,10 +351,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public BaseStepListener(final File outputDirectory) {
-        this(outputDirectory, Injectors.getInjector());
-    }
-
-    public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
         this.testOutcomes = new ArrayList<>();
 //        this.currentTestOutcome = new ThreadLocal<>();
@@ -366,10 +361,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.storywideIssues = new ArrayList<>();
         this.storywideTags = new ArrayList<>();
         //this.webdriverManager = injector.getInstance(WebdriverManager.class);
-        this.clock = injector.getInstance(SystemClock.class);
-        this.configuration = injector.getInstance(Configuration.class);
+        this.clock = SerenityInfrastructure.getClock();
+        this.configuration = SerenityInfrastructure.getConfiguration();
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
-        this.closeBrowsers = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowsers = SerenityInfrastructure.getCloseBrowser();
         this.soundEngineer = new SoundEngineer(configuration.getEnvironmentVariables());
     }
 
@@ -894,6 +889,23 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
+
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+        if (!aStepHasFailed()) {
+            // This is the actual failure, so record all the details
+            takeEndOfStepScreenshotForPlayback(FAILURE, screenshotList);
+
+            TestFailureCause failureCause = TestFailureCause.from(failure.getException());
+            getCurrentTestOutcome().appendTestFailure(failureCause);
+
+            recordFailureDetails(failure);
+        }
+        // In all cases, mark the step as done with the appropriate result
+        currentStepDone(failureAnalysis.resultFor(failure));
+    }
+
+
     public void stepFailedWithException(Throwable failure) {
         if (!aStepHasFailed()) {
             takeEndOfStepScreenshotFor(FAILURE);
@@ -976,6 +988,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     @Override
     public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
         takeEndOfStepScreenshotForRecording(SUCCESS, screenshots);
+    }
+
+    @Override
+    public void takeScreenshots(TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
+        takeEndOfStepScreenshotForRecording(result, screenshots);
     }
 
     public void currentStepDone(TestResult result) {
@@ -1186,13 +1203,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
-        List<ScreenshotAndHtmlSource> screenshots = SerenityWebdriverManager.inThisTestThread()
+        return SerenityWebdriverManager.inThisTestThread()
                 .getCurrentDrivers()
                 .stream()
                 .map(driver -> new ScreenshotAndHtmlSource(screenshotFrom(driver), sourceFrom(result, driver)))
                 .filter(ScreenshotAndHtmlSource::wasTaken)
                 .collect(Collectors.toList());
-        return screenshots;
     }
 
     private File screenshotFrom(WebDriver driver) {

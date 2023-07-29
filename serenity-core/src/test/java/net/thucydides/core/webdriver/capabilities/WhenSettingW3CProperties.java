@@ -31,7 +31,9 @@ public class WhenSettingW3CProperties {
     @Test
     public void shouldReadW3COptionsFromConfFile() {
         EnvironmentVariables environmentVariables = from("sample-conf-files/simple.conf");
-        DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").asDesiredCapabilities();
+        DesiredCapabilities caps = W3CCapabilities.definedIn(environmentVariables)
+                .withPrefix("webdriver.capabilities")
+                .asDesiredCapabilities();
 
         assertThat(caps.getBrowserName()).isEqualTo("Chrome");
         assertThat(caps.getBrowserVersion()).isEqualTo("103.0");

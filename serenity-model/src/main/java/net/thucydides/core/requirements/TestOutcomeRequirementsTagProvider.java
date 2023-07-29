@@ -2,6 +2,7 @@ package net.thucydides.core.requirements;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.*;
@@ -16,9 +17,6 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
-import static net.thucydides.core.guice.Injectors.getInjector;
 
 /**
  * Read requirements from test outcomes, based on the path specified in each test outcome
@@ -39,7 +37,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
      * Default constructor. Initializes an instance of the TestOutcomeRequirementsTagProvider class with default environment variables.
      */
     public TestOutcomeRequirementsTagProvider() {
-        this(getInjector().getProvider(EnvironmentVariables.class).get());
+        this(ModelInfrastructure.getEnvironmentVariables());
     }
 
     /**

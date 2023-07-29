@@ -16,12 +16,13 @@ import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.*;
@@ -95,7 +96,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
      * in @CucumberOptions.
      */
     public SerenityReporter() {
-        this.systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+        this.systemConfiguration = SerenityInfrastructure.getConfiguration();
         this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
         baseStepListeners = Collections.synchronizedList(new ArrayList<>());
     }

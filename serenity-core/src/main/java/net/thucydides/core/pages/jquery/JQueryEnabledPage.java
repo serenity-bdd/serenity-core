@@ -6,8 +6,6 @@ import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +33,7 @@ public class JQueryEnabledPage {
 
 	public boolean isJQueryIntegrationEnabled(){
 		boolean jqueryIntegrationEnabled =
-				Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION
+				Boolean.valueOf(ThucydidesSystemProperty.SERENITY_JQUERY_INTEGRATION
 						.from(environmentVariables,"true"));
 		return jqueryIntegrationEnabled;
 	}
@@ -80,7 +78,7 @@ public class JQueryEnabledPage {
     }
 
     public void injectJQueryPlugins() {
-        if (ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_HIGHLIGHTING.booleanFrom(environmentVariables)) {
+        if (ThucydidesSystemProperty.SERENITY_ACTIVATE_HIGHLIGHTING.booleanFrom(environmentVariables)) {
             executeScriptFrom("jquery/jquery-thucydides-plugin.js");
         }
     }

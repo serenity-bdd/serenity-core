@@ -1,0 +1,382 @@
+{
+  "name": "Examination date rules",
+  "id": "date-of-next-medical;examination-date-rules",
+  "scenarioId": "medicals/date_of_next_medical:Examination date rules",
+  "methodName": "Examination date rules",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "1: Examination date rules ({Class\u003d1st class, Birth Date\u003dJanuary 01 2000, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJanuary 31 2021, Comments\u003dFrank is under 40})",
+      "duration": 4,
+      "startTime": "2023-07-15T19:40:21.183597+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 17,
+      "children": [
+        {
+          "number": 2,
+          "description": "Given Frank is a 1st class pilot born on January 01 2000",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.184598+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 3,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.186035+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 4,
+          "description": "Then his next medical should be no later than January 31 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.186627+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "description": "2: Examination date rules ({Class\u003d1st class, Birth Date\u003dJanuary 15 1970, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJuly 31 2020, Comments\u003dFrank is over 40})",
+      "duration": 3,
+      "startTime": "2023-07-15T19:40:21.190902+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 18,
+      "children": [
+        {
+          "number": 6,
+          "description": "Given Frank is a 1st class pilot born on January 15 1970",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.192050+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 7,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.193257+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 8,
+          "description": "Then his next medical should be no later than July 31 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.193949+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "description": "3: Examination date rules ({Class\u003d2nd class, Birth Date\u003dJanuary 15 2000, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJanuary 31 2021, Comments\u003dSerena is under 40})",
+      "duration": 4,
+      "startTime": "2023-07-15T19:40:21.196949+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 23,
+      "children": [
+        {
+          "number": 10,
+          "description": "Given Frank is a 2nd class pilot born on January 15 2000",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.198140+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 11,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.199898+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 12,
+          "description": "Then his next medical should be no later than January 31 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.200523+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "description": "4: Examination date rules ({Class\u003d2nd class, Birth Date\u003dJanuary 01 1970, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJanuary 31 2021, Comments\u003dSerena is over 40})",
+      "duration": 2,
+      "startTime": "2023-07-15T19:40:21.203580+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 24,
+      "children": [
+        {
+          "number": 14,
+          "description": "Given Frank is a 2nd class pilot born on January 01 1970",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.204374+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 15,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.205302+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 16,
+          "description": "Then his next medical should be no later than January 31 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.205811+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "description": "5: Examination date rules ({Class\u003d3rd class, Birth Date\u003dJanuary 15 2000, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJanuary 31 2025, Comments\u003dTheo is under 40})",
+      "duration": 2,
+      "startTime": "2023-07-15T19:40:21.208995+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 29,
+      "children": [
+        {
+          "number": 18,
+          "description": "Given Frank is a 3rd class pilot born on January 15 2000",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.209885+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 19,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.210731+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 20,
+          "description": "Then his next medical should be no later than January 31 2025",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.211242+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "description": "6: Examination date rules ({Class\u003d3rd class, Birth Date\u003dJanuary 01 1970, Last Medical\u003dJanuary 20 2020, Next Medical\u003dJanuary 31 2022, Comments\u003dTheo is over 40})",
+      "duration": 3,
+      "startTime": "2023-07-15T19:40:21.214074+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 30,
+      "children": [
+        {
+          "number": 22,
+          "description": "Given Frank is a 3rd class pilot born on January 01 1970",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.215013+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 23,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.216354+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 24,
+          "description": "Then his next medical should be no later than January 31 2022",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.216844+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "medicals/date_of_next_medical",
+    "storyName": "Date of next medical",
+    "displayName": "Date of next medical",
+    "path": "medicals/date_of_next_medical",
+    "pathElements": [
+      {
+        "name": "medicals",
+        "description": ""
+      },
+      {
+        "name": "date_of_next_medical",
+        "description": ""
+      }
+    ],
+    "narrative": "  In order to stay compliant with air regulations and continue to fly legally\n  As a pilot\n  I want to know when my next medical is due",
+    "type": "feature"
+  },
+  "title": "Examination date rules",
+  "description": "",
+  "tags": [
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-07-15T19:40:21.182504+01:00[Europe/London]",
+  "duration": 34,
+  "rule": {
+    "name": "The date of the next examination depends on the class of license and the age of the pilot",
+    "description": ""
+  },
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "dataTable": {
+    "headers": [
+      "Class",
+      "Birth Date",
+      "Last Medical",
+      "Next Medical",
+      "Comments"
+    ],
+    "rows": [
+      {
+        "values": [
+          "1st class",
+          "January 01 2000",
+          "January 20 2020",
+          "January 31 2021",
+          "Frank is under 40"
+        ],
+        "lineNumber": 17,
+        "result": "FAILURE"
+      },
+      {
+        "values": [
+          "1st class",
+          "January 15 1970",
+          "January 20 2020",
+          "July 31 2020",
+          "Frank is over 40"
+        ],
+        "lineNumber": 18,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "2nd class",
+          "January 15 2000",
+          "January 20 2020",
+          "January 31 2021",
+          "Serena is under 40"
+        ],
+        "lineNumber": 23,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "2nd class",
+          "January 01 1970",
+          "January 20 2020",
+          "January 31 2021",
+          "Serena is over 40"
+        ],
+        "lineNumber": 24,
+        "result": "FAILURE"
+      },
+      {
+        "values": [
+          "3rd class",
+          "January 15 2000",
+          "January 20 2020",
+          "January 31 2025",
+          "Theo is under 40"
+        ],
+        "lineNumber": 29,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "3rd class",
+          "January 01 1970",
+          "January 20 2020",
+          "January 31 2022",
+          "Theo is over 40"
+        ],
+        "lineNumber": 30,
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": true,
+    "scenarioOutline": "Given Frank is a \u003cClass\u003e pilot born on \u003cBirth Date\u003e\n\rWhen his last medical was on the \u003cLast Medical\u003e\n\rThen his next medical should be no later than \u003cNext Medical\u003e\n\r",
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 2,
+        "name": "First class pilots",
+        "description": "First class pilot examinations are every 6 months for 40 or over, and every 12 months for under 40s"
+      },
+      {
+        "startRow": 2,
+        "rowCount": 2,
+        "name": "Second class pilots",
+        "description": "Second class pilots need a medical every 12 months regardless of age"
+      },
+      {
+        "startRow": 4,
+        "rowCount": 0,
+        "name": "Third class pilots",
+        "description": "Third class pilots need a medical every 5 years if under 40, and every 2 years if they are 40 or older"
+      }
+    ]
+  },
+  "manual": false,
+  "testSource": "Cucumber",
+  "order": 0,
+  "result": "FAILURE",
+  "scenarioOutline": "Given Frank is a \u003cClass\u003e pilot born on \u003cBirth Date\u003e\nWhen his last medical was on the \u003cLast Medical\u003e\nThen his next medical should be no later than \u003cNext Medical\u003e"
+}

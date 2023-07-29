@@ -33,7 +33,7 @@ class TransitionBuilder extends BuilderSupport {
         return null
     }
 
-    public class TransitionSetMap {
+    class TransitionSetMap {
 
         Map<TestResult, TransitionsForOutcome> transitionsByTestResult = [:]
 
@@ -45,13 +45,13 @@ class TransitionBuilder extends BuilderSupport {
         }
 
 
-        public String toString ( ) {
+        String toString ( ) {
             transitionsByTestResult.toMapString()
         }}
 
-    public class TransitionsForOutcome {
+    class TransitionsForOutcome {
 
-        Map<String, List<String>> transitionMap = new HashMap<TestResult, List<String>>();
+        Map<String, List<String>> transitionMap = new HashMap<String, List<String>>();
 
         List<String> whenIssueIs(String status) {
             transitionMap[status] ? transitionMap[status] : []
@@ -65,10 +65,7 @@ class TransitionBuilder extends BuilderSupport {
             transitionMap[status] = transitions
         }
 
-
-        public String toString ( ) {
+        String toString ( ) {
             transitionMap.toMapString()
         }}
-
-
 }

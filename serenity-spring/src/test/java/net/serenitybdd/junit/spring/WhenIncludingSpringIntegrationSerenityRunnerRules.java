@@ -1,17 +1,17 @@
 package net.serenitybdd.junit.spring;
 
-import javax.inject.Inject;
-
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @ContextConfiguration("classpath:/spring/integration-rules-context.xml")
 public class WhenIncludingSpringIntegrationSerenityRunnerRules {
-    @Inject
+
+    @Autowired
     public StringHolder stringHolder;
 
     @Test

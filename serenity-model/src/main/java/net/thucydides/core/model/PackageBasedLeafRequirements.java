@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static java.util.Arrays.stream;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
 
 public class PackageBasedLeafRequirements {
 
@@ -18,7 +18,7 @@ public class PackageBasedLeafRequirements {
     private final String rootPackage;
 
     public PackageBasedLeafRequirements(EnvironmentVariables environmentVariables) {
-        this.rootPackage = THUCYDIDES_TEST_ROOT.from(environmentVariables);
+        this.rootPackage = SERENITY_TEST_ROOT.from(environmentVariables);
         this.requirementTypesProvider = new PackageRequirementsTagProvider(environmentVariables, rootPackage);
     }
 

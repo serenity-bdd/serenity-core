@@ -31,7 +31,6 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
             xunitReporter.generateReportsFrom(xunitFileDirectory)
         then:
             generatedJsonFiles().size() == 3
-            generatedHtmlFiles().size() == 3
     }
 
     def generatedJsonFiles() {
@@ -62,7 +61,6 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
             xunitReporter.generateReportsFrom(xunitFileDirectory)
         then:
             generatedJsonFiles().size() == 4
-            generatedHtmlFiles().size() == 4
     }
 
 }

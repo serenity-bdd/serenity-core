@@ -67,7 +67,6 @@ public class WhenUpdatingIssueStatus {
     @Mock
     IssueTracker issueTracker;
 
-
     EnvironmentVariables environmentVariables;
     
     ClasspathWorkflowLoader workflowLoader;

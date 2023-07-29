@@ -48,7 +48,7 @@ public class RequirementsReports {
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
 //        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink,
-//                                                                     Injectors.getInjector().getInstance(IssueTracking.class),
+//                                                                     RequirementsInfrastructure.getIssueTracking(),
 //                                                                     requirementsService);
 //        this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
         this.testOutcomes = testOutcomes;

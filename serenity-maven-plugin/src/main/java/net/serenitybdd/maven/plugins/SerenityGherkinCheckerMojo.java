@@ -1,7 +1,7 @@
 package net.serenitybdd.maven.plugins;
 
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.requirements.RootDirectory;

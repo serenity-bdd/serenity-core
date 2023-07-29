@@ -4,7 +4,7 @@ package net.serenitybdd.cucumber;
 import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.plugin.SerenityReporter;
 import io.cucumber.core.runtime.Runtime;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.util.function.Supplier;
@@ -14,7 +14,7 @@ public class CucumberWithSerenityRuntime {
 
     public static Runtime using(Supplier<ClassLoader> classLoaderSupplier,
                                 RuntimeOptions runtimeOptions) {
-        Configuration systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+        Configuration systemConfiguration = SerenityInfrastructure.getConfiguration();
         return createSerenityEnabledRuntime(classLoaderSupplier, runtimeOptions, systemConfiguration);
     }
 

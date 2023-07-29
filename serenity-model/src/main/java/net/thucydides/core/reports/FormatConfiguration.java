@@ -1,7 +1,7 @@
 package net.thucydides.core.reports;
 
 import com.google.common.base.Splitter;
-import com.google.inject.Inject;
+
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class FormatConfiguration {
 
     private final List<OutcomeFormat> formats;
 
-    @Inject
+    
     public FormatConfiguration(EnvironmentVariables environmentVariables) {
         List<String> formatNames = Splitter.on(",").trimResults()
                                                    .splitToList(ThucydidesSystemProperty.OUTPUT_FORMATS

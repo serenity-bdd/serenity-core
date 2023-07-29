@@ -20,9 +20,7 @@ public class WhenUsingTimeoutStack {
 
     private Duration duration = Duration.ZERO;
 
-    @InjectMocks
-    private TimeoutStack timeoutStack;
-
+    private TimeoutStack timeoutStack = new TimeoutStack();
 
     @Test
     public void remove_timeouts_from_map() {

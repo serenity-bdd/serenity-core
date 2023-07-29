@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -21,14 +21,14 @@ public abstract class AbstractRequirementsTagProvider {
     protected AbstractRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectory) {
         this.environmentVariables = environmentVariables;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = ModelInfrastructure.getRequirementsService();
         this.rootDirectory = rootDirectory;
     }
 
     protected AbstractRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = ModelInfrastructure.getRequirementsService();
         this.rootDirectory = getDefaultRootDirectory();
     }
 

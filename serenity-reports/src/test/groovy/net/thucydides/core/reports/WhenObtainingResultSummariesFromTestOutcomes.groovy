@@ -18,11 +18,11 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
     def cleanup() {
         Locale.setDefault(currentLocale)
     }
-    def loader = new TestOutcomeLoader().forFormat(OutcomeFormat.XML)
+    def loader = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON)
 
     def testOutcomesIn(directory) {
         def outcomeDir = Paths.get(this.getClass().getResource(directory).toURI()).toFile()
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(outcomeDir);
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
     }
 
     def jsonTestOutcomesIn(directory) {
@@ -32,7 +32,7 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
 
     def "should count the number of successful tests in a set"() {
         when:
-            def testOutcomes = testOutcomesIn("/tagged-test-outcomes");// TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes"));
+            def testOutcomes = testOutcomesIn("/tagged-test-outcomes-json");// TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
         then:
             testOutcomes.total == 3
     }
@@ -67,10 +67,10 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             directory                                  | successCount | failureCount | errorCount   | pendingCount | skipCount  | indeterminateCount
             "/test-outcomes/all-successful"            | 3            | 0            | 0            | 0            | 0          | 0
             "/test-outcomes/containing-failure"        | 1            | 1            | 0            | 1            | 0          | 1
-            "/test-outcomes/containing-nostep-errors"  | 2            | 2            | 1            | 2            | 0          | 3
-            "/test-outcomes/containing-errors"         | 1            | 0            | 2            | 0            | 0          | 0
+            "/test-outcomes/containing-nostep-errors"  | 0            | 0            | 1            | 0            | 0          | 0
+            "/test-outcomes/containing-errors"         | 2            | 0            | 1            | 0            | 0          | 0
             "/test-outcomes/containing-pending"        | 2            | 0            | 0            | 1            | 0          | 1
-            "/test-outcomes/containing-skipped"        | 3            | 0            | 0            | 0            | 1          | 1
+            "/test-outcomes/containing-skipped"        | 2            | 0            | 0            | 0            | 1          | 1
     }
 
     def "should find the total number of tests with a given result and a given execution type (manual/automated)"() {
@@ -95,7 +95,7 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
 
     def "should count the number steps in a set of test outcomes"() {
         when:
-            def testOutcomes = testOutcomesIn("/tagged-test-outcomes")
+            def testOutcomes = testOutcomesIn("/tagged-test-outcomes-json")
         then:
             testOutcomes.stepCount == 17
     }
@@ -269,8 +269,9 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
         when:
             def testOutcomes = testOutcomesIn("/test-outcomes/datadriven")
         then:
-            testOutcomes.total == 14
+            testOutcomes.total == 10
             testOutcomes.totalTestScenarios == 2
+            testOutcomes.testCaseCount == 10
     }
 
 
@@ -278,7 +279,7 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
         when:
           def testOutcomes = testOutcomesIn("/test-outcomes/datadriven")
         then:
-            testOutcomes.totalTests.withResult("success") == 12
+            testOutcomes.totalTests.withResult("success") == 8
             testOutcomes.totalTests.withResult("failure") == 2
     }
 
@@ -286,8 +287,8 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
         when:
         def testOutcomes = testOutcomesIn("/test-outcomes/datadriven")
         then:
-            testOutcomes.formatted.percentSteps.withResult("success") == "85.7%"
-            testOutcomes.formatted.percentSteps.withResult("failure") == "14.3%"
+            testOutcomes.formatted.percentSteps.withResult("success") == "83.3%"
+            testOutcomes.formatted.percentSteps.withResult("failure") == "16.7%"
     }
 
 
@@ -295,12 +296,12 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
         when:
         def testOutcomes = testOutcomesIn("/test-outcomes/somedatadriven")
         then:
-            testOutcomes.totalTests.withResult("success") == 1
+            testOutcomes.totalTests.withResult("success") == 5
             testOutcomes.totalTests.withResult("failure") == 2
-            testOutcomes.totalTests.withResult("pending") == 3
-            testOutcomes.totalTests.withResult("error") == 1
+            testOutcomes.totalTests.withResult("pending") == 0
+            testOutcomes.totalTests.withResult("error") == 0
             testOutcomes.total  == 7
-            testOutcomes.totalTestScenarios  == 4
+            testOutcomes.totalTestScenarios  == 2
     }
 
     def "should distinguish custom failures and errors"() {
@@ -316,12 +317,9 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             def testOutcomes = testOutcomesIn("/test-outcomes/somedatadriven")
         then:
             testOutcomes.hasDataDrivenTests()
-            testOutcomes.totalDataRows == 5
-            testOutcomes.proportion.withResult("success") == 0.14285714285714285
+            testOutcomes.totalDataRows == 6
+            testOutcomes.proportion.withResult("success") == 0.7142857142857143
             testOutcomes.proportion.withResult("failure") == 0.2857142857142857
-            testOutcomes.proportion.withResult("error") == 0.14285714285714285
-            testOutcomes.proportion.withResult("pending") == 0.42857142857142855
-            testOutcomes.proportion.withFailureOrError() == 0.42857142857142855
     }
 
     def "should count percentage results correctly with no results"() {
@@ -333,81 +331,6 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             testOutcomes.proportion.withResult("failure") == 0.0
             testOutcomes.proportion.withResult("error") == 0.0
             testOutcomes.proportion.withResult("pending") == 0.0
-    }
-
-
-
-
-    def "should calculate the average test size in steps"() {
-        when:
-        def aTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        aTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        aTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-
-        def anotherTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 3").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 4").withResult(TestResult.SUCCESS))
-
-        def testOutcomes = TestOutcomes.of([aTest, anotherTest])
-
-        then:
-        testOutcomes.averageTestSize == 3.0
-        testOutcomes.stepCount == 6
-    }
-
-    def "should not use skipped or ignored tests to calulcate the average test size in steps"() {
-        when:
-        def ignoredTest = TestOutcome.forTestInStory("ignoredTest", Story.called("a story"))
-        ignoredTest.setAnnotatedResult(TestResult.IGNORED)
-
-        def skippedTest = TestOutcome.forTestInStory("skippedTest", Story.called("a story"))
-        skippedTest.setAnnotatedResult(TestResult.SKIPPED)
-
-        def aTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        aTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        aTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-
-        def anotherTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 3").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 4").withResult(TestResult.SUCCESS))
-
-        def testOutcomes = TestOutcomes.of([aTest, anotherTest, ignoredTest, skippedTest])
-
-        then:
-        testOutcomes.averageTestSize == 3.0
-        testOutcomes.estimatedTotalStepCount == 12
-    }
-
-    def "should estimate the size of ignored tests"() {
-        when:
-        def ignoredTest = TestOutcome.forTestInStory("ignoredTest", Story.called("a story"))
-        ignoredTest.setAnnotatedResult(TestResult.IGNORED)
-
-        def skippedTest = TestOutcome.forTestInStory("skippedTest", Story.called("a story"))
-        skippedTest.setAnnotatedResult(TestResult.SKIPPED)
-
-        def aTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        aTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        aTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-
-        def anotherTest = TestOutcome.forTestInStory("passingTest", Story.called("a story"))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 1").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 2").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 3").withResult(TestResult.SUCCESS))
-        anotherTest.recordStep(TestStep.forStepCalled("passing step 4").withResult(TestResult.SUCCESS))
-
-        def testOutcomes = TestOutcomes.of([aTest, anotherTest, ignoredTest, skippedTest])
-
-        then:
-        testOutcomes.averageTestSize == 3.0
-        testOutcomes.estimatedTotalStepCount == 12
-        testOutcomes.proportionalStepsOf(TestType.ANY).withResult(TestResult.IGNORED) == 0.25
-        testOutcomes.proportionalStepsOf(TestType.ANY).withResult(TestResult.SKIPPED) == 0.25
-        testOutcomes.proportionalStepsOf(TestType.ANY).withResult(TestResult.SUCCESS) == 0.50
     }
 
     def "should filter test outcomes by result"() {

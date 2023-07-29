@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.spring;
 
-import javax.inject.Inject;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationMethodRule;
@@ -9,6 +8,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,7 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration("classpath:/spring/integration-rules-context.xml")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class WhenBothRuleAndDirtiesContextPresent {
-    @Inject
+
+    @Autowired
     public StringHolder stringHolder;
 
     @Rule

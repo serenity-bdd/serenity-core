@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay
 
+import net.serenitybdd.core.di.SerenityInfrastructure
 import net.thucydides.core.environment.TestLocalEnvironmentVariables
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
@@ -10,7 +10,6 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.serenitybdd.screenplay.Tasks.instrumented
 import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION
 
 class WhenInstrumentingTasks extends Specification {
@@ -21,7 +20,7 @@ class WhenInstrumentingTasks extends Specification {
     boolean currentManualInstrumentationSetting
 
     def setup() {
-        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        environmentVariables = SerenityInfrastructure.environmentVariables
         currentManualInstrumentationSetting = environmentVariables.getPropertyAsBoolean(MANUAL_TASK_INSTRUMENTATION, false);
         temporaryDirectory = Files.createTempDirectory("tmp").toFile();
         temporaryDirectory.deleteOnExit();

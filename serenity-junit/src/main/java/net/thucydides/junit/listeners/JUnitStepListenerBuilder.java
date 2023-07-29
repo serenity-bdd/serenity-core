@@ -1,13 +1,12 @@
 package net.thucydides.junit.listeners;
 
-import com.google.inject.Key;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
 import net.thucydides.core.steps.StepListener;
-import net.thucydides.junit.guice.JUnitInjectors;
 
 import java.io.File;
 
@@ -100,7 +99,8 @@ public class JUnitStepListenerBuilder {
     }
 
     private StepListener newTestCountListener() {
-        return JUnitInjectors.getInjector().getInstance(Key.get(StepListener.class, TestCounter.class));
+        return new TestCountListener(SerenityInfrastructure.getEnvironmentVariables(),
+                                     SerenityInfrastructure.getTestCount());
     }
 
     private JUnitStepListener newStandardJunitStepListener() {

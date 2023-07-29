@@ -19,15 +19,15 @@ class Workflow {
         s.run()
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public boolean isActive() {
+    boolean isActive() {
         return active;
     }
 
-    public TransitionBuilder.TransitionSetMap getTransitions() {
+    TransitionBuilder.TransitionSetMap getTransitions() {
         builder.getTransitionSetMap()
     }
 }

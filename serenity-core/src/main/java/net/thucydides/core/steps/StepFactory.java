@@ -13,11 +13,11 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.ConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
@@ -67,7 +67,7 @@ public class StepFactory {
     public StepFactory(final Pages pages) {
         this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED );
         this.pages = pages;
-        this.dependencyInjectorService = Injectors.getInjector().getInstance(DependencyInjectorService.class);
+        this.dependencyInjectorService = SerenityInfrastructure.getDependencyInjectorService();
         this.proxyCache = new TypeCache.WithInlineExpunction<TypeCache.SimpleKey>( TypeCache.Sort.WEAK );
         try {
             if (ClassInjector.UsingLookup.isAvailable()) {

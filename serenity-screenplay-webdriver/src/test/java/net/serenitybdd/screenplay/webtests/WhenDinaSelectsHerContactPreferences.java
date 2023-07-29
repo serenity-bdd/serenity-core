@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.hasItems;
 @RunWith(SerenityRunner.class)
 public class WhenDinaSelectsHerContactPreferences {
 
-    @Managed(driver = "firefox", options="--headless")
+    @Managed(driver = "chrome", options="--headless")
     WebDriver firstBrowser;
 
     @Test

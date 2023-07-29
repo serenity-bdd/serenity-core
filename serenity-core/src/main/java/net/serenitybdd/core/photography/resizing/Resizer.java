@@ -17,8 +17,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class Resizer implements PhotoFilter {
 

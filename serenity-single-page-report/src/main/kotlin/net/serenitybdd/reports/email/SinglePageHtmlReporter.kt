@@ -1,12 +1,12 @@
 package net.serenitybdd.reports.email
 
+import net.serenitybdd.core.di.ModelInfrastructure
 import net.serenitybdd.reports.model.*
 import net.serenitybdd.reports.email.templates.ThymeleafTemplateEngine
 import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.model.averageDurationOf
 import net.serenitybdd.reports.model.formattedDuration
 import net.serenitybdd.reports.model.maxDurationOf
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
@@ -23,7 +23,7 @@ class SinglePageHtmlReporter(
         private var sourceDirectory: Path = sourceDirectoryDefinedIn(environmentVariables),
         private var outputDirectory: Path = outputDirectoryDefinedIn(environmentVariables)) : ExtendedReport {
 
-    constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
+    constructor() : this(ModelInfrastructure.getEnvironmentVariables())
 
     override fun getName(): String = "single-page-html"
     override fun getDescription(): String = "Single Page HTML Summary"

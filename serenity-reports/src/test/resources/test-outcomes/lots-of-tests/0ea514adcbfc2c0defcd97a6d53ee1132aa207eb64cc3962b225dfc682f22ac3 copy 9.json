@@ -30,7 +30,7 @@
       "type": "feature"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "[1] {number_of_photos\u003d0, expected_price\u003d15.0}",
       "duration": 12,

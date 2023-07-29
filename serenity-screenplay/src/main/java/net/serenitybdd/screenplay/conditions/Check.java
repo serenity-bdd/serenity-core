@@ -12,7 +12,7 @@ public class Check {
         return new ConditionalPerformableOnQuestion(condition);
     }
 
-    public static <T> ConditionalPerformable whether(Question<T> question, Matcher<T> matcher) {
+    public static <T> ConditionalPerformable whether(Question<? extends T> question, Matcher<T> matcher) {
         Question<Boolean> condition = actor -> matcher.matches(question.answeredBy(actor));
 
         return new ConditionalPerformableOnQuestion(condition);

@@ -1,13 +1,10 @@
 package net.thucydides.core.reports;
 
-import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.strings.Joiner;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.flags.Flag;
 import net.thucydides.core.model.flags.FlagCounts;
@@ -28,7 +25,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.naturalOrder;
 import static org.hamcrest.Matchers.is;
@@ -46,7 +42,6 @@ public class TestOutcomes {
 
     private final List<TestOutcome> outcomes;
     private final Optional<TestOutcomes> rootOutcomes;
-    private final double estimatedAverageStepCount;
     private final EnvironmentVariables environmentVariables;
     private final RequirementsService requirementsService;
 
@@ -65,9 +60,7 @@ public class TestOutcomes {
 
     static int outcomeCount = 0;
 
-    @Inject
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
-                           double estimatedAverageStepCount,
                            String label,
                            TestTag testTag,
                            TestResult resultFilter,
@@ -78,13 +71,12 @@ public class TestOutcomes {
         this.outcomes = sorted(outcomes);
         this.startTime = startTime().orElse(null);
 
-        this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = testTag;
         this.resultFilter = resultFilter;
         this.rootOutcomes = Optional.ofNullable(rootOutcomes);
         this.environmentVariables = environmentVariables;
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = ModelInfrastructure.getRequirementsService();
     }
 
     private List<TestOutcome> sorted(Collection<? extends TestOutcome> outcomes) {
@@ -97,32 +89,28 @@ public class TestOutcomes {
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
-                           double estimatedAverageStepCount,
                            String label) {
-        this(outcomes, estimatedAverageStepCount, label, null, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
+        this(outcomes, label, null, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
-                           double estimatedAverageStepCount,
                            String label,
                            TestTag tag) {
-        this(outcomes, estimatedAverageStepCount, label, tag, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
+        this(outcomes, label, tag, null, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
-                           double estimatedAverageStepCount,
                            String label,
                            TestResult resultFilter) {
-        this(outcomes, estimatedAverageStepCount, label, null, resultFilter, null, SystemEnvironmentVariables.currentEnvironmentVariables());
+        this(outcomes, label, null, resultFilter, null, SystemEnvironmentVariables.currentEnvironmentVariables());
     }
 
-    protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
-                           double estimatedAverageStepCount) {
-        this(outcomes, estimatedAverageStepCount, "");
+    protected TestOutcomes(Collection<? extends TestOutcome> outcomes) {
+        this(outcomes, "");
     }
 
     public TestOutcomes withLabel(String label) {
-        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label);
+        return new TestOutcomes(this.outcomes, label);
     }
 
     public TestOutcomes withResultFilter(TestResult testResult) {
@@ -132,7 +120,7 @@ public class TestOutcomes {
                 filteredOutcomes.add(outcome.withExamplesHavingResult(testResult));
             }
         }
-        return new TestOutcomes(filteredOutcomes, this.estimatedAverageStepCount, label, testResult);
+        return new TestOutcomes(filteredOutcomes,label, testResult);
     }
 
     public TestOutcomes filteredByEnvironmentTags() {
@@ -232,14 +220,14 @@ public class TestOutcomes {
     }
 
     public static TestOutcomes of(Collection<? extends TestOutcome> outcomes) {
-        return new TestOutcomes(outcomes, SystemPropertiesConfiguration.DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return new TestOutcomes(outcomes);
     }
 
     private static final List<TestOutcome> NO_OUTCOMES = new ArrayList<>();
 
 
     public static TestOutcomes withNoResults() {
-        return new TestOutcomes(NO_OUTCOMES, ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
+        return new TestOutcomes(NO_OUTCOMES);
 
     }
 
@@ -741,7 +729,7 @@ public class TestOutcomes {
     }
 
     private TestOutcomes withRootOutcomes(TestOutcomes rootOutcomes) {
-        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, this.label, this.testTag, this.resultFilter, rootOutcomes, environmentVariables);
+        return new TestOutcomes(this.outcomes,this.label, this.testTag, this.resultFilter, rootOutcomes, environmentVariables);
     }
 
     /**
@@ -778,7 +766,7 @@ public class TestOutcomes {
     }
 
     private TestOutcomes withTestTag(TestTag tag) {
-        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, tag);
+        return new TestOutcomes(this.outcomes,label, tag);
     }
 
     public TestOutcomes withTags(Collection<TestTag> tags) {
@@ -1153,7 +1141,7 @@ public class TestOutcomes {
         if (totalImplementedTests() > 0) {
             return ((double) getStepCount()) / totalImplementedTests();
         } else {
-            return estimatedAverageStepCount;
+            return 1;
         }
     }
 
@@ -1167,8 +1155,6 @@ public class TestOutcomes {
 
     /**
      * The test case count include all individual tests data-driven tests. A data-driven test counts as 1 test.
-     *
-     * @return
      */
     public long getTestCaseCount() {
         return outcomes.stream()
@@ -1178,8 +1164,6 @@ public class TestOutcomes {
 
     /**
      * The scenario count include all individual tests and rows in data-driven tests.
-     *
-     * @return
      */
     public long getScenarioCount() {
         return outcomes.stream()
@@ -1286,7 +1270,6 @@ public class TestOutcomes {
 
         TestOutcomes that = (TestOutcomes) o;
 
-        if (Double.compare(that.estimatedAverageStepCount, estimatedAverageStepCount) != 0) return false;
         if (!Objects.equals(outcomes, that.outcomes)) return false;
         if (!Objects.equals(rootOutcomes, that.rootOutcomes)) return false;
         if (!Objects.equals(environmentVariables, that.environmentVariables))
@@ -1303,11 +1286,8 @@ public class TestOutcomes {
     @Override
     public int hashCode() {
         int result;
-        long temp;
         result = outcomes != null ? outcomes.hashCode() : 0;
         result = 31 * result + (rootOutcomes != null ? rootOutcomes.hashCode() : 0);
-        temp = Double.doubleToLongBits(estimatedAverageStepCount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (environmentVariables != null ? environmentVariables.hashCode() : 0);
         result = 31 * result + (requirementsService != null ? requirementsService.hashCode() : 0);
         result = 31 * result + (label != null ? label.hashCode() : 0);

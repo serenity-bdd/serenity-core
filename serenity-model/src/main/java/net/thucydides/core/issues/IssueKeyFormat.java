@@ -14,7 +14,7 @@ public class IssueKeyFormat {
     }
 
     private String getProjectPrefix() {
-        return ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables);
+        return ThucydidesSystemProperty.SERENITY_PROJECT_KEY.from(environmentVariables);
     }
 
     public String andKey(String issueNumber) {

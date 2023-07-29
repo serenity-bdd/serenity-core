@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.CurrentOS;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ public class UpdateDriverEnvironmentProperty {
         // If the driver binary is not available on the system path, attempt to update it using the environment properties
         //
         if (!DriverExecutableIsDefined.bySystemProperty(driverProperty)) {
-            EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+            EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
 
             Optional<String> defaultConfiguredDriver = environmentVariables.optionalProperty(driverProperty);
 

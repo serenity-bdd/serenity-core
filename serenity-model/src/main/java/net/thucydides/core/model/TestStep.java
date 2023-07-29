@@ -2,10 +2,10 @@ package net.thucydides.core.model;
 
 import com.google.common.base.Objects;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.Screenshot;
@@ -74,7 +74,7 @@ public class TestStep implements Cloneable {
     }
 
     private SystemClock getSystemClock() {
-        return Injectors.getInjector().getInstance(SystemClock.class);
+        return ModelInfrastructure.getClock();
     }
 
     private ZonedDateTime now() {

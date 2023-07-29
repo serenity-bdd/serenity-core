@@ -1,15 +1,14 @@
 package net.thucydides.core.reports.json;
 
 import com.google.common.base.Preconditions;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.io.SafelyMoveFiles;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +40,8 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     JSONConverter jsonConverter;
 
     public JSONTestOutcomeReporter() {
-        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
-        jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
+        encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
+        jsonConverter = ModelInfrastructure.getJsonConverter();
     }
 
     @Override

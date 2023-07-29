@@ -1,14 +1,14 @@
 package net.serenitybdd.plugins.jira.requirements;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import net.serenitybdd.plugins.jira.domain.IssueSummary;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.serenitybdd.plugins.jira.requirements.JIRARequirementsConfiguration.JIRA_CUSTOM_FIELD;
 import static net.serenitybdd.plugins.jira.requirements.JIRARequirementsConfiguration.JIRA_CUSTOM_NARRATIVE_FIELD;
@@ -26,7 +26,7 @@ public class RequirementsAdaptor {
         Requirement baseRequirement = Requirement.named(issue.getSummary())
                 .withOptionalCardNumber(issue.getKey())
                 .withType(issue.getType())
-                .withNarrative(narativeTextFrom(issue))
+                .withNarrative(narrativeTextFrom(issue))
                 .withReleaseVersions(issue.getFixVersions());
 
         for (String fieldName : definedCustomFields()) {
@@ -39,10 +39,10 @@ public class RequirementsAdaptor {
         return baseRequirement;
     }
 
-    private String narativeTextFrom(IssueSummary issue) {
-        Optional<String> customFieldName = Optional.fromNullable(environmentVariables.getProperty(JIRA_CUSTOM_NARRATIVE_FIELD.getName()));
+    private String narrativeTextFrom(IssueSummary issue) {
+        Optional<String> customFieldName = Optional.ofNullable(environmentVariables.getProperty(JIRA_CUSTOM_NARRATIVE_FIELD.getName()));
         if (customFieldName.isPresent()) {
-            return customFieldNameFor(issue, customFieldName.get()).or(ObjectUtils.firstNonNull(issue.getRendered().getDescription(), ""));
+            return customFieldNameFor(issue, customFieldName.get()).orElse(ObjectUtils.firstNonNull(issue.getRendered().getDescription(), ""));
         } else {
             return issue.getRendered().getDescription();
         }
@@ -50,7 +50,7 @@ public class RequirementsAdaptor {
     }
 
     private List<String> definedCustomFields() {
-        List<String> customFields = Lists.newArrayList();
+        List<String> customFields = new ArrayList<>();
         int customFieldIndex = 1;
         while (addCustomFieldIfDefined(environmentVariables, customFields, customFieldNumber(customFieldIndex++))) ;
         return customFields;
@@ -61,7 +61,7 @@ public class RequirementsAdaptor {
         if (issue.customField(customFieldName).isPresent()) {
             return Optional.of(issue.customField(customFieldName).get().asString());
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

@@ -1,7 +1,6 @@
 package net.serenitybdd.plugins.jira.service;
 
 import net.serenitybdd.plugins.jira.client.JerseyJiraClient;
-import net.serenitybdd.plugins.jira.guice.Injectors;
 
 public class JIRAConnection {
 
@@ -9,7 +8,7 @@ public class JIRAConnection {
     private final JerseyJiraClient jiraClient;
 
     public JIRAConnection() {
-        this(Injectors.getInjector().getInstance(JIRAConfiguration.class));
+        this(JIRAInfrastructure.getConfiguration());
     }
 
     public JIRAConnection(JIRAConfiguration configuration) {

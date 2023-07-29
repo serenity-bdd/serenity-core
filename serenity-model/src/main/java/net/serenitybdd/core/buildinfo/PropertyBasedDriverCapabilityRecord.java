@@ -1,6 +1,6 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.inject.Inject;
+
 import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,11 @@ import static java.nio.file.Files.newInputStream;
  */
 public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityRecord {
 
-    Logger LOGGER = LoggerFactory.getLogger(PropertyBasedDriverCapabilityRecord.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyBasedDriverCapabilityRecord.class);
 
     private Configuration configuration;
 
-    @Inject
+    
     public PropertyBasedDriverCapabilityRecord(Configuration configuration) {
         this.configuration = configuration;
     }

@@ -1,7 +1,9 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.TestTag;
@@ -28,6 +30,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
+import static net.thucydides.core.ThucydidesSystemProperty.TAGS;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 class RequirementsOverviewReportingTask extends BaseReportingTask implements ReportingTask {
@@ -120,7 +123,14 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
             requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(toList());
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements), requirementsOutcomes.filteredByDisplayTag());
+        //
+        // If the cucumber.filter.tags parameter has been provided, we only display requirements with that tag type in the requirements tree
+        //
+        Optional<String> cucumberTags = EnvironmentSpecificConfiguration.from(environmentVariables).getOptionalProperty("cucumber.filter.tags");
+        JSONRequirementsTree requirementsTree
+                = JSONRequirementsTree.forRequirements(requirementsFilter.filteredByDisplayTag(requirements),
+                                                       requirementsOutcomes.filteredByDisplayTag(),
+                                                       cucumberTags.orElse(""));
         if (asParentRequirement) {
             requirementsTree = requirementsTree.asAParentRequirement();
         }

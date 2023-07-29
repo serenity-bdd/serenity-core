@@ -1,6 +1,6 @@
+
 package net.thucydides.core.statistics
 
-import net.thucydides.core.guice.Injectors
 import spock.lang.Specification
 
 class WhenKeepingTrackOfTheTestExecutionCount extends Specification {
@@ -28,12 +28,5 @@ class WhenKeepingTrackOfTheTestExecutionCount extends Specification {
             testCount.getNextTest()
         then:
             testCount.getCurrentTestNumber() == 2
-    }
-
-    def "the test count should be managed by Guice"() {
-        when:
-            TestCount managedTestCount = Injectors.getInjector().getInstance(TestCount)
-        then:
-            managedTestCount != null
     }
 }

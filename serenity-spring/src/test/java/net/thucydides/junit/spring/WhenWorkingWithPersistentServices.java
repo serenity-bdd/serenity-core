@@ -3,7 +3,7 @@ package net.thucydides.junit.spring;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.junit.spring.samples.domain.User;
 import net.thucydides.junit.spring.samples.service.UserService;
 import org.junit.Before;
@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.is;
 // the demo config probably needs fixing.
 //
 @Ignore("Should work but doesn't")
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 @ContextConfiguration(locations = "classpath:spring/db-config.xml")
 //@TransactionConfiguration
 @Transactional

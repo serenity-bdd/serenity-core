@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.inject.Injector;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
@@ -11,9 +10,7 @@ import net.thucydides.core.annotations.ManualTestMarkedAsError;
 import net.thucydides.core.annotations.ManualTestMarkedAsFailure;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.batches.BatchManagerProvider;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.guice.webdriver.WebDriverModule;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
@@ -90,34 +87,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         return pages.get();
     }
 
-    /**
-     * Creates a new test runner for WebDriver web tests.
-     *
-     * @param klass the class under test
-     * @throws InitializationError if some JUnit-related initialization problem occurred
-     */
     public SerenityRunner(final Class<?> klass) throws InitializationError {
-        this(klass, Injectors.getInjector(new WebDriverModule()));
-    }
-
-    /**
-     * Creates a new test runner for WebDriver web tests.
-     *
-     * @param klass the class under test
-     * @param module used to inject a custom Guice module
-     * @throws InitializationError if some JUnit-related initialization problem occurred
-     */
-    public SerenityRunner(Class<?> klass, com.google.inject.Module module) throws InitializationError {
-        this(klass, Injectors.getInjector(module));
-    }
-
-    public SerenityRunner(final Class<?> klass,
-                          final Injector injector) throws InitializationError {
 
         this(klass,
                 ThucydidesWebDriverSupport.getWebdriverManager(),
-                injector.getInstance(DriverConfiguration.class),
-                injector.getInstance(BatchManager.class)
+                SerenityInfrastructure.getDriverConfiguration(),
+                SerenityInfrastructure.getBatchManager()
         );
     }
 
@@ -132,7 +107,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         this(klass,
                 webDriverFactory,
                 configuration,
-                new BatchManagerProvider(configuration).get()
+                SerenityInfrastructure.getBatchManager()
         );
     }
 

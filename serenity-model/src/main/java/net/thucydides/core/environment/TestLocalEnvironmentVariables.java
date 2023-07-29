@@ -14,12 +14,10 @@ public class TestLocalEnvironmentVariables {
     static final ThreadLocal<Map<String, String>> THREAD_LOCAL_PROPERTIES = ThreadLocal.withInitial(ConcurrentHashMap::new);
     private static final ThreadLocal<EnvironmentVariables> CURRENT_ENVIRONMENT_VARIABLES
             = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
-    private static final ThreadLocal<EnvironmentVariables> BASE_ENVIRONMENT_VARIABLES
-            = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
 
     public static void setProperty(String name, String value) {
-        THREAD_LOCAL_PROPERTIES.get().put(name,value);
-        CURRENT_ENVIRONMENT_VARIABLES.set(updatedEnvironmentVariables(CURRENT_ENVIRONMENT_VARIABLES.get()));
+        SystemEnvironmentVariables.currentEnvironment().setProperty(name, value);
+        THREAD_LOCAL_PROPERTIES.get().put(name, value);
     }
 
     public static String getProperty(String name) {
@@ -40,7 +38,7 @@ public class TestLocalEnvironmentVariables {
 
     public static void clear() {
         THREAD_LOCAL_PROPERTIES.get().clear();
-        CURRENT_ENVIRONMENT_VARIABLES.set(BASE_ENVIRONMENT_VARIABLES.get());
+        SystemEnvironmentVariables.currentEnvironment().reset();
     }
 
     public static EnvironmentVariables getUpdatedEnvironmentVariables() {

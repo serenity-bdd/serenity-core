@@ -3,7 +3,7 @@ package net.thucydides.core.annotations.locators;
 import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
@@ -33,7 +33,7 @@ public class SmartFieldDecorator implements FieldDecorator {
     private CustomFindByAnnotationProviderService customFindByAnnotationProviderService;
 
     public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject) {
-       this(factory, driver, pageObject, WebDriverInjectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+       this(factory, driver, pageObject, SerenityInfrastructure.getCustomFindByAnnotationProviderService());
     }
 
     public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject,

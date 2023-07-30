@@ -368,6 +368,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(), event.getTestCase());
         getContext(featurePath).clearStepQueue(event.getTestCase());
         getContext(featurePath).stepEventBus().clear();
+
+        // We need to close the driver here to avoid wasting resources and causing timeouts with Selenium Grid services
+        getContext(featurePath).stepEventBus().getBaseStepListener().cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven());
+
     }
 
     private Status eventStatusFor(TestCaseFinished event) {

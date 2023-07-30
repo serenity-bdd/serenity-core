@@ -67,7 +67,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         String context = fetchContextFrom(capabilities, environmentVariables, SAUCE_OPTIONS);
         testOutcome.setContext(context);
 
-        capabilities.setCapability(SAUCE_OPTIONS, newOptions);
+        capabilities.setCapability(SAUCE_OPTIONS.replace("\"",""), newOptions);
         return capabilities;
     }
 

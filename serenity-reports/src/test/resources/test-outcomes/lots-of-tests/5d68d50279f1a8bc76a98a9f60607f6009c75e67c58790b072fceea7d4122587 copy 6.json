@@ -37,7 +37,7 @@
       "type": "story"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "When I view the daily deals",
       "duration": 4407,

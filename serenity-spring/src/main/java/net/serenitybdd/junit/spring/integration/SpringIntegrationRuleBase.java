@@ -19,7 +19,7 @@ class SpringIntegrationRuleBase {
     private TestContextManager testContextManager;
 
     /**
-     * Construct a {@link SpringIntegrationRule} with runPrepareTestInstance set to true, and no pre-constructed {@link TestContextManager}
+     * Construct a {@link SpringIntegrationRuleBase} with runPrepareTestInstance set to true, and no pre-constructed {@link TestContextManager}
      */
     protected SpringIntegrationRuleBase() {
         this.setupInner(true,null);

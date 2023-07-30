@@ -13,7 +13,7 @@ import java.util.Stack;
  */
 public class TimeoutStack {
 
-    Map<WebDriver, Stack<Duration>> timeouts = new HashMap();
+    Map<WebDriver, Stack<Duration>> timeouts = new HashMap<>();
 
     public void pushTimeoutFor(WebDriver driver, Duration implicitTimeout) {
         if (!timeouts.containsKey(driver)) {

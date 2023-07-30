@@ -3,7 +3,7 @@ package net.serenitybdd.maven.plugins;
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder;
 import net.serenitybdd.core.history.TestOutcomeSummaryRecorder;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
@@ -70,7 +70,7 @@ public class SerenityHistoryMojo extends AbstractMojo {
     }
 
     private Configuration getConfiguration() {
-        return Injectors.getInjector().getProvider(Configuration.class).get();
+        return SerenityInfrastructure.getConfiguration();
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {

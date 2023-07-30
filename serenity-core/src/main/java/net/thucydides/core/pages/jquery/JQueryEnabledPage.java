@@ -33,7 +33,7 @@ public class JQueryEnabledPage {
 
 	public boolean isJQueryIntegrationEnabled(){
 		boolean jqueryIntegrationEnabled =
-				Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION
+				Boolean.valueOf(ThucydidesSystemProperty.SERENITY_JQUERY_INTEGRATION
 						.from(environmentVariables,"true"));
 		return jqueryIntegrationEnabled;
 	}
@@ -78,7 +78,7 @@ public class JQueryEnabledPage {
     }
 
     public void injectJQueryPlugins() {
-        if (ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_HIGHLIGHTING.booleanFrom(environmentVariables)) {
+        if (ThucydidesSystemProperty.SERENITY_ACTIVATE_HIGHLIGHTING.booleanFrom(environmentVariables)) {
             executeScriptFrom("jquery/jquery-thucydides-plugin.js");
         }
     }

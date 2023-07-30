@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.remoteTesting;
 
-import com.google.inject.Inject;
+
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -12,7 +12,7 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     public RemoteTestingLinkManager() {
     }
 
-    @Inject
+    
     public RemoteTestingLinkManager(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }

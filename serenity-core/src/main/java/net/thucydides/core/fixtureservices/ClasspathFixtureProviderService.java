@@ -11,19 +11,26 @@ import java.util.ServiceLoader;
  */
 public class ClasspathFixtureProviderService implements FixtureProviderService {
 
-    private List<FixtureService> fixtureServices;
+    private volatile List<FixtureService> fixtureServices;
 
     @Override
     public List<FixtureService> getFixtureServices() {
-        if (fixtureServices == null) {
-            fixtureServices = new ArrayList<>();
+        List<FixtureService> result = fixtureServices;
+        if (result == null) {
+            synchronized (this) {
+                result = fixtureServices;
+                if (result == null) {
+                    result = new ArrayList<>();
 
-            ServiceLoader<FixtureService> fixtureServiceLoader = ServiceLoader.load(FixtureService.class);
+                    ServiceLoader<FixtureService> fixtureServiceLoader = ServiceLoader.load(FixtureService.class);
 
-            for (FixtureService fixtureService : fixtureServiceLoader) {
-                fixtureServices.add(fixtureService);
+                    for (FixtureService fixtureService : fixtureServiceLoader) {
+                        result.add(fixtureService);
+                    }
+                    fixtureServices = result;
+                }
             }
         }
-        return fixtureServices;
+        return result;
     }
 }

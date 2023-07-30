@@ -10,14 +10,14 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-
-import javax.inject.Inject;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @ContextConfiguration("classpath:/spring/integration-rules-context.xml")
 public class WhenSerenityRunnerTestPlaysWellWithExistingRules {
-    @Inject
+
+    @Autowired
     public StringHolder stringHolder;
 
     @Rule

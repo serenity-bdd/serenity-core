@@ -1,6 +1,6 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.webdriver.Configuration;
@@ -53,7 +53,7 @@ public class SerenityCheckMojo extends AbstractMojo {
     }
 
     private Configuration getConfiguration() {
-        return Injectors.getInjector().getProvider(Configuration.class).get();
+        return SerenityInfrastructure.getConfiguration();
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {

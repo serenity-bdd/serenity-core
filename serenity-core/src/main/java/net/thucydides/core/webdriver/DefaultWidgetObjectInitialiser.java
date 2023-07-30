@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WidgetObject;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +15,7 @@ public class DefaultWidgetObjectInitialiser extends AbstractObjectInitialiser<Wi
 	
     public DefaultWidgetObjectInitialiser(WebDriver driver, int ajaxTimeoutInMilliseconds) {
         super(driver, ajaxTimeoutInMilliseconds);
-        this.widgetProxyCreator = WebDriverInjectors.getInjector().getInstance(WidgetProxyCreator.class);
+        this.widgetProxyCreator = SerenityInfrastructure.getWidgetProxyCreator();
     }
 
     public boolean apply(WidgetObject widget) {

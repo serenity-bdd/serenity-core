@@ -17,7 +17,7 @@ import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     File temporaryDirectory
-    def loader = new TestOutcomeLoader().forFormat(OutcomeFormat.XML)
+    def loader = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON)
 
     def setup() {
         temporaryDirectory = Files.createTempDirectory("serenity-tmp").toFile()
@@ -40,7 +40,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def "should store a row of data for each test result"() {
         given: "a set of test results"
-            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes"));
+            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"));
         when: "we store these outcomes as a CSV file"
             def csvReporter = new CSVReporter(temporaryDirectory)
             File csvResults = csvReporter.generateReportFor(TestOutcomes.of(testOutcomeList), "results.csv")
@@ -51,7 +51,7 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
 
     def "should store user-configurable extra columns"() {
         given: "a set of test results"
-            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes"));
+            def testOutcomeList = loader.loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"));
         and: "we want to store extra columns from tag values"
             environmentVariables.setProperty("thucydides.csv.extra.columns","feature, epic")
         when: "we store these outcomes as a CSV file"

@@ -1,11 +1,8 @@
 package net.serenitybdd.junit.runners.integration;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.guice.webdriver.WebDriverModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
@@ -36,19 +33,16 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Rule
     public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();
 
-    Injector injector;
-
     @Before
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
-        injector = Guice.createInjector(new WebDriverModule());
         StepEventBus.getParallelEventBus().clear();
     }
 
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenario.class, injector);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenario.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();

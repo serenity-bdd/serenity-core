@@ -13,19 +13,26 @@ import java.util.ServiceLoader;
  */
 public class ClasspathCustomFindByAnnotationProviderService implements CustomFindByAnnotationProviderService {
 
-    private List<CustomFindByAnnotationService> findByAnnotationServices;
+    private volatile List<CustomFindByAnnotationService> findByAnnotationServices;
 
     @Override
     public List<CustomFindByAnnotationService> getCustomFindByAnnotationServices() {
-        if (findByAnnotationServices == null) {
-            findByAnnotationServices = new ArrayList<>();
+        List<CustomFindByAnnotationService> result = findByAnnotationServices;
+        if (result == null) {
+            synchronized (this) {
+                result = findByAnnotationServices;
+                if (result == null) {
+                    result = new ArrayList<>();
 
-            ServiceLoader<CustomFindByAnnotationService> seleniumAnnotationServiceLoader = ServiceLoader.load(CustomFindByAnnotationService.class);
+                    ServiceLoader<CustomFindByAnnotationService> seleniumAnnotationServiceLoader = ServiceLoader.load(CustomFindByAnnotationService.class);
 
-            for (CustomFindByAnnotationService findByAnnotationService : seleniumAnnotationServiceLoader) {
-                findByAnnotationServices.add(findByAnnotationService);
+                    for (CustomFindByAnnotationService findByAnnotationService : seleniumAnnotationServiceLoader) {
+                        result.add(findByAnnotationService);
+                    }
+                    findByAnnotationServices = result;
+                }
             }
         }
-        return findByAnnotationServices;
+        return result;
     }
 }

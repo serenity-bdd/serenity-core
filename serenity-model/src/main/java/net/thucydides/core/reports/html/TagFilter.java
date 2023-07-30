@@ -5,7 +5,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -31,7 +31,7 @@ public class TagFilter {
     }
 
     public TagFilter(EnvironmentVariables environmentVariables) {
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = ModelInfrastructure.getRequirementsService();
         this.environmentVariables = environmentVariables;
         this.excludedTags = new ArrayList<>(EnvironmentSpecificConfiguration.from(environmentVariables).getListOfValues(SERENITY_REPORT_EXCLUDE_TAGS));
         this.excludedTags.addAll(EnvironmentSpecificConfiguration.from(environmentVariables).getListOfValues(ThucydidesSystemProperty.HIDDEN_TAGS));

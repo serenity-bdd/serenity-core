@@ -2,15 +2,12 @@ package net.thucydides.core.requirements.reports.cucumber;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.requirements.model.cucumber.AnnotatedFeature;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REQUIREMENTS_CACHE_HEAP_SIZE;
@@ -27,7 +24,7 @@ public class FeatureCache {
     }
 
     protected FeatureCache() {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         int maxHeap = SERENITY_REQUIREMENTS_CACHE_HEAP_SIZE.integerFrom(environmentVariables, 1024);
 
         cache = Caffeine.newBuilder()

@@ -1,19 +1,15 @@
 package net.thucydides.core.batches;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Singleton
 public class TestCountBasedBatchManager extends SystemVariableBasedBatchManager {
     private Map<Integer, AtomicInteger> batchNumberTestCount = new HashMap<>();
     private Map<Integer, Integer> testCaseNumberBatchNumber = new HashMap<>();
 
-    @Inject
     public TestCountBasedBatchManager(EnvironmentVariables environmentVariables) {
         super(environmentVariables);
 

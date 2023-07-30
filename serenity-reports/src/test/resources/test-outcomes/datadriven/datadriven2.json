@@ -1,0 +1,358 @@
+{
+  "name": "When medical certificates expire",
+  "id": "certificate-expiry;when-medical-certificates-expire",
+  "scenarioId": "medicals/certificate_expiry:When medical certificates expire",
+  "methodName": "When medical certificates expire",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "1: When medical certificates expire ({Class\u003d1st class, Birth Date\u003dJanuary 01 2000, Last Medical\u003dJanuary 20 2020, Current Date\u003dMarch 1 2021, New Class\u003d3rd class, Next Medical\u003dJanuary 31 2025, Comments\u003dFrank is under 40})",
+      "duration": 92,
+      "startTime": "2023-07-15T19:40:21.021864+01:00[Europe/London]",
+      "result": "FAILURE",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 16,
+      "children": [
+        {
+          "number": 2,
+          "description": "Given Frank is a 1st class pilot born on January 01 2000",
+          "duration": 11,
+          "startTime": "2023-07-15T19:40:21.074750+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 3,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.087585+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 4,
+          "description": "And today is the March 1 2021",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.089179+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 5,
+          "description": "Then he should now be a 3rd class pilot",
+          "duration": 19,
+          "startTime": "2023-07-15T19:40:21.091602+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 6,
+          "description": "And his next medical should be no later than January 31 2025",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.112183+01:00[Europe/London]",
+          "result": "FAILURE",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "description": "2: When medical certificates expire ({Class\u003d1st class, Birth Date\u003dJanuary 01 1970, Last Medical\u003dJanuary 20 2020, Current Date\u003dAugust 1 2021, New Class\u003d2nd class, Next Medical\u003dJanuary 31 2021, Comments\u003dFrank is over 40})",
+      "duration": 10,
+      "startTime": "2023-07-15T19:40:21.125412+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 17,
+      "children": [
+        {
+          "number": 8,
+          "description": "Given Frank is a 1st class pilot born on January 01 1970",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.129356+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 9,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.131388+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 10,
+          "description": "And today is the August 1 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.132785+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 11,
+          "description": "Then he should now be a 2nd class pilot",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.134005+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 12,
+          "description": "And his next medical should be no later than January 31 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.134789+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "description": "3: When medical certificates expire ({Class\u003d2nd class, Birth Date\u003dJanuary 01 2000, Last Medical\u003dJanuary 20 2020, Current Date\u003dFebruary 1 2021, New Class\u003d3rd class, Next Medical\u003dJanuary 31 2025, Comments\u003dFrank is under 40})",
+      "duration": 6,
+      "startTime": "2023-07-15T19:40:21.139973+01:00[Europe/London]",
+      "result": "FAILURE",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 21,
+      "children": [
+        {
+          "number": 14,
+          "description": "Given Frank is a 2nd class pilot born on January 01 2000",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.141409+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 15,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.142913+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 16,
+          "description": "And today is the February 1 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.143793+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 17,
+          "description": "Then he should now be a 3rd class pilot",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.144985+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 18,
+          "description": "And his next medical should be no later than January 31 2025",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.145713+01:00[Europe/London]",
+          "result": "FAILURE",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "description": "4: When medical certificates expire ({Class\u003d2nd class, Birth Date\u003dJanuary 01 1970, Last Medical\u003dJanuary 20 2020, Current Date\u003dFebruary 1 2021, New Class\u003d3rd class, Next Medical\u003dJanuary 31 2022, Comments\u003dFrank is over 40})",
+      "duration": 6,
+      "startTime": "2023-07-15T19:40:21.149681+01:00[Europe/London]",
+      "result": "SUCCESS",
+      "precondition": false,
+      "level": 0,
+      "lineNumber": 22,
+      "children": [
+        {
+          "number": 20,
+          "description": "Given Frank is a 2nd class pilot born on January 01 1970",
+          "duration": 1,
+          "startTime": "2023-07-15T19:40:21.151133+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 21,
+          "description": "When his last medical was on the January 20 2020",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.152566+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 22,
+          "description": "And today is the February 1 2021",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.153304+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 23,
+          "description": "Then he should now be a 3rd class pilot",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.154035+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        },
+        {
+          "number": 24,
+          "description": "And his next medical should be no later than January 31 2022",
+          "duration": 0,
+          "startTime": "2023-07-15T19:40:21.154772+01:00[Europe/London]",
+          "result": "SUCCESS",
+          "precondition": false,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "medicals/certificate_expiry",
+    "storyName": "Certificate expiry",
+    "displayName": "Certificate expiry",
+    "path": "medicals/certificate_expiry",
+    "pathElements": [
+      {
+        "name": "medicals",
+        "description": ""
+      },
+      {
+        "name": "certificate_expiry",
+        "description": ""
+      }
+    ],
+    "narrative": "  In order to encourage pilots to renew their medical examinations on time in a fair manner\n  As an airline regulator\n  I want to pilots to be downgraded to the next lowest status if they don\u0027t renew their medicals",
+    "type": "feature"
+  },
+  "title": "When medical certificates expire",
+  "description": "",
+  "tags": [
+    {
+      "name": "Mac",
+      "type": "context",
+      "displayName": "Mac"
+    }
+  ],
+  "startTime": "2023-07-15T19:40:21.015045+01:00[Europe/London]",
+  "duration": 141,
+  "rule": {
+    "name": "If the medical date is not respected the pilot license may expire or be downgraded",
+    "description": ""
+  },
+  "projectKey": "",
+  "isManualTestingUpToDate": false,
+  "context": "mac",
+  "dataTable": {
+    "headers": [
+      "Class",
+      "Birth Date",
+      "Last Medical",
+      "Current Date",
+      "New Class",
+      "Next Medical",
+      "Comments"
+    ],
+    "rows": [
+      {
+        "values": [
+          "1st class",
+          "January 01 2000",
+          "January 20 2020",
+          "March 1 2021",
+          "3rd class",
+          "January 31 2025",
+          "Frank is under 40"
+        ],
+        "lineNumber": 16,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "1st class",
+          "January 01 1970",
+          "January 20 2020",
+          "August 1 2021",
+          "2nd class",
+          "January 31 2021",
+          "Frank is over 40"
+        ],
+        "lineNumber": 17,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "2nd class",
+          "January 01 2000",
+          "January 20 2020",
+          "February 1 2021",
+          "3rd class",
+          "January 31 2025",
+          "Frank is under 40"
+        ],
+        "lineNumber": 21,
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "2nd class",
+          "January 01 1970",
+          "January 20 2020",
+          "February 1 2021",
+          "3rd class",
+          "January 31 2022",
+          "Frank is over 40"
+        ],
+        "lineNumber": 22,
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": true,
+    "scenarioOutline": "Given Frank is a \u003cClass\u003e pilot born on \u003cBirth Date\u003e\n\rWhen his last medical was on the \u003cLast Medical\u003e\n\rAnd today is the \u003cCurrent Date\u003e\n\rThen he should now be a \u003cNew Class\u003e pilot\n\rAnd his next medical should be no later than \u003cNext Medical\u003e\n\r",
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 2,
+        "name": "Expiry rules for first class pilots",
+        "description": ""
+      },
+      {
+        "startRow": 2,
+        "rowCount": 0,
+        "name": "Expiry rules for second class pilots",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "testSource": "Cucumber",
+  "order": 0,
+  "result": "SUCCESS",
+  "scenarioOutline": "Given Frank is a \u003cClass\u003e pilot born on \u003cBirth Date\u003e\nWhen his last medical was on the \u003cLast Medical\u003e\nAnd today is the \u003cCurrent Date\u003e\nThen he should now be a \u003cNew Class\u003e pilot\nAnd his next medical should be no later than \u003cNext Medical\u003e"
+}

@@ -1,5 +1,7 @@
 package net.thucydides.core.util;
 
+import com.typesafe.config.Config;
+
 import java.io.IOException;
 
 /**
@@ -7,4 +9,6 @@ import java.io.IOException;
  */
 public interface LocalPreferences {
     void loadPreferences() throws IOException;
+
+    Config getConfig();
 }

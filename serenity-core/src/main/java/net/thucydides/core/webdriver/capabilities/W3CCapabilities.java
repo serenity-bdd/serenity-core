@@ -30,9 +30,11 @@ import static net.thucydides.core.webdriver.CapabilityValue.stripQuotesFrom;
 public class W3CCapabilities {
 
     private final EnvironmentVariables environmentVariables;
-    private static final Logger LOGGER = LoggerFactory.getLogger(W3CCapabilities.class);
     private String prefix;
-    private final Set<String> STRING_CONFIG_PROPERTIES = new HashSet<>(Arrays.asList("platformName","platformVersion"));
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(W3CCapabilities.class);
+    private static final Set<String> STRING_CONFIG_PROPERTIES = new HashSet<>(Arrays.asList("platformName","platformVersion"));
+    private static final List<String> BASE_PROPERTIES = Arrays.asList("browserName", "browserVersion", "platformName");
 
     public W3CCapabilities(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -41,8 +43,6 @@ public class W3CCapabilities {
     public static W3CCapabilities definedIn(EnvironmentVariables environmentVariables) {
         return new W3CCapabilities(environmentVariables);
     }
-
-    private final List<String> BASE_PROPERTIES = Arrays.asList("browserName", "browserVersion", "platformName");
 
     public W3CCapabilities withPrefix(String prefix) {
         this.prefix = prefix;
@@ -142,7 +142,7 @@ public class W3CCapabilities {
         if (STRING_CONFIG_PROPERTIES.contains(fieldName)) {
             capabilities.setPlatform(Platform.fromString(value.unwrapped().toString()));
         } else {
-            capabilities.setCapability(fieldName, asObject(value));
+            capabilities.setCapability(stripQuotesFrom(fieldName), asObject(value));
         }
     }
 

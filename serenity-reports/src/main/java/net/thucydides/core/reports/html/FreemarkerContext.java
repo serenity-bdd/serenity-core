@@ -2,11 +2,10 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.reports.styling.TagStylist;
-import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.reports.model.*;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.ReportType;
@@ -81,7 +80,7 @@ public class FreemarkerContext {
         this.relativeLink = relativeLink;
         buildProperties = new BuildInfoProvider(environmentVariables).getBuildProperties();
         this.parentTag = parentTag;
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = ModelInfrastructure.getRequirementsService();
         this.requirementTypes = requirements.getRequirementTypes();
 
         VersionProvider versionProvider = new VersionProvider(environmentVariables);

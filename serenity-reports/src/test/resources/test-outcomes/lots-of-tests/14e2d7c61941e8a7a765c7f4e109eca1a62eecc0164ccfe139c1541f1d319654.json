@@ -30,7 +30,7 @@
       "type": "story"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "[1] {customer-1\u003d006500, batch-file-1\u003dvalid-batch-1, date-1\u003dtoday, customer-2\u003d006500, batch-file-2\u003dvalid-batch-1, date-2\u003dtoday, result\u003drejected, message-code\u003dC1}",
       "duration": 59,

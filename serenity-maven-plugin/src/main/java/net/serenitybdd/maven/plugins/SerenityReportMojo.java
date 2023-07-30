@@ -4,7 +4,7 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.reports.ExtendedReports;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -106,7 +106,7 @@ public class SerenityReportMojo extends AbstractMojo {
 
     private Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = Injectors.getInjector().getProvider(Configuration.class).get();
+            configuration = SerenityInfrastructure.getConfiguration();
         }
         return configuration;
     }

@@ -1,10 +1,8 @@
 package net.thucydides.core.environment;
 
 import com.typesafe.config.Config;
-import net.serenitybdd.core.collect.NewMap;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -12,17 +10,17 @@ import java.util.stream.Collectors;
 
 public class MockEnvironmentVariables implements EnvironmentVariables {
 
-    private Properties properties = new Properties();
+    private Map<String, String> properties = new HashMap<>();
     private Map<String, String> values = new HashMap<>();
 
     public MockEnvironmentVariables() {
-        this.properties.setProperty("user.home", System.getProperty("user.home"));
-        this.properties.setProperty("feature.file.encoding", "UTF-8");
+        this.properties.put("user.home", System.getProperty("user.home"));
+        this.properties.put("feature.file.encoding", "UTF-8");
         if (localEnvironment().getProperty("phantomjs.binary.path") != null) {
-            this.properties.setProperty("phantomjs.binary.path", localEnvironment().getProperty("phantomjs.binary.path"));
+            this.properties.put("phantomjs.binary.path", localEnvironment().getProperty("phantomjs.binary.path"));
         }
         if (localEnvironment().getProperty("webdriver.chrome.driver") != null) {
-            this.properties.setProperty("webdriver.chrome.driver", localEnvironment().getProperty("webdriver.chrome.driver"));
+            this.properties.put("webdriver.chrome.driver", localEnvironment().getProperty("webdriver.chrome.driver"));
         }
     }
 
@@ -30,17 +28,17 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return ConfiguredEnvironment.getEnvironmentVariables();
     }
 
-    protected MockEnvironmentVariables(Properties properties) {
-        this.properties = PropertiesUtil.copyOf(properties);
+    protected MockEnvironmentVariables(Map<String, String> properties) {
+        this.properties = new HashMap<>(properties);
     }
 
-    protected MockEnvironmentVariables(Properties properties, Map<String, String> values) {
-        this.properties = PropertiesUtil.copyOf(properties);
-        this.values = NewMap.copyOf(values);
+    protected MockEnvironmentVariables(Map<String, String> properties, Map<String, String> values) {
+        this.properties = new HashMap<>(properties);
+        this.values = new HashMap<>(values);
     }
 
     public static EnvironmentVariables fromSystemEnvironment() {
-        return new MockEnvironmentVariables(SystemEnvironmentVariables.createEnvironmentVariables().getProperties());
+        return new MockEnvironmentVariables(SystemEnvironmentVariables.createEnvironmentVariables().properties());
     }
 
     public boolean propertySetIsEmpty() {
@@ -65,9 +63,9 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public Integer getPropertyAsInteger(String name, Integer defaultValue) {
-        String value = (String) properties.get(name);
+        String value = properties.get(name);
         if (StringUtils.isNumeric(value)) {
-            return Integer.parseInt(properties.getProperty(name));
+            return Integer.parseInt(properties.get(name));
         } else {
             return defaultValue;
         }
@@ -79,10 +77,10 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public Boolean getPropertyAsBoolean(String name, boolean defaultValue) {
-        if (properties.getProperty(name) == null) {
+        if (properties.get(name) == null) {
             return defaultValue;
         } else {
-            return Boolean.parseBoolean(properties.getProperty(name, "false"));
+            return Boolean.parseBoolean(properties.get(name));
         }
     }
 
@@ -93,7 +91,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
 
     public String getProperty(String name) {
         if (name != null) {
-            return properties.getProperty(name);
+            return properties.get(name);
         } else {
             return null;
         }
@@ -110,7 +108,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(String name, String defaultValue) {
-        return properties.getProperty(name, defaultValue);
+        return properties.get(name) == null ? defaultValue : properties.get(name);
     }
 
 
@@ -119,7 +117,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public void setProperty(String name, String value) {
-        properties.setProperty(name, value);
+        properties.put(name, value);
     }
 
     public void setProperties(Map<String, String> newProperties) {
@@ -144,7 +142,9 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public Properties getProperties() {
-        return new Properties(properties);
+        Properties props = new Properties();
+        props.putAll(properties);
+        return props;
     }
 
     @Override
@@ -154,12 +154,12 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public boolean aValueIsDefinedFor(Enum<?> property) {
-        return properties.contains(property.toString());
+        return properties.containsKey(property.toString());
     }
 
     @Override
     public boolean aValueIsDefinedFor(String property) {
-        return properties.contains(property);
+        return properties.containsKey(property);
     }
 
     @Override
@@ -179,8 +179,8 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         values.keySet().forEach(
                 key -> environmentValues.put(key, values.get(key))
         );
-        properties.stringPropertyNames().forEach(
-                key -> environmentValues.put(key, properties.getProperty(key))
+        properties.keySet().forEach(
+                key -> environmentValues.put(key, properties.get(key))
         );
         return environmentValues;
     }
@@ -202,6 +202,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     @Override
     public Config getConfig(String prefix) {
         return EnvironmentVariables.super.getConfig(prefix);
+    }
+
+    @Override
+    public Map<String, String> properties() {
+        return properties;
     }
 
     public void setValue(String name, String value) {

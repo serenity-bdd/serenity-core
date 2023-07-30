@@ -44,7 +44,7 @@
       "type": "story"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "[1] {category\u003dArt, keyword\u003dcats, expected_title\u003dSculpture Cat, options\u003dthe quick brown fox jumped over the lazy dog the quick brown fox jumped over the lazy dog the quick brown fox jumped over the lazy dog the quick brown fox jumped over the lazy dog}",
       "duration": 15844,

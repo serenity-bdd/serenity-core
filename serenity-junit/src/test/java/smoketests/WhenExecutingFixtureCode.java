@@ -1,24 +1,18 @@
 package smoketests;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.guice.webdriver.WebDriverModule;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.InitializationError;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 
@@ -30,12 +24,9 @@ public class WhenExecutingFixtureCode extends AbstractTestStepRunnerTest {
     @Rule
     public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();
 
-    Injector injector;
-
     @Before
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
-        injector = Guice.createInjector(new WebDriverModule());
         StepEventBus.getParallelEventBus().clear();
     }
 

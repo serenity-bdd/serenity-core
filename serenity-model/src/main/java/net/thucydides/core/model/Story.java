@@ -6,10 +6,8 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.AnnotatedDescription;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.reports.html.ReportNameProvider;
-import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -61,7 +59,7 @@ public class Story {
     }
 
     private PathElements pathElementsFromPackagePath(String path) {
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         String configuredRootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables, "");
 
         // The actual root path used in this path - empty if the configured root path is different from the path

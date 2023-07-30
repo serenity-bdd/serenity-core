@@ -1,8 +1,8 @@
 package net.thucydides.core.model.formatters;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.html.ContextIconFormatter;
 import net.thucydides.core.reports.html.ResultIconFormatter;
@@ -11,7 +11,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ReportFormatter {
@@ -19,23 +18,14 @@ public class ReportFormatter {
     private final static String ISSUE_LINK_FORMAT = "<a target=\"_blank\" href=\"{0}\">{1}</a>";
 
     private final IssueTracking issueTracking;
-    private final EnvironmentVariables environmentVariables;
 
     public ReportFormatter() {
-        this(Injectors.getInjector().getInstance(IssueTracking.class),
-                SystemEnvironmentVariables.currentEnvironmentVariables());
+        this(ModelInfrastructure.getIssueTracking());
     }
-
-    public ReportFormatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
-        this.issueTracking = issueTracking;
-        this.environmentVariables = environmentVariables;
-    }
-
 
     public ReportFormatter(IssueTracking issueTracking) {
-        this(issueTracking, SystemEnvironmentVariables.currentEnvironmentVariables() );
+        this.issueTracking = issueTracking;
     }
-
 
     public static List<String> issuesIn(final String value) {
         IssueExtractor extractor = new IssueExtractor(value);
@@ -138,7 +128,7 @@ public class ReportFormatter {
 
     private List<String> inOrderOfDecreasingLength(List<String> issues) {
         List<String> sortedIssues = NewList.copyOf(issues);
-        Collections.sort(sortedIssues, (o1, o2) -> o2.length() - o1.length());
+        sortedIssues.sort((o1, o2) -> o2.length() - o1.length());
         return sortedIssues;
     }
 

@@ -4,8 +4,8 @@ import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -35,13 +35,13 @@ public class ReleaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequirementsTagProvider.class);
 
     public ReleaseManager(EnvironmentVariables environmentVariables, ReportNameProvider reportNameProvider) {
-        this(environmentVariables, reportNameProvider, Injectors.getInjector().getInstance(RequirementsService.class));
+        this(environmentVariables, reportNameProvider, ModelInfrastructure.getRequirementsService());
     }
 
     public ReleaseManager(EnvironmentVariables environmentVariables, ReportNameProvider reportNameProvider, RequirementsService requirementsService) {
         this.reportNameProvider = reportNameProvider;
         this.requirementsService = requirementsService;
-        String typeValues = ThucydidesSystemProperty.THUCYDIDES_RELEASE_TYPES.from(environmentVariables, DEFAULT_RELEASE_TYPES);
+        String typeValues = ThucydidesSystemProperty.SERENITY_RELEASE_TYPES.from(environmentVariables, DEFAULT_RELEASE_TYPES);
         releaseTypes = Splitter.on(",").trimResults().splitToList(typeValues);
     }
 

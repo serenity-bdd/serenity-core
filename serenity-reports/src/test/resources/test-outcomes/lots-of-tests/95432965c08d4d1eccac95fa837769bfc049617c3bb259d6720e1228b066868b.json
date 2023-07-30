@@ -24,7 +24,7 @@
       "type": "story"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "[1] {account\u003d123456, bsb\u003d092002, account-status\u003dclosed, final-acccount-no\u003d002814091, appears-on-report\u003dyes}",
       "duration": 14,

@@ -2,9 +2,10 @@ package net.serenitybdd.plugins.jira;
 
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
-import net.serenitybdd.plugins.jira.guice.Injectors;
+
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
+import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestOutcomeSummary;
@@ -31,19 +32,20 @@ public class JiraFileServiceUpdater implements JiraUpdaterService {
     private Set<String> allIssues;
     private JiraUpdater jiraUpdater;
 
-    @Inject
+    
     public JiraFileServiceUpdater(IssueTracker issueTracker,
                                   EnvironmentVariables environmentVariables,
                                   WorkflowLoader loader) {
-        this.resultTally = new TestResultTally<TestOutcomeSummary>();
+        this.resultTally = new TestResultTally<>();
         this.allIssues = new HashSet<>();
         jiraUpdater = new JiraUpdater(issueTracker,environmentVariables,loader);
     }
 
     public JiraFileServiceUpdater() {
-        this(Injectors.getInjector().getInstance(IssueTracker.class),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ,
-                Injectors.getInjector().getInstance(WorkflowLoader.class));
+
+        this(JIRAInfrastructure.getIssueTracker(),
+                ModelInfrastructure.getEnvironmentVariables(),
+                JIRAInfrastructure.getWorkflowLoader());
     }
 
     /**

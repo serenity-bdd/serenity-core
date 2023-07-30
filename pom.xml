@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>3.9.8-SNAPSHOT</version>
+    <version>3.9.9-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -48,7 +48,7 @@
         <hamcrest.version>2.2</hamcrest.version>
 <!--        <slf4j.version>1.7.30</slf4j.version>-->
         <slf4j.version>2.0.7</slf4j.version>
-        <guice.version>5.1.0</guice.version>
+<!--        <guice.version>5.1.0</guice.version>-->
         <cucumber.version>7.12.1</cucumber.version>
         <gson.version>2.10.1</gson.version>
         <junit5.version>5.9.3</junit5.version>
@@ -81,7 +81,7 @@
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
         <spring.version>5.3.25</spring.version>
-        <spring.boot.version>2.7.5</spring.boot.version>
+        <spring.boot.version>2.7.14</spring.boot.version>
         <jimfs.version>1.2</jimfs.version>
         <jbehave.version>4.8.3</jbehave.version>
         <ant.version>1.10.12</ant.version>
@@ -93,7 +93,7 @@
         <xchart.version>3.5.2</xchart.version>
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
-        <kotlin.version>1.8.10</kotlin.version>
+        <kotlin.version>1.9.0</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
@@ -211,29 +211,29 @@
             </dependency>
 
             <!-- Guice dependencies -->
-            <dependency>
-                <groupId>com.google.inject</groupId>
-                <artifactId>guice</artifactId>
-                <version>${guice.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>asm</groupId>
-                        <artifactId>asm</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.sonatype.sisu.inject</groupId>
-                        <artifactId>cglib</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.google.inject</groupId>-->
+<!--                <artifactId>guice</artifactId>-->
+<!--                <version>${guice.version}</version>-->
+<!--                <exclusions>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>org.ow2.asm</groupId>-->
+<!--                        <artifactId>asm</artifactId>-->
+<!--                    </exclusion>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>asm</groupId>-->
+<!--                        <artifactId>asm</artifactId>-->
+<!--                    </exclusion>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>com.google.guava</groupId>-->
+<!--                        <artifactId>guava</artifactId>-->
+<!--                    </exclusion>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>org.sonatype.sisu.inject</groupId>-->
+<!--                        <artifactId>cglib</artifactId>-->
+<!--                    </exclusion>-->
+<!--                </exclusions>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.commons</groupId>

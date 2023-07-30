@@ -1246,7 +1246,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private boolean useVerboseLogging() {
-        return ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.booleanFrom(environmentVariables);
+        return ThucydidesSystemProperty.SERENITY_VERBOSE_STEPS.booleanFrom(environmentVariables);
     }
 
     @Override

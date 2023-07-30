@@ -1,6 +1,6 @@
 package net.thucydides.core.issues;
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -18,7 +18,7 @@ public class SystemPropertiesIssueTracking implements IssueTracking {
         this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
-    @Inject
+    
     public SystemPropertiesIssueTracking(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }

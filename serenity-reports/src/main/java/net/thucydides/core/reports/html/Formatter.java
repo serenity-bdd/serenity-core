@@ -2,7 +2,6 @@ package net.thucydides.core.reports.html;
 
 import com.github.rjeschke.txtmark.Configuration;
 import com.google.common.base.Splitter;
-import com.google.inject.Inject;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -46,8 +45,6 @@ import static org.apache.commons.lang3.StringUtils.*;
  * In particular, this integrates JIRA links into the generated reports.
  */
 public class Formatter {
-
-
     private static final String ELIPSE = "&hellip;";
     private static final String MARKDOWN = "markdown";
     private static final String TEXT = "";
@@ -72,7 +69,6 @@ public class Formatter {
     Parser parser;
     HtmlRenderer renderer;
 
-    @Inject
     public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
 

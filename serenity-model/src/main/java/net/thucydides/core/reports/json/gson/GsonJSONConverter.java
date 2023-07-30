@@ -2,7 +2,7 @@ package net.thucydides.core.reports.json.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.inject.Inject;
+
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.flags.Flag;
@@ -32,7 +32,7 @@ public class GsonJSONConverter implements JSONConverter {
 
     private final String encoding;
 
-    @Inject
+    
     public GsonJSONConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         encoding = ThucydidesSystemProperty.SERENITY_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());

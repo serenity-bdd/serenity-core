@@ -30,6 +30,6 @@ public class ScreenshotDigest {
     }
 
     private String optionalWidth() {
-        return ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH.from(environmentVariables,"");
+        return ThucydidesSystemProperty.SERENITY_RESIZED_IMAGE_WIDTH.from(environmentVariables,"");
     }
 }

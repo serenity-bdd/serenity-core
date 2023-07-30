@@ -32,16 +32,16 @@ public class WhenManipulatingSystemProperties {
 
     @Test
     public void should_be_able_to_read_a_numerical_thucydides_system_property() {
-        System.setProperty("thucydides.step.delay","10");
-        Integer storedValue = SerenitySystemProperties.getProperties().getIntegerValue(ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY, 0);
+        System.setProperty("serenity.step.delay","10");
+        Integer storedValue = SerenitySystemProperties.getProperties().getIntegerValue(ThucydidesSystemProperty.SERENITY_STEP_DELAY, 0);
 
         assertThat(storedValue, is(10));
     }
 
     @Test
     public void should_return_default_value_if_numerical_system_property_not_provided() {
-        System.clearProperty("thucycides.step.delay");
-        Integer storedValue = SerenitySystemProperties.getProperties().getIntegerValue(ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY, 20);
+        System.clearProperty("serenity.step.delay");
+        Integer storedValue = SerenitySystemProperties.getProperties().getIntegerValue(ThucydidesSystemProperty.SERENITY_STEP_DELAY, 20);
 
         assertThat(storedValue, is(20));
     }

@@ -1,11 +1,9 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.inject.Injector;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
 import org.junit.runners.model.InitializationError;
 
 import java.util.ArrayList;
@@ -19,54 +17,6 @@ import java.util.List;
 abstract class QualifiedTestsRunner extends SerenityRunner {
     private String qualifier;
     private Object test;
-
-    public QualifiedTestsRunner(Class<?> klass, String qualifier, Object test) throws InitializationError {
-        super(klass);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, com.google.inject.Module module, String qualifier, Object test) throws InitializationError {
-        super(klass, module);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, Injector injector, String qualifier, Object test) throws InitializationError {
-        super(klass, injector);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverFactory);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverFactory, configuration);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverFactory, configuration, batchManager);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
-        super(klass, batchManager);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
-
-    public QualifiedTestsRunner(Class<?> klass, WebdriverManager webDriverManager, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
-        super(klass, webDriverManager, configuration, batchManager);
-        this.qualifier = qualifier;
-        this.test = test;
-    }
 
     public QualifiedTestsRunner(final Class<?> type,
                          final DriverConfiguration configuration,

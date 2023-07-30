@@ -32,7 +32,7 @@
       "type": "feature"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "When I view the specials",
       "duration": 1,

@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.annotations.TestData;
-import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@RunWith(ThucydidesParameterizedRunner.class)
+@RunWith(SerenityParameterizedRunner.class)
 public class SampleDataDrivenScenarioWithExternalFailure {
 
 

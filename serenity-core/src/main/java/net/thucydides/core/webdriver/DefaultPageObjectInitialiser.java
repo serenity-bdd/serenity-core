@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +11,7 @@ public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<Page
 	
     public DefaultPageObjectInitialiser(WebDriver driver, long ajaxTimeoutInMilliseconds) {
     	super(driver, ajaxTimeoutInMilliseconds);
-    	this.elementProxyCreator = WebDriverInjectors.getInjector().getInstance(ElementProxyCreator.class);
+    	this.elementProxyCreator = SerenityInfrastructure.getElementProxyCreator();
     }
 
     public boolean apply(PageObject page) {

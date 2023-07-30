@@ -4,12 +4,12 @@ import com.google.common.base.Predicate;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.pages.components.Dropdown;
@@ -109,7 +109,7 @@ public abstract class PageObject {
         if (driver instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
         } else {
-            driver.manage().timeouts().implicitlyWait(implicitTimeout.toMillis(), MILLISECONDS);
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(waitForElementTimeout.toMillis()));
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class PageObject {
             waitForElementTimeout = ((ConfigurableTimeouts) driver).resetTimeouts();
         } else {
             waitForElementTimeout = getDefaultImplicitTimeout();
-            driver.manage().timeouts().implicitlyWait(waitForElementTimeout.toMillis(), MILLISECONDS);
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(waitForElementTimeout.toMillis()));
         }
     }
 
@@ -134,7 +134,7 @@ public abstract class PageObject {
 
     protected PageObject() {
         this.webdriverClock = Clock.systemDefaultZone();
-        this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.time.SystemClock.class);
+        this.clock = SerenityInfrastructure.getClock();
         this.environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
     }

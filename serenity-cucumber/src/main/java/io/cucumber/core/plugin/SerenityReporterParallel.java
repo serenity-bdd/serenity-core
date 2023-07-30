@@ -17,12 +17,12 @@ import io.cucumber.tagexpressions.Expression;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Rule;
 import net.thucydides.core.model.*;
@@ -82,8 +82,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerenityReporter.class);
 
-    private ManualScenarioChecker manualScenarioDateChecker;
-
     private final Set<URI> contextURISet = new CopyOnWriteArraySet<>();
 
     /**
@@ -102,13 +100,11 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
      * in @CucumberOptions.
      */
     public SerenityReporterParallel() {
-        this.systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
-        this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
+        this.systemConfiguration = SerenityInfrastructure.getConfiguration();
     }
 
     public SerenityReporterParallel(Configuration systemConfiguration) {
         this.systemConfiguration = systemConfiguration;
-        this.manualScenarioDateChecker = new ManualScenarioChecker(systemConfiguration.getEnvironmentVariables());
     }
 
     private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
@@ -371,6 +367,11 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         }
         getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(), event.getTestCase());
         getContext(featurePath).clearStepQueue(event.getTestCase());
+        getContext(featurePath).stepEventBus().clear();
+
+        // We need to close the driver here to avoid wasting resources and causing timeouts with Selenium Grid services
+        getContext(featurePath).stepEventBus().getBaseStepListener().cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven());
+
     }
 
     private Status eventStatusFor(TestCaseFinished event) {

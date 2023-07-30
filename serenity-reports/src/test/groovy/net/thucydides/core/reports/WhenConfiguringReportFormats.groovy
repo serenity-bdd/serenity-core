@@ -32,12 +32,12 @@ class WhenConfiguringReportFormats extends Specification {
 
     def "should ignore case"() {
         given:
-        environmentVars.setProperty("output.formats","xMl")
+        environmentVars.setProperty("output.formats","Json")
         FormatConfiguration formatConfiguration = new FormatConfiguration(environmentVars)
         when:
         List<String> formats = formatConfiguration.getFormats()
         then:
-        formats == [OutcomeFormat.XML]
+        formats == [OutcomeFormat.JSON]
     }
 
     def "should ignore unknown formats"() {

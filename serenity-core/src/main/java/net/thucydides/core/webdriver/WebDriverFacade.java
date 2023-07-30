@@ -2,10 +2,8 @@ package net.thucydides.core.webdriver;
 
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.SystemTimeouts;
-import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
@@ -58,7 +56,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
                            final WebDriverFactory webDriverFactory) {
         this.driverClass = driverClass;
         this.webDriverFactory = webDriverFactory;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
         this.implicitTimeout = defaultImplicitWait();
     }
 
@@ -67,7 +65,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, JavascriptEx
         this.driverClass = driver.getClass();
         this.proxiedWebDriver = driver;
         this.webDriverFactory = webDriverFactory;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
         this.implicitTimeout = defaultImplicitWait();
     }
 

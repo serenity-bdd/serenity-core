@@ -5,14 +5,14 @@ import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.TestsRequirement;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class SamplePassingScenarioWithPrivateFields {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplePassingScenarioWithPrivateFields.class);

@@ -3,7 +3,7 @@ package net.serenitybdd.junit.runners;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
@@ -203,7 +203,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
      */
     public SerenityParameterizedRunner(final Class<?> klass) throws Throwable {
         this(klass, WebDriverConfiguredEnvironment.getDriverConfiguration(), new WebDriverFactory(),
-                Injectors.getInjector().getInstance(BatchManager.class));
+             SerenityInfrastructure.getBatchManager());
     }
 
     @Override

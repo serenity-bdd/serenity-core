@@ -4,7 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
 import net.serenitybdd.core.webdriver.appium.AppiumServerPool;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -38,7 +39,7 @@ public class AppiumDriverProvider implements DriverProvider {
 
     public AppiumDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = SerenityInfrastructure.getDriverCapabilityRecord();
     }
 
     @Override

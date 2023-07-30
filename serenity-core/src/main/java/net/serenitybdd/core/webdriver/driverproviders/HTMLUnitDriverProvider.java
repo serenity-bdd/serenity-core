@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -25,7 +25,7 @@ public class HTMLUnitDriverProvider implements DriverProvider {
 
     public HTMLUnitDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = SerenityInfrastructure.getDriverCapabilityRecord();
     }
 
     @Override

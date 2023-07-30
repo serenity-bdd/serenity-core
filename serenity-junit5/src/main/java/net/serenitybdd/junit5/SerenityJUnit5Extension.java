@@ -27,7 +27,7 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
         Serenity.injectAnnotatedPagesObjectInto(testInstance);
         Serenity.injectScenarioStepsInto(testInstance);
         Serenity.injectDependenciesInto(testInstance);
-        SystemEnvironmentVariables.currentEnvironmentVariables().reset();
+        SystemEnvironmentVariables.currentEnvironment().reset();
     }
 
     private StepEventBus eventBusFor(ExtensionContext context) {

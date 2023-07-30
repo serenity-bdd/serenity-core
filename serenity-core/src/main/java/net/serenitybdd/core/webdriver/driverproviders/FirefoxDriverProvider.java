@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -23,7 +23,7 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
 
     public FirefoxDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = SerenityInfrastructure.getDriverCapabilityRecord();
     }
 
     @Override

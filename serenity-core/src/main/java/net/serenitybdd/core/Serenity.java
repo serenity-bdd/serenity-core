@@ -3,7 +3,7 @@ package net.serenitybdd.core;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.configurers.WebDriverConfigurer;
 import net.serenitybdd.core.di.DependencyInjector;
-import net.serenitybdd.core.di.WebDriverInjectors;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
@@ -12,7 +12,6 @@ import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
@@ -37,7 +36,6 @@ import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach
  */
 public class Serenity {
 
-    private static final ThreadLocal<WebDriverFactory> factoryThreadLocal = new ThreadLocal<>();
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = ThreadLocal.withInitial(TestSessionVariables::new);
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
@@ -51,7 +49,6 @@ public class Serenity {
     public static void initialize(final Object testCase) {
         ThucydidesWebDriverSupport.initialize();
 
-        setupWebDriverFactory();
         setupWebdriverManager();
 
         ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
@@ -85,7 +82,8 @@ public class Serenity {
     }
 
     private static DependencyInjectorService getDependencyInjectorService() {
-        return Injectors.getInjector().getInstance(DependencyInjectorService.class);
+        return SerenityInfrastructure.getDependencyInjectorService();
+//        return Injectors.getInjector().getInstance(DependencyInjectorService.class);
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
@@ -101,7 +99,6 @@ public class Serenity {
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
-        setupWebDriverFactory();
         setupWebdriverManager();
 
         ThucydidesWebDriverSupport.initialize();
@@ -122,10 +119,6 @@ public class Serenity {
         StepListener listener = new BaseStepListener(outputDirectory);
         stepListenerThreadLocal.set(listener);
         getStepEventBus().registerListener(getStepListener());
-    }
-
-    private static void setupWebDriverFactory() {
-        factoryThreadLocal.set(WebDriverInjectors.getInjector().getInstance(WebDriverFactory.class));
     }
 
     /**

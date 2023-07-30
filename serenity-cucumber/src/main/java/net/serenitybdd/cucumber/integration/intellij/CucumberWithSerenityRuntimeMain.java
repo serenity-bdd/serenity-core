@@ -4,8 +4,8 @@ import io.cucumber.core.options.CommandlineOptionsParser;
 import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class CucumberWithSerenityRuntimeMain {
         RuntimeOptions  runtimeOptions = new CommandlineOptionsParser(System.out).parse(argv).build() ;
 
         //ResourceLoader resourceLoader = new MultiLoader(classLoader);
-        Configuration systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+        Configuration systemConfiguration = SerenityInfrastructure.getConfiguration();
         //Supplier<ClassLoader> classLoader = ClassLoaders::getDefaultClassLoader;
         Runtime serenityRuntime = CucumberWithSerenity.createSerenityEnabledRuntime(/*resourceLoader,*/
                 classLoaderSupplier,

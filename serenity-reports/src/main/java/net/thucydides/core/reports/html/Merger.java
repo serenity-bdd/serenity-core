@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.ModelInfrastructure;
 import net.thucydides.core.reports.templates.TemplateManager;
 
 import java.io.Writer;
@@ -12,7 +12,7 @@ public class Merger {
 
     public Merger(final String templateFile) {
         this.templateFile = templateFile;
-        this.templateManager = Injectors.getInjector().getInstance(TemplateManager.class);
+        this.templateManager = ModelInfrastructure.getTemplateManager();
     }
 
     public MergeBuilder withContext(final Map<String, Object> context) {

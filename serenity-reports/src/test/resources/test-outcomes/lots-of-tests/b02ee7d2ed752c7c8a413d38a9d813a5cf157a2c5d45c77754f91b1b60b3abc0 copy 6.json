@@ -30,7 +30,7 @@
       "type": "story"
     }
   ],
-  "test-steps": [
+  "testSteps": [
     {
       "description": "Given a credit account number \u003caccount\u003e associated with an RBA BSB \u003cbsb\u003e",
       "duration": 0,

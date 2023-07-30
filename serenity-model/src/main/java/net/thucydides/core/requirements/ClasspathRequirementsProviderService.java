@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements;
 
-import com.google.inject.Inject;
+
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderFilter;
@@ -25,7 +25,7 @@ public class ClasspathRequirementsProviderService implements RequirementsProvide
 
     private TagProviderFilter<RequirementsTagProvider> filter = new TagProviderFilter<>();
 
-    @Inject
+    
     public ClasspathRequirementsProviderService(TagProviderService tagProviderService) {
         this.tagProviderService = tagProviderService;
     }

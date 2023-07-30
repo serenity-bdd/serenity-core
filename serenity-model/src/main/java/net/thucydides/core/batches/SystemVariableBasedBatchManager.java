@@ -1,7 +1,5 @@
 package net.thucydides.core.batches;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import static net.thucydides.core.ThucydidesSystemProperty.*;
  * Manages running test cases (i.e. test classes) in batches.
  */
 
-@Singleton
 public class SystemVariableBasedBatchManager implements BatchManager {
 
     private final AtomicInteger testCaseCount = new AtomicInteger(0);
@@ -31,7 +28,7 @@ public class SystemVariableBasedBatchManager implements BatchManager {
      * The batch manager is initiated using system properties.
      * These properties are "thucydides.batch.size" (or "thucydides.batch.count") and "thucydides.batch.number".
      */
-    @Inject
+    
     public SystemVariableBasedBatchManager(EnvironmentVariables environmentVariables) {
         this.batchCount = getBatchCountFrom(environmentVariables);
         this.batchNumber = THUCYDIDES_BATCH_NUMBER.integerFrom(environmentVariables, 0);

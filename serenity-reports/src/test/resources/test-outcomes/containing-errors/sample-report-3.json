@@ -1,0 +1,60 @@
+{
+    "title": "Третий приемлемый",
+    "name": "an_acceptance_test_run",
+    "steps": "6",
+    "successful": "5",
+    "failures": "0",
+    "skipped": "0",
+    "ignored": "0",
+    "pending": "1",
+    "result": "ERROR",
+    "userStory": {
+        "id": "net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AFeature.AUserStoryInAFeature",
+        "name": "A user story in a feature",
+        "displayName": "To a list with existing entries",
+        "storyClassName": "todomvc.WhenAddingTasks$ToAListWithExistingEntries",
+        "path": "WhenAddingTasks",
+        "type": "story"
+    },
+    "tags": [
+        {
+            "name":"an epic",
+            "type":"epic"
+        },
+        {
+            "name":"another different story",
+            "type":"story"
+        }
+    ],
+    "testSteps": [
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates from metro jobs link.",
+            "screenshot": "the_customer_navigates_from_metro_jobs_link1.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates to the metro masthead site.",
+            "screenshot": "the_customer_navigates_to_the_metro_masthead_site2.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer navigates to classified place ad page.",
+            "screenshot": "the_customer_navigates_to_classified_place_ad_page3.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer chooses the jobs section.",
+            "screenshot": "the_customer_chooses_the_jobs_section4.png"
+        },
+        {
+            "result": "SUCCESS",
+            "description": "The customer selects a run option.",
+            "screenshot": "the_customer_selects_a_run_option5.png"
+        },
+        {
+            "result": "ERROR",
+            "description": "The customer provides email address for registration."
+        }
+    ]
+}

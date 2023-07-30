@@ -1,14 +1,14 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.AnnotationBasedTagProvider;
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
 
     public List<RequirementsTagProvider> getRequirementsTagProviders() {
         if (requirementsTagProviders == null) {
-            RequirementsProviderService requirementsProviderService = Injectors.getInjector().getInstance(RequirementsProviderService.class);
+            RequirementsProviderService requirementsProviderService = ModelInfrastructure.getRequirementsProviderService();
             requirementsTagProviders = reprioritizeProviders(active(requirementsProviderService.getRequirementsProviders()));
         }
         return requirementsTagProviders;
@@ -76,12 +76,12 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
 
     private List<RequirementsTagProvider> active(List<RequirementsTagProvider> requirementsProviders) {
         boolean useDirectoryBasedRequirements =
-                ThucydidesSystemProperty.THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES.booleanFrom(environmentVariables, true);
+                EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(ThucydidesSystemProperty.SERENITY_USE_REQUIREMENTS_DIRECTORIES,true);
 
         if (useDirectoryBasedRequirements) {
             return requirementsProviders;
         } else {
-            List<RequirementsTagProvider> activeRequirementsProviders = new ArrayList();
+            List<RequirementsTagProvider> activeRequirementsProviders = new ArrayList<>();
             for (RequirementsTagProvider provider : requirementsProviders) {
                 if (!(provider instanceof FileSystemRequirementsTagProvider)) {
                     activeRequirementsProviders.add(provider);
@@ -92,8 +92,8 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
     }
 
     private List<RequirementsTagProvider> reprioritizeProviders(List<RequirementsTagProvider> requirementsTagProviders) {
-        Map<String,RequirementsTagProvider> lowPriorityProviders = new HashMap();
-        List<RequirementsTagProvider> prioritizedProviders = new ArrayList();
+        Map<String,RequirementsTagProvider> lowPriorityProviders = new HashMap<>();
+        List<RequirementsTagProvider> prioritizedProviders = new ArrayList<>();
 
         for (RequirementsTagProvider provider : requirementsTagProviders) {
             if (LOW_PRIORITY_PROVIDERS.contains(provider.getClass().getCanonicalName())) {

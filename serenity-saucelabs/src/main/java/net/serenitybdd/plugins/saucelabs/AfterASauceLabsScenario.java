@@ -49,7 +49,6 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
 
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
-//            sauceLabsTestSession.updateTestResultFor(testOutcome);
 
             String publicUrl = sauceLabsTestSession.getTestLink();
             testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));

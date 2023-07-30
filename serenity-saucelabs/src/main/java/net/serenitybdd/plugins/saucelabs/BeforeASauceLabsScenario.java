@@ -60,9 +60,6 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         // Add the test name
         newOptions.put("name", testName);
 
-        // Add tags
-        newOptions.put("tags", CapabilityTags.tagsFrom(testOutcome, environmentVariables));
-
         // Add the build name
         String context = fetchContextFrom(capabilities, environmentVariables, SAUCE_OPTIONS);
         testOutcome.setContext(context);

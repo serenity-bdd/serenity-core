@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -95,7 +94,6 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @Before
     public void openLocalStaticSite() {
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         driver = new ChromeDriver(options);

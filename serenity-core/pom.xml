@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.9.9-SNAPSHOT</version>
+        <version>3.10.0-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-core</artifactId>
     <packaging>jar</packaging>
@@ -300,10 +300,6 @@
                     <artifactId>junit-dep</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jhlabs</groupId>

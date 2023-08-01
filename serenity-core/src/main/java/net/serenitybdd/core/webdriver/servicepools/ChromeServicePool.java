@@ -3,9 +3,9 @@ package net.serenitybdd.core.webdriver.servicepools;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
         boolean disableBuildCheck = environmentVariables.getPropertyAsBoolean(ChromeDriverService.CHROME_DRIVER_DISABLE_BUILD_CHECK, false);
         boolean verbose = environmentVariables.getPropertyAsBoolean(ChromeDriverService.CHROME_DRIVER_VERBOSE_LOG_PROPERTY, false);
         boolean silent = environmentVariables.getPropertyAsBoolean(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, false);
-        String whitelist = environmentVariables.getProperty(ChromeDriverService.CHROME_DRIVER_WHITELISTED_IPS_PROPERTY,"");
+        String whitelist = environmentVariables.getProperty(ChromeDriverService.CHROME_DRIVER_ALLOWED_IPS_PROPERTY,"");
 
         ChromeDriverService.Builder builder = new ChromeDriverService.Builder()
                 .usingDriverExecutable(chromeDriverExecutable())
@@ -46,7 +46,7 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
             builder.withWhitelistedIps(whitelist);
         }
         if (!logLevel.isEmpty()) {
-            builder.withLogLevel(ChromeDriverLogLevel.fromString(logLevel));
+            builder.withLogLevel(ChromiumDriverLogLevel.fromString(logLevel));
         }
         if (disableBuildCheck) {
             System.setProperty(ChromeDriverService.CHROME_DRIVER_DISABLE_BUILD_CHECK, "true");

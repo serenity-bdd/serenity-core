@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.ensure.web
 
-import io.github.bonigarcia.wdm.WebDriverManager
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
@@ -39,7 +38,6 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
     val outputDirectory: Path
 
     init {
-        WebDriverManager.chromedriver().setup();
         val options = ChromeOptions()
         options.addArguments("headless","remote-allow-origins=*")
         driver = ChromeDriver(options)

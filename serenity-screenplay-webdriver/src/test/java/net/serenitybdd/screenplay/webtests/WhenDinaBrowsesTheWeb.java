@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.webtests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
@@ -52,11 +51,6 @@ public class WhenDinaBrowsesTheWeb {
     ProfileQuestion profile = new ProfileQuestion();
 
     BankBalanceQuestion balances = new BankBalanceQuestion();
-
-    @BeforeClass
-    public static void setupDriver() {
-        WebDriverManager.chromedriver().setup();
-    }
 
     @Test
     public void dinaCanUpdateHerProfile() {

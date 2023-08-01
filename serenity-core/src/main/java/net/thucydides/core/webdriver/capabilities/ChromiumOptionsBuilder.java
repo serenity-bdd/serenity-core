@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -65,12 +64,6 @@ public class ChromiumOptionsBuilder {
                     // Binary
                     case "binary":
                         chromiumOptions.setBinary(options.get("binary").toString());
-                        break;
-                    // Overall log level
-                    case "logLevel":
-                        if (chromiumOptions instanceof ChromeOptions) {
-                            ((ChromeOptions) chromiumOptions).setLogLevel(ChromeDriverLogLevel.fromString(options.get("logLevel").toString()));
-                        }
                         break;
                     case "androidUseRunningApp":
                         chromiumOptions.setUseRunningAndroidApp(Boolean.parseBoolean(options.get("androidUseRunningApp").toString()));

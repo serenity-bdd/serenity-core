@@ -182,6 +182,7 @@ public class SystemPropertiesConfiguration implements Configuration {
         String serenityOutputDirectory = environmentVariables.optionalProperty("serenity.outputDirectory").orElse(null);
         String projectReportingOutputDirectory = environmentVariables.optionalProperty("project.reporting.OutputDirectory").orElse(null);
         String projectBuildDirectory = environmentVariables.optionalProperty("project.build.directory").orElse(null);
+        String workingDirectory = environmentVariables.getProperty("user.dir");
 
         // Absolute dirs always prime
         if (serenityOutputDirectory != null && new File(serenityOutputDirectory).isAbsolute()) {
@@ -208,6 +209,9 @@ public class SystemPropertiesConfiguration implements Configuration {
         //
         else if (isNotEmpty(projectBuildDirectory)) {
             return new File(projectBuildDirectory + "/target/site/serenity");
+        }
+        else if (isNotEmpty(workingDirectory)) {
+            return new File(workingDirectory + "/target/site/serenity");
         }
         // Default directory
         return new File("target/site/serenity");

@@ -39,7 +39,7 @@ public class EdgeDriverProvider extends DownloadableDriverProvider implements Dr
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required
-        downloadDriverIfRequired("edge", environmentVariables);
+//        downloadDriverIfRequired("edge", environmentVariables);
         //
         // Update the binary path if necessary
         //

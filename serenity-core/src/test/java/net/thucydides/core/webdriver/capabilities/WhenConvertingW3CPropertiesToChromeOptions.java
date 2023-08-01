@@ -3,28 +3,22 @@ package net.thucydides.core.webdriver.capabilities;
 import com.google.common.io.Resources;
 import net.thucydides.core.environment.SystemEnvironmentVariables;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.junit.Assume;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LoggingPreferences;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
 
 @DisplayName("When converting W3C properties to a ChromeOptions object")
 class WhenConvertingW3CPropertiesToChromeOptions {
@@ -83,11 +77,6 @@ class WhenConvertingW3CPropertiesToChromeOptions {
         @Test
         void platformName() {
             assertThat(options.getPlatformName()).isEqualTo(Platform.WIN11);
-        }
-
-        @Test
-        void logLevel() {
-            assertThat(options.getLogLevel()).isEqualTo(ChromeDriverLogLevel.INFO);
         }
     }
 
@@ -256,12 +245,6 @@ class WhenConvertingW3CPropertiesToChromeOptions {
     class ConfiguringLoggingPreferences {
         EnvironmentVariables environmentVariables = from("sample-conf-files/chrome/complete.conf");
         ChromeOptions options = W3CCapabilities.definedIn(environmentVariables).withPrefix("webdriver.capabilities").chromeOptions();
-
-        @Test
-        @DisplayName("including the overall logging level")
-        void logLevel() {
-            assertThat(options.getLogLevel()).isEqualTo(ChromeDriverLogLevel.INFO);
-        }
 
         @Test
         @DisplayName("including the detailed logging preferences")

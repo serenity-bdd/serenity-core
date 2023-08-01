@@ -280,8 +280,4 @@ public class FreemarkerContext {
     protected String timestampFrom(ReadableDateTime startTime) {
         return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
     }
-
-    public FreemarkerContext withParentTag(TestTag knownTag) {
-        return new FreemarkerContext(environmentVariables, requirements, issueTracking, relativeLink, knownTag);
-    }
 }

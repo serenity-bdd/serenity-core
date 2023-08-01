@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.webtests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -26,11 +25,6 @@ public class WhenDinaChecksTheStateOfWebElements {
     WebDriver browser;
 
     Actor dana = new Actor("Dana");
-
-    @BeforeClass
-    public static void setupDriver() {
-        WebDriverManager.chromedriver().setup();
-    }
 
     @Before
     public void prepareBrowser() {

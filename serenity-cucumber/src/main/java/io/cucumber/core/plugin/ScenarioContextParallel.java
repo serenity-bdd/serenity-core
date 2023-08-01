@@ -29,50 +29,50 @@ public class ScenarioContextParallel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioContextParallel.class);
 
-    private Map<String,List<StepEventBusEvent>> highPriorityEventBusEvents = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,List<StepEventBusEvent>> highPriorityEventBusEvents = Collections.synchronizedMap(new HashMap<>());
     private final Map<UUID,Queue<Step>> stepQueue = Collections.synchronizedMap(new HashMap<>());
     private final Map<UUID,Queue<TestStep>> testStepQueue = Collections.synchronizedMap(new HashMap<>());
-    private Map<String,Boolean> examplesRunningMap = Collections.synchronizedMap(new HashMap<>());
-    private Map<String,Boolean> addingScenarioOutlineStepsMap = Collections.synchronizedMap(new HashMap<>());
-    private Map<String,DataTable> tableMap = Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,Boolean> examplesRunningMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,Boolean> addingScenarioOutlineStepsMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,DataTable> tableMap = Collections.synchronizedMap(new HashMap<>());;
     //map1: keys are scenario ids
     //map2: keys are line numbers, entries are example rows (key=header, value=rowValue )
-    private Map<String,Map<Long, Map<String, String>>> exampleRowsMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,Map<Long, Map<String, String>>> exampleRowsMap = Collections.synchronizedMap(new HashMap<>());
     //keys are line numbers
     private Map<Long, List<Tag>> exampleTags;
 
-    private Map<String,AtomicInteger> exampleCountMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,AtomicInteger> exampleCountMap = Collections.synchronizedMap(new HashMap<>());
 
-    private boolean waitingToProcessBackgroundSteps = false;
+    //key- ScenarioId
+    private final Map<String,Boolean> waitingToProcessBackgroundSteps = Collections.synchronizedMap(new HashMap<>());;
 
-    private List<String> currentScenarioIdList = Collections.synchronizedList(new ArrayList<>());
+    private final List<String> currentScenarioIdList = Collections.synchronizedList(new ArrayList<>());
 
-    private Map<String,Scenario> currentScenarioDefinitionMap = Collections.synchronizedMap(new HashMap<>());
+    //key - scenarioId
+    private final Map<String,Scenario> currentScenarioDefinitionMap = Collections.synchronizedMap(new HashMap<>());
 
-    private Map<String,String> currentScenarioMap =  Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,String> currentScenarioMap =  Collections.synchronizedMap(new HashMap<>());;
 
     private List<Tag> featureTags = new ArrayList<>();
 
-    private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
+    private final FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
 
     private final List<BaseStepListener> baseStepListeners;
 
-    private final List<BaseStepListener> parameterizedBaseStepListeners;
 
     // key-line in feature file; value - list with StepBusEvents corresponding to this line.
-    private Map<Integer,List<StepEventBusEvent>> allTestEventsByLine = Collections.synchronizedMap(new TreeMap<>());
+    private final Map<Integer,List<StepEventBusEvent>> allTestEventsByLine = Collections.synchronizedMap(new TreeMap<>());
 
-    private URI scenarioContextURI;
+    private final URI scenarioContextURI;
 
     private StepEventBus stepEventBus;
 
     // key - scenarioId
-    private Map<String,List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());;
 
 
     public ScenarioContextParallel(URI scenarioContextURI) {
         this.baseStepListeners = Collections.synchronizedList(new ArrayList<>());
-        this.parameterizedBaseStepListeners = Collections.synchronizedList(new ArrayList<>());
         this.scenarioContextURI = scenarioContextURI;
         this.stepEventBus = stepEventBus(scenarioContextURI);
     }
@@ -134,8 +134,8 @@ public class ScenarioContextParallel {
         return tableMap.get(scenarioId);
     }
 
-    public synchronized boolean isWaitingToProcessBackgroundSteps() {
-        return waitingToProcessBackgroundSteps;
+    public synchronized boolean isWaitingToProcessBackgroundSteps(String scenarioId) {
+        return waitingToProcessBackgroundSteps.getOrDefault(scenarioId, false);
     }
 
     public synchronized void addCurrentScenarioId(String scenarioId) {
@@ -316,8 +316,8 @@ public class ScenarioContextParallel {
     }
 
 
-    public void setWaitingToProcessBackgroundSteps(boolean waitingToProcessBackgroundSteps) {
-        this.waitingToProcessBackgroundSteps = waitingToProcessBackgroundSteps;
+    public void setWaitingToProcessBackgroundSteps(String scenarioId, boolean waitingToProcessBackgroundSteps) {
+        this.waitingToProcessBackgroundSteps.put(scenarioId,waitingToProcessBackgroundSteps);
     }
 
     /**

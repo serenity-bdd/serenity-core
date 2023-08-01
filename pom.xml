@@ -44,7 +44,7 @@
         <groovy.version>4.0.13</groovy.version>
         <spock.version>2.2-M1-groovy-4.0</spock.version>
         <byte-buddy.version>1.14.5</byte-buddy.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
 <!--        <slf4j.version>1.7.30</slf4j.version>-->
         <slf4j.version>2.0.7</slf4j.version>

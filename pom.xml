@@ -63,8 +63,8 @@
         <commons.net.version>3.9.0</commons.net.version>
         <commons.codec.version>1.15</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <selenium.version>4.10.0</selenium.version>
-        <htmlunit.driver.version>4.10.0</htmlunit.driver.version>
+        <selenium.version>4.11.0</selenium.version>
+        <htmlunit.driver.version>4.11.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.12.2</joda-time.version>
@@ -76,8 +76,7 @@
         <freemarker.version>2.3.31</freemarker.version>
         <appium.version>8.3.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
-        <htmlunit.version>3.0.0</htmlunit.version>
-        <webdrivermanager.version>5.3.2</webdrivermanager.version>
+        <htmlunit.version>3.4.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>
         <ngwebdriver.version>1.1.6</ngwebdriver.version>
         <spring.version>5.3.25</spring.version>

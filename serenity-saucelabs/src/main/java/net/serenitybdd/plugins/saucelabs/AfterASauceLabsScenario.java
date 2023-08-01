@@ -42,7 +42,6 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             );
         } else {
             ((JavascriptExecutor)driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
-//            ((JavascriptExecutor)driver).executeScript("sauce:job-name=" + TestOutcomeName.from(testOutcome));
             ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
             String result = (testOutcome.isSuccess()) ? "passed" : "failed";

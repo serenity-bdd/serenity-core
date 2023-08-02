@@ -66,7 +66,7 @@ public class TestStep implements Cloneable {
     private List<TestStep> children = new ArrayList<>();
 
     public TestStep() {
-        startTime = now();
+        startTime = ModelInfrastructure.getClock().getCurrentTime();
     }
 
     protected void setNumber(int number) {
@@ -154,6 +154,10 @@ public class TestStep implements Cloneable {
         this.externalLink = externalLink;
     }
 
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public static class TestStepBuilder {
         private final String description;
 
@@ -239,10 +243,14 @@ public class TestStep implements Cloneable {
     }
 
 
-    public void recordDuration() {
+    public void recordDuration(ZonedDateTime time) {
         setDuration(
-                ChronoUnit.MILLIS.between(startTime, now())
+                ChronoUnit.MILLIS.between(startTime, time)
         );
+    }
+
+    public void recordDuration() {
+        recordDuration(now());
     }
 
     public int getNumber() {

@@ -9,11 +9,12 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import org.junit.internal.AssumptionViolatedException;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-public class RecordStepResultEvent extends StepEventBusEventBase {
+public class StepFinishedWithResultEvent extends StepEventBusEventBase {
 
     private static final String OPEN_PARAM_CHAR = "\uff5f";
     private static final String CLOSE_PARAM_CHAR = "\uff60";
@@ -24,11 +25,16 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
 	private final TestStep currentTestStep;
 
     private final List<ScreenshotAndHtmlSource> screenshotList;
-	public RecordStepResultEvent(Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep,List<ScreenshotAndHtmlSource> screenshotList){
+	public StepFinishedWithResultEvent(Result result,
+                                       io.cucumber.messages.types.Step currentStep,
+                                       TestStep currentTestStep,
+                                       List<ScreenshotAndHtmlSource> screenshotList,
+                                       ZonedDateTime time){
 		this.result = result;
 		this.currentStep = currentStep;
 		this.currentTestStep =  currentTestStep;
 		this.screenshotList =  screenshotList;
+        this.timestamp = time;
 	}
 
 	@Override
@@ -36,7 +42,7 @@ public class RecordStepResultEvent extends StepEventBusEventBase {
  		if (getStepEventBus().currentTestIsSuspended()) {
             getStepEventBus().stepIgnored();
         } else if (Status.PASSED.equals(result.getStatus())) {
-            getStepEventBus().stepFinished(screenshotList);
+            getStepEventBus().stepFinished(screenshotList, getTimestamp());
         } else if (Status.FAILED.equals(result.getStatus())) {
             failed(SerenityReporterParallel.stepTitleFrom(currentStep, currentTestStep), result.getError(), screenshotList);
         } else if (Status.SKIPPED.equals(result.getStatus())) {

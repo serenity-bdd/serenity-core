@@ -131,6 +131,11 @@ public class FailureDetectingStepListener implements StepListener {
 
     }
 
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
+
+    }
+
 
     public void testIgnored() {
 

@@ -15,8 +15,6 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 
 	private boolean inDataTest;
 
-	private final ZonedDateTime finishingTime;
-
 	private SessionId webSessionId;
 
 	private String driverUsedInThisTest;
@@ -24,14 +22,12 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 	private WebDriver webDriver;
 
 	public TestFinishedEvent() {
-		this.finishingTime = ZonedDateTime.now();
 		saveCurrentWebDriverContext();
 	}
 
-	public TestFinishedEvent(String scenarioId,boolean inDataDrivenTest) {
+	public TestFinishedEvent(String scenarioId, boolean inDataDrivenTest) {
 		super(scenarioId);
 		this.inDataTest = inDataDrivenTest;
-		this.finishingTime = ZonedDateTime.now();
 		saveCurrentWebDriverContext();
 	}
 
@@ -59,9 +55,9 @@ public class TestFinishedEvent extends StepEventBusEventBase {
 			TestSession.getTestSessionContext().setDriverUsedInThisTest(getDriverUsedInThisTest());
 		}
 		if (getScenarioId() != null) {
-			getStepEventBus().testFinished(inDataTest, finishingTime);
+			getStepEventBus().testFinished(inDataTest, getTimestamp());
 		} else {
-			getStepEventBus().testFinished();
+			getStepEventBus().testFinished(false, getTimestamp());
 		}
 	}
 

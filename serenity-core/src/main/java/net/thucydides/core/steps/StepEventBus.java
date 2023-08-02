@@ -533,18 +533,24 @@ public class StepEventBus {
      * Start the execution of a test step.
      */
     public void stepStarted(final ExecutedStepDescription stepDescription) {
-        stepStarted(stepDescription, false);
+        stepStarted(stepDescription, false, ZonedDateTime.now());
+    }
+
+    public void stepStarted(final ExecutedStepDescription stepDescription, ZonedDateTime startTime) {
+        stepStarted(stepDescription, false, startTime);
     }
 
     /**
      * Start the execution of a test step.
      */
-    public void stepStarted(final ExecutedStepDescription stepDescription, boolean isPrecondition) {
+    public void stepStarted(final ExecutedStepDescription stepDescription,
+                            boolean isPrecondition,
+                            ZonedDateTime startTime) {
 
         pushStep(stepDescription.getName());
 
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.stepStarted(stepDescription);
+            stepListener.stepStarted(stepDescription, startTime);
         }
 
         if (isPrecondition) {
@@ -576,11 +582,11 @@ public class StepEventBus {
      * Called from serial replay - StepFinishedEvent
      * @param screenshots - screenshots that were recorded when the step was finished
      */
-    public void stepFinished(List<ScreenshotAndHtmlSource> screenshots) {
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshots, ZonedDateTime time) {
         stepDone();
         getResultTally().logExecutedTest();
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.stepFinished(screenshots);
+            stepListener.stepFinished(screenshots, time);
         }
     }
 
@@ -707,6 +713,12 @@ public class StepEventBus {
 
     public void temporarilySuspendWebdriverCalls() {
         webdriverSuspensions.push(true);
+    }
+
+    public void testFailed(final Throwable cause, ZonedDateTime timestamp) {
+        TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+        outcome.recordDuration(timestamp);
+        testFailed(cause);
     }
 
     /**
@@ -889,9 +901,21 @@ public class StepEventBus {
         }
     }
 
+    public void exampleStarted(Map<String, String> data, ZonedDateTime time) {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.exampleStarted(data, time);
+        }
+    }
+
     public void exampleStarted(Map<String, String> data, String exampleName) {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.exampleStarted(data, exampleName);
+        }
+    }
+
+    public void exampleStarted(Map<String, String> data, String exampleName, ZonedDateTime time) {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.exampleStarted(data, exampleName, time);
         }
     }
 

@@ -21,7 +21,7 @@ public class ExampleStartedEvent extends StepEventBusEventBase {
 	@Override
 	public void play() {
 		TestSession.getTestSessionContext().setCurrentTestName(exampleName);
-		getStepEventBus().exampleStarted(data,exampleName);
+		getStepEventBus().exampleStarted(data,exampleName,timestamp);
 	}
 
 	public String toString() {

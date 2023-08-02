@@ -315,7 +315,12 @@ public class ConsoleLoggingListener implements StepListener {
 
     @Override
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+        stepOut();
+    }
 
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
+        stepOut();
     }
 
     public void stepFailed(StepFailure failure) {

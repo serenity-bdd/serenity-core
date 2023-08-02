@@ -135,6 +135,11 @@ public class JiraStepListener implements StepListener {
 
     }
 
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
+
+    }
+
     public void testFailed(TestOutcome testOutcome, Throwable cause) {}
 
     public void testIgnored() {}

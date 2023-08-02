@@ -75,7 +75,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     private final static String FEATURES_ROOT_PATH = "/features/";
     private final static String FEATURES_CLASSPATH_ROOT_PATH = ":features/";
 
-    private FeatureFileLoader featureLoader = new FeatureFileLoader();
+    private final FeatureFileLoader featureLoader = new FeatureFileLoader();
 
     private LineFilters lineFilters;
 
@@ -270,7 +270,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                 boolean newScenario = !scenarioId.equals(context.getCurrentScenario(scenarioId));
                 if (newScenario) {
                     configureDriver(currentFeature.get(), event.getTestCase().getUri());
-                    if (currentScenarioDefinition.getExamples().size() > 0) {
+                    if (!currentScenarioDefinition.getExamples().isEmpty()) {
                         context.startNewExample(scenarioId);
                         LOGGER.debug("SRP:startNewExample {} {} {} at line {} ", event.getTestCase().getUri(), Thread.currentThread(),
                                 event.getTestCase().getId(), event.getTestCase().getLocation().getLine());
@@ -286,7 +286,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                         startProcessingExampleLine(scenarioId, featurePath, event.getTestCase(), Long.valueOf(event.getTestCase().getLocation().getLine()), scenarioName);
                     }
                 }
-                TestSourcesModel.getBackgroundForTestCase(astNode).ifPresent(background -> handleBackground(featurePath, event.getTestCase(), background));
+                final String scenarioIdForBackground =  scenarioId;
+                TestSourcesModel.getBackgroundForTestCase(astNode).ifPresent(background -> handleBackground(featurePath, scenarioIdForBackground, background));
                 //
                 // Check for tags
                 //
@@ -305,12 +306,12 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             }
 
         } catch (Throwable t) {
-            t.printStackTrace();
+            LOGGER.error("Test case started failed with error ", t);
             throw t;
         }
     }
 
-    private static Map<UUID, TestResult> MANUAL_TEST_RESULTS_CACHE = new HashMap<>();
+    private final static Map<UUID, TestResult> MANUAL_TEST_RESULTS_CACHE = new HashMap<>();
 
     private io.cucumber.messages.types.Rule getRuleForTestCase(TestSourcesModel.AstNode astNode) {
         Feature feature = getFeatureForTestCase(astNode);
@@ -368,6 +369,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(), event.getTestCase());
         getContext(featurePath).clearStepQueue(event.getTestCase());
         getContext(featurePath).stepEventBus().clear();
+
+        // We need to close the driver here to avoid wasting resources and causing timeouts with Selenium Grid services
+        getContext(featurePath).stepEventBus().getBaseStepListener().cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven());
+
     }
 
     private Status eventStatusFor(TestCaseFinished event) {
@@ -926,8 +931,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
 
-    private void handleBackground(URI featurePath, TestCase testCase, Background background) {
-        getContext(featurePath).setWaitingToProcessBackgroundSteps(true);
+    private void handleBackground(URI featurePath,String scenarioId,  Background background) {
+        getContext(featurePath).setWaitingToProcessBackgroundSteps(scenarioId,true);
         String backgroundName = background.getName();
         if (backgroundName != null) {
             getContext(featurePath).addStepEventBusEvent(
@@ -980,8 +985,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void recordFinalResult(String scenarioId, URI featurePath, TestCase testCase) {
         ScenarioContextParallel context = getContext(featurePath);
-        if (context.isWaitingToProcessBackgroundSteps()) {
-            context.setWaitingToProcessBackgroundSteps(false);
+        if (context.isWaitingToProcessBackgroundSteps(scenarioId)) {
+            context.setWaitingToProcessBackgroundSteps(scenarioId,false);
         } else {
             updateResultFromTags(scenarioId, featurePath, testCase, context.getScenarioTags(scenarioId));
         }

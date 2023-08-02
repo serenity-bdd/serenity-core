@@ -629,29 +629,32 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (TestSession.getTestSessionContext().getWebDriver() != null) {
             handlePostponedParallelExecution(outcome, isInDataDrivenTest);
         } else {
-            if (currentTestIsABrowserTest()) {
-                getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
-                updateSessionIdIfKnown();
-
-                AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
-                        getEventBus().getEnvironmentVariables(),
-                        outcome,
-                        SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
-
-                if (isInDataDrivenTest) {
-                    closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
-                } else {
-                    closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
-                    ThucydidesWebDriverSupport.clearDefaultDriver();
-                }
-            }
+            cleanupWebdriverInstance(isInDataDrivenTest);
         }
-
         currentStepStack.clear();
         while (!currentGroupStack.isEmpty()) {
             finishGroup();
         }
         LifecycleRegister.clear();
+    }
+
+    public void cleanupWebdriverInstance(boolean isInDataDrivenTest) {
+        if (currentTestIsABrowserTest()) {
+            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+            updateSessionIdIfKnown();
+
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    getCurrentTestOutcome(),
+                    SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
+
+            if (isInDataDrivenTest) {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
+            } else {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+                ThucydidesWebDriverSupport.clearDefaultDriver();
+            }
+        }
     }
 
     private void handlePostponedParallelExecution(TestOutcome outcome, boolean isInDataDrivenTest) {

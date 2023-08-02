@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException;
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException;
@@ -26,7 +25,6 @@ public class CheckingFieldContentWithTheFluentElementAPI {
 
     @BeforeClass
     public static void openStaticPage() {
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.setHeadless(true);
         localDriver = new ChromeDriver(options);

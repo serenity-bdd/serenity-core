@@ -42,14 +42,12 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             );
         } else {
             ((JavascriptExecutor)driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
-            ((JavascriptExecutor)driver).executeScript("sauce:job-name=" + TestOutcomeName.from(testOutcome));
             ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
             String result = (testOutcome.isSuccess()) ? "passed" : "failed";
             ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
 
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
-//            sauceLabsTestSession.updateTestResultFor(testOutcome);
 
             String publicUrl = sauceLabsTestSession.getTestLink();
             testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));

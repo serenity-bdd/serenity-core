@@ -33,7 +33,7 @@ public class FirefoxDriverProvider extends DownloadableDriverProvider implements
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required
-        downloadDriverIfRequired("firefox", environmentVariables);
+//        downloadDriverIfRequired("firefox", environmentVariables);
         //
         // Update the binary path if necessary
         //

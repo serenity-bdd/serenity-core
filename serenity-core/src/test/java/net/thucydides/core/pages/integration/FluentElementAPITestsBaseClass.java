@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.StaticTestSite;
@@ -27,7 +26,6 @@ public class FluentElementAPITestsBaseClass {
 
     @BeforeClass
     public static void openBrowsers() throws IOException {
-        WebDriverManager.chromedriver().setup();
         chromeService = new ChromeServicePool();
         chromeService.start();
         StepEventBus.getParallelEventBus().clear();
@@ -37,7 +35,6 @@ public class FluentElementAPITestsBaseClass {
         chromeOptions.addArguments("--headless");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(chromeOptions);
 
         staticSitePage = new StaticSitePage(driver, 1000);

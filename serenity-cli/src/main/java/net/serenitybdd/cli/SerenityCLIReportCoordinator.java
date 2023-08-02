@@ -1,6 +1,5 @@
 package net.serenitybdd.cli;
 
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.cli.reporters.CLIAggregateReportGenerator;
 import net.serenitybdd.cli.reporters.CLIIssueTrackerUpdater;
 import net.serenitybdd.cli.reporters.CLIReportGenerator;
@@ -33,10 +32,7 @@ public class SerenityCLIReportCoordinator {
         this.sourceDirectory = sourceDirectory;
         this.destinationDirectory = destinationDirectory;
 
-        reportGenerators.addAll(ImmutableList.of(
-//                new CLIOutcomeReportGenerator(sourceDirectory, destinationDirectory, project, issueTrackerUrl,
-//                        jiraUrl, jiraProject, jiraUsername, jiraPassword,
-//                        requirementsDirectory),
+        reportGenerators.addAll(List.of(
                 new CLIAggregateReportGenerator(sourceDirectory, destinationDirectory, project, issueTrackerUrl,
                         jiraUrl, jiraProject, jiraUsername, jiraPassword,
                         requirementsDirectory, tags),

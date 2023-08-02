@@ -1,9 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,7 +21,6 @@ public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBase
 
     @BeforeClass
     public static void openDriver() {
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         localDriver = new ChromeDriver(options);

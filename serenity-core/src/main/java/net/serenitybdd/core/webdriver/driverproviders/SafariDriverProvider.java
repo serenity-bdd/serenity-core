@@ -31,7 +31,7 @@ public class SafariDriverProvider extends DownloadableDriverProvider implements 
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required
-        downloadDriverIfRequired("safari", environmentVariables);
+//        downloadDriverIfRequired("safari", environmentVariables);
         //
         // Update the binary path if necessary
         //

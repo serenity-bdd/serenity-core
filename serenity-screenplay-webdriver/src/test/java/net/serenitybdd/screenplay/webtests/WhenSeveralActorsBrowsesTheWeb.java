@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay.webtests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -24,11 +23,6 @@ public class WhenSeveralActorsBrowsesTheWeb {
 
     @Managed(driver = "chrome", options = "--headless")
     WebDriver firstBrowser;
-
-    @BeforeClass
-    public static void setupDriver() {
-        WebDriverManager.chromedriver().setup();
-    }
 
     @Test
     public void multipleUsersCanShareTheSameBrowser() {

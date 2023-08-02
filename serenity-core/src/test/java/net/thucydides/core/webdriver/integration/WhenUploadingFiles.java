@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
@@ -68,7 +67,6 @@ public class WhenUploadingFiles {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("headless.mode","true");
 
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         driver = new ChromeDriver(options);

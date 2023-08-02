@@ -40,7 +40,7 @@ public class ChromeDriverProvider extends DownloadableDriverProvider implements 
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required
-        downloadDriverIfRequired("chrome", environmentVariables);
+//        downloadDriverIfRequired("chrome", environmentVariables);
         //
         // Update the chromedriver binary path if necessary
         //

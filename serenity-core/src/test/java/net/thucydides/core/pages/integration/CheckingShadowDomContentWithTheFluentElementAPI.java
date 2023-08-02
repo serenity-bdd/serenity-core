@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.ListOfWebElementFacades;
 
 import net.thucydides.core.webdriver.javascript.ByShadowDom;
@@ -24,8 +23,6 @@ public class CheckingShadowDomContentWithTheFluentElementAPI {
 
     @BeforeClass
     public static void openStaticPage() {
-        WebDriverManager.firefoxdriver().setup();
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.setHeadless(true);
         localDriver = new ChromeDriver(options);

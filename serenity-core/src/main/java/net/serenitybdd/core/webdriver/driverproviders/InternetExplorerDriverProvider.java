@@ -31,7 +31,7 @@ public class InternetExplorerDriverProvider extends DownloadableDriverProvider i
             return new WebDriverStub();
         }
         // Download the driver using WebDriverManager if required
-        downloadDriverIfRequired("ie", environmentVariables);
+//        downloadDriverIfRequired("ie", environmentVariables);
         //
         // Update the binary path if necessary
         //

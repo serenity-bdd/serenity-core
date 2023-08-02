@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.integration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.core.pages.PageObject;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,7 +38,6 @@ public class WhenCheckingVisibilityOnAWebSiteUsingPageObjects {
     @BeforeClass
     public static void openStaticTestSite() {
         String url = "file://" + fileInClasspathCalled("static-site/index.html").getAbsolutePath();
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         driver = new ChromeDriver(options);

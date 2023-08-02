@@ -1,19 +1,10 @@
 package net.serenitybdd.core.webdriver
 
-import io.github.bonigarcia.wdm.WebDriverManager
-import net.serenitybdd.core.pages.PageObject
-import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.webdriver.TimeoutStack
-import net.thucydides.core.webdriver.WebDriverFacade
-import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeOptions
-import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.Duration
-import java.time.temporal.ChronoUnit
 
 /**
  * Created by john on 12/03/15.

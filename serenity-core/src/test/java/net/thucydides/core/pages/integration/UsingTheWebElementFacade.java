@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import net.thucydides.core.pages.WebElementFacade;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,7 +23,6 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
     @BeforeClass
     public static void openStaticPage() {
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
         driver = new ChromeDriver(options);

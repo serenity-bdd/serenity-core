@@ -8,6 +8,7 @@ import net.thucydides.core.webdriver.Configuration;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
@@ -49,6 +50,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     protected EnvironmentVariables environmentVariables;
 
     private final FilePathParser filePathParser;
+    private Path projectDirectory;
 
     public SystemPropertiesConfiguration(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -158,6 +160,11 @@ public class SystemPropertiesConfiguration implements Configuration {
         this.sourceDirectory = sourceDirectory;
     }
 
+    @Override
+    public void setProjectDirectory(Path projectDirectory) {
+        this.projectDirectory = projectDirectory;
+    }
+
     /**
      * The output directory is where the test runner writes the XML and HTML
      * reports to. By default, it will be in 'target/site/serenity', but you can
@@ -182,7 +189,7 @@ public class SystemPropertiesConfiguration implements Configuration {
         String serenityOutputDirectory = environmentVariables.optionalProperty("serenity.outputDirectory").orElse(null);
         String projectReportingOutputDirectory = environmentVariables.optionalProperty("project.reporting.OutputDirectory").orElse(null);
         String projectBuildDirectory = environmentVariables.optionalProperty("project.build.directory").orElse(null);
-        String workingDirectory = environmentVariables.getProperty("user.dir");
+        String workingDirectory = (projectDirectory == null) ? environmentVariables.getProperty("user.dir") : projectDirectory.toAbsolutePath().toString();
 
         // Absolute dirs always prime
         if (serenityOutputDirectory != null && new File(serenityOutputDirectory).isAbsolute()) {

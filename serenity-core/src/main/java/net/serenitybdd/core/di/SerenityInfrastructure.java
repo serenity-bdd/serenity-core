@@ -50,8 +50,6 @@ public class SerenityInfrastructure {
 
     private static final ThreadLocal<ConsoleLoggingListener> consoleLoggingListener = ThreadLocal.withInitial(() -> new ConsoleLoggingListener(getEnvironmentVariables()));
 
-    private static Configuration configuration;
-
     private static final ThreadLocal<Formatter> formatter = ThreadLocal.withInitial(() -> new Formatter(getEnvironmentVariables()));
 
     private static final ElementProxyCreator elementProxyCreator = new SmartElementProxyCreator();
@@ -80,10 +78,7 @@ public class SerenityInfrastructure {
     }
 
     public static Configuration getConfiguration() {
-        if (configuration == null) {
-            configuration = new SystemPropertiesConfiguration(getEnvironmentVariables());
-        }
-        return configuration;
+        return ModelInfrastructure.getConfiguration();
     }
 
     public static DriverCapabilityRecord getDriverCapabilityRecord() {

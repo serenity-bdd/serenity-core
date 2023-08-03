@@ -24,6 +24,7 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.statistics.service.ClasspathTagProviderService;
 import net.thucydides.core.statistics.service.TagProviderService;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.Configuration;
 
 public class ModelInfrastructure {
 
@@ -51,6 +52,8 @@ public class ModelInfrastructure {
 
     private static final TemplateManager templateManager = new TemplateManager();
 
+    private static Configuration configuration;
+
     public static RequirementsService getRequirementsService() {
         return requirementsService;
     }
@@ -75,8 +78,13 @@ public class ModelInfrastructure {
         return SystemEnvironmentVariables.currentEnvironmentVariables();
     }
 
-    public static SystemPropertiesConfiguration getConfiguration() {
-        return new SystemPropertiesConfiguration(getEnvironmentVariables());
+    public static Configuration getConfiguration() {
+        if (configuration == null) {
+            synchronized (ModelInfrastructure.class) {
+                configuration = new SystemPropertiesConfiguration(getEnvironmentVariables());
+            }
+        }
+        return configuration;
     }
 
     public static FlagProvider getFlagProvider() {

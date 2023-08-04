@@ -46,6 +46,11 @@ public interface StepListener {
      * A test with a given name has started.
      */
     void testStarted(final String description);
+
+    default void testStarted(final String description, ZonedDateTime startTime) {
+        testStarted(description);
+    }
+
     void testStarted(final String description, final String id);
 
     default void testStarted(final String testName, String testMethod, final String id, String scenarioId) {

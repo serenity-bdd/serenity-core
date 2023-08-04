@@ -13,7 +13,8 @@ public abstract class StepEventBusEventBase implements StepEventBusEvent {
 	protected ZonedDateTime timestamp;
 
 	public StepEventBusEventBase() {
-		this("");
+		this.scenarioId = "";
+		this.timestamp = ZonedDateTime.now();
 	}
 
 	public StepEventBusEventBase(String scenarioId) {

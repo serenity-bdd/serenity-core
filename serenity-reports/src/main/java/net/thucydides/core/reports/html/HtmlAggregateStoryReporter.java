@@ -120,7 +120,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
 
-        ModelInfrastructure.getConfiguration().setProjectDirectory(Paths.get(projectDirectory));
+        if (projectDirectory != null) {
+            ModelInfrastructure.getConfiguration().setProjectDirectory(Paths.get(projectDirectory));
+        }
         Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
 

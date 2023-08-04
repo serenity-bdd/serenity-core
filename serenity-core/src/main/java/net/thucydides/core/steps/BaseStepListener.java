@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -498,6 +497,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param testMethod the name of the test method in the test suite class.
      */
     public void testStarted(final String testMethod) {
+        testStarted(testMethod, ZonedDateTime.now());
+    }
+
+    public void testStarted(final String testMethod, ZonedDateTime startTime) {
         String testMethodName = testMethod;
         String qualifier = "";
         if (testMethod.contains("%")) {
@@ -511,6 +514,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
+        this.currentTestOutcome.setStartTime(startTime);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
@@ -540,7 +544,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         recordNewTestOutcome(testMethod, currentTestOutcome);
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
-
 
     private void recordNewTestOutcome(String testMethod, TestOutcome newTestOutcome) {
         newTestOutcome.setTestSource(getEventBus().getTestSource());

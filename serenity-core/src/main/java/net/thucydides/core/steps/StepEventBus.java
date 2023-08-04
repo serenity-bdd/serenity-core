@@ -241,6 +241,14 @@ public class StepEventBus {
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
+    public void testStarted(final String testName, ZonedDateTime startTime) {
+        clear();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testStarted(testName, startTime);
+        }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
+    }
+
     public void testStarted(final String testName, final String id, ZonedDateTime startTime) {
         clear();
         for (StepListener stepListener : getAllListeners()) {

@@ -532,6 +532,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
          if (TestSession.isSessionStarted()) {
             StepFinishedEvent stepFinishedEvent = new StepFinishedEvent();
+            LOGGER.debug("SRP:Actor finished step in session " + stepFinishedEvent + " " +  Thread.currentThread());
             TestSession.addEvent(stepFinishedEvent);
          }
          else {
@@ -637,13 +638,12 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
                         .withDisplayedFields(fieldValuesIn(object));
         if(TestSession.isSessionStarted()) {
             StepStartedEvent stepStartedEvent = new StepStartedEvent(description);
-            LOGGER.debug("SRP:Actor started event in session " + stepStartedEvent + " " +  Thread.currentThread());
+            LOGGER.debug("SRP:Actor started step in session " + stepStartedEvent + " " +  Thread.currentThread());
             TestSession.addEvent(stepStartedEvent);
         }
         else {
             StepEventBus.getParallelEventBus().stepStarted(description);
         }
-
     }
 
     private Map<String, Object> fieldValuesIn(Object object) {

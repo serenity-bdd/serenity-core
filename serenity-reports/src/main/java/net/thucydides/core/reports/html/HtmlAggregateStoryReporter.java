@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -119,6 +120,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
 
+        if (projectDirectory != null) {
+            ModelInfrastructure.getConfiguration().setProjectDirectory(Paths.get(projectDirectory));
+        }
         Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
 

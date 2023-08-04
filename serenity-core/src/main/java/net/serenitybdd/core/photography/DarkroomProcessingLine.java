@@ -35,7 +35,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     DarkroomProcessingLine(List<? extends PhotoFilter> processors) {
         this.processors = processors;
-        this.queue = Collections.synchronizedList(new LinkedList<ScreenshotNegative>());
+        this.queue = Collections.synchronizedList(new LinkedList<>());
         this.openForBusiness = true;
     }
 

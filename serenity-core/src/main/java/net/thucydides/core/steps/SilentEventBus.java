@@ -100,7 +100,6 @@ public class SilentEventBus extends StepEventBus {
     public void stepStarted(ExecutedStepDescription stepDescription) {
     }
 
-    @Override
     public void stepStarted(ExecutedStepDescription stepDescription, boolean isPrecondition) {
     }
 

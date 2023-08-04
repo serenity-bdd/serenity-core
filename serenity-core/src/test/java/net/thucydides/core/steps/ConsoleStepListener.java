@@ -4,6 +4,8 @@ package net.thucydides.core.steps;
 import net.thucydides.core.model.TestOutcome;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.time.ZonedDateTime;
+
 public class ConsoleStepListener extends BaseStepListener {
 
     private final StringBuffer buffer = new StringBuffer();
@@ -27,6 +29,10 @@ public class ConsoleStepListener extends BaseStepListener {
         currentIndent--;
     }
 
+    public void testStarted(final String testMethod, ZonedDateTime startTime) {
+        testStarted(testMethod);
+    }
+
     public void testStarted(String description) {
         buffer.append("TEST " + description).append("\n");
         push();
@@ -46,6 +52,11 @@ public class ConsoleStepListener extends BaseStepListener {
         writeIndent(buffer);
         buffer.append(description.getName()).append("\n");
         push();
+    }
+
+    @Override
+    public void stepStarted(final ExecutedStepDescription description, ZonedDateTime startTime) {
+        stepStarted(description);
     }
 
     @Override

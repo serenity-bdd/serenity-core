@@ -4,6 +4,7 @@ import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
 
 public interface Configuration<T extends Configuration> {
@@ -60,4 +61,6 @@ public interface Configuration<T extends Configuration> {
     EnvironmentVariables getEnvironmentVariables();
 
     void setSourceDirectory(File sourceDirectory);
+
+    void setProjectDirectory(Path projectDir);
 }

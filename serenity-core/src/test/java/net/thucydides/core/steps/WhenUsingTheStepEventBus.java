@@ -241,7 +241,7 @@ public class WhenUsingTheStepEventBus {
         StepEventBus.getParallelEventBus().testStarted("some_test");
         StepEventBus.getParallelEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"));
 
-        verify(listener).stepStarted(any(ExecutedStepDescription.class));
+        verify(listener).stepStarted(any(ExecutedStepDescription.class), any());
     }
 
     @Test
@@ -254,7 +254,7 @@ public class WhenUsingTheStepEventBus {
 
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
 
         assertThat(argument.getValue().getName(), is("step1"));
     }

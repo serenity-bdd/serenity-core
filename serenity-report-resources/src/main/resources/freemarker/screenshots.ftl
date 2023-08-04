@@ -227,10 +227,11 @@
                 <#if screenshot_has_next>
                     <#assign caption = "${screenshot.html.description}">
                 <#else>
+
                     <#if testOutcome.conciseErrorMessage??>
-                        <#assign caption = "${screenshot.html.description}: <span class='${outcome_text}'>${testOutcome.result}</span>">
+                        <#assign caption = "${screenshot.description}: <span class='${outcome_text}'>${testOutcome.result}</span>">
                     <#else>
-                        <#assign caption = "${screenshot.html.description}">
+                        <#assign caption = "${screenshot.description}">
                     </#if>
                 </#if>
                 <#list 0..<screenshot.depth as i></#list>

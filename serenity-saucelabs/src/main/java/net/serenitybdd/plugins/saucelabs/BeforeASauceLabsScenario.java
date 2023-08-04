@@ -8,6 +8,8 @@ import net.serenitybdd.plugins.CapabilityTags;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.environment.TestLocalEnvironmentVariables;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;

@@ -25,7 +25,7 @@ public class StepFinishedEvent extends StepEventBusEventBase {
 	public void play() {
 	 	LOGGER.debug("SRP:PlayStepFinishedEvent with screenshot size "
 	 					+ ((screenshotList != null) ?  screenshotList.size() : 0));
-		getStepEventBus().stepFinished(screenshotList);
+		getStepEventBus().stepFinished(screenshotList, this.getTimestamp());
 	}
 
 	public String toString() {

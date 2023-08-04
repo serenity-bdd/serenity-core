@@ -46,6 +46,11 @@ public interface StepListener {
      * A test with a given name has started.
      */
     void testStarted(final String description);
+
+    default void testStarted(final String description, ZonedDateTime startTime) {
+        testStarted(description);
+    }
+
     void testStarted(final String description, final String id);
 
     default void testStarted(final String testName, String testMethod, final String id, String scenarioId) {
@@ -77,6 +82,10 @@ public interface StepListener {
      *                    (generally a class and method name)
      */
     void stepStarted(final ExecutedStepDescription description);
+
+    default void stepStarted(final ExecutedStepDescription description, ZonedDateTime startTime) {
+        stepStarted(description);
+    }
 
     /**
      * Called when a test step is about to be started, but this step is scheduled to be skipped.
@@ -128,7 +137,10 @@ public interface StepListener {
      */
     void stepFinished();
 
-    void stepFinished(List<ScreenshotAndHtmlSource> screenshotList);
+    default void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+        stepFinished(screenshotList, ZonedDateTime.now());
+    }
+    void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time);
 
     /**
      * The test failed, but not while executing a step.
@@ -176,9 +188,17 @@ public interface StepListener {
      */
     void exampleStarted(Map<String,String> data);
 
+    default void exampleStarted(Map<String,String> data, ZonedDateTime time) {
+        exampleStarted(data, ZonedDateTime.now());
+    }
     default void exampleStarted(Map<String,String> data, String exampleName) {
         exampleStarted(data);
     }
+
+    default void exampleStarted(Map<String,String> data, String exampleName, ZonedDateTime time) {
+        exampleStarted(data);
+    }
+
     /**
      * An example has finished.
      */

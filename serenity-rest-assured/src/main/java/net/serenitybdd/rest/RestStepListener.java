@@ -111,6 +111,11 @@ public class RestStepListener implements StepListener {
     }
 
     @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
+
+    }
+
+    @Override
     public void testFailed(TestOutcome testOutcome, Throwable cause) {
 
     }

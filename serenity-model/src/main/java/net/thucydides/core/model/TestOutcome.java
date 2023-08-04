@@ -2466,8 +2466,10 @@ public class TestOutcome {
     }
 
     public void recordDuration(ZonedDateTime finishTime) {
-        long duration = ChronoUnit.MILLIS.between(startTime, finishTime);
-        setDuration(duration);
+        if (duration == 0) {
+            long duration = ChronoUnit.MILLIS.between(startTime, finishTime);
+            setDuration(duration);
+        }
     }
 
     public void setDuration(final long duration) {

@@ -48,6 +48,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
@@ -409,6 +410,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
     private void handleTestStepStarted(TestStepStarted event) {
+        ZonedDateTime startTime = ZonedDateTime.now();
         URI featurePath = event.getTestCase().getUri();
         TestSourcesModel.AstNode mainAstNode = featureLoader.getAstNode(featurePath, event.getTestCase().getLocation().getLine());
         Scenario currentScenarioDefinition = TestSourcesModel.getScenarioDefinition(mainAstNode);
@@ -444,7 +446,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                     io.cucumber.messages.types.Step currentStep = getContext(featurePath).getCurrentStep(event.getTestCase());
                     String stepTitle = stepTitleFrom(currentStep, pickleTestStep);
                     getContext(featurePath).addStepEventBusEvent(
-                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle)));
+                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle),startTime));
                     getContext(featurePath).addStepEventBusEvent(
                             new UpdateCurrentStepTitleEvent(normalized(stepTitle)));
                 }
@@ -979,8 +981,9 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
     private void recordStepResult(URI featurePath, TestCase testCase, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep) {
+        ZonedDateTime endTime = ZonedDateTime.now();
         List<ScreenshotAndHtmlSource> screenshotList = getContext(featurePath).stepEventBus().takeScreenshots();
-        getContext(featurePath).addStepEventBusEvent(new RecordStepResultEvent(result, currentStep, currentTestStep, screenshotList));
+        getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime));
     }
 
     private void recordFinalResult(String scenarioId, URI featurePath, TestCase testCase) {

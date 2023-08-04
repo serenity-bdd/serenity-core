@@ -150,6 +150,10 @@ public class ConsoleLoggingListener implements StepListener {
         testStarted(description,id);
     }
 
+    public void testStarted(final String testMethod, ZonedDateTime startTime) {
+        testStarted(testMethod);
+    }
+
     public void testFinished(TestOutcome result) {
         if (reportedOutcomes.contains(result)) {
             return;
@@ -287,9 +291,13 @@ public class ConsoleLoggingListener implements StepListener {
         nestedSteps.push(description.getName());
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String indent = indentation(nestedSteps.size());// StringUtils.repeat("  ", nestedSteps.size());
-            System.out.println(withTimestamp(colored.green(indent + description.getTitle())));
-//            getLogger().info(colored.green(indent + description.getTitle()));
+         //   System.out.println(withTimestamp(colored.green(indent + description.getTitle())));
+            getLogger().info(colored.green(indent + description.getTitle()));
         }
+    }
+
+    public void stepStarted(final ExecutedStepDescription description, ZonedDateTime startTime) {
+        stepStarted(description);
     }
 
     private String withTimestamp(String message) {
@@ -315,11 +323,15 @@ public class ConsoleLoggingListener implements StepListener {
 
     @Override
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+        stepOut();
+    }
 
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
+        stepOut();
     }
 
     public void stepFailed(StepFailure failure) {
-
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();

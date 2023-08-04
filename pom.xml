@@ -94,7 +94,7 @@
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
         <kotlin.version>1.9.0</kotlin.version>
-        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -834,7 +834,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.2.0</version>
                         <configuration>
-                            <source>1.8</source>
+                            <source>11</source>
                         </configuration>
                         <executions>
                             <execution>

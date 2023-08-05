@@ -5,9 +5,9 @@ import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Managed;
+import net.serenitybdd.annotations.ManagedPages;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTag;
 import net.thucydides.model.batches.BatchManager;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
@@ -808,8 +808,8 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = reload(outputDirectory).listFiles(new HTMLFileFilter());
-        assertThat(reports.length, is(3));
+        File[] jsonReports = reload(outputDirectory).listFiles(new JSONFileFilter());
+        assertThat(jsonReports.length, is(3));
     }
 
     private class HTMLFileFilter implements FilenameFilter {

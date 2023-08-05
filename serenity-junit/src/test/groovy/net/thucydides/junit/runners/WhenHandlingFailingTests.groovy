@@ -2,7 +2,7 @@ package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.annotations.Step
-import net.thucydides.core.annotations.Steps
+import net.serenitybdd.annotations.Steps
 import net.thucydides.model.domain.TestResult
 import net.thucydides.model.environment.MockEnvironmentVariables
 import org.junit.Test

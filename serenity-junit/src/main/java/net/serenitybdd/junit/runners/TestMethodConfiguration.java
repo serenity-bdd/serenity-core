@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.Manual;
+import net.serenitybdd.annotations.Manual;
 import net.serenitybdd.annotations.Pending;
 import net.thucydides.model.domain.TestResult;
 import org.junit.Ignore;

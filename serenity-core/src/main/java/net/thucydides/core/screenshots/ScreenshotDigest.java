@@ -1,5 +1,6 @@
 package net.thucydides.core.screenshots;
 
+import net.serenitybdd.annotations.BlurLevel;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.codec.digest.DigestUtils;

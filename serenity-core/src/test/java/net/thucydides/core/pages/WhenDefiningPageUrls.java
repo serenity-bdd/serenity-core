@@ -1,9 +1,9 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageUrls;
 import net.serenitybdd.core.pages.UnableToInvokeWhenPageOpensMethods;
-import net.thucydides.core.annotations.*;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.webdriver.Configuration;

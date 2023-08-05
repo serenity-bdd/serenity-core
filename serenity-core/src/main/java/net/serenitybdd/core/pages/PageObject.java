@@ -8,7 +8,7 @@ import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.model.time.SystemClock;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.WhenPageOpens;
+import net.serenitybdd.annotations.WhenPageOpens;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
 import net.thucydides.core.pages.Pages;

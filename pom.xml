@@ -672,6 +672,7 @@
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
                     <failOnError>false</failOnError>
+                    <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>
             <plugin>

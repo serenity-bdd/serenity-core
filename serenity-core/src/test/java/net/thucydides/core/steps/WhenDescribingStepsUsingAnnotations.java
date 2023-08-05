@@ -2,7 +2,6 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.annotations.*;
 import net.serenitybdd.model.collect.NewMap;
-import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.model.steps.AnnotatedStepDescription;
 import net.thucydides.model.steps.ExecutedStepDescription;

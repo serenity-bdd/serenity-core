@@ -8,7 +8,7 @@ import net.serenitybdd.screenplay.questions.page.TheWebPage;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.ui.Link;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.thucydides.core.annotations.Managed;
+import net.serenitybdd.annotations.Managed;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

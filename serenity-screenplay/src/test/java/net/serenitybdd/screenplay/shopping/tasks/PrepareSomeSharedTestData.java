@@ -3,8 +3,7 @@ package net.serenitybdd.screenplay.shopping.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
-import net.thucydides.core.annotations.Shared;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Shared;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

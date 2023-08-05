@@ -660,7 +660,7 @@ public class WhenRecordingNewTestOutcomes {
         assertThat(testOutcome.isCompromised(), is(true));
 
         TestStep compromisedStep = testOutcome.getTestSteps().get(1);
-        assertThat(compromisedStep.getErrorMessage(), is("net.serenitybdd.core.exceptions.TestCompromisedException: Oh bother!"));
+        assertThat(compromisedStep.getErrorMessage(), is("net.serenitybdd.model.exceptions.TestCompromisedException: Oh bother!"));
     }
 
     @Test

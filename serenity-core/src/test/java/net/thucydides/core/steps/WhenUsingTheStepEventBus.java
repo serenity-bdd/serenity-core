@@ -1,11 +1,8 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.annotations.*;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.serenitybdd.annotations.Pending;
-import net.serenitybdd.annotations.Step;
-import net.serenitybdd.annotations.StepGroup;
 import net.thucydides.model.logging.ConsoleLoggingListener;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;

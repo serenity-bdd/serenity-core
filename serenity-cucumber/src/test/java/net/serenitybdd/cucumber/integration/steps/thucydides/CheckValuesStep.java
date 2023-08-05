@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.integration.steps.thucydides;
 
 import net.serenitybdd.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 
 public class CheckValuesStep {
     String firstname;

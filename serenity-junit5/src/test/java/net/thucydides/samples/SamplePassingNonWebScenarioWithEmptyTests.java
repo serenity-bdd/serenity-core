@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.annotations.Pending;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

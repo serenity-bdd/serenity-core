@@ -1,6 +1,6 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.annotations.SingleBrowser;
+import net.serenitybdd.annotations.SingleBrowser;
 import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;

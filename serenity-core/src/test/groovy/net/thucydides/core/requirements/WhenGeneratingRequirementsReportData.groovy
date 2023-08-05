@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements
 
 import com.google.common.collect.Lists
+import net.thucydides.core.model.SampleTestResults
 import net.thucydides.model.ThucydidesSystemProperty
 import net.thucydides.model.issues.IssueTracking
 import net.thucydides.model.domain.*

@@ -1,6 +1,6 @@
 package net.thucydides.core.steps
 
-import net.thucydides.core.annotations.Steps
+import net.serenitybdd.annotations.Steps
 import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 

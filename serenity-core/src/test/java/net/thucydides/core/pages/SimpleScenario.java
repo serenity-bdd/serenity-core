@@ -1,6 +1,6 @@
 package net.thucydides.core.pages;
 
-import net.thucydides.core.annotations.ManagedPages;
+import net.serenitybdd.annotations.ManagedPages;
 
 public class SimpleScenario {
 

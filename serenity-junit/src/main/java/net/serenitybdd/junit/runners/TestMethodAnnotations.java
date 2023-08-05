@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.annotations.DriverOptions;
-import net.thucydides.core.annotations.WithDriver;
+import net.serenitybdd.annotations.DriverOptions;
+import net.serenitybdd.annotations.WithDriver;
 import org.junit.runners.model.FrameworkMethod;
 
 /**

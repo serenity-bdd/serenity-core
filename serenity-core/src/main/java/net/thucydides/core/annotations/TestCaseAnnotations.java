@@ -1,5 +1,7 @@
 package net.thucydides.core.annotations;
 
+import net.serenitybdd.annotations.ClearCookiesPolicy;
+import net.serenitybdd.annotations.UsePersistantStepLibraries;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.model.requirements.SerenityTestCaseFinder;

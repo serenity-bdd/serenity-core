@@ -2,7 +2,7 @@ package net.thucydides.core.model.screenshots;
 
 import net.serenitybdd.markers.DisableScreenshots;
 import net.serenitybdd.markers.IsSilent;
-import net.thucydides.core.annotations.Screenshots;
+import net.serenitybdd.annotations.Screenshots;
 import net.thucydides.model.domain.TakeScreenshots;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.screenshots.ScreenshotPreferencesByClass;

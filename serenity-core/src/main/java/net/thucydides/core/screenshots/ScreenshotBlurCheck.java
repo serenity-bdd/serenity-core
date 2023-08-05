@@ -1,6 +1,7 @@
 package net.thucydides.core.screenshots;
 
-import net.thucydides.core.annotations.BlurScreenshots;
+import net.serenitybdd.annotations.BlurLevel;
+import net.serenitybdd.annotations.BlurScreenshots;
 import net.thucydides.model.reflection.StackTraceAnalyser;
 
 import java.lang.reflect.Method;

@@ -2,7 +2,7 @@ package net.serenitybdd.core.photography;
 
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.core.screenshots.BlurLevel;
+import net.serenitybdd.annotations.BlurLevel;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.UnhandledAlertException;
 import org.slf4j.Logger;

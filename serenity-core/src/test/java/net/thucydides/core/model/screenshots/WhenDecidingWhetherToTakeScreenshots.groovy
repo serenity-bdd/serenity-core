@@ -1,7 +1,7 @@
 package net.thucydides.core.model.screenshots
 
 
-import net.thucydides.core.annotations.Screenshots
+import net.serenitybdd.annotations.Screenshots
 import net.serenitybdd.annotations.Step
 import net.thucydides.model.configuration.SystemPropertiesConfiguration
 import net.thucydides.model.domain.TakeScreenshots

@@ -18,7 +18,10 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[1].addTags([TestTag.withValue("color:red")])
 
         then:
-            testOutcomes.tags as Set == [TestTag.withValue("flavor:chocolate"),
+            testOutcomes.tags.size() == 5
+            testOutcomes.tags as Set == [TestTag.withValue("feature:widget feature"),
+                                      TestTag.withValue("flavor:chocolate"),
+                                      TestTag.withValue("feature:net/thucydides/core/reports/TestOutcomesBuilder/WidgetFeature/PurchaseNewWidget"),
                                       TestTag.withValue("color:orange"),
                                       TestTag.withValue("color:red")] as Set
     }
@@ -30,7 +33,9 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
             testOutcomes.tagNames == ['chocolate',
+                                      'net/thucydides/core/reports/testoutcomesbuilder/widgetfeature/purchasenewwidget',
                                       'orange',
+                                      'widget feature'
                                       ]
     }
 
@@ -39,7 +44,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
-            testOutcomes.tagTypes == ['color','flavor']
+            testOutcomes.tagTypes == ['color','feature','flavor']
     }
 
 

@@ -2,7 +2,7 @@ package net.thucydides.samples;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.annotations.Pending;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;

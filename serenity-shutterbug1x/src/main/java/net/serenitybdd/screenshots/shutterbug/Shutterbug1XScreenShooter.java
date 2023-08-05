@@ -26,9 +26,9 @@ import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_SCREENSHOT_
  *     <li>shutterbug.betweenScrollTimeout – Timeout to wait between each scrolling operation</li>
  *     <li>shutterbug.useDevicePixelRatio – whether or not take into account device pixel ratio</li>
  *  </ul>
- * @Deprecated and replaced by the Shutterbug 2 integration.
+ *  Replaced by the Shutterbug 2 integration.
  */
-
+@Deprecated
 public class Shutterbug1XScreenShooter implements ScreenShooter {
     private final WebDriver driver;
     private final EnvironmentVariables environmentVariables;

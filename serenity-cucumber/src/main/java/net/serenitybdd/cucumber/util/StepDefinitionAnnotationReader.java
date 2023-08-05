@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.util;
 
-import net.thucydides.core.annotations.Screenshots;
+import net.serenitybdd.annotations.Screenshots;
 import net.thucydides.model.domain.TakeScreenshots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

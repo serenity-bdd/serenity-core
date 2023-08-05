@@ -1,11 +1,9 @@
 package net.thucydides.core.annotations.findby.integration
 
 import net.serenitybdd.core.pages.PageObject
-import net.thucydides.core.annotations.DefaultUrl
+import net.serenitybdd.annotations.DefaultUrl
 import net.thucydides.model.environment.TestLocalEnvironmentVariables
 import net.thucydides.core.pages.WebElementFacade
-import net.thucydides.model.util.EnvironmentVariables
-import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory

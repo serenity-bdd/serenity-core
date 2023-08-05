@@ -3,7 +3,7 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;

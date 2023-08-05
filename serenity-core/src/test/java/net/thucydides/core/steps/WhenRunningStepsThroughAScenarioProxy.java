@@ -1,11 +1,7 @@
 package net.thucydides.core.steps;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
-import net.thucydides.core.annotations.*;
-import net.serenitybdd.annotations.Pending;
-import net.serenitybdd.annotations.Step;
-import net.serenitybdd.annotations.StepGroup;
-import net.serenitybdd.annotations.Story;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.SomeTestScenario;

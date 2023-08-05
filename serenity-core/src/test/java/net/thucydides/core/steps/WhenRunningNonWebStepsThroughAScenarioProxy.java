@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.Story;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepListener;

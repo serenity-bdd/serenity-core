@@ -326,7 +326,7 @@ public class StepEventBus {
     private Set<StepListener> getCustomListeners() {
 
         if (customListeners == null) {
-            customListeners = Collections.synchronizedSet(new HashSet<StepListener>());
+            customListeners = Collections.synchronizedSet(new HashSet<>());
 
             ServiceLoader<StepListener> stepListenerServiceLoader = ServiceLoader.load(StepListener.class);
             Iterator<StepListener> listenerImplementations = stepListenerServiceLoader.iterator();

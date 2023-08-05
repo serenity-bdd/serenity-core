@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.annotations.*;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Ignore;

@@ -1,7 +1,7 @@
 package net.serenitybdd.cucumber.util;
 
 import io.cucumber.java.en.Given;
-import net.thucydides.core.annotations.Screenshots;
+import net.serenitybdd.annotations.Screenshots;
 
 public class SampleStepDefinitions {
 

@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 
 import java.io.IOException;
 

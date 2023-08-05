@@ -3,7 +3,7 @@ package net.serenitybdd.junit.runners.integration;
 import net.serenitybdd.model.exceptions.UnrecognisedException;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.junit.runners.integration.exceptions.*;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

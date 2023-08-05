@@ -7,7 +7,7 @@ import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.steps.UIInteractionSteps;
 import net.serenitybdd.annotations.Fields;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.model.webdriver.Configuration;

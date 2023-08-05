@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment
-import net.thucydides.core.annotations.Managed
+import net.serenitybdd.annotations.Managed
 import net.thucydides.core.annotations.TestCaseAnnotations
 import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.model.util.EnvironmentVariables

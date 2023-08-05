@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements
 
+import net.thucydides.model.requirements.DefaultCapabilityTypes
 import net.thucydides.model.requirements.FileSystemRequirements
 import net.thucydides.model.requirements.Requirements
 import net.thucydides.model.requirements.model.NarrativeReader

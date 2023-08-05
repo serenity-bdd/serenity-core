@@ -6,4 +6,4 @@
 )
 package annotatedstories.apples;
 
-import net.thucydides.core.annotations.Narrative;
+import net.serenitybdd.annotations.Narrative;

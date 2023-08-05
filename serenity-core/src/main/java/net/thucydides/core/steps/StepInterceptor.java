@@ -3,27 +3,31 @@ package net.thucydides.core.steps;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import net.bytebuddy.implementation.bind.annotation.*;
-import net.serenitybdd.core.IgnoredStepException;
-import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.annotations.*;
+import net.serenitybdd.model.IgnoredStepException;
+import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.markers.IsSilent;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.adapters.TestFramework;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.stacktrace.StackTraceSanitizer;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.steps.AnnotatedStepDescription;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.ScreenplayInspector;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -38,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
+import static net.thucydides.model.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION;
 
 /**
  * Listen to step results and publish notification messages.
@@ -53,7 +57,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
     private final EnvironmentVariables environmentVariables;
-    private static ThreadLocal<Class> expectedExceptionType = new ThreadLocal<>();
+    private static final ThreadLocal<Class> expectedExceptionType = new ThreadLocal<>();
 
     public static void setExpectedExceptionType(Class expectedException) {
         expectedExceptionType.set(expectedException);
@@ -63,7 +67,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         expectedExceptionType.remove();
     }
 
-    private List<StepInterceptionListener> listeners = new ArrayList<>();
+    private final List<StepInterceptionListener> listeners = new ArrayList<>();
 
     CleanupMethodLocator cleanupMethodLocator;
     StepInterceptor(final Class<?> testStepClass) {
@@ -123,11 +127,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
             return true;
         }
 
-        if (isNotAStepAnnotatedMethodWhenManualInstrumentationIsActive(method)) {
-            return true;
-        }
-
-        return false;
+        return isNotAStepAnnotatedMethodWhenManualInstrumentationIsActive(method);
     }
 
     private boolean isHidden(Class<?> callingClass) {
@@ -394,10 +394,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private boolean aPreviousStepHasFailed() {
-        boolean aPreviousStepHasFailed = false;
-        if (getStepEventBus().aStepInTheCurrentTestHasFailed()) {
-            aPreviousStepHasFailed = true;
-        }
+        boolean aPreviousStepHasFailed = getStepEventBus().aStepInTheCurrentTestHasFailed();
         return aPreviousStepHasFailed;
     }
 

@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
 import java.io.File;

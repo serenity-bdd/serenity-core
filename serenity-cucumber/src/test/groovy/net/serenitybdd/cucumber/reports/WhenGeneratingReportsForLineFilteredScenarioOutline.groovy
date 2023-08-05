@@ -3,8 +3,8 @@ package net.serenitybdd.cucumber.reports
 import io.cucumber.junit.CucumberRunner
 import io.cucumber.plugin.event.Status
 import net.serenitybdd.cucumber.integration.SimpleTableScenarioWithLineFilters
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
 import org.assertj.core.util.Files
 import spock.lang.Specification
 

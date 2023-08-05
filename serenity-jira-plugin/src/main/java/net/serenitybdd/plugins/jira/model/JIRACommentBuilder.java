@@ -1,8 +1,8 @@
 package net.serenitybdd.plugins.jira.model;
 
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

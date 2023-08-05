@@ -1,8 +1,11 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.collect.NewMap;
+import net.serenitybdd.annotations.*;
+import net.serenitybdd.model.collect.NewMap;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.model.steps.AnnotatedStepDescription;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import org.jbehave.core.annotations.Given;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -101,7 +104,7 @@ public class WhenDescribingStepsUsingAnnotations {
     }
 
     static class User {
-        private String email;
+        private final String email;
         private String nickname;
         private Address address;
 
@@ -132,7 +135,7 @@ public class WhenDescribingStepsUsingAnnotations {
     }
 
     static class DbUser extends User {
-        private int id;
+        private final int id;
 
         public DbUser(int id, String email) {
             super(email);
@@ -145,8 +148,8 @@ public class WhenDescribingStepsUsingAnnotations {
     }
 
     static class Address {
-        private String city;
-        private String address1;
+        private final String city;
+        private final String address1;
 
         public Address(String city, String address1) {
             this.city = city;
@@ -254,7 +257,7 @@ public class WhenDescribingStepsUsingAnnotations {
         ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
                 "a_customized_step_with_parameters_and_fields",
                 new Object[]{"Joe"})
-                .withDisplayedFields(NewMap.of("color", (Object) "red"));
+                .withDisplayedFields(NewMap.of("color", "red"));
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 

@@ -1,16 +1,16 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.logging.LoggingLevel;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.logging.LoggingLevel;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.Story;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.statistics.TestCount;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_DISPLAY_TEST_NUMBERS;
 
 public class TestCountListener implements StepListener {
 

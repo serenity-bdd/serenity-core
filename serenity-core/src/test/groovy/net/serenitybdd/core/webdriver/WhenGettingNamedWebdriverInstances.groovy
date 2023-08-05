@@ -1,17 +1,17 @@
 package net.serenitybdd.core.webdriver
 
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import spock.lang.Specification
 
 class WhenGettingNamedWebdriverInstances extends Specification {
 
-    EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-    SystemPropertiesConfiguration configuration = new WebDriverConfiguration(environmentVariables);
+    EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+    SystemPropertiesConfiguration configuration = new WebDriverConfiguration(environmentVariables)
 
     def setup() {
         SerenityWebdriverManager.inThisTestThread().closeAllDrivers()

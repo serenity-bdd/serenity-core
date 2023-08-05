@@ -2,12 +2,12 @@ package net.serenitybdd.cucumber.outcomes.parallel
 
 import io.cucumber.junit.CucumberJUnit5ParallelRunner
 import net.serenitybdd.core.di.SerenityInfrastructure
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.webdriver.Configuration
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.webdriver.Configuration
 import org.assertj.core.util.Files
 import spock.lang.Specification
 
@@ -26,10 +26,10 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
     def "should record failures for a failing scenario"() {
         given:
             Configuration configuration = SerenityInfrastructure.configuration
-            configuration.setOutputDirectory(outputDirectory);
+            configuration.setOutputDirectory(outputDirectory)
         when:
-            CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/failing_scenario.feature","net.serenitybdd.cucumber.integration.steps");
-            List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+            CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/failing_scenario.feature","net.serenitybdd.cucumber.integration.steps")
+            List<TestOutcome> recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
             TestOutcome testOutcome = recordedTestOutcomes[0]
             List<TestStep> stepResults = testOutcome.testSteps.collect { step -> step.result }
         then:
@@ -42,12 +42,12 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
     def "should generate a well-structured Serenity test outcome for each executed Cucumber scenario"() {
         given:
         Configuration configuration = SerenityInfrastructure.configuration
-        configuration.setOutputDirectory(outputDirectory);
+        configuration.setOutputDirectory(outputDirectory)
 
         when:
-        CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/simple_scenario.feature","net.serenitybdd.cucumber.integration.steps");
+        CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/simple_scenario.feature","net.serenitybdd.cucumber.integration.steps")
 
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
         def steps = testOutcome.testSteps.collect { step -> step.description }
 
@@ -58,11 +58,11 @@ class WhenCreatingSerenityTestOutcomesInParallel extends Specification {
     def "should record results for each step"() {
         given:
               Configuration configuration = SerenityInfrastructure.configuration
-        configuration.setOutputDirectory(outputDirectory);
+        configuration.setOutputDirectory(outputDirectory)
 
         when:
-        CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/simple_scenario.feature","net.serenitybdd.cucumber.integration.steps");
-        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name };
+        CucumberJUnit5ParallelRunner.runFileFromClasspathInParallel("samples/simple_scenario.feature","net.serenitybdd.cucumber.integration.steps")
+        def recordedTestOutcomes = new TestOutcomeLoader().forFormat(OutcomeFormat.JSON).loadFrom(outputDirectory).sort { it.name }
         def testOutcome = recordedTestOutcomes[0]
 
         then:

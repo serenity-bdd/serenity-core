@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.webtests.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.COUNTRY;
 

@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators
 
 import net.thucydides.core.WebdriverCollectionStrategy
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebElement
 import spock.lang.Specification
 

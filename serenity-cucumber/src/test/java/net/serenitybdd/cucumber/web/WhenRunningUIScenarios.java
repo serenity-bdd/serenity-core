@@ -1,13 +1,13 @@
 package net.serenitybdd.cucumber.web;
 
 import net.serenitybdd.cucumber.integration.*;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.TestOutcomeLoader;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.reports.OutcomeFormat;
+import net.thucydides.model.reports.TestOutcomeLoader;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.assertj.core.util.Files;
 import org.junit.Before;
 import org.junit.Test;

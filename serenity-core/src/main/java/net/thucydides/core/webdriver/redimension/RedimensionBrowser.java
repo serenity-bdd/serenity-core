@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.redimension;
 
-import net.serenitybdd.core.collect.NewMap;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.collect.NewMap;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;

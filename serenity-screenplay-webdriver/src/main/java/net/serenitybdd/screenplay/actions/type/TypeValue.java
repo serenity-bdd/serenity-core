@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;
 import org.openqa.selenium.Keys;
 

@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.samples;
 
 import net.thucydides.core.annotations.BlurScreenshots;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;

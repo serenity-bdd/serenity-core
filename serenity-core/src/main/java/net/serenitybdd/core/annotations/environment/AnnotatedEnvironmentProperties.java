@@ -1,6 +1,6 @@
 package net.serenitybdd.core.annotations.environment;
 
-import net.thucydides.core.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

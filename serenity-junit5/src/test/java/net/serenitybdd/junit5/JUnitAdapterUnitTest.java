@@ -1,7 +1,7 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.adapters.TestFramework;
-import net.thucydides.core.tags.Taggable;
+import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.tags.Taggable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

@@ -1,21 +1,23 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.ReportType
-import net.thucydides.core.model.SampleTestResults
-import net.thucydides.core.model.TestTagCache
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.statistics.service.TagProvider
-import net.thucydides.core.statistics.service.TagProviderService
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.ReportType
+import net.thucydides.model.domain.TestTagCache
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.requirements.MultiSourceRequirementsService
+import net.thucydides.model.requirements.PackageAnnotationBasedTagProvider
+import net.thucydides.model.requirements.RequirementsTagProvider
+import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomes
+import net.thucydides.model.statistics.service.TagProvider
+import net.thucydides.model.statistics.service.TagProviderService
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT
 
 class WhenCalculatingRequirementTestCoverage extends Specification {
 

@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.batches.BatchManager;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.runners.model.InitializationError;

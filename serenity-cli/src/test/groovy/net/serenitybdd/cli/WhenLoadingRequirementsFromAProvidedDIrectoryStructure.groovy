@@ -1,7 +1,7 @@
 package net.serenitybdd.cli
 
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenLoadingRequirementsFromAProvidedDirectoryStructure extends Specification{

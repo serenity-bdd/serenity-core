@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.json
 
 import net.serenitybdd.reports.configuration.*
-import net.thucydides.core.ThucydidesSystemProperty.*
+import net.thucydides.model.ThucydidesSystemProperty.*
 import java.nio.file.Path
 
 

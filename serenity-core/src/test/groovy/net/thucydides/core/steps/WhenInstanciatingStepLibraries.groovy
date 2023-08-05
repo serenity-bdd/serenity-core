@@ -1,9 +1,9 @@
 package net.thucydides.core.steps
 import net.serenitybdd.core.pages.PageObject
-import net.thucydides.core.annotations.Step
+import net.serenitybdd.annotations.Step
 import net.thucydides.core.pages.Pages
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.webdriver.Configuration
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.webdriver.Configuration
 import net.thucydides.core.webdriver.DriverConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
@@ -36,11 +36,11 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     static class MyStepLibrary extends ScenarioSteps {
 
-        MyPageObject myPageObject;
-        MyOtherPageObject myInstantiatedPageObject;
-        EnvironmentVariables environmentVariables;
-        Configuration configuration;
-        DriverConfiguration driverConfiguration;
+        MyPageObject myPageObject
+        MyOtherPageObject myInstantiatedPageObject
+        EnvironmentVariables environmentVariables
+        Configuration configuration
+        DriverConfiguration driverConfiguration
 
         MyStepLibrary(Pages pages) {
             super(pages)
@@ -53,7 +53,7 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     static class MySimpleStepLibrary extends ScenarioSteps {
 
-        MySimplePageObject myPageObject;
+        MySimplePageObject myPageObject
 
         MySimpleStepLibrary(Pages pages) {
             super(pages)
@@ -144,8 +144,8 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     static class MyImmutableStepLibrary {
 
-        private final String favoriteColor;
-        private final Integer favoriteNumber;
+        private final String favoriteColor
+        private final Integer favoriteNumber
 
         String getFavoriteColor() {
             return favoriteColor

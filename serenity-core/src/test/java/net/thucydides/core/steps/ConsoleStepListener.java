@@ -1,7 +1,9 @@
 package net.thucydides.core.steps;
 
 
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.time.ZonedDateTime;

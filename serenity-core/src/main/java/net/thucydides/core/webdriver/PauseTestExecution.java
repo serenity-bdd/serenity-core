@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 
 class PauseTestExecution {
     private final int delay;

@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.WebElement;
 
 public class DoubleClickOnTarget implements Interaction {

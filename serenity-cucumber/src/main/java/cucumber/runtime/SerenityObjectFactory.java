@@ -8,7 +8,7 @@ import io.cucumber.core.plugin.ConfigureDriverFromTags;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;

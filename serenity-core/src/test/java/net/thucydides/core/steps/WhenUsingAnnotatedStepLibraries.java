@@ -1,10 +1,10 @@
 package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.InvalidStepsFieldException;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.reflection.FieldSetter;
+import net.thucydides.model.reflection.FieldSetter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -3,7 +3,7 @@ package net.thucydides.core.pages;
 
 import net.serenitybdd.core.pages.PagesAnnotatedField;
 import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.reflection.FieldSetter;
+import net.thucydides.model.reflection.FieldSetter;
 import net.thucydides.core.steps.InvalidManagedPagesFieldException;
 import org.junit.Before;
 import org.junit.Test;

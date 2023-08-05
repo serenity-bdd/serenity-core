@@ -2,10 +2,10 @@ package net.serenitybdd.plugins.jira.model;
 
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.plugins.jira.workflow.ClasspathWorkflowLoader;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

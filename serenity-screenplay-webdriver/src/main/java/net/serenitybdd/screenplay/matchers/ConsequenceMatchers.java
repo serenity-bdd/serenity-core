@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.matchers;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

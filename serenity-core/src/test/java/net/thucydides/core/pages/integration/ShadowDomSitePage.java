@@ -2,7 +2,7 @@ package net.thucydides.core.pages.integration;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.DefaultUrl;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 @DefaultUrl("classpath:static-site/fancy-tabs-demo.html")

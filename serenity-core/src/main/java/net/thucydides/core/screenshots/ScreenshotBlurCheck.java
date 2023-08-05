@@ -1,7 +1,7 @@
 package net.thucydides.core.screenshots;
 
 import net.thucydides.core.annotations.BlurScreenshots;
-import net.thucydides.core.reflection.StackTraceAnalyser;
+import net.thucydides.model.reflection.StackTraceAnalyser;
 
 import java.lang.reflect.Method;
 import java.util.Optional;

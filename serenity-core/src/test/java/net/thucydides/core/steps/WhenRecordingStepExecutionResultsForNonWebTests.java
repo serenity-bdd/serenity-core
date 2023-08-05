@@ -1,14 +1,14 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.core.util.ExtendedTemporaryFolder;
+import net.serenitybdd.annotations.Story;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.FlatScenarioStepsWithoutPages;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

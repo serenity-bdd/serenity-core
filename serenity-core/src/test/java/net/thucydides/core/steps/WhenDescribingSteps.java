@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.UserStoryCode;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

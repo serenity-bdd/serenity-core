@@ -1,37 +1,38 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.core.annotations.events.AfterExample;
 import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.annotations.events.BeforeExample;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.exceptions.TheErrorType;
+import net.serenitybdd.model.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
-import net.serenitybdd.core.rest.RestQuery;
-import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.model.rest.RestQuery;
+import net.serenitybdd.model.strings.Joiner;
+import net.serenitybdd.model.time.SystemClock;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.junit.SerenityJUnitTestCase;
-import net.thucydides.core.model.*;
-import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.annotations.TestAnnotations;
+import net.thucydides.core.junit.SerenityJUnitTestCase;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.domain.failures.FailureAnalysis;
+import net.thucydides.model.domain.stacktrace.FailureCause;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.ConfigCache;
 import net.thucydides.core.webdriver.*;
+import net.thucydides.model.screenshots.ScreenshotException;
+import net.thucydides.model.steps.*;
+import net.thucydides.model.util.ConfigCache;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -46,8 +47,8 @@ import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.EXAMPLE;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.SCENARIO;
-import static net.thucydides.core.model.Stories.findStoryFrom;
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.model.domain.Stories.findStoryFrom;
+import static net.thucydides.model.domain.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
 
@@ -95,9 +96,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private WebDriver driver;
 
-    private File outputDirectory;
+    private final File outputDirectory;
 
-    private WebdriverProxyFactory proxyFactory;
+    private final WebdriverProxyFactory proxyFactory;
 
     private Story testedStory;
 
@@ -767,7 +768,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     Stack<Method> currentStepMethodStack = new Stack<>();
 
     public Optional<Method> getCurrentStepMethod() {
-        return currentStepMethodStack.empty() ? Optional.<Method>empty() : Optional.ofNullable(currentStepMethodStack.peek());
+        return currentStepMethodStack.empty() ? Optional.empty() : Optional.ofNullable(currentStepMethodStack.peek());
     }
 
     private TestStep recordStep(ExecutedStepDescription description) {
@@ -1481,7 +1482,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean newStepForEachExample() {
-        if (!latestTestOutcome().isPresent()) {
+        if (latestTestOutcome().isEmpty()) {
             return false;
         }
         return (getCurrentTestOutcome().getTestSource() != null) && (!getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit"));

@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.stepdata;
 
-import net.thucydides.core.model.DataTable;
+import net.thucydides.model.domain.DataTable;
 import net.thucydides.core.steps.DataDrivenStepFactory;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;

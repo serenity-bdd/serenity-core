@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.io
 
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.reports.TestOutcomes
 import java.nio.file.Path
 
 fun testOutcomesIn(outputDirectory: Path): TestOutcomes {

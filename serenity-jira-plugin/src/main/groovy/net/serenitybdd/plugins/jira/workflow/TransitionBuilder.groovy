@@ -1,11 +1,11 @@
 package net.serenitybdd.plugins.jira.workflow
 
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 
 class TransitionBuilder extends BuilderSupport {
 
-    def TransitionSetMap transitionSetMap = new TransitionSetMap();
-    def currentStatus;
+    TransitionSetMap transitionSetMap = new TransitionSetMap()
+    def currentStatus
 
     @Override
     protected void setParent(Object o, Object o1) {
@@ -51,7 +51,7 @@ class TransitionBuilder extends BuilderSupport {
 
     class TransitionsForOutcome {
 
-        Map<String, List<String>> transitionMap = new HashMap<String, List<String>>();
+        Map<String, List<String>> transitionMap = new HashMap<String, List<String>>()
 
         List<String> whenIssueIs(String status) {
             transitionMap[status] ? transitionMap[status] : []

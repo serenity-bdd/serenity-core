@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.asciidoc.configuration
 
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.util.EnvironmentVariables
 import java.nio.file.Path
 import java.nio.file.Paths
 

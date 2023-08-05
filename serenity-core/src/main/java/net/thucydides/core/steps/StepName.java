@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;

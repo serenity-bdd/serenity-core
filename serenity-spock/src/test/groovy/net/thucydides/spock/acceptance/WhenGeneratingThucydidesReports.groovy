@@ -1,7 +1,7 @@
 package net.thucydides.spock.acceptance
 
 import net.thucydides.core.annotations.Steps
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.spock.ThucydidesEnabled
 import spock.lang.Specification

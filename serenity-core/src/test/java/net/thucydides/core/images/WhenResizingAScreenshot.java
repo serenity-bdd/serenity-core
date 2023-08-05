@@ -1,7 +1,9 @@
 package net.thucydides.core.images;
 
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.FileSystemUtils;
+import net.thucydides.model.images.ResizableImage;
+import net.thucydides.model.images.ResizedImage;
+import net.thucydides.model.util.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Before;
@@ -119,7 +121,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage resizedImage = image.rescaleCanvas(1200);
 
-        assertThat((DodgyResizableImage) resizedImage, is(image));
+        assertThat(resizedImage, is(image));
         verify(logger).warn(contains("Could not resize screenshot"), any(Exception.class));
 
     }

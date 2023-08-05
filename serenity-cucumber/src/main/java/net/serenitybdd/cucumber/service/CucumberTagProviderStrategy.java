@@ -1,14 +1,14 @@
 package net.serenitybdd.cucumber.service;
 
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.statistics.service.ContextTagProvider;
-import net.thucydides.core.statistics.service.InjectedTagProvider;
-import net.thucydides.core.statistics.service.TagProvider;
-import net.thucydides.core.statistics.service.TagProviderStrategy;
-import net.thucydides.core.steps.TestSourceType;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider;
+import net.thucydides.model.statistics.service.ContextTagProvider;
+import net.thucydides.model.statistics.service.InjectedTagProvider;
+import net.thucydides.model.statistics.service.TagProvider;
+import net.thucydides.model.statistics.service.TagProviderStrategy;
+import net.thucydides.model.steps.TestSourceType;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Arrays;
 

@@ -4,7 +4,7 @@ import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import net.serenitybdd.reports.asciidoc.configuration.SerenityReport
 import net.serenitybdd.reports.asciidoc.configuration.TemplateDirectoryProperty
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import java.io.Writer
 
 

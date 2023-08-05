@@ -1,8 +1,10 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.Story;
+import net.serenitybdd.annotations.Story;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

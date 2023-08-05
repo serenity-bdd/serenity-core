@@ -6,9 +6,9 @@ import io.cucumber.messages.types.Scenario;
 import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestStep;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.DataTableRow;
+import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.steps.StepEventBus;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ class ScenarioContext {
 
     URI currentFeaturePath;
 
-    private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
+    private final FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
 
     public void currentFeaturePathIs(URI featurePath) {
         currentFeaturePath = featurePath;

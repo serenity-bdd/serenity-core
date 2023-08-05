@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.requirements.classpath.NarrativeTitle
+import net.thucydides.model.requirements.classpath.NarrativeTitle
 import spock.lang.Specification
 
 class WhenReadingNarrativeDetails extends Specification {

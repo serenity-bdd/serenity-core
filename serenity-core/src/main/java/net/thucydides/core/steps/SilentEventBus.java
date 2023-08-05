@@ -1,8 +1,12 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.model.*;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.TestFailureCause;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.List;
 import java.util.Map;

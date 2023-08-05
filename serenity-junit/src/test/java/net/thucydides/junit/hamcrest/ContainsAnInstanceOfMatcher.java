@@ -1,6 +1,6 @@
 package net.thucydides.junit.hamcrest;
 
-import net.thucydides.core.reports.AcceptanceTestReporter;
+import net.thucydides.model.reports.AcceptanceTestReporter;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 

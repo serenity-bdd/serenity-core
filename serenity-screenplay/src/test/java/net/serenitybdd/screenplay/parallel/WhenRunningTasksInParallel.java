@@ -5,9 +5,9 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.InParallel;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SerenityRunner.class)
 public class WhenRunningTasksInParallel {
 
-    private List<String> completedTasks =  Collections.synchronizedList(new ArrayList<String>());
+    private final List<String> completedTasks =  Collections.synchronizedList(new ArrayList<String>());
 
     private Performable doSomething() {
         return Task.where("{0} does something",

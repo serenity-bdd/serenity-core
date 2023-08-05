@@ -2,14 +2,14 @@ package net.thucydides.core.model.screenshots
 
 
 import net.thucydides.core.annotations.Screenshots
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
-import net.thucydides.core.model.TakeScreenshots
+import net.serenitybdd.annotations.Step
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.domain.TakeScreenshots
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.thucydides.core.webdriver.Configuration
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.webdriver.Configuration
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -203,14 +203,14 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
     }
 
     @Screenshots(onlyOnFailures = true)
-    public void shouldTakeScreenshotsOnlyOnFailures(Configuration configuration) {
+    void shouldTakeScreenshotsOnlyOnFailures(Configuration configuration) {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
         assert !permissions.areAllowed(TakeScreenshots.FOR_EACH_ACTION)
     }
 
     @Screenshots(disabled = true)
-    public void shouldNotTakeScreenshots(Configuration configuration) {
+    void shouldNotTakeScreenshots(Configuration configuration) {
         ScreenshotPermission permissions = new ScreenshotPermission(configuration)
         assert !permissions.areAllowed(TakeScreenshots.FOR_EACH_ACTION)
         assert !permissions.areAllowed(TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP)

@@ -1,15 +1,17 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.time.Stopwatch;
+import net.thucydides.model.domain.ReportNamer;
+import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
 public class TextSummaryReportTask extends BaseReportingTask implements ReportingTask {
 
@@ -23,7 +25,7 @@ public class TextSummaryReportTask extends BaseReportingTask implements Reportin
     public TextSummaryReportTask(FreemarkerContext context, EnvironmentVariables environmentVariables, File outputDirectory, TestOutcomes testOutcomes) {
         super(context, environmentVariables, outputDirectory);
         this.testOutcomes = testOutcomes;
-        this.reportNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML);
+        this.reportNameProvider = new ReportNameProvider(NO_CONTEXT, ReportNamer.forReportType(ReportType.HTML));
     }
 
     public void generateReports() throws IOException {

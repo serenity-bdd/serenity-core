@@ -1,10 +1,11 @@
 package net.thucydides.core.reports.adaptors.xunit
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.adaptors.xunit.DefaultXUnitAdaptor
 import spock.lang.Specification
 
-import static net.thucydides.core.util.TestResources.fileInClasspathCalled
+import static net.thucydides.model.util.TestResources.fileInClasspathCalled
 
 /**
  * We want to convert xUnit outputs (possibly with some extra custom fields) to TestOutcomes
@@ -19,7 +20,7 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
             def xUnitAdaptor = new DefaultXUnitAdaptor()
         when:
             List<TestOutcome> outcomes = xUnitAdaptor.loadOutcomesFrom(xunitFileDirectory)
-            TestOutcome outcome = outcomes[0];
+            TestOutcome outcome = outcomes[0]
         then:
             outcomes.size() == 7
             outcome.testCount == 1
@@ -35,7 +36,7 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
             def xUnitAdaptor = new DefaultXUnitAdaptor()
         when:
             List<TestOutcome> outcomes = xUnitAdaptor.testOutcomesIn(xunitFile)
-            TestOutcome outcome = outcomes[0];
+            TestOutcome outcome = outcomes[0]
         then:
             outcomes.size() == 1
             outcome.testCount == 1
@@ -50,7 +51,7 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
             def xUnitAdaptor = new DefaultXUnitAdaptor()
         when:
             List<TestOutcome> outcomes = xUnitAdaptor.testOutcomesIn(xunitFile)
-            TestOutcome outcome = outcomes[0];
+            TestOutcome outcome = outcomes[0]
         then:
             outcomes.size() == 1
             outcome.testCount == 1
@@ -64,7 +65,7 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
             def xUnitAdaptor = new DefaultXUnitAdaptor()
         when:
             List<TestOutcome> outcomes = xUnitAdaptor.testOutcomesIn(xunitFile)
-            TestOutcome outcome = outcomes[0];
+            TestOutcome outcome = outcomes[0]
         then:
             outcomes.size() == 1
             outcome.testCount == 1

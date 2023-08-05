@@ -2,7 +2,7 @@ package net.serenitybdd.reports.email
 
 import net.serenitybdd.reports.configuration.*
 import net.serenitybdd.reports.model.ReportTags
-import net.thucydides.core.ThucydidesSystemProperty.*
+import net.thucydides.model.ThucydidesSystemProperty.*
 import java.io.File
 import java.nio.file.Path
 

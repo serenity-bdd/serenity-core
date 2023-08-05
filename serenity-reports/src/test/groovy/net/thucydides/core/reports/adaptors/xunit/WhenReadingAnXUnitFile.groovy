@@ -1,9 +1,11 @@
 package net.thucydides.core.reports.adaptors.xunit
 
-import net.thucydides.core.reports.adaptors.xunit.model.TestSuite
+import net.thucydides.model.reports.adaptors.xunit.BasicXUnitLoader
+import net.thucydides.model.reports.adaptors.xunit.CouldNotReadXUnitFileException
+import net.thucydides.model.reports.adaptors.xunit.model.TestSuite
 import spock.lang.Specification
 
-import static net.thucydides.core.util.TestResources.fileInClasspathCalled
+import static net.thucydides.model.util.TestResources.fileInClasspathCalled
 
 /**
  * We want to convert xUnit outputs (possibly with some extra custom fields) to TestOutcomes
@@ -16,7 +18,7 @@ class WhenReadingAnXUnitFile extends Specification {
             def xunitFileSource = fileInClasspathCalled("/xunit/singleTestCase.xml")
             def xunitLoader = new BasicXUnitLoader()
         when:
-            TestSuite testSuite = xunitLoader.loadFrom(xunitFileSource)[0]
+        TestSuite testSuite = xunitLoader.loadFrom(xunitFileSource)[0]
         then:
             testSuite.name == "aTestSuite"
             testSuite.testCases.size() == 1

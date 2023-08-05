@@ -5,13 +5,14 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.serenitybdd.junit5.utils.ClassUtil;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.logging.ConsoleLoggingListener;
-import net.thucydides.core.model.*;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.logging.ConsoleLoggingListener;
+import net.thucydides.model.domain.*;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.reports.ReportService;
+import net.thucydides.model.reports.ReportService;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.steps.StepListener;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -35,12 +36,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.thucydides.core.reports.ReportService.getDefaultReporters;
-import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT5;
+import static net.thucydides.model.reports.ReportService.getDefaultReporters;
+import static net.thucydides.model.steps.TestSourceType.TEST_SOURCE_JUNIT5;
 
 public class SerenityTestExecutionListener implements TestExecutionListener {
 
-    private static List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
+    private static final List<Class> expectedExceptions = Collections.synchronizedList(new ArrayList<>());
 
     private static final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
@@ -58,7 +59,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     //key-> "ClassName.MethodName"
     //entries-> DataTable associated with method
-    private Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, DataTable> dataTables = Collections.synchronizedMap(new HashMap<>());
 
 
     private boolean isSerenityTest = false;
@@ -186,7 +187,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
 
     private void startTestAtEventBus(TestIdentifier testIdentifier) {
-        eventBusFor(testIdentifier).setTestSource(TestSourceType.TEST_SOURCE_JUNIT5.getValue());
+        eventBusFor(testIdentifier).setTestSource(TEST_SOURCE_JUNIT5.getValue());
         String displayName = removeEndBracketsFromDisplayName(testIdentifier.getDisplayName());
         if (isMethodSource(testIdentifier)) {
             String className = ((MethodSource) testIdentifier.getSource().get()).getClassName();
@@ -205,7 +206,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         return displayName;
     }
 
-    private Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
+    private final Map<Class<?>, String> testCaseDisplayNames = new HashMap<>();
 
     @Override
     public synchronized void executionStarted(TestIdentifier testIdentifier) {
@@ -460,9 +461,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
     private boolean testingThisTest(TestIdentifier testIdentifier, Class<?> testClass) {
         if (isMethodSource(testIdentifier)) {
             MethodSource methodSource = (MethodSource) testIdentifier.getSource().get();
-            if (testClass.equals(methodSource.getJavaClass())) {
-                return true;
-            }
+            return testClass.equals(methodSource.getJavaClass());
         }
         return false;
     }

@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.By;

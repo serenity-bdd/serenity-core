@@ -1,7 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import net.thucydides.core.annotations.Step;
-
 import java.util.List;
 
 public class AnonymousInteraction extends AnonymousPerformable implements Interaction {

@@ -1,14 +1,14 @@
 package net.serenitybdd.reports.json
 
-import net.serenitybdd.core.di.ModelInfrastructure
+import net.serenitybdd.model.di.ModelInfrastructure
 import net.serenitybdd.reports.model.*
 import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.model.averageDurationOf
 import net.serenitybdd.reports.model.maxDurationOf
 import net.thucydides.core.reports.ExtendedReport
-import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.core.reports.html.Merger
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration
@@ -28,7 +28,7 @@ class JsonSummaryReporter(val environmentVariables: EnvironmentVariables,
         }
 
         override fun setOutputDirectory(outputDirectory: Path) {
-            this.outputDirectory = outputDirectory;
+            this.outputDirectory = outputDirectory
         }
 
         constructor() : this(

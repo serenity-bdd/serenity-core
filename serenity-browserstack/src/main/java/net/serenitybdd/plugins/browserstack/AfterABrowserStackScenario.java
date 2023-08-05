@@ -2,10 +2,10 @@ package net.serenitybdd.plugins.browserstack;
 
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.ExternalLink;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 

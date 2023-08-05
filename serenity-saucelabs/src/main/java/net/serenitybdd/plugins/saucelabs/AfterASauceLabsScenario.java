@@ -1,12 +1,11 @@
 package net.serenitybdd.plugins.saucelabs;
 
-import net.serenitybdd.core.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.serenitybdd.plugins.CapabilityTags;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.ExternalLink;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -41,11 +40,11 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
                     + "You can find both of these here: https://app.saucelabs.com/user-settings"
             );
         } else {
-            ((JavascriptExecutor)driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
-            ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
+            ((JavascriptExecutor)driver).executeScript("job-build=" + BuildName.from(environmentVariables));
+            ((JavascriptExecutor)driver).executeScript("job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
 
             String result = (testOutcome.isSuccess()) ? "passed" : "failed";
-            ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
+            ((JavascriptExecutor)driver).executeScript("job-result=" +  result);
 
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
 

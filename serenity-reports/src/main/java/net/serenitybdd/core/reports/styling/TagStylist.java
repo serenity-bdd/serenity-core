@@ -1,8 +1,8 @@
 package net.serenitybdd.core.reports.styling;
 
 import com.google.common.base.Splitter;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.*;
 

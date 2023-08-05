@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.actions.LastScriptExecution;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 /**
  * Executes JavaScript in the context of the currently selected frame or window. The script fragment provided will be executed as the body of an anonymous function.

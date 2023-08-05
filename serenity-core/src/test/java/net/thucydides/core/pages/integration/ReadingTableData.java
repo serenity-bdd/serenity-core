@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.matchers.BeanMatchers.the;
+import static net.thucydides.model.matchers.BeanMatchers.the;
 import static net.thucydides.core.pages.components.HtmlTable.inTable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

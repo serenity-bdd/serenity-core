@@ -1,11 +1,11 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.requirements.model.Requirement
-import net.thucydides.core.requirements.reports.RequirementOutcome
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.requirements.model.Requirement
+import net.thucydides.model.requirements.reports.RequirementOutcome
 import spock.lang.Specification
 
 class WhenReportingOnRequirementCompletion extends Specification {

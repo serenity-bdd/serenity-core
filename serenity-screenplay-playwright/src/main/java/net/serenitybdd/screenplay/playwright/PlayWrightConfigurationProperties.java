@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.playwright;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.microsoft.playwright.options.Proxy;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.lang.reflect.Type;
 import java.nio.file.Path;

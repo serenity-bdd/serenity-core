@@ -1,6 +1,12 @@
 package net.thucydides.core.model
 
 import com.google.common.collect.Lists
+import net.thucydides.model.domain.Story
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.domain.TestTag
+
 /**
  * Created by john on 23/07/2016.
  */

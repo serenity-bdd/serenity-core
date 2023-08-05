@@ -1,7 +1,7 @@
 package net.thucydides.core.adapters.junit5;
 
-import net.thucydides.core.adapters.TestStrategyAdapter;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.adapters.TestStrategyAdapter;
+import net.thucydides.model.domain.TestTag;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class JUnit5Adapter implements TestStrategyAdapter {
 
-    private JUnit5Strategy jUnit5Strategy;
+    private final JUnit5Strategy jUnit5Strategy;
 
     public JUnit5Adapter() {
         jUnit5Strategy = new JUnit5Strategy();

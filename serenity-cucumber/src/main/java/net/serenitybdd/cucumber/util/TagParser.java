@@ -2,8 +2,8 @@ package net.serenitybdd.cucumber.util;
 
 import io.cucumber.tagexpressions.Expression;
 import io.cucumber.tagexpressions.TagExpressionParser;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;

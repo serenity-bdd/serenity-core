@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.model.time.SystemClock;
 
 public class ScenarioStepsStepDelayer<T extends ScenarioSteps> {
 

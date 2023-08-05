@@ -1,7 +1,7 @@
 package net.serenitybdd.core.lifecycle;
 
-import net.serenitybdd.core.exceptions.TestCompromisedException;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.model.exceptions.TestCompromisedException;
+import net.thucydides.model.domain.TestOutcome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

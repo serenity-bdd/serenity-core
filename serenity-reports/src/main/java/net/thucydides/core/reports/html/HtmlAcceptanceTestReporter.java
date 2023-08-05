@@ -1,23 +1,25 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.core.reports.styling.TagStylist;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.*;
-import net.thucydides.core.model.formatters.ReportFormatter;
-import net.thucydides.core.model.screenshots.Screenshot;
-import net.thucydides.core.reports.AcceptanceTestReporter;
-import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
-import net.thucydides.core.util.TagInflector;
-import net.thucydides.core.util.VersionProvider;
+import net.serenitybdd.model.time.Stopwatch;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.domain.screenshots.Screenshot;
+import net.thucydides.model.reports.AcceptanceTestReporter;
+import net.thucydides.model.reports.OutcomeFormat;
+import net.thucydides.model.reports.ReportOptions;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.TagFilter;
+import net.thucydides.model.requirements.RequirementsService;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
+import net.thucydides.model.util.TagInflector;
+import net.thucydides.model.util.VersionProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +34,8 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.model.ReportType.HTML;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.model.domain.ReportType.HTML;
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
  * Generates acceptance test results in HTML form.
@@ -47,7 +49,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private String qualifier;
 
-    private RequirementsService requirementsService;
+    private final RequirementsService requirementsService;
 
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;

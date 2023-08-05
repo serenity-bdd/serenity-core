@@ -1,6 +1,6 @@
 package net.thucydides.core.model.screenshots;
 
-import net.thucydides.core.model.TakeScreenshots;
+import net.thucydides.model.domain.TakeScreenshots;
 
 public class StepDefinitionAnnotations {
 
@@ -14,5 +14,5 @@ public class StepDefinitionAnnotations {
         return screenshotOverride.get();
     }
 
-    public static void clear() { screenshotOverride.remove(); };
+    public static void clear() { screenshotOverride.remove(); }
 }

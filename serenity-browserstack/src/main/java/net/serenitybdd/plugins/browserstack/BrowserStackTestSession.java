@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.browserstack;
 
 import com.google.gson.*;
-import net.serenitybdd.core.model.TestOutcomeName;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.serenitybdd.model.model.TestOutcomeName;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.session.TestSession;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.Header;

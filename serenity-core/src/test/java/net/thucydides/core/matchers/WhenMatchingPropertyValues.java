@@ -1,5 +1,6 @@
 package net.thucydides.core.matchers;
 
+import net.thucydides.model.matchers.*;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
 import org.junit.Rule;
@@ -8,7 +9,7 @@ import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
-import static net.thucydides.core.matchers.dates.DateMatchers.isAfter;
+import static net.thucydides.model.matchers.dates.DateMatchers.isAfter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

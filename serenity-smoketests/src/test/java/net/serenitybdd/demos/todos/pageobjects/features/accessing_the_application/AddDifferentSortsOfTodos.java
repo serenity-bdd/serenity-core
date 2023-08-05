@@ -4,7 +4,7 @@ import net.serenitybdd.demos.todos.pageobjects.steps.TodoUserSteps;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.WithTag;
+import net.thucydides.model.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;

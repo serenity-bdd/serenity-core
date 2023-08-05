@@ -1,6 +1,6 @@
 package net.serenitybdd.rest.event;
 
-import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.model.rest.RestQuery;
 import net.thucydides.core.steps.events.StepEventBusEventBase;
 
 public class RecordRestQueryEvent extends StepEventBusEventBase {

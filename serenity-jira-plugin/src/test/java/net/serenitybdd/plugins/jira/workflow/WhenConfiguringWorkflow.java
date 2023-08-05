@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.jira.workflow;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -1,14 +1,14 @@
 package net.thucydides.core.reports.html.accessibility;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ACCESSIBILITY;
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_ACCESSIBILITY;
+import static net.thucydides.model.domain.TestResult.*;
 
 /**
  * We can switch between color schemes by setting the serenity.report.accessibility property to true.

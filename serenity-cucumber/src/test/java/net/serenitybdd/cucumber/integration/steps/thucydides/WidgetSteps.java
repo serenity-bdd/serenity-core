@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.integration.steps.thucydides;
 
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

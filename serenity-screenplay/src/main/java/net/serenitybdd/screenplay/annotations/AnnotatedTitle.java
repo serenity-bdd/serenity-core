@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.annotations;
 
 import net.serenitybdd.screenplay.Uninstrumented;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;

@@ -2,9 +2,9 @@ package net.thucydides.core.webdriver;
 
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.time.Duration;
 

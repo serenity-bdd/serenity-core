@@ -3,9 +3,9 @@ package net.serenitybdd.junit5;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.TestInstance;
@@ -232,7 +232,7 @@ public class JUnit5DataDrivenAnnotations {
         if (argument instanceof Arguments) {
             return Arrays.asList(((Arguments) argument).get());
         } else {
-            return Arrays.asList(argument);
+            return Collections.singletonList(argument);
         }
     }
 

@@ -2,7 +2,7 @@ package net.thucydides.samples;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.thucydides.core.annotations.Manual;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

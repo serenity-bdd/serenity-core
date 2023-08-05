@@ -1,6 +1,7 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.ReportOptions
 import spock.lang.Specification
 
 class WhenConfiguringReportOptions extends Specification {

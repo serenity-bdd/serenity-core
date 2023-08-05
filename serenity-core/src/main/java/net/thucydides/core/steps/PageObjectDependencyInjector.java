@@ -1,16 +1,16 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.steps.UIInteractionSteps;
-import net.thucydides.core.annotations.Fields;
+import net.serenitybdd.annotations.Fields;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.PageFactory;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -77,7 +77,6 @@ public class PageObjectDependencyInjector implements DependencyInjector {
 
             if (pageObjectField.get(target) != null) {
                 updatePageObject(pageObjectField.get(target));//, pages);
-                return;
             } else {
                 Class<PageObject> pageObjectClass = (Class<PageObject>) pageObjectField.getType();
                 PageObject newPageObject = factory.createPageOfType(pageObjectClass);

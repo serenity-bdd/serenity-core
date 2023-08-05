@@ -1,6 +1,7 @@
 package net.thucydides.core;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,8 @@
 
 package net.thucydides.core.statistics
 
+import net.thucydides.model.statistics.AtomicTestCount
+import net.thucydides.model.statistics.TestCount
 import spock.lang.Specification
 
 class WhenKeepingTrackOfTheTestExecutionCount extends Specification {

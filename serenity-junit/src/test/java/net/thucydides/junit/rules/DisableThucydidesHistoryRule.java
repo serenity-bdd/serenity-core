@@ -1,7 +1,7 @@
 package net.thucydides.junit.rules;
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

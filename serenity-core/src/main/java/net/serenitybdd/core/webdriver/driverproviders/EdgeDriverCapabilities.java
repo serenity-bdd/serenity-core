@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 /**
  * Driver options are command line arguments for the browser:

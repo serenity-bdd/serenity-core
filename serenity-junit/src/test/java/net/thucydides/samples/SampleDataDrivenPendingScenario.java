@@ -2,7 +2,7 @@ package net.thucydides.samples;
 
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Pending;
+import net.serenitybdd.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.annotations.TestData;

@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay
 
 import net.serenitybdd.screenplay.formatting.FormattedTitle
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenFormattingConsequenceDescriptions extends Specification {

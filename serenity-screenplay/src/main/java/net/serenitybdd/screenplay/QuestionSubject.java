@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import static net.thucydides.core.util.NameConverter.humanize;
+import static net.thucydides.model.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class QuestionSubject<T> {

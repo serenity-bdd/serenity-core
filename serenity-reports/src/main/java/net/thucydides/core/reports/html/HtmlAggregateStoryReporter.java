@@ -1,22 +1,24 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.SerenitySystemProperties;
-import net.serenitybdd.core.di.ModelInfrastructure;
-import net.serenitybdd.core.time.Stopwatch;
+import net.serenitybdd.model.SerenitySystemProperties;
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.serenitybdd.model.time.Stopwatch;
 import net.serenitybdd.reports.model.DurationDistribution;
 import net.serenitybdd.reports.model.FrequentFailure;
 import net.serenitybdd.reports.model.FrequentFailures;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.reports.*;
-import net.thucydides.core.requirements.DefaultRequirements;
-import net.thucydides.core.requirements.Requirements;
-import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.reports.*;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.requirements.DefaultRequirements;
+import net.thucydides.model.requirements.Requirements;
+import net.thucydides.model.requirements.model.RequirementsConfiguration;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.model.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_TEST_ROOT;
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -44,9 +46,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 
-    private String projectName;
+    private final String projectName;
     private String projectDirectory;
-    private String relativeLink;
+    private final String relativeLink;
     private String tags;
     private final IssueTracking issueTracking;
 
@@ -54,7 +56,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final ReportNameProvider reportNameProvider;
     private final Requirements requirements;
 
-    private FormatConfiguration formatConfiguration;
+    private final FormatConfiguration formatConfiguration;
     private boolean generateTestOutcomeReports = false;
 
     public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};

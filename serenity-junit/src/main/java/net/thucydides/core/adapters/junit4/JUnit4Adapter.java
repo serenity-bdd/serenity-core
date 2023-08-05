@@ -1,7 +1,7 @@
 package net.thucydides.core.adapters.junit4;
 
-import net.thucydides.core.adapters.TestStrategyAdapter;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.adapters.TestStrategyAdapter;
+import net.thucydides.model.domain.TestTag;
 
 import java.lang.reflect.Method;
 import java.util.List;

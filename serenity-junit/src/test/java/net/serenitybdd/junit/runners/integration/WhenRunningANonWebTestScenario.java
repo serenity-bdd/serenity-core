@@ -2,11 +2,11 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.model.TestTag;
+import net.serenitybdd.annotations.Pending;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
@@ -346,7 +346,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
             if (testOutcome.getTitle().startsWith(title)) {
                 return testOutcome;
             }
-        };
+        }
         return null;
     }
 

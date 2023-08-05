@@ -1,16 +1,16 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
-import net.thucydides.core.batches.BatchManager;
+import net.thucydides.model.batches.BatchManager;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.AcceptanceTestReporter;
-import net.thucydides.core.reports.ReportService;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.AcceptanceTestReporter;
+import net.thucydides.model.reports.ReportService;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.tags.TagScanner;
-import net.thucydides.core.tags.Taggable;
+import net.thucydides.model.tags.TagScanner;
+import net.thucydides.model.tags.Taggable;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.ThucydidesJUnitSystemProperties;
@@ -40,7 +40,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     private final DriverConfiguration configuration;
     private ReportService reportService;
     private final ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = ParameterizedTestsOutcomeAggregator.from(this);
-    private TagScanner tagScanner;
+    private final TagScanner tagScanner;
 
     /**
      * Test runner used for testing purposes.
@@ -56,7 +56,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
                                        final WebDriverFactory webDriverFactory,
                                        final BatchManager batchManager
     ) throws Throwable {
-        super(klass, Collections.<Runner>emptyList());
+        super(klass, Collections.emptyList());
         this.configuration = configuration;
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
 

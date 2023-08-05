@@ -3,7 +3,7 @@ package net.serenitybdd.junit.runners.smoketests.steplibraries;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

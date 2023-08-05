@@ -2,9 +2,9 @@ package net.serenitybdd.demos.todos.pageobjects.steps;
 
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatusFilter;
 import net.serenitybdd.demos.todos.pageobjects.pages.TodoListPage;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.annotations.Step;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import static java.util.Arrays.asList;
 import static net.serenitybdd.demos.todos.pageobjects.model.TodoStatus.Active;

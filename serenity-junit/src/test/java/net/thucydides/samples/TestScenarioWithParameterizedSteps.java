@@ -3,7 +3,7 @@ package net.thucydides.samples;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.TestsRequirement;
+import net.serenitybdd.annotations.TestsRequirement;
 import net.thucydides.core.pages.Pages;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import net.thucydides.core.annotations.Pending;
+import net.serenitybdd.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

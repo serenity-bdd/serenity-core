@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.model.*;
+import net.thucydides.model.domain.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 

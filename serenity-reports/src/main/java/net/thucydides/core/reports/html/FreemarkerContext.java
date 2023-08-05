@@ -1,29 +1,32 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.buildinfo.BuildInfoProvider;
-import net.serenitybdd.core.buildinfo.BuildProperties;
-import net.serenitybdd.core.di.ModelInfrastructure;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.buildinfo.BuildInfoProvider;
+import net.serenitybdd.model.buildinfo.BuildProperties;
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.reports.model.*;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.NumericalFormatter;
-import net.thucydides.core.model.ReportType;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.model.formatters.ReportFormatter;
-import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.accessibility.ChartColorScheme;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.reports.ScenarioOutcome;
-import net.thucydides.core.requirements.reports.ScenarioOutcomes;
-import net.thucydides.core.tags.OutcomeTagFilter;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
-import net.thucydides.core.util.TagInflector;
-import net.thucydides.core.util.VersionProvider;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.NumericalFormatter;
+import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.domain.formatters.ReportFormatter;
+import net.thucydides.model.reports.ReportOptions;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.RequirementsFilter;
+import net.thucydides.model.reports.html.TagFilter;
+import net.thucydides.model.requirements.RequirementsService;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.reports.ScenarioOutcome;
+import net.thucydides.model.requirements.reports.ScenarioOutcomes;
+import net.thucydides.model.tags.OutcomeTagFilter;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
+import net.thucydides.model.util.TagInflector;
+import net.thucydides.model.util.VersionProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
@@ -36,11 +39,11 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static net.serenitybdd.reports.model.DurationsKt.*;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.READABLE_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
  * Created by john on 21/06/2016.

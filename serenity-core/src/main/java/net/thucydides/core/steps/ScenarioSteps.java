@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.model.time.SystemClock;
 import net.thucydides.core.pages.Pages;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;

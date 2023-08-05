@@ -1,11 +1,11 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_HISTORY_DIRECTORY;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_HISTORY_DIRECTORY;
 
 public class HistoryDirectory {
 

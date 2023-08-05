@@ -1,7 +1,8 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.ReportOptions
 import spock.lang.Specification
 
 class WhenManagingTestResultTags extends Specification {
@@ -17,10 +18,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[1].addTags([TestTag.withValue("color:red")])
 
         then:
-            testOutcomes.tags.size() == 5
-            testOutcomes.tags as Set == [TestTag.withValue("feature:widget feature"),
-                                      TestTag.withValue("flavor:chocolate"),
-                                      TestTag.withValue("feature:net/thucydides/core/reports/TestOutcomesBuilder/WidgetFeature/PurchaseNewWidget"),
+            testOutcomes.tags as Set == [TestTag.withValue("flavor:chocolate"),
                                       TestTag.withValue("color:orange"),
                                       TestTag.withValue("color:red")] as Set
     }
@@ -32,9 +30,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
             testOutcomes.tagNames == ['chocolate',
-                                      'net/thucydides/core/reports/testoutcomesbuilder/widgetfeature/purchasenewwidget',
                                       'orange',
-                                      'widget feature'
                                       ]
     }
 
@@ -43,7 +39,7 @@ class WhenManagingTestResultTags extends Specification {
             testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
             testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
         then:
-            testOutcomes.tagTypes == ['color','feature','flavor']
+            testOutcomes.tagTypes == ['color','flavor']
     }
 
 
@@ -52,7 +48,7 @@ class WhenManagingTestResultTags extends Specification {
             def environmentVariables = new MockEnvironmentVariables()
             environmentVariables.setProperty("serenity.report.tag.menus","color,flavor")
         when:
-            ReportOptions options = new ReportOptions(environmentVariables)
+        ReportOptions options = new ReportOptions(environmentVariables)
         then:
             options.firstClassTagTypes == ['color','flavor']
     }

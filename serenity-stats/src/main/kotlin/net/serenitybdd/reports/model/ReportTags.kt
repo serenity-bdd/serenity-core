@@ -1,9 +1,9 @@
 package net.serenitybdd.reports.model
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES
-import net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_TAGTYPES
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.ThucydidesSystemProperty.REPORT_TAGTYPES
+import net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_TAGTYPES
+import net.thucydides.model.util.EnvironmentVariables
 
 class ReportTags(val environmentVariables: EnvironmentVariables) {
 

@@ -1,8 +1,8 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.runners.model.TestClass;
 
 public class TestConfiguration {

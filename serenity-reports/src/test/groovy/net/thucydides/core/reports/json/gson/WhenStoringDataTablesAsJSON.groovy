@@ -1,8 +1,9 @@
 package net.thucydides.core.reports.json.gson
 
-import net.thucydides.core.model.DataTable
-import net.thucydides.core.model.DataTableRow
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.DataTable
+import net.thucydides.model.domain.DataTableRow
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.json.gson.GsonJSONConverter
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import spock.lang.Shared
@@ -13,7 +14,7 @@ class WhenStoringDataTablesAsJSON extends Specification {
     private static final DateTime FIRST_OF_JANUARY = new LocalDateTime(2013, 1, 1, 0, 0, 0, 0).toDateTime()
 
     @Shared
-    def environmentVars = new MockEnvironmentVariables();
+    def environmentVars = new MockEnvironmentVariables()
 
     @Shared
     def converter = new GsonJSONConverter(environmentVars)

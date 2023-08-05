@@ -1,10 +1,11 @@
 package net.thucydides.core.reports.junit
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
-import net.thucydides.core.steps.TestFailureCause
+import net.thucydides.model.reports.junit.JUnitXMLOutcomeReporter
+import net.thucydides.model.steps.TestFailureCause
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -18,23 +19,23 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
     private static final ZonedDateTime FIRST_OF_JANUARY = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault())
     private static final ZonedDateTime SECOND_OF_JANUARY = ZonedDateTime.of(2013, 1, 2, 0, 0, 0, 0, ZoneId.systemDefault())
 
-    def JUnitXMLOutcomeReporter reporter
+    JUnitXMLOutcomeReporter reporter
 
     File outputDirectory
 
     def setup() {
         outputDirectory = Files.createTempDirectory("junit").toFile()
-        reporter = new JUnitXMLOutcomeReporter(outputDirectory);
+        reporter = new JUnitXMLOutcomeReporter(outputDirectory)
     }
 
     class SomeTestScenario {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
@@ -111,7 +112,7 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
         testOutcome2.startTime = FIRST_OF_JANUARY
         testOutcome2.description = "Some description"
         testOutcome2.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
-        def failingStep = TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY);
+        def failingStep = TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY)
         failingStep.failedWith(new AssertionError("Oh noses!"))
         testOutcome2.recordStep(failingStep)
 

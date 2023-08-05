@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.html.screenshots;
 
-import net.thucydides.core.images.ResizableImage;
-import net.thucydides.core.model.screenshots.Screenshot;
-import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.FileSystemUtils;
+import net.thucydides.model.images.ResizableImage;
+import net.thucydides.model.domain.screenshots.Screenshot;
+import net.thucydides.model.domain.stacktrace.FailureCause;
+import net.thucydides.model.util.FileSystemUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

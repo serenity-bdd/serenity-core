@@ -1,10 +1,10 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
-import net.thucydides.core.annotations.Step
+import net.serenitybdd.annotations.Step
 import net.thucydides.core.annotations.Steps
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
@@ -23,20 +23,20 @@ class WhenHandlingFailingTests extends Specification {
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
     }
 
 
     static class SomeSteps {
         @Step
-        public void myFailingStep() {
+        void myFailingStep() {
             throw new IllegalStateException()
 
         }
 
         @Step
-        public void myUnexpectedlyFailingStep() {
+        void myUnexpectedlyFailingStep() {
             throw new UnknownError()
 
         }
@@ -46,14 +46,14 @@ class WhenHandlingFailingTests extends Specification {
     static class ATestWithAnExpectedExceptionInAStep {
 
         @Steps
-        SomeSteps mysteps;
+        SomeSteps mysteps
 
         @Test(expected=IllegalStateException)
-        public void shouldThrowAnIllegalStateException() {
+        void shouldThrowAnIllegalStateException() {
             try {
-                mysteps.myFailingStep();
+                mysteps.myFailingStep()
             } catch(Exception e) {
-                System.out.println("ZZZThrowsException " + e);
+                System.out.println("ZZZThrowsException " + e)
             }
         }
     }
@@ -71,11 +71,11 @@ class WhenHandlingFailingTests extends Specification {
     static class ATestWithAnUnexpectedExceptionInAStep {
 
         @Steps
-        SomeSteps mysteps;
+        SomeSteps mysteps
 
         @Test(expected=IllegalStateException)
-        public void shouldThrowAnIllegalStateException() {
-            mysteps.myUnexpectedlyFailingStep();
+        void shouldThrowAnIllegalStateException() {
+            mysteps.myUnexpectedlyFailingStep()
         }
     }
 
@@ -92,7 +92,7 @@ class WhenHandlingFailingTests extends Specification {
     static class ATestWithAnExpectedException {
 
         @Test(expected=IllegalStateException)
-        public void shouldThrowAnIllegalStateException() {
+        void shouldThrowAnIllegalStateException() {
             throw new IllegalStateException()
         }
     }
@@ -110,7 +110,7 @@ class WhenHandlingFailingTests extends Specification {
     static class ATestWithAnUnexpectedException {
 
         @Test(expected=IllegalStateException)
-        public void shouldThrowAnIllegalStateException() {
+        void shouldThrowAnIllegalStateException() {
             throw new NullPointerException()
         }
     }
@@ -128,7 +128,7 @@ class WhenHandlingFailingTests extends Specification {
     static class ATestWithAnUnexpectedFailure {
 
         @Test(expected=IllegalStateException)
-        public void shouldThrowAnIllegalStateException() {
+        void shouldThrowAnIllegalStateException() {
             throw new AssertionError()
         }
     }

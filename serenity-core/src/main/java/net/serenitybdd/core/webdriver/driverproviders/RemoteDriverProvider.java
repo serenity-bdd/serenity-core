@@ -1,14 +1,14 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.ProvidesRemoteWebdriverUrl;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_DRIVER;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER;
 
 /**
  * A Remote Driver using services like Browserstack, LambdaTest or SauceLabs (for remote web testing), or Selenium Grid.

@@ -1,7 +1,7 @@
 package integration.serenitySteps;
 
 import integration.pages.IFixitPage;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 
 import static org.assertj.core.api.Assertions.assertThat;

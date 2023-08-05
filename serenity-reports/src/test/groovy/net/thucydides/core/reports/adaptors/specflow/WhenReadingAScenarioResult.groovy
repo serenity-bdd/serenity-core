@@ -1,6 +1,8 @@
 package net.thucydides.core.reports.adaptors.specflow
 
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.adaptors.specflow.ScenarioStep
+import net.thucydides.model.reports.adaptors.specflow.ScenarioStepReader
 import spock.lang.Specification
 
 class WhenReadingAScenarioResult extends Specification {
@@ -9,7 +11,7 @@ class WhenReadingAScenarioResult extends Specification {
 
     def "should identify result lines"() {
         expect:
-            ScenarioStepReader.isResult(line) == expected
+        ScenarioStepReader.isResult(line) == expected
         where:
             line                | expected
         "  -> done: foo"        | true

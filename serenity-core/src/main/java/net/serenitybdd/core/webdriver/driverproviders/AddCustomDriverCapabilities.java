@@ -2,8 +2,8 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.webdriver.driverproviders.cache.PreScenarioFixtures;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 

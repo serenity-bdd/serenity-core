@@ -2,7 +2,7 @@ package net.thucydides.browsermob.fixtureservices
 
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService
 import net.thucydides.core.fixtureservices.FixtureException
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class WhenUsingABrowsermobService extends Specification {
 
     def "should find the browsermob service if it is on the classpath"() {
         given:
-            def classpathFixtureProviderService = new ClasspathFixtureProviderService();
+            def classpathFixtureProviderService = new ClasspathFixtureProviderService()
         when:
             def services = classpathFixtureProviderService.getFixtureServices()
         then:
@@ -133,7 +133,7 @@ class WhenUsingABrowsermobService extends Specification {
     Ports withNoPorts = new Ports(8888) {
         @Override
         boolean isAvailable(int portNumber) {
-            return false;
+            return false
         }
     }
 

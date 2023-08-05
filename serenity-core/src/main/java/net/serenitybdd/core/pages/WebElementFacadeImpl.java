@@ -3,14 +3,13 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
-import net.serenitybdd.core.time.InternalSystemClock;
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.serenitybdd.model.time.InternalSystemClock;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.TemporalUnitConverter;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -33,13 +32,12 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
-import static net.thucydides.core.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
+import static net.thucydides.model.ThucydidesSystemProperty.LEGACY_WAIT_FOR_TEXT;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 

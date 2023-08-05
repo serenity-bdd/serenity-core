@@ -3,12 +3,12 @@ package net.serenitybdd.screenplay
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
 import net.serenitybdd.screenplay.shopping.DanaGoesShoppingQuicklySample
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
 import static OutcomeChecks.resultsFrom
-import static net.thucydides.core.model.TestResult.*
+import static net.thucydides.model.domain.TestResult.*
 
 class WhenActorsGoOnAJourney extends Specification{
 

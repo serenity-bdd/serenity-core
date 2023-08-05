@@ -1,9 +1,9 @@
 package net.serenitybdd.core.photography;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.screenshots.BlurLevel;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.UnhandledAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +19,14 @@ public class PhotoSession {
     private final PhotoLens lens;
     private final Path outputDirectory;
     private final Darkroom darkroom;
-    private BlurLevel blurLevel;
-    private EnvironmentVariables environmentVariables;
-    private ScreenShooterFactory screenShooterFactory;
+    private final BlurLevel blurLevel;
+    private final EnvironmentVariables environmentVariables;
+    private final ScreenShooterFactory screenShooterFactory;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private static ThreadLocal<ScreenshotPhoto> previousScreenshot = new ThreadLocal<>();
-    private static ThreadLocal<Long> previousScreenshotTimestamp = ThreadLocal.withInitial(() -> 0L);
+    private static final ThreadLocal<ScreenshotPhoto> previousScreenshot = new ThreadLocal<>();
+    private static final ThreadLocal<Long> previousScreenshotTimestamp = ThreadLocal.withInitial(() -> 0L);
 
     private static final String BLANK_SCREEN = "c118a2e3019c996cb56584ec6f8cd0b2be4c056ce4ae6b83de3c32c2e364cc61.png";
 

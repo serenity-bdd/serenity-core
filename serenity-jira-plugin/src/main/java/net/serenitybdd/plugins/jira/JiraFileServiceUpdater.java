@@ -3,15 +3,15 @@ package net.serenitybdd.plugins.jira;
 
 import com.google.common.collect.Lists;
 
-import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestOutcomeSummary;
-import net.thucydides.core.reports.JiraUpdaterService;
-import net.thucydides.core.reports.TestOutcomeStream;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestOutcomeSummary;
+import net.thucydides.model.reports.JiraUpdaterService;
+import net.thucydides.model.reports.TestOutcomeStream;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,8 @@ public class JiraFileServiceUpdater implements JiraUpdaterService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JiraFileServiceUpdater.class);
     private final TestResultTally<TestOutcomeSummary> resultTally;
-    private Set<String> allIssues;
-    private JiraUpdater jiraUpdater;
+    private final Set<String> allIssues;
+    private final JiraUpdater jiraUpdater;
 
     
     public JiraFileServiceUpdater(IssueTracker issueTracker,

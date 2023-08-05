@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 
 class CSSColor {
     companion object {

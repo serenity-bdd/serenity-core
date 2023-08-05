@@ -2,7 +2,7 @@ package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
-import net.thucydides.core.annotations.Step
+import net.serenitybdd.annotations.Step
 import net.thucydides.core.steps.StepEventBus
 
 open class PerformableExpectation<A, E>(

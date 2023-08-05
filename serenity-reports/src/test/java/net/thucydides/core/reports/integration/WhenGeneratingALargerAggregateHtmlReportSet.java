@@ -1,21 +1,21 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.TestOutcomeLoader;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.reports.OutcomeFormat;
+import net.thucydides.model.reports.TestOutcomeLoader;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.jupiter.api.*;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
 
-import static net.thucydides.core.matchers.FileMatchers.exists;
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
+import static net.thucydides.model.matchers.FileMatchers.exists;
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -24,7 +24,7 @@ class WhenGeneratingALargerAggregateHtmlReportSet {
     private static File outputDirectory;
     HtmlAggregateStoryReporter reporter;
 
-    private static EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+    private static final EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
     @BeforeAll
     public static void generateReports() throws IOException {

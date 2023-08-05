@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.bitbar;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Optional;
 

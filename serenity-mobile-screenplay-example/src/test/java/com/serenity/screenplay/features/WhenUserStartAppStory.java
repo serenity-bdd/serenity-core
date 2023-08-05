@@ -15,7 +15,7 @@ import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.WithTag;
+import net.thucydides.model.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 
 @RunWith(SerenityRunner.class)

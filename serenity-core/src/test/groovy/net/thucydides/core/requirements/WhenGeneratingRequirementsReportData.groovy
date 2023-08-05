@@ -1,20 +1,24 @@
 package net.thucydides.core.requirements
 
 import com.google.common.collect.Lists
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.*
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.thucydides.core.requirements.reports.cucumber.FeatureCache
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.*
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.requirements.MultiSourceRequirementsService
+import net.thucydides.model.requirements.PackageAnnotationBasedTagProvider
+import net.thucydides.model.requirements.RequirementsTagProvider
+import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomes
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.requirements.reports.cucumber.FeatureCache
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT
 
 class WhenGeneratingRequirementsReportData extends Specification {
 
@@ -72,7 +76,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             outcomes.requirementOutcomes.collect {it.requirement.narrative.renderedText}
     }
 
-    public void "should report test results associated with specified requirements"() {
+    void "should report test results associated with specified requirements"() {
         given: "we have a set of test outcomes"
             def someTestOutcomes = TestOutcomes.of(someTestResults())
             def requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
@@ -293,10 +297,10 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     def someTestResults() {
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
 
         return [testOutcome1, testOutcome2]
 
@@ -304,16 +308,16 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     def somePassingTestResults() {
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
         testOutcome1.recordStep(TestStep.forStepCalled("step 1").withResult(TestResult.SUCCESS))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
         testOutcome2.recordStep(TestStep.forStepCalled("step 2").withResult(TestResult.SUCCESS))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
 
         TestOutcome testOutcome3 = TestOutcome.forTestInStory("Feed chickens grain", Story.called("Feed chickens"))
         testOutcome2.recordStep(TestStep.forStepCalled("step 3").withResult(TestResult.SUCCESS))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
 
         return [testOutcome1, testOutcome2, testOutcome3]
 
@@ -321,16 +325,16 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     def somePendingTestResults() {
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
         testOutcome1.recordStep(TestStep.forStepCalled("step 1").withResult(TestResult.PENDING))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
         testOutcome2.recordStep(TestStep.forStepCalled("step 2").withResult(TestResult.SUCCESS))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
 
         TestOutcome testOutcome3 = TestOutcome.forTestInStory("Feed chickens grain", Story.called("Feed chickens"))
         testOutcome2.recordStep(TestStep.forStepCalled("step 3").withResult(TestResult.SUCCESS))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
 
         return [testOutcome1, testOutcome2, testOutcome3]
 
@@ -339,20 +343,20 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     def someFailingTestResults() {
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("capability")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("capability")))
         testOutcome1.recordStep(TestStep.forStepCalled("step 1").withResult(TestResult.SUCCESS))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
         testOutcome2.recordStep(TestStep.forStepCalled("step 2").withResult(TestResult.SUCCESS))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
 
         TestOutcome testOutcome3 = TestOutcome.forTestInStory("Feed chickens grain", Story.called("Feed chickens"))
         testOutcome3.recordStep(TestStep.forStepCalled("step 3").withResult(TestResult.SUCCESS))
-        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
 
         TestOutcome testOutcome4 = TestOutcome.forTestInStory("Feed chickens cake", Story.called("Feed chickens"))
         testOutcome4.recordStep(TestStep.forStepCalled("step 4").withResult(TestResult.FAILURE))
-        testOutcome4.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome4.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
 
         return [testOutcome1, testOutcome2, testOutcome3, testOutcome4]
 

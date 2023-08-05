@@ -1,8 +1,8 @@
 package some.other.place;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.statistics.service.TagProvider;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.statistics.service.TagProvider;
 
 import java.util.Set;
 

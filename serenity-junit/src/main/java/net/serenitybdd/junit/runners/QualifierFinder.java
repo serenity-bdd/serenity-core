@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.reflection.MethodFinder;
+import net.thucydides.model.reflection.MethodFinder;
 import net.thucydides.junit.annotations.Qualifier;
 import net.thucydides.junit.internals.MethodInvoker;
 

@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 public class OpenTheApplication implements Performable {
 

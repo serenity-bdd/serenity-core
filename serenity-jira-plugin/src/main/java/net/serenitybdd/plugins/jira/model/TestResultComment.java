@@ -4,8 +4,8 @@ package net.serenitybdd.plugins.jira.model;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestResultList;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestResultList;
 
 import java.time.LocalDateTime;
 import java.util.*;

@@ -1,6 +1,7 @@
 package net.thucydides.core.annotations;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.serenitybdd.annotations.Fields;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;

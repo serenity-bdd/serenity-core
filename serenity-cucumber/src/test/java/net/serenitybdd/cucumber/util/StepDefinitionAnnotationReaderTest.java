@@ -1,6 +1,6 @@
 package net.serenitybdd.cucumber.util;
 
-import net.thucydides.core.model.TakeScreenshots;
+import net.thucydides.model.domain.TakeScreenshots;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

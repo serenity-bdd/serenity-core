@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver.appium
 import net.serenitybdd.core.webdriver.driverproviders.AppiumDriverProvider
 import net.thucydides.core.annotations.Shared
 import net.thucydides.core.events.TestLifecycleEvents
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverInstanceEvents
 import net.thucydides.core.webdriver.WebDriverLifecycleEvent
 import org.openqa.selenium.WebDriver
@@ -120,7 +120,7 @@ class WhenUsingAnAppiumDevicePool extends Specification {
             bus.register(new AppiumDriverProvider.AppiumEventListener(driver, devicePool.requestDevice(), devicePool))
             bus.register(new AppiumDriverProvider.AppiumEventListener(driver, devicePool.requestDevice(), devicePool))
         when:
-            TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
+            TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished())
         then:
             devicePool.availableDevices.containsAll(["device1","device2","device3"])
     }

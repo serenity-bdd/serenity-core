@@ -5,7 +5,7 @@ import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;

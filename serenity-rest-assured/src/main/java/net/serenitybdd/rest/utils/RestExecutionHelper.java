@@ -1,14 +1,14 @@
 package net.serenitybdd.rest.utils;
 
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
 import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
 
 
@@ -18,7 +18,7 @@ import static net.thucydides.core.steps.StepEventBus.getParallelEventBus;
  * Time: 7:51 AM
  */
 public class RestExecutionHelper {
-    private static Set<String> classWithDryCleanEnabled =
+    private static final Set<String> classWithDryCleanEnabled =
             Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     public static boolean restCallsAreDisabled() {

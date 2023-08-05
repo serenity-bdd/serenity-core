@@ -2,9 +2,9 @@ package net.thucydides.junit.runners;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.Before;

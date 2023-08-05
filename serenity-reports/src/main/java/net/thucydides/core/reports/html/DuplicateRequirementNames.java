@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
 
 public class DuplicateRequirementNames {
     public static boolean presentIn(RequirementsOutcomes filteredRequirementsOutcomes) {

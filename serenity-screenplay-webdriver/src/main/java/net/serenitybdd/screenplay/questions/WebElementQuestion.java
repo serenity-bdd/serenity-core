@@ -1,10 +1,8 @@
 package net.serenitybdd.screenplay.questions;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.HumanReadableTaskName;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.annotations.Subject;
@@ -12,12 +10,7 @@ import net.serenitybdd.screenplay.matchers.statematchers.CheckForAbsenceHint;
 import net.serenitybdd.screenplay.matchers.statematchers.MissingWebElement;
 import net.serenitybdd.screenplay.targets.HasByLocator;
 import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.screenplay.ui.LocatorStrategies;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 
 import java.util.List;
 import java.util.Set;

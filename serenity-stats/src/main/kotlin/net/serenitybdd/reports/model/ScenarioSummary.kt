@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
 
 /**
  * A summary of a failing scenario to appear in the email reports

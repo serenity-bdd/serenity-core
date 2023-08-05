@@ -1,7 +1,7 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.model.HeuristicTestResult
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.HeuristicTestResult
+import net.thucydides.model.domain.TestResult
 import spock.lang.Specification
 import spock.lang.Unroll
 

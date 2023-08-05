@@ -1,13 +1,13 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
 import io.cucumber.gherkin.ScenarioLineCountStatistics;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_TEST_STATISTICS_DIR;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_TEST_STATISTICS_DIR;
 
 public interface TestStatistics {
 

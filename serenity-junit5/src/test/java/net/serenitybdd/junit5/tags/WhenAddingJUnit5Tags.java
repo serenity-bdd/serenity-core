@@ -2,7 +2,7 @@ package net.serenitybdd.junit5.tags;
 
 import net.serenitybdd.junit5.JUnit5Tags;
 import net.thucydides.core.annotations.SingleBrowser;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Method;

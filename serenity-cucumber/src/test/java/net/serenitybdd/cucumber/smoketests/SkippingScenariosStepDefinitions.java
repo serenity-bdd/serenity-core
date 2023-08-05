@@ -8,7 +8,7 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.annotations.DefaultUrl;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.support.FindBy;

@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actions.WebElementLocator;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 

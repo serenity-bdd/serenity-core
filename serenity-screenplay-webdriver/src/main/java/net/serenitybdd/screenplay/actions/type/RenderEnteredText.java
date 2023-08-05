@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.strings.Joiner;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.strings.Joiner;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 

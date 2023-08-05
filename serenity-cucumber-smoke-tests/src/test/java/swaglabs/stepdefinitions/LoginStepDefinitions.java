@@ -16,7 +16,7 @@ import net.serenitybdd.screenplay.ui.PageElement;
 import net.thucydides.core.annotations.WithDriver;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

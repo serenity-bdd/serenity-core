@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.bitbar;
 
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

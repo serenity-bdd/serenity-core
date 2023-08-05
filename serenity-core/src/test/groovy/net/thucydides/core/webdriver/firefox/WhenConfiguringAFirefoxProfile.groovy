@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.firefox
 
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.firefox.FirefoxProfile
 import spock.lang.Specification
 
@@ -25,11 +25,11 @@ class WhenConfiguringAFirefoxProfile extends Specification {
         when:
             profileEnhancer.activateProxy(profile,"http://my.proxy","8080")
         then:
-            1 * profile.setPreference("network.proxy.http", "http://my.proxy");
+            1 * profile.setPreference("network.proxy.http", "http://my.proxy")
         and:
-            1 * profile.setPreference("network.proxy.http_port", 8080);
+            1 * profile.setPreference("network.proxy.http_port", 8080)
         and:
-            1 * profile.setPreference("network.proxy.type", 1);
+            1 * profile.setPreference("network.proxy.type", 1)
     }
 
     def "should add firefox preferences"() {

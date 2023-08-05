@@ -1,6 +1,6 @@
 package net.thucydides.core.annotations;
 
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

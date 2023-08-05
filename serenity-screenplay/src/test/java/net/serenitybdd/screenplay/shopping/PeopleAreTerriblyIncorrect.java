@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
+import net.serenitybdd.model.exceptions.CausesCompromisedTestFailure;
 
 public class PeopleAreTerriblyIncorrect extends AssertionError implements CausesCompromisedTestFailure {
 

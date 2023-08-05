@@ -1,34 +1,34 @@
 package net.thucydides.core.reports.integration
 
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.reports.FormatConfiguration
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.reports.FormatConfiguration
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
 
-public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specification {
+class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specification {
 
     File temporaryDirectory
 
     def issueTracking = Mock(IssueTracking)
     def environmentVariables = new MockEnvironmentVariables()
-    def reporter = new HtmlAggregateStoryReporter("project", issueTracking);
+    def reporter = new HtmlAggregateStoryReporter("project", issueTracking)
 
     File outputDirectory
 
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
-        reporter.outputDirectory = outputDirectory;
+        reporter.outputDirectory = outputDirectory
         reporter.formatConfiguration = new FormatConfiguration(environmentVariables)
 
     }

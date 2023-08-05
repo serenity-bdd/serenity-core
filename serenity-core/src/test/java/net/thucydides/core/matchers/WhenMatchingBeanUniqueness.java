@@ -1,5 +1,7 @@
 package net.thucydides.core.matchers;
 
+import net.thucydides.model.matchers.BeanCollectionMatcher;
+import net.thucydides.model.matchers.BeanUniquenessMatcher;
 import org.junit.Before;
 import org.junit.Test;
 

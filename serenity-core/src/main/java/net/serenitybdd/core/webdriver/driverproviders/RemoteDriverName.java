@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 

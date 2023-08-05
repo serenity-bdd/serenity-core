@@ -1,10 +1,10 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.stacktrace.FailureCause;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.stacktrace.FailureCause;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -14,18 +14,18 @@ import org.junit.runner.notification.RunListener;
 import java.io.File;
 import java.util.*;
 
-import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
+import static net.thucydides.model.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 /**
  * Intercepts JUnit events and reports them to Thucydides.
  */
 public class JUnitStepListener extends RunListener {
 
-    private BaseStepListener baseStepListener;
-    private StepListener[] extraListeners;
-    private Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
-    private Class<?> testClass;
-    private ThreadLocal<Boolean> testStarted;
+    private final BaseStepListener baseStepListener;
+    private final StepListener[] extraListeners;
+    private final Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
+    private final Class<?> testClass;
+    private final ThreadLocal<Boolean> testStarted;
 
     public static JUnitStepListenerBuilder withOutputDirectory(File outputDirectory) {
         return new JUnitStepListenerBuilder(outputDirectory);
@@ -33,7 +33,7 @@ public class JUnitStepListener extends RunListener {
 
     protected JUnitStepListener(Class<?> testClass, BaseStepListener baseStepListener, StepListener... listeners) {
         testStarted = new ThreadLocal<>();
-        testStarted.set(new Boolean(false));
+        testStarted.set(Boolean.valueOf(false));
         this.baseStepListener = baseStepListener;
         this.extraListeners = listeners;
         this.testClass = testClass;

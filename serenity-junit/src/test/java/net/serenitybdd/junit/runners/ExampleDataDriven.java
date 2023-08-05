@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.Qualifier;

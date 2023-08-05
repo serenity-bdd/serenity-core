@@ -1,7 +1,8 @@
 package net.thucydides.core.requirements
 
 import com.google.common.collect.Maps
-import net.thucydides.core.requirements.model.Requirement
+import net.thucydides.model.requirements.RequirementPersister
+import net.thucydides.model.requirements.model.Requirement
 import spock.lang.Specification
 
 import java.nio.file.Files

@@ -4,7 +4,7 @@ import com.microsoft.playwright.Keyboard;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.playwright.abilities.BrowseTheWebWithPlaywright;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.apache.commons.lang3.StringUtils;
 
 /**

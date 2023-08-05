@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver.firefox;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.driverproviders.SanitisedBrowserPreferences;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserPreferences;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -51,9 +51,9 @@ public class FirefoxProfileEnhancer {
 
         void applyTo(FirefoxProfile profile) {
             if (value instanceof Boolean) {
-                profile.setPreference(key, (Boolean) value);
+                profile.setPreference(key, value);
             } else if (value instanceof Integer) {
-                profile.setPreference(key, (Integer) value);
+                profile.setPreference(key, value);
             } else {
                 profile.setPreference(key, value.toString());
             }

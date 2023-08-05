@@ -1,14 +1,14 @@
 package net.serenitybdd.core.webdriver;
 
 import net.serenitybdd.core.webdriver.driverproviders.InsecureCertConfig;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 
 public class FirefoxOptionsEnhancer {
-    private FirefoxOptions options;
+    private final FirefoxOptions options;
 
     public FirefoxOptionsEnhancer(FirefoxOptions options) {
 

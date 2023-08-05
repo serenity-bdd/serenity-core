@@ -2,7 +2,7 @@ package net.thucydides.core.annotations;
 
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.requirements.SerenityTestCaseFinder;
+import net.thucydides.model.requirements.SerenityTestCaseFinder;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;

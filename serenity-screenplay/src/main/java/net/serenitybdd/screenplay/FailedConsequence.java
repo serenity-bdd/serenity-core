@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 
 public class FailedConsequence {
         private final Consequence consequence;
@@ -14,7 +14,7 @@ public class FailedConsequence {
                 this.runtimeExceptionCause = null;
             } else if (cause instanceof RuntimeException) {
                 this.errorCause = null;
-                this.runtimeExceptionCause = (RuntimeException) cause;;
+                this.runtimeExceptionCause = (RuntimeException) cause;
             } else {
                 this.errorCause = null;
                 this.runtimeExceptionCause = (RuntimeException) SerenityManagedException.detachedCopyOf(cause);

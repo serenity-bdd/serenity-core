@@ -1,0 +1,4 @@
+net.thucydides.model.statistics.service.AnnotationBasedTagProvider
+net.thucydides.model.statistics.service.FeatureStoryTagProvider
+net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+net.thucydides.model.requirements.PackageAnnotationBasedTagProvider

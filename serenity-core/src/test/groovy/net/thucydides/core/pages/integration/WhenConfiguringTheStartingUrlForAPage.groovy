@@ -4,9 +4,9 @@ import net.serenitybdd.core.pages.PageUrls
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.annotations.NamedUrl
 import net.thucydides.core.annotations.NamedUrls
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.configuration
 
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 
 class ReportTagTypeProperty: ReportProperty<List<String>> {
 

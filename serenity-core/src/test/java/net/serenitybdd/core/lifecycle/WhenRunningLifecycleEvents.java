@@ -2,7 +2,7 @@ package net.serenitybdd.core.lifecycle;
 
 import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

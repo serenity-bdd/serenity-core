@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.jira.workflow
 
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -10,23 +10,23 @@ class ClasspathWorkflowLoader implements WorkflowLoader {
     public static final String WORKFLOW_CONFIGURATION_PROPERTY = "serenity.jira.workflow"
     public static final String ACTIVATE_WORKFLOW_PROPERTY = "serenity.jira.workflow.active"
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathWorkflowLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathWorkflowLoader.class)
 
-    private final String defaultWorkflow;
-    private final EnvironmentVariables environmentVariables;
+    private final String defaultWorkflow
+    private final EnvironmentVariables environmentVariables
 
     ClasspathWorkflowLoader(String defaultWorkflow,
                             EnvironmentVariables environmentVariables) {
         this.defaultWorkflow = defaultWorkflow
-        this.environmentVariables = environmentVariables;
+        this.environmentVariables = environmentVariables
     }
 
     String getDefaultWorkflow() {
-        return defaultWorkflow;
+        return defaultWorkflow
     }
 
     Workflow load() {
-        InputStream inputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(getWorkflowFile());
+        InputStream inputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(getWorkflowFile())
         loadFrom(getWorkflowFile(), inputStream)
     }
 
@@ -46,7 +46,7 @@ class ClasspathWorkflowLoader implements WorkflowLoader {
     }
 
      boolean systemConfiguredWorkflowPropertyIsDefined() {
-         getSystemConfiguredWorkflow() != null;
+         getSystemConfiguredWorkflow() != null
     }
 
     boolean worflowActivatedViaTheSystemProperty() {
@@ -59,16 +59,16 @@ class ClasspathWorkflowLoader implements WorkflowLoader {
         } else if (defaultWorkflowIsPresent()) {
             defaultWorkflow
         } else {
-            BUNDLED_WORKFLOW;
+            BUNDLED_WORKFLOW
         }
     }
 
     boolean defaultWorkflowIsPresent() {
-        def defaultWorkflowPath = fileOnClasspathAt(defaultWorkflow);
+        def defaultWorkflowPath = fileOnClasspathAt(defaultWorkflow)
         if (defaultWorkflowPath) {
-            return new File(defaultWorkflowPath).exists();
+            return new File(defaultWorkflowPath).exists()
         } else {
-            return false;
+            return false
         }
     }
 
@@ -86,7 +86,7 @@ class ClasspathWorkflowLoader implements WorkflowLoader {
 
     def getSystemConfiguredWorkflowFile() {
         if (fileOnClasspathAt(systemConfiguredWorkflow)) {
-            return fileOnClasspathAt(systemConfiguredWorkflow);
+            return fileOnClasspathAt(systemConfiguredWorkflow)
         } else {
             LOGGER.error("Failed to load system-specified JIRA workflow configuration at {}", systemConfiguredWorkflow)
             return null

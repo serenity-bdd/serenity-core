@@ -5,7 +5,7 @@ import io.cucumber.core.options.RuntimeOptions;
 import io.cucumber.core.plugin.SerenityReporter;
 import io.cucumber.core.runtime.Runtime;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 
 import java.util.function.Supplier;
 

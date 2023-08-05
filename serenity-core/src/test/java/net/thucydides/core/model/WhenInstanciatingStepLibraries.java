@@ -1,14 +1,15 @@
 package net.thucydides.core.model;
 
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.samples.MyInheritedStepLibrary;
+import net.serenitybdd.annotations.Step;
+import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.RecursiveOrCyclicStepLibraryReferenceException;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
+import net.thucydides.model.domain.Story;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class WhenInstanciatingStepLibraries {
 
 
     public static class ASimpleStepLibrary  {
-        private Pages pages;
+        private final Pages pages;
 
         public ASimpleStepLibrary(Pages pages) {
             this.pages = pages;

@@ -1,6 +1,6 @@
 package net.thucydides.core.pages.components;
 
-import net.thucydides.core.matchers.BeanMatcher;
+import net.thucydides.model.matchers.BeanMatcher;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

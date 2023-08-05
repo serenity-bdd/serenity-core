@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import net.thucydides.model.steps.StepArgumentWriter;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

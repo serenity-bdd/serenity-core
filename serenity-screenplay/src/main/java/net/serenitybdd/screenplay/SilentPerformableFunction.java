@@ -1,10 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.markers.CanBeSilent;
-import net.thucydides.core.annotations.Step;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class SilentPerformableFunction implements Performable, CanBeSilent {

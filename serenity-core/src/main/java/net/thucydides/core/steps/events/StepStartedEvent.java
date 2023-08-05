@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.events;
 
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.ExecutedStepDescription;
 
 import java.time.ZonedDateTime;
 

@@ -1,8 +1,8 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import com.google.common.io.Resources;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

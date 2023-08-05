@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 import org.openqa.selenium.WebElement;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;

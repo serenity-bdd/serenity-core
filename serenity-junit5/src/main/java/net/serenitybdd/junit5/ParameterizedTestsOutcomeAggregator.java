@@ -1,6 +1,6 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.model.*;
+import net.thucydides.model.domain.*;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ParameterizedTestsOutcomeAggregator {
 
-    private List<TestOutcome> allTestOutcomes;
+    private final List<TestOutcome> allTestOutcomes;
 
     public ParameterizedTestsOutcomeAggregator() {
         BaseStepListener baseStepListener = StepEventBus.getParallelEventBus().getBaseStepListener();

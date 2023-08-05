@@ -4,22 +4,22 @@ import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.serenitybdd.annotations.WithTag;
+import net.thucydides.model.batches.BatchManager;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.stepdata.StepData;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.annotations.Concurrent;
@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -694,7 +693,7 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithSpecifiedThreadCountSample {
         @TestData
         public static Collection testData() {
-            return Arrays.asList(new Object[][]{});
+            return List.of();
         }
         @Test
         public void foo() {
@@ -730,7 +729,7 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithRelativeThreadCountSample {
         @TestData
         public static Collection testData() {
-            return Arrays.asList(new Object[][]{});
+            return List.of();
         }
 
         @Test
@@ -756,7 +755,7 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithInvalidThreadCountSample {
         @TestData
         public static Collection testData() {
-            return Arrays.asList(new Object[][]{});
+            return List.of();
         }
 
         @Test

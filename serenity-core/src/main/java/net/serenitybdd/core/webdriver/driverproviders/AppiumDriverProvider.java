@@ -3,17 +3,16 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import com.google.common.eventbus.Subscribe;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
 import net.serenitybdd.core.webdriver.appium.AppiumServerPool;
-import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.TestContext;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
@@ -25,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
-import static net.thucydides.core.ThucydidesSystemProperty.MANAGE_APPIUM_SERVERS;
+import static net.thucydides.model.ThucydidesSystemProperty.MANAGE_APPIUM_SERVERS;
 import static net.thucydides.core.webdriver.SupportedWebDriver.ANDROID;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IPHONE;
 
@@ -149,8 +148,8 @@ public class AppiumDriverProvider implements DriverProvider {
     private static class AppiumEventListener implements WebDriverInstanceEventListener {
         private final String deviceName;
         private WebDriver appiumDriver;
-        private AppiumDevicePool devicePool;
-        private Thread currentThread;
+        private final AppiumDevicePool devicePool;
+        private final Thread currentThread;
 
         private AppiumEventListener(WebDriver appiumDriver, String deviceName, AppiumDevicePool devicePool) {
             this.appiumDriver = appiumDriver;

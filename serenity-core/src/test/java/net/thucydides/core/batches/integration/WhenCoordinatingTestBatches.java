@@ -1,7 +1,7 @@
 package net.thucydides.core.batches.integration;
 
-import net.thucydides.core.batches.SystemVariableBasedBatchManager;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.batches.SystemVariableBasedBatchManager;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
@@ -144,7 +144,7 @@ public class WhenCoordinatingTestBatches {
         }
     }
 
-    private AtomicInteger counter = new AtomicInteger(1);
+    private final AtomicInteger counter = new AtomicInteger(1);
     private void runFiftyTestCases(SystemVariableBasedBatchManager batchManager, List<Integer> executedTests) {
         for(int testNumber = 0; testNumber < 50; testNumber++) {
             batchManager.registerTestCase("Test Case " + counter.getAndIncrement());

@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.model
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.NameConverter.humanize
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.util.NameConverter.humanize
+import net.thucydides.model.util.EnvironmentVariables
 
 /**
  * Custom report fields are stored in the serenity.properties file as report.customfields.* properties, or passed in on the command line.

@@ -6,7 +6,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.WithTag;
+import net.thucydides.model.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.junit.Before;
 import org.junit.Test;

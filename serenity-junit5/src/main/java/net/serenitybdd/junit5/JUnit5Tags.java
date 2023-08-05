@@ -1,7 +1,7 @@
 package net.serenitybdd.junit5;
 
 import net.thucydides.core.annotations.SingleBrowser;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.domain.TestTag;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class JUnit5Tags {
-    private static List<Class<? extends Annotation>> SERENITY_SPECIFIC_ANNOTATIONS = Arrays.asList(
+    private static final List<Class<? extends Annotation>> SERENITY_SPECIFIC_ANNOTATIONS = List.of(
             SingleBrowser.class
     );
 

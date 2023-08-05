@@ -20,21 +20,25 @@ import net.serenitybdd.core.SerenityReports;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
+import net.serenitybdd.cucumber.events.SetTestManualEvent;
+import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.Rule;
-import net.thucydides.core.model.*;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.requirements.FeatureFilePath;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.Rule;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.requirements.FeatureFilePath;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.Inflector;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.TestSourceType;
+import net.thucydides.model.util.Inflector;
+import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.SerenityWebdriverManager;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -71,7 +75,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private static final String SCENARIO_OUTLINE_NOT_KNOWN_YET = "";
 
-    private Configuration systemConfiguration;
+    private final Configuration systemConfiguration;
 
     private final static String FEATURES_ROOT_PATH = "/features/";
     private final static String FEATURES_CLASSPATH_ROOT_PATH = ":features/";
@@ -108,7 +112,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         this.systemConfiguration = systemConfiguration;
     }
 
-    private FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
+    private final FeaturePathFormatter featurePathFormatter = new FeaturePathFormatter();
 
     private StepEventBus getStepEventBus(URI featurePath) {
         URI prefixedPath = featurePathFormatter.featurePathWithPrefixIfNecessary(featurePath);
@@ -130,14 +134,14 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).addBaseStepListener(listeners.getBaseStepListener());
     }
 
-    private EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
-    private EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
-    private EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
-    private EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
-    private EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
-    private EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
-    private EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
-    private EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
+    private final EventHandler<TestSourceRead> testSourceReadHandler = this::handleTestSourceRead;
+    private final EventHandler<TestCaseStarted> caseStartedHandler = this::handleTestCaseStarted;
+    private final EventHandler<TestCaseFinished> caseFinishedHandler = this::handleTestCaseFinished;
+    private final EventHandler<TestStepStarted> stepStartedHandler = this::handleTestStepStarted;
+    private final EventHandler<TestStepFinished> stepFinishedHandler = this::handleTestStepFinished;
+    private final EventHandler<TestRunStarted> runStartedHandler = this::handleTestRunStarted;
+    private final EventHandler<TestRunFinished> runFinishedHandler = this::handleTestRunFinished;
+    private final EventHandler<WriteEvent> writeEventHandler = this::handleWrite;
 
     private void handleTestRunStarted(TestRunStarted event) {
         LOGGER.debug("SRP:handleTestRunStarted {} ", Thread.currentThread());
@@ -179,11 +183,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         boolean useDecodedURI = systemConfiguration.getEnvironmentVariables().getPropertyAsBoolean("use.decoded.url", false);
         String pathURIAsString;
         if (useDecodedURI) {
-            try {
-                pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                pathURIAsString = fullPathUri.toString();
-            }
+            pathURIAsString = URLDecoder.decode(fullPathUri.toString(), StandardCharsets.UTF_8);
         } else {
             pathURIAsString = fullPathUri.toString();
         }

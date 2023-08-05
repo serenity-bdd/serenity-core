@@ -1,5 +1,6 @@
 package net.thucydides.core.matchers;
 
+import net.thucydides.model.matchers.BeanMatcher;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.matchers.BeanMatcherAsserts.*;
-import static net.thucydides.core.matchers.BeanMatchers.*;
+import static net.thucydides.model.matchers.BeanMatcherAsserts.*;
+import static net.thucydides.model.matchers.BeanMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

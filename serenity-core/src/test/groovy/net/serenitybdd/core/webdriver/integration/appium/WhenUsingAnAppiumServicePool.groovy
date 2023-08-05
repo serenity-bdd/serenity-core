@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver.integration.appium
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool
 import net.serenitybdd.core.webdriver.appium.AppiumServerPool
 import net.thucydides.core.annotations.Shared
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenUsingAnAppiumServicePool extends Specification {

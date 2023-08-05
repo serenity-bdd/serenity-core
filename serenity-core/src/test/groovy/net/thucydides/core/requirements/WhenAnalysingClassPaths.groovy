@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements
 
+import net.thucydides.model.requirements.PathStartsWith
 import spock.lang.Specification
 
 class WhenAnalysingClassPaths extends Specification {

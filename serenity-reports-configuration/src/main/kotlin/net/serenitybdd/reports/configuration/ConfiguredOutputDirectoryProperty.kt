@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.configuration
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.model.environment.ConfiguredEnvironment
+import net.thucydides.model.util.EnvironmentVariables
 import java.nio.file.Path
 import java.nio.file.Paths
 

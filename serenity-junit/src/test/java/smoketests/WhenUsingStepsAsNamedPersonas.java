@@ -1,14 +1,12 @@
 package smoketests;
 
-import net.serenitybdd.core.annotations.environment.EnvironmentProperty;
 import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.core.steps.ScenarioActor;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +28,7 @@ public class WhenUsingStepsAsNamedPersonas {
 
     public static class TravellerWithConfigurableTitle {
 
-        private String title = "#actor flies to {0}";
+        private final String title = "#actor flies to {0}";
         private String actor;
 
         @Step("!#title")

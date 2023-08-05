@@ -3,7 +3,7 @@ package io.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Feature;
 import io.cucumber.plugin.event.TestSourceRead;
-import net.thucydides.core.util.Inflector;
+import net.thucydides.model.util.Inflector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

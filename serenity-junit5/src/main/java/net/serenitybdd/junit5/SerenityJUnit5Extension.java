@@ -2,13 +2,13 @@ package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.logging.ConsoleLoggingListener;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.logging.ConsoleLoggingListener;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.TestSourceType;
+import net.thucydides.model.steps.TestSourceType;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static net.thucydides.core.matchers.FileMatchers.exists;
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
+import static net.thucydides.model.matchers.FileMatchers.exists;
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 

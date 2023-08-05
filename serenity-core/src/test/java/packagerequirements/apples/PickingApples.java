@@ -1,6 +1,6 @@
 package packagerequirements.apples;
 
-import net.thucydides.core.annotations.Narrative;
+import net.serenitybdd.annotations.Narrative;
 
 @Narrative(text="Pick some apples")
 public class PickingApples {}

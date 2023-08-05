@@ -1,8 +1,8 @@
 package net.thucydides.core.bootstrap;
 
-import net.thucydides.core.model.Story;
+import net.thucydides.model.domain.Story;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 
 import java.util.Optional;
 

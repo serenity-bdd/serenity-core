@@ -1,30 +1,34 @@
 package net.serenitybdd.reports.model
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.util.EnvironmentVariables
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.util.EnvironmentVariables
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
-class DurationDistribution(
-    val environmentVariables: EnvironmentVariables,
+class DurationDistribution {
+
+    val environmentVariables: EnvironmentVariables
     val testOutcomes: TestOutcomes
-) {
+
+    constructor(environmentVariables: EnvironmentVariables, testOutcomes: TestOutcomes) {
+        this.environmentVariables = environmentVariables
+        this.testOutcomes = testOutcomes
+        this.durationLimits = durationLimitsDefinedIn(environmentVariables)
+        this.durationBuckets = durationBucketsFrom(durationLimits)
+        populateDurationBuckets()
+    }
 
     companion object {
         const val DEFAULT_DURATION_RANGES_IN_SECONDS = "1, 10, 30, 60, 120, 300, 600"
 
     }
 
-    var durationLimits = durationLimitsDefinedIn(environmentVariables)
-    var durationBuckets = durationBucketsFrom(durationLimits)
-
-    init {
-        populateDurationBuckets()
-    }
+    var durationLimits: List<Duration>
+    var durationBuckets: List<DurationBucket>
 
     private fun durationBucketsFrom(durationLimits: List<Duration>): List<DurationBucket> {
         val durationBuckets: MutableList<DurationBucket> = mutableListOf()

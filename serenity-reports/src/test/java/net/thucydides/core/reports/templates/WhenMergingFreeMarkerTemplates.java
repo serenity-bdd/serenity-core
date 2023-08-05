@@ -1,6 +1,9 @@
 package net.thucydides.core.reports.templates;
 
 
+import net.thucydides.model.reports.templates.FreeMarkerTemplateManager;
+import net.thucydides.model.reports.templates.ReportTemplate;
+import net.thucydides.model.reports.templates.TemplateMergeException;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;

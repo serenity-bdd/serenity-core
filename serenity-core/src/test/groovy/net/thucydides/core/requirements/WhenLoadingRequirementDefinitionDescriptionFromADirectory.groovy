@@ -1,7 +1,9 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.requirements.model.NarrativeReader
-import net.thucydides.core.util.FileSystemUtils
+import net.thucydides.model.requirements.FileSystemRequirements
+import net.thucydides.model.requirements.Requirements
+import net.thucydides.model.requirements.model.NarrativeReader
+import net.thucydides.model.util.FileSystemUtils
 import spock.lang.Specification
 
 class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specification {
@@ -13,7 +15,7 @@ class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specific
     def "Directories in a 1-level directory structure represent the top level of the requirements hierarchy"() {
         given: "there is a readme.md file in a single-level directory structure"
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/one-level-feature-files/features/fruit")
-            Requirements requirements = new FileSystemRequirements("sample-story-directories/one-level-feature-files/features")
+        Requirements requirements = new FileSystemRequirements("sample-story-directories/one-level-feature-files/features")
         when:
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/one-level-feature-files/features")
             def narrative = reader.loadFrom(directoryContainingANarrative)

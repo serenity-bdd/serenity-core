@@ -1,18 +1,18 @@
 package net.serenitybdd.screenplay
 
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
 
 class OutcomeChecks {
 
-    static def TestOutcomeChecker resultsFrom(List<TestOutcome> testOutcomes) {
-        new TestOutcomeChecker(testOutcomes);
+    static TestOutcomeChecker resultsFrom(List<TestOutcome> testOutcomes) {
+        new TestOutcomeChecker(testOutcomes)
     }
 
     static class TestOutcomeChecker {
-        private final List<TestOutcome> testOutcomes;
+        private final List<TestOutcome> testOutcomes
 
         TestOutcomeChecker(List<TestOutcome> testOutcomes) {
-            this.testOutcomes = testOutcomes;
+            this.testOutcomes = testOutcomes
         }
 
         TestOutcome getAt(String methodName) {

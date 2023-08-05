@@ -2,7 +2,7 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.SampleNonWebScenarioWithError;

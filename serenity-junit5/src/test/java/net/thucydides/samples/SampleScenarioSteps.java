@@ -2,8 +2,8 @@ package net.thucydides.samples;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.steps.UIInteractionSteps;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Assumptions;

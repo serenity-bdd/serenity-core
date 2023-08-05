@@ -6,8 +6,8 @@ import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import net.serenitybdd.core.photography.PhotoLens;
 import net.serenitybdd.core.photography.ScreenShooter;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import javax.imageio.ImageIO;
@@ -15,8 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_SCREENSHOT_STRATEGY;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_FULL_PAGE_SCREENSHOT_STRATEGY;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_SCREENSHOT_STRATEGY;
 
 /**
  * Takes screenshots using Shutterbug 1.5

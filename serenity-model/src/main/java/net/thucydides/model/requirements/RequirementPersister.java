@@ -68,7 +68,7 @@ public class RequirementPersister {
 
     public void write(SortedMap<String, Requirement> map) throws IOException {
         if (!outputDirectory.exists()) {
-            Files.createDirectory(outputDirectory.toPath());
+            Files.createDirectories(outputDirectory.toPath());
         }
 
         ;

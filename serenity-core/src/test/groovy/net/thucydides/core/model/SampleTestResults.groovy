@@ -121,7 +121,6 @@ class SampleTestResults {
         testOutcome2.addTags(Lists.asList(TestTag.withName("Apples").andType("feature")));
         testOutcome2.addTags(Lists.asList(TestTag.withName("Picking apples").andType("story")));
 
-
         return [testOutcome1, testOutcome2]
     }
 

@@ -1,7 +1,7 @@
 package net.serenitybdd.demos.todos.pageobjects.features.maintain_my_todo_list;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.model.annotations.WithTag;
+import net.serenitybdd.annotations.WithTag;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 

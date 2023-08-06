@@ -3,7 +3,7 @@ package net.serenitybdd.demos.todos.pageobjects.steps;
 import net.serenitybdd.demos.todos.pageobjects.model.TodoStatusFilter;
 import net.serenitybdd.demos.todos.pageobjects.pages.TodoListPage;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import static java.util.Arrays.asList;

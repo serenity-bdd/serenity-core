@@ -1,10 +1,10 @@
 package net.serenitybdd.demos.todos.screenplay.actions;
 
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.model.annotations.Step;
 import org.openqa.selenium.WebElement;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;

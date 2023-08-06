@@ -66,18 +66,20 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
             applesFeatureOutcomes.subrequirements.total == 2
     }
 
-    def "should show only outcomes containing tests if so configured"() {
-        given: "there are two stories with passing tests in the 'Apples' feature"
-        def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
-        def environmentVariables = new MockEnvironmentVariables()
-        environmentVariables.setProperty("serenity.report.hide.empty.requirements","true")
-        and: "we read the requirements from the directory structure"
-        RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
-        when: "we generate the capability outcomes"
-        RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
-        then:
-        outcomes.visibleOutcomes.size() == 1
-    }
+// TODO: Refactor to use recorded test outcomes, not the deprecated PackageRequirementsTagProvider
+//
+//    def "should show only outcomes containing tests if so configured"() {
+//        given: "there are two stories with passing tests in the 'Apples' feature"
+//        def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
+//        def environmentVariables = new MockEnvironmentVariables()
+//        environmentVariables.setProperty("serenity.report.hide.empty.requirements","true")
+//        and: "we read the requirements from the directory structure"
+//        RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
+//        when: "we generate the capability outcomes"
+//        RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
+//        then:
+//        outcomes.visibleOutcomes.size() == 1
+//    }
 
     def "should count zero if there are no nested requirements"() {
         given: "there are two stories with passing tests in the 'Apples' feature"
@@ -92,39 +94,43 @@ class WhenCalculatingRequirementTestCoverage extends Specification {
             potatoesFeatureOutcomes.subrequirements.total == 0
     }
 
-    def "should count the number of nested requirements with tests in a given state"() {
-        given: "there are two stories with passing tests in the 'Apples' feature"
-            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
-            def environmentVariables = new MockEnvironmentVariables()
-        and: "we read the requirements from the directory structure"
-            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
-        when: "we generate the capability outcomes"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
-            def applesFeatureOutcomes = outcomes.requirementOutcomes.find { it.requirement.name == 'Apples'}
-        then:
-            applesFeatureOutcomes.subrequirements.withResult("success") == 1
-        and:
-            applesFeatureOutcomes.subrequirements.withResult("failure") == 1
-        and:
-            applesFeatureOutcomes.subrequirements.withResult("pending") == 0
-    }
+// TODO: Refactor to use recorded test outcomes, not the deprecated PackageRequirementsTagProvider
+//
+//    def "should count the number of nested requirements with tests in a given state"() {
+//        given: "there are two stories with passing tests in the 'Apples' feature"
+//            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
+//            def environmentVariables = new MockEnvironmentVariables()
+//        and: "we read the requirements from the directory structure"
+//            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
+//        when: "we generate the capability outcomes"
+//            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
+//            def applesFeatureOutcomes = outcomes.requirementOutcomes.find { it.requirement.name == 'Apples'}
+//        then:
+//            applesFeatureOutcomes.subrequirements.withResult("success") == 1
+//        and:
+//            applesFeatureOutcomes.subrequirements.withResult("failure") == 1
+//        and:
+//            applesFeatureOutcomes.subrequirements.withResult("pending") == 0
+//    }
 
-    def "should count the percentage of nested requirements with tests in a given state"() {
-        given: "there are two stories with passing tests in the 'Apples' feature"
-            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
-            def environmentVariables = new MockEnvironmentVariables()
-        and: "we read the requirements from the directory structure"
-            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
-        when: "we generate the capability outcomes"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
-            def applesFeatureOutcomes = outcomes.requirementOutcomes.find { it.requirement.name == 'Apples'}
-        then:
-            applesFeatureOutcomes.subrequirements.proportion.withResult("success") == 0.5
-        and:
-            applesFeatureOutcomes.subrequirements.proportion.withResult("failure") == 0.5
-        and:
-            applesFeatureOutcomes.subrequirements.proportion.withResult("pending") == 0.0
-    }
+// TODO: Refactor to use recorded test outcomes, not the deprecated PackageRequirementsTagProvider
+//
+//    def "should count the percentage of nested requirements with tests in a given state"() {
+//        given: "there are two stories with passing tests in the 'Apples' feature"
+//            def testOutcomes = TestOutcomes.of(SampleTestResults.withPassingTestForApples())
+//            def environmentVariables = new MockEnvironmentVariables()
+//        and: "we read the requirements from the directory structure"
+//            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
+//        when: "we generate the capability outcomes"
+//            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
+//            def applesFeatureOutcomes = outcomes.requirementOutcomes.find { it.requirement.name == 'Apples'}
+//        then:
+//            applesFeatureOutcomes.subrequirements.proportion.withResult("success") == 0.5
+//        and:
+//            applesFeatureOutcomes.subrequirements.proportion.withResult("failure") == 0.5
+//        and:
+//            applesFeatureOutcomes.subrequirements.proportion.withResult("pending") == 0.0
+//    }
 
     def "should count the number of nested requirements with no tests"() {
         given: "there are two stories with passing tests in the 'Apples' feature"

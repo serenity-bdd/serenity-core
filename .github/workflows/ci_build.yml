@@ -8,20 +8,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
+      - uses: actions/checkout@v2 # Update to v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2 # Update to v2
+        with:
+          distribution: 'temurin' # 'temurin' distribution provides OpenJ9 builds of the OpenJDK
+          java-version: '17'
 
-    - name: Cache the Maven packages to speed up build
-      uses: actions/cache@v1
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+      - name: Cache the Maven packages to speed up build
+        uses: actions/cache@v2 # Update to v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
-    - name: Unit and Integration Tests
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        run: mvn clean verify
+      - name: Unit and Integration Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: mvn clean verify

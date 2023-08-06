@@ -717,6 +717,15 @@
                     <source>11</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
+                    <excludePackageNames>io.netty.*</excludePackageNames>
+                    <excludePackageNames>org.eclipse.*</excludePackageNames>
+                    <excludePackageNames>io.cucumber.*</excludePackageNames>
+                    <excludePackageNames>org.apache.*</excludePackageNames>
+                    <excludePackageNames>org.assertj.*</excludePackageNames>
+                    <excludePackageNames>org.seleniumhq.*</excludePackageNames>
+                    <excludePackageNames>io.opentelemetry.*</excludePackageNames>
+                    <excludePackageNames>com.google.*</excludePackageNames>
+                    <excludePackageNames>org.checkerframework.*</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>

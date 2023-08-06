@@ -25,4 +25,4 @@ jobs:
       - name: Unit and Integration Tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: mvn clean verify
+          run: mvn clean verify -DJIRA_USERNAME=${{ secrets.JIRA_USERNAME }} -DJIRA_API_TOKEN=${{ secrets.JIRA_API_TOKEN }} -DJIRA_WEBSERVICE_URL=${{ secrets.DJIRA_WEBSERVICE_URL }}

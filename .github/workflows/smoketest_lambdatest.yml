@@ -1,4 +1,4 @@
-name: Smoke Tests (BrowserStack)
+name: Smoke Tests (LambdaTest)
 
 on: [push]
 

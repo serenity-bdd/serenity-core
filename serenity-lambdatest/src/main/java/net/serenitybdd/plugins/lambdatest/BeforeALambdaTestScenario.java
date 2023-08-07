@@ -23,6 +23,7 @@ import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_PROJECT_NAM
 public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, ProvidesRemoteWebdriverUrl {
 
     private final static String LT_OPTIONS = "\"LT:Options\"";
+    private final static String LT_CAPABILITY = "LT:Options";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -74,7 +75,7 @@ public class BeforeALambdaTestScenario implements BeforeAWebdriverScenario, Prov
             });
         });
 
-        capabilities.setCapability(LT_OPTIONS, newOptions);
+        capabilities.setCapability(LT_CAPABILITY, newOptions);
 
         // Operating system
         // Context from browserName and OS

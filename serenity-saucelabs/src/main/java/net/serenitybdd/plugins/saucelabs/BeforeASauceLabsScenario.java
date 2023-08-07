@@ -21,6 +21,7 @@ import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFr
 public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
 
     private final static String SAUCE_OPTIONS = "\"sauce:options\"";
+    private final static String SAUCE_CAPABILITY = "sauce:options";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -63,7 +64,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         String context = fetchContextFrom(capabilities, environmentVariables, SAUCE_OPTIONS);
         testOutcome.setContext(context);
 
-        capabilities.setCapability(SAUCE_OPTIONS.replace("\"",""), newOptions);
+        capabilities.setCapability(SAUCE_CAPABILITY, newOptions);
         return capabilities;
     }
 

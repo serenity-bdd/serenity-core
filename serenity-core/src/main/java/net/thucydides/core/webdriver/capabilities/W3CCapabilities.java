@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.webdriver.CapabilityValue.stripQuotesFrom;
+import static net.thucydides.core.webdriver.CapabilityValue.handleQuotes;
 
 public class W3CCapabilities {
 
@@ -118,9 +118,9 @@ public class W3CCapabilities {
         } else if (isCustom(fieldGroup)) {
             DesiredCapabilities nestedCapabilites = new DesiredCapabilities();
             addNonMandatoryCapabilities(groupConfig, nestedCapabilites);
-            capabilities.setCapability(stripQuotesFrom(fieldGroup), nestedCapabilites.asMap());
+            capabilities.setCapability(handleQuotes(fieldGroup), nestedCapabilites.asMap());
         } else {
-            capabilities.setCapability(stripQuotesFrom(fieldGroup), asMap(groupConfig));
+            capabilities.setCapability(handleQuotes(fieldGroup), asMap(groupConfig));
         }
     }
 
@@ -131,7 +131,7 @@ public class W3CCapabilities {
     private Map<String, Object> asMap(Config groupConfig) {
         Map<String, Object> values = new HashMap<>();
         groupConfig.entrySet().forEach(
-                entry -> values.put(stripQuotesFrom(entry.getKey()), asObject(entry.getValue()))
+                entry -> values.put(handleQuotes(entry.getKey()), asObject(entry.getValue()))
         );
         return values;
     }
@@ -141,7 +141,7 @@ public class W3CCapabilities {
         if (STRING_CONFIG_PROPERTIES.contains(fieldName)) {
             capabilities.setPlatform(Platform.fromString(value.unwrapped().toString()));
         } else {
-            capabilities.setCapability(stripQuotesFrom(fieldName), asObject(value));
+            capabilities.setCapability(handleQuotes(fieldName), asObject(value));
         }
     }
 

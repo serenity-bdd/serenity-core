@@ -25,13 +25,13 @@ public class CapabilityValue {
         if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(value);
         }
-        if (isAList(stripQuotesFrom(value))) {
-            return asList(stripQuotesFrom(value));
+        if (isAList(handleQuotes(value))) {
+            return asList(handleQuotes(value));
         }
-        if (isAMap(stripQuotesFrom(value))) {
-            return asMap(stripQuotesFrom(value));
+        if (isAMap(handleQuotes(value))) {
+            return asMap(handleQuotes(value));
         }
-        return stripQuotesFrom(value);
+        return handleQuotes(value);
     }
 
     private static boolean isInteger(String value) {
@@ -52,7 +52,7 @@ public class CapabilityValue {
         }
     }
 
-    public static String stripQuotesFrom(String value) {
+    public static String handleQuotes(String value) {
         if (value.startsWith("\"") && value.endsWith("\"")) {
             return value.substring(1, value.length() - 1);
         }

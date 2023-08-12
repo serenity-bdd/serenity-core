@@ -6,9 +6,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
+import net.serenitybdd.model.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.util.FileSystemUtils
+import net.thucydides.model.util.FileSystemUtils
 import org.junit.Rule
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -19,7 +19,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static net.serenitybdd.rest.SerenityRest.rest
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 
 /**
  * User: YamStranger
@@ -29,23 +29,23 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 class WhenRunningHttpsRestTestsThroughSerenity extends Specification {
 
     @Rule
-    def WireMockRule wire = new WireMockRule(wireMockConfig()
+    WireMockRule wire = new WireMockRule(wireMockConfig()
         .httpsPort(0)
         .keystorePath(FileSystemUtils.getResourceAsFile("wiremock/keystore.jks").getAbsolutePath())
-        .keystorePassword("serenitybdd"));
+        .keystorePassword("serenitybdd"))
 
     @Rule
-    def TestCase<BaseStepListener> test = new TestCase({
+    TestCase<BaseStepListener> test = new TestCase({
         Mock(BaseStepListener)
-    }.call());
+    }.call())
 
-    def Gson gson = new GsonBuilder().setPrettyPrinting().
-        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
 
     @Ignore("HTTPS does not work with rest")
     def "Should record RestAssured get() method calls when HTTPS is used"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Size", "Huge")
             json.addProperty("Type", "God")
             def body = gson.toJson(json)
@@ -59,7 +59,7 @@ class WhenRunningHttpsRestTestsThroughSerenity extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             def result = rest().given().relaxedHTTPSValidation()
                 .contentType("application/json").content(body)

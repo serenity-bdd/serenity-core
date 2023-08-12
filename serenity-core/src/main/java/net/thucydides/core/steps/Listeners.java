@@ -1,6 +1,8 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.thucydides.model.steps.StepListener;
+
 import java.io.File;
 
 public class Listeners {

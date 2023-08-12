@@ -1,16 +1,23 @@
 package net.serenitybdd.plugins.saucelabs;
 
-import net.serenitybdd.core.model.TestOutcomeName;
+import com.google.gson.JsonObject;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.serenitybdd.plugins.CapabilityTags;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.ExternalLink;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import java.util.Arrays;
+import java.util.Base64;
 
 public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
 
@@ -30,7 +37,6 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
             sessionId = RemoteDriver.of(driver).getSessionId().toString();
         }
         String userName = SauceLabsCredentials.from(environmentVariables).getUser();
-
         String key = SauceLabsCredentials.from(environmentVariables).getAccessKey();
 
         if (userName == null || key == null) {
@@ -41,16 +47,36 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
                     + "You can find both of these here: https://app.saucelabs.com/user-settings"
             );
         } else {
-            ((JavascriptExecutor)driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
-            ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
-
-            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
-            ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
+//            ((JavascriptExecutor) driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
+//            ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
+//
+//            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
+//            ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
 
             SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
 
             String publicUrl = sauceLabsTestSession.getTestLink();
             testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
+
+            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
+            String tags = Arrays.toString(CapabilityTags.tagsFrom(testOutcome, environmentVariables));
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                String jobUrl = "https://saucelabs.com/rest/v1/" + userName + "/jobs/" + sessionId;
+                HttpPut putRequest = new HttpPut(jobUrl);
+                putRequest.setHeader("Content-Type", "application/json");
+                putRequest.setHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((userName + ":" + key).getBytes()));
+
+                JsonObject json = new JsonObject();
+                json.addProperty("build", BuildName.from(environmentVariables));
+                json.addProperty("tags", tags);
+                json.addProperty("passed", result.equals("passed"));
+
+                putRequest.setEntity(new StringEntity(json.toString()));
+
+                httpClient.execute(putRequest);
+            } catch (Exception e) {
+                // Handle exception
+            }
         }
     }
 

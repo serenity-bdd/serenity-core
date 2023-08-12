@@ -3,7 +3,7 @@ package net.thucydides.samples;
 import net.serenitybdd.core.annotations.environment.EnvironmentProperty;
 import net.serenitybdd.junit5.SerenityAfterEachCallback;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

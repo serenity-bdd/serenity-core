@@ -2,7 +2,8 @@ package net.thucydides.core.reports.html;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ResultCounts;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

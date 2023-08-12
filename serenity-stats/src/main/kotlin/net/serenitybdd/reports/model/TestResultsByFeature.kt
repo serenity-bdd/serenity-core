@@ -1,15 +1,15 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.reports.TestOutcomes
 
 class TestResultsByFeature(val featureName: String,
                            val issues: List<String>,
                            val scenarios: List<ScenarioSummary>) {
 
-    fun getDescription(): String = featureName + issueDescription();
+    fun getDescription(): String = featureName + issueDescription()
 
-    private fun issueDescription(): String = if (issues.isEmpty()) "" else " (" + issues.joinToString(",") + ")";
+    private fun issueDescription(): String = if (issues.isEmpty()) "" else " (" + issues.joinToString(",") + ")"
 
     companion object {
         fun from(testOutcomes: TestOutcomes): List<TestResultsByFeature> {

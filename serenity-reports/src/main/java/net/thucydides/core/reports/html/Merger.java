@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.di.ModelInfrastructure;
-import net.thucydides.core.reports.templates.TemplateManager;
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.thucydides.model.reports.templates.TemplateManager;
 
 import java.io.Writer;
 import java.util.Map;

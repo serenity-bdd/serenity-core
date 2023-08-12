@@ -1,11 +1,9 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.steps.Instrumented;
-import net.thucydides.core.util.NameConverter;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * A marker class to indicate that a Performable represents a higher level business task,

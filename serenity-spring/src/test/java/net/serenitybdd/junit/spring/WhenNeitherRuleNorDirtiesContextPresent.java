@@ -2,7 +2,7 @@ package net.serenitybdd.junit.spring;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule;
-import net.thucydides.core.annotations.Title;
+import net.serenitybdd.annotations.Title;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.ClassRule;

@@ -1,9 +1,9 @@
 package net.serenitybdd.core.parallel;
 
 import net.serenitybdd.core.Serenity;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.After;
 import org.junit.Before;
@@ -94,8 +94,8 @@ public class WhenKeepingTrackOfActorsAndActivities {
 
         Serenity.setSessionVariable(Agent.IN_THE_CURRENT_SESSION).to(james);
         asList(
-                (Runnable) () -> checkThatTheStepListenerIs(james, expectedListener),
-                (Runnable) () -> checkThatTheStepListenerIs(james, expectedListener),
+                () -> checkThatTheStepListenerIs(james, expectedListener),
+                () -> checkThatTheStepListenerIs(james, expectedListener),
                 (Runnable) () -> checkThatTheStepListenerIs(james, expectedListener)
         ).parallelStream().forEach(Runnable::run);
     }
@@ -110,9 +110,9 @@ public class WhenKeepingTrackOfActorsAndActivities {
         BaseStepListener listenerForMax = Agency.getInstance().baseListenerFor(max).get();
 
         asList(
-                (Runnable) () -> checkThatTheStepListenerIs(james, listenerForJames),
-                (Runnable) () -> checkThatTheStepListenerIs(james, listenerForJames),
-                (Runnable) () -> checkThatTheStepListenerIs(max, listenerForMax),
+                () -> checkThatTheStepListenerIs(james, listenerForJames),
+                () -> checkThatTheStepListenerIs(james, listenerForJames),
+                () -> checkThatTheStepListenerIs(max, listenerForMax),
                 (Runnable) () -> checkThatTheStepListenerIs(max, listenerForMax)
         ).parallelStream().forEach(Runnable::run);
     }

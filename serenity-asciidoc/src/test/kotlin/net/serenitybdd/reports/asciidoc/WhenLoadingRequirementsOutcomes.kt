@@ -1,11 +1,11 @@
 package net.serenitybdd.reports.asciidoc
 
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.core.requirements.reports.FileSystemRequirmentsOutcomeFactory
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

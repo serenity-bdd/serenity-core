@@ -1,11 +1,11 @@
 package net.serenitybdd.rest;
 
 import io.restassured.response.ValidatableResponse;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.model.steps.StepFailure;
 import net.thucydides.core.steps.events.StepFailedEvent;
 import net.thucydides.core.steps.events.StepFinishedEvent;
 import net.thucydides.core.steps.events.StepStartedEvent;

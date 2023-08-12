@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.stacktrace.FailureCause;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.model.steps.StepFailure;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
 import org.slf4j.Logger;

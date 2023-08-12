@@ -1,18 +1,16 @@
 package net.serenitybdd.plugins.jira;
 
 
-import net.serenitybdd.core.di.ModelInfrastructure;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.plugins.jira.model.IssueTracker;
 import net.serenitybdd.plugins.jira.service.JIRAInfrastructure;
 import net.serenitybdd.plugins.jira.workflow.WorkflowLoader;
-import net.thucydides.core.model.*;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepFailure;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -25,11 +23,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class JiraStepListener implements StepListener {
 
-    private TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-    private Set<String> testSuiteIssues = new CopyOnWriteArraySet();
+    private final TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
+    private final Set<String> testSuiteIssues = new CopyOnWriteArraySet();
 //    private static TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
 //    private static Set<String> testSuiteIssues = new CopyOnWriteArraySet();
-    private JiraUpdater jiraUpdater;
+    private final JiraUpdater jiraUpdater;
 
     
     public JiraStepListener(IssueTracker issueTracker,
@@ -132,6 +130,11 @@ public class JiraStepListener implements StepListener {
 
     @Override
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
+
+    }
+
+    @Override
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time) {
 
     }
 

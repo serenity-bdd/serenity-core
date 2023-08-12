@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.events;
 
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.StepFailure;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.steps.StepFailure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

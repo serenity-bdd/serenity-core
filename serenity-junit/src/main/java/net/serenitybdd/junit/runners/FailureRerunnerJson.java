@@ -2,9 +2,9 @@ package net.serenitybdd.junit.runners;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -17,16 +17,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.thucydides.core.ThucydidesSystemProperty.RECORD_FAILURES;
-import static net.thucydides.core.ThucydidesSystemProperty.REPLAY_FAILURES;
+import static net.thucydides.model.ThucydidesSystemProperty.RECORD_FAILURES;
+import static net.thucydides.model.ThucydidesSystemProperty.REPLAY_FAILURES;
 
 public class FailureRerunnerJson implements FailureRerunner {
 
     private final Logger logger = LoggerFactory.getLogger(FailureRerunnerJson.class);
     private final EnvironmentVariables environmentVariables;
     private final static String DEFAULT_RERUN_FOLDER_NAME = "rerun";
-    private ObjectMapper objectMapper;
-    private String rerunFolderName;
+    private final ObjectMapper objectMapper;
+    private final String rerunFolderName;
 
     public FailureRerunnerJson(Configuration configuration) {
         this.environmentVariables = configuration.getEnvironmentVariables();

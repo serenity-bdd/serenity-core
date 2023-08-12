@@ -1,11 +1,14 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.annotations.*;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.SomeTestScenario;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
 import org.junit.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -385,7 +388,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
 
         assertThat(argument.getValue().getName(), is("step_with_parameter: Joe"));
     }
@@ -398,7 +401,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
 
         assertThat(argument.getValue().getName(), is("step_with_parameters: Joe, 10"));
     }
@@ -412,7 +415,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
 
         assertThat(argument.getValue().getName(), is("step_with_parameters: [1, 2, 3]"));
     }
@@ -426,7 +429,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
 
         assertThat(argument.getValue().getName(), is("step_with_array: {1,2,3}"));
     }
@@ -440,7 +443,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         steps.step2();
         steps.step3();
 
-        verify(listener, times(3)).stepStarted(any(ExecutedStepDescription.class));
+        verify(listener, times(3)).stepStarted(any(ExecutedStepDescription.class), any());
     }
 
     class AStory {}
@@ -461,7 +464,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         steps.step_one();
 
-        verify(listener).stepStarted(argument.capture());
+        verify(listener).stepStarted(argument.capture(), any());
         assertThat(argument.getValue().getStepClass().getName(), is(SimpleTestScenarioSteps.class.getName()));
         assertThat(argument.getValue().getName(), is("step_one"));
     }
@@ -494,7 +497,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         steps.step_group1();
 
-        verify(listener, times(4)).stepStarted(any(ExecutedStepDescription.class));
+        verify(listener, times(4)).stepStarted(any(ExecutedStepDescription.class), any());
         verify(listener, times(4)).stepFinished();
     }
 

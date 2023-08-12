@@ -1,29 +1,29 @@
 package net.serenitybdd.screenplay
 
 import net.serenitybdd.core.di.SerenityInfrastructure
-import net.thucydides.core.environment.TestLocalEnvironmentVariables
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.environment.TestLocalEnvironmentVariables
+import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION
+import static net.thucydides.model.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTATION
 
 class WhenInstrumentingTasks extends Specification {
 
     File temporaryDirectory
     BaseStepListener listener = new BaseStepListener(temporaryDirectory)
-    EnvironmentVariables environmentVariables;
+    EnvironmentVariables environmentVariables
     boolean currentManualInstrumentationSetting
 
     def setup() {
         environmentVariables = SerenityInfrastructure.environmentVariables
-        currentManualInstrumentationSetting = environmentVariables.getPropertyAsBoolean(MANUAL_TASK_INSTRUMENTATION, false);
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        currentManualInstrumentationSetting = environmentVariables.getPropertyAsBoolean(MANUAL_TASK_INSTRUMENTATION, false)
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
 
         StepEventBus.eventBus.clear()
         StepEventBus.eventBus.registerListener(listener)
@@ -31,7 +31,7 @@ class WhenInstrumentingTasks extends Specification {
     }
 
     def cleanup() {
-        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), currentManualInstrumentationSetting.toString());
+        environmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), currentManualInstrumentationSetting.toString())
     }
 
     def "A non-instrumented class will be reported by default"() {
@@ -39,7 +39,7 @@ class WhenInstrumentingTasks extends Specification {
         given:
             Performable basicTask = new EatsAnApple()
         when:
-            Actor.named("eddie").attemptsTo(basicTask);
+            Actor.named("eddie").attemptsTo(basicTask)
         then:
             testPassed()
         and:
@@ -52,7 +52,7 @@ class WhenInstrumentingTasks extends Specification {
         given:
         Performable basicTask = EatsFruit.loudly()
         when:
-            Actor.named("Eddie").attemptsTo(basicTask);
+            Actor.named("Eddie").attemptsTo(basicTask)
         then:
             testPassed()
         and:
@@ -64,7 +64,7 @@ class WhenInstrumentingTasks extends Specification {
         given:
             Performable basicTask = EatsARockmelon.quietly()
         when:
-            Actor.named("eddie").attemptsTo(basicTask);
+            Actor.named("eddie").attemptsTo(basicTask)
         then:
             testPassed()
         and:
@@ -77,7 +77,7 @@ class WhenInstrumentingTasks extends Specification {
         given:
             Performable basicTask = new EatsAnOrange()
         when:
-            Actor.named("Annie").attemptsTo(basicTask);
+            Actor.named("Annie").attemptsTo(basicTask)
         then:
             testPassed()
         and:
@@ -125,7 +125,7 @@ class WhenInstrumentingTasks extends Specification {
         given:
             Performable basicTask = new EatsATangarine()
         when:
-            Actor.named("Annie").attemptsTo(basicTask);
+            Actor.named("Annie").attemptsTo(basicTask)
         then:
             testPassed()
         and:
@@ -136,7 +136,7 @@ class WhenInstrumentingTasks extends Specification {
     def "Instrumented tasks with the CanBeSilent marker interface can be configured to be reported or not"() {
 
         when:
-            Actor.named("Annie").attemptsTo(EatsAWatermelon.quietly(), EatsAWatermelon.noisily());
+            Actor.named("Annie").attemptsTo(EatsAWatermelon.quietly(), EatsAWatermelon.noisily())
         then:
             testPassed()
         and:
@@ -148,10 +148,10 @@ class WhenInstrumentingTasks extends Specification {
     def "The @Step annotation is ignored in test output if task is manually instantiated and MANUAL_TASK_INSTRUMENTATION is true"() {
 
         given:
-        TestLocalEnvironmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        TestLocalEnvironmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true")
         Performable basicTask = new EatsAnOrange()
         when:
-        Actor.named("Annie").attemptsTo(basicTask);
+        Actor.named("Annie").attemptsTo(basicTask)
         then:
         testPassed()
         and:
@@ -161,10 +161,10 @@ class WhenInstrumentingTasks extends Specification {
     def "There should be no test output if a task is manually instantiated and MANUAL_TASK_INSTRUMENTATION is true"() {
 
         given:
-        TestLocalEnvironmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true");
+        TestLocalEnvironmentVariables.setProperty(MANUAL_TASK_INSTRUMENTATION.toString(), "true")
         Performable basicTask = EatsFruit.loudly()
         when:
-        Actor.named("Eddie").attemptsTo(basicTask);
+        Actor.named("Eddie").attemptsTo(basicTask)
         then:
         testPassed()
         and:

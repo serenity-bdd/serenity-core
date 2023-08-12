@@ -1,12 +1,11 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
-import net.thucydides.core.reports.html.ReportNameProvider;
-import net.thucydides.core.reports.html.ReportProperties;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.reports.ResultChecker;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -19,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import java.io.File;
 import java.io.IOException;
 
-import static net.thucydides.core.matchers.FileMatchers.exists;
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
+import static net.thucydides.model.matchers.FileMatchers.exists;
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -30,7 +29,7 @@ public class WhenGeneratingAnAggregateHtmlReportSetWithContext {
 
     private static File outputDirectory;
 
-    private static EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+    private static final EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
     @BeforeClass
     public static void generateReports() throws IOException {

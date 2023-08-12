@@ -1,11 +1,9 @@
 package net.thucydides.core.annotations.findby.integration
 
 import net.serenitybdd.core.pages.PageObject
-import net.thucydides.core.annotations.DefaultUrl
-import net.thucydides.core.environment.TestLocalEnvironmentVariables
+import net.serenitybdd.annotations.DefaultUrl
+import net.thucydides.model.environment.TestLocalEnvironmentVariables
 import net.thucydides.core.pages.WebElementFacade
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
@@ -24,33 +22,33 @@ class WhenUsingSmartFindByOnPageObjects extends Specification {
 	class StaticSitePageWithFindBy extends PageObject {
 
 			@net.thucydides.core.annotations.findby.FindBy(jquery = "[name='firstname']")
-			public WebElementFacade firstName;
+			public WebElementFacade firstName
 
 			@net.thucydides.core.annotations.findby.FindBy(jquery = "[name='hiddenfield']")
-			public WebElementFacade hiddenField;
+			public WebElementFacade hiddenField
 
 			@net.thucydides.core.annotations.findby.FindBy(jquery = ".doesNotExist")
-			public WebElementFacade nonExistantField;
+			public WebElementFacade nonExistantField
 
 			StaticSitePageWithFindBy(WebDriver driver){
-				super(driver);
+				super(driver)
 			}
 	}
 
 
 	def newDriver() {
-		TestLocalEnvironmentVariables.setProperty("headless.mode","true");
-		driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
+		TestLocalEnvironmentVariables.setProperty("headless.mode","true")
+		driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory())
 	}
 
 	@Shared
 	def driver = newDriver()
 
 	@Shared
-	StaticSitePageWithFindBy page =  new StaticSitePageWithFindBy(driver);
+	StaticSitePageWithFindBy page =  new StaticSitePageWithFindBy(driver)
 
 	def setupSpec() {
-		new DefaultPageObjectInitialiser(driver, 2000).apply(page);
+		new DefaultPageObjectInitialiser(driver, 2000).apply(page)
 		page.open()
 	}
 

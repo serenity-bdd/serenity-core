@@ -1,7 +1,7 @@
 package net.thucydides.junit.spring;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Steps;
 import net.thucydides.junit.spring.samples.dao.GizmoDao;
 import net.thucydides.junit.spring.samples.service.BazingaService;
 import net.thucydides.junit.spring.samples.service.GizmoService;

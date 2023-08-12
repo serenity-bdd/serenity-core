@@ -2,8 +2,8 @@ package net.serenitybdd.core.environment;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.DriverConfiguration;
 
 public class WebDriverConfiguredEnvironment {

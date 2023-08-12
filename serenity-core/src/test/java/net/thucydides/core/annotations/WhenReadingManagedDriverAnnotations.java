@@ -1,6 +1,7 @@
 package net.thucydides.core.annotations;
 
 
+import net.serenitybdd.annotations.Managed;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.junit.Before;
 import org.junit.Test;

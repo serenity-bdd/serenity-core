@@ -2,22 +2,22 @@ package net.serenitybdd.screenplay.playwright.abilities;
 
 import com.google.common.eventbus.Subscribe;
 import com.microsoft.playwright.*;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.playwright.Photographer;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.events.TestLifecycleEvents;
-import net.thucydides.core.model.TakeScreenshots;
-import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.core.events.TestLifecycleEvents;
+import net.thucydides.model.domain.TakeScreenshots;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -79,7 +79,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
      */
     private Page currentPage;
 
-    private EnvironmentVariables environmentVariables;
+    private final EnvironmentVariables environmentVariables;
 
     protected BrowseTheWebWithPlaywright(EnvironmentVariables environmentVariables) {
         this(environmentVariables,

@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.graphs
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestResult.*
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestResult.*
 import org.knowm.xchart.BitmapEncoder.BitmapFormat.PNG
 import org.knowm.xchart.BitmapEncoder.saveBitmap
 import org.knowm.xchart.PieChart
@@ -47,6 +47,6 @@ class ResultChart(val data: Map<TestResult, Int>) {
         return chart
     }
 
-    fun saveTo(savedGraph: File) = saveBitmap(chart, savedGraph.absolutePath, PNG);
+    fun saveTo(savedGraph: File) = saveBitmap(chart, savedGraph.absolutePath, PNG)
 
 }

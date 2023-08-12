@@ -1,9 +1,9 @@
 package net.serenitybdd.core.photography;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.webdriver.IsMobile;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.TakesScreenshot;
@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.time.Duration;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT;
 
 /**
  * Take a screenshot with a specified WebDriver instance.

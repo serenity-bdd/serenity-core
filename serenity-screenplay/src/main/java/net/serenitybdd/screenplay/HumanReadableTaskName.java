@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay;
 
-import net.thucydides.core.util.NameConverter;
+import net.thucydides.model.util.NameConverter;
 
 public class HumanReadableTaskName {
 

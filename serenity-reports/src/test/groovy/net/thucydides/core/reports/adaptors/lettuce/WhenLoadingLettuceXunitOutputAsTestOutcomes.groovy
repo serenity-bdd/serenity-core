@@ -1,11 +1,12 @@
 package net.thucydides.core.reports.adaptors.lettuce
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.adaptors.TestOutcomeAdaptor
+import net.thucydides.model.reports.adaptors.lettuce.LettuceXUnitAdaptor
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static net.thucydides.core.util.TestResources.fileInClasspathCalled
+import static net.thucydides.model.util.TestResources.fileInClasspathCalled
 
 /**
  * We want to convert xUnit outputs (possibly with some extra custom fields) to TestOutcomes
@@ -16,7 +17,7 @@ class WhenLoadingLettuceXunitOutputAsTestOutcomes extends Specification {
     def "should convert a lettuce xunit test result to a test containing the given-when-then steps"() {
         given:
             def xunitReport = fileInClasspathCalled("/lettuce-xunit-reports/normal")
-            TestOutcomeAdaptor lettuceLoader = new  net.thucydides.core.reports.adaptors.lettuce.LettuceXUnitAdaptor()
+            TestOutcomeAdaptor lettuceLoader = new  LettuceXUnitAdaptor()
         when:
             def testOutcomes = lettuceLoader.loadOutcomesFrom(xunitReport)
         then:
@@ -34,7 +35,7 @@ class WhenLoadingLettuceXunitOutputAsTestOutcomes extends Specification {
     def "should load errors and failing results"() {
         given:
             def xunitReport = fileInClasspathCalled("/lettuce-xunit-reports/with-failures")
-            TestOutcomeAdaptor lettuceLoader = new  net.thucydides.core.reports.adaptors.lettuce.LettuceXUnitAdaptor()
+            TestOutcomeAdaptor lettuceLoader = new LettuceXUnitAdaptor()
         when:
             def testOutcomes = lettuceLoader.loadOutcomesFrom(xunitReport)
         then:

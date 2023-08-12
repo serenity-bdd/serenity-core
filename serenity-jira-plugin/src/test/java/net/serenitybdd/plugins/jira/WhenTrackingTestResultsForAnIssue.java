@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.jira;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

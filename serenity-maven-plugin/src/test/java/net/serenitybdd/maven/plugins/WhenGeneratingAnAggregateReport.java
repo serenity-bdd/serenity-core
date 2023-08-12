@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,8 +47,7 @@ public class WhenGeneratingAnAggregateReport {
         plugin.setReporter(reporter);
         plugin.project = project;
         plugin.session = Mockito.mock(MavenSession.class);
-        MavenProject project=Mockito.mock(MavenProject.class);
-        Mockito.when(project.getBasedir()).thenReturn(new File("."));
+        Mockito.when(plugin.project.getBasedir()).thenReturn(new File("."));
         Mockito.when(plugin.session.getCurrentProject()).thenReturn(project);
     }
 

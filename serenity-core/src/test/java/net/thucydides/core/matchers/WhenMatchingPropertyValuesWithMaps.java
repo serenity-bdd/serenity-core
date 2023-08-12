@@ -1,5 +1,6 @@
 package net.thucydides.core.matchers;
 
+import net.thucydides.model.matchers.*;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;

@@ -1,10 +1,8 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.pages.components.FileToUpload;
+import net.serenitybdd.annotations.Step;
 
 import java.nio.file.Path;
 

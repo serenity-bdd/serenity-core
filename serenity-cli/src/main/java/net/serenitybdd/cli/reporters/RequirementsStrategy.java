@@ -1,7 +1,7 @@
 package net.serenitybdd.cli.reporters;
 
-import net.thucydides.core.requirements.FileSystemRequirements;
-import net.thucydides.core.requirements.Requirements;
+import net.thucydides.model.requirements.FileSystemRequirements;
+import net.thucydides.model.requirements.Requirements;
 
 /**
  * Created by john on 25/06/2016.

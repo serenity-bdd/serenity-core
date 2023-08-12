@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**

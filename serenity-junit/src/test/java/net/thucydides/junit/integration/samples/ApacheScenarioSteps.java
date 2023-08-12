@@ -1,8 +1,8 @@
 package net.thucydides.junit.integration.samples;
 
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.TestsRequirement;
+import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.TestsRequirement;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.steps.ScenarioSteps;

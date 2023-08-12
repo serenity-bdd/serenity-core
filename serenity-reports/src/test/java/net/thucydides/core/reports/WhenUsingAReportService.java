@@ -1,6 +1,8 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.AcceptanceTestReporter;
+import net.thucydides.model.reports.ReportService;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,16 +1,8 @@
 package net.serenitybdd.maven.plugins;
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.reports.ResultChecker;
-import net.thucydides.core.requirements.RootDirectory;
-import net.thucydides.core.requirements.model.cucumber.FeatureFileChecker;
-import net.thucydides.core.requirements.model.cucumber.FeatureFileFinder;
-import net.thucydides.core.requirements.model.cucumber.InvalidFeatureFileException;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import org.apache.commons.lang3.StringUtils;
+import net.thucydides.model.requirements.model.cucumber.FeatureFileChecker;
+import net.thucydides.model.requirements.model.cucumber.FeatureFileFinder;
+import net.thucydides.model.requirements.model.cucumber.InvalidFeatureFileException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -19,11 +11,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * This plugin checks for inconsistencies or errors in Cucumber feature files that may cause issues with the Serenity reports.

@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.configuration
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*

@@ -1,6 +1,6 @@
 package net.thucydides.core.model
 
-import net.thucydides.core.model.stacktrace.FailureCause
+import net.thucydides.model.domain.stacktrace.FailureCause
 import spock.lang.Specification
 
 /**

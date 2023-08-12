@@ -1,5 +1,6 @@
 package net.thucydides.core.annotations
 
+import net.serenitybdd.annotations.Managed
 import org.openqa.selenium.WebDriver
 import spock.lang.Shared
 import spock.lang.Specification

@@ -1,8 +1,10 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.Story;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.annotations.Story;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +12,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.time.ZonedDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -19,7 +23,7 @@ import static org.mockito.Mockito.verify;
 
 public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
-    StepListener listener;
+    ConsoleStepListener listener;
 
     @Mock
     StepListener mockListener;
@@ -37,7 +41,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
         StepEventBus.getParallelEventBus().registerListener(listener);
         StepEventBus.getParallelEventBus().registerListener(mockListener);
 
-        StepEventBus.getParallelEventBus().testStarted("aTest");
+        StepEventBus.getParallelEventBus().testStarted("aTest",ZonedDateTime.now());
 
     }
 
@@ -190,7 +194,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
         steps.step2();
         steps.step3();
 
-        verify(mockListener, times(3)).stepStarted(any(ExecutedStepDescription.class));
+        verify(mockListener, times(3)).stepStarted(any(ExecutedStepDescription.class), any());
     }
 
     class AStory {
@@ -211,7 +215,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
         steps.step1();
 
-        verify(mockListener).stepStarted(argument.capture());
+        verify(mockListener).stepStarted(argument.capture(), any());
         assertThat(argument.getValue().getStepClass().getName(), is(SimpleSteps.class.getName()));
         assertThat(argument.getValue().getName(), is("step1"));
     }

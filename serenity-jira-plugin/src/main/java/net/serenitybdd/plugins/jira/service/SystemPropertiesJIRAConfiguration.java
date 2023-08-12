@@ -1,9 +1,9 @@
 package net.serenitybdd.plugins.jira.service;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.LocalPreferences;
-import net.thucydides.core.util.PropertiesLocalPreferences;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.LocalPreferences;
+import net.thucydides.model.util.PropertiesLocalPreferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

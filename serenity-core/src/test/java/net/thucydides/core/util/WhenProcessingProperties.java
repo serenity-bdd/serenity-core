@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import net.thucydides.model.util.PropertiesUtil;
 import org.junit.Test;
 
 import java.util.HashMap;

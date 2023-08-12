@@ -1,11 +1,11 @@
 package net.serenitybdd.plugins.jira.workflow
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static net.thucydides.core.model.TestResult.FAILURE
-import static net.thucydides.core.model.TestResult.SUCCESS
+import static net.thucydides.model.domain.TestResult.FAILURE
+import static net.thucydides.model.domain.TestResult.SUCCESS
 
 class WhenUsingACustomJiraWorkflow extends Specification {
 
@@ -19,7 +19,7 @@ class WhenUsingACustomJiraWorkflow extends Specification {
     }
 
     def setup() {
-        workflow = new ClasspathWorkflowLoader("jira-workflow.groovy", environmentVariables).load();
+        workflow = new ClasspathWorkflowLoader("jira-workflow.groovy", environmentVariables).load()
     }
 
     def "should load a custom workflow defined in the serenity.jira.workflow system property"() {

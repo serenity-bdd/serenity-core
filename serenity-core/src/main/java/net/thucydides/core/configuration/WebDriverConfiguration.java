@@ -1,7 +1,8 @@
 package net.thucydides.core.configuration;
 
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
 
 import java.util.Optional;

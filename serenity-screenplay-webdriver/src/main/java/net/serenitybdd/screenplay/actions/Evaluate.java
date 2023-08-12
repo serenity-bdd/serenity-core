@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.actions.LastScriptExecution;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 /**
  * Executes JavaScript in the context of the currently selected frame or window. The script fragment provided will be executed as the body of an anonymous function.
@@ -17,8 +17,8 @@ import net.thucydides.core.annotations.Step;
  * For a non-decimal number, a Long is returned
  * For a boolean, a Boolean is returned
  * For all other cases, a String is returned.
- * For an array, return a List<Object> with each object following the rules above. We support nested lists.
- * For a map, return a Map<String, Object> with values following the rules above.
+ * For an array, return a List of Objects with each object following the rules above. We support nested lists.
+ * For a map, return a Map of Strings to Objects with values following the rules above.
  * Unless the value is null or there is no return value, in which null is returned
  * Arguments must be a number, a boolean, a String, WebElement, or a List of any combination of the above. An exception will be thrown if the arguments do not meet these criteria. The arguments will be made available to the JavaScript via the "arguments" magic variable, as if the function were called via "Function.apply"
  */

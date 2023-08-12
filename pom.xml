@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <description>Serenity BDD Core Libraries</description>
     <name>Serenity BDD</name>
-    <version>3.10.0-SNAPSHOT</version>
+    <version>4.0.0-beta-3-SNAPSHOT</version>
     <url>https://serenity-bdd.github.io/</url>
 
     <licenses>
@@ -94,7 +94,7 @@
         <ehcache.version>3.10.8</ehcache.version>
         <!-- Kotlin config -->
         <kotlin.version>1.9.0</kotlin.version>
-        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -515,7 +515,7 @@
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>1.13.0</version>
+                    <version>3.0.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -548,7 +548,7 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.1.2</version>
                     <configuration>
                         <includes>
                             <include>**/When*</include>
@@ -569,7 +569,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.1.2</version>
                     <configuration>
                         <includes>
                             <include>**/integration/*IT</include>
@@ -605,7 +605,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.1.1</version>
                 </plugin>
                 <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
                 <plugin>
@@ -614,12 +614,12 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.4.5</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.1.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -627,7 +627,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -645,7 +645,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>1.6.13</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -666,12 +666,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <configuration>
-                    <source>1.8</source>
+                    <source>11</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
                     <failOnError>false</failOnError>
+                    <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>
             <plugin>
@@ -706,16 +707,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>3.1.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <configuration>
-                    <source>1.8</source>
+                    <source>11</source>
                     <excludePackageNames>net.thucydides.core.batches.*</excludePackageNames>
                     <failOnWarnings>false</failOnWarnings>
+                    <excludePackageNames>io.netty.*</excludePackageNames>
+                    <excludePackageNames>org.eclipse.*</excludePackageNames>
+                    <excludePackageNames>io.cucumber.*</excludePackageNames>
+                    <excludePackageNames>org.apache.*</excludePackageNames>
+                    <excludePackageNames>org.assertj.*</excludePackageNames>
+                    <excludePackageNames>org.seleniumhq.*</excludePackageNames>
+                    <excludePackageNames>io.opentelemetry.*</excludePackageNames>
+                    <excludePackageNames>com.google.*</excludePackageNames>
+                    <excludePackageNames>org.checkerframework.*</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>
@@ -834,7 +844,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.2.0</version>
                         <configuration>
-                            <source>1.8</source>
+                            <source>11</source>
                         </configuration>
                         <executions>
                             <execution>

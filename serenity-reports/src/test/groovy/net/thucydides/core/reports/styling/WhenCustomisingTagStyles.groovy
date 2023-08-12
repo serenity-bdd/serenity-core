@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.styling
 
 import net.serenitybdd.core.reports.styling.TagStylist
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -33,7 +33,7 @@ class WhenCustomisingTagStyles extends Specification {
         environmentVariables.setProperty("tag.color.for.error", "red")
         environmentVariables.setProperty("tag.color.for.warning", "#FFBF00")
         when:
-        def tag = TestTag.withName("my tag").andType(tagType);
+        def tag = TestTag.withName("my tag").andType(tagType)
         then:
         TagStylist.from(environmentVariables).tagStyleFor(tag) == expectedTagStyle
         where:
@@ -58,7 +58,7 @@ class WhenCustomisingTagStyles extends Specification {
         given:
         environmentVariables.setProperty(style, styleValue)
         when:
-        def tag = TestTag.withName("my tag").andType(tagType);
+        def tag = TestTag.withName("my tag").andType(tagType)
         then:
         TagStylist.from(environmentVariables).tagStyleFor(tag) == expectedTagStyle
         where:

@@ -1,13 +1,14 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.releases.ReleaseManager;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.releases.ReleaseManager;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.requirements.RequirementsService;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.model.RequirementsConfiguration;
+import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
+import net.thucydides.model.requirements.reports.RequirementsOutcomes;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +19,8 @@ import static net.thucydides.core.reports.html.RequirementsTypeReportingTask.req
 
 public class RequirementsReports {
 
-    private ReportNameProvider reportNameProvider;
-    private RequirementsOutcomeFactory requirementsFactory;
+    private final ReportNameProvider reportNameProvider;
+    private final RequirementsOutcomeFactory requirementsFactory;
     private ReleaseManager releaseManager;
     private final String relativeLink;
 

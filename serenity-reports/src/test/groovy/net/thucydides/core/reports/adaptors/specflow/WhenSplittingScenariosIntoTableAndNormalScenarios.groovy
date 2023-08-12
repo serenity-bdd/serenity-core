@@ -1,5 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow
 
+import net.thucydides.model.reports.adaptors.specflow.ScenarioSplitter
+import net.thucydides.model.reports.adaptors.specflow.SpecflowScenario
 import spock.lang.Specification
 
 class WhenSplittingScenariosIntoTableAndNormalScenarios extends Specification {

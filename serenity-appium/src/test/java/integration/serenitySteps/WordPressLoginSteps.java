@@ -3,7 +3,7 @@ package integration.serenitySteps;
 import integration.pages.WordPressLoginPage;
 
 import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

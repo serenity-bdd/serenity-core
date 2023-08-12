@@ -1,13 +1,13 @@
 package net.serenitybdd.screenplay.injectors;
 
-import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import net.serenitybdd.screenplay.annotations.CastMember;
-import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.annotations.Managed;
+import net.serenitybdd.annotations.Fields;
+import net.serenitybdd.annotations.Managed;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;

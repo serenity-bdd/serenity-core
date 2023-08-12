@@ -1,8 +1,8 @@
 package net.serenitybdd.cucumber.model;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class FeatureFileContents {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeatureFileContents.class);
 
-    private EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+    private final EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
 
     public FeatureFileContents(String featureFilePath) {
         this.lines = readFeatureFileFrom(featureFilePath);

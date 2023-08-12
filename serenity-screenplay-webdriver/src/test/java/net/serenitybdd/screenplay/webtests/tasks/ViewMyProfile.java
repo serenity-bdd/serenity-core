@@ -7,7 +7,7 @@ import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actions.PerformOn;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 public class ViewMyProfile implements Performable {
 

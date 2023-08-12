@@ -1,6 +1,7 @@
 package net.thucydides.core.annotations;
 
 
+import net.serenitybdd.annotations.*;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,8 +19,8 @@ class WhenRerunningFailingTests extends Specification {
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
         environmentVariables.setProperty("rerun.failures.directory",System.getProperty("user.dir") + File.separator + "src/test/resources/rerun")
         environmentVariables.setProperty("replay.failures","true")
     }
@@ -30,16 +30,16 @@ class WhenRerunningFailingTests extends Specification {
     static class ATestWithMoreTestMethods {
 
         @Test
-        public void testMethod1() {
-            throw new Exception();
+        void testMethod1() {
+            throw new Exception()
         }
 
         @Test
-        public void testMethod2() {
+        void testMethod2() {
         }
 
         @Test
-        public void testMethod3() {
+        void testMethod3() {
         }
     }
 

@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 public class LambdaTestVideoLink {
     private final String PUBLIC_URL = "https://automation.lambdatest.com/public/video?testID=%s&auth=%s";

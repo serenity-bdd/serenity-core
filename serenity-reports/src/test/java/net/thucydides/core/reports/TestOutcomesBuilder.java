@@ -1,7 +1,8 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.model.*;
+import net.serenitybdd.annotations.Feature;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.reports.TestOutcomes;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.thucydides.core.model.TestResult.FAILURE;
-import static net.thucydides.core.model.TestResult.SUCCESS;
+import static net.thucydides.model.domain.TestResult.FAILURE;
+import static net.thucydides.model.domain.TestResult.SUCCESS;
 
 public class TestOutcomesBuilder {
 

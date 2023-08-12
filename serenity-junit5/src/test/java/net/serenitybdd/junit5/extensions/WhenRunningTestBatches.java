@@ -2,7 +2,7 @@ package net.serenitybdd.junit5.extensions;
 
 import net.serenitybdd.junit5.AbstractTestStepRunnerTest;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.Before;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;

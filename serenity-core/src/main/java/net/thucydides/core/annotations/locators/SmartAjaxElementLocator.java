@@ -2,12 +2,12 @@ package net.thucydides.core.annotations.locators;
 
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.WebdriverCollectionStrategy;
 import net.thucydides.core.annotations.ElementIsUsable;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.WebDriverFacade;
@@ -31,7 +31,7 @@ import static net.thucydides.core.annotations.locators.SearchContextType.*;
 
 public class SmartAjaxElementLocator extends SmartElementLocator implements WithConfigurableTimeout {
     private static final Duration ZERO_SECONDS =  Duration.ofSeconds(0);
-    private Optional<Integer> annotatedTimeoutInSeconds;
+    private final Optional<Integer> annotatedTimeoutInSeconds;
     private final Clock clock;
 
     private final Field field;
@@ -67,7 +67,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final static SearchContextProvider WEBELEMENT_SEARCH_CONTEXT = (context, timeout) -> context;
 
 
-    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap<>();
+    private static final Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap<>();
 
     static {
         SEARCH_CONTEXTS.put(WebDriverFacadeContext,     UNMODIFIED_SEARCH_CONTEXT);

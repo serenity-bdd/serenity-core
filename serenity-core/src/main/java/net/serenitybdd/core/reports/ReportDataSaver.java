@@ -1,9 +1,9 @@
 package net.serenitybdd.core.reports;
 
-import net.thucydides.core.model.ReportData;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.model.domain.ReportData;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.session.TestSession;
 
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
 
 public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 

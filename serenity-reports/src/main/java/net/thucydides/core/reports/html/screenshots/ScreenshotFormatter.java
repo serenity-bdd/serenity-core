@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html.screenshots;
 
-import net.thucydides.core.images.ResizableImage;
-import net.thucydides.core.model.screenshots.Screenshot;
+import net.thucydides.model.images.ResizableImage;
+import net.thucydides.model.domain.screenshots.Screenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

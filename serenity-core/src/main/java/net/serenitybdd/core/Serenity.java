@@ -1,24 +1,30 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.IgnoredStepException;
+import net.serenitybdd.model.PendingStepException;
+import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.core.configurers.WebDriverConfigurer;
-import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.model.di.DependencyInjector;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.reports.ReportDataSaver;
 import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.steps.di.DependencyInjectorService;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.di.DependencyInjectorService;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.*;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 

@@ -1,9 +1,10 @@
 package net.thucydides.core.tags
 
 import junittestcases.samples.mock.SerenityRunner
-import net.thucydides.core.annotations.WithTag
-import net.thucydides.core.annotations.WithTagValuesOf
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.serenitybdd.annotations.WithTag
+import net.serenitybdd.annotations.WithTagValuesOf
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.tags.TagScanner
 import org.junit.runner.RunWith
 import spock.lang.Specification
 import spock.lang.Unroll

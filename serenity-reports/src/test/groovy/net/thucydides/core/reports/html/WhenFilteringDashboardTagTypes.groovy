@@ -1,7 +1,8 @@
 package net.thucydides.core.reports.html
 
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.html.TagFilter
 import spock.lang.Specification
 
 class WhenFilteringDashboardTagTypes extends Specification {

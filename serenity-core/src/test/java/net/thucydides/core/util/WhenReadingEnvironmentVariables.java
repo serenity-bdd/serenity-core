@@ -1,7 +1,8 @@
 package net.thucydides.core.util;
 
-import net.thucydides.core.environment.MockEnvironmentVariables;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Test;
 
 import java.util.HashMap;

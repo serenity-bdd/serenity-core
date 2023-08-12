@@ -5,10 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
+import net.serenitybdd.model.rest.RestQuery
 import net.serenitybdd.rest.utils.RestExecutionHelper
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
+import net.serenitybdd.annotations.Step
+import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepFactory
 import org.hamcrest.Matchers
@@ -19,7 +19,7 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.serenitybdd.core.rest.RestMethod.GET
+import static net.serenitybdd.model.rest.RestMethod.GET
 import static net.serenitybdd.rest.JsonConverter.formatted
 import static net.serenitybdd.rest.SerenityRest.get
 import static net.serenitybdd.rest.SerenityRest.given
@@ -31,14 +31,14 @@ import static net.serenitybdd.rest.SerenityRest.given
  */
 class WhenEnabledDryRunWithSerenityRest extends Specification {
     @Rule
-    def TestCase<BaseStepListener> test = new TestCase({
-        Mock(BaseStepListener);
-    }.call());
+    TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call())
 
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
         temporaryDirectory.deleteOnExit()
     }
 
@@ -57,12 +57,12 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
         }
     }
 
-    def Gson gson = new GsonBuilder().setPrettyPrinting().
-        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
 
     def "Should record RestAssured get() method calls when enabled dry run"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Number", "9999")
             json.addProperty("Price", "100")
             def base = "http://localhost:5164"
@@ -83,7 +83,7 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
     }
     def "Should record RestAssured get() method calls with parameters when enabled dry run"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Exists", true)
             json.addProperty("label", "UI")
             json.addProperty("SomeValue","value")
@@ -106,7 +106,7 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
 
     def "Should record RestAssured get() method calls with parameter provided as a list when enabled dry run"() {
         given:
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Weather", "rain")
             json.addProperty("temperature", "+2")
             json.addProperty("SomeValue","value")
@@ -131,19 +131,19 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
     static class RestSteps {
         @Step
         def successfulGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000));
+            given().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000))
             given().get("$url/{id}", 1000).then().body(Matchers.equalTo("/pets/id"))
         }
 
         @Step
         def failingGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001));
+            given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001))
         }
 
 
         @Step
         def getById(final String url) {
-            given().get("$url/{id}", 1000);
+            given().get("$url/{id}", 1000)
         }
     }
 
@@ -151,10 +151,10 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
         given:
             def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
-            StepFactory factory = new StepFactory();
-            def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+            StepFactory factory = new StepFactory()
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Food", "sushi")
             json.addProperty("size", "7")
             def base = "http://localhost:23424"
@@ -171,7 +171,7 @@ class WhenEnabledDryRunWithSerenityRest extends Specification {
         given:
             def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Sky", "Clear")
             json.addProperty("Time", "10:17AM")
             json.addProperty("SomeValue","value")

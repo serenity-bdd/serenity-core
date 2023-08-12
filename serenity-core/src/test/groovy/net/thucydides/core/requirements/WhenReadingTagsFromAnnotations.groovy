@@ -2,12 +2,13 @@ package net.thucydides.core.requirements
 
 import annotatedstorieswithcontents.apples.BuyApples
 import annotatedstorieswithcontents.potatoes.big_potatoes.PlantBigPotatoes
-import net.thucydides.core.annotations.Narrative
-import net.thucydides.core.model.Story
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.requirements.annotations.NarrativeFinder
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.serenitybdd.annotations.Narrative
+import net.thucydides.model.domain.Story
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.requirements.PackageAnnotationBasedTagProvider
+import net.thucydides.model.requirements.annotations.NarrativeFinder
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenReadingTagsFromAnnotations extends Specification {

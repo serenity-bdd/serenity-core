@@ -1,10 +1,10 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
-import net.thucydides.core.annotations.Pending
-import net.thucydides.core.annotations.Steps
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.serenitybdd.annotations.Pending
+import net.serenitybdd.annotations.Steps
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.environment.MockEnvironmentVariables
 import net.thucydides.samples.SampleScenarioSteps
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,18 +21,18 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
     }
 
 
     @RunWith(SerenityRunner)
-    public static class APassingScenario {
+    static class APassingScenario {
         @Steps
-        SampleScenarioSteps steps;
+        SampleScenarioSteps steps
 
         @Test
-        public void shouldPass() {
+        void shouldPass() {
             steps.stepThatSucceeds()
         }
     }
@@ -47,9 +47,9 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
     }
 
     @RunWith(SerenityRunner)
-    public static class APassingScenarioWithoutSteps {
+    static class APassingScenarioWithoutSteps {
         @Test
-        public void shouldPass() {
+        void shouldPass() {
         }
     }
 
@@ -64,12 +64,12 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
 
 
     @RunWith(SerenityRunner)
-    public static class AFailingScenario {
+    static class AFailingScenario {
         @Steps
-        SampleScenarioSteps steps;
+        SampleScenarioSteps steps
 
         @Test
-        public void shouldPass() {
+        void shouldPass() {
             steps.stepThatFails()
         }
     }
@@ -85,9 +85,9 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
 
 
     @RunWith(SerenityRunner)
-    public static class AFailingScenarioWithoutSteps {
+    static class AFailingScenarioWithoutSteps {
         @Test
-        public void shouldPass() {
+        void shouldPass() {
             assertThat(1).isEqualTo(2)
         }
     }
@@ -105,12 +105,12 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
 
 
     @RunWith(SerenityRunner)
-    public static class AScenarioWithAPendingStep {
+    static class AScenarioWithAPendingStep {
         @Steps
-        SampleScenarioSteps steps;
+        SampleScenarioSteps steps
 
         @Test
-        public void shouldBePending() {
+        void shouldBePending() {
             steps.stepThatIsPending()
         }
     }
@@ -125,13 +125,13 @@ class WhenReportingOnTestOutcomesInJunit extends Specification {
     }
 
     @RunWith(SerenityRunner)
-    public static class APendingScenario {
+    static class APendingScenario {
         @Steps
-        SampleScenarioSteps steps;
+        SampleScenarioSteps steps
 
         @Pending
         @Test
-        public void shouldBePending() {
+        void shouldBePending() {
         }
     }
 

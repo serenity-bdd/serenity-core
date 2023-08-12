@@ -1,12 +1,12 @@
 package net.serenitybdd.plugins.lambdatest;
 
-import net.serenitybdd.core.model.TestOutcomeName;
+import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
-import net.thucydides.core.model.ExternalLink;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.ExternalLink;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static net.thucydides.core.model.TestResult.FAILURE;
+import static net.thucydides.model.domain.TestResult.FAILURE;
 
 /**
  * Update the LambdaTest outcomes on the server

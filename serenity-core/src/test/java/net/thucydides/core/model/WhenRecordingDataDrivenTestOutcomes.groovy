@@ -2,15 +2,17 @@ package net.thucydides.core.model
 
 
 import net.thucydides.core.steps.StepEventBus
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.DataTableRow
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
-import static net.thucydides.core.model.TestResult.*
+import static net.thucydides.model.domain.TestResult.*
 
 class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def setup() {
-        StepEventBus.eventBus.reset();
+        StepEventBus.eventBus.reset()
     }
 
     def "Test outcomes should not have a data-driven table by default"()  {
@@ -42,7 +44,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                               andRows([["Joe", "Smith",20],
-                                       ["Jack", "Jones",21]]).build();
+                                       ["Jack", "Jones",21]]).build()
         then:
         table.headers == ["firstName","lastName","age"]
         table.rows.collect {it.values} ==[["Joe","Smith",20], ["Jack","Jones",21]]
@@ -53,7 +55,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andRows([["Joe", "Smith",20],
-                         ["Jack", "Jones",21]]).build();
+                         ["Jack", "Jones",21]]).build()
         then:
         table.restoreVariablesIn("A person named Joe Smith") == "A person named <firstName> <lastName>"
     }
@@ -62,7 +64,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andRows([["[a, b, c]", ".*",20],
-                         ["Jack", "Jones",21]]).build();
+                         ["Jack", "Jones",21]]).build()
         then:
         table.restoreVariablesIn("A person named Joe Smith") == "A person named Joe Smith"
     }
@@ -71,7 +73,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andRows([["Joe", "Smith",20],
-                         ["Jack", "Jones",21]]).build();
+                         ["Jack", "Jones",21]]).build()
         then:
         table.restoreVariablesIn("Joesphine and Joe Smith") == "Joesphine and <firstName> <lastName>"
     }
@@ -81,7 +83,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andRows([["Joe", "Smith",20],
-                         ["Jack", "Jones",21]]).build();
+                         ["Jack", "Jones",21]]).build()
         then:
         table.dataSets.size() == 1
         and:
@@ -95,7 +97,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
                          ["Jack", "Jones",21]])
                 .andTitle("a title")
                 .andDescription("a description")
-                .build();
+                .build()
         then:
         table.dataSets.size() == 1
         and:
@@ -110,11 +112,11 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
                          ["Jack", "Jones",21]])
                 .andTitle("a title")
                 .andDescription("a description")
-                .build();
+                .build()
         and:
         table.startNewDataSet("another title","another description")
         table.addRows([new DataTableRow(["Jane", "Smith",20]),
-                       new DataTableRow(["Jill", "Jones",21]),
+                       new DataTableRow(["Jill", "Jones", 21]),
                        new DataTableRow(["Jodie", "Jacobs",21])])
         then:
         table.dataSets.size() == 2
@@ -135,7 +137,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andMappedRows([["firstName":"Joe",  "lastName":"Smith","age":20],
-                               ["firstName":"Jack", "lastName":"Jones","age":21]]).build();
+                               ["firstName":"Jack", "lastName":"Jones","age":21]]).build()
         then:
         table.headers == ["firstName","lastName","age"]
         table.rows.collect {it.values} ==[["Joe","Smith",20], ["Jack","Jones",21]]
@@ -145,7 +147,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         when:
         def table = DataTable.withHeaders(["firstName","lastName","age"]).
                 andMappedRows([["firstName":"Joe",  "lastName":"Smith","age":20],
-                        ["firstName":"Jack", "lastName":"Jones","age":21]]).build();
+                        ["firstName":"Jack", "lastName":"Jones","age":21]]).build()
         then:
         table.rows.collect {it.result} ==[UNDEFINED, UNDEFINED]
     }
@@ -154,7 +156,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         given:
             def table = DataTable.withHeaders(["firstName","lastName","age"]).
                     andMappedRows([["firstName":"Joe",  "lastName":"Smith","age":20],
-                            ["firstName":"Jack", "lastName":"Jones","age":21]]).build();
+                            ["firstName":"Jack", "lastName":"Jones","age":21]]).build()
         when:
             table.row(0).hasResult(FAILURE)
             table.row(1).hasResult(PENDING)
@@ -166,7 +168,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         given:
             def table = DataTable.withHeaders(["firstName","lastName","age"]).
                     andMappedRows([["firstName":"Joe",  "lastName":"Smith","age":20],
-                                   ["firstName":"Jack", "lastName":"Jones","age":21]]).build();
+                                   ["firstName":"Jack", "lastName":"Jones","age":21]]).build()
         when:
             table.currentRow().hasResult(FAILURE)
             table.nextRow()
@@ -177,7 +179,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def "should be able to add rows incrementally"() {
         given:
-            def table = DataTable.withHeaders(["firstName","lastName","age"]).build();
+            def table = DataTable.withHeaders(["firstName","lastName","age"]).build()
         when:
             table.addRow(["firstName":"Joe",  "lastName":"Smith","age":20])
             table.currentRow().hasResult(FAILURE)
@@ -188,7 +190,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             table.rows.collect {it.result} ==[FAILURE, PENDING]
     }
 
-    def outputDirectory = Mock(File);
+    def outputDirectory = Mock(File)
     def environmentVariables = new MockEnvironmentVariables()
 
    /* def "Should be able to describe an example table via the event bus"() {

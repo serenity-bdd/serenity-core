@@ -1,18 +1,18 @@
 package io.cucumber.core.plugin;
 
 import io.cucumber.messages.types.Tag;
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.core.steps.BaseStepListener;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.List;
 import java.util.Optional;
 
 public class UpdateManualScenario {
 
-    private BaseStepListener baseStepListener;
-    private ManualScenarioChecker manualScenarioChecker;
-    private String scenarioDescription;
+    private final BaseStepListener baseStepListener;
+    private final ManualScenarioChecker manualScenarioChecker;
+    private final String scenarioDescription;
 
     private UpdateManualScenario(BaseStepListener baseStepListener,
                                  EnvironmentVariables environmentVariables,
@@ -80,7 +80,7 @@ public class UpdateManualScenario {
     }
 
     public static class UpdateManualScenarioBuilder {
-        private String description;
+        private final String description;
 
         UpdateManualScenarioBuilder(String description) {
             this.description = description;

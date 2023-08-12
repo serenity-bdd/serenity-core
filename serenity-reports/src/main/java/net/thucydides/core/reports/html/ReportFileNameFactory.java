@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.steps.TestSourceType;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.steps.TestSourceType;
 
 public class ReportFileNameFactory {
 

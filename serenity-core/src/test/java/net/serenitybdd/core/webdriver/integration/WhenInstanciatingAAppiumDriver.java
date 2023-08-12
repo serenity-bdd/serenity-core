@@ -1,8 +1,8 @@
 package net.serenitybdd.core.webdriver.integration;
 
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.WebDriverFactory;

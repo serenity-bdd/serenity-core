@@ -3,7 +3,7 @@ package net.serenitybdd.cucumber.integration.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import net.serenitybdd.cucumber.integration.steps.thucydides.SampleWebSteps;
-import net.thucydides.core.annotations.Steps;
+import net.serenitybdd.annotations.Steps;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -8,4 +8,5 @@ public interface ExtendedReport {
     void setSourceDirectory(Path sourceDirectory);
     void setOutputDirectory(Path outputDirectory);
     Path generateReport();
+    default void setProjectDirectory(String path) {};
 }

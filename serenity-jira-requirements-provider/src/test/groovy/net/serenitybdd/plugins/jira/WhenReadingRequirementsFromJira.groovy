@@ -1,8 +1,8 @@
 package net.serenitybdd.plugins.jira
 
-import net.thucydides.core.requirements.model.Requirement
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.serenitybdd.plugins.jira.requirements.JIRARequirementsProvider
+import net.thucydides.model.requirements.model.Requirement
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.serenitybdd.plugins.jirarequirements.JIRARequirementsProvider
 import net.serenitybdd.plugins.jira.service.JIRAConfiguration
 import net.serenitybdd.plugins.jira.service.SystemPropertiesJIRAConfiguration
 import spock.lang.Specification
@@ -28,7 +28,7 @@ class WhenReadingRequirementsFromJira extends Specification {
         given:
             def requirementsProvider = new JIRARequirementsProvider(configuration)
         when:
-            def requirements = requirementsProvider.getRequirements();
+            def requirements = requirementsProvider.getRequirements()
         then:
             requirements.size() == 2
         and:
@@ -39,7 +39,7 @@ class WhenReadingRequirementsFromJira extends Specification {
         given:
         def requirementsProvider = new JIRARequirementsProvider(configuration)
         when:
-        def requirements = requirementsProvider.getRequirements();
+        def requirements = requirementsProvider.getRequirements()
         then:
         def parent = requirements.get(0)
         def firstChild = parent.getChildren().get(0)
@@ -53,7 +53,7 @@ class WhenReadingRequirementsFromJira extends Specification {
         and:
         def requirementsProvider = new JIRARequirementsProvider(configuration, environmentVariables)
         when:
-        def requirements = requirementsProvider.getRequirements();
+        def requirements = requirementsProvider.getRequirements()
         then:
         totalNumberOf(requirements) == 8
     }
@@ -64,16 +64,16 @@ class WhenReadingRequirementsFromJira extends Specification {
         and:
         def requirementsProvider = new JIRARequirementsProvider(configuration, environmentVariables)
         when:
-        def requirements = requirementsProvider.getRequirements();
+        def requirements = requirementsProvider.getRequirements()
         then:
         requirementsProvider.rootIssueType.is("story")
         totalNumberOf(requirements) == 4
     }
 
     def totalNumberOf(List<Requirement> requirements) {
-        int total = 0;
+        int total = 0
         requirements.each {
-            total++;
+            total++
             if (it.children) {
                 total = total + totalNumberOf(it.children)
             }

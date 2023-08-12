@@ -1,15 +1,14 @@
 package net.serenitybdd.plugins.saucelabs;
 
 import net.serenitybdd.core.environment.CustomDriverConfig;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.serenitybdd.core.model.TestOutcomeName;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.model.TestOutcomeName;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
-import net.serenitybdd.plugins.CapabilityTags;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.TestLocalEnvironmentVariables;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.TestLocalEnvironmentVariables;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
@@ -22,6 +21,7 @@ import static net.serenitybdd.core.environment.CustomDriverConfig.fetchContextFr
 public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
 
     private final static String SAUCE_OPTIONS = "\"sauce:options\"";
+    private final static String SAUCE_CAPABILITY = "sauce:options";
 
     @Override
     public MutableCapabilities apply(EnvironmentVariables environmentVariables,
@@ -64,7 +64,7 @@ public class BeforeASauceLabsScenario implements BeforeAWebdriverScenario {
         String context = fetchContextFrom(capabilities, environmentVariables, SAUCE_OPTIONS);
         testOutcome.setContext(context);
 
-        capabilities.setCapability(SAUCE_OPTIONS.replace("\"",""), newOptions);
+        capabilities.setCapability(SAUCE_CAPABILITY, newOptions);
         return capabilities;
     }
 

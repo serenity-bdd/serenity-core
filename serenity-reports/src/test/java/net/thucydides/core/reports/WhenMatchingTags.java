@@ -1,9 +1,9 @@
 package net.thucydides.core.reports;
 
-import net.serenitybdd.core.collect.NewSet;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestTag;
+import net.serenitybdd.model.collect.NewSet;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestTag;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.*;
+import static net.thucydides.model.reports.matchers.TestOutcomeMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

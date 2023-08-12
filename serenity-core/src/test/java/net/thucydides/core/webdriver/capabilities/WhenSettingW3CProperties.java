@@ -1,8 +1,8 @@
 package net.thucydides.core.webdriver.capabilities;
 
 import com.google.common.io.Resources;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.hamcrest.Matchers;
 import org.junit.Assume;
 import org.junit.Test;

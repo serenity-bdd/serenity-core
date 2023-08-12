@@ -2,7 +2,7 @@ package starter.postcodes;
 
 import io.restassured.RestAssured;
 import net.serenitybdd.rest.SerenityRest;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 public class PostCodeAPI {
 

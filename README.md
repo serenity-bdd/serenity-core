@@ -91,6 +91,9 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|---------------------|-----------------------|
+| 4.0.0         | 4.0.0                 | 4.11.0           | 5.3.1               | 8.3.0                 |
+| 3.9.8         | 3.9.8                 | 4.11.0           | 5.2.0               | 8.3.0                 |
+| 3.6.12        | 3.6.12                | 4.8.0            | 5.2.0               | 8.3.0                 |
 | 3.6.12        | 3.6.12                | 4.8.0            | 5.2.0               | 8.3.0                 |
 | 3.3.10        | 3.3.10                | 4.5.2            | 5.2.0               | 8.2.0                 |
 | 3.3.4         | 3.3.4                 | 4.4.0            | 5.1.1               | 8.1.1                 |
@@ -125,13 +128,15 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
-|---------------|----------------------|--------------------|----------|
-| 3.6.12        | 3.6.12               | 3.6.12             | 7.11.0   |
-| 3.3.10        | 3.3.10               | 3.3.10             | 7.8.1    |
-| 3.3.4         | 3.3.4                | 3.3.4              | 7.4.1    |
-| 3.2.4         | 3.2.4                | 3.2.4              | 7.2.3    |
-| 3.1.20        | 3.1.20               | 3.1.20             | 7.1.1    |
-| 3.1.15        | 3.1.15               | 3.1.15             | 7.0.0    |
+|---------------|-----------------------|-------------------|----------|
+| 4.0.0         | 4.0.0                 | 4.0.0             | 7.13.0   |
+| 3.9.8         | 3.9.8                 | 3.9.8             | 7.13.0   |
+| 3.6.12        | 3.6.12                | 3.6.12            | 7.11.0   |
+| 3.3.10        | 3.3.10                | 3.3.10            | 7.8.1    |
+| 3.3.4         | 3.3.4                 | 3.3.4             | 7.4.1    |
+| 3.2.4         | 3.2.4                 | 3.2.4             | 7.2.3    |
+| 3.1.20        | 3.1.20                | 3.1.20            | 7.1.1    |
+| 3.1.15        | 3.1.15                | 3.1.15            | 7.0.0    |
    
 #### Cucumber 6
   _Note:_ Cucumber 6 is no longer supported in newer versions of Serenity.
@@ -278,7 +283,7 @@ Also, make sure you try with the latest version of Serenity - your bug may alrea
 It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like [this one](https://github.com/serenity-bdd/serenity-cucumber-starter) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
 
 ## Found a bug?
-You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time or through a sponsoring organisation.
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just paid for from a volunteer's spare time or through a sponsoring organisation.
     
 Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 

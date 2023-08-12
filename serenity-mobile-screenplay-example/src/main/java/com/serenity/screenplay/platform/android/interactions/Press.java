@@ -12,7 +12,7 @@ import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 /**
  * 

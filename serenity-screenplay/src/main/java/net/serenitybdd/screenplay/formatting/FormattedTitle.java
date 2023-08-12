@@ -3,16 +3,16 @@ package net.serenitybdd.screenplay.formatting;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Consequence;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.thucydides.core.reports.html.Formatter;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 public class FormattedTitle {
 
-    private EnvironmentVariables environmentVariables;
-    private Actor actor;
+    private final EnvironmentVariables environmentVariables;
+    private final Actor actor;
 
     public FormattedTitle(EnvironmentVariables environmentVariables, Actor actor) {
         this.environmentVariables = environmentVariables;

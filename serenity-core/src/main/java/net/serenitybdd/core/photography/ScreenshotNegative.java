@@ -1,6 +1,6 @@
 package net.serenitybdd.core.photography;
 
-import net.thucydides.core.screenshots.BlurLevel;
+import net.serenitybdd.annotations.BlurLevel;
 
 import java.io.IOException;
 import java.nio.file.Files;

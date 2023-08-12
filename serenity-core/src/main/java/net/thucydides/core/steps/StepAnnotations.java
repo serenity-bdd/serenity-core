@@ -1,10 +1,10 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.PagesAnnotatedField;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.StepsClassResolver;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_MAXIMUM_STEP_NESTING_DEPTH;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_MAXIMUM_STEP_NESTING_DEPTH;
 
 /**
  * Utility class used to inject fields into a test case.

@@ -2,12 +2,12 @@ package net.serenitybdd.junit5.datadriven;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.collect.NewList;
-import net.thucydides.core.configuration.FilePathParser;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.configuration.FilePathParser;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepFactory;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import org.apache.commons.lang3.StringUtils;

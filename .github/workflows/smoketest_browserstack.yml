@@ -8,11 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+      - uses: actions/checkout@v2 # Update to v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2 # Update to v2
         with:
-          java-version: 1.8
+          distribution: 'temurin' # 'temurin' distribution provides OpenJ9 builds of the OpenJDK
+          java-version: '17'
 
       - name: Cache the Maven packages to speed up build
         uses: actions/cache@v1
@@ -25,4 +26,14 @@ jobs:
         run: mvn clean install -T4 -DskipTests
 
       - name: Smoke Tests
+        env:
+          JIRA_USERNAME: ${{ secrets.JIRA_USERNAME }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_WEBSERVICE_URL: ${{ secrets.JIRA_WEBSERVICE_URL }}
+          BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
+          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
         run: cd serenity-smoketests && mvn verify -Denvironment=browserstack -Dbrowserstack.user=${{ secrets.BROWSERSTACK_USER }} -Dbrowserstack.key=${{ secrets.BROWSERSTACK_KEY }}

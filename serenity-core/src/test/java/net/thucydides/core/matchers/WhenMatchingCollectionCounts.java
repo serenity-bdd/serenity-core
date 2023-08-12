@@ -1,5 +1,6 @@
 package net.thucydides.core.matchers;
 
+import net.thucydides.model.matchers.BeanCountMatcher;
 import org.junit.Test;
 
 import java.util.Arrays;

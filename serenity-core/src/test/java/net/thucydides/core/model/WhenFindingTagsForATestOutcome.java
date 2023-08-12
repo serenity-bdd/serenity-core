@@ -1,16 +1,18 @@
 package net.thucydides.core.model;
 
 import com.google.common.io.Resources;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTagValuesOf;
-import net.thucydides.core.annotations.WithTags;
-import net.thucydides.core.reports.TestOutcomeStream;
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.requirements.PackageRequirementsTagProvider;
-import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.statistics.service.*;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTagValuesOf;
+import net.serenitybdd.annotations.WithTags;
+import net.thucydides.model.domain.Story;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.TestOutcomeStream;
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider;
+import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.statistics.service.*;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -50,6 +52,7 @@ public class WhenFindingTagsForATestOutcome {
         for(TagProvider provider : tagProviders) {
             if (provider instanceof AnnotationBasedTagProvider) {
                 containsAnnotationTagProvider = true;
+                break;
             }
         }
         assertThat(containsAnnotationTagProvider, is(true));
@@ -65,6 +68,7 @@ public class WhenFindingTagsForATestOutcome {
         for(TagProvider provider : tagProviders) {
             if (provider instanceof AnnotationBasedTagProvider) {
                 containsAnnotationTagProvider = true;
+                break;
             }
         }
         assertThat(containsAnnotationTagProvider, is(true));
@@ -79,6 +83,7 @@ public class WhenFindingTagsForATestOutcome {
         for(TagProvider provider : tagProviders) {
             if (provider instanceof FileSystemRequirementsTagProvider) {
                 containsRequirementsProvider = true;
+                break;
             }
         }
         assertThat(containsRequirementsProvider, is(true));

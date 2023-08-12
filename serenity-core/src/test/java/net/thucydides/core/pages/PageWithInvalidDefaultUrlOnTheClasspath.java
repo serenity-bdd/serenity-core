@@ -1,7 +1,7 @@
 package net.thucydides.core.pages;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.DefaultUrl;
+import net.serenitybdd.annotations.DefaultUrl;
 import org.openqa.selenium.WebDriver;
 
 @DefaultUrl("classpath:static-site/does-not-exist.html")

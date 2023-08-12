@@ -2,7 +2,7 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.ClickStrategy;
 import net.serenitybdd.screenplay.Actor;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.openqa.selenium.By;
 
 import java.util.List;

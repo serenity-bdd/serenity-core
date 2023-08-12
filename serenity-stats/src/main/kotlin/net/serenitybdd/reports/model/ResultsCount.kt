@@ -1,8 +1,8 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ResultCounts
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ResultCounts
 
 fun countByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Long> {
     return TestResult.values().associate { result ->

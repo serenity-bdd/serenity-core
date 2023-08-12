@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityValue;
 
 import java.util.*;

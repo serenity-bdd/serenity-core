@@ -1,17 +1,17 @@
 package net.thucydides.core.reports.integration;
 
-import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.annotations.Story;
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.issues.SystemPropertiesIssueTracking;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.serenitybdd.annotations.Feature;
+import net.serenitybdd.annotations.Story;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.reports.AcceptanceTestReporter;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.util.FileSystemUtils;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,17 +64,12 @@ public class AbstractReportGenerationTest {
         public void a_simple_test_case() {
         }
 
-        ;
-
         public void should_do_this() {
         }
-
-        ;
 
         public void should_do_that() {
         }
 
-        ;
     }
 
     @Feature
@@ -82,7 +77,6 @@ public class AbstractReportGenerationTest {
         class AUserStoryInAFeature {
         }
 
-        ;
     }
 
     @Story(WhenGeneratingAnHtmlReport.AFeature.AUserStoryInAFeature.class)
@@ -90,11 +84,8 @@ public class AbstractReportGenerationTest {
         public void should_do_this() {
         }
 
-        ;
-
         public void should_do_that() {
         }
 
-        ;
     }
 }

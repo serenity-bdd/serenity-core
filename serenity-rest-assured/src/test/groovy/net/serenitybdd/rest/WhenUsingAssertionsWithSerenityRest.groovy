@@ -8,8 +8,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.restassured.response.ValidatableResponse
 import net.serenity.test.utils.rules.TestCase
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
+import net.serenitybdd.annotations.Step
+import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepFactory
 import org.hamcrest.Matchers
@@ -32,50 +32,50 @@ import static net.serenitybdd.rest.SerenityRest.*
 class WhenUsingAssertionsWithSerenityRest extends Specification {
 
     @Rule
-    def WireMockRule wire = new WireMockRule(0);
+    WireMockRule wire = new WireMockRule(0)
 
     @Rule
-    def TestCase<BaseStepListener> test = new TestCase({
-        Mock(BaseStepListener);
-    }.call());
+    TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call())
 
     File temporaryDirectory
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
         temporaryDirectory.deleteOnExit()
     }
 
-    def Gson gson = new GsonBuilder().setPrettyPrinting().
-        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
 
     static class RestSteps {
         @Step
         def successfulGet(final String url) {
-            rest().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000));
+            rest().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000))
             given().get("$url/{id}", 1000).then().body(Matchers.equalTo("/pets/id"))
         }
 
         @Step
         def failingGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001));
+            given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001))
         }
 
-        def Consumer<ValidatableResponse> foodIsHealthy = new Consumer<ValidatableResponse>() {
+        Consumer<ValidatableResponse> foodIsHealthy = new Consumer<ValidatableResponse>() {
             @Override
             void accept(ValidatableResponse response) {
                 response.body("Food", Matchers.equalTo(1000))
             }
         }
 
-        def Consumer<ValidatableResponse> foodIsTasty = new Consumer<ValidatableResponse>() {
+        Consumer<ValidatableResponse> foodIsTasty = new Consumer<ValidatableResponse>() {
             @Override
             void accept(ValidatableResponse response) {
                 response.body("Food", Matchers.equalTo(1001))
             }
         }
 
-        def Consumer<ValidatableResponse> foodIsSushi = new Consumer<ValidatableResponse>() {
+        Consumer<ValidatableResponse> foodIsSushi = new Consumer<ValidatableResponse>() {
             @Override
             void accept(ValidatableResponse response) {
                 response.body("Food", Matchers.equalTo("sushi"))
@@ -84,21 +84,21 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
         @Step
         def getWithEnsure(final String url) {
-            given().get("$url/{id}", 1000);
+            given().get("$url/{id}", 1000)
 
             Ensure.that("food is 1001", foodIsTasty)
         }
 
         @Step
         def getWithMultipleEnsures(final String url) {
-            given().get("$url/{id}", 1000);
+            given().get("$url/{id}", 1000)
 
             Ensure.that("food is healthy", foodIsHealthy).andThat("food is sushi", foodIsSushi)
         }
 
         @Step
         def getWithMultipleFailingEnsures(final String url) {
-            given().get("$url/{id}", 1000);
+            given().get("$url/{id}", 1000)
 
             Ensure.that("food is healthy", foodIsHealthy).andThat("food is tasty", foodIsTasty)
         }
@@ -106,14 +106,14 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
         @Step
         def getWithMultiplePassingEnsures(final String url) {
-            given().get("$url/{id}", 1000);
+            given().get("$url/{id}", 1000)
 
             Ensure.that("food is sushi", foodIsSushi).andThat("food is sushi", foodIsSushi)
         }
 
         @Step
         def getById(final String url) {
-            rest().get("$url/{id}", 1000);
+            rest().get("$url/{id}", 1000)
         }
 
         @Step
@@ -123,7 +123,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
         @Step
         def thenCheckWrongOutcome() {
-            then().body("id", Matchers.equalTo(0));
+            then().body("id", Matchers.equalTo(0))
         }
     }
 
@@ -131,10 +131,10 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
             def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
-            StepFactory factory = new StepFactory();
-            def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+            StepFactory factory = new StepFactory()
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Food", "sushi")
             json.addProperty("size", "7")
             def body = gson.toJson(json)
@@ -148,7 +148,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             restSteps.failingGet(url)
         then:
@@ -161,10 +161,10 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
         def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
-        StepFactory factory = new StepFactory();
+        StepFactory factory = new StepFactory()
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
-        def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
         json.addProperty("Food", "sushi")
         json.addProperty("size", "7")
         def body = gson.toJson(json)
@@ -178,7 +178,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
         restSteps.getWithEnsure(url)
         then:
@@ -191,10 +191,10 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
         def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
-        StepFactory factory = new StepFactory();
+        StepFactory factory = new StepFactory()
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
-        def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
         json.addProperty("Food", "sushi")
         json.addProperty("size", "7")
         def body = gson.toJson(json)
@@ -208,7 +208,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
         restSteps.getWithMultiplePassingEnsures(url)
         then:
@@ -222,10 +222,10 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
         def listener = new BaseStepListener(temporaryDirectory)
         test.register(listener)
-        StepFactory factory = new StepFactory();
+        StepFactory factory = new StepFactory()
         def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
-        def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
         json.addProperty("Food", "sushi")
         json.addProperty("size", "7")
         def body = gson.toJson(json)
@@ -239,7 +239,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
         restSteps.getWithMultipleEnsures(url)
         then:
@@ -254,7 +254,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
             def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
-            def JsonObject json = new JsonObject()
+        JsonObject json = new JsonObject()
             json.addProperty("Sky", "Clear")
             json.addProperty("Time", "10:17AM")
             def body = gson.toJson(json)
@@ -270,7 +270,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             def result = given().get(url).then().body("Sky", Matchers.equalTo("Clear"))
             test.finish()
@@ -288,9 +288,9 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         given:
             def listener = new BaseStepListener(temporaryDirectory)
             test.register(listener)
-            StepFactory factory = new StepFactory();
-            def restSteps = factory.getSharedStepLibraryFor(RestSteps)
-            def JsonObject json = new JsonObject()
+            StepFactory factory = new StepFactory()
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+        JsonObject json = new JsonObject()
             json.addProperty("Object", "Groot")
             json.addProperty("id", 7)
             def body = gson.toJson(json)
@@ -304,7 +304,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody(body)));
+                .withBody(body)))
         when:
             restSteps.getById(url)
             restSteps.thenCheckOutcome()

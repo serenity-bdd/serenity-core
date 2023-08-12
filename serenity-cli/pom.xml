@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>3.10.0-SNAPSHOT</version>
+        <version>4.0.0-beta-3-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-cli</artifactId>
     <packaging>jar</packaging>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.4.9</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

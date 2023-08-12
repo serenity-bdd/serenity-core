@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static net.thucydides.core.matchers.dates.DateMatchers.isCloseTo;
+import static net.thucydides.model.matchers.dates.DateMatchers.isCloseTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.joda.time.Period.minutes;
@@ -24,13 +24,13 @@ public class WhenMatchingTimes {
 
     @Before
     public void setupDates() {
-        januaryFirst2000At10_00am = new DateTime(2000,01,01,10,0).toDate();
-        januaryFirst2000At10_01am = new DateTime(2000,01,01,10,1).toDate();
-        januaryFirst2000At10_06am = new DateTime(2000,01,01,10,6).toDate();
+        januaryFirst2000At10_00am = new DateTime(2000,1,1,10,0).toDate();
+        januaryFirst2000At10_01am = new DateTime(2000,1,1,10,1).toDate();
+        januaryFirst2000At10_06am = new DateTime(2000,1,1,10,6).toDate();
 
-        januaryFirst2001At10_00am = new DateTime(2000,01,01,10,0);
-        januaryFirst2001At10_01am = new DateTime(2000,01,01,10,1);
-        januaryFirst2001At10_06am = new DateTime(2000,01,01,10,6);
+        januaryFirst2001At10_00am = new DateTime(2000,1,1,10,0);
+        januaryFirst2001At10_01am = new DateTime(2000,1,1,10,1);
+        januaryFirst2001At10_06am = new DateTime(2000,1, 1,10,6);
 
     }
 

@@ -8,7 +8,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 
 import java.io.File;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_EDGE_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_EDGE_DRIVER;
 
 public class EdgeServicePool extends DriverServicePool<EdgeDriverService> {
 

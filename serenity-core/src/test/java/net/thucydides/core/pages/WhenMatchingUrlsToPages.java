@@ -1,7 +1,7 @@
 package net.thucydides.core.pages;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.At;
+import net.serenitybdd.annotations.At;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

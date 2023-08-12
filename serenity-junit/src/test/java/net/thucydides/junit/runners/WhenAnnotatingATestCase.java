@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import net.thucydides.core.annotations.Managed;
+import net.serenitybdd.annotations.Managed;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;

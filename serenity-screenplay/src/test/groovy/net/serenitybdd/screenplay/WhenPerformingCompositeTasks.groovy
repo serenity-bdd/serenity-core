@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.conditions.Check
 import net.serenitybdd.screenplay.shopping.BitesTheBanana
 import net.serenitybdd.screenplay.shopping.ChewsTheBanana
 import net.serenitybdd.screenplay.shopping.PeelABanana
-import net.thucydides.core.model.TestResult
+import net.thucydides.model.domain.TestResult
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
@@ -20,8 +20,8 @@ class WhenPerformingCompositeTasks extends Specification {
     BaseStepListener listener = new BaseStepListener(temporaryDirectory)
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
 
         StepEventBus.eventBus.clear()
         StepEventBus.eventBus.registerListener(listener)
@@ -33,7 +33,7 @@ class WhenPerformingCompositeTasks extends Specification {
         given:
         Performable eatsABanana = new PeelABanana().then(new BitesTheBanana()).then(new ChewsTheBanana())
         when:
-        Actor.named("Eddie").attemptsTo(eatsABanana);
+        Actor.named("Eddie").attemptsTo(eatsABanana)
         then:
         testPassed()
         and:

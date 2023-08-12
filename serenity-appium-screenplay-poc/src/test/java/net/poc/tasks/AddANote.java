@@ -7,7 +7,7 @@ import net.poc.interactions.EnterANote;
 import net.poc.model.Note;
 import net.poc.ui.AddNotePage;
 import net.poc.ui.NotesWelcomePage;
-import net.thucydides.core.annotations.Step;
+import net.thucydides.model.annotations.Step;
 
 import java.util.ArrayList;
 

@@ -1,44 +1,51 @@
 package net.thucydides.core.model;
 
 
-import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.model.features.ApplicationFeature;
+import net.serenitybdd.annotations.Feature;
+import net.thucydides.model.domain.Story;
+import net.thucydides.model.domain.features.ApplicationFeature;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-class SimpleTestCase {};
+class SimpleTestCase {}
 
 public class WhenGroupingUserStoriesByFeature {
 
     @Feature
     class WidgetFeature {
-         class PurchaseNewWidget{};
-         class SearchWidgets{};
-         class DisplayWidgets{};
+         class PurchaseNewWidget{}
+
+        class SearchWidgets{}
+
+        class DisplayWidgets{}
     }
 
     @Feature
     class GizmoFeature {
-         class PurchaseNewGizmo{};
-         class SearchGizmos{};
-         class DisplayGizmos{};
+         class PurchaseNewGizmo{}
+
+        class SearchGizmos{}
+
+        class DisplayGizmos{}
     }
 
     class MyApp {
-         class PurchaseNewWidget{};
-         class SearchWidgets{};
-         class DisplayWidgets{};
+         class PurchaseNewWidget{}
+
+        class SearchWidgets{}
+
+        class DisplayWidgets{}
     }
 
-    @net.thucydides.core.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
+    @net.serenitybdd.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
     class WhenUserPurchasesNewWidgetsTestCase {
         public void shouldDoThis(){}
         public void shouldDoThat(){}
     }
 
-    @net.thucydides.core.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
+    @net.serenitybdd.annotations.Story(WidgetFeature.PurchaseNewWidget.class)
     class WhenUserPurchasesLotsOfNewWidgetsTestCase {
         public void shouldDoSomethingElse(){}
     }
@@ -47,7 +54,7 @@ public class WhenGroupingUserStoriesByFeature {
     public void a_user_story_can_belong_to_a_feature() {
         Class<?> userStoryClass = WidgetFeature.PurchaseNewWidget.class;
 
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(userStoryClass);
+        net.thucydides.model.domain.Story story = net.thucydides.model.domain.Story.from(userStoryClass);
         ApplicationFeature feature = story.getFeature();
         assertThat(feature.getId(), is(WidgetFeature.class.getCanonicalName()));
     }
@@ -56,7 +63,7 @@ public class WhenGroupingUserStoriesByFeature {
     public void a_user_story_does_not_have_to_belong_to_a_feature() {
         Class<?> userStoryClass = SimpleTestCase.class;
 
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(userStoryClass);
+        net.thucydides.model.domain.Story story = net.thucydides.model.domain.Story.from(userStoryClass);
         ApplicationFeature feature = story.getFeature();
         assertThat(feature, is(nullValue()));
     }
@@ -93,7 +100,7 @@ public class WhenGroupingUserStoriesByFeature {
     public void a_user_story_can_be_nested_in_a_class_that_is_not_a_feature() {
         Class<?> userStoryClass = MyApp.PurchaseNewWidget.class;
 
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(userStoryClass);
+        net.thucydides.model.domain.Story story = net.thucydides.model.domain.Story.from(userStoryClass);
         assertThat(story.getFeature(), is(nullValue()));
 //        Class<?> featureClass = story.getFeatureClass();
 //        assertThat(featureClass, is(nullValue()));
@@ -103,7 +110,7 @@ public class WhenGroupingUserStoriesByFeature {
     public void a_user_story_can_return_the_name_of_its_feature() {
         Class<?> userStoryClass = WidgetFeature.PurchaseNewWidget.class;
 
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(userStoryClass);
+        net.thucydides.model.domain.Story story = net.thucydides.model.domain.Story.from(userStoryClass);
 
         assertThat(story.getFeature().getName(), is("Widget feature"));
     }
@@ -118,7 +125,7 @@ public class WhenGroupingUserStoriesByFeature {
         protected SubvertedFeature(final Class<?> featureClass) {
             super(featureClass);
         }
-    };
+    }
 
     @Test
     public void a_feature_can_be_equal_to_another_subclassed_feature_instance() {
@@ -183,7 +190,7 @@ public class WhenGroupingUserStoriesByFeature {
     public void a_user_story_can_return_the_corresponding_feature_class() {
         Class<?> userStoryClass = WidgetFeature.PurchaseNewWidget.class;
 
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(userStoryClass);
+        net.thucydides.model.domain.Story story = net.thucydides.model.domain.Story.from(userStoryClass);
         ApplicationFeature feature = ApplicationFeature.from(WidgetFeature.class);
 
         assertThat(story.getFeature(), is(feature));
@@ -191,7 +198,7 @@ public class WhenGroupingUserStoriesByFeature {
 
     @Test
     public void a_user_story_can_return_the_corresponding_feature_class_using_id_and_name() {
-        net.thucydides.core.model.Story story = Story.withId("story.class","AStory", "feature.class","AFeature");
+        net.thucydides.model.domain.Story story = Story.withId("story.class","AStory", "feature.class","AFeature");
 
         ApplicationFeature feature = new ApplicationFeature("feature.class","AFeature");
 

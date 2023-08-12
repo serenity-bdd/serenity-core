@@ -1,11 +1,11 @@
 package net.serenitybdd.core.pages;
 
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.function.Function;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_RETRY_ON_STALE_ELEMENT_EXCEPTION;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_RETRY_ON_STALE_ELEMENT_EXCEPTION;
 
 public class FindAllWithRetry {
 

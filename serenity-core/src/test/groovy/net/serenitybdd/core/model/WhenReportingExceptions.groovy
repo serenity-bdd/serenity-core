@@ -1,14 +1,14 @@
 package net.serenitybdd.core.model
 
 import io.cucumber.java.PendingException
-import net.serenitybdd.core.PendingStepException
-import net.serenitybdd.core.exceptions.TestCompromisedException
+import net.serenitybdd.model.PendingStepException
+import net.serenitybdd.model.exceptions.TestCompromisedException
 import net.serenitybdd.core.model.sampleexceptions.MyFailureException
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.failures.FailureAnalysis
-import net.thucydides.core.steps.StepFailureException
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.thucydides.core.webdriver.WebdriverAssertionError
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.failures.FailureAnalysis
+import net.thucydides.model.steps.StepFailureException
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.webdriver.WebdriverAssertionError
 import org.assertj.core.api.SoftAssertionError
 import org.junit.internal.ArrayComparisonFailure
 import org.openqa.selenium.WebDriverException

@@ -1,9 +1,9 @@
 package net.serenitybdd.cucumber.suiteslicing;
 
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Optional.empty;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_BATCH_NUMBER;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_FORK_NUMBER;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_BATCH_NUMBER;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_FORK_NUMBER;
 
 public class SerenityTags {
 

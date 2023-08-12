@@ -1,22 +1,20 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.di.ModelInfrastructure;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.logging.ConsoleColors;
-import net.thucydides.core.logging.LoggingLevel;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.ThucydidesReporter;
-import net.thucydides.core.reports.templates.TemplateManager;
-import net.thucydides.core.reports.util.CopyDirectory;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.logging.ConsoleColors;
+import net.thucydides.model.logging.LoggingLevel;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.ThucydidesReporter;
+import net.thucydides.model.reports.templates.TemplateManager;
+import net.thucydides.model.reports.util.CopyDirectory;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;

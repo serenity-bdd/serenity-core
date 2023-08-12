@@ -1,8 +1,8 @@
 package net.serenitybdd.junit5;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.annotations.DriverOptions;
-import net.thucydides.core.annotations.WithDriver;
+import net.serenitybdd.annotations.DriverOptions;
+import net.serenitybdd.annotations.WithDriver;
 import org.junit.jupiter.api.DisplayName;
 
 import java.lang.reflect.Method;

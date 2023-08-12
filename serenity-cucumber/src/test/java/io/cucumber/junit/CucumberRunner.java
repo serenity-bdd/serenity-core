@@ -6,10 +6,10 @@ import io.cucumber.core.options.RuntimeOptionsBuilder;
 import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.configuration.SystemPropertiesConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
 

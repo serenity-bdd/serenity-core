@@ -1,7 +1,7 @@
 package net.serenitybdd.core;
 
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.webdriver.Configuration;
 
 /**
  * Provide supporting methods for creating report listeners and generating reports.

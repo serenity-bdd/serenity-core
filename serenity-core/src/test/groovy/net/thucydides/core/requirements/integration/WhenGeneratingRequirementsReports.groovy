@@ -1,17 +1,17 @@
 package net.thucydides.core.requirements.integration
 
 import com.google.common.collect.Lists
-import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.model.*
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.history.DateProvider
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.core.requirements.model.Requirement
+import net.thucydides.model.issues.IssueTracking
+import net.thucydides.model.domain.*
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.history.DateProvider
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
+import net.thucydides.model.requirements.model.Requirement
 import net.thucydides.core.requirements.reportpages.RequirementsReport
-import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
-import net.thucydides.core.requirements.reports.RequirementsOutcomes
+import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory
+import net.thucydides.model.requirements.reports.RequirementsOutcomes
 import org.joda.time.DateTime
 import org.junit.Rule
 import spock.lang.Specification
@@ -50,7 +50,7 @@ class WhenGeneratingRequirementsReports extends Specification {
             RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         when: "we get the child requirement type of a requirement"
-            Requirement firstRequirement = outcomes.getRequirementOutcomes().get(0).getRequirement();
+            Requirement firstRequirement = outcomes.getRequirementOutcomes().get(0).getRequirement()
         then:
             firstRequirement.childType() == 'feature'
     }
@@ -68,21 +68,21 @@ class WhenGeneratingRequirementsReports extends Specification {
     def someTestResults() {
 
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")))
 
         TestOutcome testOutcome3 = TestOutcome.forTestInStory("Feeding poultry", Story.called("raising chickens"))
-        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
         TestStep failingStep = new TestStep("look for grain")
         failingStep.failedWith(new AssertionError("No grain left"))
         testOutcome3.recordStep(failingStep)
 
         TestOutcome testOutcome4 = TestOutcome.forTestInStory("Planting wheat", Story.called("planting some wheet"))
-        testOutcome4.addTags(Lists.asList(TestTag.withName("Grow wheat").andType("capability")));
+        testOutcome4.addTags(Lists.asList(TestTag.withName("Grow wheat").andType("capability")))
         TestStep passingStep = new TestStep("Grow wheat")
         passingStep.setResult(TestResult.SUCCESS)
         testOutcome4.recordStep(passingStep)
@@ -95,21 +95,21 @@ class WhenGeneratingRequirementsReports extends Specification {
     def someMoreTestResults() {
 
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
-        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")));
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
+        testOutcome1.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")))
 
         TestOutcome testOutcome2 = TestOutcome.forTestInStory("planting potatoes in the rain", Story.called("planting potatoes"))
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")));
-        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")));
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow potatoes").andType("capability")))
+        testOutcome2.addTags(Lists.asList(TestTag.withName("Grow new potatoes").andType("feature")))
 
         TestOutcome testOutcome3 = TestOutcome.forTestInStory("Feeding poultry", Story.called("raising chickens"))
-        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")));
+        testOutcome3.addTags(Lists.asList(TestTag.withName("Raise chickens").andType("capability")))
         TestStep passingChickenStep = new TestStep("look for grain")
         passingChickenStep.setResult(TestResult.SUCCESS)
         testOutcome3.recordStep(passingChickenStep)
 
         TestOutcome testOutcome4 = TestOutcome.forTestInStory("Planting wheat", Story.called("planting some wheet"))
-        testOutcome4.addTags(Lists.asList(TestTag.withName("Grow wheat").andType("capability")));
+        testOutcome4.addTags(Lists.asList(TestTag.withName("Grow wheat").andType("capability")))
         TestStep passingStep = new TestStep("Grow wheat")
         passingStep.setResult(TestResult.SUCCESS)
         testOutcome4.recordStep(passingStep)

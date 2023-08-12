@@ -1,8 +1,8 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.reports.csv.CSVReporter;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.csv.CSVReporter;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_GENERATE_CSV_REPORTS;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_GENERATE_CSV_REPORTS;
 
 public abstract class BaseReportingTask implements ReportingTask {
 

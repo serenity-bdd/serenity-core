@@ -1,25 +1,22 @@
 package net.thucydides.core.reports.html;
 
-import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.configuration.TimeoutConfiguration;
-import net.thucydides.core.configuration.TimeoutValue;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.reports.NumberOfThreads;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.time.Stopwatch;
+import net.thucydides.model.configuration.TimeoutConfiguration;
+import net.thucydides.model.configuration.TimeoutValue;
+import net.thucydides.model.reports.NumberOfThreads;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
+import static net.thucydides.model.ThucydidesSystemProperty.REPORT_TIMEOUT_THREADDUMPS;
 
 class Reporter implements Closeable {
 

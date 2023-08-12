@@ -1,9 +1,9 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.io.Resources;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.nio.file.Paths;

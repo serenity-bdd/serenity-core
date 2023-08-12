@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.html
 
-import net.thucydides.core.model.TestTag
+import net.thucydides.model.domain.TestTag
 import spock.lang.Specification
 
 class WhenGeneratingBreadcrumbs extends Specification {

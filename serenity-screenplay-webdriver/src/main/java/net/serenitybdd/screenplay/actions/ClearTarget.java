@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 
 public class ClearTarget implements Interaction {
     private final Target target;

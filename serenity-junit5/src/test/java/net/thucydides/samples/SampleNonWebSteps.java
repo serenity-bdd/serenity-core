@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Pending;
+import net.serenitybdd.annotations.Step;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Ignore;

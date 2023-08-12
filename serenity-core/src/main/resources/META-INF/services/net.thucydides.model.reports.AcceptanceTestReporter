@@ -1,0 +1,2 @@
+net.thucydides.model.reports.json.JSONTestOutcomeReporter
+net.thucydides.core.reports.html.HtmlAcceptanceTestReporter

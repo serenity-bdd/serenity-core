@@ -1,18 +1,18 @@
 package net.thucydides.core.webdriver;
 
 import net.thucydides.core.configuration.WebDriverConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.FileSystemUtils;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.FileSystemUtils;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 
 public class StaticTestSite {
 
-    private WebDriverFactory factory;
+    private final WebDriverFactory factory;
    // private SerenityWebdriverManager webdriverManager;
-    private EnvironmentVariables environmentVariables;
+    private final EnvironmentVariables environmentVariables;
 
     public StaticTestSite() {
         this(MockEnvironmentVariables.fromSystemEnvironment());

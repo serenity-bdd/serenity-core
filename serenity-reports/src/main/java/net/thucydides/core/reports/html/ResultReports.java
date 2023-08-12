@@ -1,10 +1,12 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.reports.model.DurationDistribution;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.TagExclusions;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.io.File;
 import java.util.ArrayList;

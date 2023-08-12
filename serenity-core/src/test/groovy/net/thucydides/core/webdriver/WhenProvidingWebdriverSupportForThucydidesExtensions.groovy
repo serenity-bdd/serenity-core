@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.core.annotations.Managed
-import net.thucydides.core.annotations.ManagedPages
+import net.serenitybdd.annotations.Managed
+import net.serenitybdd.annotations.ManagedPages
 import net.thucydides.core.pages.Pages
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver

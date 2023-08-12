@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.email.templates
 
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.model.util.EnvironmentVariables
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
@@ -8,9 +8,9 @@ import org.thymeleaf.templateresolver.DefaultTemplateResolver
 import java.io.Writer
 
 
-class ThymeleafTemplateEngine() {
+class ThymeleafTemplateEngine {
 
-    val templateEngine : TemplateEngine;
+    val templateEngine : TemplateEngine
 
     init {
         templateEngine = TemplateEngine()
@@ -19,7 +19,7 @@ class ThymeleafTemplateEngine() {
     fun merge(template: String, fields : Map<String, Any>, writer : Writer) {
         val templateResolver = ClassLoaderTemplateResolver()
         templateEngine.setTemplateResolver(templateResolver)
-        templateEngine.addDialect(Java8TimeDialect());
+        templateEngine.addDialect(Java8TimeDialect())
 
         val context = TestOutcomesContext()
         context.setVariables(fields)

@@ -1,5 +1,6 @@
 package net.thucydides.core.util;
 
+import net.thucydides.model.util.NameConverter;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

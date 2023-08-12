@@ -1,6 +1,6 @@
 package net.serenitybdd.junit5;
 
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

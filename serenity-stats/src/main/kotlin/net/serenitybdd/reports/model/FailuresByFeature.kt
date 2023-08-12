@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.reports.TestOutcomes
 
 class FailuresByFeature(val featureName: String, val failures: List<ScenarioSummary>) {
     companion object {

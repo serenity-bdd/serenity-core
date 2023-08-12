@@ -1,8 +1,8 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.configuration.FilePathParser;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.configuration.FilePathParser;
+import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

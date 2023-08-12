@@ -1,7 +1,7 @@
 package net.thucydides.core.batches.integration;
 
-import net.thucydides.core.batches.TestCountBasedBatchManager;
-import net.thucydides.core.environment.MockEnvironmentVariables;
+import net.thucydides.model.batches.TestCountBasedBatchManager;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 public class WhenUseTestCountBasedBatchStrategy {
 	private MockEnvironmentVariables environmentVariables;
 	private List<Integer> testCountInTestCase;
-	private AtomicInteger counter = new AtomicInteger(1);
+	private final AtomicInteger counter = new AtomicInteger(1);
 
 	@Before
 	public void initMocks() {

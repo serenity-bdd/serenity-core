@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.interception;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.annotations.TestAnnotations;
+import net.serenitybdd.annotations.TestAnnotations;
 import net.thucydides.core.steps.ExampleTables;
 import net.thucydides.core.steps.StepEventBus;
 

@@ -1,37 +1,38 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.core.annotations.events.AfterExample;
 import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.annotations.events.BeforeExample;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.serenitybdd.core.exceptions.TheErrorType;
+import net.serenitybdd.model.exceptions.TheErrorType;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.WebDriverPhotoLens;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
-import net.serenitybdd.core.rest.RestQuery;
-import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.model.rest.RestQuery;
+import net.serenitybdd.model.strings.Joiner;
+import net.serenitybdd.model.time.SystemClock;
 import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.junit.SerenityJUnitTestCase;
-import net.thucydides.core.model.*;
-import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.serenitybdd.annotations.TestAnnotations;
+import net.thucydides.core.junit.SerenityJUnitTestCase;
+import net.thucydides.model.domain.*;
+import net.thucydides.model.domain.failures.FailureAnalysis;
+import net.thucydides.model.domain.stacktrace.FailureCause;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.session.TestSession;
-import net.thucydides.core.util.ConfigCache;
 import net.thucydides.core.webdriver.*;
+import net.thucydides.model.screenshots.ScreenshotException;
+import net.thucydides.model.steps.*;
+import net.thucydides.model.util.ConfigCache;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -46,8 +47,8 @@ import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.EXAMPLE;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.SCENARIO;
-import static net.thucydides.core.model.Stories.findStoryFrom;
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.model.domain.Stories.findStoryFrom;
+import static net.thucydides.model.domain.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
 
@@ -95,9 +96,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private WebDriver driver;
 
-    private File outputDirectory;
+    private final File outputDirectory;
 
-    private WebdriverProxyFactory proxyFactory;
+    private final WebdriverProxyFactory proxyFactory;
 
     private Story testedStory;
 
@@ -497,6 +498,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param testMethod the name of the test method in the test suite class.
      */
     public void testStarted(final String testMethod) {
+        testStarted(testMethod, ZonedDateTime.now());
+    }
+
+    public void testStarted(final String testMethod, ZonedDateTime startTime) {
         String testMethodName = testMethod;
         String qualifier = "";
         if (testMethod.contains("%")) {
@@ -510,6 +515,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
         this.currentTestOutcome = newTestOutcome;
         recordNewTestOutcome(testMethod, currentTestOutcome);
+        this.currentTestOutcome.setStartTime(startTime);
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
@@ -539,7 +545,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         recordNewTestOutcome(testMethod, currentTestOutcome);
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeScenario.class, newTestOutcome);
     }
-
 
     private void recordNewTestOutcome(String testMethod, TestOutcome newTestOutcome) {
         newTestOutcome.setTestSource(getEventBus().getTestSource());
@@ -723,6 +728,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+    public void stepStarted(final ExecutedStepDescription description, ZonedDateTime startTime) {
+        pushStepMethodIn(description);
+        TestStep newStep = recordStep(description);
+        if (newStep != null) {
+            newStep.setStartTime(startTime);
+        }
+        if (currentTestIsABrowserTest() && browserIsOpen()) {
+            takeInitialScreenshot();
+        }
+    }
+
     private void pushStepMethodIn(ExecutedStepDescription description) {
         if (description.isAQuestion()) {
             currentStepMethodStack.push(tokenQuestionMethod());
@@ -752,13 +768,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     Stack<Method> currentStepMethodStack = new Stack<>();
 
     public Optional<Method> getCurrentStepMethod() {
-        return currentStepMethodStack.empty() ? Optional.<Method>empty() : Optional.ofNullable(currentStepMethodStack.peek());
+        return currentStepMethodStack.empty() ? Optional.empty() : Optional.ofNullable(currentStepMethodStack.peek());
     }
 
-    private void recordStep(ExecutedStepDescription description) {
+    private TestStep recordStep(ExecutedStepDescription description) {
 
         if (!latestTestOutcome().isPresent()) {
-            return;
+            return null;
         }
 
         TestStep step = new TestStep(AnnotatedStepDescription.from(description).getName());
@@ -769,6 +785,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 //        currentStepStack.get().push(step);
         currentStepStack.push(step);
         recordStepToCurrentTestOutcome(step);
+        return step;
     }
 
     private void recordStepToCurrentTestOutcome(TestStep step) {
@@ -833,17 +850,21 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished() {
+        this.recordTestDuration();
         takeEndOfStepScreenshotFor(SUCCESS);
         currentStepDone(SUCCESS);
         pauseIfRequired();
     }
 
     public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
-        takeEndOfStepScreenshotForPlayback(SUCCESS, screenshotList);
-        currentStepDone(SUCCESS);
-        pauseIfRequired();
+        stepFinished(screenshotList, ZonedDateTime.now());
     }
 
+    public void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime timestamp) {
+        takeEndOfStepScreenshotForPlayback(SUCCESS, screenshotList);
+        currentStepDone(SUCCESS, timestamp);
+        pauseIfRequired();
+    }
 
     private void updateExampleTableIfNecessary(TestResult result) {
         if (getCurrentTestOutcome().isDataDriven()) {
@@ -998,13 +1019,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
         takeEndOfStepScreenshotForRecording(result, screenshots);
     }
 
-    public void currentStepDone(TestResult result) {
+    public void currentStepDone(TestResult result, ZonedDateTime time) {
         if (!currentStepMethodStack.isEmpty()) {
             currentStepMethodStack.pop();
         }
         if (currentStepExists()) {
             TestStep finishedStep = currentStepStack.pop();
-            finishedStep.recordDuration();
+            finishedStep.recordDuration(time);
             if ((result != null) && (result.isAtLeast(finishedStep.getResult()))) {
                 finishedStep.setResult(result);
             }
@@ -1013,6 +1034,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
             }
         }
         updateExampleTableIfNecessary(result);
+    }
+
+    public void currentStepDone(TestResult result) {
+        currentStepDone(result, ZonedDateTime.now());
     }
 
     private boolean currentStepExists() {
@@ -1388,12 +1413,19 @@ public class BaseStepListener implements StepListener, StepPublisher {
         //currentExample = 0;
     }
 
-
     public void exampleStarted(Map<String, String> data) {
         exampleStarted(data, "");
     }
 
+    public void exampleStarted(Map<String, String> data, ZonedDateTime startTime) {
+        exampleStarted(data, "", startTime);
+    }
+
     public void exampleStarted(Map<String, String> data, String exampleName) {
+        exampleStarted(data, exampleName, ZonedDateTime.now());
+    }
+
+    public void exampleStarted(Map<String, String> data, String exampleName, ZonedDateTime startTime) {
 
         clearForcedResult();
         if (getCurrentTestOutcome().isDataDriven()) {
@@ -1404,7 +1436,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentExample++;
         if (newStepForEachExample()) {
             String exampleTitle = (exampleName.isEmpty() ? exampleTitle(currentExample, data) : exampleTitle(currentExample, exampleName, data));
-            getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle));
+            getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle), startTime);
         }
 
         LifecycleRegister.invokeMethodsAnnotatedBy(BeforeExample.class, getCurrentTestOutcome());
@@ -1450,7 +1482,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean newStepForEachExample() {
-        if (!latestTestOutcome().isPresent()) {
+        if (latestTestOutcome().isEmpty()) {
             return false;
         }
         return (getCurrentTestOutcome().getTestSource() != null) && (!getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit"));

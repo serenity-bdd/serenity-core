@@ -1,14 +1,15 @@
 package net.thucydides.core.reports.json.gson
 
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.json.gson.GsonJSONConverter
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource
 import org.skyscreamer.jsonassert.JSONCompare
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
 class WhenStoringScreenshotsAsJSON extends Specification {
 
-    def environmentVars = new MockEnvironmentVariables();
+    def environmentVars = new MockEnvironmentVariables()
 
     def "should generate JSON for a screenshot"() {
         given:
@@ -27,7 +28,7 @@ class WhenStoringScreenshotsAsJSON extends Specification {
   "htmlSource" : "screenshot.html"
 }
 """
-        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed();
+        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed()
     }
 
 
@@ -46,7 +47,7 @@ class WhenStoringScreenshotsAsJSON extends Specification {
   "screenshot" : "screenshot.png"
 }
 """
-        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed();
+        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed()
     }
 
     def "should read a screenshot from JSON"() {

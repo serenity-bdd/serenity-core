@@ -1,8 +1,9 @@
 package net.thucydides.core.reports.json.gson
 
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.json.gson.GsonJSONConverter
 import org.skyscreamer.jsonassert.JSONCompare
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Shared
@@ -15,7 +16,7 @@ import java.time.ZonedDateTime
 class WhenStoringTestStepsAsJSON extends Specification {
 
     @Shared
-    def environmentVars = new MockEnvironmentVariables();
+    def environmentVars = new MockEnvironmentVariables()
 
     private static final ZonedDateTime FIRST_OF_JANUARY = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault())
 
@@ -39,7 +40,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
     def "should generate an JSON report for a test step"() {
         expect:
         def renderedJson = converter.gson.toJson(testStep)
-        JSONCompare.compareJSON(expectedJson, renderedJson, JSONCompareMode.LENIENT).passed();
+        JSONCompare.compareJSON(expectedJson, renderedJson, JSONCompareMode.LENIENT).passed()
 
         where:
         testStep    | expectedJson
@@ -60,7 +61,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
     def "should read and write a test step containing an error"() {
         given:
             TestStep stepWithError = TestStep.forStepCalled("some step").withResult(TestResult.ERROR)
-                                           .startingAt(FIRST_OF_JANUARY);
+                                           .startingAt(FIRST_OF_JANUARY)
             stepWithError.failedWith(new IllegalStateException("Oh crap!"))
 
         when:
@@ -77,7 +78,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
     def "should read and write a test step containing a failure"() {
         given:
         TestStep failingStep = TestStep.forStepCalled("some step").withResult(TestResult.FAILURE)
-                .startingAt(FIRST_OF_JANUARY);
+                .startingAt(FIRST_OF_JANUARY)
         failingStep.failedWith(new AssertionError("Oh crap!"))
 
         when:
@@ -98,7 +99,7 @@ line 2
 line 3
 """
         TestStep aStep = TestStep.forStepCalled(description).withResult(TestResult.FAILURE)
-                .startingAt(FIRST_OF_JANUARY);
+                .startingAt(FIRST_OF_JANUARY)
 
         when:
         def renderedJson = converter.gson.toJson(aStep)
@@ -112,7 +113,7 @@ line 3
         given:
         def description = "line 1\r\nline 2\r\nline 3"
         TestStep aStep = TestStep.forStepCalled(description).withResult(TestResult.FAILURE)
-                .startingAt(FIRST_OF_JANUARY);
+                .startingAt(FIRST_OF_JANUARY)
 
         when:
         def renderedJson = converter.gson.toJson(aStep)

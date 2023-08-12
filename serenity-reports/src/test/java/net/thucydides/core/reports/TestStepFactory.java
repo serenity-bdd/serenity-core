@@ -1,12 +1,12 @@
 package net.thucydides.core.reports;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.domain.TestStep;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 
 import java.io.File;
 
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.model.domain.TestResult.*;
 
 public class TestStepFactory {
     public static TestStep forASuccessfulTestStepCalled(String description) {

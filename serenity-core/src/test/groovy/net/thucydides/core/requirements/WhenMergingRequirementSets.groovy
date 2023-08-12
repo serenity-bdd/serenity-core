@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.requirements.model.Requirement
+import net.thucydides.model.requirements.RequirementsMerger
+import net.thucydides.model.requirements.model.Requirement
 import spock.lang.Specification
 
 /**

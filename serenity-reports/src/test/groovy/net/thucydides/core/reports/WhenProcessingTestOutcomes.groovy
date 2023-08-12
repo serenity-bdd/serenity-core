@@ -1,17 +1,21 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.ReportLoadingFailedError
+import net.thucydides.model.reports.TestOutcomeLoader
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.file.Paths
 
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.withResult
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static net.thucydides.model.reports.matchers.TestOutcomeMatchers.havingTagName
+import static net.thucydides.model.reports.matchers.TestOutcomeMatchers.withResult
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
 import static org.junit.matchers.JUnitMatchers.everyItem
 
 class WhenProcessingTestOutcomes extends Specification {
@@ -20,7 +24,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should load test outcomes from a given directory"() {
         when:
-            List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         then:
             testOutcomes.size() == 3
     }
@@ -29,10 +33,10 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should load tests in JSON if configured"() {
         given:
-            environmentVariables.setProperty("thucydides.report.format","json");
-            def loader = new TestOutcomeLoader(environmentVariables)
+            environmentVariables.setProperty("thucydides.report.format","json")
+        def loader = new TestOutcomeLoader(environmentVariables)
         when:
-            List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/json-test-outcomes"));
+            List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/json-test-outcomes"))
         then:
             testOutcomes.size() == 12
     }
@@ -46,7 +50,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all the tag types for the test outcomes"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tagTypes = testOutcomes.getTagTypes()
         then:
@@ -55,7 +59,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all the tags for the test outcomes"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tags = testOutcomes.getTagNames()
         then:
@@ -66,7 +70,7 @@ class WhenProcessingTestOutcomes extends Specification {
         given:
             TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes()
                                                          .inFormat(OutcomeFormat.JSON)
-                                                         .from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+                                                         .from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tags = testOutcomes.getTagsOfType 'feature'
         then:
@@ -75,7 +79,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all the tags for a given type"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             Set<String> tagTypes = testOutcomes.withTagType("feature").getTagTypes()
         then:
@@ -84,7 +88,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all the tag types for a given name"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             Set<String> tagTypes = testOutcomes.withTag("an epic").getTagTypes()
         then:
@@ -93,7 +97,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given tag type"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tests = testOutcomes.withTagType("feature").getTests()
         then:
@@ -106,7 +110,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given issue using a tag notation"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tests = testOutcomes.withTag(TestTag.withValue("issue:ISSUE-1")).getTests()
         then:
@@ -115,7 +119,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given set of tags"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tags = [TestTag.withValue("story:a story"), TestTag.withValue("story:another story")]
             def tests = testOutcomes.withTags(tags).getTests()
@@ -127,7 +131,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given set of issue numbers"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tags = [TestTag.withValue("issue:ISSUE-1"), TestTag.withValue("issue:ISSUE-2")]
             def tests = testOutcomes.withTags(tags).getTests()
@@ -139,7 +143,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given tag"() {
         given:
-        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+        TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
         def tests = testOutcomes.withTag("a story").getTests()
         then:
@@ -149,7 +153,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all passing tests"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"))
         when:
             def tests = testOutcomes.passingTests.getTests()
         then:
@@ -159,9 +163,9 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all passing tests from JSON files"() {
         given:
-            environmentVariables.setProperty("thucydides.report.format","json");
-            def loader = new TestOutcomeLoader(environmentVariables)
-            TestOutcomes testOutcomes = TestOutcomes.of(loader.loadFrom(directoryInClasspathCalled("/json-test-outcomes")));
+            environmentVariables.setProperty("thucydides.report.format","json")
+        def loader = new TestOutcomeLoader(environmentVariables)
+            TestOutcomes testOutcomes = TestOutcomes.of(loader.loadFrom(directoryInClasspathCalled("/json-test-outcomes")))
         when:
             def tests = testOutcomes.passingTests.getTests()
         then:
@@ -170,7 +174,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all failing tests"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"))
         when:
             def tests = testOutcomes.failingTests.getTests()
         then:
@@ -180,7 +184,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all pending tests"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/containing-failure"))
         when:
             def tests = testOutcomes.pendingTests.getTests()
         then:
@@ -190,7 +194,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list tests for a given tag and tag type"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         when:
             def tests = testOutcomes.withTagType("feature").withTag("a feature").getTests()
         then:
@@ -199,28 +203,28 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should provide total test duration for a set of tests"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         then:
             testOutcomes.duration == 1775
     }
 
     def "should provide total test duration in seconds for a set of tests"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         then:
             testOutcomes.durationInSeconds == 1.78
     }
 
     def "should provide total test duration in seconds for a set of tests when the time is zero"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/with-no-steps"));
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/with-no-steps"))
         then:
             testOutcomes.durationInSeconds == 0.0
     }
 
     def "should count tests in set"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"));
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/tagged-test-outcomes-json"))
         then:
             testOutcomes.total == 3
     }
@@ -228,7 +232,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should count the number of scenarios correctly"() {
         when:
-            def testOutcomes = jsonTestOutcomesIn("/sample-full-json-report");
+            def testOutcomes = jsonTestOutcomesIn("/sample-full-json-report")
         then:
             testOutcomes.totalTestScenarios == 11
         and:
@@ -241,7 +245,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def jsonTestOutcomesIn(directory) {
         def outcomeDir = Paths.get(this.getClass().getResource(directory).toURI()).toFile()
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir);
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outcomeDir)
     }
 
 }

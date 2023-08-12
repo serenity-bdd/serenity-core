@@ -1,6 +1,6 @@
 package net.serenitybdd.plugins.jira.model;
 
-import net.thucydides.core.model.TestResult;
+import net.thucydides.model.domain.TestResult;
 
 public class NamedTestResult {
 

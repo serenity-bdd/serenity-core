@@ -2,13 +2,13 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_CAPABILITIES;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_DRIVER_CAPABILITIES;
 
 /**
  * A set of user-defined capabilities to be used to configure the WebDriver driver.

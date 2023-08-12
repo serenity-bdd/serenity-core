@@ -1,15 +1,15 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.util.Optional;
 
 public class SystemTimeouts {
-    private EnvironmentVariables environmentVariables;
+    private final EnvironmentVariables environmentVariables;
 
     public SystemTimeouts(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;

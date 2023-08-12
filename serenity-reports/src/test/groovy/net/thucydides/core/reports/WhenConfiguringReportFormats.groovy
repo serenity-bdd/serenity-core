@@ -1,6 +1,8 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.FormatConfiguration
+import net.thucydides.model.reports.OutcomeFormat
 import spock.lang.Specification
 
 /**
@@ -12,7 +14,7 @@ class WhenConfiguringReportFormats extends Specification {
 
     def "should produce JSON by default"() {
         given:
-            FormatConfiguration formatConfiguration = new FormatConfiguration(environmentVars)
+        FormatConfiguration formatConfiguration = new FormatConfiguration(environmentVars)
         when:
             List<String> formats = formatConfiguration.getFormats()
         then:

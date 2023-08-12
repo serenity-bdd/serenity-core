@@ -2,8 +2,8 @@ package net.serenitybdd.cucumber.outcomes
 
 
 import net.serenitybdd.cucumber.integration.TaggedExampleTablesScenarios
-import net.thucydides.core.reports.OutcomeFormat
-import net.thucydides.core.reports.TestOutcomeLoader
+import net.thucydides.model.reports.OutcomeFormat
+import net.thucydides.model.reports.TestOutcomeLoader
 import org.assertj.core.util.Files
 import spock.lang.Specification
 

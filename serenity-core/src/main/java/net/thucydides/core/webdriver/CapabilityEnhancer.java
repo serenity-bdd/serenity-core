@@ -5,9 +5,9 @@ import net.serenitybdd.core.webdriver.driverproviders.AddEnvironmentSpecifiedDri
 import net.serenitybdd.core.webdriver.driverproviders.InsecureCertConfig;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.model.TestOutcome;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -16,7 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import static net.thucydides.model.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 
 /**
  * Created by john on 25/06/2016.

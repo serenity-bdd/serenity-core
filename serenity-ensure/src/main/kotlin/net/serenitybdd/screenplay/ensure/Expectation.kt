@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
-import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import java.time.LocalDate
 

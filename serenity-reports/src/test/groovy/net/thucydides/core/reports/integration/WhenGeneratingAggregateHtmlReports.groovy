@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.integration
 
-import net.serenitybdd.core.SerenitySystemProperties
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.issues.IssueTracking
+import net.serenitybdd.model.SerenitySystemProperties
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.issues.IssueTracking
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
@@ -14,7 +14,7 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 
-import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
+import static net.thucydides.model.util.TestResources.directoryInClasspathCalled
 
 class WhenGeneratingAggregateHtmlReports extends Specification {
 
@@ -23,19 +23,19 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
     def issueTracking = Mock(IssueTracking)
     def mockSystemProperties = Mock(SerenitySystemProperties)
     def environmentVariables = new MockEnvironmentVariables()
-    def reporter = new HtmlAggregateStoryReporter("project", issueTracking);
+    def reporter = new HtmlAggregateStoryReporter("project", issueTracking)
 
     File outputDirectory
 
     WebDriver driver
 
     def setup() {
-        temporaryDirectory = Files.createTempDirectory("tmp").toFile();
-        temporaryDirectory.deleteOnExit();
+        temporaryDirectory = Files.createTempDirectory("tmp").toFile()
+        temporaryDirectory.deleteOnExit()
 
         outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
-        reporter.outputDirectory = outputDirectory;
+        reporter.outputDirectory = outputDirectory
         environmentVariables.setProperty("output.formats","xml")
         //reporter.formatConfiguration = new FormatConfiguration(environmentVariables)
 
@@ -84,13 +84,13 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
 //        given: "We generate reports from a directory containing features and stories only"
 //            reporter.generateReportsForTestResultsFrom directory("/test-outcomes/containing-features-and-stories")
         when: "we view the report"
-            ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments("--headless");
+            ChromeOptions chromeOptions = new ChromeOptions()
+            chromeOptions.addArguments("--headless")
             driver = new ChromeDriver(chromeOptions)
-            driver.get reportHomePageUrl();
+            driver.get reportHomePageUrl()
         then: "we should see a Releases tab"
             def releasesLink = driver.findElement(By.linkText("Releases"))
-            releasesLink.click();
+            releasesLink.click()
         and:"a list of releases should be displayed"
             def releases = driver.findElements(By.cssSelector(".jqtree-title")).collect { it.text }
             releases.containsAll(["Release 1.0", "Release 2.0"])
@@ -101,12 +101,12 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
 //        given: "We generate reports from a directory containing features and stories only"
 //            reporter.generateReportsForTestResultsFrom directory("/test-outcomes/containing-features-and-stories")
         when: "we view the release report"
-            ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments("--headless");
+            ChromeOptions chromeOptions = new ChromeOptions()
+            chromeOptions.addArguments("--headless")
             driver = new ChromeDriver(chromeOptions)
-            driver.get reportHomePageUrl();
+            driver.get reportHomePageUrl()
             def releasesLink = driver.findElement(By.linkText("Releases"))
-            releasesLink.click();
+            releasesLink.click()
         then: "we should be able to display a release report for each release"
             driver.findElement(By.className("jqtree-title")).click()
         and: "the release report should contain the requirement type as a title"
@@ -115,13 +115,13 @@ class WhenGeneratingAggregateHtmlReports extends Specification {
 
     class CustomHtmlAggregateStoryReporter extends HtmlAggregateStoryReporter {
 
-        public CustomHtmlAggregateStoryReporter(final String projectName) {
-            super(projectName);
+        CustomHtmlAggregateStoryReporter(final String projectName) {
+            super(projectName)
         }
 
         @Override
         protected SerenitySystemProperties getSystemProperties() {
-            return mockSystemProperties;
+            return mockSystemProperties
         }
     }
 

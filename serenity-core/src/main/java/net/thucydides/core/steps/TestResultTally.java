@@ -1,6 +1,7 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
+import net.thucydides.model.steps.StepFailure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public class TestResultTally implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private List<StepFailure> failures = new ArrayList<StepFailure>();
+    private final List<StepFailure> failures = new ArrayList<StepFailure>();
     private int ignored = 0;
     private int run = 0;
     final Class<?> classUnderTest;

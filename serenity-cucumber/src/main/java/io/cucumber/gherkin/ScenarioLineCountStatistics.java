@@ -9,7 +9,7 @@ import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Scenario;
 import net.serenitybdd.cucumber.suiteslicing.TestScenarioResult;
 import net.serenitybdd.cucumber.suiteslicing.TestStatistics;
-import net.thucydides.core.util.Inflector;
+import net.thucydides.model.util.Inflector;
 
 import java.math.BigDecimal;
 import java.net.URI;

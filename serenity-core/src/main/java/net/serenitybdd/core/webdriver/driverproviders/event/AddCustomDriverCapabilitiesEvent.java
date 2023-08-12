@@ -3,7 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders.event;
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.thucydides.core.steps.TestContext;
 import net.thucydides.core.steps.events.StepEventBusEventBase;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.MutableCapabilities;
 
@@ -11,9 +11,9 @@ import org.openqa.selenium.MutableCapabilities;
 public class AddCustomDriverCapabilitiesEvent extends StepEventBusEventBase {
 
 
-	private EnvironmentVariables environmentVariables;
-	private String driverName;
-	private MutableCapabilities capabilities;
+	private final EnvironmentVariables environmentVariables;
+	private final String driverName;
+	private final MutableCapabilities capabilities;
 
 	public AddCustomDriverCapabilitiesEvent(EnvironmentVariables environmentVariables, String driverName, MutableCapabilities capabilities) {
 		this.environmentVariables = environmentVariables;

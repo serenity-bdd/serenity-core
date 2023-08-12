@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.issues.IssueTracking;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.TestOutcomes;
+import net.thucydides.model.requirements.RequirementsService;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

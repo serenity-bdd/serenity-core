@@ -1,17 +1,16 @@
 package net.serenitybdd.plugins.saucelabs;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
-import net.thucydides.core.webdriver.capabilities.W3CCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.MutableCapabilities;
 
 import java.util.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
+import static net.thucydides.model.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class SaucelabsRemoteDriverCapabilities {

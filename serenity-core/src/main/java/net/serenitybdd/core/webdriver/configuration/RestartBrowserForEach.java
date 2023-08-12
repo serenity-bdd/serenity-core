@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.configuration;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;

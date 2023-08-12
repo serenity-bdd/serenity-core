@@ -13,7 +13,7 @@ import net.serenitybdd.screenplay.rest.interactions.Put;
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
 import net.serenitybdd.screenplay.rest.questions.RestQuestionBuilder;
 import net.serenitybdd.screenplay.rest.questions.TheResponse;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

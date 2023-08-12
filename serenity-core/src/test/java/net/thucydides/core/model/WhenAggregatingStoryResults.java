@@ -1,6 +1,7 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.annotations.Feature;
+import net.serenitybdd.annotations.Feature;
+import net.thucydides.model.domain.Story;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,9 +12,11 @@ public class WhenAggregatingStoryResults {
 
     @Feature
     class WidgetFeature {
-         class PurchaseNewWidget{};
-         class SearchWidgets{};
-         class DisplayWidgets{};
+         class PurchaseNewWidget{}
+
+        class SearchWidgets{}
+
+        class DisplayWidgets{}
     }
 
     @Test

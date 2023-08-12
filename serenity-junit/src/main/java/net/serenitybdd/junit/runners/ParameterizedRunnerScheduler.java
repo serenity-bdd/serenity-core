@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.model.collect.NewList;
 import org.junit.runners.model.RunnerScheduler;
 
 import java.util.LinkedList;
@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 class ParameterizedRunnerScheduler implements RunnerScheduler {
 
-    private ExecutorService executorService;
-    private CompletionService<Void> completionService;
-    private Queue<Future<Void>> tasks;
+    private final ExecutorService executorService;
+    private final CompletionService<Void> completionService;
+    private final Queue<Future<Void>> tasks;
 
     public ParameterizedRunnerScheduler(final Class<?> klass, final int threadCount) {
 

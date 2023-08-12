@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.core.di.SerenityInfrastructure;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 import org.junit.runners.model.InitializationError;
 
 /**

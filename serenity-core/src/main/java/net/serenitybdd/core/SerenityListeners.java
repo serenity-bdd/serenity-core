@@ -1,12 +1,12 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.model.TestOutcome;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -16,8 +16,8 @@ import java.util.List;
 
 public class SerenityListeners {
     private Configuration systemConfiguration;
-    private BaseStepListener baseStepListener;
-    private List<StepListener> stepListeners;
+    private final BaseStepListener baseStepListener;
+    private final List<StepListener> stepListeners;
 
     public SerenityListeners(Configuration systemConfiguration) {
         this(StepEventBus.getParallelEventBus(), systemConfiguration);

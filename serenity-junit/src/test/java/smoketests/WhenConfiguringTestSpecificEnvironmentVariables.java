@@ -2,8 +2,8 @@ package smoketests;
 
 import net.serenitybdd.core.annotations.environment.EnvironmentProperty;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

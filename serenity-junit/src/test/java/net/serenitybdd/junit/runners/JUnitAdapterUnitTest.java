@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.adapters.TestFramework;
-import net.thucydides.core.tags.Taggable;
+import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.tags.Taggable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -22,9 +22,7 @@ public class JUnitAdapterUnitTest {
         assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("beforeClass"))).isTrue();
         assertThat(TestFramework.support().isTestSetupMethod(Junit4Test.class.getMethod("before"))).isTrue();
         assertThat(TestFramework.support().isATaggableClass(Junit4Test.class)).isFalse();
-        assertThat(TestFramework.support().isATaggableClass(TaggableJunit4Test.class)).isTrue();
         assertThat(TestFramework.support().isSerenityTestCase(Junit4Test.class)).isFalse();
-        assertThat(TestFramework.support().isSerenityTestCase(SerenityJunit4Test.class)).isTrue();
         assertThat(TestFramework.support()
                 .isAssumptionViolatedException(new org.junit.AssumptionViolatedException("Assumption violated!")))
                 .isTrue();

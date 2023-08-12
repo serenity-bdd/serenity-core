@@ -1,7 +1,8 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.collect.NewList;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.webdriver.Configuration;
 import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.JavascriptExecutor;
@@ -23,12 +24,12 @@ public class WebdriverProxyFactory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ThreadLocal<WebdriverProxyFactory> factory = new ThreadLocal<WebdriverProxyFactory>();
+    private static final ThreadLocal<WebdriverProxyFactory> factory = new ThreadLocal<WebdriverProxyFactory>();
 
-    private static List<ThucydidesWebDriverEventListener> eventListeners
+    private static final List<ThucydidesWebDriverEventListener> eventListeners
                                               = synchronizedList(new ArrayList<>());
 
-    private WebDriverFactory webDriverFactory;
+    private final WebDriverFactory webDriverFactory;
     private WebDriverFacade mockDriver;
     private final DriverConfiguration configuration;
 

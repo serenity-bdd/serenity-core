@@ -1,10 +1,11 @@
 package net.thucydides.core.reports.json.gson
 
-import net.thucydides.core.model.TestOutcome
+import net.thucydides.model.domain.TestOutcome
 import net.thucydides.core.reports.integration.TestStepFactory
-import net.thucydides.core.reports.json.AScenarioHasNoNameException
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.reports.json.AScenarioHasNoNameException
+import net.thucydides.model.reports.json.gson.GsonJSONConverter
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
@@ -19,19 +20,19 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
     class SomeTestScenario {
-        public void a_simple_test_case() {
+        void a_simple_test_case() {
         }
 
-        public void should_do_this() {
+        void should_do_this() {
         }
 
-        public void should_do_that() {
+        void should_do_that() {
         }
     }
 
     def "should serialize TestOutcomes to JSON"() {
         given:
-            GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
+        GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
         and:
             def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).withQualifier("foo")
             testOutcome.startTime = FIRST_OF_JANUARY
@@ -48,8 +49,8 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
             def json = outputStream.toString()
 
         and:
-            InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
-            def loadedTestOutcome = converter.fromJson(stream).get()
+            InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))
+        def loadedTestOutcome = converter.fromJson(stream).get()
         then:
             loadedTestOutcome == testOutcome
     }
@@ -70,8 +71,8 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
             converter.toJson(testOutcome, outputStream)
             def json = outputStream.toString()
         and:
-            InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
-            def loadedTestOutcome = converter.fromJson(stream).get()
+            InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))
+        def loadedTestOutcome = converter.fromJson(stream).get()
         then:
             loadedTestOutcome.context == "chrome"
     }

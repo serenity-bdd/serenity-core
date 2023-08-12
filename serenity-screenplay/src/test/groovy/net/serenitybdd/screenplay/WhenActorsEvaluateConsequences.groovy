@@ -7,7 +7,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import static OutcomeChecks.resultsFrom
-import static net.thucydides.core.model.TestResult.*
+import static net.thucydides.model.domain.TestResult.*
 
 class WhenActorsEvaluateConsequences extends Specification{
 

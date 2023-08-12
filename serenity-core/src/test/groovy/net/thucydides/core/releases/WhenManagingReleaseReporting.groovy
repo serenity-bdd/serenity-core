@@ -1,11 +1,12 @@
 package net.thucydides.core.releases
 
-import net.thucydides.core.model.Story
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.domain.Story
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestTag
+import net.thucydides.model.releases.ReleaseManager
+import net.thucydides.model.reports.TestOutcomes
+import net.thucydides.model.reports.html.ReportNameProvider
+import net.thucydides.model.environment.MockEnvironmentVariables
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
@@ -40,7 +41,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "should be able to list the top-level releases"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def releases = releaseManager.getReleasesFrom(testOutcomes)
@@ -50,7 +51,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "should be able to derive release tags from requirements"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome5])
         when:
             def releases = releaseManager.getReleasesFrom(testOutcomes)
@@ -62,7 +63,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "should be able to obtain a flattened list of the releases"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def flatReleases = releaseManager.getFlattenedReleasesFrom(testOutcomes)
@@ -72,7 +73,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "Releases should have parents stored"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def releases = releaseManager.getReleasesFrom(testOutcomes)
@@ -86,7 +87,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "Release  entries should store children"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def releases = releaseManager.getReleasesFrom(testOutcomes)
@@ -98,7 +99,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "Release parent entries should not store children"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def releases = releaseManager.getReleasesFrom(testOutcomes)
@@ -110,7 +111,7 @@ class WhenManagingReleaseReporting extends Specification {
 
     def "Releases should be available in JSON format"() {
         given:
-            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+            def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider)
             def testOutcomes = TestOutcomes.of([outcome1, outcome2, outcome3, outcome4])
         when:
             def releasesData = releaseManager.getJSONReleasesFrom(testOutcomes)

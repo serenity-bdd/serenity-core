@@ -1,15 +1,14 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.chrome.ChromeOptions;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.chromium.ChromiumOptions;
 
 import java.util.List;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+import static net.thucydides.model.ThucydidesSystemProperty.HEADLESS_MODE;
 
 public class EnvironmentSwitches {
     private final EnvironmentVariables environmentVariables;

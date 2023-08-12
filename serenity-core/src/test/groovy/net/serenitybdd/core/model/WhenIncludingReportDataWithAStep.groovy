@@ -1,9 +1,9 @@
 package net.serenitybdd.core.model
 
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.model.*
+import net.thucydides.model.domain.*
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.model.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
@@ -49,7 +49,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         given:
             File outputDir = Files.createTempDirectory("out").toFile()
 
-            StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+            StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir))
             StepEventBus.getEventBus().testStarted("some test")
             StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
 
@@ -68,7 +68,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         given:
         File outputDir = Files.createTempDirectory("out").toFile()
 
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir))
         StepEventBus.getEventBus().testStarted("some test")
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
 
@@ -87,7 +87,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         given:
         File outputDir = Files.createTempDirectory("out").toFile()
 
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir))
         StepEventBus.getEventBus().testStarted("some test")
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
 
@@ -98,7 +98,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         then:
         TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
         testOutcome.lastStep().hasData()
-        testOutcome.lastStep().reportData[0].isEvidence
+        testOutcome.lastStep().reportData[0].isEvidence()
     }
 
 
@@ -106,7 +106,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         given:
         File outputDir = Files.createTempDirectory("out").toFile()
 
-        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir))
         StepEventBus.getEventBus().testStarted("some test")
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
 

@@ -2,8 +2,8 @@ package net.thucydides.core;
 
 import net.serenitybdd.core.SerenityListeners;
 import net.serenitybdd.core.SerenityReports;
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.reports.ReportService;
+import net.thucydides.model.webdriver.Configuration;
 
 /** @deprecated Use SerenityListeners instead
  *

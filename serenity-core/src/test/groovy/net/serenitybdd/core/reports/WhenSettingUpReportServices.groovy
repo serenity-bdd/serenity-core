@@ -1,17 +1,17 @@
 package net.serenitybdd.core.reports
 
 import net.serenitybdd.core.SerenityReports
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
-import net.thucydides.core.reports.NumberOfThreads
-import net.thucydides.core.reports.ReporterRuntime
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.environment.MockEnvironmentVariables
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.reports.NumberOfThreads
+import net.thucydides.model.reports.ReporterRuntime
+import net.thucydides.model.util.EnvironmentVariables
+import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenSettingUpReportServices extends Specification {
 
-    def environmentVariables = new MockEnvironmentVariables();
-    def configuration = new SystemPropertiesConfiguration(environmentVariables);
+    def environmentVariables = new MockEnvironmentVariables()
+    def configuration = new SystemPropertiesConfiguration(environmentVariables)
 
     def "should be able to configure default report services"() {
         when:
@@ -38,9 +38,9 @@ class WhenSettingUpReportServices extends Specification {
         given:
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
         when:
-            environmentVariables.setProperty("io.blocking.coefficient", "0.1");
+            environmentVariables.setProperty("io.blocking.coefficient", "0.1")
         then:
-            new NumberOfThreads().forIO() != new NumberOfThreads(environmentVariables).forIO();
+            new NumberOfThreads().forIO() != new NumberOfThreads(environmentVariables).forIO()
 
     }
 
@@ -55,9 +55,9 @@ class WhenSettingUpReportServices extends Specification {
                 }
             }
         when:
-            int numberOfThreads = new NumberOfThreads(environmentVariables, singleCPURuntime).forIO();
+            int numberOfThreads = new NumberOfThreads(environmentVariables, singleCPURuntime).forIO()
         then:
-            numberOfThreads == 2;
+            numberOfThreads == 2
 
     }
 
@@ -65,9 +65,9 @@ class WhenSettingUpReportServices extends Specification {
         given:
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
         when:
-            environmentVariables.setProperty("report.threads", "16");
+            environmentVariables.setProperty("report.threads", "16")
         then:
-            new NumberOfThreads(environmentVariables).forIO() == 16;
+            new NumberOfThreads(environmentVariables).forIO() == 16
 
     }
 

@@ -3,11 +3,11 @@ package net.serenitybdd.junit.finder
 import net.serenitybdd.core.di.SerenityInfrastructure
 import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
-import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.model.ThucydidesSystemProperty
+import net.thucydides.model.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.configuration.WebDriverConfiguration
-import net.thucydides.core.environment.MockEnvironmentVariables
-import net.thucydides.core.webdriver.Configuration
+import net.thucydides.model.environment.MockEnvironmentVariables
+import net.thucydides.model.webdriver.Configuration
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule
@@ -22,24 +22,24 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
 
 
     @Rule
-    def SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule();
+    SaveWebdriverSystemPropertiesRule saveWebdriverSystemPropertiesRule = new SaveWebdriverSystemPropertiesRule()
 
     @Rule
-    def QuietThucydidesLoggingRule quietThucydidesLoggingRule = new QuietThucydidesLoggingRule();
+    QuietThucydidesLoggingRule quietThucydidesLoggingRule = new QuietThucydidesLoggingRule()
 
-    def MockEnvironmentVariables environmentVariables;
+    MockEnvironmentVariables environmentVariables
 
-    def Configuration configuration;
+    Configuration configuration
 
     def setup() {
-        environmentVariables = new MockEnvironmentVariables();
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        environmentVariables = new MockEnvironmentVariables()
+        configuration = new SystemPropertiesConfiguration(environmentVariables)
     }
 
     def "when test contains method to determine Qualifier it should be used for step names"() {
         given:
-            def outputDirectory = Files.createTempDirectory("tmp").toFile();
-            outputDirectory.deleteOnExit()
+            def outputDirectory = Files.createTempDirectory("tmp").toFile()
+        outputDirectory.deleteOnExit()
 
             environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath())
@@ -50,9 +50,9 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
             def outcomes = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods()
         then:
             outcomes.size() == 1
-            def happyDayOutcomes = outcomes.get(0);
-            def happyDaySteps = happyDayOutcomes.getTestSteps()
-            happyDaySteps.size() == 12;
+            def happyDayOutcomes = outcomes.get(0)
+        def happyDaySteps = happyDayOutcomes.getTestSteps()
+            happyDaySteps.size() == 12
         and:
             happyDayOutcomes.getTitle().matches("Happy day scenario")
             happyDaySteps.each { step ->
@@ -60,13 +60,13 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
             }
     }
 
-    def private SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {
+    private SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {
         def configuration = new WebDriverConfiguration(environmentVariables)
         def factory = new WebDriverFactory(environmentVariables)
         def batchManager = SerenityInfrastructure.batchManager
         return new SerenityParameterizedRunner(testClass, configuration, factory, batchManager) {
             @Override
-            public void generateReports() {
+            void generateReports() {
                 //do nothing
             }
         }

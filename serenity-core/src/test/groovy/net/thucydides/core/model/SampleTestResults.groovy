@@ -1,6 +1,12 @@
 package net.thucydides.core.model
 
 import com.google.common.collect.Lists
+import net.thucydides.model.domain.Story
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestResult
+import net.thucydides.model.domain.TestStep
+import net.thucydides.model.domain.TestTag
+
 /**
  * Created by john on 23/07/2016.
  */
@@ -114,7 +120,6 @@ class SampleTestResults {
         testOutcome2.recordStep(TestStep.forStepCalled("step 1.1").withResult(TestResult.FAILURE))
         testOutcome2.addTags(Lists.asList(TestTag.withName("Apples").andType("feature")));
         testOutcome2.addTags(Lists.asList(TestTag.withName("Picking apples").andType("story")));
-
 
         return [testOutcome1, testOutcome2]
     }

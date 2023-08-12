@@ -1,17 +1,17 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.webdriver.enhancers.CustomChromiumOptions;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.reflection.ClassFinder;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.reflection.ClassFinder;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.chromium.ChromiumOptions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+import static net.thucydides.model.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import static net.thucydides.model.ThucydidesSystemProperty.HEADLESS_MODE;
 
 public class ConfigureChromiumOptions {
 

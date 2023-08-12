@@ -6,7 +6,7 @@ import io.cucumber.core.resource.ClassLoaders;
 import io.cucumber.core.runtime.Runtime;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
-import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.model.webdriver.Configuration;
 
 import java.io.IOException;
 import java.util.function.Supplier;

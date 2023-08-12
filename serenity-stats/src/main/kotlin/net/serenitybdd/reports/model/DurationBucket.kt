@@ -1,7 +1,7 @@
 package net.serenitybdd.reports.model
 
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestTag
+import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.TestTag
 import java.time.Duration
 
 class DurationBucket(
@@ -12,7 +12,7 @@ class DurationBucket(
 ) {
     fun addOutcome(testCaseDuration: TestCaseDuration) {
         if (testCaseDuration.testOutcome.isDataDriven) {
-            val outcomeTitle = "${testCaseDuration.testOutcome.getTitle()} (${duration})"
+            val outcomeTitle = "${testCaseDuration.testOutcome.title} (${duration})"
             outcomes.add(withExamplesOfMatchingDuration(outcomeTitle, testCaseDuration.testOutcome))
         } else {
             outcomes.add(testCaseDuration)

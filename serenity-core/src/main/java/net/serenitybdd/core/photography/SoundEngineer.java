@@ -1,12 +1,12 @@
 package net.serenitybdd.core.photography;
 
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.model.domain.TestResult;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.core.photography.StoreHTML.ALWAYS;
 import static net.serenitybdd.core.photography.StoreHTML.NEVER;
-import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_STORE_HTML;
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_STORE_HTML;
 
 public class SoundEngineer {
 

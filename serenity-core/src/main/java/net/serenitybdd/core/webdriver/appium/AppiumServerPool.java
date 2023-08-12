@@ -3,9 +3,9 @@ package net.serenitybdd.core.webdriver.appium;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
@@ -33,8 +33,8 @@ public class AppiumServerPool {
 
     private static AppiumServerPool pool;
 
-    private Map<String, DriverService> appiumServers = Collections.synchronizedMap(new HashMap<>());
-    private Map<Thread, Set<DriverService>> serversByThread = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, DriverService> appiumServers = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Thread, Set<DriverService>> serversByThread = Collections.synchronizedMap(new HashMap<>());
 
     private Optional<String> defaultHubUrl = Optional.empty();
 

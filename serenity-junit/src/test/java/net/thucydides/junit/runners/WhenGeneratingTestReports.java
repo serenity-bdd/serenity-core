@@ -1,8 +1,8 @@
 package net.thucydides.junit.runners;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.AcceptanceTestReporter;
+import net.thucydides.model.domain.TestOutcome;
+import net.thucydides.model.reports.AcceptanceTestReporter;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.AnnotatedSingleTestScenario;
 import org.junit.Before;

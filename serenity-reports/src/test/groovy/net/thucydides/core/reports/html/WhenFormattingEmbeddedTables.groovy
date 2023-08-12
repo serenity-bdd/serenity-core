@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html
 
+import net.thucydides.model.reports.html.ExampleTable
 import spock.lang.Specification
 
 class WhenFormattingEmbeddedTables extends Specification {

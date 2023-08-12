@@ -1,10 +1,10 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.annotations.TestsRequirement;
-import net.thucydides.core.annotations.TestsRequirements;
-import net.thucydides.core.annotations.Title;
-import net.thucydides.core.reflection.MethodFinder;
-import net.thucydides.core.util.NameConverter;
+import net.serenitybdd.annotations.TestsRequirement;
+import net.serenitybdd.annotations.TestsRequirements;
+import net.serenitybdd.annotations.Title;
+import net.thucydides.model.reflection.MethodFinder;
+import net.thucydides.model.util.NameConverter;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.thucydides.core.util.NameConverter.withNoArguments;
+import static net.thucydides.model.util.NameConverter.withNoArguments;
 
 /**
  * Helps analyse annotations on test methods, steps and step groups.

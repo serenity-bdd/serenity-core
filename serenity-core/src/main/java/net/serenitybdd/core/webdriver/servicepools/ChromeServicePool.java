@@ -9,7 +9,7 @@ import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 
 import java.io.File;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER;
 
 public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
 

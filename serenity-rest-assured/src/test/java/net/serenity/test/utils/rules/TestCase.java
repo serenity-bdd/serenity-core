@@ -1,7 +1,7 @@
 package net.serenity.test.utils.rules;
 
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepListener;
+import net.thucydides.model.steps.StepListener;
 import net.thucydides.core.steps.events.TestFinishedEvent;
 import net.thucydides.core.steps.events.TestStartedEvent;
 import net.thucydides.core.steps.session.TestSession;
@@ -18,9 +18,9 @@ import java.util.*;
  */
 public class TestCase<T extends StepListener> implements MethodRule {
 
-    private List<T> listeners;
+    private final List<T> listeners;
     private boolean finished;
-    private String name;
+    private final String name;
 
     @SafeVarargs
     public TestCase(T... listener) {

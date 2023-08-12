@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Optional;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
+import static net.thucydides.model.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class GeckoServicePool extends DriverServicePool<GeckoDriverService> {
 

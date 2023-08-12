@@ -7,9 +7,9 @@ import io.cucumber.messages.types.Step;
 import io.cucumber.messages.types.Tag;
 import io.cucumber.plugin.event.TestCase;
 import io.cucumber.plugin.event.TestStep;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.model.domain.DataTable;
+import net.thucydides.model.domain.DataTableRow;
+import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.session.TestSession;
@@ -34,7 +34,7 @@ public class ScenarioContextParallel {
     private final Map<UUID,Queue<TestStep>> testStepQueue = Collections.synchronizedMap(new HashMap<>());
     private final Map<String,Boolean> examplesRunningMap = Collections.synchronizedMap(new HashMap<>());
     private final Map<String,Boolean> addingScenarioOutlineStepsMap = Collections.synchronizedMap(new HashMap<>());
-    private final Map<String,DataTable> tableMap = Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,DataTable> tableMap = Collections.synchronizedMap(new HashMap<>());
     //map1: keys are scenario ids
     //map2: keys are line numbers, entries are example rows (key=header, value=rowValue )
     private final Map<String,Map<Long, Map<String, String>>> exampleRowsMap = Collections.synchronizedMap(new HashMap<>());
@@ -44,14 +44,14 @@ public class ScenarioContextParallel {
     private final Map<String,AtomicInteger> exampleCountMap = Collections.synchronizedMap(new HashMap<>());
 
     //key- ScenarioId
-    private final Map<String,Boolean> waitingToProcessBackgroundSteps = Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,Boolean> waitingToProcessBackgroundSteps = Collections.synchronizedMap(new HashMap<>());
 
     private final List<String> currentScenarioIdList = Collections.synchronizedList(new ArrayList<>());
 
     //key - scenarioId
     private final Map<String,Scenario> currentScenarioDefinitionMap = Collections.synchronizedMap(new HashMap<>());
 
-    private final Map<String,String> currentScenarioMap =  Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,String> currentScenarioMap =  Collections.synchronizedMap(new HashMap<>());
 
     private List<Tag> featureTags = new ArrayList<>();
 
@@ -68,7 +68,7 @@ public class ScenarioContextParallel {
     private StepEventBus stepEventBus;
 
     // key - scenarioId
-    private final Map<String,List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());;
+    private final Map<String,List<Tag>> scenarioTags = Collections.synchronizedMap(new HashMap<>());
 
 
     public ScenarioContextParallel(URI scenarioContextURI) {

@@ -22,6 +22,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Install Chrome for Testing and its driver
+        run: |
+          npm i puppeteer
+          npx @puppeteer/browsers install chrome@stable
+
       - name: Snapshot Build
 
         run: mvn clean install -T4 -DskipTests

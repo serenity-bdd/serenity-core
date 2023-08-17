@@ -15,6 +15,11 @@ jobs:
           distribution: 'temurin' # 'temurin' distribution provides OpenJ9 builds of the OpenJDK
           java-version: '17'
 
+      - name: Install Chrome for Testing and its driver
+        run: |
+          npm i puppeteer
+          npx @puppeteer/browsers install chrome@stable
+
       - name: Cache the Maven packages to speed up build
         uses: actions/cache@v2 # Update to v2
         with:

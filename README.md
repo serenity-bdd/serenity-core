@@ -50,9 +50,25 @@ And if you drill into the details, Serenity will give you a detailed account of 
 ![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
 
 ## Found a bug?
-You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time or through a sponsoring organisation.
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time, through a sponsoring organisation or via a [commercial support package](https://by2kx88fp4k.typeform.com/to/X8sN33jP](https://www.serenity-dojo.com/serenity-bdd-enterprise-support).
     
 Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
+
+Here are a few tips to make it easier for us to help you:
+
+### Give as much context as possible.
+
+Simply saying "The reports don't get generated" will not help us very much. Give as much context as possible, including:
+- Serenity version (serenity-core and the other serenity libraries, such as serenity-cucummber and serenity-jbehave)
+- If you are using Firefox, firefox and geckodriver version
+- If you are using Chrome, chrome and chromedriver version
+- What Operating System are you using
+
+Also, make sure you try with the latest version of Serenity - your bug may already be fixed, and in any case error messages from the latest version will be more relevant when we try to track down the source of the problem.
+
+### Use living documentation
+
+It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like [this one](https://github.com/serenity-bdd/serenity-cucumber-starter) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
 
 **You can help out by sponsoring Serenity BDD directly here:
 [:heart: Sponsor](https://github.com/sponsors/serenity-bdd)**
@@ -264,38 +280,3 @@ under the name *Thucydides* - everything discussed in "BDD in Action" is directl
   - *net.thucydides:thucydides-cucumber* becomes *net.serenity:serenity-cucumber*
 
 and so on.
-
-## Found a bug? Please read this before you raise an issue.
-
-If you have found a defect, we are keen to hear about it! But there are a few things you can do to help us provide a fix sooner:
-
-### Give as much context as possible.
-
-Simply saying "The reports don't get generated" will not help us very much. Give as much context as possible, including:
-  - Serenity version (serenity-core and the other serenity libraries, such as serenity-cucummber and serenity-jbehave)
-  - If you are using Firefox, firefox and geckodriver version
-  - If you are using Chrome, chrome and chromedriver version
-  - What Operating System are you using
-
-Also, make sure you try with the latest version of Serenity - your bug may already be fixed, and in any case error messages from the latest version will be more relevant when we try to track down the source of the problem.
-
-### Use living documentation
-
-It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like [this one](https://github.com/serenity-bdd/serenity-cucumber-starter) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
-
-## Found a bug?
-You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just paid for from a volunteer's spare time or through a sponsoring organisation.
-    
-Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
-
-**NOTE:** From time to time, old issues that have not been active for over 6 months will be automatically closed. If one of these issues affects your project and is still reproducible with the latest version of Serenity, feel free to reopen.
-    
-You can help out by sponsoring Serenity BDD directly here:
-[:heart: Sponsor](https://github.com/sponsors/serenity-bdd)
-
-Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
-   
-
-## Need Commercial Support?
-    
-If you are using Serenity for your company projects, and need faster or more in-depth support, including training and coaching, why not ask your company to get some [commercial support](https://johnfergusonsmart.com/serenity-bdd/)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.

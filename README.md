@@ -60,8 +60,8 @@ Some companies and individuals who find that Serenity BDD helps in their daily w
 Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.
 
 ## Need Commercial Support?
-    
-If you are using Serenity for your company projects, and need faster or more in-depth support, including training and coaching, why not ask your company to get some [commercial support](https://by2kx88fp4k.typeform.com/to/X8sN33jP)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs, so let's chat!
+
+If you are using Serenity for your company projects and need faster or more in-depth support, including training and coaching, why not ask your company to explore our **[commercial support options]([https://by2kx88fp4k.typeform.com/to/X8sN33jP](https://www.serenity-dojo.com/serenity-bdd-enterprise-support))**? We recognize that businesses have unique needs and require specialized attention. That's why we've designed a comprehensive range of support options tailored to your requirements. Whether it's prioritized tickets for pressing issues, custom Serenity work to integrate seamlessly with your existing systems, or remote mentoring and pair programming sessions to enhance your team's capabilities, we've got you covered. Our packages even include options for unlimited email support and additional live support hours at competitive rates. With monthly and annual payment plans, our support models aim to supercharge your Serenity experience, reducing downtime, accelerating development, and ensuring you get the most value out of your automation efforts. Let's chat and find the right fit for your needs!
   
 ## Where can I learn more?
 
@@ -75,6 +75,7 @@ Check out Serenity BDD in more detail here:
     
 ## Release Notes
 Release notes are available for major releases:
+* [4.0.0](docs/release-notes/4.0.0.md)
 * [3.2.4](docs/release-notes/3.2.4.md)
 * [3.2.0](docs/release-notes/3.2.0.md)
 * [2.3.2](docs/release-notes/2.3.2.md)

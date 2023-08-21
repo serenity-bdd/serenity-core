@@ -44,7 +44,7 @@
         <groovy.version>4.0.13</groovy.version>
         <spock.version>2.2-M1-groovy-4.0</spock.version>
         <byte-buddy.version>1.14.5</byte-buddy.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.1.2-jre</guava.version>
         <hamcrest.version>2.2</hamcrest.version>
 <!--        <slf4j.version>1.7.30</slf4j.version>-->
         <slf4j.version>2.0.7</slf4j.version>
@@ -59,7 +59,7 @@
         <commons.io.version>2.11.0</commons.io.version>
         <commons.text.version>1.10.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.collections.version>3.2.2</commons.collections.version>
+        <commons.collections.version>4.4</commons.collections.version>
         <commons.net.version>3.9.0</commons.net.version>
         <commons.codec.version>1.16.0</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
@@ -266,8 +266,8 @@
                 <version>${commons.net.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
                 <version>${commons.collections.version}</version>
             </dependency>
             <dependency>
@@ -496,7 +496,7 @@
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>

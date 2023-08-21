@@ -74,7 +74,7 @@ allprojects {
             // whe//n updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for generated POM
-            force "commons-collections:commons-collections:${commonsCollectionsVersion}",
+            force "org.apache.commons:commons-collections4:${commonsCollectionsVersion}",
                     "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                     "xml-apis:xml-apis:${xmlApisVersion}",
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",

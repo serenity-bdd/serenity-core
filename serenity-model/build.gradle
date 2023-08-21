@@ -14,7 +14,7 @@ dependencies {
     implementation "org.apache.commons:commons-text:${commonsTextVersion}"
     implementation "commons-beanutils:commons-beanutils-core:${beanUtilsVersion}"
     implementation "commons-net:commons-net:${commonsNetVersion}"
-    implementation "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    implementation "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
     implementation "commons-codec:commons-codec:${commonsCodecVersion}"
     implementation "com.google.guava:guava:${guavaVersion}"
     api "org.slf4j:slf4j-api:${slf4jVersion}"

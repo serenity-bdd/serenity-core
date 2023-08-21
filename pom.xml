@@ -59,7 +59,7 @@
         <commons.io.version>2.11.0</commons.io.version>
         <commons.text.version>1.10.0</commons.text.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.collections.version>3.2.2</commons.collections.version>
+        <commons.collections.version>4.4</commons.collections.version>
         <commons.net.version>3.9.0</commons.net.version>
         <commons.codec.version>1.16.0</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
@@ -266,8 +266,8 @@
                 <version>${commons.net.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
                 <version>${commons.collections.version}</version>
             </dependency>
             <dependency>

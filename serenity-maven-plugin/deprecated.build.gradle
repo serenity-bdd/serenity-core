@@ -71,7 +71,7 @@ configurations.all {
         force "org.codehaus.plexus:plexus-classworlds:${plexusClasswordsVersion}",
             "org.codehaus.plexus:plexus-utils:${plexusUtilsVersion}",
             "org.slf4j:slf4j-api:${slf4jVersion}",
-            "commons-collections:commons-collections:${commonsCollectionsVersion}",
+            "org.apache.commons:commons-collections4:${commonsCollectionsVersion}",
                 "xml-apis:xml-apis:${xmlApiVersion}"
     }
 }

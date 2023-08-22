@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_USE_REQUIREMENTS_CACHE;
 import static net.thucydides.model.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.model.requirements.RequirementsPath.pathElements;
 import static net.thucydides.model.requirements.RequirementsPath.stripRootFromPath;

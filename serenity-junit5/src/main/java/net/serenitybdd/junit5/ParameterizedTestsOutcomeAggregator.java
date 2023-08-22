@@ -4,6 +4,7 @@ import net.thucydides.model.domain.*;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -151,13 +152,31 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private String alternativeMethodName(TestOutcome testOutcome) {
+        // Any parameterized test name attributes overrides the qualified name
+        if (hasParameterizedTestName(testOutcome)) {
+            return testOutcome.getTitle();
+        }
+
         Optional<String> qualifier = testOutcome.getQualifier();
         if (qualifier != null && qualifier.isPresent()) {
-            return testOutcome.getTitle(false) + " " +
-                    testOutcome.getQualifier().get();
+            return testOutcome.getTitle(false) + " " + testOutcome.getQualifier().get();
         } else {
             return testOutcome.getTitle();
         }
+    }
+
+    private boolean hasParameterizedTestName(TestOutcome testOutcome) {
+        if (testOutcome.getTestCase() == null) {
+            return false;
+        }
+        String parameterizedTestName = Arrays.stream(testOutcome.getTestCase().getDeclaredMethods())
+                .filter(method -> method.getName().equals(testOutcome.getMethodName()))
+                .filter(method -> method.isAnnotationPresent(ParameterizedTest.class))
+                .map(method -> method.getAnnotation(ParameterizedTest.class).name())
+                .findFirst()
+                .orElse("");
+
+        return (!parameterizedTestName.isEmpty());
     }
 
     public List<TestOutcome> getTestOutcomesForAllParameterSets() {

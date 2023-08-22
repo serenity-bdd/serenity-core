@@ -10,7 +10,7 @@ import net.thucydides.model.domain.*;
 import net.thucydides.model.domain.features.ApplicationFeature;
 import net.thucydides.model.domain.stacktrace.FailureCause;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

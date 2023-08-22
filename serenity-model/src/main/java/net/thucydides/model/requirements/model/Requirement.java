@@ -11,7 +11,7 @@ import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.util.NameConverter;
-import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

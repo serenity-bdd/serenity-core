@@ -10,7 +10,7 @@
     </parent>
     <artifactId>serenity-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <description>Serenity BDD Maven Plugin</description>
+    <name>Serenity BDD Maven Plugin</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>

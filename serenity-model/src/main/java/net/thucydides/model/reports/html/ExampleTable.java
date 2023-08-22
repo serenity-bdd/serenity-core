@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.collections.IteratorUtils.toList;
+import static org.apache.commons.collections4.IteratorUtils.toList;
 
 public class ExampleTable {
 

@@ -16,10 +16,10 @@ public class RequirementCache {
     private final Set<Requirement> flattenedRequirementsSet; // to avoid list scanning
 
     private RequirementCache() {
-        flattenedRequirements = new CopyOnWriteArrayList<>();
-        flattenedRequirementsSet = ConcurrentHashMap.newKeySet();
-        requirementsPathIndex = new ConcurrentHashMap<>();
-        requirementsByTag = new ConcurrentHashMap<>();
+        flattenedRequirements = new ArrayList<>();
+        flattenedRequirementsSet = new HashSet<>();
+        requirementsPathIndex = new HashMap<>();
+        requirementsByTag = new HashMap<>();
     }
 
     public void clear() {
@@ -36,11 +36,7 @@ public class RequirementCache {
 
     public List<Requirement> getRequirements(Supplier<List<Requirement>> requirementFactory) {
         if (requirements == null) {
-            synchronized (this) {
-                if (requirements == null) { // double-checked locking
-                    requirements = requirementFactory.get();
-                }
-            }
+            requirements = requirementFactory.get();
         }
         return requirements;
     }
@@ -56,7 +52,11 @@ public class RequirementCache {
     }
 
     public Requirement getRequirementsByTag(TestTag testTag, Function<TestTag, Requirement> requirementFinder) {
-        return requirementsByTag.computeIfAbsent(testTag, requirementFinder);
+        if (!requirementsByTag.containsKey(testTag)) {
+            requirementsByTag.put(testTag, requirementFinder.apply(testTag));
+        }
+        return requirementsByTag.get(testTag);
+//        return requirementsByTag.computeIfAbsent(testTag, requirementFinder);
     }
 
     private static class SingletonHelper {

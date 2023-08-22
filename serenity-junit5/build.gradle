@@ -16,7 +16,7 @@ dependencies {
     implementation "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
     implementation "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
     implementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
-    implementation "org.junit.platform:junit-platform-launcher:1.8.1"
+    implementation "org.junit.platform:junit-platform-launcher"
     implementation "junit:junit:${junitVersion}"
     implementation("org.spockframework:spock-core:${spockVersion}") {
         exclude group:'org.junit.platform', module:'junit-platform-engine'

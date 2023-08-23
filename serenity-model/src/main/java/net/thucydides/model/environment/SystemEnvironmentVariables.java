@@ -27,8 +27,14 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     private volatile Config config;
     private volatile boolean configLoaded = false;
 
-    private static final ThreadLocal<SystemEnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
-            = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
+    private static SystemEnvironmentVariables CACHED_ENVIRONMENT_VARIABLES;
+
+    private static SystemEnvironmentVariables getCachedEnvironmentVariables() {
+        if (CACHED_ENVIRONMENT_VARIABLES == null) {
+            CACHED_ENVIRONMENT_VARIABLES = createEnvironmentVariables();
+        }
+        return CACHED_ENVIRONMENT_VARIABLES;
+    }
 
     /**
      * System properties as loaded from the system, without test-specific configuration
@@ -57,7 +63,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentUpdater currentEnvironment() {
-        return new EnvironmentUpdater(LOADED_ENVIRONMENT_VARIABLES.get().loadLocalConfig());
+        return new EnvironmentUpdater(getCachedEnvironmentVariables().loadLocalConfig());
     }
 
     /**
@@ -65,7 +71,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        return LOADED_ENVIRONMENT_VARIABLES.get().copy();
+        return getCachedEnvironmentVariables();
     }
 
     public void setConfig(Config typesafeConfig) {
@@ -298,11 +304,8 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return environmentVariables;
     }
 
-    ReentrantLock configLock = new ReentrantLock();
-
     private EnvironmentVariables loadLocalConfig() {
         if (!configLoaded) {
-            configLock.lock();
             LocalPreferences localPreferences = new PropertiesLocalPreferences(this.properties);
             try {
                 localPreferences.loadPreferences();
@@ -311,7 +314,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
                 e.printStackTrace();
             }
             configLoaded = true;
-            configLock.unlock();
         }
         return this;
     }

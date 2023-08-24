@@ -64,7 +64,8 @@ public class ReportNamer {
         if (isJUnit5(testOutcome.getQualifiedId())) {
             return testOutcome.getUserStory().getId() + "." + testOutcome.getMethodName();
         } else {
-            String pathWithoutSlashes = testOutcome.getPath() != null ? testOutcome.getPath().replace(".", "_").replace("/", "_SL_") : "";
+            String pathWithoutSlashes = testOutcome.getPath() != null ?
+                    testOutcome.getPath().replace(".", "_").replace("/", "_SL_").replace("\\", "_BSL_") : "";
             return testOutcome.getQualifiedId() + ":" + NameConverter.withNoIssueNumbers(pathWithoutSlashes);
         }
     }

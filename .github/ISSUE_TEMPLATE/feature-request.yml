@@ -42,5 +42,7 @@ body:
         I would like to:
       options:
         - label: "work on this myself (with Serenity BDD team guidance)"
-        - label: "[hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support) to build it for me"
+        - label: "[Hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support) to build it for me"
         - label: "add it to the Serenity BDD backlog and wait for a volunteer"
+    validations:
+      required: true

@@ -1,20 +1,46 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+name: Feature Request
+description: Suggest an idea for Serenity BDD
+title: "Serenity BDD should ..."
+body:
 
----
+- type: markdown
+  attributes:
+  value: |
+  👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Tell us more about your idea.
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+- type: textarea
+  id: problem
+  attributes:
+  label: What's the problem you're trying to solve?
+  validations:
+  required: true
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+- type: textarea
+  id: solution
+  attributes:
+  label: How would you like to solve it?
+  description: |
+  What's your preferred solution, and why is it the best way to do it?
+  validations:
+  required: true
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+- type: textarea
+  id: alternatives
+  attributes:
+  label: Are there any alternatives?
+  description: |
+  Have you considered any alternative solutions or workarounds?
+  validations:
+  required: false
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+- type: checkboxes
+  attributes:
+  label: How can we make it happen?
+  description: |
+  We'll need someone to help make your idea happen.
+
+      I would like to:
+  options:
+  - label: "work on this myself (with Serenity BDD team guidance)"
+  - label: "[hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support) to build it for me"
+  - label: "add it to the Serenity BDD backlog and wait for a volunteer"

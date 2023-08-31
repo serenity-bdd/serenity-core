@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.0-beta-7</version>
+        <version>4.0.0-beta-8-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-shutterbug</artifactId>
     <packaging>jar</packaging>

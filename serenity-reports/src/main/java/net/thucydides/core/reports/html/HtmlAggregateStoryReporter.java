@@ -14,6 +14,7 @@ import net.thucydides.model.domain.TestTag;
 import net.thucydides.core.reports.*;
 import net.thucydides.model.reports.*;
 import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.reports.html.TestOutcomesContext;
 import net.thucydides.model.requirements.DefaultRequirements;
 import net.thucydides.model.requirements.Requirements;
 import net.thucydides.model.requirements.model.RequirementsConfiguration;
@@ -137,6 +138,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         }
         LOGGER.trace("Loaded test outcomes after {}", stopwatch.lapTimeFormatted());
 
+        TestOutcomesContext.setTestOutcomes(allTestOutcomes);
         generateReportsForTestResultsIn(allTestOutcomes);
 
         LOGGER.trace("Generated reports after {}", stopwatch.lapTimeFormatted());

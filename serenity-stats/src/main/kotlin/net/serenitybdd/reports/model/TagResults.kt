@@ -24,7 +24,7 @@ class TagResults(val testOutcomes: TestOutcomes) {
     }
 
     fun groupedByType(): List<TagResultSet> {
-        val exclusions = TagExclusions(environmentVariables)
+        val exclusions = TagExclusions(environmentVariables, testOutcomes)
 
         return forAllTags()
             .filter { tagResult -> StringUtils.isNotEmpty(tagResult.tag.type) }

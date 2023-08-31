@@ -62,7 +62,6 @@ public class TagFilter {
         return exclusions.doNotExclude(tag);
     }
 
-
     public Set<TestTag> removeTagsOfType(Set<TestTag> tags, String... redundantTagTypes) {
         Set<TestTag> filteredTags = new HashSet<>();
         List<String> maskedTagTypes = Arrays.asList(redundantTagTypes);

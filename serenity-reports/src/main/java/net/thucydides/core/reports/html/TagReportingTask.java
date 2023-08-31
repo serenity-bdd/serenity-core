@@ -135,7 +135,8 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                            final List<String> requirementTypes,
                                            final List<String> knownRequirementReportNames) {
 
-            TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+            TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables, testOutcomes);
+
             Set<TestTag> reportedTags = testOutcomes.getTags().stream()
                     .filter(exclusions::doNotExclude)
                     .filter(tag -> !requirementTag(requirementTypes, tag))

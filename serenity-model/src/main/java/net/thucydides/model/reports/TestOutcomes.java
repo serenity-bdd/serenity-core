@@ -1256,6 +1256,22 @@ public class TestOutcomes {
         return getOutcomes().isEmpty();
     }
 
+    public List<String> getPlatformContexts() {
+        return getOutcomes().stream().flatMap(outcome -> outcome.getTags().stream())
+                .distinct()
+                .filter(TestTag::isAPlatform)
+                .map(TestTag::getName)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getBrowserContexts() {
+        return getOutcomes().stream().flatMap(outcome -> outcome.getTags().stream())
+                .distinct()
+                .filter(TestTag::isABrowser)
+                .map(TestTag::getName)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         return "TestOutcomes{" +

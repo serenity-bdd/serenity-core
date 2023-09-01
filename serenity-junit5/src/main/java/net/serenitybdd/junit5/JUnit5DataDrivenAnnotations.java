@@ -2,6 +2,7 @@ package net.serenitybdd.junit5;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
+import net.bytebuddy.implementation.MethodCall;
 import net.serenitybdd.junit5.datadriven.JUnit5CSVTestDataSource;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.domain.DataTable;
@@ -9,6 +10,7 @@ import net.thucydides.model.util.EnvironmentVariables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.slf4j.Logger;
@@ -157,11 +159,43 @@ public class JUnit5DataDrivenAnnotations {
     }
 
     private void fillDataTablesFromArgumentsSource(Map<String, DataTable> dataTables, Method testDataMethod) {
-        String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
-        String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
-        List<List<Object>> parametersAsListsOfObjects = listOfObjectsFromMethodSource(testDataMethod);
-        logger.info("GetParameterTablesFromMethodSource: Put parameter dataTableName " + dataTableName + " " + parametersAsListsOfObjects);
-        dataTables.put(dataTableName, createParametersTableFrom(columnNamesString, parametersAsListsOfObjects));
+        try {
+
+            ArgumentsSource argumentsSource = testDataMethod.getAnnotation(ArgumentsSource.class);
+            ArgumentsProvider argumentProvider = argumentsSource.value().getConstructor().newInstance();
+
+            // We don't have the extensionContext here, so we can't use the extensionContext to get the arguments
+            // If the extensionContext is needed, this will fail, and we will fall back to the old way of getting the arguments
+            List<?> arguments = argumentProvider.provideArguments(null).map(Arguments::get).collect(Collectors.toList());
+
+            // If there are no arguments...actually not sure if this can happen
+            if (arguments.isEmpty()) {
+                return;
+            }
+
+            // The arguments can be either a list of objects or a list of arrays.
+            // If it is a list of arrays, we need to convert it to a list of objects
+            List<List<Object>> argumentRows = new ArrayList<>();
+            if (arguments.get(0) instanceof Object[]) {
+                for (Object[] argument : (List<Object[]>) arguments) {
+                    argumentRows.add(Arrays.asList(argument));
+                }
+            } else {
+                for (Object argument : arguments) {
+                    argumentRows.add(Collections.singletonList(argument));
+                }
+            }
+
+            // We don't have explicit column names, so we will use the default column names
+            List<String> columns = numberedColumnHeadings(argumentRows.get(0).size());
+
+            String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
+            dataTables.put(dataTableName, createParametersTableFrom(columns, argumentRows));
+
+        } catch (NullPointerException ignored) {
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     List<Method> findTestDataMethods() {
@@ -341,6 +375,12 @@ public class JUnit5DataDrivenAnnotations {
                 .build();
     }
 
+    private DataTable createParametersTableFrom(List<String> columnNames, List<List<Object>> parametersList) {
+        return DataTable.withHeaders(columnNames)
+                .andRows(parametersList)
+                .build();
+    }
+
     private List<String> split(String columnNamesString, int numberOfColumns) {
         if (StringUtils.isEmpty(columnNamesString)) {
             return numberedColumnHeadings(numberOfColumns);
@@ -362,7 +402,8 @@ public class JUnit5DataDrivenAnnotations {
                         || isACsvFileSourceAnnotatedMethod(method)
                         || isACsvSourceAnnotatedMethod(method)
                         || isAEnumSourceAnnotatedMethod(method)
-                        || isAMethodSourceAnnotatedMethod(method));
+                        || isAMethodSourceAnnotatedMethod(method)
+                        || isAnArgumentsSourceAnnotatedMethod(method));
     }
 
     private boolean isAValueSourceAnnotatedMethod(Method method) {

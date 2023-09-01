@@ -197,7 +197,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         java.util.Optional<Story> featureOrStory = java.util.Optional.ofNullable(testOutcome.getUserStory());
         String parentTitle = null;
 
-        if (parentRequirement.isPresent()) {
+        if (parentRequirement != null && parentRequirement.isPresent()) {
             parentTitle = parentRequirement.get().getName();
             context.put("parentRequirement", parentRequirement);
             context.put("featureOrStory", Optional.empty());

@@ -466,16 +466,16 @@
                                                                                 </#if>
                                                                             </td>
                                                                             <td>
-                                                                                <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                                 <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
-                                                                                    <br/>
-                                                                                    <i class="bi bi-table" title="Data Driven Scenario"> ${scenario.numberOfTestCases}
+                                                                                    <i class="bi bi-table" title="Data Driven Scenario"> <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                                     <br/>
                                                                                         <#list scenario.getResultCounts() as resultCount>
                                                                                             <#assign outcome_icon = formatter.resultIcon().forResult(resultCount.result) />
                                                                                             ${outcome_icon} ${resultCount.numberOfTestCases}
                                                                                             <br/>
                                                                                         </#list>
+                                                                                <#else>
+                                                                                    <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                                 </#if>
                                                                             </td>
                                                                             <td>${context_icon}<span style="display:none">${context_label}</span> </td>

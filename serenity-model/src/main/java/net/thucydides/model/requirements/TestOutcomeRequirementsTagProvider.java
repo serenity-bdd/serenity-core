@@ -94,35 +94,41 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     private List<Requirement> loadRequirements() {
         TestOutcomeLoader loader = new TestOutcomeLoader();
         File outputDirectory = ConfiguredEnvironment.getConfiguration().getOutputDirectory();
-        List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
 
-        int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
+        // If no output directory exists (yet), the test run is still in progress, so don't bother reading the requirements yet.
+        if (outputDirectory.exists()) {
+            List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
 
-        // Bottom-level requirements
-        Map<PathElements, Requirement> leafLevelRequirements = getLeafLevelRequirementsFrom(outcomes);
+            int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
 
-        Set<PathElements> leafPathElements = leafLevelRequirements.keySet();
+            // Bottom-level requirements
+            Map<PathElements, Requirement> leafLevelRequirements = getLeafLevelRequirementsFrom(outcomes);
 
-        Map<PathElements, Requirement> requirementsByPath = new HashMap<>();
+            Set<PathElements> leafPathElements = leafLevelRequirements.keySet();
 
-        // Non-leaf requirements indexed by path
-        findPathElementsIn(outcomes).forEach(pathElements -> processPathElements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath));
+            Map<PathElements, Requirement> requirementsByPath = new HashMap<>();
 
-        Collection<Requirement> allRequirements = requirementsByPath.values();
+            // Non-leaf requirements indexed by path
+            findPathElementsIn(outcomes).forEach(pathElements -> processPathElements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath));
 
-        // Use the map to update the leaf requirements
-        updateParentFieldsIn(requirementsByPath, allRequirements);
+            Collection<Requirement> allRequirements = requirementsByPath.values();
 
-        // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
+            // Use the map to update the leaf requirements
+            updateParentFieldsIn(requirementsByPath, allRequirements);
 
-        populateChildren(requirementsByPath, allRequirements);
+            // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
 
-        RequirementCache.getInstance().indexRequirements(requirementsByPath);
+            populateChildren(requirementsByPath, allRequirements);
 
-        // Return a list of the top-level or leaf requirements with no parent elements
-        return allRequirements.stream()
-                .filter(requirement -> StringUtils.isEmpty(requirement.getParent()))
-                .collect(Collectors.toList());
+            RequirementCache.getInstance().indexRequirements(requirementsByPath);
+
+            // Return a list of the top-level or leaf requirements with no parent elements
+            return allRequirements.stream()
+                    .filter(requirement -> StringUtils.isEmpty(requirement.getParent()))
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     private void processPathElements(PathElements pathElements, int maxRequirementsDepth, Set<PathElements> leafPathElements,

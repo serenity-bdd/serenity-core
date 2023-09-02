@@ -37,12 +37,19 @@ body:
     attributes:
       label: How can we make it happen?
       description: |
-        We'll need someone to help make your idea happen.
+        We'll need someone to help make your idea happen.        
+        
+        Serenity BDD is an open-source project, and we greatly appreciate your contribution to help make it better. 
+        Please be aware that while we may be able to address this issue quickly, especially if it aligns with other work 
+        we are currently doing, there is no SLA or guarantee that it will ever be implemented. If the issue is valuable for you 
+        and your project and you want to improve the chances of getting it implemented, you have several options. 
+        You can dive into the code yourself (with our guidance), hire a third party to fix it, or **[Hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support)** 
+        to do it for you. We're here to help in any way we can!
         
         I would like to:
       options:
-        - label: "work on this myself (with Serenity BDD team guidance)"
-        - label: "[Hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support) to build it for me"
-        - label: "add it to the Serenity BDD backlog and wait for a volunteer"
+        - Work on this myself and propose a PR (with Serenity BDD team guidance)
+        - Hire the Serenity BDD team
+        - Add it to the Serenity BDD backlog and wait for a volunteer to pick it up
     validations:
       required: true

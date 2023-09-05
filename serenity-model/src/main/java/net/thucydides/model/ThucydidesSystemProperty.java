@@ -208,6 +208,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_FLOW_REPORTS_DIR("flow"),
 
     /**
+     * If set to true and Healenium is available, Serenity will wrap any driver in the Healenium SelfHealingDriver delegat.
+     */
+    SERENITY_USE_HEALENIUM,
+
+    /**
      * Default name of folder, with reports about test flow and aggregation report generation
      */
     SERENITY_FLOW_REPORTS_DIR("flow"),

@@ -7,6 +7,7 @@ import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.serenitybdd.core.webdriver.driverproviders.*;
+import net.thucydides.core.webdriver.healenium.HealeniumWrapper;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.fixtureservices.FixtureException;
@@ -170,6 +171,17 @@ public class WebDriverFactory {
         EnhanceDriver.from(environmentVariables).to(driver);
 
         closeBrowser.closeWhenTheTestsAreFinished(driver);
+
+        //
+        // Optionally wrap the driver in the Healenium delegate
+        //
+        return optionalHealeniumDelegate(driver);
+    }
+
+    private WebDriver optionalHealeniumDelegate(WebDriver driver) {
+        if (SERENITY_USE_HEALENIUM.booleanFrom(environmentVariables, false)) {
+            return HealeniumWrapper.wrapDriver(driver);
+        }
         return driver;
     }
 

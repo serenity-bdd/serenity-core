@@ -507,6 +507,9 @@
                                                                         <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                                     </#list>
                                                                 </div>
+<#--                                                                <#if !scenario.examples?has_content >-->
+<#--                                                                    <div><h1></h1></div>-->
+<#--                                                                </#if>-->
                                                             </div>
                                                         </div>
                                                     </#list>

@@ -2,10 +2,8 @@ package net.thucydides.model.environment;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import net.serenitybdd.model.collect.NewMap;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.util.LocalPreferences;
-//import net.thucydides.model.util.PropertiesFileLocalPreferences;
 import net.thucydides.model.util.PropertiesLocalPreferences;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,19 +25,28 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     private volatile Config config;
     private volatile boolean configLoaded = false;
 
-    private static final ThreadLocal<SystemEnvironmentVariables> LOADED_ENVIRONMENT_VARIABLES
-            = ThreadLocal.withInitial(SystemEnvironmentVariables::createEnvironmentVariables);
+    private static EnvironmentVariables CACHED_ENVIRONMENT_VARIABLES;
 
-    /**
-     * System properties as loaded from the system, without test-specific configuration
-     */
-    private Map<String, String> pristineProperties = new ConcurrentHashMap<>();
+    private static final Lock lock = new ReentrantLock();
 
-    private SystemEnvironmentVariables(Map<String, String> properties, Map<String, String> systemValues, Config config, Map<String, String> pristineProperties) {
+    private static EnvironmentVariables getCachedEnvironmentVariables() {
+        if (CACHED_ENVIRONMENT_VARIABLES == null) {
+            lock.lock();
+            try {
+                if (CACHED_ENVIRONMENT_VARIABLES == null) { // Check again inside the lock
+                    CACHED_ENVIRONMENT_VARIABLES = createEnvironmentVariables().loadLocalConfig();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+        return CACHED_ENVIRONMENT_VARIABLES;
+    }
+
+    private SystemEnvironmentVariables(Map<String, String> properties, Map<String, String> systemValues, Config config) {
         this.properties.putAll(properties);
         this.systemValues.putAll(systemValues);
         this.config = config;
-        this.pristineProperties.putAll(pristineProperties);
         loadLocalConfig();
     }
 
@@ -49,7 +56,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(this.properties, this.systemValues, this.config, this.pristineProperties).loadLocalConfig();
+        return new SystemEnvironmentVariables(this.properties, this.systemValues, this.config);
     }
 
     public SystemEnvironmentVariables() {
@@ -57,7 +64,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentUpdater currentEnvironment() {
-        return new EnvironmentUpdater(LOADED_ENVIRONMENT_VARIABLES.get().loadLocalConfig());
+        return new EnvironmentUpdater(getCachedEnvironmentVariables());
     }
 
     /**
@@ -65,7 +72,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
      * Test-local environment variables can be updated using the TestLocalEnvironmentVariables class.
      */
     public static EnvironmentVariables currentEnvironmentVariables() {
-        return LOADED_ENVIRONMENT_VARIABLES.get().copy();
+        if (TestLocalEnvironmentVariables.isEmpty()) {
+            return getCachedEnvironmentVariables();
+        } else {
+            return TestLocalEnvironmentVariables.getUpdatedEnvironmentVariables();
+        }
     }
 
     public void setConfig(Config typesafeConfig) {
@@ -75,7 +86,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public SystemEnvironmentVariables(Map<String, String> propertyValues, Map<String, String> systemValues) {
         this.systemValues.putAll(systemValues);
         this.properties.putAll(propertyValues);
-        this.pristineProperties = NewMap.copyOf(propertyValues);
         loadLocalConfig();
     }
 
@@ -88,7 +98,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
             propertyValues.put(property, value);
         }
         this.properties.putAll(propertyValues);
-        this.pristineProperties = NewMap.copyOf(propertyValues);
         loadLocalConfig();
     }
 
@@ -258,8 +267,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public void reset() {
-        this.properties.clear();
-        this.properties.putAll(pristineProperties);
+        TestLocalEnvironmentVariables.clear();
     }
 
     public static SystemEnvironmentVariables createEnvironmentVariables() {
@@ -298,11 +306,8 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return environmentVariables;
     }
 
-    ReentrantLock configLock = new ReentrantLock();
-
     private EnvironmentVariables loadLocalConfig() {
         if (!configLoaded) {
-            configLock.lock();
             LocalPreferences localPreferences = new PropertiesLocalPreferences(this.properties);
             try {
                 localPreferences.loadPreferences();
@@ -311,7 +316,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
                 e.printStackTrace();
             }
             configLoaded = true;
-            configLock.unlock();
         }
         return this;
     }

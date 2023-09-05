@@ -1,6 +1,6 @@
 package net.thucydides.model.matchers;
 
-import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.IntrospectionException;

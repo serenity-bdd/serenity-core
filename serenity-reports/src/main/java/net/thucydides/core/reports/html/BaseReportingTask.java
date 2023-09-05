@@ -62,7 +62,7 @@ public abstract class BaseReportingTask implements ReportingTask {
     }
 
     private boolean csvReportsAreActivated() {
-        return SERENITY_GENERATE_CSV_REPORTS.booleanFrom(environmentVariables, true);
+        return SERENITY_GENERATE_CSV_REPORTS.booleanFrom(environmentVariables, false);
     }
 
 }

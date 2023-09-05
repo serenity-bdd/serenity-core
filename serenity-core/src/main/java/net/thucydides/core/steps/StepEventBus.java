@@ -450,7 +450,9 @@ public class StepEventBus {
 
     private void recordTestMetadataFor(TestOutcome outcome) {
         outcome.setTestSource(testSource);
-        outcome.setContext(TestContext.forTheCurrentTest().getContext());
+        if (!TestContext.forTheCurrentTest().getContext().isEmpty()) {
+            outcome.setContext(TestContext.forTheCurrentTest().getContext());
+        }
     }
 
     private void recordTestContext() {

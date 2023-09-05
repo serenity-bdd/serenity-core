@@ -21,7 +21,7 @@ public class ResultReports {
                                                          File outputDirectory,
                                                          ReportNameProvider reportNameProvider) {
 
-        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables);
+        TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables, testOutcomes);
 
         return Stream.of(
                 // RESULT REPORTS

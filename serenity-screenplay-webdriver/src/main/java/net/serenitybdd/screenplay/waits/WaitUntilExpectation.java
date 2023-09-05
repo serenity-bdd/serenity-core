@@ -4,6 +4,7 @@ import net.serenitybdd.markers.IsSilent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
@@ -25,6 +26,7 @@ public class WaitUntilExpectation<T> implements Interaction, IsSilent {
     @Override
     public <A extends Actor> void performAs(A actor) {
         BrowseTheWeb.as(actor).withTimeoutOf(duration).waitFor(expectedCondition);
+
     }
 
     public Interaction forNoMoreThan(Duration duration) {

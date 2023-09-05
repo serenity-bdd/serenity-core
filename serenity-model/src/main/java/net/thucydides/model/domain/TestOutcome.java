@@ -866,6 +866,10 @@ public class TestOutcome {
         return driver;
     }
 
+    public String getBrowser() {
+        return (driver.contains(":")) ? driver.substring(0, driver.indexOf(":")) : driver;
+    }
+
     public void resetFailingStepsCausedBy(Class<? extends Throwable> expected) {
         for (TestStep step : testSteps) {
             resetFailingStepsIn(step).causedBy(expected);
@@ -2125,6 +2129,9 @@ public class TestOutcome {
     }
 
     private void addContextTagsFor(String context) {
+        if (context == null) {
+            return;
+        }
         List<String> contexts = Arrays.stream(context.split(",")).map(String::trim).map(StringUtils::capitalize).collect(Collectors.toList());
         contexts.forEach(
                 contextElement -> addTag(TestTag.withName(contextElement).andType("context"))

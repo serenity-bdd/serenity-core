@@ -96,7 +96,7 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
     implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    implementation "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    implementation "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
     implementation("org.fluentlenium:fluentlenium-core:${fluentleniumVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'junit', module: 'junit-dep'

@@ -1,11 +1,15 @@
 package net.thucydides.core.steps;
 
+import com.google.common.collect.ImmutableSet;
+import net.serenitybdd.model.di.ModelInfrastructure;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_ADD_OS_TAG;
 
 public class TestContext {
 
@@ -35,9 +39,10 @@ public class TestContext {
         if (StringUtils.isNotBlank(browserName)) {
             contextItems.add(browserName.toLowerCase());
         }
+
         if (StringUtils.isNotBlank(platform)) {
             contextItems.add(platform.toLowerCase());
-        } else {
+        } else if (SERENITY_ADD_OS_TAG.booleanFrom(ModelInfrastructure.getEnvironmentVariables())) {
             contextItems.add(currentPlatform());
         }
 
@@ -46,10 +51,15 @@ public class TestContext {
 
     private String currentPlatform() {
         String osName = System.getProperty("os.name");
-        if (osName.startsWith("Windows")) { return "windows"; }
-        else if (osName.startsWith("Mac")) {return "mac"; }
-        else if (osName.startsWith("Linux")) {return "linux"; }
-        else { return osName; }
+        if (osName.startsWith("Windows")) {
+            return "windows";
+        } else if (osName.startsWith("Mac")) {
+            return "mac";
+        } else if (osName.startsWith("Linux")) {
+            return "linux";
+        } else {
+            return osName;
+        }
     }
 
     public void recordCurrentPlatform() {

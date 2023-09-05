@@ -4,6 +4,9 @@ import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.digest.Digest;
 import net.thucydides.model.util.NameConverter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
 
 /**
@@ -13,8 +16,12 @@ import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_COMPRESS_FI
  */
 public class ReportNamer {
 
+    private static final Map<ReportType, ReportNamer> REPORT_NAMERS = new HashMap<>();
     public static ReportNamer forReportType(ReportType type) {
-        return new ReportNamer(type);
+        if (!REPORT_NAMERS.containsKey(type)) {
+            REPORT_NAMERS.put(type, new ReportNamer(type));
+        }
+        return REPORT_NAMERS.get(type);
     }
 
     private ReportType type;
@@ -57,7 +64,8 @@ public class ReportNamer {
         if (isJUnit5(testOutcome.getQualifiedId())) {
             return testOutcome.getUserStory().getId() + "." + testOutcome.getMethodName();
         } else {
-            String pathWithoutSlashes = testOutcome.getPath() != null ? testOutcome.getPath().replace(".", "_").replace("/", "_SL_") : "";
+            String pathWithoutSlashes = testOutcome.getPath() != null ?
+                    testOutcome.getPath().replace(".", "_").replace("/", "_SL_").replace("\\", "_BSL_") : "";
             return testOutcome.getQualifiedId() + ":" + NameConverter.withNoIssueNumbers(pathWithoutSlashes);
         }
     }

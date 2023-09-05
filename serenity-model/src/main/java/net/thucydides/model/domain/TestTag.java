@@ -1,10 +1,15 @@
 package net.thucydides.model.domain;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import net.serenitybdd.model.strings.Joiner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ObjectUtils.compare;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -158,6 +163,29 @@ public class TestTag implements Comparable<TestTag> {
         if (!normalisedName().equals(testTag.normalisedName())) return false;
         return normalisedType().equals(testTag.normalisedType());
     }
+
+    public static final Set<String> SUPPORTED_PLATFORMS = ImmutableSet.of("windows", "mac", "linux");
+    public static final Set<String> SUPPORTED_BROWSERS = ImmutableSet.of("firefox", "chrome", "edge", "iexplorer", "safari", "htmlunit", "appium","iphone","android");
+
+    public boolean isAPlatform() {
+        return "context".equalsIgnoreCase(type) && SUPPORTED_PLATFORMS.contains(name.toLowerCase());
+    }
+
+    public boolean isABrowser() {
+        return "context".equalsIgnoreCase(type) && SUPPORTED_BROWSERS.contains(name.toLowerCase());
+    }
+
+    public boolean isABrowserPlatformCombination() {
+        if (name.contains(",")) {
+            List<String> nameElements = Arrays.stream(name.split(",")).map(String::trim).collect(Collectors.toList());
+            String browser = nameElements.get(0);
+            String platform = nameElements.get(1);
+            return SUPPORTED_BROWSERS.contains(browser.toLowerCase()) && SUPPORTED_PLATFORMS.contains(platform.toLowerCase());
+        } else {
+            return false;
+        }
+    }
+
 
     public boolean equalsIgnoreCase(Object o) {
         if (this == o) return true;

@@ -9,6 +9,7 @@ import net.thucydides.model.domain.TestTag;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String name;
@@ -86,7 +87,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return name;
     }
 
-    public String getSimplifiedName() { return name; }
+    public String getSimplifiedName() {
+        return name;
+    }
 
     public String getTitle() {
 
@@ -97,7 +100,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     private String backgroundTitle() {
-        if (name.isEmpty()) { return "Background"; }
+        if (name.isEmpty()) {
+            return "Background";
+        }
         return "Background: " + name;
     }
 
@@ -129,10 +134,18 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return examples;
     }
 
-    public boolean hasExamples() { return exampleCount > 0; }
+    public boolean hasExamples() {
+        return exampleCount > 0;
+    }
 
-    public String getNumberOfExamples() { return (exampleCount == 1) ? "1 example" : exampleCount + " examples"; }
 
+    public String getNumberOfExamples() {
+        return (exampleCount == 1) ? "1 example" : exampleCount + " examples";
+    }
+
+    public String getNumberOfTestCases() {
+        return (exampleCount == 1) ? "1 test case" : exampleCount + " test cases";
+    }
 
     public String getScenarioReport() {
         return scenarioReport;
@@ -142,8 +155,27 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return reportBadges;
     }
 
-    public Integer getStepCount() { return steps.size(); }
+    public Integer getStepCount() {
+        return steps.size();
+    }
 
+    public List<TestCaseResultCount> getResultCounts() {
+        List<TestCaseResultCount> resultCounts = new ArrayList<>();
+        // Create an initial list of results in a logical order
+        Arrays.stream(TestResult.values())
+                .sorted(Comparator.comparingInt(TestResult::getPriority))
+                .map(TestCaseResultCount::new)
+                .forEach(resultCounts::add);
+
+        exampleOutcomes.forEach(
+                outcome -> resultCounts.get(outcome.getResult().getPriority()).increment()
+        );
+
+        // return the list of result counts excluding ones with 0 results
+        return resultCounts.stream()
+                .filter(resultCount -> resultCount.getCount() > 0)
+                .collect(Collectors.toList());
+    }
 
     public ZonedDateTime getStartTime() {
         return startTime;
@@ -162,7 +194,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedDuration() {
-        return  (duration != 0L) ? CompoundDuration.of(duration) : "";
+        return (duration != 0L) ? CompoundDuration.of(duration) : "";
     }
 
     public String getParentName() {
@@ -188,7 +220,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     @Override
-    public Rule getRule() { return rule; }
+    public Rule getRule() {
+        return rule;
+    }
 
     @Override
     public ExternalLink getExternalLink() {
@@ -196,7 +230,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     }
 
     @Override
-    public List<ExampleOutcome> getExampleOutcomes() { return exampleOutcomes; }
+    public List<ExampleOutcome> getExampleOutcomes() {
+        return exampleOutcomes;
+    }
 
     @Override
     public String getContext() {

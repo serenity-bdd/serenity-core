@@ -158,7 +158,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                         RequirementAncestry.addParentsTo(loadedRequirements);
                     }
                     this.requirements = loadedRequirements;
-                    RequirementCache.getInstance().indexRequirements(indexByPath(requirements));
+//                    if (SERENITY_USE_REQUIREMENTS_CACHE.booleanFrom(environmentVariables)) {
+                        RequirementCache.getInstance().indexRequirements(indexByPath(requirements));
+//                    }
                 }
             }
         }
@@ -440,9 +442,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     @Override
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
-        Requirement matchingRequirement
-                = RequirementCache.getInstance().getRequirementsByTag(testTag, this::findRequirementByTag);
-        return Optional.ofNullable(matchingRequirement);
+//        if (SERENITY_USE_REQUIREMENTS_CACHE.booleanFrom(environmentVariables)) {
+            Requirement matchingRequirement
+                    = RequirementCache.getInstance().getRequirementsByTag(testTag, this::findRequirementByTag);
+            return Optional.ofNullable(matchingRequirement);
+//        } else {
+//            return Optional.ofNullable(findRequirementByTag(testTag));
+//        }
     }
 
     public Requirement findRequirementByTag(TestTag testTag) {

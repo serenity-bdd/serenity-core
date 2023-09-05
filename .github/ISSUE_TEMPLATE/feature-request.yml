@@ -1,0 +1,55 @@
+name: Feature Request
+description: Suggest an idea for Serenity BDD
+title: "Serenity BDD should ..."
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Tell us more about your idea.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem you're trying to solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: How would you like to solve it?
+      description: |
+        What's your preferred solution, and why is it the best way to do it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Are there any alternatives?
+      description: |
+        Have you considered any alternative solutions or workarounds?
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: How can we make it happen?
+      description: |
+        We'll need someone to help make your idea happen.        
+        
+        Serenity BDD is an open-source project, and we greatly appreciate your contribution to help make it better. 
+        Please be aware that while we may be able to address this issue quickly, especially if it aligns with other work 
+        we are currently doing, there is no SLA or guarantee that it will ever be implemented. If the issue is valuable for you 
+        and your project and you want to improve the chances of getting it implemented, you have several options. 
+        You can dive into the code yourself (with our guidance), hire a third party to fix it, or **[Hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support)** 
+        to do it for you. We're here to help in any way we can!
+        
+        I would like to:
+      options:
+        - Work on this myself and propose a PR (with Serenity BDD team guidance)
+        - Hire the Serenity BDD team
+        - Add it to the Serenity BDD backlog and wait for a volunteer to pick it up
+    validations:
+      required: true

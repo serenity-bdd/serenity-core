@@ -1,7 +1,5 @@
 package net.thucydides.model.requirements;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.serenitybdd.model.collect.NewList;
 import net.thucydides.model.domain.Release;
 import net.thucydides.model.domain.ReportType;
@@ -35,13 +33,10 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseRequirementsService.class);
 
-    private final LoadingCache<TestOutcome, Optional> parentRequirementCache;
+    private final Map<TestOutcome, Optional> parentRequirementCache = new HashMap<>();
 
     public BaseRequirementsService(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        parentRequirementCache = Caffeine.newBuilder()
-                .maximumSize(1024)
-                .build(this::findParentRequirementFor);
 
     }
 
@@ -52,7 +47,11 @@ public abstract class BaseRequirementsService implements RequirementsService {
     public abstract Optional<ReleaseProvider> getReleaseProvider();
 
     public java.util.Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome) {
+        if (!parentRequirementCache.containsKey(testOutcome)) {
+            parentRequirementCache.put(testOutcome, findParentRequirementFor(testOutcome));
+        }
         return parentRequirementCache.get(testOutcome);
+//        return parentRequirementCache.computeIfAbsent(testOutcome, this::findParentRequirementFor);
     }
 
     private Optional<Requirement> findParentRequirementFor(TestOutcome testOutcome) {

@@ -1660,6 +1660,17 @@ public enum ThucydidesSystemProperty {
     SERENITY_REQUIREMENTS_CACHE_HEAP_SIZE,
 
     /**
+     * If set to true, automatically add a contextual tag to each test with the name of the operating system the test was run on.
+     * False by default.
+     */
+    SERENITY_ADD_OS_TAG,
+    /**
+     * If set to true, automatically add a contextual tag to each test with the name of the browser the test was run on.
+     * False by default.
+     */
+    SERENITY_ADD_BROWSER_TAG,
+
+    /**
      * Use this property to set how long webdriver should wait x second for an alert to be present before throwing an exception.
      */
     WEBDRIVER_WAIT_FOR_ALERT_TIMEOUT("webdriver.wait.for.alert.timeout");

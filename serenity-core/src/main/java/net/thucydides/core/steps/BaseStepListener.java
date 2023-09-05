@@ -835,17 +835,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private TestStep getCurrentGroup() {
-//        if (currentGroupStack.get().isEmpty()) {
-        if (currentGroupStack.isEmpty()) {
-            return null;
-        } else {
-//            return currentGroupStack.get().peek();// findLastChildIn(currentGroupStack.peek());
-            return currentGroupStack.peek();// findLastChildIn(currentGroupStack.peek());
-        }
+        return currentGroupStack.isEmpty() ? null : currentGroupStack.peek();
     }
 
     private boolean thereAreUnfinishedSteps() {
-//        return !currentStepStack.get().isEmpty();
         return !currentStepStack.isEmpty();
     }
 

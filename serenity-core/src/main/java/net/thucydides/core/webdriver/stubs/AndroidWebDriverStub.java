@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
+import io.appium.java_client.ExecutesMethod;
 import io.appium.java_client.LocksDevice;
 import io.appium.java_client.PushesFiles;
 import io.appium.java_client.android.HasAndroidDeviceDetails;
@@ -112,5 +113,15 @@ public class AndroidWebDriverStub extends WebDriverStub implements HasNetworkCon
     }
 
     void configuratorSetActionAcknowledgmentTimeout(Duration timeout) {
+    }
+
+    @Override
+    public ExecutesMethod assertExtensionExists(String s) {
+        return new ExecutesMethodStub();
+    }
+
+    @Override
+    public ExecutesMethod markExtensionAbsence(String s) {
+        return new ExecutesMethodStub();
     }
 }

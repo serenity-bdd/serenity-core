@@ -17,4 +17,8 @@ public class Check {
 
         return new ConditionalPerformableOnQuestion(condition);
     }
+
+    public static <T> ConditionalPerformable whetherThe(Target target, Matcher<WebElementState> expectedState) {
+        return new ConditionalPerformableOnTargetState(target, expectedState);
+    }
 }

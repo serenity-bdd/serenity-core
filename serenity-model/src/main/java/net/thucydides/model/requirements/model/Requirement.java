@@ -11,7 +11,6 @@ import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.util.NameConverter;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -458,6 +457,13 @@ public class Requirement implements Comparable<Requirement> {
         return (getTags().contains(testTag) || asTag().isAsOrMoreSpecificThan(testTag));
     }
 
+    public static <E> List<E> union(final List<? extends E> list1, final List<? extends E> list2) {
+        final ArrayList<E> result = new ArrayList<>(list1.size() + list2.size());
+        result.addAll(list1);
+        result.addAll(list2);
+        return result;
+    }
+
     public Requirement merge(Requirement newRequirement) {
 
         String mergedCardNumber = isEmpty(cardNumber) ? newRequirement.cardNumber : cardNumber;
@@ -465,9 +471,9 @@ public class Requirement implements Comparable<Requirement> {
         String mergedNarrativeText = isEmpty(narrative.getText()) ? newRequirement.narrative.getText() : narrative.getText();
         String mergedPath = isEmpty(path) ? newRequirement.path : path;
         String mergedFeatureFileName = isEmpty(featureFileName) ? newRequirement.featureFileName : featureFileName;
-        List<String> mergedReleasVersions = ListUtils.union(releaseVersions, newRequirement.releaseVersions);
-        List<Example> mergedExamples = ListUtils.union(examples, newRequirement.examples);
-        List<CustomFieldValue> mergedCustomFields = ListUtils.union(customFields, newRequirement.customFields);
+        List<String> mergedReleasVersions = union(releaseVersions, newRequirement.releaseVersions);
+        List<Example> mergedExamples = union(examples, newRequirement.examples);
+        List<CustomFieldValue> mergedCustomFields = union(customFields, newRequirement.customFields);
 
         List<Requirement> mergedChildren = mergeRequirementLists(children, newRequirement.children);
 

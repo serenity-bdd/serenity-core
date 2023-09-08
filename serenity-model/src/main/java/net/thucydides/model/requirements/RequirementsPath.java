@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.collections4.IteratorUtils.toList;
-
 public class RequirementsPath {
 
     private final static Pattern PATH_SEPARATORS = Pattern.compile("[\\\\/.]");
@@ -30,13 +28,13 @@ public class RequirementsPath {
         if (path == null) {
             return new ArrayList<>();
         }
-        return toList(Splitter.on(PATH_SEPARATORS).omitEmptyStrings().trimResults().split(path).iterator());
+        return Splitter.on(PATH_SEPARATORS).omitEmptyStrings().trimResults().splitToList(path);
     }
 
     public static List<String> fileSystemPathElements(String path) {
         if (path == null) {
             return new ArrayList<>();
         }
-        return toList(Splitter.on(FILE_SYSTEM_PATH_SEPARATORS).omitEmptyStrings().trimResults().split(path).iterator());
+        return Splitter.on(FILE_SYSTEM_PATH_SEPARATORS).omitEmptyStrings().trimResults().splitToList(path);
     }
 }

@@ -256,20 +256,15 @@
                 <artifactId>commons-text</artifactId>
                 <version>${commons.text.version}</version>
             </dependency>
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${commons.beanutils.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>commons-beanutils</groupId>-->
+<!--                <artifactId>commons-beanutils</artifactId>-->
+<!--                <version>${commons.beanutils.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>commons-net</groupId>
                 <artifactId>commons-net</artifactId>
                 <version>${commons.net.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons.collections.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

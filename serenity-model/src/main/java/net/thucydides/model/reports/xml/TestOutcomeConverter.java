@@ -10,7 +10,6 @@ import net.thucydides.model.domain.*;
 import net.thucydides.model.domain.features.ApplicationFeature;
 import net.thucydides.model.domain.stacktrace.FailureCause;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -246,7 +245,7 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private void addTagsTo(HierarchicalStreamWriter writer, Set<TestTag> tags) {
-        if (!CollectionUtils.isEmpty(tags)) {
+        if (tags != null && !tags.isEmpty()) {
             writer.startNode(TAGS);
             List<TestTag> orderedTags = new ArrayList(tags);
             Collections.sort(orderedTags);

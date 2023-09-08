@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.collections4.IteratorUtils.toList;
 
 public class ExampleTable {
 
@@ -28,10 +27,10 @@ public class ExampleTable {
 
     public ExampleTable(String tableContents) {
         tableContents = stripBracketsFromOuterPipes(tableContents);
-        List<String> lines = toList(Splitter.on(NEW_LINE)
+        List<String> lines = Splitter.on(NEW_LINE)
                 .omitEmptyStrings()
                 .trimResults(CharMatcher.anyOf(SQUARE_BRACKETS_OR_WHITE_SPACE))
-                .split(tableContents).iterator());
+                .splitToList(tableContents);
         addHeaderFrom(lines.get(0));
         for (int row = 1; row < lines.size(); row++) {
             addRowFrom(lines.get(row));
@@ -65,7 +64,7 @@ public class ExampleTable {
             line = line.substring(0, line.length() - 1);
         }
 
-        return toList(Splitter.on("|").trimResults().split(line).iterator());
+        return Splitter.on("|").trimResults().splitToList(line);
     }
 
     public String inHtmlFormat() {

@@ -1,6 +1,5 @@
 package net.thucydides.model.matchers;
 
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.IntrospectionException;
@@ -41,8 +40,15 @@ public class BeanMatcherAsserts {
         }
     }
 
+    public static <E> List<E> union(final List<? extends E> list1, final List<? extends E> list2) {
+        final ArrayList<E> result = new ArrayList<>(list1.size() + list2.size());
+        result.addAll(list1);
+        result.addAll(list2);
+        return result;
+    }
+
     private static List mustContainAtLeastOneItemMatching(List<BeanCollectionMatcher> matchers) {
-        return ListUtils.union(matchers, Arrays.asList(BeanMatchers.the_count(is(not(0)))));
+        return union(matchers, Arrays.asList(BeanMatchers.the_count(is(not(0)))));
     }
 
     private static boolean thereIsACardinalityConstraintSpecifiedInThe(List<BeanCollectionMatcher> matchers) {

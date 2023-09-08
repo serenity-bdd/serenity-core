@@ -200,7 +200,7 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_CONFIGURATION_REPORT("thucydides.configuration.json"),
 
     /**
-     * Default name of report with configurations. It will contains some values that was used during generation of reports
+     * Default name of report with configurations. It will contain some values that was used during generation of reports
      */
     SERENITY_CONFIGURATION_REPORT("serenity.configuration.json"),
 

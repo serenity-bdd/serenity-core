@@ -1,0 +1,394 @@
+{
+  "id": "completing-items;todo-list-app-should-allow-me-to-mark-items-as-complete;macos-22-6-0;firefox-115-0",
+  "name": "Todo List App should allow me to mark items as complete",
+  "title": "Todo List App should allow me to mark items as complete",
+  "methodName": "Todo List App should allow me to mark items as complete",
+  "manual": false,
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Tess starts with a list containing 2 items",
+      "startTime": "2023-09-09T21:43:55.413Z",
+      "children": [
+        {
+          "number": 2,
+          "description": "Tess starts with an empty todo list",
+          "startTime": "2023-09-09T21:43:55.414Z",
+          "children": [
+            {
+              "number": 3,
+              "description": "Tess navigates to '/'",
+              "startTime": "2023-09-09T21:43:55.414Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-navigates-to-c0a329d282.png",
+                  "timeStamp": 1694295835748
+                }
+              ],
+              "duration": 288,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 4,
+              "description": "Tess ensures that website title does equal 'Serenity/JS TodoApp'",
+              "startTime": "2023-09-09T21:43:55.754Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-website-title-does-equal-c0a329d282.png",
+                  "timeStamp": 1694295835776
+                }
+              ],
+              "duration": 4,
+              "result": "SUCCESS"
+            }
+          ],
+          "reportData": [],
+          "screenshots": [],
+          "duration": 364,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 5,
+          "description": "Tess records an item called 'buy some cheese'",
+          "startTime": "2023-09-09T21:43:55.789Z",
+          "children": [
+            {
+              "number": 6,
+              "description": "Tess enters 'buy some cheese' into \"What needs to be done?\" input box",
+              "startTime": "2023-09-09T21:43:55.789Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-enters-buy-some-cheese-into-what-ne-00ba1336cf.png",
+                  "timeStamp": 1694295835812
+                }
+              ],
+              "duration": 12,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 7,
+              "description": "Tess presses key Enter in \"What needs to be done?\" input box",
+              "startTime": "2023-09-09T21:43:55.823Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-presses-key-enter-in-what-needs-to-be-69a53be826.png",
+                  "timeStamp": 1694295835863
+                }
+              ],
+              "duration": 20,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 8,
+              "description": "Tess waits until displayed items does contain 'buy some cheese'",
+              "startTime": "2023-09-09T21:43:55.874Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-waits-until-displayed-items-does-conta-69a53be826.png",
+                  "timeStamp": 1694295835912
+                }
+              ],
+              "duration": 21,
+              "result": "SUCCESS"
+            }
+          ],
+          "reportData": [],
+          "screenshots": [],
+          "duration": 126,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 9,
+          "description": "Tess records an item called 'feed the cat'",
+          "startTime": "2023-09-09T21:43:55.927Z",
+          "children": [
+            {
+              "number": 10,
+              "description": "Tess enters 'feed the cat' into \"What needs to be done?\" input box",
+              "startTime": "2023-09-09T21:43:55.927Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-enters-feed-the-cat-into-what-needs-d5e4022437.png",
+                  "timeStamp": 1694295835952
+                }
+              ],
+              "duration": 12,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 11,
+              "description": "Tess presses key Enter in \"What needs to be done?\" input box",
+              "startTime": "2023-09-09T21:43:55.961Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-presses-key-enter-in-what-needs-to-be-345e3ff55d.png",
+                  "timeStamp": 1694295835994
+                }
+              ],
+              "duration": 16,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 12,
+              "description": "Tess waits until displayed items does contain 'feed the cat'",
+              "startTime": "2023-09-09T21:43:55.998Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-waits-until-displayed-items-does-conta-345e3ff55d.png",
+                  "timeStamp": 1694295836035
+                }
+              ],
+              "duration": 22,
+              "result": "SUCCESS"
+            }
+          ],
+          "reportData": [],
+          "screenshots": [],
+          "duration": 115,
+          "result": "SUCCESS"
+        }
+      ],
+      "reportData": [],
+      "screenshots": [],
+      "duration": 641,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 13,
+      "description": "Tess ensures that displayed items does contain items where each item does get displayed as outstanding",
+      "startTime": "2023-09-09T21:43:56.064Z",
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-displayed-items-does-cont-345e3ff55d.png",
+          "timeStamp": 1694295836089
+        }
+      ],
+      "duration": 11,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 14,
+      "description": "Tess marks an item called 'buy some cheese' as completed",
+      "startTime": "2023-09-09T21:43:56.096Z",
+      "children": [
+        {
+          "number": 15,
+          "description": "Tess checks whether an item called 'buy some cheese' does get displayed as outstanding",
+          "startTime": "2023-09-09T21:43:56.096Z",
+          "children": [
+            {
+              "number": 16,
+              "description": "Tess toggles the completion status of an item called 'buy some cheese'",
+              "startTime": "2023-09-09T21:43:56.112Z",
+              "children": [
+                {
+                  "number": 17,
+                  "description": "Tess clicks on toggle button of an item called 'buy some cheese'",
+                  "startTime": "2023-09-09T21:43:56.113Z",
+                  "children": [],
+                  "reportData": [],
+                  "screenshots": [
+                    {
+                      "screenshot": "photo-darwin-firefox-115.0-tess-clicks-on-toggle-button-of-an-item-cal-876cab5a58.png",
+                      "timeStamp": 1694295836197
+                    }
+                  ],
+                  "duration": 65,
+                  "result": "SUCCESS"
+                }
+              ],
+              "reportData": [],
+              "screenshots": [],
+              "duration": 86,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 18,
+              "description": "Tess ensures that an item called 'buy some cheese' does get displayed as completed",
+              "startTime": "2023-09-09T21:43:56.209Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-an-item-called-buy-some-876cab5a58.png",
+                  "timeStamp": 1694295836236
+                }
+              ],
+              "duration": 12,
+              "result": "SUCCESS"
+            }
+          ],
+          "reportData": [],
+          "screenshots": [],
+          "duration": 146,
+          "result": "SUCCESS"
+        }
+      ],
+      "reportData": [],
+      "screenshots": [],
+      "duration": 156,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 19,
+      "description": "Tess ensures that the 1st of displayed items does get displayed as completed",
+      "startTime": "2023-09-09T21:43:56.262Z",
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-the-1st-of-displayed-item-876cab5a58.png",
+          "timeStamp": 1694295836286
+        }
+      ],
+      "duration": 6,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 20,
+      "description": "Tess marks an item called 'feed the cat' as completed",
+      "startTime": "2023-09-09T21:43:56.289Z",
+      "children": [
+        {
+          "number": 21,
+          "description": "Tess checks whether an item called 'feed the cat' does get displayed as outstanding",
+          "startTime": "2023-09-09T21:43:56.289Z",
+          "children": [
+            {
+              "number": 22,
+              "description": "Tess toggles the completion status of an item called 'feed the cat'",
+              "startTime": "2023-09-09T21:43:56.303Z",
+              "children": [
+                {
+                  "number": 23,
+                  "description": "Tess clicks on toggle button of an item called 'feed the cat'",
+                  "startTime": "2023-09-09T21:43:56.303Z",
+                  "children": [],
+                  "reportData": [],
+                  "screenshots": [
+                    {
+                      "screenshot": "photo-darwin-firefox-115.0-tess-clicks-on-toggle-button-of-an-item-cal-915dcfc55e.png",
+                      "timeStamp": 1694295836367
+                    }
+                  ],
+                  "duration": 50,
+                  "result": "SUCCESS"
+                }
+              ],
+              "reportData": [],
+              "screenshots": [],
+              "duration": 71,
+              "result": "SUCCESS"
+            },
+            {
+              "number": 24,
+              "description": "Tess ensures that an item called 'feed the cat' does get displayed as completed",
+              "startTime": "2023-09-09T21:43:56.385Z",
+              "children": [],
+              "reportData": [],
+              "screenshots": [
+                {
+                  "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-an-item-called-feed-the-915dcfc55e.png",
+                  "timeStamp": 1694295836415
+                }
+              ],
+              "duration": 11,
+              "result": "SUCCESS"
+            }
+          ],
+          "reportData": [],
+          "screenshots": [],
+          "duration": 127,
+          "result": "SUCCESS"
+        }
+      ],
+      "reportData": [],
+      "screenshots": [],
+      "duration": 138,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 25,
+      "description": "Tess ensures that the 2nd of displayed items does get displayed as completed",
+      "startTime": "2023-09-09T21:43:56.439Z",
+      "children": [],
+      "reportData": [],
+      "screenshots": [
+        {
+          "screenshot": "photo-darwin-firefox-115.0-tess-ensures-that-the-2nd-of-displayed-item-915dcfc55e.png",
+          "timeStamp": 1694295836479
+        }
+      ],
+      "duration": 7,
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "completing-items",
+    "storyName": "Completing items",
+    "displayName": "Completing items",
+    "path": "completing-items.spec.ts",
+    "pathElements": [
+      {
+        "name": "completing-items",
+        "description": "completing-items"
+      },
+      {
+        "name": "todo-list-app-should-allow-me-to-unmark-items-as-complete",
+        "description": "todo-list-app-should-allow-me-to-unmark-items-as-complete"
+      }
+
+    ],
+    "type": "feature"
+  },
+  "startTime": "2023-09-09T21:43:54.703Z",
+  "featureTag": {
+    "name": "Completing items",
+    "type": "feature",
+    "displayName": "Completing items"
+  },
+  "tags": [
+    {
+      "name": "Completing items",
+      "type": "feature",
+      "displayName": "Completing items"
+    },
+    {
+      "name": "macOS 22.6.0",
+      "type": "platform",
+      "platformName": "macOS",
+      "platformVersion": "22.6.0",
+      "displayName": "macOS 22.6.0"
+    },
+    {
+      "name": "firefox 115.0",
+      "type": "browser",
+      "browserName": "firefox",
+      "browserVersion": "115.0",
+      "displayName": "firefox 115.0"
+    }
+  ],
+  "testSource": "JS",
+  "context": "mac,firefox",
+  "driver": "firefox",
+  "result": "SUCCESS",
+  "duration": 1826
+}

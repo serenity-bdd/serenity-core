@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,11 +35,19 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of(JUNIT5_FORMAT, JUNIT4_FORMAT,JAVASCRIPT_FORMAT);
 
+
+    private Path sourceDirectory;
+
     /**
      * Default constructor. Initializes an instance of the TestOutcomeRequirementsTagProvider class with default environment variables.
      */
     public TestOutcomeRequirementsTagProvider() {
         this(ModelInfrastructure.getEnvironmentVariables());
+    }
+
+    public TestOutcomeRequirementsTagProvider fromSourceDirectory(Path sourceDirectory) {
+        this.sourceDirectory = sourceDirectory;
+        return this;
     }
 
     /**
@@ -95,9 +104,15 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         TestOutcomeLoader loader = new TestOutcomeLoader();
         File outputDirectory = ConfiguredEnvironment.getConfiguration().getOutputDirectory();
 
+        File requirementsDirectory;
+        if ((sourceDirectory != null) && sourceDirectory.toFile().exists()) {
+            requirementsDirectory = sourceDirectory.toFile();
+        } else {
+            requirementsDirectory = outputDirectory;
+        }
         // If no output directory exists (yet), the test run is still in progress, so don't bother reading the requirements yet.
-        if (outputDirectory.exists()) {
-            List<TestOutcome> outcomes = loader.loadFrom(outputDirectory);
+        if (requirementsDirectory.exists()) {
+            List<TestOutcome> outcomes = loader.loadFrom(requirementsDirectory);
 
             int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
 

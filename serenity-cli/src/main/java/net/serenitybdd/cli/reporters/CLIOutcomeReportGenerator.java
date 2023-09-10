@@ -51,7 +51,7 @@ public class CLIOutcomeReportGenerator implements CLIReportGenerator {
     @Override
     public void generateReportsFrom(Path sourceDirectory) throws IOException {
 
-        Requirements requirements = RequirementsStrategy.forDirectory(requirementsDirectory);
+        Requirements requirements = RequirementsStrategy.forJSONOutputsIn(sourceDirectory).andFeatureFilesIn(requirementsDirectory);
         final HtmlAcceptanceTestReporter reporter = new HtmlAcceptanceTestReporter(requirements.getRequirementsService());
         reporter.setSourceDirectory(sourceDirectory.toFile());
         reporter.setOutputDirectory(destinationDirectory.toFile());

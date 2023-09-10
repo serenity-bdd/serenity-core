@@ -81,6 +81,19 @@ class WhenRunningSerenityFromTheCommandLine extends Specification {
 "" +
         "git push"    }
 
+    def "should generate requirements test reports from JS test outcomes"() {
+        given:
+        Path sourceDirectory = Paths.get("src/test/resources/js-outputs")
+        assert outputDirectory.toFile().list().length == 0
+
+        when:
+        new Serenity().executeWith("--source", sourceDirectory.toAbsolutePath().toString(),
+                "--destination", outputDirectory.toAbsolutePath().toString(),
+                "--features","no/such/directory")
+        then:
+        outputDirectory.resolve("capabilities.html").toFile().exists()
+    }
+
     def "should copy report resources to the output directory"() {
         given:
         Path sourceDirectory = Paths.get("src/test/resources/test-outcomes")

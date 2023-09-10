@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.thucydides.model.reports.ReportService.getDefaultReporters;
 import static net.thucydides.model.steps.TestSourceType.TEST_SOURCE_JUNIT5;
 
@@ -45,11 +44,11 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private static final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
-    static {
-        ByteBuddyAgent.install();
-        new ByteBuddy().rebase(Assertions.class).visit(Advice.to(AssertThrowsAdvice.class).on(named("assertThrows"))).make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
-    }
-
+//    static {
+//        ByteBuddyAgent.install();
+//        new ByteBuddy().rebase(Assertions.class)
+//                       .visit(Advice.to(AssertThrowsAdvice.class).on(named("assertThrows"))).make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
+//    }
 
     private ReportService reportService;
 

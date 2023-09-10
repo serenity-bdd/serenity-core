@@ -4,6 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.TypeCache;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.VisibilityBridgeStrategy;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
@@ -65,7 +66,8 @@ public class StepFactory {
      * are created.
      */
     public StepFactory(final Pages pages) {
-        this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED );
+        this.byteBuddy = new ByteBuddy().with( TypeValidation.DISABLED )
+                                        .with(VisibilityBridgeStrategy.Default.NEVER);
         this.pages = pages;
         this.dependencyInjectorService = SerenityInfrastructure.getDependencyInjectorService();
         this.proxyCache = new TypeCache.WithInlineExpunction<TypeCache.SimpleKey>( TypeCache.Sort.WEAK );

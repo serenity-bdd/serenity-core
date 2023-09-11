@@ -2,8 +2,10 @@ package net.serenitybdd.junit5;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.matcher.ElementMatchers;
 import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.logging.ConsoleLoggingListener;
@@ -30,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,11 +47,15 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private static final Logger logger = LoggerFactory.getLogger(SerenityTestExecutionListener.class);
 
-//    static {
-//        ByteBuddyAgent.install();
-//        new ByteBuddy().rebase(Assertions.class)
-//                       .visit(Advice.to(AssertThrowsAdvice.class).on(named("assertThrows"))).make().load(Assertions.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
-//    }
+    static {
+        Instrumentation inst = ByteBuddyAgent.install();
+        new AgentBuilder.Default()
+                .type(ElementMatchers.named("org.junit.jupiter.api.Assertions"))
+                .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
+                        builder.method(ElementMatchers.named("assertThrows"))
+                                .intercept(Advice.to(AssertThrowsAdvice.class))
+                ).installOn(inst);
+    }
 
     private ReportService reportService;
 
@@ -63,7 +70,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
 
     private boolean isSerenityTest = false;
 
-    public SerenityTestExecutionListener() {}
+    public SerenityTestExecutionListener() {
+    }
 
     private static File getOutputDirectory() {
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
@@ -415,10 +423,10 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             }
 
             eventBusFor(testIdentifier).testStarted(Optional.ofNullable(testName).orElse("Initialisation"),
-                                                    methodSource.getJavaClass(),
-                                                    methodSource.getMethodName(),
-                                                    testIdentifier.getUniqueId(),
-                                                    testIdentifier.getParentId().orElse(testIdentifier.getUniqueId()));
+                    methodSource.getJavaClass(),
+                    methodSource.getMethodName(),
+                    testIdentifier.getUniqueId(),
+                    testIdentifier.getParentId().orElse(testIdentifier.getUniqueId()));
 
             //
             // Check for @Pending tests

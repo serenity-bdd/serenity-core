@@ -108,6 +108,7 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|---------------------|-----------------------|
+| 4.0.8         | 4.0.8                 | 4.12.1           | 5.3.1               | 8.3.0                 |
 | 4.0.1         | 4.0.1                 | 4.12.0           | 5.3.1               | 8.3.0                 |
 | 3.9.8         | 3.9.8                 | 4.11.0           | 5.2.0               | 8.3.0                 |
 | 3.6.12        | 3.6.12                | 4.8.0            | 5.2.0               | 8.3.0                 |
@@ -146,6 +147,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 4.0.8         | 4.0.8                 | 4.0.8             | 7.14.0   |
 | 4.0.1         | 4.0.1                 | 4.0.1             | 7.13.0   |
 | 3.9.8         | 3.9.8                 | 3.9.8             | 7.13.0   |
 | 3.6.12        | 3.6.12                | 3.6.12            | 7.11.0   |
@@ -212,7 +214,7 @@ Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-
 
 ### Serenity with JBehave
 
-No new development is being done with the Serenity/JBehave integration. Latest versions _should_ continue to work but new Cucumber-specific features may not.
+JBehave is not currently supported in the current version of Serenity BDD, and no new development is being done with the Serenity/JBehave integration. 
 
 | serenity-core | serenity-maven-plugin | serenity-jbehave  | JBehave             |
 |---------------|-----------------------|-------------------|---------------------|

@@ -102,9 +102,9 @@ public class RootDirectory {
                 } else {
                     rootDirectories = firstDefinedOf(
                             getRootDirectoryFromClasspath(),
-                            getGradleProjectDirectoryAsSet(),
                             getFileSystemDefinedDirectory(),
                             getRootDirectoryFromWorkingDirectory()
+//                            getGradleProjectDirectoryAsSet()
                     );
                 }
 
@@ -179,24 +179,6 @@ public class RootDirectory {
         }
         return new HashSet<>();
     }
-
-//    private Set<String> getGradleProjectDirectoryAsSet() {
-//
-//        String gradleProjectDir = getGradleProjectDirectory();
-//        String gradleResourceDir;
-//        if (gradleProjectDir != null && new File(gradleProjectDir).isAbsolute()) {
-//            gradleResourceDir = new File(gradleProjectDir, "src/test/resources/features").getAbsolutePath();
-//        } else {
-//            gradleResourceDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
-//        }
-//
-//        if (gradleProjectDir != null) {
-//            Set<String> directory = new HashSet<>();
-//            directory.add(gradleResourceDir);
-//            return directory;
-//        }
-//        return new HashSet<>();
-//    }
 
     private Set<String> getGradleProjectDirectoryAsSet() {
 

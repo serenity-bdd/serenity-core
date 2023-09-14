@@ -87,28 +87,33 @@ public class RootDirectory {
         return new RootDirectory(environmentVariables, ".");
     }
 
+    private Set<String> rootDirectoryPaths;
+
     /**
      * Find the root directory in the classpath or on the file system from which the requirements will be read.
      */
     public Set<String> getRootDirectoryPaths() {
 
-        Set<String> rootDirectories;
-        try {
-            if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
-                rootDirectories = getRootDirectoryFromRequirementsBaseDir();
-            } else {
-                rootDirectories = firstDefinedOf(
-                        getRootDirectoryFromClasspath(),
-                        getGradleProjectDirectoryAsSet(),
-                        getFileSystemDefinedDirectory(),
-                        getRootDirectoryFromWorkingDirectory()
-                );
-            }
+        if (rootDirectoryPaths == null) {
+            Set<String> rootDirectories;
+            try {
+                if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
+                    rootDirectories = getRootDirectoryFromRequirementsBaseDir();
+                } else {
+                    rootDirectories = firstDefinedOf(
+                            getRootDirectoryFromClasspath(),
+                            getGradleProjectDirectoryAsSet(),
+                            getFileSystemDefinedDirectory(),
+                            getRootDirectoryFromWorkingDirectory()
+                    );
+                }
 
-            return rootDirectories.stream().map(path -> toAbsolute(path)).collect(Collectors.toSet());
-        } catch (IOException e) {
-            return new HashSet<>();
+                this.rootDirectoryPaths = rootDirectories.stream().map(path -> toAbsolute(path)).collect(Collectors.toSet());
+            } catch (IOException e) {
+                this.rootDirectoryPaths = new HashSet<>();
+            }
         }
+        return rootDirectoryPaths;
     }
 
     private String toAbsolute(String path) {
@@ -175,22 +180,41 @@ public class RootDirectory {
         return new HashSet<>();
     }
 
+//    private Set<String> getGradleProjectDirectoryAsSet() {
+//
+//        String gradleProjectDir = getGradleProjectDirectory();
+//        String gradleResourceDir;
+//        if (gradleProjectDir != null && new File(gradleProjectDir).isAbsolute()) {
+//            gradleResourceDir = new File(gradleProjectDir, "src/test/resources/features").getAbsolutePath();
+//        } else {
+//            gradleResourceDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+//        }
+//
+//        if (gradleProjectDir != null) {
+//            Set<String> directory = new HashSet<>();
+//            directory.add(gradleResourceDir);
+//            return directory;
+//        }
+//        return new HashSet<>();
+//    }
+
     private Set<String> getGradleProjectDirectoryAsSet() {
 
         String gradleProjectDir = getGradleProjectDirectory();
-        String gradleResourceDir;
-        if (gradleProjectDir != null && new File(gradleProjectDir).isAbsolute()) {
-            gradleResourceDir = new File(gradleProjectDir, "src/test/resources/features").getAbsolutePath();
-        } else {
-            gradleResourceDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
-        }
 
+        Set<String> directory = new HashSet<>();
         if (gradleProjectDir != null) {
-            Set<String> directory = new HashSet<>();
-            directory.add(gradleResourceDir);
-            return directory;
+
+            String gradleResourceDirectory;
+            if (rootDirectoryPath != null && rootDirectoryPath.startsWith(gradleProjectDir)) {
+                gradleResourceDirectory = rootDirectoryPath;
+                directory.add(gradleResourceDirectory);
+            } else if (new File(gradleProjectDir).isAbsolute()) {
+                gradleResourceDirectory = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+                directory.add(gradleResourceDirectory);
+            }
         }
-        return new HashSet<>();
+        return directory;
     }
 
     private String getGradleProjectDirectory() {

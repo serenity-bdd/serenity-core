@@ -44,6 +44,14 @@ public class BuildInfoProvider {
                                                 driverCapabilityRecord.getDriverCapabilities().get(driver).toString())
         );
 
+        //
+        // Programmatically-added build info
+        //
+        BuildInfo.load();
+        BuildInfo.getSections().forEach(
+                section -> sections.put(section, BuildInfo.getSection(section))
+        );
+
         addCustomPropertiesTo(generalProperties);
 
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();

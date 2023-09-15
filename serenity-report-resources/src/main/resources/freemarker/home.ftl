@@ -51,7 +51,7 @@
                     search: ""
                 },
                 columnDefs: [
-                    {type: 'time-elapsed-dhms', targets: 4}
+                    {type: 'time-elapsed-dhms', targets: 5}
                 ]
             })
             $("#manual-scenario-results").DataTable({
@@ -476,7 +476,7 @@
                                                                                 <a href="${scenario.parentReport}">${scenario.parentName}</a>
                                                                             </#if>
                                                                         </td>
-                                                                        <td>
+                                                                        <td data-order="${scenario.title}">
                                                                             <#if (scenario.hasExamples() && scenario.getExampleOutcomes()?has_content)>
                                                                             <i class="bi bi-table"
                                                                                title="Data Driven Scenario"> <a
@@ -491,11 +491,10 @@
                                                                                     <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                                                 </#if>
                                                                         </td>
-                                                                        <td>${context_icon}<span
-                                                                                    style="display:none">${context_label}</span>
+                                                                        <td>${context_icon}<span style="display:none">${context_label}</span>
                                                                         </td>
                                                                         <td>${scenario.stepCount}</td>
-                                                                        <td>${scenario.formattedStartTime}</td>
+                                                                        <td data-order="${scenario.timestamp}">${scenario.formattedStartTime}</td>
                                                                         <td>${scenario.formattedDuration}</td>
                                                                         <td>${outcome_icon} <span
                                                                                     style="display:none">${scenario.result}</span>

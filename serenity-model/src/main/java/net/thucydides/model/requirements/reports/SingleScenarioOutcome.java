@@ -87,7 +87,9 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return name;
     }
 
-    public String getSimplifiedName() { return simplifiedName; }
+    public String getSimplifiedName() {
+        return simplifiedName;
+    }
 
     public String getTitle() {
 
@@ -98,7 +100,9 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     }
 
     private String backgroundTitle() {
-        if (name.isEmpty()) { return "Background"; }
+        if (name.isEmpty()) {
+            return "Background";
+        }
         return "Background: " + name;
     }
 
@@ -130,9 +134,13 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return examples;
     }
 
-    public boolean hasExamples() { return exampleCount > 0; }
+    public boolean hasExamples() {
+        return exampleCount > 0;
+    }
 
-    public String getNumberOfExamples() { return (exampleCount == 1) ? "1 example" : exampleCount + " examples"; }
+    public String getNumberOfExamples() {
+        return (exampleCount == 1) ? "1 example" : exampleCount + " examples";
+    }
 
 
     @Override
@@ -145,11 +153,18 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return ReportBadges.forReport(scenarioReport);
     }
 
-    public Integer getStepCount() { return steps.size(); }
+    public Integer getStepCount() {
+        return steps.size();
+    }
 
 
     public ZonedDateTime getStartTime() {
         return startTime;
+    }
+
+    @Override
+    public Long getTimestamp() {
+        return (getStartTime() != null) ? getStartTime().toEpochSecond() : 0L;
     }
 
     public Long getDuration() {
@@ -169,7 +184,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     }
 
     public String getFormattedDuration() {
-        return  (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
+        return (duration != 0L) ? "" + CompoundDuration.of(duration) : "";
     }
 
     public String getParentName() {
@@ -190,7 +205,9 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return EMPTY_MAP;
     }
 
-    public Rule getRule() { return rule;}
+    public Rule getRule() {
+        return rule;
+    }
 
     @Override
     public ExternalLink getExternalLink() {

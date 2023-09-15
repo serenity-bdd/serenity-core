@@ -181,6 +181,15 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return startTime;
     }
 
+    @Override
+    public Long getTimestamp() {
+        return exampleOutcomes.stream()
+                .map(ExampleOutcome::getStartTime)
+                .mapToLong(ZonedDateTime::toEpochSecond)
+                .min()
+                .orElse(0);
+    }
+
     public Long getDuration() {
         return duration;
     }

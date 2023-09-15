@@ -45,6 +45,8 @@ public interface ScenarioOutcome {
 
     ZonedDateTime getStartTime();
 
+    Long getTimestamp();
+
     Long getDuration();
 
     Boolean isManual();

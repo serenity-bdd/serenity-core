@@ -69,7 +69,7 @@
                                     <td class="bluetext">${testOutcome.ignoredCount}</td>
                                 </#if>
 
-                                <td class="${testOutcome.result}-text" data-sort="${testOutcome.timestamp}">${testOutcome.startedAt}</td>
+                                <td class="${testOutcome.result}-text" data-order="${testOutcome.timestamp}">${testOutcome.startedAt}</td>
 
                                 <td class="${testOutcome.result}-text">${testOutcome.durationInSeconds}</td>
                             </tr>

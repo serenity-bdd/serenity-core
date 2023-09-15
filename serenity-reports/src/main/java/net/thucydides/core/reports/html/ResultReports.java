@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_TEST_DURATIONS;
+
 public class ResultReports {
 
     public static Stream<ReportingTask> resultReportsFor(TestOutcomes testOutcomes,
@@ -22,6 +24,7 @@ public class ResultReports {
                                                          ReportNameProvider reportNameProvider) {
 
         TagExclusions exclusions = TagExclusions.usingEnvironment(environmentVariables, testOutcomes);
+
 
         return Stream.of(
                 // RESULT REPORTS
@@ -123,24 +126,26 @@ public class ResultReports {
 
         List<ReportingTask> tasks = new ArrayList<>();
 
-        DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomesForThisTag);
-        durationDistribution.getDurationBuckets().forEach(
-                bucket -> {
-                    if (!bucket.getOutcomes().isEmpty()) {
-                        String label = "Duration " + bucket.getDuration();
-                        if (!currentTag.getCompleteName().isEmpty()) {
-                            label = currentTag.getName() + " > " + label;
+        if (SERENITY_REPORT_TEST_DURATIONS.booleanFrom(environmentVariables,true)) {
+            DurationDistribution durationDistribution = new DurationDistribution(environmentVariables, testOutcomesForThisTag);
+            durationDistribution.getDurationBuckets().forEach(
+                    bucket -> {
+                        if (!bucket.getOutcomes().isEmpty()) {
+                            String label = "Duration " + bucket.getDuration();
+                            if (!currentTag.getCompleteName().isEmpty()) {
+                                label = currentTag.getName() + " > " + label;
+                            }
+                            tasks.add(durationReport(freemarker,
+                                    environmentVariables,
+                                    outputDirectory,
+                                    TestOutcomes.of(bucket.getTestOutcomes()).withLabel(label),
+                                    reportName,
+                                    currentTag,
+                                    bucket.getDuration()));
                         }
-                        tasks.add(durationReport(freemarker,
-                                environmentVariables,
-                                outputDirectory,
-                                TestOutcomes.of(bucket.getTestOutcomes()).withLabel(label),
-                                reportName,
-                                currentTag,
-                                bucket.getDuration()));
                     }
-                }
-        );
+            );
+        }
         return tasks.stream();
     }
 

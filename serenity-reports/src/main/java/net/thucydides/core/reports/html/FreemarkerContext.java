@@ -39,10 +39,9 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static net.serenitybdd.reports.model.DurationsKt.*;
-import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS;
-import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_SHOW_STORY_DETAILS_IN_TESTS;
 import static net.thucydides.core.reports.html.HtmlReporter.READABLE_TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
+import static net.thucydides.model.ThucydidesSystemProperty.*;
 import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
@@ -120,6 +119,7 @@ public class FreemarkerContext {
         context.put("testOutcomes", testOutcomes);
 
         // Calculate Duration
+        context.put("reportDurations", SERENITY_REPORT_TEST_DURATIONS.booleanFrom(environmentVariables,true));
         context.put("durations", new DurationDistribution(environmentVariables, testOutcomes));
 
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());

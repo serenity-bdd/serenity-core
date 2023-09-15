@@ -53,11 +53,15 @@ public class ReportNamer {
     }
 
     public String optionallyCompressed(String text) {
-        return compressedFilename ? Digest.ofTextValue(text) : Digest.ofTextValue(text, shortened(text));
+        return compressedFilename ? Digest.ofTextValue(text) : Digest.ofTextValue(text, pathSafe(shortened(text)));
     }
 
     private String shortened(String text) {
         return text.substring(Math.max(0, text.length() - 30));
+    }
+
+    private String pathSafe(String text) {
+        return text.replace("/", "_").replace("\\", "_");
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {

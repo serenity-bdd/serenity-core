@@ -1246,6 +1246,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_COMPRESS_SCREENSHOTS,
 
     /**
+     * If set to true (the default value), Serenity will report on test duration in the test results.
+     * This provides richer reports but takes more space, so you can turn it off if you prefer to save space.
+     */
+    SERENITY_REPORT_TEST_DURATIONS,
+
+    /**
      * Specify the screenshot tool to be used to take screenshots.
      * By default it will be WebDriver. Other values include:
      * <ul>

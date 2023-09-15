@@ -520,7 +520,12 @@
                                 <div id="results" class="tab-pane fade">
                                     <div class="container-fluid">
                                         <div class="row">
-                                            <div class="col-sm-4">
+                                            <#if reportDurations >
+                                                <#assign chartClassStyle = "col-sm-4" >
+                                            <#else>
+                                                <#assign chartClassStyle = "col-sm-6" >
+                                            </#if>
+                                            <div class="${chartClassStyle}">
                                                 <h3>Feature Coverage By Scenario</h3>
                                                 <!-- TEST RESULT PIE CHART -->
                                                 <#if testOutcomes.total != 0>
@@ -529,7 +534,7 @@
                                                     </div>
                                                 </#if>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="${chartClassStyle}">
                                                 <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
                                                 <!-- Severity bar chart -->
                                                 <div class="chart-container" style="position: relative; width:30vw">
@@ -537,7 +542,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-4">
+                                            <#if reportDurations >
+                                            <div class="${chartClassStyle}">
                                                 <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
 
                                                 <!-- Duration bar chart -->
@@ -545,6 +551,7 @@
                                                     <canvas id="durationChart" width="300" height="300"></canvas>
                                                 </div>
                                             </div>
+                                            </#if>
                                         </div>
                                     </div>
                                     <div class="container-fluid">

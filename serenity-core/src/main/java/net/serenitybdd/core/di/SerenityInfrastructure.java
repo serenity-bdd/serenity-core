@@ -48,9 +48,11 @@ public class SerenityInfrastructure {
 
     private static final FixtureProviderService fixtureProviderService = new ClasspathFixtureProviderService();
 
-    private static final ThreadLocal<ConsoleLoggingListener> consoleLoggingListener = ThreadLocal.withInitial(() -> new ConsoleLoggingListener(getEnvironmentVariables()));
+//    private static final ThreadLocal<ConsoleLoggingListener> consoleLoggingListener = ThreadLocal.withInitial(() -> new ConsoleLoggingListener(getEnvironmentVariables()));
+    private static ConsoleLoggingListener consoleLoggingListener;
 
-    private static final ThreadLocal<Formatter> formatter = ThreadLocal.withInitial(() -> new Formatter(getEnvironmentVariables()));
+//    private static final ThreadLocal<Formatter> formatter = ThreadLocal.withInitial(() -> new Formatter(getEnvironmentVariables()));
+    private static Formatter formatter;
 
     private static final ElementProxyCreator elementProxyCreator = new SmartElementProxyCreator();
 
@@ -108,7 +110,10 @@ public class SerenityInfrastructure {
     }
 
     public static StepListener getLoggingListener() {
-        return consoleLoggingListener.get();
+        if (consoleLoggingListener == null) {
+            consoleLoggingListener = new ConsoleLoggingListener(getEnvironmentVariables());
+        }
+        return consoleLoggingListener;
     }
 
     public static ElementProxyCreator getElementProxyCreator() {
@@ -124,7 +129,10 @@ public class SerenityInfrastructure {
     }
 
     public static Formatter getFormatter() {
-        return formatter.get();
+        if (formatter == null) {
+            formatter = new Formatter(getEnvironmentVariables());
+        }
+        return formatter;
     }
 
     public static BatchManager getBatchManager() {

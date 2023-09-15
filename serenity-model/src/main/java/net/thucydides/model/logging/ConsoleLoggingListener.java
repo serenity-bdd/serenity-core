@@ -36,10 +36,11 @@ public class ConsoleLoggingListener implements StepListener {
                     ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
                     "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
                     "                                                                                     \n" +
-                    " News and tutorials at http://www.serenity-bdd.info                                  \n" +
-                    " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
+                    " News and tutorials at https://serenity-bdd.info                                     \n" +
+                    " Documentation at https://serenity-bdd.github.io                                     \n" +
+                    " Test Automation Training and Coaching: https://www.serenity-dojo.com                \n" +
+                    " Commercial Support: https://www.serenity-dojo.com/serenity-bdd-enterprise-support   \n" +
                     " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
-                    " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
                     "-------------------------------------------------------------------------------------\n";
 
     public static final String SERENITY_SMALL_BANNER =
@@ -47,10 +48,11 @@ public class ConsoleLoggingListener implements StepListener {
                     "[__  |___ |__/ |___ |\\ | |  |   \\_/     |__] |  \\ |  \\ \n" +
                     "___] |___ |  \\ |___ | \\| |  |    |      |__] |__/ |__/ \n" +
                     "                                                                                     \n" +
-                    " News and tutorials at http://www.serenity-bdd.info                                  \n" +
-                    " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
+                    " News and tutorials at https://serenity-bdd.info                                     \n" +
+                    " Documentation at https://serenity-bdd.github.io                                     \n" +
+                    " Test Automation Training and Coaching: https://www.serenity-dojo.com                \n" +
+                    " Commercial Support: https://www.serenity-dojo.com/serenity-bdd-enterprise-support   \n" +
                     " Join the Serenity Community on Gitter: https://gitter.im/serenity-bdd/serenity-core \n" +
-                    " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
                     "-------------------------------------------------------------------------------------\n";
 
     public static final String SERENITY_NONE_BANNER = "Serenity BDD. Home page at http://www.serenity-bdd.info";

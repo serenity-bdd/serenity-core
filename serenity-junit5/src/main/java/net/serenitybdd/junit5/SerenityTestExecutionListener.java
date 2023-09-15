@@ -6,6 +6,7 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.matcher.ElementMatchers;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.junit5.utils.ClassUtil;
 import net.thucydides.model.configuration.SystemPropertiesConfiguration;
 import net.thucydides.model.logging.ConsoleLoggingListener;
@@ -445,7 +446,8 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
             File outputDirectory = getOutputDirectory();
             BaseStepListener baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
             currentEventBus.registerListener(baseStepListener);
-            currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
+//            currentEventBus.registerListener(new ConsoleLoggingListener(currentEventBus.getEnvironmentVariables()));
+            currentEventBus.registerListener(SerenityInfrastructure.getLoggingListener());
             logger.trace("  -> ADDED BASE LISTENER " + baseStepListener);
             StepListener loggingListener = Listeners.getLoggingListener();
             currentEventBus.registerListener(loggingListener);

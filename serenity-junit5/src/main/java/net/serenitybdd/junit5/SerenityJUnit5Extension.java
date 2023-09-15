@@ -2,6 +2,7 @@ package net.serenitybdd.junit5;
 
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.environment.AnnotatedEnvironmentProperties;
+import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.logging.ConsoleLoggingListener;
@@ -35,7 +36,8 @@ public class SerenityJUnit5Extension implements TestInstancePostProcessor,  Afte
             StepEventBus eventBus = StepEventBus.eventBusFor(context.getUniqueId());
             if (!eventBus.isBaseStepListenerRegistered()) {
                 eventBus.registerListener(new BaseStepListener(ConfiguredEnvironment.getConfiguration().getOutputDirectory()));
-                eventBus.registerListener(new ConsoleLoggingListener(ConfiguredEnvironment.getEnvironmentVariables()));
+//                eventBus.registerListener(new ConsoleLoggingListener(ConfiguredEnvironment.getEnvironmentVariables()));
+                eventBus.registerListener(SerenityInfrastructure.getLoggingListener());
             }
             StepEventBus.setCurrentBusToEventBusFor(context.getTestMethod());
         }

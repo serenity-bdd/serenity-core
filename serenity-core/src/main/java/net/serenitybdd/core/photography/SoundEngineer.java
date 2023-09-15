@@ -24,7 +24,7 @@ public class SoundEngineer {
         } else if (storeHTML == ALWAYS) {
             recordPageSource = true;
         } else {
-            recordPageSource = (result == TestResult.FAILURE || result == TestResult.ERROR || result == TestResult.UNDEFINED);
+            recordPageSource = (result == TestResult.FAILURE || result == TestResult.ERROR);
         }
         return this;
     }

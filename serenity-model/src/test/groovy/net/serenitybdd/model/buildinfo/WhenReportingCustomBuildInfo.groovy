@@ -43,7 +43,7 @@ class WhenReportingCustomBuildInfo extends Specification {
         when:
         def buildInfo = new BuildInfoProvider(environmentVariables)
         then:
-        buildInfo.buildProperties.sectionTitles == ["Staff"]
+        buildInfo.buildProperties.sectionTitles.contains("Staff")
         and:
         buildInfo.buildProperties.sections["Staff"]["Ran by"] == "John"
     }

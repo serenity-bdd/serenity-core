@@ -6,6 +6,9 @@ import org.openqa.selenium.firefox.GeckoDriverService;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -19,7 +22,7 @@ public class ThreadsafeGeckoDriverService extends GeckoDriverService {
     private final EnvironmentVariables environmentVariables;
 
     public ThreadsafeGeckoDriverService(EnvironmentVariables environmentVariables) throws IOException {
-        super(new File(""), 0, null, null);
+        super(new File(""), 0, Duration.ofMillis(0), new ArrayList<>(), new HashMap<>());
         this.environmentVariables = environmentVariables;
     }
 

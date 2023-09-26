@@ -48,9 +48,6 @@ public class ChromiumOptionsBuilder {
                         if (!args.isEmpty()) {
                             chromiumOptions.addArguments(args);
                         }
-                        if (args.contains("headless") || args.contains("--headless")) {
-                            chromiumOptions.setHeadless(true);
-                        }
                         break;
                     // Extensions
                     case "extensions":

@@ -3,11 +3,14 @@ package net.serenitybdd.core.webdriver.servicepools;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DisabledGeckoDriverService extends org.openqa.selenium.firefox.GeckoDriverService {
 
     public DisabledGeckoDriverService() throws IOException {
-        super(new File(""), 0, null, null);
+        super(new File(""), 0, Duration.ofMillis(0), new ArrayList<>(), new HashMap<>());
     }
 
     public static DisabledGeckoDriverService build() {

@@ -122,7 +122,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     @Before
     public void openLocalStaticSite() {
 		ChromeOptions options = new ChromeOptions();
-		options.setHeadless(true);
+		options.addArguments("--headless");
 		driver = new ChromeDriver(options);
 
         openStaticTestSite();

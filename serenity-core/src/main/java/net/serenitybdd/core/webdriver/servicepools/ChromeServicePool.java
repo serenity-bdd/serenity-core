@@ -43,7 +43,7 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
                 .withVerbose(verbose);
 
         if (!whitelist.isEmpty()) {
-            builder.withWhitelistedIps(whitelist);
+            builder.withAllowedListIps(whitelist);
         }
         if (!logLevel.isEmpty()) {
             builder.withLogLevel(ChromiumDriverLogLevel.fromString(logLevel));

@@ -20,7 +20,6 @@ public class FirefoxOptionsEnhancer {
     }
 
     public void using(EnvironmentVariables environmentVariables) {
-        options.setHeadless(HEADLESS_MODE.booleanFrom(environmentVariables,false));
         options.setAcceptInsecureCerts(InsecureCertConfig.acceptInsecureCertsDefinedIn(environmentVariables).orElse(false));
         FirefoxDriverLogLevel logLevel = FirefoxDriverLogLevel.fromString(FIREFOX_LOG_LEVEL.from(environmentVariables,"ERROR"));
         options.setLogLevel(logLevel);

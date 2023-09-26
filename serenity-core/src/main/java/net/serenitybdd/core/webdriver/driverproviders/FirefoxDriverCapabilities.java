@@ -95,13 +95,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         firefoxOptions.addArguments(argValues);
         registeredArguments.addAll(argValues);
 
-        //
-        // Special case for the headless mode
-        //
-        if(registeredArguments.contains("headless")) {
-            firefoxOptions.setHeadless(true);
-        }
-
         firefoxCapabilities.forEach(
                 (key, value) -> {
                     if (!key.startsWith("preferences.")) {

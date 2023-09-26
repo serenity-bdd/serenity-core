@@ -42,9 +42,6 @@ public class FirefoxOptionsBuilder {
                         if (options.get("args") instanceof List) {
                             List<String> args = ListOfValues.from(options).forProperty("args");
                             firefoxOptions.getBinary().addCommandLineOptions(args.toArray(new String[]{}));
-                            if (args.contains("headless") || args.contains("-headless")) {
-                                firefoxOptions.setHeadless(true);
-                            }
                         }
                         break;
 

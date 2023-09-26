@@ -1141,7 +1141,7 @@ public enum ThucydidesSystemProperty {
     DELETE_HISTORY_DIRECTORY,
 
     /**
-     * Generate a CSV report for each test result (true by default)
+     * Generate a CSV report for each test result (false by default)
      */
     SERENITY_GENERATE_CSV_REPORTS,
 

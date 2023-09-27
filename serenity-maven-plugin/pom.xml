@@ -16,7 +16,7 @@
         <java.version>11</java.version>
         <maven.core.version>3.9.0</maven.core.version>
         <maven.reporting.version>3.1.1</maven.reporting.version>
-        <maven.plugin.version>3.8.1</maven.plugin.version>
+        <maven.plugin.version>3.9.0</maven.plugin.version>
     </properties>
 
     <build>

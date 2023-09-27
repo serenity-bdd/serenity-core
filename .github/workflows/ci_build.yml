@@ -8,12 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2 # Update to v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2 # Update to v2
+      - name: 'Set up latest Oracle JDK 21'
+        uses: oracle-actions/setup-java@v1
         with:
-          distribution: 'temurin' # 'temurin' distribution provides OpenJ9 builds of the OpenJDK
-          java-version: '17'
+          website: oracle.com
+          release: 21
 
       - name: Install Chrome for Testing and its driver
         run: |

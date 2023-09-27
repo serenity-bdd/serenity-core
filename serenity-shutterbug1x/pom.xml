@@ -12,7 +12,7 @@
     <name>Serenity Shutterbug 1.x integration</name>
 
     <properties>
-        <shutterbug.1x.version>1.5</shutterbug.1x.version>
+        <shutterbug.1x.version>1.6</shutterbug.1x.version>
     </properties>
     <dependencies>
         <dependency>

@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.cucumber.SerenityOptions;
 import net.serenitybdd.cucumber.suiteslicing.CucumberSuiteSlicer;
 import net.serenitybdd.cucumber.suiteslicing.ScenarioFilter;
@@ -39,6 +38,7 @@ import net.serenitybdd.cucumber.util.Splitter;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.requirements.reports.MultipleSourceRequirmentsOutcomeFactory;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.NoTestsRemainException;
@@ -47,10 +47,12 @@ import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerScheduler;
 import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CucumberSerenityBaseRunner.class);
 
     private EventBus bus;
 
@@ -250,7 +252,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
             if ((batchCount == 1) && (forkCount == 1)) {
                 return children;
             } else {
-                log.info("Running slice {} of {} using fork {} of {} from feature paths {}", batchNumber, batchCount, forkNumber, forkCount, featurePaths);
+                LOGGER.info("Running slice {} of {} using fork {} of {} from feature paths {}", batchNumber, batchCount, forkNumber, forkCount, featurePaths);
 
                 List<String> tagFiltersAsString = tagFilters.stream().map(Expression::toString).collect(toList());
                 WeightedCucumberScenarios weightedCucumberScenarios = new CucumberSuiteSlicer(featurePaths, TestStatistics.from(environmentVariables, featurePaths))
@@ -266,17 +268,17 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
                     .collect(toList());
 
                 if (filteredInScenarioCount.get() != weightedCucumberScenarios.totalScenarioCount()) {
-                    log.warn(
+                    LOGGER.warn(
                         "There is a mismatch between the number of scenarios included in this test run ({}) and the expected number of scenarios loaded ({}). This suggests that the scenario filtering is not working correctly or feature file(s) of an unexpected structure are being run",
                         filteredInScenarioCount.get(),
                         weightedCucumberScenarios.scenarios.size());
                 }
 
-                log.info("Running {} of {} features", filteredChildren.size(), unfilteredChildren.size());
+                LOGGER.info("Running {} of {} features", filteredChildren.size(), unfilteredChildren.size());
                 return filteredChildren;
             }
         } catch (Exception e) {
-            log.error("Test failed to start", e);
+            LOGGER.error("Test failed to start", e);
             throw e;
         }
     }
@@ -291,19 +293,19 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
                 String featurePath = FeatureRunnerExtractors.featurePathFor(featureRunner);
                 featureRunner.filter(filter);
                 if (!filter.scenariosIncluded().isEmpty()) {
-                    log.info("{} scenario(s) included for '{}' in {}", filter.scenariosIncluded().size(), featureName, featurePath);
+                    LOGGER.info("{} scenario(s) included for '{}' in {}", filter.scenariosIncluded().size(), featureName, featurePath);
                     filter.scenariosIncluded().forEach(scenario -> {
-                        log.info("Included scenario '{}'", scenario);
+                        LOGGER.info("Included scenario '{}'", scenario);
                         filteredInScenarioCount.getAndIncrement();
                     });
                 }
                 if (!filter.scenariosExcluded().isEmpty()) {
-                    log.debug("{} scenario(s) excluded for '{}' in {}", filter.scenariosExcluded().size(), featureName, featurePath);
-                    filter.scenariosExcluded().forEach(scenario -> log.debug("Excluded scenario '{}'", scenario));
+                    LOGGER.debug("{} scenario(s) excluded for '{}' in {}", filter.scenariosExcluded().size(), featureName, featurePath);
+                    filter.scenariosExcluded().forEach(scenario -> LOGGER.debug("Excluded scenario '{}'", scenario));
                 }
                 return Optional.of(featureRunner);
             } catch (NoTestsRemainException e) {
-                log.info("Filtered out all {} scenarios for feature '{}'", initialScenarioCount, featureName);
+                LOGGER.info("Filtered out all {} scenarios for feature '{}'", initialScenarioCount, featureName);
                 return Optional.empty();
             }
         };
@@ -314,7 +316,7 @@ public class CucumberSerenityBaseRunner extends ParentRunner<ParentRunner<?>> {
             String featureName = FeatureRunnerExtractors.extractFeatureName(featureRunner);
             String featurePath = PathUtils.getAsFile(FeatureRunnerExtractors.featurePathFor(featureRunner)).getName();
             boolean matches = weightedCucumberScenarios.scenarios.stream().anyMatch(scenario -> featurePath.equals(scenario.featurePath));
-            log.debug("{} in filtering '{}' in {}", matches ? "Including" : "Not including", featureName, featurePath);
+            LOGGER.debug("{} in filtering '{}' in {}", matches ? "Including" : "Not including", featureName, featurePath);
             return matches;
         };
     }

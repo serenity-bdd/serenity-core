@@ -165,6 +165,12 @@ public class SystemPropertiesConfiguration implements Configuration {
         this.projectDirectory = projectDirectory;
     }
 
+    @Override
+    public Path getProjectDirectory() {
+        return projectDirectory;
+    }
+
+
     /**
      * The output directory is where the test runner writes the XML and HTML
      * reports to. By default, it will be in 'target/site/serenity', but you can

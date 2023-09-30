@@ -14,7 +14,6 @@ public class MarkdownRendering {
     private final EnvironmentVariables environmentVariables;
 
     public MarkdownRendering(EnvironmentVariables environmentVariables) {
-
         this.environmentVariables = environmentVariables;
     }
 

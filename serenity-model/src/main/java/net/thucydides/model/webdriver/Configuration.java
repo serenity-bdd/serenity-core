@@ -63,4 +63,5 @@ public interface Configuration<T extends Configuration> {
     void setSourceDirectory(File sourceDirectory);
 
     void setProjectDirectory(Path projectDir);
+    Path getProjectDirectory();
 }

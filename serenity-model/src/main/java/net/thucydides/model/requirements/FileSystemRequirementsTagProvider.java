@@ -1,8 +1,11 @@
 package net.thucydides.model.requirements;
 
+import com.vladsch.flexmark.ext.resizable.image.ResizableImageExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.DataHolder;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.model.ThucydidesSystemProperty;
@@ -551,10 +554,24 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .map(Optional::get);
     }
 
-    private final Parser parser = Parser.builder().build();
-    private final HtmlRenderer renderer = HtmlRenderer.builder().build();
+//    private static final DataHolder MARKDOWN_OPTIONS = new MutableDataSet()
+//            // for full GFM table compatibility add the following table extension options:
+//            .set(TablesExtension.COLUMN_SPANS, false)
+//            .set(TablesExtension.APPEND_MISSING_COLUMNS, true)
+//            .set(TablesExtension.DISCARD_EXTRA_COLUMNS, true)
+//            .set(TablesExtension.HEADER_SEPARATOR_COLUMN_MATCH, true)
+//            .set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), ResizableImageExtension.create()))
+//            .toImmutable();
+//
+    final private static DataHolder MARKDOWN_OPTIONS = new MutableDataSet()
+            .set(Parser.EXTENSIONS, Collections.singleton(ResizableImageExtension.create()))
+            .toImmutable();
+
+    private final Parser parser = Parser.builder(MARKDOWN_OPTIONS).build();
+    private final HtmlRenderer renderer = HtmlRenderer.builder(MARKDOWN_OPTIONS).build();
 
     public String renderMarkdownWithoutTags(String text) {
+
         if (text == null) {
             return "";
         }

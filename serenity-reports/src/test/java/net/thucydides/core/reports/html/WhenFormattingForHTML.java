@@ -198,6 +198,36 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void markdown_should_render_formatting() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("**bold**"));
+
+        assertThat(htmlFormatted, equalTo("<strong>bold</strong>"));
+    }
+
+    @Test
+    public void markdown_should_render_images() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("![Wordle Game](assets/wordle.png)"));
+
+        assertThat(htmlFormatted, equalTo("<img src=\"assets/wordle.png\" alt=\"Wordle Game\" />"));
+    }
+
+    @Test
+    public void markdown_should_render_resized_images() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("![Image_30x30](./test-image.jpg =30x30)"));
+
+        assertThat(htmlFormatted, equalTo("<img src=\"./test-image.jpg\" alt=\"Image_30x30\" width=\"30px\" height=\"30px\"></img>"));
+    }
+
+    @Test
     public void markdown_should_render_tables() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 

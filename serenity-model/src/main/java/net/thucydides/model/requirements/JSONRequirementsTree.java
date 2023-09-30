@@ -120,18 +120,13 @@ public class JSONRequirementsTree {
         return new Node(requirementName, requirement.getType(), report, label, childCount, children);
     }
 
-    private String requirementsAndScenariosFor(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
-        String requirementChildren = countChildRequirementsIn(requirement);
-        String scenarioCount = countScenariosIn(requirement, requirementsOutcomes);
-        return (scenarioCount.isEmpty()) ? requirementChildren : requirementChildren + ", " + scenarioCount;
-    }
+    private static Parser PARSER = Parser.builder().build();
+    private static HtmlRenderer RENDERER = HtmlRenderer.builder().build();
 
     @NotNull
     private static String getRequirementNameFrom(Requirement requirement) {
-        Parser parser = Parser.builder().build();
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-        Document document = parser.parse(requirement.getDisplayName());
-        return Jsoup.parse(renderer.render(document)).text();
+        Document document = PARSER.parse(requirement.getDisplayName());
+        return Jsoup.parse(RENDERER.render(document)).text();
     }
 
     private String countChildRequirementsIn(Requirement requirement) {

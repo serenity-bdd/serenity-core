@@ -1,11 +1,14 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.model.di.ModelInfrastructure;
+import net.thucydides.core.reports.ReportInfrastructure;
 import net.thucydides.model.reports.ReportGenerationFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Optional;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.thucydides.model.ThucydidesSystemProperty.REPORT_ASSETS_DIRECTORY;
@@ -21,13 +24,19 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
     @Override
     public void generateReports() throws IOException {
 
-        if (!assetSourcePath().toFile().exists()) { return; }
+        if (!Files.exists(assetSourcePath())) {
+            return;
+        }
 
         Files.createDirectories(assetsDestinationDirectory());
 
         Files.list(assetSourcePath())
                 .filter(this::notCopied)
                 .parallel()
+                .forEach(this::copyToTarget);
+
+        Files.list(assetSourcePath())
+                .filter(this::notCopied)
                 .forEach(this::copyToTarget);
     }
 
@@ -56,8 +65,11 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
     }
 
     private Path assetSourcePath() {
-        String assetDirectoryPath = REPORT_ASSETS_DIRECTORY.from(getEnvironmentVariables(), DEFAULT_ASSETS_DIRECTORIES);
-        return Paths.get(assetDirectoryPath);
+        // We should be defining the project directory in the maven or gradle plugin, but if not we fall back on the current working directory
+        Path projectDirectory = Optional.ofNullable(ModelInfrastructure.getConfiguration().getProjectDirectory()).orElse(Paths.get(""));
+
+        // Now resolve the report assets directory based on the project directory, or use a sensible default value otherwise
+        return projectDirectory.resolve(REPORT_ASSETS_DIRECTORY.from(getEnvironmentVariables(), DEFAULT_ASSETS_DIRECTORIES));
     }
 
     private Path assetsDestinationDirectory() {

@@ -3,10 +3,12 @@ package net.thucydides.core.reports.html;
 import com.github.rjeschke.txtmark.Configuration;
 import com.google.common.base.Splitter;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.resizable.image.ResizableImageExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
@@ -33,10 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,28 +69,24 @@ public class Formatter {
     private final EnvironmentVariables environmentVariables;
     Configuration markdownEncodingConfiguration;
 
-    Parser parser;
-    HtmlRenderer renderer;
+    private static final DataHolder MARKDOWN_OPTIONS = new MutableDataSet()
+            // for full GFM table compatibility add the following table extension options:
+            .set(TablesExtension.COLUMN_SPANS, false)
+            .set(TablesExtension.APPEND_MISSING_COLUMNS, true)
+            .set(TablesExtension.DISCARD_EXTRA_COLUMNS, true)
+            .set(TablesExtension.HEADER_SEPARATOR_COLUMN_MATCH, true)
+            .set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), ResizableImageExtension.create()))
+            .set(HtmlRenderer.SOFT_BREAK, "<br />\n")
+            .toImmutable();
+
+    private static final Parser PARSER = Parser.builder(MARKDOWN_OPTIONS).build();
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder(MARKDOWN_OPTIONS).build();
 
     public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
 
         String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables, "UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
-
-
-        /////////////
-        MutableDataSet options = new MutableDataSet();
-
-        // uncomment to set optional extensions
-        options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
-
-        // uncomment to convert soft-breaks to hard breaks
-        //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
-
-        parser = Parser.builder(options).build();
-        renderer = HtmlRenderer.builder(options).build();
-
     }
 
     public Formatter() {
@@ -103,18 +98,16 @@ public class Formatter {
             return "";
         }
 
-        Node document = parser.parse(text);
-        String html = renderer.render(document);
-
-        return stripSurroundingParagraphTagsFrom(html);
+        Node document = PARSER.parse(text);
+        return stripSurroundingParagraphTagsFrom(RENDERER.render(document));
     }
 
     public String renderMarkdownWithoutTags(String text) {
         if (text == null) {
             return "";
         }
-        Node document = parser.parse(text);
-        return Jsoup.parse(renderer.render(document)).text();
+        Node document = PARSER.parse(text);
+        return Jsoup.parse(RENDERER.render(document)).text();
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {

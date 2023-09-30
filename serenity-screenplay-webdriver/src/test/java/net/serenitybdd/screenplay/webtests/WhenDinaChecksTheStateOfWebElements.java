@@ -20,7 +20,7 @@ import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 @RunWith(SerenityRunner.class)
 public class WhenDinaChecksTheStateOfWebElements {
 
-    @Managed(driver = "firefox", options = "--headless")
+    @Managed(driver = "chrome", options = "--headless")
     WebDriver browser;
 
     Actor dana = new Actor("Dana");

@@ -6,7 +6,7 @@
 
 <!--CHART.JS-->
 <script src="chartjs/chart.js"></script>
-<script src="chartjs/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="chartjs/chartjs-plugin-datalabels@2.0.0.min.js"></script>
 <script src="chartjs/patternomaly.min.js"></script>
 <script>
     // Register the plugin to all charts:

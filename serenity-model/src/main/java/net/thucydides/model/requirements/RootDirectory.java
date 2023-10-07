@@ -178,11 +178,17 @@ public class RootDirectory {
     private Set<String> getGradleProjectDirectoryAsSet() {
 
         String gradleProjectDir = getGradleProjectDirectory();
-        String gradleResourcetDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+
+        String gradleResourceDir;
+        if (new File(rootDirectoryPath).isAbsolute()) {
+            gradleResourceDir = new File(gradleProjectDir,"src/test/resources/features").getAbsolutePath();
+        } else {
+            gradleResourceDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+        }
 
         if (gradleProjectDir != null) {
             Set<String> directory = new HashSet<>();
-            directory.add(gradleResourcetDir);
+            directory.add(gradleResourceDir);
             return directory;
         }
         return new HashSet<>();

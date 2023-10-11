@@ -528,9 +528,9 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
          if (TestSession.isSessionStarted()) {
-            StepFinishedEvent stepFinishedEvent = new StepFinishedEvent();
-            LOGGER.debug("SRP:Actor finished step in session " + stepFinishedEvent + " " +  Thread.currentThread());
-            TestSession.addEvent(stepFinishedEvent);
+            LOGGER.debug("SRP:Actor finished step in session "  +  Thread.currentThread());
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots();
+            TestSession.addEvent(new StepFinishedEvent(screenshotList));
          }
          else {
             StepEventBus.getParallelEventBus().stepFinished();

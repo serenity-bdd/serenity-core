@@ -18,6 +18,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Coordinates;
@@ -1045,7 +1046,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Wait<WebDriver> waitForCondition() {
-        return new FluentWait<>(driver, webdriverClock, sleeper).withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds)).pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH)).ignoring(NoSuchElementException.class, NoSuchFrameException.class);
+        return new FluentWait<>(driver, webdriverClock, sleeper)
+            .withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds))
+            .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
+            .ignoring(NoSuchElementException.class, NoSuchFrameException.class, StaleElementReferenceException.class);
     }
 
     @Override

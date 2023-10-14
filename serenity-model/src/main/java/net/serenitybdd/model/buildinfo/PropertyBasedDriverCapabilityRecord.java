@@ -33,6 +33,9 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
 
         try {
             File browserProperties = new File(configuration.getOutputDirectory(), "browser-" + driver.toLowerCase() + ".properties");
+            if (!browserProperties.getParentFile().exists()) {
+                browserProperties.getParentFile().mkdirs();
+            }
             try (Writer writer = new OutputStreamWriter(new FileOutputStream(browserProperties), StandardCharsets.UTF_8))  {
                 capabilitiesAsProperties.store(writer, "");
             }

@@ -9,7 +9,7 @@
     </parent>
     <artifactId>serenity-browsermob-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>Serenity Report Resources</name>
+    <name>Serenity BrowserMob Resources</name>
     <properties>
         <browsermob.version>2.1.5</browsermob.version>
     </properties>

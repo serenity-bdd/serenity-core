@@ -24,7 +24,7 @@ public class TagFilter {
     private final List<String> excludedTags;
 
     private final List<String> ALWAYS_HIDDEN_TAGS
-            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser","Duration");
+            = Arrays.asList("manual-result","manual-test-evidence","manual-last-tested","singlebrowser","Duration","context:*");
 
     public TagFilter(){
         this(SystemEnvironmentVariables.currentEnvironmentVariables());

@@ -372,7 +372,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 return element.isDisplayed();
             }
 
-        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException |
+                 TimeoutException e) {
             return false;
         }
     }
@@ -720,7 +721,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 waitForCondition().until(elementToBeClickable(getElement()));
                 return true;
             }
-        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+        } catch (ElementNotInteractableException | NoSuchElementException | StaleElementReferenceException |
+                 TimeoutException e) {
             return false;
         }
         return false;
@@ -740,8 +742,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             return this;
         }
         WithRetries.on(this).perform(elementFacade -> {
-                elementFacade.getElement().clear();
-                elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keyValue));
+            elementFacade.getElement().clear();
+            elementFacade.getElement().sendKeys(nonNullCharSequenceFrom(keyValue));
         }, 12);
         notifyScreenChange();
         return this;
@@ -750,6 +752,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private CharSequence[] nonNullCharSequenceFrom(CharSequence... charSequences) {
         return Arrays.stream(charSequences).filter(chars -> chars != null).collect(Collectors.toList()).toArray(new CharSequence[]{});
     }
+
     /**
      * Type a value into a field and then press Enter, making sure that the field is empty first.
      *
@@ -1039,7 +1042,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private boolean hasValueAttribute(WebElement element) {
         try {
             return element.getAttribute("value") != null;
-        } catch (UnsupportedCommandException exception){
+        } catch (UnsupportedCommandException exception) {
             return false;
         }
     }
@@ -1047,9 +1050,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public Wait<WebDriver> waitForCondition() {
         return new FluentWait<>(driver, webdriverClock, sleeper)
-            .withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds))
-            .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
-            .ignoring(NoSuchElementException.class, NoSuchFrameException.class, StaleElementReferenceException.class);
+                .withTimeout(Duration.ofMillis(waitForTimeoutInMilliseconds))
+                .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
+                .ignoreAll(Arrays.asList(NoSuchElementException.class,
+                                         NoSuchFrameException.class,
+                                         StaleElementReferenceException.class));
     }
 
     @Override
@@ -1419,6 +1424,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public ListOfWebElementFacades findNestedElementsMatching(ResolvableElement nestedElement) {
         return nestedElement.resolveAllFor(this);
     }
+
     public static ListOfWebElementFacades fromWebElements(List<WebElement> elements) {
         List<WebElementFacade> facades = elements.stream().map(element -> WebElementFacadeImpl.wrapWebElement(Serenity.getDriver(), element)).collect(Collectors.toList());
         return new ListOfWebElementFacades(facades);

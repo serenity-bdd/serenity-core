@@ -189,7 +189,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private Object testStepResult(final Object obj, final Method method,
-            final Object[] args, final Method zuperMethod) throws Throwable {
+                                  final Object[] args, final Method zuperMethod) throws Throwable {
 
         if (!isATestStep(method)) {
             return runNormalMethod(obj, method, args, zuperMethod);
@@ -359,22 +359,22 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private Object primativeDefaultValueFor(Method method) {
         switch (returnTypeOf(method)) {
-        case VOID:
-            return null;
-        case STRING:
-            return "";
-        case LONG:
-            return 0L;
-        case INTEGER:
-            return 0;
-        case FLOAT:
-            return 0.0F;
-        case DOUBLE:
-            return 0.0D;
-        case BOOLEAN:
-            return Boolean.FALSE;
-        default:
-            return null;
+            case VOID:
+                return null;
+            case STRING:
+                return "";
+            case LONG:
+                return 0L;
+            case INTEGER:
+                return 0;
+            case FLOAT:
+                return 0.0F;
+            case DOUBLE:
+                return 0.0D;
+            case BOOLEAN:
+                return Boolean.FALSE;
+            default:
+                return null;
         }
     }
 
@@ -462,7 +462,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private Object runTestStep(final Object obj, final Method method,
-            final Object[] args, final Method zuperMethod) throws Throwable {
+                               final Object[] args, final Method zuperMethod) throws Throwable {
 
         String callingClass = testContext();
         LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).orElse(method.getName()));
@@ -527,24 +527,24 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
-         if (TestSession.isSessionStarted()) {
-            StepFinishedEvent stepFinishedEvent = new StepFinishedEvent();
-            LOGGER.debug("SRP:Actor finished step in session " + stepFinishedEvent + " " +  Thread.currentThread());
-            TestSession.addEvent(stepFinishedEvent);
-         }
-         else {
+        if (TestSession.isSessionStarted()) {
+            LOGGER.debug("SRP:Actor finished step in session "  +  Thread.currentThread());
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots();
+            TestSession.addEvent(new StepFinishedEvent(screenshotList));
+        }
+        else {
             StepEventBus.getParallelEventBus().stepFinished();
-         }
+        }
     }
 
     private void notifySkippedStepFinishedFor(final Method method, final Object[] args) {
         if (TestSession.isSessionStarted()) {
             StepIgnoredEvent stepIgnoredEvent = new StepIgnoredEvent();
             TestSession.addEvent(stepIgnoredEvent);
-         }
-         else {
+        }
+        else {
             StepEventBus.getParallelEventBus().stepIgnored();
-         }
+        }
     }
 
     private void notifyStepPending(String message) {
@@ -559,19 +559,19 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifyAssumptionViolated(String message) {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new AssumptionViolatedEvent(message));
-         }
-         else {
+        }
+        else {
             StepEventBus.getParallelEventBus().assumptionViolated(message);
-         }
+        }
     }
 
     private void notifyStepIgnored() {
         if (TestSession.isSessionStarted()) {
             TestSession.addEvent(new StepIgnoredEvent());
-         }
-         else {
+        }
+        else {
             StepEventBus.getParallelEventBus().stepIgnored();
-         }
+        }
     }
 
     private String getTestNameFrom(final Method method, final Object[] args) {
@@ -579,25 +579,25 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private void notifyStepSkippedFor(final Method method, final Object[] args) {
-         if (TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             if (isPending(method)) {
                 TestSession.addEvent(new StepPendingEvent());
             } else {
                 TestSession.addEvent(new StepIgnoredEvent());
             }
-         } else {
+        } else {
             if (isPending(method)) {
                 StepEventBus.getParallelEventBus().stepPending();
             } else {
                 StepEventBus.getParallelEventBus().stepIgnored();
             }
-         }
+        }
     }
 
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
-            final Throwable cause) throws Throwable {
+                                     final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                                                                     .withDisplayedFields(fieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
 
@@ -632,7 +632,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
         if(TestSession.isSessionStarted()) {
             StepStartedEvent stepStartedEvent = new StepStartedEvent(description);
             LOGGER.debug("SRP:Actor started step in session " + stepStartedEvent + " " +  Thread.currentThread());
@@ -656,7 +656,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
 
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
-                        .withDisplayedFields(fieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
         getStepEventBus().skippedStepStarted(description);
     }
 
@@ -676,12 +676,12 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
         return classNameElements[classNameElements.length - 1];
     }
     private StepEventBus getStepEventBus() {
-         if (TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             return TestSession.getTestSessionContext().getStepEventBus();
-         }
-         else {
+        }
+        else {
             return StepEventBus.getParallelEventBus();
-         }
+        }
     }
 
 }

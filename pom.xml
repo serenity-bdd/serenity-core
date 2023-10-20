@@ -73,7 +73,7 @@
         <imgscalr.version>4.2</imgscalr.version>
         <awaitility.version>4.2.0</awaitility.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <appium.version>8.5.1</appium.version>
+        <appium.version>9.0.0</appium.version>
         <fluentlenium.version>0.10.2</fluentlenium.version>
         <htmlunit.version>3.4.0</htmlunit.version>
         <filters.version>2.0.235</filters.version>

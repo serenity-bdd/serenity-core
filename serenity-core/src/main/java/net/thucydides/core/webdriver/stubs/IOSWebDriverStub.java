@@ -96,11 +96,6 @@ public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWith
     }
 
     @Override
-    public void hideKeyboard(String strategy, String keyName) {
-
-    }
-
-    @Override
     public void hideKeyboard() {
 
     }

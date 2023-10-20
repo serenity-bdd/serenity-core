@@ -1,6 +1,6 @@
 package net.serenitybdd.core.annotations.locators;
 
-import io.appium.java_client.MobileBy;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
@@ -39,7 +39,7 @@ public class SmartAnnotations extends Annotations {
             org.openqa.selenium.By getBy(Annotation annotation) {
                 String value = getValue(annotation, this);
                 if (annotation.annotationType().equals(AndroidFindBy.class)) {
-                    return MobileBy.AndroidUIAutomator(value);
+                    return AppiumBy.androidUIAutomator(value);
                 }
 //                if (annotation.annotationType().equals(iOSXCUITFindBy.class)) {
 //                    return MobileBy.IosUIAutomation(value);
@@ -50,7 +50,7 @@ public class SmartAnnotations extends Annotations {
         BYACCESSABILITY("accessibility") {
             @Override
             org.openqa.selenium.By getBy(Annotation annotation) {
-                return MobileBy.AccessibilityId(getValue(annotation, this));
+                return AppiumBy.accessibilityId(getValue(annotation, this));
             }
         },
         BYCLASSNAME("className") {
@@ -116,13 +116,13 @@ public class SmartAnnotations extends Annotations {
         BYIOSCLASSCHAIN("iOSClassChain") {
             @Override
             org.openqa.selenium.By getBy(Annotation annotation) {
-                return MobileBy.iOSClassChain(getValue(annotation, this));
+                return AppiumBy.iOSClassChain(getValue(annotation, this));
             }
         },
         BYIOSNSPREDICATE("iOSNsPredicate") {
             @Override
             org.openqa.selenium.By getBy(Annotation annotation) {
-                return MobileBy.iOSNsPredicateString(getValue(annotation, this));
+                return AppiumBy.iOSNsPredicateString(getValue(annotation, this));
             }
         };
 
@@ -340,19 +340,19 @@ public class SmartAnnotations extends Annotations {
                 return By.sclocator(using);
 
             case ACCESSIBILITY_ID:
-                return MobileBy.AccessibilityId(using);
+                return AppiumBy.accessibilityId(using);
 
 //            case IOS_UI_AUTOMATION:
 //                return MobileBy.IosUIAutomation(using);
 
             case ANDROID_UI_AUTOMATOR:
-                return MobileBy.AndroidUIAutomator(using);
+                return AppiumBy.androidUIAutomator(using);
 
             case IOS_CLASS_CHAIN:
-                return MobileBy.iOSClassChain(using);
+                return AppiumBy.iOSClassChain(using);
 
             case IOS_NS_PREDICATE_STRING:
-                return MobileBy.iOSNsPredicateString(using);
+                return AppiumBy.iOSNsPredicateString(using);
 
             default:
                 // Note that this shouldn't happen (eg, the above matches all
@@ -399,10 +399,10 @@ public class SmartAnnotations extends Annotations {
             return By.jquery(myFindBy.jquery());
         }
         if (isNotEmpty(myFindBy.accessibilityId())) {
-            return MobileBy.AccessibilityId(myFindBy.accessibilityId());
+            return AppiumBy.accessibilityId(myFindBy.accessibilityId());
         }
         if (isNotEmpty(myFindBy.androidUIAutomator())) {
-            return MobileBy.AndroidUIAutomator(myFindBy.androidUIAutomator());
+            return AppiumBy.androidUIAutomator(myFindBy.androidUIAutomator());
         }
 //        if (isNotEmpty(myFindBy.iOSUIAutomation())) {
 //            // FIXME: Need to support android with platform switch

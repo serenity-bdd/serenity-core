@@ -97,14 +97,6 @@ public class TestStep implements Cloneable {
             count = renumberChildrenFrom(count);
         }
         return count;
-
-//        this.number = count;
-//        return (children.isEmpty()) ? renumberChildrenFrom(count + 1) : count + 1;
-//        if (!children.isEmpty()) {
-//            count = renumberChildrenFrom(count);
-//        }
-//        return count;
-
     }
 
     private int renumberChildrenFrom(int count) {

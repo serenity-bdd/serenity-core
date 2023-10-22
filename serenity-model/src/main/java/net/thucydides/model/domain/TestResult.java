@@ -15,37 +15,22 @@ import java.util.Set;
  * and of the overall acceptance test case itself.
  * 
  * @author johnsmart
- *
  */
 public enum TestResult {
     /**
-     * Either failure, error or compromised - internal use only
+     * Test result not known yet.
      */
-    UNSUCCESSFUL(6, true, "Unsuccessful"),
+    UNDEFINED(0, false, "Undefined"),
     /**
-     * Test failures due to external events or systems that compromise the validity of the test.
+     * The test or test case ran as expected.
      */
-    COMPROMISED(5, true, "Compromised"),
+    SUCCESS(1, true, "Passing"),
     /**
-     *  Test failure, due to some other exception.
+     * A pending test is one that has been specified but not yet implemented.
+     * In a JUnit test case, you can use the (Thucydides) @Pending annotation to mark this.
+     * A pending test case is a test case that has at least one pending test.
      */
-     ERROR(4, true, "Broken"),
-    /**
-     * Test failure, due to an assertion error
-     * For a test case, this means one of the tests in the test case failed.
-     */
-    FAILURE(3, true, "Failing"),
-
-    /**
-     * Test is skipped due to a failing assumption
-     */
-    ABORTED(2, false, "Aborted"),
-
-    /**
-     * The test step was not executed because a previous step in this test case failed.
-     * A whole test case can be skipped using tags or annotations to indicate that it is currently "work-in-progress"
-     */
-    SKIPPED(2, false, "Skipped"),
+    PENDING(2, false, "Pending"),
     /**
      * The test or test case was deliberately ignored.
      * Tests can be ignored via the @Ignore annotation in JUnit, for example.
@@ -54,23 +39,32 @@ public enum TestResult {
      * ignored test can be a temporarily-deactivated test (during refactoring, for example).
      */
     IGNORED(2, false, "Ignored"),
-
     /**
-     * A pending test is one that has been specified but not yet implemented.
-     * In a JUnit test case, you can use the (Thucydides) @Pending annotation to mark this.
-     * A pending test case is a test case that has at least one pending test.
+     * The test step was not executed because a previous step in this test case failed.
+     * A whole test case can be skipped using tags or annotations to indicate that it is currently "work-in-progress"
      */
-    PENDING(2, false, "Pending"),
-
+    SKIPPED(2, false, "Skipped"),
     /**
-     * The test or test case ran as expected.
+     * Test is skipped due to a failing assumption
      */
-    SUCCESS(1, true, "Passing"),
-    
+    ABORTED(2, false, "Aborted"),
     /**
-     * Test result not known yet.
+     * Test failure, due to an assertion error
+     * For a test case, this means one of the tests in the test case failed.
      */
-    UNDEFINED(0, false, "Undefined");
+    FAILURE(3, true, "Failing"),
+    /**
+     * Test failure, due to some other exception.
+     */
+    ERROR(4, true, "Broken"),
+    /**
+     * Test failures due to external events or systems that compromise the validity of the test.
+     */
+    COMPROMISED(5, true, "Compromised"),
+    /**
+     * Either failure, error or compromised - internal use only
+     */
+    UNSUCCESSFUL(6, true, "Unsuccessful");
 
     private final int priority;
     private final boolean executedResultsCount;

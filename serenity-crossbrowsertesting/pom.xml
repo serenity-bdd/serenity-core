@@ -4,7 +4,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.17</version>
+        <version>4.0.18-SNAPSHOT</version>
     </parent>
     <artifactId>serenity-crossbrowsertesting</artifactId>
     <packaging>jar</packaging>

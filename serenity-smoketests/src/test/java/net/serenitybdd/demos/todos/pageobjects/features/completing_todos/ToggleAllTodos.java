@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 @WithTags({
         @WithTag("PageObjects pattern"),
         @WithTag("version:RELEASE-1"),
+        @WithTag("smoke"),
 })
 public class ToggleAllTodos {
 

@@ -16,6 +16,7 @@ public class TestResultTest {
     })
     public void shouldDetectMoreSevereResults(TestResult firstStatus, TestResult secondStatus, boolean expectedResult) {
         Assertions.assertEquals(expectedResult, firstStatus.isMoreSevereThan(secondStatus));
+
     }
 
     @ParameterizedTest(name = "Should {0} be less severe than {1} => {2}")

@@ -1,6 +1,6 @@
 package net.thucydides.core.csv;
 
-import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVParser;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
@@ -320,7 +320,7 @@ public class WhenLoadingTestDataFromACSVFile {
         //  name; address;        phone
         //  Bill; 10 main street, Bill\nVille; 123456789
 
-        TestDataSource testdata = new CSVTestDataSource(testDataFile.getAbsolutePath(),';', CSVReader.DEFAULT_QUOTE_CHARACTER, '"'); // '"' to handle '\n'
+        TestDataSource testdata = new CSVTestDataSource(testDataFile.getAbsolutePath(),';', CSVParser.DEFAULT_QUOTE_CHARACTER, '"'); // '"' to handle '\n'
 
         List<Map<String,String>> loadedData = testdata.getData();
         Map<String,String> row = loadedData.get(0);

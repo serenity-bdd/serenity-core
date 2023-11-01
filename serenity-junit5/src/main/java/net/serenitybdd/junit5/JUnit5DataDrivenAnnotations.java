@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5;
 
+import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Splitter;
 import net.bytebuddy.implementation.MethodCall;
@@ -133,7 +134,7 @@ public class JUnit5DataDrivenAnnotations {
         String columnNamesString = createColumnNamesFromParameterNames(testDataMethod);
         String dataTableName = testDataMethod.getDeclaringClass().getCanonicalName() + "." + testDataMethod.getName();
         try {
-            JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(paths), CSVReader.DEFAULT_SEPARATOR);
+            JUnit5CSVTestDataSource csvTestDataSource = new JUnit5CSVTestDataSource(Arrays.asList(paths), CSVParser.DEFAULT_SEPARATOR);
             List<Map<String, String>> data = csvTestDataSource.getData();
             List<List<Object>> rows = new ArrayList<>();
             for (Map<String, String> dataRowMap : data) {

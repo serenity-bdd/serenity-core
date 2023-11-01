@@ -1,5 +1,6 @@
 package net.serenitybdd.junit5.datadriven;
 
+import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.model.collect.NewList;
@@ -67,15 +68,15 @@ public class JUnit5CSVTestDataSource implements TestDataSource {
     }
 
     public JUnit5CSVTestDataSource(final String path) throws IOException {
-        this(NewList.of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public JUnit5CSVTestDataSource(final List<String> paths, final char separatorValue) throws IOException {
-        this(paths, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(paths, separatorValue, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public JUnit5CSVTestDataSource(final String path, final char separatorValue) throws IOException {
-        this(NewList.of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.of(path), separatorValue, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public JUnit5CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {

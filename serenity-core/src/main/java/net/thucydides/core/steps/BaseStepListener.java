@@ -917,9 +917,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
             getCurrentTestOutcome().appendTestFailure(failureCause);
 
             recordFailureDetails(failure);
+            // Step marked as done with the appropriate result before
+            currentStepDone(failureAnalysis.resultFor(failure));
         }
-        // In all cases, mark the step as done with the appropriate result
-        currentStepDone(failureAnalysis.resultFor(failure));
+
     }
 
 

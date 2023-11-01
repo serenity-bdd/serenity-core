@@ -1,11 +1,8 @@
 package net.serenitybdd.demos.todos.pageobjects.features.accessing_the_application;
 
+import net.serenitybdd.annotations.*;
 import net.serenitybdd.demos.todos.pageobjects.steps.TodoUserSteps;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
-import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.annotations.Steps;
-import net.serenitybdd.annotations.WithTag;
-import net.serenitybdd.annotations.WithTags;
 import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Before;
@@ -18,6 +15,7 @@ import java.util.Collection;
 
 @RunWith(SerenityParameterizedRunner.class)
 @Concurrent(threads = "4")
+@WithTagValuesOf("smoketest")
 @WithTags({
         @WithTag("PageObjects pattern"),
         @WithTag("version:RELEASE-3"),

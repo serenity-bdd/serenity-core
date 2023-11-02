@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
  */
 class BrowserStackConfiguration {
 
-    public static final String BROWSERSTACK_OPTIONS = "\"bstack:options\"";
+    public static final String BROWSERSTACK_OPTIONS = "bstack:options";
     public static final String BROWSERSTACK_OPTIONS_PATH = "webdriver.capabilities." + BROWSERSTACK_OPTIONS;
 
     static boolean isActiveFor(EnvironmentVariables environmentVariables) {

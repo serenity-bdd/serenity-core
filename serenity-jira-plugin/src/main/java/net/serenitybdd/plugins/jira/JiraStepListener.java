@@ -11,6 +11,8 @@ import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
 import net.thucydides.model.steps.StepListener;
 import net.thucydides.model.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -24,10 +26,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class JiraStepListener implements StepListener {
 
     private final TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-    private final Set<String> testSuiteIssues = new CopyOnWriteArraySet();
-//    private static TestResultTally<TestOutcomeSummary> resultTally = new TestResultTally<>();
-//    private static Set<String> testSuiteIssues = new CopyOnWriteArraySet();
+    private final Set<String> testSuiteIssues = new CopyOnWriteArraySet<>();
     private final JiraUpdater jiraUpdater;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JiraStepListener.class);
 
     
     public JiraStepListener(IssueTracker issueTracker,
@@ -63,8 +65,11 @@ public class JiraStepListener implements StepListener {
 
     }
 
+    @Override
     public void testFinished(TestOutcome result) {
-        if (jiraUpdater.shouldUpdateIssues()) {
+        boolean shouldUpdateIssues = jiraUpdater.shouldUpdateIssues();
+        LOGGER.info("TestFinished updateIssues=" + shouldUpdateIssues);
+        if (shouldUpdateIssues) {
             List<String> issues = jiraUpdater.getPrefixedIssuesWithoutHashes(new TestOutcomeSummary(result));
             tallyResults(new TestOutcomeSummary(result), issues);
             testSuiteIssues.addAll(issues);
@@ -73,7 +78,12 @@ public class JiraStepListener implements StepListener {
 
     @Override
     public void testFinished(TestOutcome result, boolean isInDataDrivenTest, ZonedDateTime finishTime) {
+        testFinished(result);
+    }
 
+    @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest) {
+        testFinished(result);
     }
 
     private void tallyResults(TestOutcomeSummary result, List<String> issues) {

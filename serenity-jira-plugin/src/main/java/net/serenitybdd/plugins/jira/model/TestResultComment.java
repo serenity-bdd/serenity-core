@@ -62,7 +62,9 @@ public class TestResultComment {
     }
 
     private SortedMap<String, NamedTestResult> indexByTestName(List<NamedTestResult> namedTestResults) {
-        Map<String, NamedTestResult> indexedTestResults = namedTestResults.stream().collect(Collectors.toMap(NamedTestResult::getTestName, Function.identity()));
+        Map<String, NamedTestResult> indexedTestResults = namedTestResults.stream().collect(Collectors.toMap(NamedTestResult::getTestName, Function.identity(),(result1, result2) -> {
+                 return result1;
+             }));
         SortedMap<String, NamedTestResult> sortedTestResults = Maps.newTreeMap();
         sortedTestResults.putAll(indexedTestResults);
         return sortedTestResults;

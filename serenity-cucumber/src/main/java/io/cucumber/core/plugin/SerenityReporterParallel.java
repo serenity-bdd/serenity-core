@@ -287,7 +287,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                         startProcessingExampleLine(scenarioId, featurePath, event.getTestCase(), Long.valueOf(event.getTestCase().getLocation().getLine()), scenarioName);
                     }
                 }
-                final String scenarioIdForBackground =  scenarioId;
+                final String scenarioIdForBackground = scenarioId;
                 TestSourcesModel.getBackgroundForTestCase(astNode).ifPresent(background -> handleBackground(featurePath, scenarioIdForBackground, background));
                 //
                 // Check for tags
@@ -371,9 +371,34 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).clearStepQueue(event.getTestCase());
         getContext(featurePath).stepEventBus().clear();
 
+        // We don't have the TestOutcome object ready yet, so we need to create a temporary one based on the event
+        // The feature name is the first part of getContext(featurePath).getCurrentScenario(scenarioId) up to the first semicolon
+        // The scenario name is the second part of getContext(featurePath).getCurrentScenario(scenarioId) after the first semicolon
+        String featureName = getContext(featurePath).getCurrentScenario(scenarioId).split(";")[0];
+        TestOutcome testOutcome = TestOutcome.forTestInStory(event.getTestCase().getName(),
+                Story.called(featureName));
+        testOutcome.setResult(serenityTestResultFrom(event.getResult().getStatus()));
+        if (event.getResult().getError() != null) {
+            testOutcome.testFailedWith(event.getResult().getError());
+        }
         // We need to close the driver here to avoid wasting resources and causing timeouts with Selenium Grid services
-        getContext(featurePath).stepEventBus().getBaseStepListener().cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven());
+        getContext(featurePath)
+                .stepEventBus()
+                .getBaseStepListener()
+                .cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven(), testOutcome);
 
+    }
+
+    private static final Map<Status, TestResult> TEST_RESULT_MAP = Map.of(
+            Status.PASSED, TestResult.SUCCESS,
+            Status.FAILED, TestResult.FAILURE, Status.SKIPPED, TestResult.SKIPPED,
+            Status.PENDING, TestResult.PENDING,
+            Status.UNDEFINED, TestResult.UNDEFINED,
+            Status.AMBIGUOUS, TestResult.UNDEFINED);
+
+    private TestResult serenityTestResultFrom(Status status) {
+        // Use a map to convert the Status enum to a Serenity TestResult value
+        return TEST_RESULT_MAP.get(status);
     }
 
     private Status eventStatusFor(TestCaseFinished event) {
@@ -446,7 +471,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                     io.cucumber.messages.types.Step currentStep = getContext(featurePath).getCurrentStep(event.getTestCase());
                     String stepTitle = stepTitleFrom(currentStep, pickleTestStep);
                     getContext(featurePath).addStepEventBusEvent(
-                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle),startTime));
+                            new StepStartedEvent(ExecutedStepDescription.withTitle(stepTitle), startTime));
                     getContext(featurePath).addStepEventBusEvent(
                             new UpdateCurrentStepTitleEvent(normalized(stepTitle)));
                 }
@@ -903,7 +928,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void reinitializeRemoteWebDriver() {
         WebDriver webDriver = SerenityWebdriverManager.inThisTestThread().getCurrentDriver();
-        if ((webDriver !=  null) && (webDriver instanceof WebDriverFacade)) {
+        if ((webDriver != null) && (webDriver instanceof WebDriverFacade)) {
             ((WebDriverFacade) webDriver).reinitializeRemoteWebDriver();
         }
     }
@@ -933,8 +958,8 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     }
 
 
-    private void handleBackground(URI featurePath,String scenarioId,  Background background) {
-        getContext(featurePath).setWaitingToProcessBackgroundSteps(scenarioId,true);
+    private void handleBackground(URI featurePath, String scenarioId, Background background) {
+        getContext(featurePath).setWaitingToProcessBackgroundSteps(scenarioId, true);
         String backgroundName = background.getName();
         if (backgroundName != null) {
             getContext(featurePath).addStepEventBusEvent(
@@ -989,7 +1014,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
     private void recordFinalResult(String scenarioId, URI featurePath, TestCase testCase) {
         ScenarioContextParallel context = getContext(featurePath);
         if (context.isWaitingToProcessBackgroundSteps(scenarioId)) {
-            context.setWaitingToProcessBackgroundSteps(scenarioId,false);
+            context.setWaitingToProcessBackgroundSteps(scenarioId, false);
         } else {
             updateResultFromTags(scenarioId, featurePath, testCase, context.getScenarioTags(scenarioId));
         }

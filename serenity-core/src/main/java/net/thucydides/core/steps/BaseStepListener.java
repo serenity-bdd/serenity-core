@@ -555,6 +555,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void updateSessionIdIfKnown() {
+        updateSessionIdIfKnown(getCurrentTestOutcome());
+    }
+
+    private void updateSessionIdIfKnown(TestOutcome testOutcome) {
         SessionId sessionId = ThucydidesWebDriverSupport.getSessionId();
         if (sessionId != null) {
             getCurrentTestOutcome().setSessionId(sessionId.toString());
@@ -643,14 +647,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
         LifecycleRegister.clear();
     }
 
-    public void cleanupWebdriverInstance(boolean isInDataDrivenTest) {
+    public void cleanupWebdriverInstance(boolean isInDataDrivenTest, TestOutcome testOutcome) {
         if (currentTestIsABrowserTest()) {
-            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
-            updateSessionIdIfKnown();
+            testOutcome.setDriver(getDriverUsedInThisTest());
+            updateSessionIdIfKnown(testOutcome);
 
             AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
                     getEventBus().getEnvironmentVariables(),
-                    getCurrentTestOutcome(),
+                    testOutcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
             if (isInDataDrivenTest) {
@@ -660,6 +664,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 ThucydidesWebDriverSupport.clearDefaultDriver();
             }
         }
+    }
+
+    public void cleanupWebdriverInstance(boolean isInDataDrivenTest) {
+        cleanupWebdriverInstance(isInDataDrivenTest, getCurrentTestOutcome());
     }
 
     private void handlePostponedParallelExecution(TestOutcome outcome, boolean isInDataDrivenTest) {

@@ -234,9 +234,13 @@ public class TestStep implements Cloneable {
 
 
     public void recordDuration(ZonedDateTime time) {
-        setDuration(
-                ChronoUnit.MILLIS.between(startTime, time)
-        );
+        if (result == TestResult.SKIPPED || result == TestResult.IGNORED || result == TestResult.PENDING) {
+            setDuration(0);
+        } else {
+            setDuration(
+                    ChronoUnit.MILLIS.between(startTime, time)
+            );
+        }
     }
 
     public void recordDuration() {

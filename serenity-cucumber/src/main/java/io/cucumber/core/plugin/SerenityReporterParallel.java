@@ -54,6 +54,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
@@ -365,7 +366,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             getContext(featurePath).addStepEventBusEvent(
                     new TestFinishedEvent(scenarioId, getContext(featurePath).examplesAreRunning(scenarioId))
             );
-            //getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(),event.getTestCase());
         }
         getContext(featurePath).storeAllStepEventBusEventsForLine(event.getTestCase().getLocation().getLine(), event.getTestCase());
         getContext(featurePath).clearStepQueue(event.getTestCase());
@@ -387,6 +387,14 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                 .getBaseStepListener()
                 .cleanupWebdriverInstance(getContext(featurePath).stepEventBus().isCurrentTestDataDriven(), testOutcome);
 
+        // Update external links cache
+        String key = featureName + "/" + testOutcome.getName();
+        if (testOutcome.getExternalLink() != null) {
+            EXTERNAL_LINK_CACHE.put(key, testOutcome.getExternalLink());
+        }
+        if (testOutcome.getSessionId() != null) {
+            SESSION_ID_CACHE.put(key, testOutcome.getSessionId());
+        }
     }
 
     private static final Map<Status, TestResult> TEST_RESULT_MAP = Map.of(
@@ -514,6 +522,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         } catch (Throwable th) {
             th.printStackTrace();
         }
+        enrichOutcomes();
         generateReports();
         assureTestSuiteFinished();
     }
@@ -1066,7 +1075,6 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         return "";
     }
 
-
     private static String convertToTextTable(List<Map<String, Object>> rows) {
         StringBuilder textTable = new StringBuilder();
         textTable.append(System.lineSeparator());
@@ -1082,6 +1090,23 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             }
         }
         return textTable.toString();
+    }
+
+    public static final Map<String, ExternalLink> EXTERNAL_LINK_CACHE = new ConcurrentHashMap<>();
+    public static final Map<String, String> SESSION_ID_CACHE = new ConcurrentHashMap<>();
+
+    private void enrichOutcomes() {
+        getAllTestOutcomes().forEach(
+                outcome -> {
+                    String key = outcome.getUserStory().getName() + "/" + outcome.getName();
+                    if (EXTERNAL_LINK_CACHE.containsKey(key)) {
+                        outcome.setLink(EXTERNAL_LINK_CACHE.get(key));
+                    }
+                    if (SESSION_ID_CACHE.containsKey(key)) {
+                        outcome.setSessionId(SESSION_ID_CACHE.get(key));
+                    }
+                }
+        );
     }
 
     private void generateReports() {

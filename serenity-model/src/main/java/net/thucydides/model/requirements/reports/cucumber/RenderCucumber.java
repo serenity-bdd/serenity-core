@@ -40,8 +40,9 @@ public class RenderCucumber {
         StringBuffer renderedTable = new StringBuffer();
         renderExampleDescriptionOf(examples);
         renderedTable.append(renderExampleDescriptionOf(examples));
+        int columnCount = examples.getTableHeader().get().getCells().size() + 1;
         addRow(renderedTable, examples.getTableHeader().get().getCells(), " ");
-        addSeparatorCells(renderedTable, examples.getTableHeader().get().getCells().size());
+        addSeparatorCells(renderedTable, columnCount);
 
         for (TableRow row : examples.getTableBody()) {
             addRow(renderedTable, row.getCells(), exampleRowResultIcon.resultToken(row.getLocation().getLine()));

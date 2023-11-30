@@ -525,7 +525,7 @@
                                     </#if>
                                 </span>
                                 <#if (step.externalLink)??>
-                                    <a href="${step.externalLink.url}" class="tag" title="${step.externalLink.type}">
+                                    <a href="${step.externalLink.url}" title="${step.externalLink.type}">
                                         <i class="bi bi-camera-video"></i>
                                     </a>
                                 </#if>

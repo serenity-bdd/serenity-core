@@ -12,7 +12,7 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     public RemoteTestingLinkManager() {
     }
 
-    
+
     public RemoteTestingLinkManager(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
@@ -20,13 +20,15 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     public String linkFor(TestOutcome testOutcome) {
         if (noSessionIdIsFoundFor(testOutcome)) {
             return null;
-        }
-
-        if (browserStackIsConfigured() && testOutcome.getExternalLink() != null) {
+        } else {
             return testOutcome.getExternalLink().getUrl();
         }
-
-        return null;
+//
+//        if (browserStackIsConfigured() && testOutcome.getExternalLink() != null) {
+//            return testOutcome.getExternalLink().getUrl();
+//        }
+//
+//        return null;
     }
 
     private boolean noSessionIdIsFoundFor(TestOutcome testOutcome) {
@@ -34,6 +36,7 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     }
 
     private boolean browserStackIsConfigured() {
-        return (ThucydidesSystemProperty.BROWSERSTACK_USER.from(environmentVariables) != null);
+        return (ThucydidesSystemProperty.BROWSERSTACK_USER.from(environmentVariables) != null
+                || System.getenv(ThucydidesSystemProperty.BROWSERSTACK_USER.getPropertyName()) != null);
     }
 }

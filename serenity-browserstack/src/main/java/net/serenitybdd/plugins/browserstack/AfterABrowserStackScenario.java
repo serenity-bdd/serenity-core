@@ -30,9 +30,11 @@ public class AfterABrowserStackScenario implements AfterAWebdriverScenario {
         TestContext.forTheCurrentTest().recordBrowser(browserStackTestSession.getBrowser());
         TestContext.forTheCurrentTest().recordPlatform(browserStackTestSession.getOS());
         testOutcome.setContext(TestContext.forTheCurrentTest().getContext());
+        testOutcome.setSessionId(sessionId);
 
         String publicUrl = browserStackTestSession.getPublicUrl();
         testOutcome.setLink(new ExternalLink(publicUrl, "BrowserStack"));
+
     }
 
     public boolean isActivated(EnvironmentVariables environmentVariables) {

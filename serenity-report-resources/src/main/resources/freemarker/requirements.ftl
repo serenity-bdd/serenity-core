@@ -594,9 +594,16 @@
                                                                                 ${outcome_icon} ${resultCount.numberOfTestCases}
                                                                                 <br/>
                                                                             </#list>
-                                                                            <#else>
-                                                                                <a href="${scenario.scenarioReport}">${scenario.title}</a>
-                                                                            </#if>
+                                                                        <#else>
+                                                                            <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                        </#if>
+                                                                        <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                            &nbsp;
+                                                                            <a href="${scenario.externalLink.url}"
+                                                                               title="${scenario.externalLink.type}">
+                                                                                <i class="fs-2 bi bi-camera-reels"></i>
+                                                                            </a>
+                                                                        </#if>
                                                                     </td>
                                                                     <td>${context_icon}<span style="display:none">${context_label}</span>
                                                                     </td>
@@ -604,14 +611,6 @@
                                                                     <td>${scenario.formattedStartTime}</td>
                                                                     <td>${scenario.formattedDuration}</td>
                                                                     <td>${outcome_icon} <span style="display:none">${scenario.result}</span>
-                                                                        <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
-                                                                            &nbsp;
-                                                                            <a href="${scenario.externalLink.url}"
-                                                                               class="tag"
-                                                                               title="${scenario.externalLink.type}">
-                                                                                <i class="fs-2 bi bi-camera-reels"></i>
-                                                                            </a>
-                                                                        </#if>
                                                                     </td>
                                                                 </tr>
                                                         </#list>
@@ -669,7 +668,6 @@
                                                                             <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
                                                                                 &nbsp;
                                                                                 <a href="${scenario.externalLink.url}"
-                                                                                   class="tag"
                                                                                    title="${scenario.externalLink.type}">
                                                                                     <i class="fs-2 bi bi-camera-reels"></i>
                                                                                 </a>
@@ -686,19 +684,18 @@
                                                                     </td>
                                                                     <td>
                                                                         <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                                        <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
+                                                                            &nbsp;
+                                                                            <a href="${scenario.externalLink.url}"
+                                                                               title="${scenario.externalLink.type}">
+                                                                                <i class="fs-2 bi bi-camera-reels"></i>
+                                                                            </a>
+                                                                        </#if>
                                                                     </td>
                                                                     <td><i class="bi bi-person"></i></td>
                                                                     <td>${scenario.stepCount}</td>
                                                                     <td>${outcome_icon}
                                                                         <span style="display:none">${scenario.result}</span>
-                                                                        <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
-                                                                            &nbsp;
-                                                                            <a href="${scenario.externalLink.url}"
-                                                                               class="tag"
-                                                                               title="${scenario.externalLink.type}">
-                                                                                <i class="fs-2 bi bi-camera-reels"></i>
-                                                                            </a>
-                                                                        </#if>
                                                                     </td>
                                                                 </tr>
                                                             </#if>

@@ -174,11 +174,14 @@
                     <tr>
                         <td colspan="2" class="test-title-bar">
                             <span class="outcome-icon">${title_outcome_icon}</span>
-                        <#if (testOutcome.videoLink)??>
-                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
-                                                                                    src="images/video.png" width="25"
-                                                                                    height="25" alt="Video"/></a>
-                        </#if>
+                            <#if (testOutcome.externalLink)?? && (testOutcome.externalLink.url)??>
+                                <td valign="top">
+                                    <a href="${testOutcome.externalLink.url}" class="tag"
+                                       title="${testOutcome.externalLink.type}">
+                                        <i class="fs-2 bi bi-camera-reels"></i>
+                                    </a>
+                                </td>
+                            </#if>
                             <span class="test-case-title">
                                 <span class="${outcome_text}">${formatter.htmlCompatibleStoryTitle(testOutcome.unqualified.titleWithLinks)}
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>

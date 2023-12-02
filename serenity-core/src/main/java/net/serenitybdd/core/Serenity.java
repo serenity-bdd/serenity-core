@@ -29,6 +29,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -363,5 +364,11 @@ public class Serenity {
             return TestSession.getTestSessionContext().getStepEventBus();
         }
         return StepEventBus.getParallelEventBus();
+    }
+
+    private static final LocalDateTime TEST_SUITE_START_TIME = LocalDateTime.now();
+
+    public static LocalDateTime getTestSuiteStartTime() {
+        return TEST_SUITE_START_TIME;
     }
 }

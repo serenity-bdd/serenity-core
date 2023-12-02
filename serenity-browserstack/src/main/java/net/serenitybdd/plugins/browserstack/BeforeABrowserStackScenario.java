@@ -56,6 +56,10 @@ public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario, Pr
         // Add the test name to the capabilities
         newOptions.put("sessionName", testName);
 
+        // Add the build name to the capabilities
+        newOptions.put("buildName", BuildNameGenerator.forEnvironmentVariables(environmentVariables).getBuildName());
+
+
         // Add the Browserstack options to the capabilities
         capabilities.setCapability(BSTACK_OPTIONS_CAPABILITY, newOptions);
 

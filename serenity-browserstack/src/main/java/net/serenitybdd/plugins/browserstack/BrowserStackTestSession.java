@@ -176,15 +176,16 @@ public class BrowserStackTestSession {
             return null;
         }
 
+        String sessionBody = null;
         try {
             HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom().
                                                             setCookieSpec(CookieSpecs.STANDARD).build()).build();
             HttpGet querySessionInfo = new HttpGet(getSessionUri());
             HttpEntity sessionDetails = httpClient.execute(querySessionInfo).getEntity();
-            String sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));
+            sessionBody = EntityUtils.toString(sessionDetails, charsetOf(sessionDetails));
             sessionElement = gson.fromJson(sessionBody, JsonElement.class);
         } catch (IOException | JsonSyntaxException | JsonIOException e) {
-            LOGGER.error("Failed to connect to Browserstack API.", e);
+            LOGGER.error("Failed to connect to Browserstack API for session " + sessionId + System.lineSeparator() + sessionBody, e);
         }
 
         if (sessionElement == null) {

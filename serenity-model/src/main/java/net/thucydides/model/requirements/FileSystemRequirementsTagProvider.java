@@ -68,6 +68,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final RequirementsConfiguration requirementsConfiguration;
     private volatile List<Requirement> requirements;
 
+    private final static String JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN =
+            "\\.(spec|test|integration|it|e2e|spec\\.e2e|spec-e2e)" +   // Consider only test files...
+            "\\.(jsx?|mjsx?|cjsx?|tsx?|mtsx?|ctsx?)$";                  // implemented in either JavaScript or TypeScript
+
+    private final static String JAVASCRIPT_SPEC_FILE_NAME_PATTERN =
+            "^(?!.*/(node_modules|jspm_packages|web_modules)/)" +       // Ignore external dependencies
+            ".*" +
+            JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN;
+
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
                 RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(defaultFeatureDirectory()).toString());
@@ -180,14 +189,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Stream<Requirement> capabilitiesAndStoriesIn(String path) {
         File rootDirectory = new File(path);
-        if (rootDirectory.exists()) {
-            return Stream.concat(
-                    loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())),
-                    loadStoriesFrom(rootDirectory.listFiles(thatAreStories()))
-            );
-        } else {
+
+        if (! (rootDirectory.exists() && rootDirectory.isDirectory())) {
             return NO_REQUIREMENTS.stream();
         }
+
+        return Stream.concat(
+            loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureOrSpecDirectories())),
+            loadStoriesFrom(rootDirectory.listFiles(thatAreStories()))
+        );
     }
 
     private int maxDirectoryDepthIn(Set<String> directoryPaths) {
@@ -546,7 +556,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Arrays.stream(requirementDirectories).map(this::readRequirementFrom);
     }
 
-
     private Stream<Requirement> loadStoriesFrom(File[] storyFiles) {
         return Arrays.stream(storyFiles)
                 .map(this::readRequirementsFromStoryOrFeatureFile)
@@ -814,13 +823,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private boolean childrenExistFor(String path) {
-        if (hasSubdirectories(path)) {
-            return true;
-        } else if (hasFeatureOrStoryFiles(path)) {
-            return true;
-        } else {
-            return classpathResourceExistsFor(path);
-        }
+        return hasSubdirectories(path)
+            || hasFeatureOrStoryFiles(path)
+            || hasJavaScriptSpecFiles(path)
+            || classpathResourceExistsFor(path);
     }
 
     private boolean hasFeatureOrStoryFiles(String path) {
@@ -832,12 +838,22 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
+    private boolean hasJavaScriptSpecFiles(String path) {
+        File requirementDirectory = new File(path);
+        return requirementDirectory.isDirectory()
+            && requirementDirectory.list(javaScriptSpecFiles()).length > 0;
+    }
+
     private FilenameFilter storyFiles() {
         return (dir, name) -> name.endsWith(".story");
     }
 
     private FilenameFilter featureFiles() {
         return (dir, name) -> name.endsWith(".feature");
+    }
+
+    private FilenameFilter javaScriptSpecFiles() {
+        return (dir, name) -> name.matches(JAVASCRIPT_SPEC_FILE_NAME_PATTERN);
     }
 
     private boolean classpathResourceExistsFor(String path) {
@@ -868,12 +884,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return nameIfNoNarrativePresent;
     }
 
-    private FileFilter thatAreFeatureDirectories() {
-        return file -> !file.getName().startsWith(".") && storyOrFeatureFilesExistIn(file);
+    private FileFilter thatAreFeatureOrSpecDirectories() {
+        return file -> file.isDirectory()
+            && !file.getName().startsWith(".")
+            && storyFeatureFilesOrSpecsExistIn(file);
     }
 
-    private boolean storyOrFeatureFilesExistIn(File directory) {
-        return startingAt(normalised(directory)).containsFiles(thatAreStories(), thatAreNarratives());
+    private boolean storyFeatureFilesOrSpecsExistIn(File directory) {
+        return startingAt(normalised(directory)).containsFiles(
+                thatAreStories(),
+                thatAreNarratives(),
+                thatAreJavaScriptSpecFiles()
+        );
     }
 
     private FileFilter thatAreStories() {
@@ -892,6 +914,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 || file.getName().equalsIgnoreCase("narrative.md")
                 || file.getName().equalsIgnoreCase("readme.md")
                 || file.getName().equalsIgnoreCase("placeholder.txt");
+    }
+
+    private FileFilter thatAreJavaScriptSpecFiles() {
+        return file -> file.getName().matches(
+                JAVASCRIPT_SPEC_FILE_NAME_PATTERN
+        );
     }
 
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {

@@ -6,7 +6,7 @@ import net.serenitybdd.reports.asciidoc.templates.FreemarkerTemplateEngine
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.reports.TestOutcomes
-import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.FileSystemRequirementsOutcomeFactory
 import net.thucydides.model.requirements.reports.RequirementsOutcomes
 import net.thucydides.model.util.EnvironmentVariables
 import java.io.File
@@ -82,6 +82,6 @@ class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
 
     class RequirementsOutcomesProvider(val testOutcomes: TestOutcomes) {
         fun using(environmentVariables: EnvironmentVariables): RequirementsOutcomes =
-                FileSystemRequirmentsOutcomeFactory(environmentVariables).buildRequirementsOutcomesFrom(testOutcomes)
+                FileSystemRequirementsOutcomeFactory(environmentVariables).buildRequirementsOutcomesFrom(testOutcomes)
     }
 }

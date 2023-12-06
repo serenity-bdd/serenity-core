@@ -14,34 +14,34 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeFactory {
+public class FileSystemRequirementsOutcomeFactory implements RequirementsOutcomeFactory {
 
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final FileSystemRequirementsTagProvider tagProvider;
     private final ReportNameProvider reportNameProvider;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemRequirmentsOutcomeFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemRequirementsOutcomeFactory.class);
 
-    public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables) {
+    public FileSystemRequirementsOutcomeFactory(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
              new SystemPropertiesIssueTracking(),
              new ReportNameProvider());
     }
 
-    public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables,
-                                               IssueTracking issueTracking,
-                                               ReportNameProvider reportNameProvider) {
+    public FileSystemRequirementsOutcomeFactory(EnvironmentVariables environmentVariables,
+                                                IssueTracking issueTracking,
+                                                ReportNameProvider reportNameProvider) {
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
         this.reportNameProvider = reportNameProvider;
     }
 
-    public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables,
-                                               IssueTracking issueTracking,
-                                               ReportNameProvider reportNameProvider,
-                                               String rootDirectoryPath) {
+    public FileSystemRequirementsOutcomeFactory(EnvironmentVariables environmentVariables,
+                                                IssueTracking issueTracking,
+                                                ReportNameProvider reportNameProvider,
+                                                String rootDirectoryPath) {
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.tagProvider = new FileSystemRequirementsTagProvider(environmentVariables, rootDirectoryPath);

@@ -4,7 +4,7 @@ import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.reports.html.ReportNameProvider;
-import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
+import net.thucydides.model.requirements.reports.FileSystemRequirementsOutcomeFactory;
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class FileSystemRequirements implements Requirements {
 
     public FileSystemRequirements(String path) {
         this.requirementsService = new FileSystemRequirementsService(path);
-        this.requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
+        this.requirmentsOutcomeFactory = new FileSystemRequirementsOutcomeFactory(
                 ConfiguredEnvironment.getEnvironmentVariables(),
                 ModelInfrastructure.getIssueTracking(),
                 new ReportNameProvider(NO_CONTEXT, ReportType.HTML, getRequirementsService()),

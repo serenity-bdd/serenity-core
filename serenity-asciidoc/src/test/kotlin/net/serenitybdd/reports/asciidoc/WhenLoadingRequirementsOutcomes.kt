@@ -3,7 +3,7 @@ package net.serenitybdd.reports.asciidoc
 import net.thucydides.model.reports.OutcomeFormat
 import net.thucydides.model.reports.TestOutcomeLoader
 import net.thucydides.model.requirements.FileSystemRequirementsTagProvider
-import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory
+import net.thucydides.model.requirements.reports.FileSystemRequirementsOutcomeFactory
 import net.thucydides.model.util.EnvironmentVariables
 import net.thucydides.model.util.MockEnvironmentVariables
 import org.assertj.core.api.Assertions.assertThat
@@ -39,7 +39,7 @@ class WhenLoadingRequirementsOutcomes {
                                             .inFormat(OutcomeFormat.JSON)
                                             .from(File("src/test/resources/test_outcomes/with_a_single_test"))
 
-        val outcomesFactory = FileSystemRequirmentsOutcomeFactory(environmentVariables)
+        val outcomesFactory = FileSystemRequirementsOutcomeFactory(environmentVariables)
         val requirementsOutcomes = outcomesFactory.buildRequirementsOutcomesFrom(testOutcomes)
         assertThat(requirementsOutcomes.requirementCount).isEqualTo(3)
     }

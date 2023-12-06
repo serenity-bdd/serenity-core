@@ -19,7 +19,7 @@
     "id": "card-payment",
     "storyName": "Card payment",
     "displayName": "Card payment",
-    "path": "ecommerce/payments/card_payment",
+    "path": "ecommerce/payments",
     "type": "feature",
     "narrative": "",
     "pathElements": [
@@ -29,10 +29,6 @@
       },
       {
         "name": "payments",
-        "description": ""
-      },
-      {
-        "name": "card_payment",
         "description": ""
       }
     ]

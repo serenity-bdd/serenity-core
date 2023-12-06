@@ -1,5 +1,6 @@
 package net.thucydides.model.requirements;
 
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.requirements.model.Requirement;
 import org.junit.jupiter.api.*;
@@ -31,6 +32,8 @@ class AggregateRequirementsTest {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-flat"));
 
+            System.out.println(requirements);
+
             assertThat(requirements).hasSize(1);
 
             Requirement feature = requirements.get(0);
@@ -44,6 +47,8 @@ class AggregateRequirementsTest {
         void should_treat_files_in_a_single_level_directory_structure_as_representing_capabilities_and_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
+
+            System.out.println(requirements);
 
             assertThat(requirements).hasSize(2);
 
@@ -63,6 +68,8 @@ class AggregateRequirementsTest {
         void should_treat_files_in_a_two_level_directory_structure_as_representing_themes_capabilities_and_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));
+
+            System.out.println(requirements);
 
             assertThat(requirements).hasSize(3);
 
@@ -85,11 +92,15 @@ class AggregateRequirementsTest {
     }
 
     private List<Requirement> requirementsFrom(Path exampleRootDirectory) {
+
         Path requirementsDirectory = exampleRootDirectory.resolve("spec");
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
-        final AggregateRequirements aggregateRequirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
-        final RequirementsService service = aggregateRequirements.getRequirementsService();
+        final RequirementsService service = new AggregateRequirementsService(
+                ModelInfrastructure.getEnvironmentVariables(),
+                new FileSystemRequirementsTagProvider(requirementsDirectory.toString()),
+                new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
+        );
 
         return service.getRequirements();
     }

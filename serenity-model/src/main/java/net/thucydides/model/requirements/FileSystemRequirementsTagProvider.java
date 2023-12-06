@@ -9,12 +9,12 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.files.TheDirectoryStructure;
 import net.thucydides.model.domain.PathElements;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestTag;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.files.TheDirectoryStructure;
 import net.thucydides.model.requirements.model.*;
 import net.thucydides.model.requirements.model.cucumber.CucumberParser;
 import net.thucydides.model.requirements.model.cucumber.InvalidFeatureFileException;
@@ -163,7 +163,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 if (requirements == null) { // double-checked locking
                     List<Requirement> loadedRequirements = getRootDirectoryPaths()
                             .stream()
-                            .flatMap(this::capabilitiesAndStoriesIn)
+                            .flatMap(this::discoverRequirementsInRootDirectories)
                             .sorted()
                             .collect(Collectors.toList());
                     if (addParents) {
@@ -187,7 +187,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return index;
     }
 
-    private Stream<Requirement> capabilitiesAndStoriesIn(String path) {
+    private Stream<Requirement> discoverRequirementsInRootDirectories(String path) {
         File rootDirectory = new File(path);
 
         if (! (rootDirectory.exists() && rootDirectory.isDirectory())) {
@@ -195,7 +195,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
 
         return Stream.concat(
-            loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureOrSpecDirectories())),
+            loadRequirementsFrom(rootDirectory.listFiles(thatAreFeatureOrSpecDirectories())),
             loadStoriesFrom(rootDirectory.listFiles(thatAreStories()))
         );
     }
@@ -552,7 +552,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Optional.empty();
     }
 
-    private Stream<Requirement> loadCapabilitiesFrom(File[] requirementDirectories) {
+    private Stream<Requirement> loadRequirementsFrom(File[] requirementDirectories) {
         return Arrays.stream(requirementDirectories).map(this::readRequirementFrom);
     }
 
@@ -596,9 +596,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             return requirementWithNarrative(requirementDirectory,
                     humanReadableVersionOf(requirementDirectory.getName()),
                     requirementNarrative.get());
-        } else {
-            return requirementFromDirectoryName(requirementDirectory);
         }
+
+        return requirementFromDirectoryName(requirementDirectory);
     }
 
     private final Set<File> invalidFeatureFiles = new HashSet<>();

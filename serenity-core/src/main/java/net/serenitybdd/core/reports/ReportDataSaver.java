@@ -33,17 +33,22 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
     @Override
     public void andContents(String contents) {
+        ReportData reportData = ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence);
+        addReportContent(reportData);
+    }
+
+    private void addReportContent(ReportData reportData) {
         if(!TestSession.isSessionStarted()) {
-            doAddContents(contents);
+            doAddContents(reportData);
         } else {
-            TestSession.addEvent(new AddReportContentEvent(this,contents));
+            TestSession.addEvent(new AddReportContentEvent(this,reportData));
         }
     }
 
-    public void doAddContents(String contents) {
+    public void doAddContents(ReportData reportData) {
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> currentStepOrBackgroundIn(outcome)
-                        .withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
+            outcome -> currentStepOrBackgroundIn(outcome)
+                .withReportData(reportData)
         );
     }
 
@@ -64,16 +69,10 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
     @Override
     public void fromFile(Path source, Charset encoding) throws IOException {
-
-        Optional<TestOutcome> outcome = eventBus.getBaseStepListener().latestTestOutcome();
-
-        if (outcome.isPresent()) {
-            ReportData reportData = (fileIsDownloadable) ?
-                    ReportData.withTitle(title).fromPath(source).asEvidence(isEvidence) :
-                    ReportData.withTitle(title).fromFile(source, encoding).asEvidence(isEvidence);
-
-            outcome.get().currentStep().get().withReportData(reportData);
-        }
+        ReportData reportData = (fileIsDownloadable) ?
+            ReportData.withTitle(title).fromPath(source).asEvidence(isEvidence) :
+            ReportData.withTitle(title).fromFile(source, encoding).asEvidence(isEvidence);
+        addReportContent(reportData);
     }
 
     @Override

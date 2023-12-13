@@ -621,13 +621,14 @@ public class StepEventBus {
         stepFailed = true;
     }
 
-    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+
+    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
 
         stepDone();
         getResultTally().logFailure(failure);
 
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.stepFailed(failure,screenshotList);
+            stepListener.stepFailed(failure,screenshotList,isInDataDrivenTest);
         }
         stepFailed = true;
     }

@@ -106,9 +106,10 @@ public interface StepListener {
      * Called when a test step fails.
      *
      * @param failure describes the test that failed and the exception that was thrown
+     * @param screenshotList list of screenshots
+     * @param isInDataDrivenTest if the step failed was called from a data driven test
      */
-    void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList);
-
+    void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest);
 
     /**
      * Declare that a step has failed after it has finished.

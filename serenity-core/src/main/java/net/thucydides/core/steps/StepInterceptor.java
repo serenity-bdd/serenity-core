@@ -603,7 +603,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
         if (TestSession.isSessionStarted()) {
             List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            StepFailedEvent stepFailedEvent = new StepFailedEvent(failure,screenshotList);
+            StepFailedEvent stepFailedEvent = new StepFailedEvent(failure,screenshotList,TestSession.getTestSessionContext().isInDataDrivenTest());
             TestSession.addEvent(stepFailedEvent);
         }
         else {

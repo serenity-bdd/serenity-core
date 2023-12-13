@@ -3,7 +3,6 @@ package net.thucydides.model.logging;
 
 import net.serenitybdd.model.collect.NewList;
 import net.serenitybdd.model.strings.Joiner;
-import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.Story;
 import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
@@ -11,7 +10,7 @@ import net.thucydides.model.domain.failures.FailureAnalysis;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
-import net.thucydides.model.steps.StepListener;
+import net.thucydides.model.steps.StepListenerAdapter;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.util.NameConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +24,7 @@ import java.util.function.BiConsumer;
 
 import static net.thucydides.model.logging.ConsoleEvent.*;
 
-public class ConsoleLoggingListener implements StepListener {
+public class ConsoleLoggingListener extends StepListenerAdapter {
 
     public static final String SERENITY_BIG_BANNER =
             "\n\n-------------------------------------------------------------------------------------\n" +
@@ -127,10 +126,6 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-
-    public void testSuiteFinished() {
-    }
-
     public void testStarted(String description) {
         flaggedSteps.clear();
         reportedOutcomes.clear();
@@ -199,9 +194,6 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
 
-    @Override
-    public void testRetried() {
-    }
 
     private Map<TestResult, BiConsumer<Logger, String>> coloredLogs() {
         Map<TestResult, BiConsumer<Logger, String>> coloredLogs = new HashMap<>();
@@ -342,7 +334,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     @Override
-    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             stepFailed(failure);
         }
@@ -354,10 +346,6 @@ public class ConsoleLoggingListener implements StepListener {
                 nestedSteps.pop();
             }
         }
-    }
-
-
-    public void lastStepFailed(StepFailure failure) {
     }
 
 
@@ -387,10 +375,6 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
 
-    public void testFailed(TestOutcome testOutcome, Throwable cause) {
-    }
-
-
     public void testIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info(colored.yellow("      -> TEST IGNORED"));
@@ -412,32 +396,6 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     @Override
-    public void testPending() {
-    }
-
-    @Override
-    public void testIsManual() {
-    }
-
-
-    public void notifyScreenChange() {
-    }
-
-    public void useExamplesFrom(DataTable table) {
-    }
-
-    @Override
-    public void addNewExamplesFrom(DataTable table) {
-
-    }
-
-    public void exampleStarted(Map<String, String> data) {
-    }
-
-    public void exampleFinished() {
-    }
-
-    @Override
     public void assumptionViolated(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
             getLogger().error(colored.red("      -> ASSUMPTION VIOLATED: " + message));
@@ -450,15 +408,4 @@ public class ConsoleLoggingListener implements StepListener {
             getLogger().info("FINISHING TEST RUN");
         }
     }
-
-    @Override
-    public void takeScreenshots(List<ScreenshotAndHtmlSource> screenshots) {
-
-    }
-
-    @Override
-    public void takeScreenshots(TestResult testResult, List<ScreenshotAndHtmlSource> screenshots) {
-
-    }
-
 }

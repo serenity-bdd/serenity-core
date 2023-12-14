@@ -18,25 +18,13 @@ public class RemoteTestingLinkManager implements LinkGenerator {
     }
 
     public String linkFor(TestOutcome testOutcome) {
-        if (noSessionIdIsFoundFor(testOutcome)) {
-            return null;
-        } else {
+        if (sessionIdIsFoundFor(testOutcome) && testOutcome.getExternalLink() != null) {
             return testOutcome.getExternalLink().getUrl();
         }
-//
-//        if (browserStackIsConfigured() && testOutcome.getExternalLink() != null) {
-//            return testOutcome.getExternalLink().getUrl();
-//        }
-//
-//        return null;
+        return null;
     }
 
-    private boolean noSessionIdIsFoundFor(TestOutcome testOutcome) {
-        return testOutcome.getSessionId() == null;
-    }
-
-    private boolean browserStackIsConfigured() {
-        return (ThucydidesSystemProperty.BROWSERSTACK_USER.from(environmentVariables) != null
-                || System.getenv(ThucydidesSystemProperty.BROWSERSTACK_USER.getPropertyName()) != null);
+    private boolean sessionIdIsFoundFor(TestOutcome testOutcome) {
+        return testOutcome.getSessionId() != null;
     }
 }

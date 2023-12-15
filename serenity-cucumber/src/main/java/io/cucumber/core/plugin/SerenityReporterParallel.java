@@ -273,6 +273,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
                 if (newScenario) {
                     configureDriver(currentFeature.get(), event.getTestCase().getUri());
                     if (!currentScenarioDefinition.getExamples().isEmpty()) {
+                        TestSession.getTestSessionContext().setInDataDrivenTest(true);
                         context.startNewExample(scenarioId);
                         LOGGER.debug("SRP:startNewExample {} {} {} at line {} ", event.getTestCase().getUri(), Thread.currentThread(),
                                 event.getTestCase().getId(), event.getTestCase().getLocation().getLine());
@@ -352,7 +353,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         String scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(currentScenarioDefinition.getName()));
 
         if (getContext(featurePath).examplesAreRunning(scenarioId)) {
-            handleResult(scenarioId, featurePath, event.getTestCase(), event.getResult());
+            handleResult(scenarioId, featurePath, event.getTestCase(), event.getResult(), true);
             finishProcessingExampleLine(scenarioId, featurePath, event.getTestCase());
         }
 
@@ -506,7 +507,7 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
             if ((astNode != null) && currentFeature.isPresent()) {
                 Scenario currentScenarioDefinition = TestSourcesModel.getScenarioDefinition(astNode);
                 scenarioId = scenarioIdFrom(currentFeature.get().getName(), TestSourcesModel.convertToId(currentScenarioDefinition.getName()));
-                handleResult(scenarioId, event.getTestCase().getUri(), event.getTestCase(), event.getResult());
+                handleResult(scenarioId, event.getTestCase().getUri(), event.getTestCase(), event.getResult(), false);
             }
             StepDefinitionAnnotations.clear();
         }
@@ -1005,19 +1006,19 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         StepEventBus.clearEventBusFor(uri);
     }
 
-    private void handleResult(String scenarioId, URI featurePath, TestCase testCase, Result result) {
+    private void handleResult(String scenarioId, URI featurePath, TestCase testCase, Result result, boolean isInDataDrivenTest) {
         io.cucumber.messages.types.Step currentStep = getContext(featurePath).nextStep(testCase);
         TestStep currentTestStep = getContext(featurePath).nextTestStep(testCase);
-        recordStepResult(featurePath, testCase, result, currentStep, currentTestStep);
+        recordStepResult(featurePath, result, currentStep, currentTestStep, isInDataDrivenTest);
         if (getContext(featurePath).noStepsAreQueued(testCase)) {
             recordFinalResult(scenarioId, featurePath, testCase);
         }
     }
 
-    private void recordStepResult(URI featurePath, TestCase testCase, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep) {
+    private void recordStepResult(URI featurePath, Result result, io.cucumber.messages.types.Step currentStep, TestStep currentTestStep, boolean isInDataDrivenTest) {
         ZonedDateTime endTime = ZonedDateTime.now();
         List<ScreenshotAndHtmlSource> screenshotList = getContext(featurePath).stepEventBus().takeScreenshots();
-        getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime));
+        getContext(featurePath).addStepEventBusEvent(new StepFinishedWithResultEvent(result, currentStep, currentTestStep, screenshotList, endTime, isInDataDrivenTest));
     }
 
     private void recordFinalResult(String scenarioId, URI featurePath, TestCase testCase) {

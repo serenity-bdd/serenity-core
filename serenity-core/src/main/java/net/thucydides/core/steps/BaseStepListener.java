@@ -914,8 +914,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
-
-    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList) {
+    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
 
         if (!aStepHasFailed()) {
             // This is the actual failure, so record all the details
@@ -926,9 +925,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
             // Step marked as done with the appropriate result before
+            if (isInDataDrivenTest) {
+                currentStepDone(failureAnalysis.resultFor(failure));
+            }
+        }
+        if (!isInDataDrivenTest) {
+            // Step marked as done with the appropriate result before
             currentStepDone(failureAnalysis.resultFor(failure));
         }
-
     }
 
 

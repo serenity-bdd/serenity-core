@@ -18,10 +18,11 @@ public class TestSessionContext {
 
 	private String currentTestName;
 
+	private boolean isInDataDrivenTest = false;
 
-	private AtomicBoolean sessionStarted = new AtomicBoolean(false);
+	private final AtomicBoolean sessionStarted = new AtomicBoolean(false);
 
-	private List<StepEventBusEvent> stepEventBusEvents = Collections.synchronizedList(new LinkedList<>());
+	private final List<StepEventBusEvent> stepEventBusEvents = Collections.synchronizedList(new LinkedList<>());
 
 	public AtomicBoolean getSessionStarted() {
 		return sessionStarted;
@@ -89,5 +90,13 @@ public class TestSessionContext {
 
 	public void setWebDriver(WebDriver webDriver) {
 		this.webDriver = webDriver;
+	}
+
+	public boolean isInDataDrivenTest() {
+		return isInDataDrivenTest;
+	}
+
+	public void setInDataDrivenTest(boolean inDataDrivenTest) {
+		isInDataDrivenTest = inDataDrivenTest;
 	}
 }

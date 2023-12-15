@@ -24,18 +24,21 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
 	private final Result result;
 	private final io.cucumber.messages.types.Step currentStep;
 	private final TestStep currentTestStep;
-
     private final List<ScreenshotAndHtmlSource> screenshotList;
+    boolean isInDataDrivenTest;
+
 	public StepFinishedWithResultEvent(Result result,
                                        io.cucumber.messages.types.Step currentStep,
                                        TestStep currentTestStep,
                                        List<ScreenshotAndHtmlSource> screenshotList,
-                                       ZonedDateTime time){
+                                       ZonedDateTime time,
+                                       boolean isInDataDrivenTest) {
 		this.result = result;
 		this.currentStep = currentStep;
 		this.currentTestStep =  currentTestStep;
 		this.screenshotList =  screenshotList;
         this.timestamp = time;
+        this.isInDataDrivenTest = isInDataDrivenTest;
 	}
 
 	@Override
@@ -65,7 +68,8 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
             if (isAssumptionFailure(rootCause)) {
                 getStepEventBus().assumptionViolated(rootCause.getMessage());
             } else {
-                getStepEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(normalized(currentStepTitle())), rootCause),screenshots);
+                StepFailure stepFailure = new StepFailure(ExecutedStepDescription.withTitle(normalized(currentStepTitle())), rootCause);
+                getStepEventBus().stepFailed(stepFailure, screenshots, isInDataDrivenTest);
             }
         }
     }

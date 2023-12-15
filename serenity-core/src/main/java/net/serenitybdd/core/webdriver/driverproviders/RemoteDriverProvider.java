@@ -18,6 +18,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +46,8 @@ public class RemoteDriverProvider implements DriverProvider {
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getParallelEventBus().webdriverCallsAreSuspended()) {
             return RemoteWebdriverStub.from(environmentVariables);
+        } else if (isAppium(environmentVariables)) {
+            return new AppiumDriverProvider(fixtureProviderService).newInstance(options, environmentVariables);
         } else {
             //
             // The remote url is defined in serenity.conf or can be defined in a class that implements ProvidesRemoteWebdriverUrl
@@ -83,6 +87,10 @@ public class RemoteDriverProvider implements DriverProvider {
         }
     }
 
+    private boolean isAppium(EnvironmentVariables environmentVariables) {
+        return "appium".equalsIgnoreCase(WEBDRIVER_REMOTE_DRIVER.from(environmentVariables));
+    }
+
     private URL getRemoteUrlFrom(EnvironmentVariables environmentVariables) {
 
         String remoteUrl = null;
@@ -100,8 +108,8 @@ public class RemoteDriverProvider implements DriverProvider {
             if (remoteUrl == null) {
                 throw new RemoteDriverConfigurationError("A webdriver.remote.url property must be defined when using a Remote driver.");
             }
-            return new URL(remoteUrl);
-        } catch (MalformedURLException e) {
+            return new URI(remoteUrl).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RemoteDriverConfigurationError("Incorrectly formed webdriver.remote.url property: " + remoteUrl, e);
         }
     }

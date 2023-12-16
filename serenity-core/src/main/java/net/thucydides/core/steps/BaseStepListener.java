@@ -924,15 +924,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
             getCurrentTestOutcome().appendTestFailure(failureCause);
 
             recordFailureDetails(failure);
-            // Step marked as done with the appropriate result before
-            if (isInDataDrivenTest) {
-                currentStepDone(failureAnalysis.resultFor(failure));
-            }
         }
-        if (!isInDataDrivenTest) {
-            // Step marked as done with the appropriate result before
-            currentStepDone(failureAnalysis.resultFor(failure));
-        }
+        // Step marked as done with the appropriate result before
+        currentStepDone(failureAnalysis.resultFor(failure));
     }
 
 

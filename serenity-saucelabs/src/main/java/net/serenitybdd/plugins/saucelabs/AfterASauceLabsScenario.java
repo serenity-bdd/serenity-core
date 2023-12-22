@@ -25,57 +25,46 @@ public class AfterASauceLabsScenario implements AfterAWebdriverScenario {
 
     @Override
     public void apply(EnvironmentVariables environmentVariables, TestOutcome testOutcome, WebDriver driver) {
-        if ((driver == null) || !RemoteDriver.isARemoteDriver(driver)) {
-            return;
-        }
-        if (!SauceLabsConfiguration.isActiveFor(environmentVariables)) {
-            return;
-        }
+        if (SauceLabsConfiguration.isDriverEnabled(driver) && this.isActivated(environmentVariables)) {
+            String sessionId = null;
+            if (RemoteDriver.of(driver).getSessionId() != null) {
+                sessionId = RemoteDriver.of(driver).getSessionId().toString();
+            }
+            String userName = SauceLabsCredentials.from(environmentVariables).getUser();
+            String key = SauceLabsCredentials.from(environmentVariables).getAccessKey();
 
-        String sessionId = null;
-        if (RemoteDriver.of(driver).getSessionId() != null) {
-            sessionId = RemoteDriver.of(driver).getSessionId().toString();
-        }
-        String userName = SauceLabsCredentials.from(environmentVariables).getUser();
-        String key = SauceLabsCredentials.from(environmentVariables).getAccessKey();
+            if (userName == null || key == null) {
+                LOGGER.warn("Incomplete SauceLabs configuration" + System.lineSeparator()
+                        + "SauceLabs integration needs the following system properties to work:" + System.lineSeparator()
+                        + "  - saucelabs.username - Your SauceLabs account name" + System.lineSeparator()
+                        + "  - saucelabs.accessKey - Your SauceLabs Access Key" + System.lineSeparator()
+                        + "You can find both of these here: https://app.saucelabs.com/user-settings"
+                );
+            } else {
+                SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
 
-        if (userName == null || key == null) {
-            LOGGER.warn("Incomplete SauceLabs configuration" + System.lineSeparator()
-                    + "SauceLabs integration needs the following system properties to work:" + System.lineSeparator()
-                    + "  - saucelabs.username - Your SauceLabs account name" + System.lineSeparator()
-                    + "  - saucelabs.accessKey - Your SauceLabs Access Key" + System.lineSeparator()
-                    + "You can find both of these here: https://app.saucelabs.com/user-settings"
-            );
-        } else {
-//            ((JavascriptExecutor) driver).executeScript("sauce:job-build=" + BuildName.from(environmentVariables));
-//            ((JavascriptExecutor)driver).executeScript("sauce:job-tags=" +  CapabilityTags.tagsFrom(testOutcome, environmentVariables));
-//
-//            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
-//            ((JavascriptExecutor)driver).executeScript("sauce:job-result=" +  result);
+                String publicUrl = sauceLabsTestSession.getTestLink();
+                testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
 
-            SauceLabsTestSession sauceLabsTestSession = new SauceLabsTestSession(userName, key, sessionId);
+                String result = (testOutcome.isSuccess()) ? "passed" : "failed";
+                String tags = Arrays.toString(CapabilityTags.tagsFrom(testOutcome, environmentVariables));
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    String jobUrl = "https://saucelabs.com/rest/v1/" + userName + "/jobs/" + sessionId;
+                    HttpPut putRequest = new HttpPut(jobUrl);
+                    putRequest.setHeader("Content-Type", "application/json");
+                    putRequest.setHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((userName + ":" + key).getBytes()));
 
-            String publicUrl = sauceLabsTestSession.getTestLink();
-            testOutcome.setLink(new ExternalLink(publicUrl, "SauceLabs"));
+                    JsonObject json = new JsonObject();
+                    json.addProperty("build", BuildName.from(environmentVariables));
+                    json.addProperty("tags", tags);
+                    json.addProperty("passed", result.equals("passed"));
 
-            String result = (testOutcome.isSuccess()) ? "passed" : "failed";
-            String tags = Arrays.toString(CapabilityTags.tagsFrom(testOutcome, environmentVariables));
-            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                String jobUrl = "https://saucelabs.com/rest/v1/" + userName + "/jobs/" + sessionId;
-                HttpPut putRequest = new HttpPut(jobUrl);
-                putRequest.setHeader("Content-Type", "application/json");
-                putRequest.setHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((userName + ":" + key).getBytes()));
+                    putRequest.setEntity(new StringEntity(json.toString()));
 
-                JsonObject json = new JsonObject();
-                json.addProperty("build", BuildName.from(environmentVariables));
-                json.addProperty("tags", tags);
-                json.addProperty("passed", result.equals("passed"));
-
-                putRequest.setEntity(new StringEntity(json.toString()));
-
-                httpClient.execute(putRequest);
-            } catch (Exception e) {
-                // Handle exception
+                    httpClient.execute(putRequest);
+                } catch (Exception e) {
+                    // Handle exception
+                }
             }
         }
     }

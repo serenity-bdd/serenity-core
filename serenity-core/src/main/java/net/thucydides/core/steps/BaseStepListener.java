@@ -110,6 +110,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer;
+    private List<ScreenshotAndHtmlSource> usedScreenshots = new ArrayList<>();
+    private List<ScreenshotAndHtmlSource> allScreenshots = new ArrayList<>();
 
     private final CloseBrowser closeBrowsers;
 
@@ -644,6 +646,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         while (!currentGroupStack.isEmpty()) {
             finishGroup();
         }
+        removeUnnecesaryScreenshotsFromOutputDir();
         LifecycleRegister.clear();
     }
 
@@ -910,6 +913,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
+        removeUnnecesaryScreenshotsFromOutputDir();
         // In all cases, mark the step as done with the appropriate result
         currentStepDone(failureAnalysis.resultFor(failure));
     }
@@ -925,6 +929,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
+        removeUnnecesaryScreenshotsFromOutputDir();
         // Step marked as done with the appropriate result before
         currentStepDone(failureAnalysis.resultFor(failure));
     }
@@ -1054,16 +1059,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-
     private void takeEndOfStepScreenshotForRecording(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
-        if ((currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result))) {
+        if (currentTestIsABrowserTest()) {
             takeRecord(MANDATORY_SCREENSHOT, result, screenshots);
         }
     }
 
     private void takeEndOfStepScreenshotForPlayback(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
-        if ((screenshots != null && screenshots.size() > 0)) {
+        allScreenshots.addAll(screenshots);
+        if ((screenshots != null && screenshots.size() > 0) && shouldTakeEndOfStepScreenshotFor(result)) {
             takePlayback(MANDATORY_SCREENSHOT, result, screenshots);
+            usedScreenshots.addAll(screenshots);
         }
     }
 
@@ -1165,6 +1171,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void removeFirstScreenshotOfCurrentStep() {
         getCurrentStep().removeScreenshot(0);
+    }
+
+    private void removeUnnecesaryScreenshotsFromOutputDir() {
+        usedScreenshots.forEach(usedScreenshot -> allScreenshots =
+            allScreenshots.stream().filter(scr -> !scr.getScreenshotName().equals(usedScreenshot.getScreenshotName()))
+                .collect(Collectors.toList()));
+        allScreenshots.forEach(this::removeScreenshot);
+    }
+
+
+    private void removeScreenshot(ScreenshotAndHtmlSource screenshot) {
+        if(screenshot.getScreenshot().delete() && currentStep().isPresent()) {
+            getCurrentStep().getScreenshots().remove(screenshot);
+        }
     }
 
     private boolean currentStepHasMoreThanOneScreenshot() {
@@ -1322,6 +1342,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
+        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(IGNORED);
     }
 
@@ -1329,7 +1350,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-
+        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
     }
 
@@ -1338,7 +1359,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-
+        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(ABORTED);
     }
 
@@ -1346,7 +1367,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-
+        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
         updateExampleTableIfNecessary(PENDING);
     }

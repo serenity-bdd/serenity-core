@@ -17,7 +17,7 @@ import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REQUIREMENT
 
 public class DefaultCapabilityTypes {
 
-    public final static List<String> DEFAULT_CAPABILITY_TYPES = NewList.of("capability", "feature", "story");
+    public final static List<String> DEFAULT_CAPABILITY_TYPES = NewList.of("theme", "capability", "feature", "story");
     private final static DefaultCapabilityTypes INSTANCE = new DefaultCapabilityTypes();
     private List<String> defaultCapabilityTypes;
 

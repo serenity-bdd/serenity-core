@@ -17,33 +17,45 @@ public class SerenityCLIReportCoordinator {
 
     List<CLIReportGenerator> reportGenerators = new ArrayList<>();
 
-    public SerenityCLIReportCoordinator(Path sourceDirectory,
-                                        Path destinationDirectory,
-                                        String project,
-                                        String issueTrackerUrl,
-                                        String jiraUrl,
-                                        String jiraProject,
-                                        String jiraUsername,
-                                        String jiraPassword,
-                                        String jiraWorkflowActive,
-                                        String jiraWorkflow,
-                                        String requirementsDirectory,
-                                        String tags) {
-        this.sourceDirectory = sourceDirectory;
+    public SerenityCLIReportCoordinator(
+            Path testScenariosDirectory,
+            Path jsonOutcomesDirectory,
+            Path destinationDirectory,
+            String project,
+            String issueTrackerUrl,
+            String jiraUrl,
+            String jiraProject,
+            String jiraUsername,
+            String jiraPassword,
+            String jiraWorkflowActive,
+            String jiraWorkflow,
+            String tags
+    ) {
+        this.sourceDirectory = jsonOutcomesDirectory;
         this.destinationDirectory = destinationDirectory;
 
         reportGenerators.addAll(List.of(
-                new CLIAggregateReportGenerator(sourceDirectory, destinationDirectory, project, issueTrackerUrl,
-                        jiraUrl, jiraProject, jiraUsername, jiraPassword,
-                        requirementsDirectory, tags),
-                new CLIIssueTrackerUpdater(jiraWorkflow, jiraWorkflowActive)
+                new CLIAggregateReportGenerator(
+                        testScenariosDirectory,
+                        destinationDirectory,
+                        project,
+                        issueTrackerUrl,
+                        jiraUrl,
+                        jiraProject,
+                        jiraUsername,
+                        jiraPassword,
+                        tags
+                ),
+                new CLIIssueTrackerUpdater(
+                        jiraWorkflow,
+                        jiraWorkflowActive
+                )
         ));
     }
 
 
     public void execute() {
         try {
-
             printStartingBanner();
 
             prepareDirectories();
@@ -51,7 +63,6 @@ public class SerenityCLIReportCoordinator {
             for (CLIReportGenerator generator : reportGenerators) {
                 generator.generateReportsFrom(sourceDirectory);
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

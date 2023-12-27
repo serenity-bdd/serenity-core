@@ -54,9 +54,9 @@ class FileSystemRequirementsOutcomeFactoryTest {
 
             Requirement capability = requirements.get(0);
 
-            assertThat(capability.getType()).isEqualTo("capability");
-            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getName()).isEqualTo("Payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
+            assertThat(capability.getType()).isEqualTo("capability");
         }
 
         @Test
@@ -71,13 +71,13 @@ class FileSystemRequirementsOutcomeFactoryTest {
             Requirement capability = requirements.get(0);
             Requirement theme = requirements.get(1);
 
-            assertThat(capability.getType()).isEqualTo("capability");
-            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getName()).isEqualTo("Payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
+            assertThat(capability.getType()).isEqualTo("capability");
 
-            assertThat(theme.getType()).isEqualTo("theme");
-            assertThat(theme.getName()).isEqualTo("ecommerce");
+            assertThat(theme.getName()).isEqualTo("Ecommerce");
             assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
+            assertThat(theme.getType()).isEqualTo("theme");
         }
     }
 

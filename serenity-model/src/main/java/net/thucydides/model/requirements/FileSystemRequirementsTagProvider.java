@@ -32,6 +32,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -708,7 +709,21 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private String getRequirementTypeOf(File requirementDirectory) {
         LOGGER.debug("Get requirements type for: {} ({})", requirementDirectory, requirementDirectory.getAbsolutePath());
         int depth = requirementDepthOf(topLevelDirectory, requirementDirectory);
-        int maxDepth = TheDirectoryStructure.startingAt(directoryAt(topLevelDirectory)).maxDepth();
+        File directory = directoryAt(topLevelDirectory);
+        int maxDepth = TheDirectoryStructure.startingAt(directory).maxDepth();
+
+        // todo: this is a hack to get the correct depth for JavaScript specs; we should come up with a better solution
+        try {
+            long count = Files.find(directory.toPath(), Integer.MAX_VALUE, (filePath, fileAttr) -> filePath.getFileName().toString().matches(JAVASCRIPT_SPEC_FILE_NAME_PATTERN))
+                    .collect(Collectors.counting());
+
+            if (count > 0) {
+                maxDepth++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return getDefaultType(depth, maxDepth);
     }
 

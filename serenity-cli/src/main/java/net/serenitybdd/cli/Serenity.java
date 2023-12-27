@@ -17,10 +17,15 @@ public class Serenity {
     @Option(name = "--help", usage = "print this message")
     private boolean help;
 
+    @Option(name = "--features",
+            usage = "Source directory containing the feature files",
+            metaVar = "<directory>")
+    Path testScenariosDirectory = Paths.get("src/test/resources/features");
+
     @Option(name = "--source",
             usage = "Source directory containing the Serenity JSON output files",
             metaVar = "<directory>")
-    Path source = Paths.get("target/site/serenity");
+    Path jsonOutcomesDirectory = Paths.get("target/site/serenity");
 
     @Option(name = "--destination",
             usage = "Directory directory to contain the generated Serenity report",
@@ -63,11 +68,6 @@ public class Serenity {
             metaVar = "<string>")
     String jiraWorkflowActive;
 
-    @Option(name = "--features",
-            usage = "Source directory containing the feature files",
-            metaVar = "<directory>")
-    Path requirementsDirectory = Paths.get("src/test/resources/features");
-
     @Option(name = "--tags",
             metaVar = "<string>")
     String tags;
@@ -93,10 +93,9 @@ public class Serenity {
         CmdLineParser parser = new CmdLineParser(this);
 
         try {
-
             parser.parseArgument(args);
-
-        } catch (CmdLineException e) {
+        }
+        catch (CmdLineException e) {
             printUsage(parser);
             return;
         }
@@ -106,15 +105,20 @@ public class Serenity {
             return;
         }
 
-        SerenityCLIReportCoordinator reporter = new SerenityCLIReportCoordinator(source,
+        String projectName = (project != null) ? project : workingDirectoryName();
+
+        SerenityCLIReportCoordinator reporter = new SerenityCLIReportCoordinator(
+                testScenariosDirectory.toAbsolutePath(),
+                jsonOutcomesDirectory.toAbsolutePath(),
                 destination,
-                (project != null) ? project : workingDirectoryName(),
+                projectName,
                 issueTrackerUrl,
+                // todo: introduce a type for JiraDetails
                 jiraUrl, jiraProject, jiraUsername, jiraPassword, jiraWorkflowActive, jiraWorkflow,
-                requirementsDirectory.toAbsolutePath().toFile().toString(), tags);
+                tags
+        );
 
         reporter.execute();
-
     }
 
     private String workingDirectoryName() {

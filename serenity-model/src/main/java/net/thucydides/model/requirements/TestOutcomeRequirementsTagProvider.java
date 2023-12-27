@@ -27,14 +27,13 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     public static final String JUNIT5_FORMAT = "JUnit5";
     public static final String JUNIT4_FORMAT = "JUnit";
-    public static final String JAVASCRIPT_FORMAT = "JS";
+    public static final String SERENITY_JS_FORMAT = "Serenity/JS";
     public static final String DEFAULT_TARGET_DIR = "target/site/serenity";
 
     private final RequirementsConfiguration requirementsConfiguration;
     private final EnvironmentVariables environmentVariables;
 
-    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of(JUNIT5_FORMAT, JUNIT4_FORMAT,JAVASCRIPT_FORMAT);
-
+    private final static List<String> SUPPORTED_TEST_SOURCES = NewList.of(JUNIT5_FORMAT, JUNIT4_FORMAT, SERENITY_JS_FORMAT);
 
     private Path sourceDirectory;
 
@@ -92,7 +91,9 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
      */
     @Override
     public List<Requirement> getRequirements() {
-        return RequirementCache.getInstance().getRequirements(this::loadRequirements);
+        // todo: rollback to using cache when I understand what's going on here
+        return this.loadRequirements();
+//        return RequirementCache.getInstance().getRequirements(this::loadRequirements);
     }
 
     private Stream<TestOutcome> supportedOutcomesFrom(List<TestOutcome> outcomes) {

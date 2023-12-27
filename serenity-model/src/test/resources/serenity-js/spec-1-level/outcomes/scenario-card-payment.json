@@ -41,7 +41,7 @@
       "displayName": "Payments"
     },
     {
-      "name": "payments/Card payment",
+      "name": "payments/card_payment",
       "type": "feature",
       "displayName": "Card payment"
     },
@@ -61,11 +61,11 @@
     }
   ],
   "featureTag": {
-    "name": "payments/Card payment",
+    "name": "payments/card_payment",
     "type": "feature",
     "displayName": "Card payment"
   },
-  "testSource": "JS",
+  "testSource": "Serenity/JS",
   "context": "mac,chrome",
   "driver": "chromium",
   "result": "SUCCESS",

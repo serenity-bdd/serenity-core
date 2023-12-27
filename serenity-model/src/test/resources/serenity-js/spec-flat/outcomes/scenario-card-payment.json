@@ -56,7 +56,7 @@
     "type": "feature",
     "displayName": "Card payment"
   },
-  "testSource": "JS",
+  "testSource": "Serenity/JS",
   "context": "mac,chrome",
   "driver": "chromium",
   "result": "SUCCESS",

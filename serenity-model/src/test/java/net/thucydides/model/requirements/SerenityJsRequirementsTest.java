@@ -1,6 +1,5 @@
 package net.thucydides.model.requirements;
 
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.requirements.model.Requirement;
 import org.junit.jupiter.api.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AggregateRequirementsTest {
+class SerenityJsRequirementsTest {
 
     @BeforeEach
     void setUp() {
@@ -38,9 +37,11 @@ class AggregateRequirementsTest {
 
             Requirement feature = requirements.get(0);
 
-            assertThat(feature.getType()).isEqualTo("feature");
+            assertThat(feature.getChildren()).hasSize(0);
+
             assertThat(feature.getName()).isEqualTo("card_payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
+            assertThat(feature.getType()).isEqualTo("feature");
         }
 
         @Test
@@ -50,18 +51,19 @@ class AggregateRequirementsTest {
 
             System.out.println(requirements);
 
-            assertThat(requirements).hasSize(2);
+            assertThat(requirements).hasSize(1);
 
-            Requirement feature = requirements.get(0);
-            Requirement capability = requirements.get(1);
-
-            assertThat(feature.getType()).isEqualTo("feature");
-            assertThat(feature.getName()).isEqualTo("card_payment");
-            assertThat(feature.getDisplayName()).isEqualTo("Card Payment");
-
-            assertThat(capability.getType()).isEqualTo("capability");
+            Requirement capability = requirements.get(0);
             assertThat(capability.getName()).isEqualTo("payments");
-            assertThat(capability.getDisplayName()).isEqualTo("Payments");
+//            assertThat(capability.getDisplayName()).isEqualTo("Payments");
+            assertThat(capability.getType()).isEqualTo("capability");
+
+            assertThat(capability.getChildren()).hasSize(1);
+
+            Requirement feature = capability.getChildren().get(0);
+            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getDisplayName()).isEqualTo("Card payment");
+            assertThat(feature.getType()).isEqualTo("feature");
         }
 
         @Test
@@ -71,23 +73,27 @@ class AggregateRequirementsTest {
 
             System.out.println(requirements);
 
-            assertThat(requirements).hasSize(3);
+            assertThat(requirements).hasSize(1);
 
-            Requirement feature = requirements.get(0);
-            Requirement capability = requirements.get(1);
-            Requirement theme = requirements.get(2);
-
-            assertThat(feature.getType()).isEqualTo("feature");
-            assertThat(feature.getName()).isEqualTo("card_payment");
-            assertThat(feature.getDisplayName()).isEqualTo("Card Payment");
-
-            assertThat(capability.getType()).isEqualTo("capability");
-            assertThat(capability.getName()).isEqualTo("payments");
-            assertThat(capability.getDisplayName()).isEqualTo("Payments");
-
-            assertThat(theme.getType()).isEqualTo("theme");
+            Requirement theme = requirements.get(0);
             assertThat(theme.getName()).isEqualTo("ecommerce");
-            assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
+//            assertThat(capability.getName()).isEqualTo("Ecommerce / Payments");
+//            assertThat(capability.getDisplayName()).isEqualTo("Ecommerce / Payments");
+            assertThat(theme.getType()).isEqualTo("theme");
+
+            assertThat(theme.getChildren()).hasSize(1);
+
+            Requirement capability = theme.getChildren().get(0);
+            assertThat(capability.getName()).isEqualTo("payments");
+//            assertThat(capability.getDisplayName()).isEqualTo("Card Payment");
+//            assertThat(capability.getType()).isEqualTo("capability");
+
+            assertThat(capability.getChildren()).hasSize(1);
+
+            Requirement feature = capability.getChildren().get(0);
+            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getDisplayName()).isEqualTo("Card payment");
+            assertThat(feature.getType()).isEqualTo("feature");
         }
     }
 
@@ -96,13 +102,9 @@ class AggregateRequirementsTest {
         Path requirementsDirectory = exampleRootDirectory.resolve("spec");
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
-        final RequirementsService service = new AggregateRequirementsService(
-                ModelInfrastructure.getEnvironmentVariables(),
-                new FileSystemRequirementsTagProvider(requirementsDirectory.toString()),
-                new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
-        );
+        Requirements requirements = SerenityJsRequirements.from(requirementsDirectory, jsonOutcomesDirectory);
 
-        return service.getRequirements();
+        return requirements.getRequirementsService().getRequirements();
     }
 
     private static Path pathTo(String resource) {

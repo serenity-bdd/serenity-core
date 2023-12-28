@@ -1,8 +1,8 @@
 package net.thucydides.model.requirements;
 
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
@@ -31,7 +31,7 @@ public class AggregateRequirements implements Requirements {
         );
         this.requirementsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
                 environmentVariables,
-                ModelInfrastructure.getIssueTracking(),
+                new SystemPropertiesIssueTracking(environmentVariables),
                 new ReportNameProvider(NO_CONTEXT, ReportType.HTML, this.requirementsService),
                 featureFilesDirectory
         );

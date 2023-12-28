@@ -19,10 +19,14 @@
     "id": "card-payment",
     "storyName": "Card payment",
     "displayName": "Card payment",
-    "path": "card_payment",
+    "path": "payments/card_payment",
     "type": "feature",
     "narrative": "",
     "pathElements": [
+      {
+        "name": "payments",
+        "description": ""
+      },
       {
         "name": "card_payment",
         "description": ""
@@ -32,7 +36,12 @@
   "startTime": "2023-12-02T15:46:38.235Z",
   "tags": [
     {
-      "name": "card_payment",
+      "name": "payments",
+      "type": "capability",
+      "displayName": "Payments"
+    },
+    {
+      "name": "payments/card_payment",
       "type": "feature",
       "displayName": "Card payment"
     },
@@ -52,7 +61,7 @@
     }
   ],
   "featureTag": {
-    "name": "card_payment",
+    "name": "payments/card_payment",
     "type": "feature",
     "displayName": "Card payment"
   },

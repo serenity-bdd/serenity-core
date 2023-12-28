@@ -1,5 +1,5 @@
 {
-  "id": "checkout-should-allow-the-customer-to-pick-their-preferred-card;macos-23-1-0;chromium-120-0-6099-28",
+  "id": "card_payment;checkout-should-allow-the-customer-to-pick-their-preferred-card;macos-23-1-0;chromium-120-0-6099-28",
   "name": "Checkout should allow the customer to pick their preferred card",
   "title": "Checkout should allow the customer to pick their preferred card",
   "manual": false,
@@ -19,10 +19,18 @@
     "id": "card-payment",
     "storyName": "Card payment",
     "displayName": "Card payment",
-    "path": "card_payment",
+    "path": "ecommerce/payments/card_payment",
     "type": "feature",
     "narrative": "",
     "pathElements": [
+      {
+        "name": "ecommerce",
+        "description": ""
+      },
+      {
+        "name": "payments",
+        "description": ""
+      },
       {
         "name": "card_payment",
         "description": ""
@@ -32,7 +40,17 @@
   "startTime": "2023-12-02T15:46:38.235Z",
   "tags": [
     {
-      "name": "card_payment",
+      "name": "ecommerce",
+      "type": "theme",
+      "displayName": "Ecommerce"
+    },
+    {
+      "name": "ecommerce/payments",
+      "type": "capability",
+      "displayName": "payments"
+    },
+    {
+      "name": "payments/card_payment",
       "type": "feature",
       "displayName": "Card payment"
     },
@@ -52,7 +70,7 @@
     }
   ],
   "featureTag": {
-    "name": "card_payment",
+    "name": "payments/card_payment",
     "type": "feature",
     "displayName": "Card payment"
   },

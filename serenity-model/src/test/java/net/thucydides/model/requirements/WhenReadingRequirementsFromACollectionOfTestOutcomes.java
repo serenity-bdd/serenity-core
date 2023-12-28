@@ -32,11 +32,13 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
     @BeforeEach
     void clearCaches() {
+        ConfiguredEnvironment.reset();
         RequirementCache.getInstance().clear();
     }
 
     @AfterAll
     static void afterAll() {
+        ConfiguredEnvironment.reset();
         RequirementCache.getInstance().clear();
     }
 

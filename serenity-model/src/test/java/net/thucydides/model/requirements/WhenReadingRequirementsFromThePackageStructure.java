@@ -2,9 +2,9 @@ package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.RequirementCache;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;
-import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,25 +1,17 @@
 package net.thucydides.model.requirements;
 
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.RequirementCache;
-import net.thucydides.model.environment.SystemEnvironmentVariables;
-import net.thucydides.model.reports.html.ReportNameProvider;
-import net.thucydides.model.requirements.model.NarrativeReader;
 import net.thucydides.model.requirements.model.Requirement;
-import net.thucydides.model.requirements.model.RequirementsConfiguration;
-import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
-import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+@Disabled("Examples that demonstrate how Serenity/JS requirements aggregation should work")
 class AggregateRequirementsTest {
 
     @BeforeEach

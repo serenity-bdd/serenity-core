@@ -6,6 +6,7 @@ import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
+import net.thucydides.model.requirements.model.NarrativeReader;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.model.RequirementsConfiguration;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
@@ -55,11 +56,24 @@ class AggregateRequirementsTest {
 
 //            RequirementsService requirementsService = new AggregateRequirementsService(
 //                    ModelInfrastructure.getEnvironmentVariables(); //,
-//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
+                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
 
+            // AbstractRequirementsTagProvider constructor; no leakage here
                     EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-                    RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+//                    RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
                     RequirementsService requirementsService = ModelInfrastructure.getRequirementsService();
+
+            // FileSystemRequirementsTagProvider constructor; todo: investigating...
+
+            String topLevelDirectory = featureFilesDirectory;
+            NarrativeReader narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, featureFilesDirectory);
+            // FileSystemRequirementsTagProvider instantiates RequirementsConfiguration again, just like its parent class
+            RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+
+//            directoryPaths = rootDirectories(rootDirectory, environmentVariables);
+
+            int level = requirementsConfiguration.startLevelForADepthOf(2);
+
 
 //                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
 //            );

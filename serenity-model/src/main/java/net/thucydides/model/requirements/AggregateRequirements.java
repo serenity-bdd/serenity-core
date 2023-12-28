@@ -1,7 +1,6 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.di.ModelInfrastructure;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
@@ -10,7 +9,6 @@ import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
 import net.thucydides.model.util.EnvironmentVariables;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -21,7 +19,7 @@ import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 public class AggregateRequirements implements Requirements {
 
     private final RequirementsService requirementsService;
-    private final RequirementsOutcomeFactory requirmentsOutcomeFactory;
+    private final RequirementsOutcomeFactory requirementsOutcomeFactory;
 
     public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory) {
         EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
@@ -29,16 +27,18 @@ public class AggregateRequirements implements Requirements {
         this.requirementsService = new AggregateRequirementsService(
                 environmentVariables,
                 new FileSystemRequirementsTagProvider(featureFilesDirectory, environmentVariables),
-                new TestOutcomeRequirementsTagProvider(environmentVariables).fromSourceDirectory(jsonOutcomes));
-        this.requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
+                new TestOutcomeRequirementsTagProvider(environmentVariables).fromSourceDirectory(jsonOutcomes)
+        );
+        this.requirementsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
                 environmentVariables,
                 ModelInfrastructure.getIssueTracking(),
                 new ReportNameProvider(NO_CONTEXT, ReportType.HTML, this.requirementsService),
-                featureFilesDirectory);
+                featureFilesDirectory
+        );
     }
 
     public RequirementsOutcomeFactory getRequirementsOutcomeFactory() {
-        return requirmentsOutcomeFactory;
+        return requirementsOutcomeFactory;
     }
 
     public RequirementsService getRequirementsService() {

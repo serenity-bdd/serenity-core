@@ -1,5 +1,6 @@
 package net.thucydides.model.requirements;
 
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.requirements.model.Requirement;
 import org.junit.jupiter.api.*;
@@ -10,15 +11,18 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+
 class AggregateRequirementsTest {
 
     @BeforeEach
     void setUp() {
+        ConfiguredEnvironment.reset();
         RequirementCache.getInstance().clear();
     }
 
     @AfterAll
     static void afterAll() {
+        ConfiguredEnvironment.reset();
         RequirementCache.getInstance().clear();
     }
 

@@ -54,9 +54,8 @@ class AggregateRequirementsTest {
 
 //            RequirementsService requirementsService = new AggregateRequirementsService(
 //                    ModelInfrastructure.getEnvironmentVariables(); //,
-//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); //,
+                    new FileSystemRequirementsTagProvider(featureFilesDirectory); //,
 
-            SystemEnvironmentVariables.currentEnvironmentVariables();
 //                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
 //            );
 

@@ -51,10 +51,11 @@ class AggregateRequirementsTest {
 
             String featureFilesDirectory = requirementsDirectory.toString();
 
-            RequirementsService requirementsService = new AggregateRequirementsService(
-                    ModelInfrastructure.getEnvironmentVariables(),
-                    new FileSystemRequirementsTagProvider(featureFilesDirectory),
-                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory));
+//            RequirementsService requirementsService = new AggregateRequirementsService(
+                    ModelInfrastructure.getEnvironmentVariables(); //,
+//                    new FileSystemRequirementsTagProvider(featureFilesDirectory),
+//                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
+//            );
 
 //            FileSystemRequirmentsOutcomeFactory requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
 //                    ConfiguredEnvironment.getEnvironmentVariables(),

@@ -32,7 +32,8 @@ class AggregateRequirementsTest {
 
         @Test
         void should_not_pollute_state() {
-
+            // fixme: expecting the act of loading the requirements to pollute global state
+            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
         }
 
         @Test

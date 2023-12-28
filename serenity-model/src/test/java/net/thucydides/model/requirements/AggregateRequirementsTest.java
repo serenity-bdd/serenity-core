@@ -41,57 +41,6 @@ class AggregateRequirementsTest {
     class SerenityJSTestOutcomes {
 
         @Test
-//        @Disabled("Disabled to debug global state pollution")
-        void should_not_pollute_state() {
-            // fixme: expecting the act of loading the requirements to pollute global state
-//            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
-
-
-            Path exampleRootDirectory = pathTo("serenity-js/spec-0-levels");
-
-            Path requirementsDirectory = exampleRootDirectory.resolve("spec");
-            Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
-
-//            Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
-
-            String featureFilesDirectory = requirementsDirectory.toString();
-
-//            RequirementsService requirementsService = new AggregateRequirementsService(
-//                    ModelInfrastructure.getEnvironmentVariables(); //,
-//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
-
-            // AbstractRequirementsTagProvider constructor; no leakage here
-                    EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
-//                    RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-                    RequirementsService requirementsService = ModelInfrastructure.getRequirementsService();
-
-            // FileSystemRequirementsTagProvider constructor; todo: investigating...
-
-//            String topLevelDirectory = featureFilesDirectory;
-//            NarrativeReader narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, featureFilesDirectory);
-            List<String> requirementTypes = new RequirementsConfiguration(environmentVariables, featureFilesDirectory)
-                    .getRequirementTypes();
-            // FileSystemRequirementsTagProvider instantiates RequirementsConfiguration again, just like its parent class
-//            RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-
-//            directoryPaths = rootDirectories(rootDirectory, environmentVariables);
-
-//            int level = requirementsConfiguration.startLevelForADepthOf(2);
-
-
-//                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
-//            );
-
-//            FileSystemRequirmentsOutcomeFactory requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
-//                    ConfiguredEnvironment.getEnvironmentVariables(),
-//                    ModelInfrastructure.getIssueTracking(),
-//                    new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService),
-//                    featureFilesDirectory);
-//
-//          requirements.getRequirementsService().getRequirements();
-        }
-
-        @Test
         @Disabled("Disabled to debug global state pollution")
         void should_treat_files_in_a_flat_directory_structure_as_representing_features() {
 

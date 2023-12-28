@@ -3,9 +3,11 @@ package net.thucydides.model.requirements;
 import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,14 +24,16 @@ public class AggregateRequirements implements Requirements {
     private final RequirementsOutcomeFactory requirmentsOutcomeFactory;
 
     public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory) {
+        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+
         this.requirementsService = new AggregateRequirementsService(
-                ModelInfrastructure.getEnvironmentVariables(),
-                new FileSystemRequirementsTagProvider(featureFilesDirectory),
-                new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomes));
+                environmentVariables,
+                new FileSystemRequirementsTagProvider(featureFilesDirectory, environmentVariables),
+                new TestOutcomeRequirementsTagProvider(environmentVariables).fromSourceDirectory(jsonOutcomes));
         this.requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
-                ConfiguredEnvironment.getEnvironmentVariables(),
+                environmentVariables,
                 ModelInfrastructure.getIssueTracking(),
-                new ReportNameProvider(NO_CONTEXT, ReportType.HTML, getRequirementsService()),
+                new ReportNameProvider(NO_CONTEXT, ReportType.HTML, this.requirementsService),
                 featureFilesDirectory);
     }
 
@@ -44,5 +48,4 @@ public class AggregateRequirements implements Requirements {
     public List<String> getTypes() {
         return requirementsService.getRequirementTypes();
     }
-
 }

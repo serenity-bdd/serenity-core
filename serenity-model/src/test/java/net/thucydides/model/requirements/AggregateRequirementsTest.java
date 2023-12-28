@@ -7,6 +7,7 @@ import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.model.RequirementsConfiguration;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.*;
@@ -54,7 +55,11 @@ class AggregateRequirementsTest {
 
 //            RequirementsService requirementsService = new AggregateRequirementsService(
 //                    ModelInfrastructure.getEnvironmentVariables(); //,
-                    new FileSystemRequirementsTagProvider(featureFilesDirectory); //,
+//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
+
+                    EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+                    RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+                    RequirementsService requirementsService = ModelInfrastructure.getRequirementsService();
 
 //                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
 //            );

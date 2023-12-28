@@ -41,7 +41,6 @@ class AggregateRequirementsTest {
     class SerenityJSTestOutcomes {
 
         @Test
-        @Disabled("Disabled to debug global state pollution")
         void should_treat_files_in_a_flat_directory_structure_as_representing_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
@@ -61,7 +60,6 @@ class AggregateRequirementsTest {
     }
 
     @Test
-    @Disabled("Disabled to debug global state pollution")
     void should_treat_files_in_a_single_level_directory_structure_as_representing_capabilities_and_features() {
 
         List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
@@ -84,7 +82,6 @@ class AggregateRequirementsTest {
     }
 
     @Test
-    @Disabled("Disabled to debug global state pollution")
     void should_treat_files_in_a_two_level_directory_structure_as_representing_themes_capabilities_and_features() {
 
         List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));

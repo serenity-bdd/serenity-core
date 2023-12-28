@@ -1,10 +1,13 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 
@@ -12,6 +15,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class WhenReadingRequirementsFromThePackageStructure {
+
+    @BeforeEach
+    void clearCaches() {
+        ConfiguredEnvironment.reset();
+        RequirementCache.getInstance().clear();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        ConfiguredEnvironment.reset();
+        RequirementCache.getInstance().clear();
+    }
 
     @Test
     public void should_read_requirements_from_a_one_level_package_hierarchy() {

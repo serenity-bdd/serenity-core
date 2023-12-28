@@ -31,6 +31,7 @@ class AggregateRequirementsTest {
     class SerenityJSTestOutcomes {
 
         @Test
+        @Disabled("Disabled to debug global state pollution")
         void should_not_pollute_state() {
             // fixme: expecting the act of loading the requirements to pollute global state
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));

@@ -25,12 +25,14 @@ class AggregateRequirementsTest {
     @BeforeEach
     void setUp() {
         ConfiguredEnvironment.reset();
+//        DefaultCapabilityTypes.instance().clear();
         RequirementCache.getInstance().clear();
     }
 
     @AfterAll
     static void afterAll() {
         ConfiguredEnvironment.reset();
+//        DefaultCapabilityTypes.instance().clear();
         RequirementCache.getInstance().clear();
     }
 
@@ -65,14 +67,16 @@ class AggregateRequirementsTest {
 
             // FileSystemRequirementsTagProvider constructor; todo: investigating...
 
-            String topLevelDirectory = featureFilesDirectory;
-            NarrativeReader narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, featureFilesDirectory);
+//            String topLevelDirectory = featureFilesDirectory;
+//            NarrativeReader narrativeReader = NarrativeReader.forRootDirectory(environmentVariables, featureFilesDirectory);
+            List<String> requirementTypes = new RequirementsConfiguration(environmentVariables, featureFilesDirectory)
+                    .getRequirementTypes();
             // FileSystemRequirementsTagProvider instantiates RequirementsConfiguration again, just like its parent class
-            RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+//            RequirementsConfiguration requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
 //            directoryPaths = rootDirectories(rootDirectory, environmentVariables);
 
-            int level = requirementsConfiguration.startLevelForADepthOf(2);
+//            int level = requirementsConfiguration.startLevelForADepthOf(2);
 
 
 //                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)

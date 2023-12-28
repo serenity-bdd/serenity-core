@@ -8,9 +8,7 @@ import net.thucydides.model.domain.TestTag;
 import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.util.EnvironmentVariables;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +29,15 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
 
     @BeforeEach
     void clearCaches() {
+        ConfiguredEnvironment.reset();
+        DefaultCapabilityTypes.instance().clear();
+        RequirementCache.getInstance().clear();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        ConfiguredEnvironment.reset();
+        DefaultCapabilityTypes.instance().clear();
         RequirementCache.getInstance().clear();
     }
 

@@ -1,0 +1,73 @@
+{
+  "id": "checkout-should-allow-the-customer-to-pick-their-preferred-card;macos-23-1-0;chromium-120-0-6099-28",
+  "name": "Checkout should allow the customer to pick their preferred card",
+  "title": "Checkout should allow the customer to pick their preferred card",
+  "manual": false,
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Tess starts with an empty basket",
+      "startTime": 1701531998839,
+      "children": [],
+      "reportData": [],
+      "screenshots": [],
+      "duration": 1897,
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "card-payment",
+    "storyName": "Card payment",
+    "displayName": "Card payment",
+    "path": "payments/card_payment",
+    "type": "feature",
+    "narrative": "",
+    "pathElements": [
+      {
+        "name": "payments",
+        "description": ""
+      },
+      {
+        "name": "card_payment",
+        "description": ""
+      }
+    ]
+  },
+  "startTime": "2023-12-02T15:46:38.235Z",
+  "tags": [
+    {
+      "name": "payments",
+      "type": "capability",
+      "displayName": "Payments"
+    },
+    {
+      "name": "payments/card_payment",
+      "type": "feature",
+      "displayName": "Card payment"
+    },
+    {
+      "name": "macOS 23.1.0",
+      "type": "platform",
+      "platformName": "macOS",
+      "platformVersion": "23.1.0",
+      "displayName": "macOS 23.1.0"
+    },
+    {
+      "name": "chromium 120.0.6099.28",
+      "type": "browser",
+      "browserName": "chromium",
+      "browserVersion": "120.0.6099.28",
+      "displayName": "chromium 120.0.6099.28"
+    }
+  ],
+  "featureTag": {
+    "name": "payments/card_payment",
+    "type": "feature",
+    "displayName": "Card payment"
+  },
+  "testSource": "Serenity/JS",
+  "context": "mac,chrome",
+  "driver": "chromium",
+  "result": "SUCCESS",
+  "duration": 3499
+}

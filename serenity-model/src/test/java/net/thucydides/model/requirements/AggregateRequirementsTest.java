@@ -56,7 +56,7 @@ class AggregateRequirementsTest {
 
 //            RequirementsService requirementsService = new AggregateRequirementsService(
 //                    ModelInfrastructure.getEnvironmentVariables(); //,
-                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
+//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); // <- This is leaking state
 
             // AbstractRequirementsTagProvider constructor; no leakage here
                     EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();

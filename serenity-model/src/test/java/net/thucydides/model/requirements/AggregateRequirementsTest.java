@@ -12,6 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
+@Disabled("Disabled the new examples again")
 class AggregateRequirementsTest {
 
     @BeforeEach

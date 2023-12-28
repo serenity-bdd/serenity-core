@@ -31,10 +31,20 @@ class AggregateRequirementsTest {
     class SerenityJSTestOutcomes {
 
         @Test
-        @Disabled("Disabled to debug global state pollution")
+//        @Disabled("Disabled to debug global state pollution")
         void should_not_pollute_state() {
             // fixme: expecting the act of loading the requirements to pollute global state
-            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
+//            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
+
+
+            Path exampleRootDirectory = pathTo("serenity-js/spec-0-levels");
+
+            Path requirementsDirectory = exampleRootDirectory.resolve("spec");
+            Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
+
+            Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
+
+//          requirements.getRequirementsService().getRequirements();
         }
 
         @Test

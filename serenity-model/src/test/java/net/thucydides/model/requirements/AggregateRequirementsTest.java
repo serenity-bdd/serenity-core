@@ -4,6 +4,7 @@ import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.RequirementCache;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
@@ -53,8 +54,9 @@ class AggregateRequirementsTest {
 
 //            RequirementsService requirementsService = new AggregateRequirementsService(
 //                    ModelInfrastructure.getEnvironmentVariables(); //,
-            //        new FileSystemRequirementsTagProvider(featureFilesDirectory); //,
+//                    new FileSystemRequirementsTagProvider(featureFilesDirectory); //,
 
+            SystemEnvironmentVariables.currentEnvironmentVariables();
 //                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory)
 //            );
 

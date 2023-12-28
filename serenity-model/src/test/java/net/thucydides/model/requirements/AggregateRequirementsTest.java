@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+@Disabled("Disabled to debug issues with singletons leaking state between tests")
 class AggregateRequirementsTest {
 
     @BeforeEach

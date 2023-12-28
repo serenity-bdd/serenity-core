@@ -1,8 +1,12 @@
 package net.thucydides.model.requirements;
 
+import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.domain.ReportType;
 import net.thucydides.model.domain.RequirementCache;
+import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.*;
 
@@ -10,6 +14,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
+import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class AggregateRequirementsTest {
@@ -42,8 +47,21 @@ class AggregateRequirementsTest {
             Path requirementsDirectory = exampleRootDirectory.resolve("spec");
             Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
-            Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
+//            Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
 
+            String featureFilesDirectory = requirementsDirectory.toString();
+
+            RequirementsService requirementsService = new AggregateRequirementsService(
+                    ModelInfrastructure.getEnvironmentVariables(),
+                    new FileSystemRequirementsTagProvider(featureFilesDirectory),
+                    new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomesDirectory));
+
+//            FileSystemRequirmentsOutcomeFactory requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
+//                    ConfiguredEnvironment.getEnvironmentVariables(),
+//                    ModelInfrastructure.getIssueTracking(),
+//                    new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService),
+//                    featureFilesDirectory);
+//
 //          requirements.getRequirementsService().getRequirements();
         }
 

@@ -25,14 +25,14 @@ class AggregateRequirementsTest {
     @BeforeEach
     void setUp() {
         ConfiguredEnvironment.reset();
-//        DefaultCapabilityTypes.instance().clear();
+        DefaultCapabilityTypes.instance().clear();
         RequirementCache.getInstance().clear();
     }
 
     @AfterAll
     static void afterAll() {
         ConfiguredEnvironment.reset();
-//        DefaultCapabilityTypes.instance().clear();
+        DefaultCapabilityTypes.instance().clear();
         RequirementCache.getInstance().clear();
     }
 

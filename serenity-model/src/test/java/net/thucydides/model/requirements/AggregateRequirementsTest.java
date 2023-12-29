@@ -2,7 +2,10 @@ package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.RequirementCache;
+import net.thucydides.model.environment.MockEnvironmentVariables;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -107,7 +110,13 @@ class AggregateRequirementsTest {
         Path requirementsDirectory = exampleRootDirectory.resolve("spec");
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
-        Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Requirements requirements = new AggregateRequirements(
+                jsonOutcomesDirectory,
+                requirementsDirectory.toString(),
+                environmentVariables
+        );
 
         return requirements.getRequirementsService().getRequirements();
     }

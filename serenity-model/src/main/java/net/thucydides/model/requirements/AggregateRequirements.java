@@ -22,8 +22,10 @@ public class AggregateRequirements implements Requirements {
     private final RequirementsOutcomeFactory requirementsOutcomeFactory;
 
     public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory) {
-        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.currentEnvironmentVariables();
+        this(jsonOutcomes, featureFilesDirectory, SystemEnvironmentVariables.createEnvironmentVariables());
+    }
 
+    public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory, EnvironmentVariables environmentVariables) {
         this.requirementsService = new AggregateRequirementsService(
                 environmentVariables,
                 new FileSystemRequirementsTagProvider(featureFilesDirectory, environmentVariables),

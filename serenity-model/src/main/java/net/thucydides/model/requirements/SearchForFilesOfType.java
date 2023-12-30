@@ -21,7 +21,7 @@ public class SearchForFilesOfType extends SimpleFileVisitor<Path> {
     int maxDepth;
 
     public SearchForFilesOfType(Path root, String suffix) {
-        this(root, Pattern.compile(".*" + suffix + "\\$"));
+        this(root, Pattern.compile(".*" + Pattern.quote(suffix) + "$"));
     }
 
     public SearchForFilesOfType(Path root, Pattern pattern) {

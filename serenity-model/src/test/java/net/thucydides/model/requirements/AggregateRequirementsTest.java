@@ -1,8 +1,6 @@
 package net.thucydides.model.requirements;
 
-import net.serenitybdd.model.di.ModelInfrastructure;
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;

@@ -40,8 +40,6 @@ class AggregateRequirementsTest {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
 
-            System.out.println(requirements);
-
             assertThat(requirements).hasSize(1);
 
             Requirement feature = requirements.get(0);
@@ -57,8 +55,6 @@ class AggregateRequirementsTest {
         void should_treat_files_in_a_single_level_directory_structure_as_representing_capabilities_and_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
-
-            System.out.println(requirements);
 
             assertThat(requirements).hasSize(1);
 
@@ -79,8 +75,6 @@ class AggregateRequirementsTest {
         void should_treat_files_in_a_two_level_directory_structure_as_representing_themes_capabilities_and_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));
-
-            System.out.println(requirements);
 
             assertThat(requirements).hasSize(1);
 
@@ -111,14 +105,6 @@ class AggregateRequirementsTest {
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
         EnvironmentVariables env = new MockEnvironmentVariables();
-
-        // todo: TestOutcomeRequirementsTagProvider doesn't use the jsonOutcomesDirectory
-        //  injected into AggregateRequirements, but instead uses the one from the environment variables
-        env.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(), jsonOutcomesDirectory.toString());
-
-        // todo: some parts of the AggregateRequirements machinery ignore the injected environment variables
-        //  and instead use the global singleton SystemEnvironmentVariables
-        ModelInfrastructure.getConfiguration().withEnvironmentVariables(env);
 
         Requirements requirements = new AggregateRequirements(
                 jsonOutcomesDirectory,

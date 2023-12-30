@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES;
 
@@ -22,18 +23,29 @@ public class DefaultCapabilityTypes {
     private List<String> defaultCapabilityTypes;
 
     private SearchForFilesOfType cucumberFileMatcher;
-    SearchForFilesOfType jbehaveFileMatcher;
+    private SearchForFilesOfType jbehaveFileMatcher;
+    private SearchForFilesOfType javaScriptSpecMatcher;
 
     private Map<String, List<String>> requirementsCache = new HashMap<>();
     public static DefaultCapabilityTypes instance() {
         return INSTANCE;
     }
 
+    private final static String JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN =
+            "\\.(spec|test|integration|it|e2e|spec\\.e2e|spec-e2e)" +   // Consider only test files...
+            "\\.(jsx?|mjsx?|cjsx?|tsx?|mtsx?|ctsx?)$";                  // implemented in either JavaScript or TypeScript
+
+    private final static String JAVASCRIPT_SPEC_FILE_NAME_PATTERN =
+            "^(?!.*/(node_modules|jspm_packages|web_modules)/)" +       // Ignore external dependencies
+            ".*" +
+            JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN;
+
     public void clear() {
         requirementsCache.clear();
         defaultCapabilityTypes = null;
         jbehaveFileMatcher = null;
         cucumberFileMatcher = null;
+        javaScriptSpecMatcher = null;
     }
 
     public List<String> getRequirementTypes(EnvironmentVariables environmentVariables, Optional<Path> root) {
@@ -54,7 +66,11 @@ public class DefaultCapabilityTypes {
             }
             else if (cucumberFilesExist(root)) {
                 defaultCapabilityTypes = cucumberCapabilityTypes(root);
-            } else {
+            }
+            else if(javaScriptSpecsExist(root)) {
+                defaultCapabilityTypes = javaScriptCapabilityHierararchy(root);
+            }
+            else {
                 defaultCapabilityTypes = DEFAULT_CAPABILITY_TYPES;
             }
         }
@@ -85,6 +101,18 @@ public class DefaultCapabilityTypes {
         }
     }
 
+    private List<String> javaScriptCapabilityHierararchy(Optional<Path> root) {
+        int directoryHierarchyDepth = getJavaScriptSpecMatcher(root).get().getMaxDepth();
+        switch (directoryHierarchyDepth) {
+            case 0:
+                return NewList.of("feature");
+            case 1:
+                return NewList.of("capability", "feature");
+            default:
+                return NewList.of("theme", "capability", "feature");
+        }
+    }
+
     private Optional<SearchForFilesOfType> getJBehaveFileMatcher(Optional<Path> root) {
         if (jbehaveFileMatcher != null) {
             return Optional.of(jbehaveFileMatcher);
@@ -102,12 +130,35 @@ public class DefaultCapabilityTypes {
         return Optional.empty();
     }
 
+    private Optional<SearchForFilesOfType> getJavaScriptSpecMatcher(Optional<Path> root) {
+        if (javaScriptSpecMatcher != null) {
+            return Optional.of(javaScriptSpecMatcher);
+        }
+
+        try {
+            if (! root.isPresent()) {
+                return Optional.empty();
+            }
+
+            javaScriptSpecMatcher = new SearchForFilesOfType(root.get(), Pattern.compile(JAVASCRIPT_SPEC_FILE_NAME_PATTERN));
+            Files.walkFileTree(root.get(), javaScriptSpecMatcher);
+            return Optional.of(javaScriptSpecMatcher);
+        }
+        catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
     private boolean jbehaveFilesExist(Optional<Path> root) {
         return (getJBehaveFileMatcher(root).isPresent() && getJBehaveFileMatcher(root).get().hasMatchingFiles());
     }
 
     private boolean cucumberFilesExist(Optional<Path> root) {
         return (getCucumberFileMatcher(root).isPresent() && getCucumberFileMatcher(root).get().hasMatchingFiles());
+    }
+
+    private boolean javaScriptSpecsExist(Optional<Path> root) {
+        return (getJavaScriptSpecMatcher(root).isPresent() && getJavaScriptSpecMatcher(root).get().hasMatchingFiles());
     }
 
     public int startLevelForADepthOf(Optional<Path> root, EnvironmentVariables environmentVariables, int requirementsDepth) {

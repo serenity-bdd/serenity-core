@@ -127,7 +127,7 @@ public class ReportNameProvider {
     }
 
     public String forRequirement(Requirement requirement) {
-        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + "requirement_" + requirement.getPath());
+        return reportNamer.getNormalizedReportNameFor(prefixUsing(context) + requirement.getType() + "_" + requirement.getPath());
     }
 
     public String forRequirement(TestTag tag) {

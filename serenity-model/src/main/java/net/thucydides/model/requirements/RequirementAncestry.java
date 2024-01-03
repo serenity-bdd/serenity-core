@@ -11,7 +11,7 @@ import static java.util.Collections.unmodifiableList;
 public class RequirementAncestry {
 
     public static void addParentsTo(List<Requirement> requirements) {
-        addParentsTo(requirements, null);
+        addParentsTo(requirements, "");
     }
 
     public static void addParentsTo(List<Requirement> requirements, String parent) {

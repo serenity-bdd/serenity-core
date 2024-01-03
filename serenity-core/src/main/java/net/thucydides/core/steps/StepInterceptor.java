@@ -4,25 +4,24 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import net.bytebuddy.implementation.bind.annotation.*;
 import net.serenitybdd.annotations.*;
-import net.serenitybdd.model.IgnoredStepException;
-import net.serenitybdd.model.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
-import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.markers.IsSilent;
-import net.thucydides.model.ThucydidesSystemProperty;
-import net.thucydides.model.adapters.TestFramework;
-import net.thucydides.model.domain.TestResult;
-import net.thucydides.model.domain.stacktrace.StackTraceSanitizer;
-import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
+import net.serenitybdd.model.IgnoredStepException;
+import net.serenitybdd.model.PendingStepException;
+import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
 import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.steps.session.TestSession;
+import net.thucydides.model.ThucydidesSystemProperty;
+import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.domain.stacktrace.StackTraceSanitizer;
+import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.AnnotatedStepDescription;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.ScreenplayInspector;
@@ -601,12 +600,8 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
 
         StepFailure failure = new StepFailure(description, cause);
 
-        if (TestSession.isSessionStarted()) {
-            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            StepFailedEvent stepFailedEvent = new StepFailedEvent(failure,screenshotList,TestSession.getTestSessionContext().isInDataDrivenTest());
-            TestSession.addEvent(stepFailedEvent);
-        }
-        else {
+        if (!TestSession.isSessionStarted()) {
+            //no step failure for the parallel runner, rely only on Cucumber events
             StepEventBus.getParallelEventBus().stepFailed(failure);
         }
         if (shouldThrowExceptionImmediately()) {
@@ -616,7 +611,7 @@ public class StepInterceptor implements MethodErrorReporter,Interceptor {
     }
 
     private void finishAnyCucumberSteps() {
-        if(TestSession.isSessionStarted()) {
+        if (TestSession.isSessionStarted()) {
             WrapupCurrentCucumberStepEvent wrapupCurrentCucumberStepEvent = new WrapupCurrentCucumberStepEvent();
             LOGGER.debug("SRP:Actor started event in session " + wrapupCurrentCucumberStepEvent + " " +  Thread.currentThread());
             TestSession.addEvent(wrapupCurrentCucumberStepEvent);

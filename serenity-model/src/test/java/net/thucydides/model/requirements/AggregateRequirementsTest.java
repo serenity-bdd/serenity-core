@@ -1,6 +1,7 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;
@@ -44,7 +45,7 @@ class AggregateRequirementsTest {
 
             assertThat(feature.getChildren()).hasSize(0);
 
-            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getName()).isEqualTo("Card payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
@@ -57,14 +58,14 @@ class AggregateRequirementsTest {
             assertThat(requirements).hasSize(1);
 
             Requirement capability = requirements.get(0);
-            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getName()).isEqualTo("Payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
             assertThat(capability.getType()).isEqualTo("capability");
 
             assertThat(capability.getChildren()).hasSize(1);
 
             Requirement feature = capability.getChildren().get(0);
-            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getName()).isEqualTo("Card payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
@@ -77,21 +78,21 @@ class AggregateRequirementsTest {
             assertThat(requirements).hasSize(1);
 
             Requirement theme = requirements.get(0);
-            assertThat(theme.getName()).isEqualTo("ecommerce");
+            assertThat(theme.getName()).isEqualTo("Ecommerce");
             assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
             assertThat(theme.getType()).isEqualTo("theme");
 
             assertThat(theme.getChildren()).hasSize(1);
 
             Requirement capability = theme.getChildren().get(0);
-            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getName()).isEqualTo("Payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
             assertThat(capability.getType()).isEqualTo("capability");
 
             assertThat(capability.getChildren()).hasSize(1);
 
             Requirement feature = capability.getChildren().get(0);
-            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getName()).isEqualTo("Card payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
@@ -103,6 +104,10 @@ class AggregateRequirementsTest {
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
         EnvironmentVariables env = new MockEnvironmentVariables();
+
+        // todo: TestOutcomeRequirementsTagProvider doesn't use the jsonOutcomesDirectory
+        //  injected into AggregateRequirements, but instead uses the one from the environment variables
+        env.setProperty(ThucydidesSystemProperty.SERENITY_FEATURES_DIRECTORY.getPropertyName(), "spec");
 
         Requirements requirements = new AggregateRequirements(
                 jsonOutcomesDirectory,

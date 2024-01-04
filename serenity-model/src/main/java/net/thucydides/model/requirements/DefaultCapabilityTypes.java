@@ -32,12 +32,12 @@ public class DefaultCapabilityTypes {
     }
 
     private final static String JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN =
+            ".*" +
             "\\.(spec|test|integration|it|e2e|spec\\.e2e|spec-e2e)" +   // Consider only test files...
             "\\.(jsx?|mjsx?|cjsx?|tsx?|mtsx?|ctsx?)$";                  // implemented in either JavaScript or TypeScript
 
     private final static String JAVASCRIPT_SPEC_FILE_NAME_PATTERN =
             "^(?!.*/(node_modules|jspm_packages|web_modules)/)" +       // Ignore external dependencies
-            ".*" +
             JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN;
 
     public void clear() {

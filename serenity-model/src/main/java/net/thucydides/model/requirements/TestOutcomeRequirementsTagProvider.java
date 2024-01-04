@@ -11,6 +11,7 @@ import net.thucydides.model.reports.TestOutcomeLoader;
 import net.thucydides.model.requirements.model.Requirement;
 import net.thucydides.model.requirements.model.RequirementsConfiguration;
 import net.thucydides.model.util.EnvironmentVariables;
+import net.thucydides.model.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,39 +112,39 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
             requirementsDirectory = outputDirectory;
         }
         // If no output directory exists (yet), the test run is still in progress, so don't bother reading the requirements yet.
-        if (requirementsDirectory.exists()) {
-            List<TestOutcome> outcomes = loader.loadFrom(requirementsDirectory);
-
-            int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
-
-            // Bottom-level requirements
-            Map<PathElements, Requirement> leafLevelRequirements = getLeafLevelRequirementsFrom(outcomes);
-
-            Set<PathElements> leafPathElements = leafLevelRequirements.keySet();
-
-            Map<PathElements, Requirement> requirementsByPath = new HashMap<>();
-
-            // Non-leaf requirements indexed by path
-            findPathElementsIn(outcomes).forEach(pathElements -> processPathElements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath));
-
-            Collection<Requirement> allRequirements = requirementsByPath.values();
-
-            // Use the map to update the leaf requirements
-            updateParentFieldsIn(requirementsByPath, allRequirements);
-
-            // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
-
-            populateChildren(requirementsByPath, allRequirements);
-
-            RequirementCache.getInstance().indexRequirements(requirementsByPath);
-
-            // Return a list of the top-level or leaf requirements with no parent elements
-            return allRequirements.stream()
-                    .filter(requirement -> StringUtils.isEmpty(requirement.getParent()))
-                    .collect(Collectors.toList());
-        } else {
+        if (! requirementsDirectory.exists()) {
             return new ArrayList<>();
         }
+
+        List<TestOutcome> outcomes = loader.loadFrom(requirementsDirectory);
+
+        int maxRequirementsDepth = getMaxRequirementsDepthFrom(outcomes);
+
+        // Bottom-level requirements
+        Map<PathElements, Requirement> leafLevelRequirements = getLeafLevelRequirementsFrom(outcomes);
+
+        Set<PathElements> leafPathElements = leafLevelRequirements.keySet();
+
+        Map<PathElements, Requirement> requirementsByPath = new HashMap<>();
+
+        // Non-leaf requirements indexed by path
+        findPathElementsIn(outcomes).forEach(pathElements -> processPathElements(pathElements, maxRequirementsDepth, leafPathElements, leafLevelRequirements, requirementsByPath));
+
+        Collection<Requirement> allRequirements = requirementsByPath.values();
+
+        // Use the map to update the leaf requirements
+        updateParentFieldsIn(requirementsByPath, allRequirements);
+
+        // Make an alias for any leaf requirements that also appear in the non-leaf requirements.
+
+        populateChildren(requirementsByPath, allRequirements);
+
+        RequirementCache.getInstance().indexRequirements(requirementsByPath);
+
+        // Return a list of the top-level or leaf requirements with no parent elements
+        return allRequirements.stream()
+                .filter(requirement -> StringUtils.isEmpty(requirement.getParent()))
+                .collect(Collectors.toList());
     }
 
     private void processPathElements(PathElements pathElements, int maxRequirementsDepth, Set<PathElements> leafPathElements,
@@ -282,13 +283,22 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
         String requirementType = requirementsConfiguration.getRequirementType(relativePath.size() - 1, maxRequirementsDepth);
 
-        return Requirement.named(requirementLeaf.getName())
+        return Requirement.named(humanReadableVersionOf(requirementLeaf.getName()))
                 .withId(StringUtils.isBlank(path) ? requirementLeaf.getName() : path)
                 .withType(requirementType)
                 .withNarrative("")
                 .withDisplayName(requirementLeaf.getDescription())
                 .withPath(path)
                 .withParent(parentPath);
+    }
+
+    // fixme: duplicated from AbstractRequirementsTagProvider
+    //  as it is not the parent of this class (should it be?).
+    //  This is to make the discovered requirements compatible with the results
+    //  of the FileSystemRequirementsTagProvider.
+    protected String humanReadableVersionOf(String name) {
+        String underscoredName = Inflector.getInstance().underscore(name);
+        return Inflector.getInstance().humanize(underscoredName);
     }
 
     private PathElements relativePathFrom(PathElements pathElements) {
@@ -311,7 +321,7 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     private Requirement requirementFrom(Story userStory) {//
         PathElement requirementLeaf = userStory.getPathElements().get(userStory.getPathElements().size() - 1);
         String parent = (userStory.getPathElements().getParent() != null) ? userStory.getPathElements().getParent().toString() : "";
-        return Requirement.named(requirementLeaf.getName())
+        return Requirement.named(humanReadableVersionOf(requirementLeaf.getName()))
                 .withId(userStory.getPathElements().toString())
                 .withType(userStory.getType())
                 .withNarrative(userStory.getNarrative())

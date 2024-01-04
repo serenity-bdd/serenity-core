@@ -18,7 +18,7 @@ import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
  */
 public class AggregateRequirements implements Requirements {
 
-    private final RequirementsService requirementsService;
+    private final BaseRequirementsService requirementsService;
     private final RequirementsOutcomeFactory requirementsOutcomeFactory;
 
     public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory) {
@@ -35,7 +35,7 @@ public class AggregateRequirements implements Requirements {
                 environmentVariables,
                 new SystemPropertiesIssueTracking(environmentVariables),
                 new ReportNameProvider(NO_CONTEXT, ReportType.HTML, this.requirementsService),
-                featureFilesDirectory
+                this.requirementsService
         );
     }
 

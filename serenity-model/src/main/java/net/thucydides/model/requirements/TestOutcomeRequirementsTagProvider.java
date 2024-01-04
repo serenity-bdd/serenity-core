@@ -280,10 +280,11 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
         PathElement requirementLeaf = relativePath.get(relativePath.size() - 1);
         String path = relativePath.toString();
         String parentPath = relativePath.getParent().toString();
+        String requirementName = requirementLeaf.getName();
 
         String requirementType = requirementsConfiguration.getRequirementType(relativePath.size() - 1, maxRequirementsDepth);
 
-        return Requirement.named(humanReadableVersionOf(requirementLeaf.getName()))
+        return Requirement.named(requirementName)
                 .withId(StringUtils.isBlank(path) ? requirementLeaf.getName() : path)
                 .withType(requirementType)
                 .withNarrative("")
@@ -321,7 +322,9 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     private Requirement requirementFrom(Story userStory) {//
         PathElement requirementLeaf = userStory.getPathElements().get(userStory.getPathElements().size() - 1);
         String parent = (userStory.getPathElements().getParent() != null) ? userStory.getPathElements().getParent().toString() : "";
-        return Requirement.named(humanReadableVersionOf(requirementLeaf.getName()))
+        String requirementName = requirementLeaf.getName();
+
+        return Requirement.named(requirementName)
                 .withId(userStory.getPathElements().toString())
                 .withType(userStory.getType())
                 .withNarrative(userStory.getNarrative())

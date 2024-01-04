@@ -45,7 +45,7 @@ class AggregateRequirementsTest {
 
             assertThat(feature.getChildren()).hasSize(0);
 
-            assertThat(feature.getName()).isEqualTo("Card payment");
+            assertThat(feature.getName()).isEqualTo("card_payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
@@ -58,14 +58,14 @@ class AggregateRequirementsTest {
             assertThat(requirements).hasSize(1);
 
             Requirement capability = requirements.get(0);
-            assertThat(capability.getName()).isEqualTo("Payments");
+            assertThat(capability.getName()).isEqualTo("payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
             assertThat(capability.getType()).isEqualTo("capability");
 
             assertThat(capability.getChildren()).hasSize(1);
 
             Requirement feature = capability.getChildren().get(0);
-            assertThat(feature.getName()).isEqualTo("Card payment");
+            assertThat(feature.getName()).isEqualTo("card_payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
@@ -78,21 +78,21 @@ class AggregateRequirementsTest {
             assertThat(requirements).hasSize(1);
 
             Requirement theme = requirements.get(0);
-            assertThat(theme.getName()).isEqualTo("Ecommerce");
+            assertThat(theme.getName()).isEqualTo("ecommerce");
             assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
             assertThat(theme.getType()).isEqualTo("theme");
 
             assertThat(theme.getChildren()).hasSize(1);
 
             Requirement capability = theme.getChildren().get(0);
-            assertThat(capability.getName()).isEqualTo("Payments");
+            assertThat(capability.getName()).isEqualTo("payments");
             assertThat(capability.getDisplayName()).isEqualTo("Payments");
             assertThat(capability.getType()).isEqualTo("capability");
 
             assertThat(capability.getChildren()).hasSize(1);
 
             Requirement feature = capability.getChildren().get(0);
-            assertThat(feature.getName()).isEqualTo("Card payment");
+            assertThat(feature.getName()).isEqualTo("card_payment");
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }

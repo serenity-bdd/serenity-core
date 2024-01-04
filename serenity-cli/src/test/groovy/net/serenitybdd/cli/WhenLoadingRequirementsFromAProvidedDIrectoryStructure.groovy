@@ -13,6 +13,7 @@ class WhenLoadingRequirementsFromAProvidedDirectoryStructure extends Specificati
             def tagProvider = new FileSystemRequirementsTagProvider(environmentVariables,
                                                                     "src/test/resources/featuredir")
         then:
-            tagProvider.requirements.collect {it.name } as Set == ["Maintain my todo list","Record todos"] as Set
+            tagProvider.requirements.collect {it.name } as Set == ["maintain_my_todo_list","record_todos"] as Set
+            tagProvider.requirements.collect {it.displayName } as Set == ["Maintain my todo list","Record todos"] as Set
     }
 }

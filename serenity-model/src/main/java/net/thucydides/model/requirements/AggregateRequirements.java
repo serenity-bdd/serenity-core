@@ -43,7 +43,7 @@ public class AggregateRequirements implements Requirements {
         return requirementsOutcomeFactory;
     }
 
-    public RequirementsService getRequirementsService() {
+    public BaseRequirementsService getRequirementsService() {
         return requirementsService;
     }
 

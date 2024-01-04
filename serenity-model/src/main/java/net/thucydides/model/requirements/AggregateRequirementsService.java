@@ -36,7 +36,8 @@ public class AggregateRequirementsService extends BaseRequirementsService implem
             StopWatch stopWatch = StopWatch.createStarted();
 
             requirements = getRequirementsTagProviders().stream()
-                    .parallel()
+                    // todo: enable parallel processing
+//                    .parallel()
                     .flatMap(RequirementsProvided::asStream)
                     .collect(Collectors.toCollection(MergedRequirementList::new));
 

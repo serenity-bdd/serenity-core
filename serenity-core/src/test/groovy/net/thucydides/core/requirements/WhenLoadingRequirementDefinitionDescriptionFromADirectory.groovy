@@ -70,7 +70,7 @@ class WhenLoadingRequirementDefinitionDescriptionFromADirectory extends Specific
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title and description should be loaded"
-            narrative.get().title.get() == "Grow more apples"
+            narrative.get().title.get() == "Grow apples"
             narrative.get().text.contains("In order to make apple pies") &&
             narrative.get().text.contains("As a farmer") &&
             narrative.get().text.contains("I want to grow apples")

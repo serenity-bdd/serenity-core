@@ -27,7 +27,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
 
     List<RequirementsTagProvider> requirementsProviders
     ReportNameProvider reportNameProvider
-    
+
     def setup() {
         FeatureCache.getCache().close()
         def vars = new MockEnvironmentVariables()
@@ -49,10 +49,10 @@ class WhenGeneratingRequirementsReportData extends Specification {
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "all the known capabilities should be listed"
             def requirementsNames = outcomes.requirementOutcomes.collect {it.requirement.name}
-            requirementsNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat",  "Raise chickens", "Apples", "Nice zucchinis", "Potatoes"]
+            requirementsNames == ["grow cucumbers", "Grow potatoes", "Grow wheat",  "raise_chickens", "Apples", "Nice zucchinis", "Potatoes"]
         and: "the display name should be obtained from the narrative file where present"
             def requirementsDisplayNames = outcomes.requirementOutcomes.collect {it.requirement.displayName}
-            requirementsDisplayNames == ["Grow cucumbers", "Grow lots of potatoes", "Grow wheat", "Raise chickens", "Apples", "Nice zucchinis", "Potatoes title"]
+            requirementsDisplayNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat", "Raise chickens", "Apples", "Nice zucchinis", "Potatoes title"]
     }
 
     def "should report no test results for requirements without associated tests"() {

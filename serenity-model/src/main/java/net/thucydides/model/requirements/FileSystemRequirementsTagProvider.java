@@ -689,10 +689,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         LOGGER.debug("Loading requirements from directory: {} ({})", requirementDirectory, requirementDirectory.getAbsolutePath());
         String requirementType = getRequirementTypeOf(requirementDirectory);
         String requirementName = requirementDirectory.getName();
+        String displayName = humanReadableVersionOf(requirementName);
         List<Requirement> children = readChildrenFrom(requirementDirectory);
 //        String path = relativeDirectoryOf(requirementDirectory.getPath());
         String path = new FeatureFilePath(environmentVariables).relativePathFor(requirementDirectory.getPath());
         return Requirement.named(requirementName)
+                .withOptionalDisplayName(displayName)
                 .withId(path)
                 .withType(requirementType)
                 .withNarrative("")

@@ -20,7 +20,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         Requirements requirements = new FileSystemRequirements("sample-story-directories/capabilities_and_features")
         when: "We load the available requirements"
         def capabilities = requirements.requirementsService.requirements
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         def capabilityTypes = capabilities.collect { it.type }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
@@ -41,7 +41,7 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/capabilities_and_features with spaces")
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
     }
@@ -51,14 +51,13 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("stories")
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
-        def capabilityNames = capabilities.collect { it.name }
+        def capabilityNames = capabilities.collect { it.displayName }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat", "Raise chickens"]
         and: "the child requirements should be found"
         def growCucumbers = capabilities.get(0)
         def cucumberFeatures = growCucumbers.children.collect { it.name }
         cucumberFeatures == ["Grow green cucumbers"]
-
     }
 
     def "Should be able to load issues from the default directory structure"() {

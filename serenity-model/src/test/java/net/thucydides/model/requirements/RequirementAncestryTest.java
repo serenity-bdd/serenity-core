@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RequirementAncestryTest {
 
     /**
-     * Parent ID must be set to an empty string for the {@link MergedRequirementList}
-     * to correctly merge the requirements discovered by different tag providers.
+     * Parent ID must be set to an empty string for the {@link Requirement#merge}
+     * to correctly merge the requirements discovered by the different tag providers.
      */
     @Test
     void sets_the_parent_id_to_empty_string_when_parent_does_not_exist() {

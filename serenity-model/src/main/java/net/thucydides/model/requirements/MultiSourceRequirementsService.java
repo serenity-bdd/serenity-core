@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MultiSourceRequirementsService extends BaseRequirementsService implements RequirementsService {
 
@@ -41,7 +40,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
             requirements = getRequirementsTagProviders().stream()
                     .parallel()
                     .flatMap(RequirementsProvided::asStream)
-                    .collect(Collectors.toCollection(MergedRequirementList::new));
+                    .collect(RequirementsCollector.merging());
 
             stopWatch.split();
             LOGGER.debug("Requirements loaded in {}", stopWatch.formatSplitTime());

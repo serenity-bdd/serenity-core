@@ -35,11 +35,11 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.thucydides.model.files.TheDirectoryStructure.startingAt;
+import static net.thucydides.model.requirements.SpecFileFilters.*;
 import static net.thucydides.model.requirements.RequirementsPath.pathElements;
 import static net.thucydides.model.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.model.util.Inflector.inflection;
@@ -836,23 +836,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             return false;
         }
 
-        boolean hasStoryFiles = requirementDirectory.list(storyFiles()).length > 0;
-        boolean hasFeatureFiles = requirementDirectory.list(featureFiles()).length > 0;
+        boolean hasStoryFiles = requirementDirectory.list(jbehaveStoryFiles()).length > 0;
+        boolean hasFeatureFiles = requirementDirectory.list(cucumberFeatureFiles()).length > 0;
+
         boolean hasJavaScriptSpecFiles = requirementDirectory.list(javascriptSpecFiles()).length > 0;
 
         return hasStoryFiles || hasFeatureFiles || hasJavaScriptSpecFiles;
-    }
-
-    private FilenameFilter storyFiles() {
-        return (dir, name) -> name.endsWith(".story");
-    }
-
-    private FilenameFilter featureFiles() {
-        return (dir, name) -> name.endsWith(".feature");
-    }
-
-    private FilenameFilter javascriptSpecFiles() {
-        return (dir, name) -> name.matches(JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN);
     }
 
     private boolean classpathResourceExistsFor(String path) {
@@ -891,7 +880,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return startingAt(normalised(directory)).containsFiles(
                 thatAreStories(),
                 thatAreNarratives(),
-                thatAreJavaScriptSpecs()
+                thatAreJavascriptSpecFiles()
         );
     }
 
@@ -904,33 +893,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 return (file.getName().toLowerCase().endsWith("." + STORY_EXTENSION) || file.getName().toLowerCase().endsWith("." + FEATURE_EXTENSION));
             }
         };
-    }
-
-    private FileFilter thatAreJavaScriptSpecs() {
-        return file -> {
-            String filename = file.getName().toLowerCase();
-            return JAVASCRIPT_SPEC_FILE_PATTERN.matcher(filename).matches();
-        };
-    }
-
-    // todo: extract from DefaultCapabilityTypes
-    private final static String JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN =
-            ".*" +
-            "\\.(spec|test|integration|it|e2e|spec\\.e2e|spec-e2e)" +   // Consider only test files...
-            "\\.(jsx?|mjsx?|cjsx?|tsx?|mtsx?|ctsx?)$";                  // implemented in either JavaScript or TypeScript
-
-    private final static String JAVASCRIPT_SPEC_FILE_NAME_PATTERN =
-            "^(?!.*/(node_modules|jspm_packages|web_modules)/)" +       // Ignore external dependencies
-            JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN;
-
-    private final static Pattern JAVASCRIPT_SPEC_FILE_PATTERN = Pattern.compile(JAVASCRIPT_SPEC_FILE_NAME_PATTERN);
-
-
-    private FileFilter thatAreNarratives() {
-        return file -> file.getName().equalsIgnoreCase("narrative.txt")
-                || file.getName().equalsIgnoreCase("narrative.md")
-                || file.getName().equalsIgnoreCase("readme.md")
-                || file.getName().equalsIgnoreCase("placeholder.txt");
     }
 
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {

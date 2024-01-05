@@ -1,5 +1,6 @@
 package net.thucydides.model.requirements;
 
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -7,25 +8,18 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class SearchForFilesOfType extends SimpleFileVisitor<Path> {
 
-
-    private final Pattern pattern;
+    private final FilenameFilter filenameFilter;
     Path root;
     List<Path> matchingFiles;
     int maxDepth;
 
-    public SearchForFilesOfType(Path root, String suffix) {
-        this(root, Pattern.compile(".*" + Pattern.quote(suffix) + "$"));
-    }
-
-    public SearchForFilesOfType(Path root, Pattern pattern) {
-        this.pattern = pattern;
+    public SearchForFilesOfType(Path root, FilenameFilter filenameFilter) {
+        this.filenameFilter = filenameFilter;
         this.root = root;
         this.matchingFiles = new ArrayList<>();
         this.maxDepth = 0;
@@ -33,15 +27,14 @@ public class SearchForFilesOfType extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
-        Matcher matcher = pattern.matcher(file.getFileName().toString());
-
-        if (matcher.matches()) {
+        if (filenameFilter.accept(file.toFile(), file.getFileName().toString())) {
             matchingFiles.add(file);
             int depth = file.getNameCount() - root.getNameCount() - 1;
             if (depth > maxDepth) {
                 maxDepth = depth;
             }
         }
+
         return CONTINUE;
     }
 

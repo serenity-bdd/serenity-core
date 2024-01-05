@@ -12,9 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES;
+import static net.thucydides.model.requirements.SpecFileFilters.cucumberFeatureFiles;
+import static net.thucydides.model.requirements.SpecFileFilters.javascriptSpecFiles;
 
 public class DefaultCapabilityTypes {
 
@@ -24,28 +25,19 @@ public class DefaultCapabilityTypes {
 
     private SearchForFilesOfType cucumberFileMatcher;
     private SearchForFilesOfType jbehaveFileMatcher;
-    private SearchForFilesOfType javaScriptSpecMatcher;
+    private SearchForFilesOfType javascriptSpecMatcher;
 
     private Map<String, List<String>> requirementsCache = new HashMap<>();
     public static DefaultCapabilityTypes instance() {
         return INSTANCE;
     }
 
-    private final static String JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN =
-            ".*" +
-            "\\.(spec|test|integration|it|e2e|spec\\.e2e|spec-e2e)" +   // Consider only test files...
-            "\\.(jsx?|mjsx?|cjsx?|tsx?|mtsx?|ctsx?)$";                  // implemented in either JavaScript or TypeScript
-
-    private final static String JAVASCRIPT_SPEC_FILE_NAME_PATTERN =
-            "^(?!.*/(node_modules|jspm_packages|web_modules)/)" +       // Ignore external dependencies
-            JAVASCRIPT_SPEC_FILE_EXTENSION_PATTERN;
-
     public void clear() {
         requirementsCache.clear();
         defaultCapabilityTypes = null;
         jbehaveFileMatcher = null;
         cucumberFileMatcher = null;
-        javaScriptSpecMatcher = null;
+        javascriptSpecMatcher = null;
     }
 
     public List<String> getRequirementTypes(EnvironmentVariables environmentVariables, Optional<Path> root) {
@@ -120,7 +112,7 @@ public class DefaultCapabilityTypes {
         try {
 //            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
-                jbehaveFileMatcher = new SearchForFilesOfType(root.get(), ".story");
+                jbehaveFileMatcher = new SearchForFilesOfType(root.get(), SpecFileFilters.jbehaveStoryFiles());
                 Files.walkFileTree(root.get(), jbehaveFileMatcher);
                 return Optional.of(jbehaveFileMatcher);
             }
@@ -131,8 +123,8 @@ public class DefaultCapabilityTypes {
     }
 
     private Optional<SearchForFilesOfType> getJavaScriptSpecMatcher(Optional<Path> root) {
-        if (javaScriptSpecMatcher != null) {
-            return Optional.of(javaScriptSpecMatcher);
+        if (javascriptSpecMatcher != null) {
+            return Optional.of(javascriptSpecMatcher);
         }
 
         try {
@@ -140,9 +132,9 @@ public class DefaultCapabilityTypes {
                 return Optional.empty();
             }
 
-            javaScriptSpecMatcher = new SearchForFilesOfType(root.get(), Pattern.compile(JAVASCRIPT_SPEC_FILE_NAME_PATTERN));
-            Files.walkFileTree(root.get(), javaScriptSpecMatcher);
-            return Optional.of(javaScriptSpecMatcher);
+            javascriptSpecMatcher = new SearchForFilesOfType(root.get(), javascriptSpecFiles());
+            Files.walkFileTree(root.get(), javascriptSpecMatcher);
+            return Optional.of(javascriptSpecMatcher);
         }
         catch (IOException e) {
             return Optional.empty();
@@ -172,7 +164,7 @@ public class DefaultCapabilityTypes {
         try {
 //            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
-                cucumberFileMatcher = new SearchForFilesOfType(root.get(), ".feature");
+                cucumberFileMatcher = new SearchForFilesOfType(root.get(), cucumberFeatureFiles());
                 Files.walkFileTree(root.get(), cucumberFileMatcher);
                 return Optional.of(cucumberFileMatcher);
             }

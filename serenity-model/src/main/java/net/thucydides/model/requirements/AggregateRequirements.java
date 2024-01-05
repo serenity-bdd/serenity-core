@@ -1,14 +1,14 @@
 package net.thucydides.model.requirements;
 
-import net.serenitybdd.model.di.ModelInfrastructure;
-import net.serenitybdd.model.environment.ConfiguredEnvironment;
 import net.thucydides.model.domain.ReportType;
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.issues.SystemPropertiesIssueTracking;
 import net.thucydides.model.reports.html.ReportNameProvider;
 import net.thucydides.model.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.model.requirements.reports.RequirementsOutcomeFactory;
+import net.thucydides.model.util.EnvironmentVariables;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -18,31 +18,36 @@ import static net.thucydides.model.reports.html.ReportNameProvider.NO_CONTEXT;
  */
 public class AggregateRequirements implements Requirements {
 
-    private final RequirementsService requirementsService;
-    private final RequirementsOutcomeFactory requirmentsOutcomeFactory;
+    private final BaseRequirementsService requirementsService;
+    private final RequirementsOutcomeFactory requirementsOutcomeFactory;
 
     public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory) {
+        this(jsonOutcomes, featureFilesDirectory, SystemEnvironmentVariables.createEnvironmentVariables());
+    }
+
+    public AggregateRequirements(Path jsonOutcomes, String featureFilesDirectory, EnvironmentVariables environmentVariables) {
         this.requirementsService = new AggregateRequirementsService(
-                ModelInfrastructure.getEnvironmentVariables(),
-                new FileSystemRequirementsTagProvider(featureFilesDirectory),
-                new TestOutcomeRequirementsTagProvider().fromSourceDirectory(jsonOutcomes));
-        this.requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
-                ConfiguredEnvironment.getEnvironmentVariables(),
-                ModelInfrastructure.getIssueTracking(),
-                new ReportNameProvider(NO_CONTEXT, ReportType.HTML, getRequirementsService()),
-                featureFilesDirectory);
+                environmentVariables,
+                new FileSystemRequirementsTagProvider(featureFilesDirectory, environmentVariables),
+                new TestOutcomeRequirementsTagProvider(environmentVariables).fromSourceDirectory(jsonOutcomes)
+        );
+        this.requirementsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
+                environmentVariables,
+                new SystemPropertiesIssueTracking(environmentVariables),
+                new ReportNameProvider(NO_CONTEXT, ReportType.HTML, this.requirementsService),
+                this.requirementsService
+        );
     }
 
     public RequirementsOutcomeFactory getRequirementsOutcomeFactory() {
-        return requirmentsOutcomeFactory;
+        return requirementsOutcomeFactory;
     }
 
-    public RequirementsService getRequirementsService() {
+    public BaseRequirementsService getRequirementsService() {
         return requirementsService;
     }
 
     public List<String> getTypes() {
         return requirementsService.getRequirementTypes();
     }
-
 }

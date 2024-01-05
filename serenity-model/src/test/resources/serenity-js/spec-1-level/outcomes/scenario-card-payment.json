@@ -25,11 +25,11 @@
     "pathElements": [
       {
         "name": "payments",
-        "description": ""
+        "description": "Payments"
       },
       {
         "name": "card_payment",
-        "description": ""
+        "description": "Card Payment"
       }
     ]
   },
@@ -65,7 +65,7 @@
     "type": "feature",
     "displayName": "Card payment"
   },
-  "testSource": "Serenity/JS",
+  "testSource": "JS",
   "context": "mac,chrome",
   "driver": "chromium",
   "result": "SUCCESS",

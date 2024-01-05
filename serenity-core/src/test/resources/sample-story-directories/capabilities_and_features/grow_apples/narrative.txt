@@ -1,4 +1,4 @@
-Grow more apples
+Grow apples
 Meta:
 @issue #123
 

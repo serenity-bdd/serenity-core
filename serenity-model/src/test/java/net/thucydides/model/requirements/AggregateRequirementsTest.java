@@ -1,8 +1,11 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.domain.RequirementCache;
+import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.requirements.model.Requirement;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -11,15 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@Disabled("Examples that demonstrate how Serenity/JS requirements aggregation should work")
 class AggregateRequirementsTest {
-
-    @BeforeEach
-    void setUp() {
-        ConfiguredEnvironment.reset();
-        DefaultCapabilityTypes.instance().clear();
-        RequirementCache.getInstance().clear();
-    }
 
     @AfterAll
     static void afterAll() {
@@ -32,12 +27,17 @@ class AggregateRequirementsTest {
     @DisplayName("when interpreting Serenity/JS test outcomes")
     class SerenityJSTestOutcomes {
 
+        @BeforeEach
+        void setUp() {
+            ConfiguredEnvironment.reset();
+            DefaultCapabilityTypes.instance().clear();
+            RequirementCache.getInstance().clear();
+        }
+
         @Test
         void should_treat_files_in_a_flat_directory_structure_as_representing_features() {
 
             List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-0-levels"));
-
-            System.out.println(requirements);
 
             assertThat(requirements).hasSize(1);
 
@@ -49,57 +49,53 @@ class AggregateRequirementsTest {
             assertThat(feature.getDisplayName()).isEqualTo("Card payment");
             assertThat(feature.getType()).isEqualTo("feature");
         }
-    }
 
-    @Test
-    void should_treat_files_in_a_single_level_directory_structure_as_representing_capabilities_and_features() {
+        @Test
+        void should_treat_files_in_a_single_level_directory_structure_as_representing_capabilities_and_features() {
 
-        List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
+            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-1-level"));
 
-        System.out.println(requirements);
+            assertThat(requirements).hasSize(1);
 
-        assertThat(requirements).hasSize(1);
+            Requirement capability = requirements.get(0);
+            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getDisplayName()).isEqualTo("Payments");
+            assertThat(capability.getType()).isEqualTo("capability");
 
-        Requirement capability = requirements.get(0);
-        assertThat(capability.getName()).isEqualTo("payments");
-        assertThat(capability.getDisplayName()).isEqualTo("Payments");
-        assertThat(capability.getType()).isEqualTo("capability");
+            assertThat(capability.getChildren()).hasSize(1);
 
-        assertThat(capability.getChildren()).hasSize(1);
+            Requirement feature = capability.getChildren().get(0);
+            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getDisplayName()).isEqualTo("Card payment");
+            assertThat(feature.getType()).isEqualTo("feature");
+        }
 
-        Requirement feature = capability.getChildren().get(0);
-        assertThat(feature.getName()).isEqualTo("card_payment");
-        assertThat(feature.getDisplayName()).isEqualTo("Card payment");
-        assertThat(feature.getType()).isEqualTo("feature");
-    }
+        @Test
+        void should_treat_files_in_a_two_level_directory_structure_as_representing_themes_capabilities_and_features() {
 
-    @Test
-    void should_treat_files_in_a_two_level_directory_structure_as_representing_themes_capabilities_and_features() {
+            List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));
 
-        List<Requirement> requirements = requirementsFrom(pathTo("serenity-js/spec-2-levels"));
+            assertThat(requirements).hasSize(1);
 
-        System.out.println(requirements);
+            Requirement theme = requirements.get(0);
+            assertThat(theme.getName()).isEqualTo("ecommerce");
+            assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
+            assertThat(theme.getType()).isEqualTo("theme");
 
-        assertThat(requirements).hasSize(1);
+            assertThat(theme.getChildren()).hasSize(1);
 
-        Requirement theme = requirements.get(0);
-        assertThat(theme.getName()).isEqualTo("ecommerce");
-        assertThat(theme.getDisplayName()).isEqualTo("Ecommerce");
-        assertThat(theme.getType()).isEqualTo("theme");
+            Requirement capability = theme.getChildren().get(0);
+            assertThat(capability.getName()).isEqualTo("payments");
+            assertThat(capability.getDisplayName()).isEqualTo("Payments");
+            assertThat(capability.getType()).isEqualTo("capability");
 
-        assertThat(theme.getChildren()).hasSize(1);
+            assertThat(capability.getChildren()).hasSize(1);
 
-        Requirement capability = theme.getChildren().get(0);
-        assertThat(capability.getName()).isEqualTo("payments");
-        assertThat(capability.getDisplayName()).isEqualTo("Payments");
-        assertThat(capability.getType()).isEqualTo("capability");
-
-        assertThat(capability.getChildren()).hasSize(1);
-
-        Requirement feature = capability.getChildren().get(0);
-        assertThat(feature.getName()).isEqualTo("card_payment");
-        assertThat(feature.getDisplayName()).isEqualTo("Card payment");
-        assertThat(feature.getType()).isEqualTo("feature");
+            Requirement feature = capability.getChildren().get(0);
+            assertThat(feature.getName()).isEqualTo("card_payment");
+            assertThat(feature.getDisplayName()).isEqualTo("Card payment");
+            assertThat(feature.getType()).isEqualTo("feature");
+        }
     }
 
     private List<Requirement> requirementsFrom(Path exampleRootDirectory) {
@@ -107,9 +103,21 @@ class AggregateRequirementsTest {
         Path requirementsDirectory = exampleRootDirectory.resolve("spec");
         Path jsonOutcomesDirectory = exampleRootDirectory.resolve("outcomes");
 
-        Requirements requirements = new AggregateRequirements(jsonOutcomesDirectory, requirementsDirectory.toString());
+        EnvironmentVariables env = new MockEnvironmentVariables();
 
-        return requirements.getRequirementsService().getRequirements();
+        // todo: TestOutcomeRequirementsTagProvider doesn't use the jsonOutcomesDirectory
+        //  injected into AggregateRequirements, but instead uses the one from the environment variables
+        env.setProperty(ThucydidesSystemProperty.SERENITY_FEATURES_DIRECTORY.getPropertyName(), "spec");
+
+        Requirements requirements = new AggregateRequirements(
+                jsonOutcomesDirectory,
+                requirementsDirectory.toString(),
+                env
+        );
+
+        RequirementsService requirementsService = requirements.getRequirementsService();
+
+        return requirementsService.getRequirements();
     }
 
     private static Path pathTo(String resource) {

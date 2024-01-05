@@ -1,6 +1,7 @@
 package net.thucydides.model.requirements;
 
 import net.serenitybdd.model.environment.ConfiguredEnvironment;
+import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.environment.MockEnvironmentVariables;
 import net.thucydides.model.domain.RequirementCache;
 import net.thucydides.model.domain.TestOutcome;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -143,6 +145,16 @@ class WhenReadingRequirementsFromACollectionOfTestOutcomes {
         void shouldListTheRequirementTypesBasedOnTheDepthOfTheRequirementsHierarchy() {
             environmentVariables.setProperty("serenity.outputDirectory", localResource("sample-junit4-outcomes"));
             environmentVariables.setProperty("serenity.test.root", "smoketests");
+            ConfiguredEnvironment.updateConfiguration(environmentVariables);
+
+            TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);
+            assertThat(tagProvider.getActiveRequirementTypes()).containsExactly("theme", "capability", "feature");
+        }
+
+        @Test
+        void shouldListTheRequirementTypesBasedOnTheDepthOfTheRequirementsHierarchyOfAJavaScriptProject() {
+            environmentVariables.setProperty("serenity.outputDirectory", localResource("serenity-js/spec-2-levels/outcomes"));
+            environmentVariables.setProperty("serenity.requirements.dir", localResource("serenity-js/spec-2-levels/spec"));
             ConfiguredEnvironment.updateConfiguration(environmentVariables);
 
             TestOutcomeRequirementsTagProvider tagProvider = new TestOutcomeRequirementsTagProvider(environmentVariables);

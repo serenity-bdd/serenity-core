@@ -25,15 +25,15 @@
     "pathElements": [
       {
         "name": "ecommerce",
-        "description": ""
+        "description": "Ecommerce"
       },
       {
         "name": "payments",
-        "description": ""
+        "description": "Payments"
       },
       {
         "name": "card_payment",
-        "description": ""
+        "description": "Card payment"
       }
     ]
   },
@@ -47,7 +47,7 @@
     {
       "name": "ecommerce/payments",
       "type": "capability",
-      "displayName": "payments"
+      "displayName": "Payments"
     },
     {
       "name": "payments/card_payment",
@@ -74,7 +74,7 @@
     "type": "feature",
     "displayName": "Card payment"
   },
-  "testSource": "Serenity/JS",
+  "testSource": "JS",
   "context": "mac,chrome",
   "driver": "chromium",
   "result": "SUCCESS",

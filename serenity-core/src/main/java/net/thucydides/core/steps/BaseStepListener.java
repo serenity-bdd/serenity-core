@@ -1066,8 +1066,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void takeEndOfStepScreenshotForPlayback(final TestResult result, List<ScreenshotAndHtmlSource> screenshots) {
-        allScreenshots.addAll(screenshots);
         if ((screenshots != null && screenshots.size() > 0) && shouldTakeEndOfStepScreenshotFor(result)) {
+            allScreenshots.addAll(screenshots);
             takePlayback(MANDATORY_SCREENSHOT, result, screenshots);
             usedScreenshots.addAll(screenshots);
         }

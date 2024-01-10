@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class TestTag implements Comparable<TestTag> {
 
-    public static final TestTag EMPTY_TAG = new TestTag("","");
+    public static final TestTag EMPTY_TAG = new TestTag("", "");
     public static final String DEFAULT_TAG_TYPE = "tag";
 
     private final String name;
@@ -27,7 +27,7 @@ public class TestTag implements Comparable<TestTag> {
     private transient String normalisedType;
 
     private TestTag(String name, String type) {
-        this(name,type, name);
+        this(name, type, name);
     }
 
     private TestTag(String name, String type, String displayName) {
@@ -47,7 +47,9 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     public String normalisedName() {
-        if (normalisedName == null) { normalisedName = normalised(name); }
+        if (normalisedName == null) {
+            normalisedName = normalised(name);
+        }
         return normalisedName;
     }
 
@@ -58,16 +60,20 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     private String normalised(String name, String type) {
-        return name.replaceAll("[\\s_-]"," ").toLowerCase() + type.replaceAll("[\\s_-]"," ").toLowerCase();
+        return name.replaceAll("[\\s_-]", " ").toLowerCase() + type.replaceAll("[\\s_-]", " ").toLowerCase();
     }
 
     public String normalisedType() {
-        if (normalisedType == null) { normalisedType = normalised(type); }
+        if (normalisedType == null) {
+            normalisedType = normalised(type);
+        }
         return normalisedType;
     }
 
     public String getCompleteName() {
-        if (isEmpty(name) && isEmpty(type)) { return ""; }
+        if (isEmpty(name) && isEmpty(type)) {
+            return "";
+        }
 
         return Joiner.on("_").join(normalisedType(), normalisedName());
     }
@@ -88,6 +94,7 @@ public class TestTag implements Comparable<TestTag> {
     public String getShortName() {
         return name.contains("/") ? name.substring(name.indexOf("/") + 1) : name;
     }
+
     public static TestTagBuilder withName(final String tagName) {
         return new TestTagBuilder(tagName);
     }
@@ -143,7 +150,7 @@ public class TestTag implements Comparable<TestTag> {
         public TestTagBuilder(String name) {
             this.name = name;
         }
-        
+
         public TestTag andType(String type) {
             return new TestTag(name, withoutTagSymbol(type));
         }
@@ -165,7 +172,7 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     public static final Set<String> SUPPORTED_PLATFORMS = ImmutableSet.of("windows", "mac", "linux");
-    public static final Set<String> SUPPORTED_BROWSERS = ImmutableSet.of("firefox", "chrome", "edge", "iexplorer", "safari", "htmlunit", "appium","iphone","android");
+    public static final Set<String> SUPPORTED_BROWSERS = ImmutableSet.of("firefox", "chrome", "edge", "iexplorer", "safari", "htmlunit", "appium", "iphone", "android");
 
     public boolean isAPlatform() {
         return "context".equalsIgnoreCase(type) && SUPPORTED_PLATFORMS.contains(name.toLowerCase());
@@ -178,9 +185,9 @@ public class TestTag implements Comparable<TestTag> {
     public boolean isABrowserPlatformCombination() {
         if (name.contains(",")) {
             List<String> nameElements = Arrays.stream(name.split(",")).map(String::trim).collect(Collectors.toList());
-            String browser = nameElements.get(0);
-            String platform = nameElements.get(1);
-            return SUPPORTED_BROWSERS.contains(browser.toLowerCase()) && SUPPORTED_PLATFORMS.contains(platform.toLowerCase());
+            return ((nameElements.size() == 2)
+                    && SUPPORTED_BROWSERS.contains(nameElements.get(0).toLowerCase())
+                    && SUPPORTED_PLATFORMS.contains(nameElements.get(1)));
         } else {
             return false;
         }

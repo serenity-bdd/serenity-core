@@ -1,4 +1,5 @@
 @issue:MYPROJ-123
+@issue:MYPROJ-234
 @issues:MYPROJ-456,MYPROJ-789
 
 @version:RELEASE-1

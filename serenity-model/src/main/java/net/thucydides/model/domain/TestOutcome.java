@@ -2085,6 +2085,7 @@ public class TestOutcome {
     public List<String> getIssueKeys() {
         return getIssues().stream()
                 .map(issue -> IssueKeyFormat.forEnvironment(getEnvironmentVariables()).andKey(issue))
+                .distinct()
                 .collect(Collectors.toList());
     }
 

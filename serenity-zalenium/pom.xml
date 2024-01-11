@@ -4,7 +4,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.0.43-SNAPSHOT</version>
+        <version>4.0.43</version>
     </parent>
     <artifactId>serenity-zalenium</artifactId>
     <packaging>jar</packaging>

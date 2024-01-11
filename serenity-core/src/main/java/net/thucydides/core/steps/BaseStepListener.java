@@ -646,7 +646,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         while (!currentGroupStack.isEmpty()) {
             finishGroup();
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         LifecycleRegister.clear();
     }
 
@@ -913,7 +912,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
+
         // In all cases, mark the step as done with the appropriate result
         currentStepDone(failureAnalysis.resultFor(failure));
     }
@@ -929,7 +928,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
             recordFailureDetails(failure);
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         // Step marked as done with the appropriate result before
         currentStepDone(failureAnalysis.resultFor(failure));
     }
@@ -1175,14 +1173,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentStep().removeScreenshot(0);
     }
 
-    private void removeUnnecesaryScreenshotsFromOutputDir() {
-        usedScreenshots.forEach(usedScreenshot -> allScreenshots =
-            allScreenshots.stream().filter(scr -> !scr.getScreenshotName().equals(usedScreenshot.getScreenshotName()))
-                .collect(Collectors.toList()));
-        allScreenshots.forEach(this::removeScreenshot);
-    }
-
-
     private void removeScreenshot(ScreenshotAndHtmlSource screenshot) {
         if(screenshot.getScreenshot().delete() && currentStep().isPresent()) {
             getCurrentStep().getScreenshots().remove(screenshot);
@@ -1344,7 +1334,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(IGNORED);
     }
 
@@ -1352,7 +1341,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
     }
 
@@ -1361,7 +1349,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(ABORTED);
     }
 
@@ -1369,7 +1356,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) {
             return;
         }
-        removeUnnecesaryScreenshotsFromOutputDir();
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
         updateExampleTableIfNecessary(PENDING);
     }

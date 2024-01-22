@@ -156,8 +156,6 @@ class CoverageByTagType(
         val testOutcomesForTag = testOutcomes.withTag(testTag)
         val successRate = testOutcomesForTag.formattedPercentage.withResult(SUCCESS, 0)
 
-        print(">> ReportNameProvider: " + reportNameProvider +  "tag: " + testTag + " report link: " + reportNameProvider.forRequirementOrTag(testTag) + "\n")
-
         return CoverageByTag(
             humanize(shortened(testTag.displayName)),
             humanize(parent(testTag.name)),

@@ -180,6 +180,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
             List<String> requirementTypes = requirementsConfiguration.getRequirementTypes();
             LOGGER.info("GENERATING SUMMARY REPORTS...");
+            LOGGER.debug("Detected requirement types: {}", requirements.getRequirementsService().getRequirementTypes());
+
             reporter.generateReportsFor(
                     Stream.of(
                             // SUMMARY REPORTS

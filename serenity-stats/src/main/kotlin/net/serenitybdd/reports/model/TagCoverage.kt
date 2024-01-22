@@ -27,13 +27,15 @@ class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcom
 class TagCoverageBuilder(
     val testOutcomes: TestOutcomes,
     val tagsToDisplay: Collection<TestTag>,
-    val environmentVariables: EnvironmentVariables
+    val environmentVariables: EnvironmentVariables,
+    var reportNameProvider: ReportNameProvider
 ) {
 
     constructor(testOutcomes: TestOutcomes, environmentVariables: EnvironmentVariables) : this(
         testOutcomes,
         setOf(),
-        environmentVariables
+        environmentVariables,
+        ReportNameProvider()
     )
 
     var hideEmptyRequirements: Boolean = false
@@ -41,6 +43,11 @@ class TagCoverageBuilder(
     init {
         hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables)
             .getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true)
+    }
+
+    fun withReportNameProvider(reportNameProvider: ReportNameProvider): TagCoverageBuilder {
+        this.reportNameProvider = reportNameProvider
+        return this
     }
 
     fun forTagTypes(displayedTagTypes: List<String>): List<CoverageByTagType> {
@@ -52,6 +59,7 @@ class TagCoverageBuilder(
             if (shouldShow(testOutcomesWithTag)) {
                 coveragesByTagType.add(
                     CoverageByTagType(
+                        reportNameProvider,
                         displayedTagType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
                         humanize(displayedTagType),
                         testOutcomes.withTagType(displayedTagType),
@@ -74,11 +82,12 @@ class TagCoverageBuilder(
     }
 
     fun showingTags(tagsOfType: Collection<TestTag>): TagCoverageBuilder {
-        return TagCoverageBuilder(testOutcomes, tagsOfType, environmentVariables)
+        return TagCoverageBuilder(testOutcomes, tagsOfType, environmentVariables, reportNameProvider)
     }
 }
 
 class CoverageByTagType(
+    val reportNameProvider: ReportNameProvider,
     val tagType: String,
     val tagTitle: String,
     val testOutcomes: TestOutcomes,
@@ -155,7 +164,7 @@ class CoverageByTagType(
             testOutcomesForTag.testCaseCount,
             successRate,
             testOutcomesForTag.result,
-            ReportNameProvider().forRequirementOrTag(testTag),
+            reportNameProvider.forRequirementOrTag(testTag),    //            ReportNameProvider().forRequirementOrTag(testTag),
             countByResultLabelFrom(testOutcomesForTag),
             percentageByResultFrom(testOutcomesForTag)
         )

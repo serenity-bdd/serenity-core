@@ -52,7 +52,11 @@ public class RequirementCache {
     }
 
     public Requirement getRequirementsByTag(TestTag testTag, Function<TestTag, Requirement> requirementFinder) {
-        if (!requirementsByTag.containsKey(testTag)) {
+        return getRequirementsByTag(testTag, requirementFinder, false);
+    }
+
+    public Requirement getRequirementsByTag(TestTag testTag, Function<TestTag, Requirement> requirementFinder, boolean forceLoad) {
+        if (!requirementsByTag.containsKey(testTag) || (null == requirementsByTag.get(testTag) && forceLoad)) {
             requirementsByTag.put(testTag, requirementFinder.apply(testTag));
         }
         return requirementsByTag.get(testTag);

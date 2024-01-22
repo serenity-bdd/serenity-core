@@ -361,8 +361,9 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
 
     @Override
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
+        boolean forceLoadFeatures = testTag.getType().equals("feature");
         Requirement matchingRequirement
-                = RequirementCache.getInstance().getRequirementsByTag(testTag, this::findRequirementByTag);
+                = RequirementCache.getInstance().getRequirementsByTag(testTag, this::findRequirementByTag, forceLoadFeatures);
         return Optional.ofNullable(matchingRequirement);
     }
 

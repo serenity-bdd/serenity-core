@@ -133,7 +133,8 @@ public class FreemarkerContext {
         context.put("reportName", reportName);
         context.put("reportNameInContext", reportName);
 
-        context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements));
+        ReportNameProvider absoluteReportNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements);
+        context.put("absoluteReportName", absoluteReportNameProvider);
 
         context.put("reportOptions", reportOptions);
         context.put("timestamp", timestampFrom(new DateTime()));
@@ -192,10 +193,10 @@ public class FreemarkerContext {
                     .filter(requirementsFilter::inDisplayOnlyTags)
                     .map(Requirement::asTag)
                     .collect(Collectors.toSet());
-            coverage = TagCoverage.from(testOutcomes).showingTags(coveredTags).forTagTypes(tagTypes);
+            coverage = TagCoverage.from(testOutcomes).withReportNameProvider(absoluteReportNameProvider).showingTags(coveredTags).forTagTypes(tagTypes);
         } else {
             // Otherwise show coverage for all requirements
-            coverage = TagCoverage.from(testOutcomes).forTagTypes(requirements.getRequirementTypes());
+            coverage = TagCoverage.from(testOutcomes).withReportNameProvider(absoluteReportNameProvider).forTagTypes(requirements.getRequirementTypes());
         }
 
         boolean hideEmptyRequirements = EnvironmentSpecificConfiguration.from(environmentVariables).getBooleanProperty(SERENITY_REPORT_HIDE_EMPTY_REQUIREMENTS, true);

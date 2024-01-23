@@ -741,7 +741,7 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         for (Tag tag : cucumberTags) {
             if (tag.getName().startsWith("@issue:")) {
                 String tagIssueValue = tag.getName().substring("@issue:".length());
-                issues.add(tagIssueValue);
+                issues.addAll(Arrays.asList(tagIssueValue.split(",")));
             }
             if (tag.getName().startsWith("@issues:")) {
                 String tagIssuesValues = tag.getName().substring("@issues:".length());

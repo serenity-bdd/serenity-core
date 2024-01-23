@@ -14,7 +14,7 @@ public class InteractingWithKeyboardTest {
     @Test
     public void pressKeyboardButton() {
         will.attemptsTo(
-                Open.url("https://todomvc.com/examples/angularjs/#/"),
+                Open.url("https://todomvc.com/examples/angular/dist/browser/#/all"),
                 Enter.theValue("Feed the cat").into(".new-todo"),
                 Press.keys("Enter")
         );
@@ -25,7 +25,7 @@ public class InteractingWithKeyboardTest {
     @Test
     public void pressKeyboardButtonUsingATarget() {
         will.attemptsTo(
-                Open.url("https://todomvc.com/examples/angularjs/#/"),
+                Open.url("https://todomvc.com/examples/angular/dist/browser/#/all"),
                 Enter.theValue("Feed the cat").into(TODO_FIELD),
                 Press.keys("Enter")
         );

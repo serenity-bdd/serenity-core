@@ -43,7 +43,8 @@ open class PerformableExpectation<A, E>(
             if (BlackBox.isUsingSoftAssertions()) {
                 BlackBox.softlyAssert(exceptionMessage)
                 StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(
-                    AssertionError(exceptionMessageWithDescription)
+                    AssertionError(BlackBox.renderedAssertionMessages())
+//                    AssertionError(exceptionMessage)
                 )
             } else {
                 takeScreenshot()

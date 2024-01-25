@@ -34,6 +34,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
+import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
 import static net.thucydides.model.ThucydidesSystemProperty.SERENITY_ENABLE_WEBDRIVER_IN_FIXTURE_METHODS;
 
 /**
@@ -949,7 +950,7 @@ public class StepEventBus {
      */
     public void takeScreenshot() {
         if (!isDryRun()) {
-            getBaseStepListener().takeScreenshot();
+            getBaseStepListener().notifyUIError();
         }
     }
 

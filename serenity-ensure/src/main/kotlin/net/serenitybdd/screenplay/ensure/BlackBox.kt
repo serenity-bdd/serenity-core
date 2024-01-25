@@ -46,6 +46,17 @@ object BlackBox {
         softAssertions.add(softAssertion)
     }
 
+    fun renderedAssertionMessages() : String {
+        if (!softAssertions.isEmpty()) {
+            val renderedErrorMessages = StringBuilder("SOFT ASSERTION FAILURES" + System.lineSeparator())
+            softAssertions.forEachIndexed { index, error ->
+                renderedErrorMessages.append("- ERROR ${index + 1}) ${normaliseSpacingIn(error)} ${System.lineSeparator()}")
+            }
+            return renderedErrorMessages.toString();
+        } else {
+            return "";
+        }
+    }
     fun reportAnySoftAssertions() {
         if (!softAssertions.isEmpty()) {
             val renderedErrorMessages = StringBuilder("SOFT ASSERTION FAILURES" + System.lineSeparator())
@@ -54,7 +65,7 @@ object BlackBox {
             }
             endSoftAssertions()
             takeScreenshot()
-            throw AssertionError(renderedErrorMessages)
+//            throw AssertionError(renderedErrorMessages)
         } else {
             endSoftAssertions()
         }

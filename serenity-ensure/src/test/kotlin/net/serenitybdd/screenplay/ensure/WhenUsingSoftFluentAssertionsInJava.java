@@ -61,9 +61,9 @@ public class WhenUsingSoftFluentAssertionsInJava {
         String color = "red";
 
         aster.attemptsTo(
-                Ensure.that(color).startsWith("b"),
+                Ensure.that(color).startsWith("r"),
                 Ensure.that(color).endsWith("d"),
-                Ensure.that(color).hasSize(4)
+                Ensure.that(color).hasSize(3)
         );
     }
 

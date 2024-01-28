@@ -19,7 +19,6 @@ import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.model.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.RemoteTestName;
-import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,8 +262,7 @@ public class BrowseTheWebWithPlaywright implements Ability, RefersToActor {
 
             return new ScreenshotAndHtmlSource(screenshot, pageSourceFile.toFile());
         } catch (IOException e) {
-            Assertions.fail("Failed to take Playwright screenshot", e);
-            return null;
+            throw new AssertionError("Failed to take Playwright screenshot", e);
         }
     }
 

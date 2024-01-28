@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.opentest4j</groupId>
             <artifactId>opentest4j</artifactId>
-            <version>1.2.0</version>
+            <version>${opentest.version}</version>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->

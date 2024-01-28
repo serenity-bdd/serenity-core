@@ -921,7 +921,7 @@ public class TestOutcome {
 
     public Optional<TestStep> getFailingStep() {
         List<TestStep> flattenedSteps = getFlattenedTestSteps();
-        for(int step = flattenedSteps.size() - 1; step >= 0; step--) {
+        for (int step = flattenedSteps.size() - 1; step >= 0; step--) {
             if (flattenedSteps.get(step).isError() || flattenedSteps.get(step).isFailure()) {
                 return Optional.of(flattenedSteps.get(step));
             }
@@ -1424,20 +1424,21 @@ public class TestOutcome {
 
     public List<TestStep> getFlattenedTestSteps() {
         if (flattenedSteps == null) {
-            List<TestStep> flattenedTestSteps = new ArrayList<>();
-            for (TestStep step : getTestSteps()) {
-                flattenedTestSteps.add(step);
-                if (step.isAGroup()) {
-                    flattenedTestSteps.addAll(step.getFlattenedSteps());
-                }
-            }
-            this.flattenedSteps = flattenedTestSteps;
+            this.flattenedSteps = getLatestFlattenedTestSteps();
         }
         return flattenedSteps;
     }
 
+    public List<TestStep> getLatestFlattenedTestSteps() {
+        List<TestStep> testSteps = getTestSteps();
+        return testSteps.stream()
+                .flatMap(step -> Stream.concat(Stream.of(step),
+                        step.isAGroup() ? step.getFlattenedSteps().stream() : Stream.empty()))
+                .collect(Collectors.toList());
+    }
+
     public List<TestStep> getLeafTestSteps() {
-        if (leafSteps == null ) {
+        if (leafSteps == null) {
             List<TestStep> leafTestSteps = new ArrayList<>();
             for (TestStep step : getTestSteps()) {
                 if (step.isAGroup()) {
@@ -1665,17 +1666,51 @@ public class TestOutcome {
     }
 
     public void determineTestFailureCause(Throwable cause) {
-        if (cause != null) {
+        // Find any previous failing steps (which can happen for soft assertions)
+        List<FailureCause> stepFailureCauses = getLatestFlattenedTestSteps().stream()
+                .map(TestStep::getException)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if ((cause != null) && !causeIsContainedIn(cause,stepFailureCauses)){
+            // Add this new failure to the list
             RootCauseAnalyzer rootCauseAnalyser = new RootCauseAnalyzer(SerenityManagedException.detachedCopyOf(cause));
             FailureCause rootCause = rootCauseAnalyser.getRootCause();
-            this.testFailureClassname = rootCauseAnalyser.getRootCause().getErrorType();
-            this.testFailureMessage = rootCauseAnalyser.getMessage();
-            this.testFailureCause = rootCause;
-            this.testFailureSummary = failureSummaryFrom(rootCause);
-            this.setAnnotatedResult(new FailureAnalysis().resultFor(rootCause.exceptionClass()));
-        } else {
+            stepFailureCauses.add(rootCause);
+
+            // Now there is at least one failure in this test
+            if (stepFailureCauses.size() == 1) {
+                // Single cause of failure
+                this.testFailureClassname = rootCauseAnalyser.getRootCause().getErrorType();
+                this.testFailureMessage = rootCauseAnalyser.getMessage();
+                this.testFailureCause = rootCause;
+                this.testFailureSummary = failureSummaryFrom(rootCause);
+                this.setAnnotatedResult(new FailureAnalysis().resultFor(rootCause.exceptionClass()));
+            } else {
+                List<String> errorMessages = stepFailureCauses.stream()
+                        .map(FailureCause::getMessage)
+                        .collect(Collectors.toList());
+                Throwable aggregatedErrors = new MultipleAssertionErrors(errorMessages);
+                RootCauseAnalyzer aggregateRootCauseAnalyser = new RootCauseAnalyzer(aggregatedErrors);
+                FailureCause aggregateRootCause = aggregateRootCauseAnalyser.getRootCause();
+                this.testFailureClassname = aggregateRootCauseAnalyser.getRootCause().getErrorType();
+                this.testFailureMessage = aggregateRootCauseAnalyser.getMessage();
+                this.testFailureCause = aggregateRootCause;
+                this.testFailureSummary = aggregatedErrors.getMessage();
+                this.setAnnotatedResult(new FailureAnalysis().resultFor(aggregateRootCause.exceptionClass()));
+
+            }
+        }
+        // Can this ever happen?
+        if (stepFailureCauses.isEmpty()) {
             noTestFailureIsDefined();
         }
+    }
+
+    private boolean causeIsContainedIn(Throwable cause, List<FailureCause> stepFailureCauses) {
+        return stepFailureCauses.stream()
+                .map(FailureCause::getOriginalCause)
+                .anyMatch(failureCause -> failureCause == cause);
     }
 
     private String failureSummaryFrom(FailureCause rootCause) {
@@ -1751,7 +1786,7 @@ public class TestOutcome {
     }
 
     public FailureCause getNestedTestFailureCause() {
-        return getFlattenedTestSteps().stream()
+        return getLatestFlattenedTestSteps().stream()
                 .filter(step -> step.getException() != null)
                 .map(TestStep::getException)
                 .findFirst()
@@ -1759,9 +1794,17 @@ public class TestOutcome {
     }
 
     public Optional<TestStep> firstStepWithErrorMessage() {
-        return getFlattenedTestSteps().stream()
+        return getLatestFlattenedTestSteps().stream()
                 .filter(step -> isNotBlank(step.getErrorMessage()))
+                .distinct()
                 .findFirst();
+    }
+
+    public List<String> stepErrorMessages() {
+        return getLatestFlattenedTestSteps().stream()
+                .map(TestStep::getErrorMessage)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.toList());
     }
 
     public Optional<String> testFailureMessage() {
@@ -1770,10 +1813,16 @@ public class TestOutcome {
     }
 
     public String getErrorMessage() {
-        if (firstStepWithErrorMessage().isPresent()) {
-            return firstStepWithErrorMessage().get().getErrorMessage();
+
+        List<String> stepErrorMessages = stepErrorMessages();
+        if (stepErrorMessages.isEmpty()) {
+            return testFailureMessage().orElse("");
         }
-        return testFailureMessage().orElse("");
+        if (stepErrorMessages.size() == 1) {
+            return stepErrorMessages.get(0);
+        }
+        return stepErrorMessages.stream()
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
     public String getConciseErrorMessage() {
@@ -1843,7 +1892,7 @@ public class TestOutcome {
     public List<String> getIssues() {
         List<String> allIssues = new ArrayList<>();
         if (issues != null) {
-           allIssues.addAll(issues);
+            allIssues.addAll(issues);
         } else {
             allIssues.addAll(issues());
         }
@@ -1901,7 +1950,9 @@ public class TestOutcome {
         return testCaseName;
     }
 
-    public String getMethodName() { return methodName; }
+    public String getMethodName() {
+        return methodName;
+    }
 
     private boolean thereAre(Collection<String> anyIssues) {
         return ((anyIssues != null) && (!anyIssues.isEmpty()));
@@ -1998,8 +2049,9 @@ public class TestOutcome {
 
     public void lastStepFailedWith(Throwable testFailureCause) {
         determineTestFailureCause(testFailureCause);
-        if (!testSteps.isEmpty()) {
-            TestStep lastTestStep = testSteps.get(testSteps.size() - 1);
+        List<TestStep> leafSteps = getLatestFlattenedTestSteps();
+        if (!leafSteps.isEmpty()) {
+            TestStep lastTestStep = leafSteps.get(leafSteps.size() - 1);
             lastTestStep.failedWith(new StepFailureException(testFailureCause.getMessage(), testFailureCause));
         }
     }
@@ -2734,7 +2786,8 @@ public class TestOutcome {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
         if (context != null ? !context.equals(that.context) : that.context != null) return false;
-        if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null) return false;
+        if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null)
+            return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         return userStory != null ? userStory.equals(that.userStory) : that.userStory == null;
     }

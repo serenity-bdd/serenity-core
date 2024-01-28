@@ -577,11 +577,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void updateCurrentStepFailureCause(Throwable failure) {
-//        if (currentStepExists()) {
-//            getCurrentStep().failedWith(failure);
-//        } else {
-        this.currentTestOutcome.lastStepFailedWith(failure);
-//        }
+        if (this.currentTestOutcome != null) {
+            this.currentTestOutcome.lastStepFailedWith(failure);
+        }
     }
 
     public class StepMutator {
@@ -1174,7 +1172,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void removeScreenshot(ScreenshotAndHtmlSource screenshot) {
-        if(screenshot.getScreenshot().delete() && currentStep().isPresent()) {
+        if (screenshot.getScreenshot().delete() && currentStep().isPresent()) {
             getCurrentStep().getScreenshots().remove(screenshot);
         }
     }

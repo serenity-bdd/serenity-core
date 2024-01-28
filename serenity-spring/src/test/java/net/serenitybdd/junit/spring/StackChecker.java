@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.spring;
 
-import org.assertj.core.api.Assertions;
 import org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks;
 import org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks;
 import org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks;
@@ -28,7 +27,7 @@ public class StackChecker {
             }
         }
         if (!encountered) {
-            Assertions.fail("Expected '" + wantedClassName + "' to be in the stack, but it was not.");
+            throw new AssertionError("Expected '" + wantedClassName + "' to be in the stack, but it was not.");
         }
     }
 }

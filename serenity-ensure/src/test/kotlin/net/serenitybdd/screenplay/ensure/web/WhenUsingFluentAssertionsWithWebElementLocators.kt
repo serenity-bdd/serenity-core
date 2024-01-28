@@ -127,16 +127,16 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is not displayed`() {
-                    shouldFailWithMessage("""|Expecting web element located by #hidden-field that is displayed
-                                             |But got: web element is not displayed"""
+                    shouldFailWithMessage("""|Expected: web element located by #hidden-field that is displayed
+                                             |Actual:   web element is not displayed"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#hidden-field")).isDisplayed(), wendy)
                 }
 
                 @Test
                 fun `when the element is not expected to be displayed`() {
-                    shouldFailWithMessage("""|Expecting web element located by #firstName that is not displayed
-                                             |But got: web element is displayed"""
+                    shouldFailWithMessage("""|Expected: web element located by #firstName that is not displayed
+                                             |Actual:   web element is displayed"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#firstName")).not().isDisplayed(), wendy)
                 }
@@ -163,8 +163,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is displayed but should not be`() {
-                    shouldFailWithMessage("""|Expecting web element located by #firstName that is not displayed
-                                             |But got: web element is displayed"""
+                    shouldFailWithMessage("""|Expected: web element located by #firstName that is not displayed
+                                             |Actual:   web element is displayed"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#firstName")).isNotDisplayed(), wendy)
                 }
@@ -181,8 +181,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is enabled`() {
-                    shouldFailWithMessage("""|Expecting web element located by #firstName that is disabled
-                                             |But got: web element is not disabled"""
+                    shouldFailWithMessage("""|Expected: web element located by #firstName that is disabled
+                                             |Actual:   web element is not disabled"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#firstName")).isDisabled(), wendy)
                 }
@@ -203,8 +203,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is disabled`() {
-                    shouldFailWithMessage("""|Expecting web element located by #disabled-field that is enabled
-                                             |But got: web element is not enabled"""
+                    shouldFailWithMessage("""|Expected: web element located by #disabled-field that is enabled
+                                             |Actual:   web element is not enabled"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#disabled-field")).isEnabled(), wendy)
                 }
@@ -230,8 +230,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is on the page with the wrong value (using a string comparator)`() {
-                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that contains: <[Wrong]>
-                                             |But got................................................................: <"Heading">"""
+                    shouldFailWithMessage("""|Expected: web element located by #heading with text value that contains: <[Wrong]>
+                                             |Actual:   <"Heading">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#heading")).text().contains("Wrong"), wendy)
                 }
@@ -239,16 +239,16 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the element is on the page with the wrong value (using a comparable)`() {
-                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that is equal to: <"Wrong Heading">
-                                             |But got...................................................................: <"Heading">"""
+                    shouldFailWithMessage("""|Expected: web element located by #heading with text value that is equal to: <"Wrong Heading">
+                                             |Actual:   <"Heading">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Wrong Heading"), wendy)
                 }
 
                 @Test
                 fun `when the element is on the page with the wrong value (using a basic comparison)`() {
-                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that is in: <[Wrong Heading, Another Wrong One]>
-                                             |But got.............................................................: <"Heading">"""
+                    shouldFailWithMessage("""|Expected: web element located by #heading with text value that is in: <[Wrong Heading, Another Wrong One]>
+                                             |Actual:   <"Heading">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#heading")).text().isIn("Wrong Heading", "Another Wrong One"), wendy)
                 }
@@ -274,8 +274,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the text content does not match`() {
-                    shouldFailWithMessage("""|Expecting web element located by #block-of-text with text value that contains: <[Some other text content]>
-                                             |But got......................................................................: <"Some text content">"""
+                    shouldFailWithMessage("""|Expected: web element located by #block-of-text with text value that contains: <[Some other text content]>
+                                             |Actual:   <"Some text content">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#block-of-text")).text().contains("Some other text content"), wendy)
                 }
@@ -299,8 +299,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the value does not match`() {
-                    shouldFailWithMessage("""|Expecting web element located by #firstName with value that is equal to: <"Jill">
-                                             |But got................................................................: <"Joe">"""
+                    shouldFailWithMessage("""|Expected: web element located by #firstName with value that is equal to: <"Jill">
+                                             |Actual:   <"Joe">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#firstName")).value().isEqualTo("Jill"), wendy)
                 }
@@ -322,8 +322,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `when the value does not match`() {
-                    shouldFailWithMessage("""|Expecting web element located by #firstName with Title attribute that is equal to: <"Wrong Value">
-                                             |But got..........................................................................: <"First Name">"""
+                    shouldFailWithMessage("""|Expected: web element located by #firstName with Title attribute that is equal to: <"Wrong Value">
+                                             |Actual:   <"First Name">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#firstName")).attribute("Title").isEqualTo("Wrong Value"), wendy)
                 }
@@ -339,8 +339,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `for a dropdown list field with the wrong value`() {
-                    shouldFailWithMessage("""|Expecting web element located by #colors with selected value that is equal to: <"blue">
-                                             |But got......................................................................: <"green">"""
+                    shouldFailWithMessage("""|Expected: web element located by #colors with selected value that is equal to: <"blue">
+                                             |Actual:   <"green">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#colors")).selectedValue().isEqualTo("blue"), wendy)
                 }
@@ -356,8 +356,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `for a dropdown list field with the wrong value`() {
-                    shouldFailWithMessage("""|Expecting web element located by #colors with selected visible text that is equal to: <"Blue">
-                                             |But got.............................................................................: <"Green">"""
+                    shouldFailWithMessage("""|Expected: web element located by #colors with selected visible text that is equal to: <"Blue">
+                                             |Actual:   <"Green">"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#colors")).selectedVisibleText().isEqualTo("Blue"), wendy)
                 }
@@ -373,16 +373,16 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `for an element that does not have the class`() {
-                    shouldFailWithMessage("""|Expecting web element located by #colors that has CSS class: "flavor-list"
-                                             |But got: color-list dropdown"""
+                    shouldFailWithMessage("""|Expected: web element located by #colors that has CSS class: "flavor-list"
+                                             |Actual:   color-list dropdown"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#colors")).hasCssClass("flavor-list"), wendy)
                 }
 
                 @Test
                 fun `for an element that does not have the class but should`() {
-                    shouldFailWithMessage("""|Expecting web element located by #colors that does not have CSS class: "color-list"
-                                             |But got: color-list dropdown"""
+                    shouldFailWithMessage("""|Expected: web element located by #colors that does not have CSS class: "color-list"
+                                             |Actual:   color-list dropdown"""
                             .trimMargin())
                             .whenChecking(that(ElementLocated.by("#colors")).not().hasCssClass("color-list"), wendy)
                 }
@@ -447,8 +447,8 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that should be non-empty`() {
-                shouldFailWithMessage("""|Expecting a collection of web elements located by .no-station that is not empty
-                                         |But got: []"""
+                shouldFailWithMessage("""|Expected: a collection of web elements located by .no-station that is not empty
+                                         |Actual:   []"""
                         .trimMargin())
                         .whenChecking(
                             thatTheListOf(ElementsLocated.by(".no-station")).isNotEmpty(), wendy)

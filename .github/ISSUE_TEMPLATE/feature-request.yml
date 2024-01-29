@@ -5,8 +5,7 @@ body:
 
   - type: markdown
     attributes:
-      value: |
-        👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Tell us more about your idea.
+      value: 👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Tell us more about your idea.
 
   - type: textarea
     id: problem

@@ -35,8 +35,8 @@ body:
       label: "Implementation Support"
       description: "Serenity BDD is an open-source project, and we value contributions from our community. While we strive to address issues promptly, we cannot guarantee implementation timelines. To improve the chances of your feature being implemented, please indicate how you would like to support its development:"
       options:
-        - "Contribute the feature myself (with guidance from the Serenity BDD team)"
-        - "Hire the Serenity BDD team for implementation"
-        - "Add it to the Serenity BDD backlog and wait for community contribution"
+        - label: "Contribute the feature myself (with guidance from the Serenity BDD team)"
+        - label: "Hire the Serenity BDD team for implementation"
+        - label: "Add it to the Serenity BDD backlog and wait for community contribution"
     validations:
       required: true

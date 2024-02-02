@@ -357,7 +357,8 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Plant Potatoes"));
+        assertThat(requirement.get().getName(), is("PlantPotatoes"));
+        assertThat(requirement.get().getDisplayName(), is("Plant Potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
@@ -374,7 +375,8 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Watering the potatoes"));
+        assertThat(requirement.get().getName(), is("WaterPotatoes"));
+        assertThat(requirement.get().getDisplayName(), is("Watering the potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
@@ -389,7 +391,8 @@ public class WhenFindingTagsForATestOutcome {
 
         Requirement norwegenRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(norwegenfeatureFile).get();
 
-        assertThat(norwegenRequirement.getName(), is("Summering"));
+        assertThat(norwegenRequirement.getName(), is("PlantScandanavianPotatoes"));
+        assertThat(norwegenRequirement.getDisplayName(), is("Summering"));
     }
 
     @Test
@@ -401,7 +404,8 @@ public class WhenFindingTagsForATestOutcome {
 
         Requirement featureRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(featureFile).get();
 
-        assertThat(featureRequirement.getName(), is("Planting some potatoes"));
+        assertThat(featureRequirement.getName(), is("PlantPotatoes"));
+        assertThat(featureRequirement.getDisplayName(), is("Planting some potatoes"));
     }
 
     @Test
@@ -429,7 +433,8 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Add new items to the todo list"));
+        assertThat(requirement.get().getName(), is("add_new_items"));
+        assertThat(requirement.get().getDisplayName(), is("Add new items to the todo list"));
         assertThat(requirement.get().getParent(), is("record_todos"));
     }
 
@@ -448,7 +453,8 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Add new items to the todo list"));
+        assertThat(requirement.get().getName(), is("add_new_items"));
+        assertThat(requirement.get().getDisplayName(), is("Add new items to the todo list"));
         assertThat(requirement.get().getParent(), is("record_todos"));
     }
 
@@ -460,10 +466,9 @@ public class WhenFindingTagsForATestOutcome {
         for(TestOutcome outcome : TestOutcomeStream.testOutcomesInDirectory(Paths.get(Resources.getResource("serenity-cucumber/json").toURI()))) {
             Optional<Requirement> feature = tagProvider.getParentRequirementOf(outcome);
             assertThat(feature.isPresent(), is(true));
-            assertThat(feature.get().getName(), equalToIgnoringCase(outcome.getFeatureTag().get().getName()));
+            assertThat(feature.get().getName(), equalToIgnoringCase(outcome.getPath().substring(0, outcome.getPath().lastIndexOf("."))));
+            assertThat(feature.get().getDisplayName(), equalToIgnoringCase(outcome.getFeatureTag().get().getName()));
             assertThat(feature.get().getParent(), not(isEmptyString()));
         }
     }
-
 }
-

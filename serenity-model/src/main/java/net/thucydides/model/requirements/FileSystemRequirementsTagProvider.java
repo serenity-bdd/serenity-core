@@ -592,7 +592,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         return requirementWithNarrative(
                 requirementDirectory,
-                humanReadableVersionOf(requirementDirectory.getName()),
+                requirementDirectory.getName(),
                 requirementNarrative.get()
         );
     }
@@ -612,12 +612,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             java.util.Optional<RequirementDefinition> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
             String storyPath = requirementsConfiguration.relativePathOfFeatureFile(storyFile);
-            String storyName = storyNameFrom(narrative, type, storyFile);
+            String storyFileName = storyFile.getName().substring(0, storyFile.getName().lastIndexOf("."));
             Requirement requirement;
             if (narrative.isPresent()) {
-                requirement = leafRequirementWithNarrative(storyName,
+                requirement = leafRequirementWithNarrative(
+                        storyFileName,
                         storyPath,
-                        narrative.get()).withType(type.toString());
+                        narrative.get()).withType(type.toString()
+                );
 
                 if (narrative.get().background().isPresent()) {
                     requirement = requirement.withBackground(narrative.get().background().get());
@@ -626,7 +628,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     requirement = requirement.withNoScenarios();
                 }
             } else {
-                requirement = storyNamed(storyName, storyPath).withType(type.toString());
+                requirement = storyNamed(storyFileName, storyPath).withType(type.toString());
             }
 
             return Optional.of(requirement.definedInFile(storyFile));
@@ -634,21 +636,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             invalidFeatureFiles.add(storyFile);
             return Optional.empty();
         }
-    }
-
-    private String storyNameFrom(java.util.Optional<RequirementDefinition> narrative, FeatureType type, File storyFile) {
-        if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
-            return narrative.get().getTitle().get();
-        } else {
-            if (isSnakeCase(storyFile.getName())) {
-                return storyFile.getName().replace(type.getExtension(), "").replace("_", " ");
-            } else {
-                String storyNameWithoutExtension = storyFile.getName().replace(type.getExtension(), "");
-                String snakeCaseStoryName = inflection().underscore(storyNameWithoutExtension);
-                return inflection().of(snakeCaseStoryName).asATitle().toString();
-            }
-        }
-
     }
 
     private boolean isSnakeCase(String name) {

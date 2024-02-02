@@ -293,15 +293,6 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
                 .withParent(parentPath);
     }
 
-    // fixme: duplicated from AbstractRequirementsTagProvider
-    //  as it is not the parent of this class (should it be?).
-    //  This is to make the discovered requirements compatible with the results
-    //  of the FileSystemRequirementsTagProvider.
-    protected String humanReadableVersionOf(String name) {
-        String underscoredName = Inflector.getInstance().underscore(name);
-        return Inflector.getInstance().humanize(underscoredName);
-    }
-
     private PathElements relativePathFrom(PathElements pathElements) {
         List<String> rootPackageElements = rootPackageElements();
         List<PathElement> relativePathElements = new ArrayList<>(pathElements);

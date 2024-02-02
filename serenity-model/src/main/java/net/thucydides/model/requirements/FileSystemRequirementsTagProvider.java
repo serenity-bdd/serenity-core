@@ -611,7 +611,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             java.util.Optional<RequirementDefinition> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
             String storyPath = requirementsConfiguration.relativePathOfFeatureFile(storyFile);
-            String storyFileName = storyNameFrom(storyFile)a;
+            String storyFileName = storyNameFrom(storyFile);
             String displayName = storyDisplayNameFrom(narrative, type, storyFile);
 
             Requirement requirement;

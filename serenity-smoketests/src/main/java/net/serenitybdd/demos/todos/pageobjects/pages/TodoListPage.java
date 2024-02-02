@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@DefaultUrl("http://todomvc.com/examples/angularjs/#/")
+@DefaultUrl("https://todo-app.serenity-js.org/#/")
 public class TodoListPage extends PageObject {
 
     // -----------------------------------------------------------------------------------------------------------------

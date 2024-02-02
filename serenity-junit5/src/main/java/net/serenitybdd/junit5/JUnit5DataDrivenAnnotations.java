@@ -322,8 +322,12 @@ public class JUnit5DataDrivenAnnotations {
 
     List<List<Object>> listOfCsvObjectsFrom(Method testDataMethod) {
         CsvSource annotation = testDataMethod.getAnnotation(CsvSource.class);
-        String annotationDelimiter = annotation.delimiterString();
-        String delimiter = (annotationDelimiter != null && !annotationDelimiter.isEmpty()) ? annotationDelimiter : ",";
+        String delimiter = ",";
+        if ((annotation.delimiterString() != null) && (!annotation.delimiterString().isEmpty())){
+            delimiter = annotation.delimiterString();
+        } else if (annotation.delimiter() != 0) {
+            delimiter = String.valueOf(annotation.delimiter());
+        }
         return listOfCsvObjectsFrom(annotation.value(), delimiter);
     }
 

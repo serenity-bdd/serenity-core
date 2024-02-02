@@ -770,7 +770,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement leafRequirementWithNarrative(String requirementName, String displayName, String path, RequirementDefinition requirementNarrative) {
-//        String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, requirementName);
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();

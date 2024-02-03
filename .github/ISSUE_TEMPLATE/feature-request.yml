@@ -1,55 +1,42 @@
 name: Feature Request
 description: Suggest an idea for Serenity BDD
-title: "Serenity BDD should ..."
+title: "Feature Request: [Brief Description]"
 body:
-
   - type: markdown
     attributes:
-      value: |
-        👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Tell us more about your idea.
+      value: "👋 Hello! Thanks for proposing an enhancement to Serenity BDD! Please provide a detailed description of your idea below."
 
   - type: textarea
     id: problem
     attributes:
-      label: What's the problem you're trying to solve?
+      label: "What's the Problem You're Trying to Solve?"
+      description: "Please describe the specific problem or challenge you're facing that led to this feature request."
     validations:
       required: true
 
   - type: textarea
     id: solution
     attributes:
-      label: How would you like to solve it?
-      description: |
-        What's your preferred solution, and why is it the best way to do it?
+      label: "Proposed Solution"
+      description: "How would you like to solve the problem? What's your preferred solution, and why do you believe it's the best approach?"
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Are there any alternatives?
-      description: |
-        Have you considered any alternative solutions or workarounds?
+      label: "Alternative Solutions"
+      description: "Have you considered any other solutions or workarounds? Please provide details about any alternative approaches you've thought about."
     validations:
       required: false
 
   - type: checkboxes
     attributes:
-      label: How can we make it happen?
-      description: |
-        We'll need someone to help make your idea happen.        
-        
-        Serenity BDD is an open-source project, and we greatly appreciate your contribution to help make it better. 
-        Please be aware that while we may be able to address this issue quickly, especially if it aligns with other work 
-        we are currently doing, there is no SLA or guarantee that it will ever be implemented. If the issue is valuable for you 
-        and your project and you want to improve the chances of getting it implemented, you have several options. 
-        You can dive into the code yourself (with our guidance), hire a third party to fix it, or **[Hire the Serenity BDD team](https://www.serenity-dojo.com/serenity-bdd-enterprise-support)** 
-        to do it for you. We're here to help in any way we can!
-        
-        I would like to:
+      label: "Implementation Support"
+      description: "Serenity BDD is an open-source project, and we value contributions from our community. While we strive to address issues promptly, we cannot guarantee implementation timelines. To improve the chances of your feature being implemented, please indicate how you would like to support its development:"
       options:
-        - Work on this myself and propose a PR (with Serenity BDD team guidance)
-        - Hire the Serenity BDD team
-        - Add it to the Serenity BDD backlog and wait for a volunteer to pick it up
+        - label: "Contribute the feature myself (with guidance from the Serenity BDD team)"
+        - label: "Hire the Serenity BDD team for implementation"
+        - label: "Add it to the Serenity BDD backlog and wait for community contribution"
     validations:
       required: true

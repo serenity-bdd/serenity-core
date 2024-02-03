@@ -163,12 +163,12 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         List<TestCaseResultCount> resultCounts = new ArrayList<>();
         // Create an initial list of results in a logical order
         Arrays.stream(TestResult.values())
-                .sorted(Comparator.comparingInt(TestResult::getPriority))
+                .sorted(Comparator.comparingInt(TestResult::ordinal))
                 .map(TestCaseResultCount::new)
                 .forEach(resultCounts::add);
 
         exampleOutcomes.forEach(
-                outcome -> resultCounts.get(outcome.getResult().getPriority()).increment()
+                outcome -> resultCounts.get(outcome.getResult().ordinal()).increment()
         );
 
         // return the list of result counts excluding ones with 0 results

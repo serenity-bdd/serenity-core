@@ -1046,6 +1046,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
             if (finishedStep == getCurrentGroup()) {
                 finishGroup();
             }
+            if ((result != null)
+                    && (finishedStep.getException() != null)
+                    && result.isAtLeast(FAILURE)
+                    && (currentTestOutcome != null)
+                    && (currentTestOutcome.isDataDriven())
+                    && (currentTestOutcome.inGroup())
+                    && (!currentTestOutcome.isTopLevelGroup())) {
+                currentTestOutcome.endGroup();
+            }
+
         }
         updateExampleTableIfNecessary(result);
     }

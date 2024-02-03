@@ -1559,10 +1559,17 @@ public class TestOutcome {
         return groupStack.peek();
     }
 
-    private boolean inGroup() {
+    public boolean inGroup() {
         return !groupStack.empty();
     }
 
+    public boolean isTopLevelGroup() {
+        if (isDataDriven()) {
+            return (groupStack.size() == 1);
+        } else {
+            return (groupStack.isEmpty());
+        }
+    }
     /**
      * Get the feature that includes the user story tested by this test.
      * If no user story is defined, no feature can be returned, so the method returns null.

@@ -132,7 +132,7 @@ public class TodoUserSteps {
 
     @Step
     public void should_see_the_correct_website_title() {
-        assertThat(todoListPage.getTitle(), is("AngularJS • TodoMVC"));
+        assertThat(todoListPage.getTitle(), is("Serenity/JS TodoApp"));
     }
 
     @Step
@@ -142,7 +142,6 @@ public class TodoUserSteps {
 
     @Step
     public void should_see_the_about_section() {
-        assertThat(todoListPage.footer(), containsString("Credits"));
+        assertThat(todoListPage.footer(), containsString("Serenity/JS TodoApp, based on TodoMVC"));
     }
-
 }

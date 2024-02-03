@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -592,7 +591,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         return requirementWithNarrative(
                 requirementDirectory,
-                humanReadableVersionOf(requirementDirectory.getName()),
+                requirementDirectory.getName(),
                 requirementNarrative.get()
         );
     }
@@ -612,12 +611,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             java.util.Optional<RequirementDefinition> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
             String storyPath = requirementsConfiguration.relativePathOfFeatureFile(storyFile);
-            String storyName = storyNameFrom(narrative, type, storyFile);
+            String storyFileName = storyNameFrom(storyFile);
+            String displayName = storyDisplayNameFrom(narrative, type, storyFile);
+
             Requirement requirement;
             if (narrative.isPresent()) {
-                requirement = leafRequirementWithNarrative(storyName,
+                requirement = leafRequirementWithNarrative(
+                        storyFileName,
+                        displayName,
                         storyPath,
-                        narrative.get()).withType(type.toString());
+                        narrative.get()
+                ).withType(type.toString());
 
                 if (narrative.get().background().isPresent()) {
                     requirement = requirement.withBackground(narrative.get().background().get());
@@ -626,7 +630,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     requirement = requirement.withNoScenarios();
                 }
             } else {
-                requirement = storyNamed(storyName, storyPath).withType(type.toString());
+                requirement = storyNamed(storyFileName, displayName, storyPath).withType(type.toString());
             }
 
             return Optional.of(requirement.definedInFile(storyFile));
@@ -636,7 +640,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private String storyNameFrom(java.util.Optional<RequirementDefinition> narrative, FeatureType type, File storyFile) {
+    private String storyNameFrom(File storyFile) {
+        return storyFile.getName().substring(0, storyFile.getName().lastIndexOf("."));
+    }
+
+    private String storyDisplayNameFrom(java.util.Optional<RequirementDefinition> narrative, FeatureType type, File storyFile) {
         if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
             return narrative.get().getTitle().get();
         } else {
@@ -749,19 +757,19 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private Requirement storyNamed(String storyName, String path) {
+    private Requirement storyNamed(String storyName, String displayName, String path) {
         String shortName = humanReadableVersionOf(storyName);
         String relativePath = new FeatureFilePath(environmentVariables).relativePathFor(path);
         return Requirement.named(shortName)
                 .withId(relativePath)
+                .withOptionalDisplayName(displayName)
                 .withType(STORY_EXTENSION)
                 .withNarrative(shortName)
                 .withParent(parentFrom(relativePath))
                 .withPath(relativePath);
     }
 
-    private Requirement leafRequirementWithNarrative(String requirementName, String path, RequirementDefinition requirementNarrative) {
-        String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, requirementName);
+    private Requirement leafRequirementWithNarrative(String requirementName, String displayName, String path, RequirementDefinition requirementNarrative) {
         String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();

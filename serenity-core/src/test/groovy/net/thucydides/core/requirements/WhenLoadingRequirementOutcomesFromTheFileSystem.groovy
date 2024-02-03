@@ -56,8 +56,9 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         capabilityNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat", "Raise chickens"]
         and: "the child requirements should be found"
         def growCucumbers = capabilities.get(0)
-        def cucumberFeatures = growCucumbers.children.collect { it.name }
-        cucumberFeatures == ["Grow green cucumbers"]
+
+        def cucumberFeatureNames = growCucumbers.children.collect { it.name }
+        cucumberFeatureNames == ["grow green cucumbers"]
     }
 
     def "Should be able to load issues from the default directory structure"() {
@@ -78,7 +79,8 @@ class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
         then: "the capability should be found"
         def potatoeGrowingCapability = capabilities.get(1)
         then: "the title should be a human-readable version of the directory name"
-        potatoeGrowingCapability.name == "Grow potatoes"
+        potatoeGrowingCapability.name == "grow_potatoes"
+        potatoeGrowingCapability.displayName == "Grow potatoes"
     }
 
     def "Should support feature files in the requirements directory"() {

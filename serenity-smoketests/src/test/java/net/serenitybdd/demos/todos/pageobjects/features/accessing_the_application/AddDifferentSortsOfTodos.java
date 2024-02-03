@@ -59,5 +59,4 @@ public class AddDifferentSortsOfTodos {
         james.should_see_the_correct_application_heading();
         james.should_see_the_about_section();
     }
-
 }

@@ -22,7 +22,8 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
             def testOutcome = TestOutcome.forTestInStory("someTest", Story.withIdAndPath("PlantPotatoes","Plant potatoes","grow_potatoes/grow_new_potatoes/PlantPotatoes.story"))
         then:
             capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
-            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant Potatoes"
+            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "PlantPotatoes"
+            capabilityProvider.getParentRequirementOf(testOutcome).get().displayName == "Plant Potatoes"
     }
 
     def "Should not find the requirement if there are no matching requirements for a tag"() {

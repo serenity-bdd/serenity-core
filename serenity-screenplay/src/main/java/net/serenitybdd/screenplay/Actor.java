@@ -472,7 +472,7 @@ public class Actor implements PerformsTasks, SkipNested, Agent {
     private void endPerformance(ErrorHandlingMode mode) {
         Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
         boolean isAFixtureMethod = StepEventBus.getParallelEventBus().inFixtureMethod();
-        if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod) {
+        if (mode == THROW_EXCEPTION_ON_FAILURE && !isAFixtureMethod && !eventBusInterface.softAssertsActive()) {
             eventBusInterface.failureCause().ifPresent(
                     cause -> {
                         StepEventBus.getParallelEventBus().notifyFailure();

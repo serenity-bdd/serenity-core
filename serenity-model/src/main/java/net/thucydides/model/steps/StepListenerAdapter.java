@@ -77,6 +77,11 @@ public class StepListenerAdapter implements StepListener {
 	}
 
 	@Override
+	public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest, ZonedDateTime timestamp) {
+
+	}
+
+	@Override
 	public void lastStepFailed(StepFailure failure) {
 
 	}

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -622,16 +623,22 @@ public class StepEventBus {
         stepFailed = true;
     }
 
-
-    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
+    public void stepFailed(final StepFailure failure,
+                           List<ScreenshotAndHtmlSource> screenshotList,
+                           boolean isInDataDrivenTest,
+                           ZonedDateTime timestamp) {
 
         stepDone();
         getResultTally().logFailure(failure);
 
         for (StepListener stepListener : getAllListeners()) {
-            stepListener.stepFailed(failure,screenshotList,isInDataDrivenTest);
+            stepListener.stepFailed(failure,screenshotList,isInDataDrivenTest, timestamp);
         }
         stepFailed = true;
+    }
+
+    public void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
+        stepFailed(failure,screenshotList,isInDataDrivenTest, ZonedDateTime.now());
     }
 
 

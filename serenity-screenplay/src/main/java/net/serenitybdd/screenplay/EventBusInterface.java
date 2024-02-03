@@ -153,6 +153,11 @@ public class EventBusInterface {
         StepEventBus.getParallelEventBus().enableSoftAsserts();
     }
 
+    public boolean softAssertsActive() {
+        return StepEventBus.getParallelEventBus().softAssertsActive();
+    }
+
+
     public void disableSoftAsserts() {
         StepEventBus.getParallelEventBus().disableSoftAsserts();
     }

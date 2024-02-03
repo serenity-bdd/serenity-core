@@ -1,19 +1,20 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.serenitybdd.annotations.Step
+import net.serenitybdd.core.Serenity
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
-import net.serenitybdd.annotations.Step
 import net.thucydides.core.steps.StepEventBus
+import net.thucydides.model.steps.ExecutedStepDescription
+import net.thucydides.model.steps.StepFailure
 
-private fun handleException(exceptionMessage: String) {
+private fun handleException(errorMsg: String) {
     takeScreenshot()
     if (BlackBox.isUsingSoftAssertions()) {
-        BlackBox.softlyAssert(exceptionMessage)
-        StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(
-            AssertionError(exceptionMessage)
-        )
+        BlackBox.softlyAssert(errorMsg.trim())
+        StepEventBus.getParallelEventBus().baseStepListener.updateCurrentStepFailureCause(AssertionError(errorMsg.trim()));
     } else {
-        throw AssertionError(exceptionMessage)
+        throw AssertionError(errorMsg.trim())
     }
 }
 

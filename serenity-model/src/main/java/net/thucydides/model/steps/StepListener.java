@@ -7,6 +7,7 @@ import net.thucydides.model.domain.TestOutcome;
 import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -56,11 +57,11 @@ public interface StepListener {
     default void testStarted(final String testName, String testMethod, final String id, String scenarioId) {
         testStarted(testName, id);
     }
+
     void testStarted(final String description, final String id, ZonedDateTime startTime);
 
     /**
      * Called when a test finishes.
-     *
      */
     void testFinished(final TestOutcome result);
 
@@ -105,11 +106,20 @@ public interface StepListener {
     /**
      * Called when a test step fails.
      *
-     * @param failure describes the test that failed and the exception that was thrown
-     * @param screenshotList list of screenshots
+     * @param failure            describes the test that failed and the exception that was thrown
+     * @param screenshotList     list of screenshots
      * @param isInDataDrivenTest if the step failed was called from a data driven test
      */
-    void stepFailed(final StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest);
+    default void stepFailed(final StepFailure failure,
+                    List<ScreenshotAndHtmlSource> screenshotList,
+                    boolean isInDataDrivenTest) {
+        stepFailed(failure, screenshotList, isInDataDrivenTest, ZonedDateTime.now());
+    }
+
+    void stepFailed(final StepFailure failure,
+                            List<ScreenshotAndHtmlSource> screenshotList,
+                            boolean isInDataDrivenTest,
+                            ZonedDateTime timestamp);
 
     /**
      * Declare that a step has failed after it has finished.
@@ -129,6 +139,7 @@ public interface StepListener {
 
     /**
      * The step is marked as pending with a descriptive message.
+     *
      * @param message
      */
     void stepPending(String message);
@@ -141,12 +152,14 @@ public interface StepListener {
     default void stepFinished(List<ScreenshotAndHtmlSource> screenshotList) {
         stepFinished(screenshotList, ZonedDateTime.now());
     }
+
     void stepFinished(List<ScreenshotAndHtmlSource> screenshotList, ZonedDateTime time);
 
     /**
      * The test failed, but not while executing a step.
+     *
      * @param testOutcome The test outcome structure for the failing test
-     * @param cause The exception that triggered the failure
+     * @param cause       The exception that triggered the failure
      */
     void testFailed(TestOutcome testOutcome, final Throwable cause);
 
@@ -163,7 +176,8 @@ public interface StepListener {
     /**
      * The test as a whole was aborted.
      */
-    default void testAborted() {}
+    default void testAborted() {
+    }
 
     /**
      * The test as a whole should be marked as 'pending'.
@@ -187,16 +201,17 @@ public interface StepListener {
     /**
      * A new example has just started.
      */
-    void exampleStarted(Map<String,String> data);
+    void exampleStarted(Map<String, String> data);
 
-    default void exampleStarted(Map<String,String> data, ZonedDateTime time) {
+    default void exampleStarted(Map<String, String> data, ZonedDateTime time) {
         exampleStarted(data, ZonedDateTime.now());
     }
-    default void exampleStarted(Map<String,String> data, String exampleName) {
+
+    default void exampleStarted(Map<String, String> data, String exampleName) {
         exampleStarted(data);
     }
 
-    default void exampleStarted(Map<String,String> data, String exampleName, ZonedDateTime time) {
+    default void exampleStarted(Map<String, String> data, String exampleName, ZonedDateTime time) {
         exampleStarted(data);
     }
 

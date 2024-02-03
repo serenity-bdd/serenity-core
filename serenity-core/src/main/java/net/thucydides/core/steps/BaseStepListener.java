@@ -20,6 +20,7 @@ import net.serenitybdd.core.webdriver.OverrideDriverCapabilities;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
+import net.thucydides.core.steps.events.UpdateCurrentStepFailureCause;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.serenitybdd.annotations.TestAnnotations;
 import net.thucydides.core.junit.SerenityJUnitTestCase;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -578,6 +580,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void updateCurrentStepFailureCause(Throwable failure) {
         if (this.currentTestOutcome != null) {
+            lastStepFailedWith(failure);
+        } else {
+            TestSession.addEvent(new UpdateCurrentStepFailureCause(failure));
+        }
+    }
+
+    public void lastStepFailedWith(Throwable failure) {
+        if (this.currentTestOutcome != null) {
             this.currentTestOutcome.lastStepFailedWith(failure);
         }
     }
@@ -915,7 +925,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
-    public void stepFailed(StepFailure failure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
+    public void stepFailed(StepFailure failure,
+                           List<ScreenshotAndHtmlSource> screenshotList,
+                           boolean isInDataDrivenTest,
+                           ZonedDateTime timestamp) {
 
         if (!aStepHasFailed()) {
             // This is the actual failure, so record all the details
@@ -927,7 +940,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             recordFailureDetails(failure);
         }
         // Step marked as done with the appropriate result before
-        currentStepDone(failureAnalysis.resultFor(failure));
+        currentStepDone(failureAnalysis.resultFor(failure), timestamp);
     }
 
 

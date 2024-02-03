@@ -27,18 +27,11 @@ public class StepFailedEvent
 		}
 	}
 
-	public StepFailedEvent(StepFailure stepFailure, List<ScreenshotAndHtmlSource> screenshotList, boolean isInDataDrivenTest) {
-		this.stepFailure = stepFailure;
-		this.screenshotList = screenshotList;
-		this.isInDataDrivenTest = isInDataDrivenTest;
-	}
-
-
 	@Override
 	public void play() {
 		LOGGER.debug("SRP:PlayStepFinishedEvent with screenshot size "
 	 					+ ((screenshotList != null) ?  screenshotList.size() : 0));
-		getStepEventBus().stepFailed(stepFailure, screenshotList, isInDataDrivenTest);
+		getStepEventBus().stepFailed(stepFailure, screenshotList, isInDataDrivenTest, this.timestamp);
 	}
 
 	public String toString() {

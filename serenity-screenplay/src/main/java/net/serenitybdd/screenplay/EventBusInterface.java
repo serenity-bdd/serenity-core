@@ -37,8 +37,10 @@ public class EventBusInterface {
         if (!TestSession.isSessionStarted()) {
             StepEventBus.getParallelEventBus().stepFailed(new StepFailure(taskDescription, e));
         }  else {
-            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e),screenshotList));
+            if (!TestSession.currentStepHasFailed()) {
+                List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
+                TestSession.addEvent(new StepFailedEvent(new StepFailure(taskDescription, e), screenshotList));
+            }
         }
     }
 
@@ -47,8 +49,10 @@ public class EventBusInterface {
         if (!TestSession.isSessionStarted()) {
             StepEventBus.getParallelEventBus().stepFailed(new StepFailure(consequenceDescription, e));
         }  else {
-             List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
-            TestSession.addEvent(new StepFailedEvent(new StepFailure(consequenceDescription, e ), screenshotList));
+            if (!TestSession.currentStepHasFailed()) {
+                List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
+                TestSession.addEvent(new StepFailedEvent(new StepFailure(consequenceDescription, e), screenshotList));
+            }
         }
     }
 

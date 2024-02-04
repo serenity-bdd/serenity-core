@@ -20,6 +20,7 @@ import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.ThucydidesSystemProperty;
 import net.thucydides.model.adapters.TestFramework;
+import net.thucydides.model.domain.TestResult;
 import net.thucydides.model.domain.stacktrace.StackTraceSanitizer;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.AnnotatedStepDescription;
@@ -612,6 +613,9 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
         if (!TestSession.isSessionStarted()) {
             //no step failure for the parallel runner, rely only on Cucumber events
             StepEventBus.getParallelEventBus().stepFailed(failure);
+        } else {
+            List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
+            TestSession.addEvent(new StepFailedEvent(failure,screenshotList));
         }
         if (shouldThrowExceptionImmediately()) {
             finishAnyCucumberSteps();

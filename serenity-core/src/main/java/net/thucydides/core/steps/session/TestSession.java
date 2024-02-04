@@ -3,6 +3,8 @@ package net.thucydides.core.steps.session;
 import io.cucumber.messages.types.Tag;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.events.StepEventBusEvent;
+import net.thucydides.core.steps.events.StepFailedEvent;
+import net.thucydides.core.steps.events.StepStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,19 @@ public class TestSession {
     public static void addEvent(StepEventBusEvent event) {
         LOGGER.debug("SRP:SessionAddEvent: id " + sessionContext.get().getSessionId() + " " + event);
         sessionContext.get().addStepBusEvent(event);
+    }
+
+    public static boolean currentStepHasFailed() {
+        List<StepEventBusEvent> events = sessionContext.get().getStepEventBusEvents();
+        for (int i = events.size() - 1; i >= 0; i--) {
+            if (events.get(i) instanceof StepStartedEvent) {
+                break;
+            }
+            if (events.get(i) instanceof StepFailedEvent) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<StepEventBusEvent> getSessionEvents() {

@@ -44,6 +44,7 @@ public class StackTraceSanitizer {
             "net.serenitybdd.cucumber",
             "net.serenitybdd.jbehave",
             "net.serenitybdd.screenplay",
+            "net.thucydides.core",
             "net.thucydides.model",
             "net.thucydides.junit",
             "net.thucydides.plugins",

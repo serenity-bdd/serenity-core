@@ -15,6 +15,7 @@ import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.model.reflection.StackTraceAnalyser;
 import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.steps.*;
 import net.thucydides.model.steps.ExecutedStepDescription;
@@ -46,6 +47,7 @@ public class Serenity {
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = ThreadLocal.withInitial(TestSessionVariables::new);
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<Boolean> throwExceptionsImmediately = ThreadLocal.withInitial(() -> false);
 
     /**
      * Initialize Serenity-related fields in the specified object.
@@ -105,7 +107,7 @@ public class Serenity {
      *
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
+    public static void initializeWithNoStepListener(final Object testCase) {
         setupWebdriverManager();
 
         ThucydidesWebDriverSupport.initialize();
@@ -115,8 +117,6 @@ public class Serenity {
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
         injectDependenciesInto(testCase);
-
-        return new SerenityConfigurer();
     }
 
 
@@ -323,21 +323,14 @@ public class Serenity {
         return null;
     }
 
-    private static boolean throwExceptionsImmediately = false;
-
     public static void throwExceptionsImmediately() {
-        throwExceptionsImmediately = true;
+        throwExceptionsImmediately.set(true);
     }
 
     public static boolean shouldThrowErrorsImmediately() {
-        return throwExceptionsImmediately;
-    }
-
-    public static class SerenityConfigurer {
-        public SerenityConfigurer throwExceptionsImmediately() {
-            Serenity.throwExceptionsImmediately();
-            return this;
-        }
+        // Throw errors immediately if this is a Cucumber test
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        return Arrays.stream(stackTrace).anyMatch(element -> element.getClassName().contains("io.cucumber.core"));
     }
 
     public static WebDriverConfigurer webdriver() {

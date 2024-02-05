@@ -58,9 +58,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Cucumber Formatter for Serenity.
+ * @deprecated - use the SerenityParallelReporter now
  *
  * @author L.Carausu (liviu.carausu@gmail.com)
  */
+@Deprecated(since="4.0.50")
 public class SerenityReporter implements Plugin, ConcurrentEventListener {
 
     private static final String OPEN_PARAM_CHAR = "\uff5f";

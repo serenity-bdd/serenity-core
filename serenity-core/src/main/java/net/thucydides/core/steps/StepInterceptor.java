@@ -617,7 +617,7 @@ public class StepInterceptor implements MethodErrorReporter, Interceptor {
             List<ScreenshotAndHtmlSource> screenshotList = TestSession.getTestSessionContext().getStepEventBus().takeScreenshots(TestResult.FAILURE);
             TestSession.addEvent(new StepFailedEvent(failure,screenshotList));
         }
-        if (shouldThrowExceptionImmediately()) {
+        if (shouldThrowExceptionImmediately() && !StepEventBus.getEventBus().softAssertsActive()) {
             finishAnyCucumberSteps();
             throw cause;
         }

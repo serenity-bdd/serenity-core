@@ -71,7 +71,7 @@ public class SerenityObjectFactory implements ObjectFactory {
         } catch (ReflectiveOperationException e) {
             throw new CucumberException(String.format("Failed to instantiate %s - this class doesn't have an empty or a page enabled constructor\"", type), e);
         }
-        Serenity.initializeWithNoStepListener(instance).throwExceptionsImmediately();
+        Serenity.initializeWithNoStepListener(instance);
 
        if (StepEventBus.getParallelEventBus().isBaseStepListenerRegistered()) {
             TestOutcome newTestOutcome = StepEventBus.getParallelEventBus().getBaseStepListener().getCurrentTestOutcome();

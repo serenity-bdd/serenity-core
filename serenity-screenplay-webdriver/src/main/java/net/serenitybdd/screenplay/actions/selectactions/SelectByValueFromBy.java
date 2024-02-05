@@ -24,7 +24,7 @@ public class SelectByValueFromBy extends ByAction {
         this.values = values;
     }
 
-    @Step("{0} selects #value in #locators")
+    @Step("{0} selects #values in #locators")
     public <T extends Actor> void performAs(T theUser) {
         values.forEach(
                 value -> BrowseTheWeb.as(theUser).find(locators).selectByValue(value)

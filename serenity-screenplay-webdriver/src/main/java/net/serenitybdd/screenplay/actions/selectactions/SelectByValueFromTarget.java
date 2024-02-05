@@ -16,7 +16,7 @@ public class SelectByValueFromTarget implements Performable {
         this.values = values;
     }
 
-    @Step("{0} selects #value in #target")
+    @Step("{0} selects #values in #target")
     public <T extends Actor> void performAs(T theUser) {
         for(String value : values) {
             target.resolveFor(theUser).selectByValue(value);

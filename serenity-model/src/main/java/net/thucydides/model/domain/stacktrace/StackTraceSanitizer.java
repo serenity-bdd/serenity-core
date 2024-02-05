@@ -38,6 +38,7 @@ public class StackTraceSanitizer {
             "org.jbehave",
             "cucumber.runtime",
             "cucumber.api",
+            "io.cucumber",
             "net.serenitybdd.core",
             "net.serenitybdd.junit",
             "net.serenitybdd.plugins",

@@ -911,7 +911,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void stepFailed(StepFailure failure) {
 
-        if (!aStepHasFailed()) {
+        if (!aStepHasFailed() || StepEventBus.getEventBus().softAssertsActive()) {
             // This is the actual failure, so record all the details
             takeEndOfStepScreenshotFor(FAILURE);
 

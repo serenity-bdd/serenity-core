@@ -491,12 +491,14 @@ public class TestStep implements Cloneable {
         return TestResultList.overallResultFrom(getChildResults());
     }
 
-
     private List<TestResult> getChildResults() {
         List<TestResult> childResults = new ArrayList<>();
         for (TestStep step : getChildren()) {
-            if (step != null && step.getResult() != null) {
-                childResults.add(step.getResult());
+            if (step != null) {
+                TestResult stepResult = step.getResult();
+                if (stepResult != null) {
+                    childResults.add(stepResult);
+                }
             }
         }
         return childResults;

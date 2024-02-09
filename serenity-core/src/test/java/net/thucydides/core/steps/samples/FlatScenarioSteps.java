@@ -67,6 +67,11 @@ public class FlatScenarioSteps extends ScenarioSteps {
         throw new AssertionError("Step failed");
     }
 
+    @Step
+    public void failingWithExceptionStep() throws Exception {
+        throw new Exception("Step failed due to exception");
+    }
+
     @Ignore
     @Step
     public void ignoredStep() {}

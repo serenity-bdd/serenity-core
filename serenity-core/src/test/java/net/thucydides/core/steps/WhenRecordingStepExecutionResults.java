@@ -846,6 +846,31 @@ public class WhenRecordingStepExecutionResults {
     }
 
     @Test
+    public void a_failing_step_should_not_prevent_collecting_next_steps_result_if_soft_asserts_enabled() throws Exception {
+
+        StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getParallelEventBus().testStarted("app_should_work");
+        StepEventBus.getParallelEventBus().enableSoftAsserts();
+
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
+        steps.step_one();
+        steps.failingWithExceptionStep();
+        steps.step_two();
+        steps.failingWithExceptionStep();
+        steps.step_three();
+        StepEventBus.getParallelEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+
+        assertThat(testOutcome.getTestSteps().size(), equalTo(5));
+        TestResult[] expectedResults = {TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS, TestResult.ERROR, TestResult.SUCCESS};
+        for (int i = 0; i < testOutcome.getTestSteps().size(); i++) {
+            assertThat(testOutcome.getTestSteps().get(i).getResult(), is(expectedResults[i]));
+        }
+    }
+
+    @Test
     public void ignored_tests_should_be_reported() {
 
         StepEventBus.getParallelEventBus().testSuiteStarted(MyTestCase.class);

@@ -148,7 +148,7 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private String baseMethodName(TestOutcome testOutcome) {
-        return testOutcome.getMethodName();
+        return testOutcome.getName(); //Updated the baseMethodName so that we can effectively handle display names, display name generators, and methods without JUnit custom display names.
     }
 
     private String alternativeMethodName(TestOutcome testOutcome) {

@@ -63,8 +63,8 @@
         <commons.net.version>3.10.0</commons.net.version>
         <commons.codec.version>1.16.0</commons.codec.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <selenium.version>4.16.1</selenium.version>
-        <htmlunit.driver.version>4.16.0</htmlunit.driver.version>
+        <selenium.version>4.18.1</selenium.version>
+        <htmlunit.driver.version>4.17.0</htmlunit.driver.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsoup.version>1.15.4</jsoup.version>
         <joda-time.version>2.12.5</joda-time.version>

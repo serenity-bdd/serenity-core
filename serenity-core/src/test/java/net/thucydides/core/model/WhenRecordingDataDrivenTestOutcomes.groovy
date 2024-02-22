@@ -4,6 +4,7 @@ package net.thucydides.core.model
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.model.domain.DataTableRow
 import net.thucydides.model.domain.TestOutcome
+import net.thucydides.model.domain.DataTable
 import net.thucydides.model.environment.MockEnvironmentVariables
 import spock.lang.Specification
 

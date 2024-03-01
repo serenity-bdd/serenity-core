@@ -50,8 +50,10 @@ And if you drill into the details, Serenity will give you a detailed account of 
 ![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
 
 ## Found a bug?
-You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time, through a sponsoring organisation or via a [commercial support package](https://www.serenity-dojo.com/serenity-bdd-enterprise-support).
-    
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time, through a sponsoring organisation or via a [commercial support package](https://www.serenitydojo.academy/serenity-bdd-support-packages).
+
+We also propose [one-on-one troubleshooting sessions](https://www.serenitydojo.academy/serenity-bdd-support-packages) to help you get your problems resolved faster.
+
 Some companies and individuals who find that Serenity BDD helps in their daily work choose to give back by sponsoring the project in different capacities. Bug fixes or change requests coming from sponsors are generally prioritised over other requests. 
 
 Here are a few tips to make it easier for us to help you:
@@ -77,7 +79,7 @@ Take a look at [this article](https://opensource.guide/how-to-contribute/#commun
 
 ## Need Commercial Support?
 
-If you are using Serenity for your company projects and need faster or more in-depth support, including training and coaching, why not ask your company to explore our **[commercial support options](https://www.serenity-dojo.com/serenity-bdd-enterprise-support)**? We recognize that businesses have unique needs and require specialized attention. That's why we've designed a comprehensive range of support options tailored to your requirements. Whether it's prioritized tickets for pressing issues, custom Serenity work to integrate seamlessly with your existing systems, or remote mentoring and pair programming sessions to enhance your team's capabilities, we've got you covered. Our packages even include options for unlimited email support and additional live support hours at competitive rates. With monthly and annual payment plans, our support models aim to supercharge your Serenity experience, reducing downtime, accelerating development, and ensuring you get the most value out of your automation efforts. Let's chat and find the right fit for your needs!
+If you are using Serenity for your company projects and need faster or more in-depth support, including training and coaching, why not ask your company to explore our **[commercial support options](https://www.serenitydojo.academy/serenity-bdd-support-packages)**? We recognize that businesses have unique needs and require specialized attention. That's why we've designed a comprehensive range of support options tailored to your requirements. Whether it's prioritized tickets for pressing issues, custom Serenity work to integrate seamlessly with your existing systems, or remote mentoring and pair programming sessions to enhance your team's capabilities, we've got you covered. Our packages even include options for unlimited email support and additional live support hours at competitive rates. With monthly and annual payment plans, our support models aim to supercharge your Serenity experience, reducing downtime, accelerating development, and ensuring you get the most value out of your automation efforts. Let's chat and find the right fit for your needs!
   
 ## Where can I learn more?
 
@@ -108,6 +110,8 @@ The tables below list the latest stable and tested versions of Serenity BDD and 
 
 | serenity-core | serenity-maven-plugin | Selenium version | RestAssured version | Appium client version |
 |---------------|-----------------------|------------------|---------------------|-----------------------|
+| 4.1.3         | 4.1.3                 | 4.18.1           | 5.3.1               | 8.3.0                 |
+| 4.1.0         | 4.1.0                 | 4.16.0           | 5.3.1               | 8.3.0                 |
 | 4.0.12        | 4.0.12                | 4.12.1           | 5.3.1               | 8.3.0                 |
 | 4.0.1         | 4.0.1                 | 4.12.0           | 5.3.1               | 8.3.0                 |
 | 3.9.8         | 3.9.8                 | 4.11.0           | 5.2.0               | 8.3.0                 |
@@ -147,6 +151,7 @@ Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd
 #### Cucumber 7 (Serenity 3.1.15 onwards)
 | serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber |
 |---------------|-----------------------|-------------------|----------|
+| 4.1.3         | 4.1.3                 | 4.1.3             | 7.15.0   |
 | 4.0.12        | 4.0.12                | 4.0.12            | 7.14.0   |
 | 4.0.1         | 4.0.1                 | 4.0.1             | 7.13.0   |
 | 3.9.8         | 3.9.8                 | 3.9.8             | 7.13.0   |

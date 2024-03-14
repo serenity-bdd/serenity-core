@@ -50,7 +50,9 @@ And if you drill into the details, Serenity will give you a detailed account of 
 ![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
 
 ## Found a bug?
-You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time, through a sponsoring organisation or via a [commercial support package](https://www.serenitydojo.academy/serenity-bdd-support-packages).
+You can raise a defect here. Note that this is an open source project, so **the fastest way to fix an issue is to fix it yourself and to propose a pull request**. 
+
+Note that pretty much **all current development on the Serenity code base is driven by commercial support contracts**. As with any open source project, support is never free - it is just payed for from a volunteer's spare time, through a sponsoring organisation or via a [commercial support package](https://www.serenitydojo.academy/serenity-bdd-support-packages). Currently, we have very little bandwidth for issues which are not requested or prioritised by a client with a commercial support package, so if an issue is important to you, your project or your company, a [commercial support package](https://www.serenitydojo.academy/serenity-bdd-support-packages) is the more effective and most ethical way of getting a fix or implementation done quickly.
 
 We also propose [one-on-one troubleshooting sessions](https://www.serenitydojo.academy/serenity-bdd-support-packages) to help you get your problems resolved faster.
 

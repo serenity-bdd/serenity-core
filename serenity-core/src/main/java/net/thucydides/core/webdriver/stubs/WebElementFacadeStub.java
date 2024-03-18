@@ -480,6 +480,16 @@ public class WebElementFacadeStub implements WebElementFacade, WebElementState {
     }
 
     @Override
+    public String getAriaLabel() {
+        return "";
+    }
+
+    @Override
+    public String getRole() {
+        return "";
+    }
+
+    @Override
     public boolean isDisabled() {
         return false;
     }

@@ -1108,6 +1108,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
+    public String getAriaLabel() {
+        return getAttribute("aria-label");
+    }
+
+    @Override
+    public String getRole() {
+        return getAttribute("role");
+    }
+
+    @Override
     public boolean isDisabled() {
         if (driverIsDisabled()) {
             return true;

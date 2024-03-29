@@ -274,11 +274,12 @@ public class WhenRunningADataDrivenTestScenario extends AbstractTestStepRunnerTe
     public void a_separate_json_report_should_be_generated_for_each_scenario() {
 
         File outputDirectory = anotherTempDir.resolve("serenity").toFile();
-
         System.setProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.getPropertyName(),
                 outputDirectory.getAbsolutePath());
         SystemPropertiesConfiguration systemPropertiesConfiguration = new SystemPropertiesConfiguration(new SystemEnvironmentVariables());
+
         runTestForClass(MultipleDataDrivenTestScenariosWithValueSource.class);
+
         File[] reports = reload(systemPropertiesConfiguration.getOutputDirectory()).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
 

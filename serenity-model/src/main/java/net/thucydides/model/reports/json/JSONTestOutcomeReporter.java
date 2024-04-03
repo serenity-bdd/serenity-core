@@ -49,8 +49,6 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
-//        String unique = UUID.randomUUID().toString();
-//        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
         report.createNewFile();
 

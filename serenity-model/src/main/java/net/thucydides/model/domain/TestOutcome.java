@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -137,6 +138,11 @@ public class TestOutcome {
      * When did this test start.
      */
     private ZonedDateTime startTime;
+
+    /**
+     * When did this start finish
+     */
+    private ZonedDateTime endTime;
 
     /**
      * How long did it last in milliseconds.
@@ -273,6 +279,7 @@ public class TestOutcome {
      * Scenario outline text.
      */
     private String scenarioOutline;
+    private String testOutlineName;
     private String testData;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
@@ -533,7 +540,8 @@ public class TestOutcome {
                 this.environmentVariables,
                 this.externalLink,
                 this.context,
-                this.testSource);
+                this.testSource,
+                this.testOutlineName);
     }
 
     protected TestOutcome(final ZonedDateTime startTime,
@@ -568,7 +576,8 @@ public class TestOutcome {
                           final EnvironmentVariables environmentVariables,
                           final ExternalLink externalLink,
                           final String context,
-                          final String testSource) {
+                          final String testSource,
+                          final String testOutlineName) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -608,6 +617,7 @@ public class TestOutcome {
         this.externalLink = externalLink;
         this.context = context;
         this.testSource = testSource;
+        this.testOutlineName = testOutlineName;
     }
 
     List<String> calculateNestPath(Class<?> testCase) {
@@ -679,7 +689,8 @@ public class TestOutcome {
                     this.environmentVariables,
                     this.externalLink,
                     this.context,
-                    this.testSource);
+                    this.testSource,
+                    this.testOutlineName);
         } else {
             return this;
         }
@@ -718,7 +729,8 @@ public class TestOutcome {
                 this.environmentVariables,
                 this.externalLink,
                 this.context,
-                this.testSource);
+                this.testSource,
+                this.testOutlineName);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -754,7 +766,8 @@ public class TestOutcome {
                 this.environmentVariables,
                 this.externalLink,
                 this.context,
-                this.testSource);
+                this.testSource,
+                this.testOutlineName);
     }
 
     public TestOutcome withStartTime(ZonedDateTime startTime) {
@@ -790,7 +803,8 @@ public class TestOutcome {
                 this.environmentVariables,
                 this.externalLink,
                 this.context,
-                this.testSource);
+                this.testSource,
+                this.testOutlineName);
     }
 
     /**
@@ -1115,6 +1129,14 @@ public class TestOutcome {
                 .collect(Collectors.toList());
 
         return TestResultList.overallResultFrom(results);
+    }
+
+    public String getTestOutlineName() {
+        return testOutlineName;
+    }
+
+    public void setTestOutlineName(String testOutlineName) {
+        this.testOutlineName = testOutlineName;
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -2528,11 +2550,8 @@ public class TestOutcome {
         return userStory;
     }
 
-    public void recordDuration() {
-        recordDuration(ZonedDateTime.now());
-    }
-
     public void recordDuration(ZonedDateTime finishTime) {
+        this.endTime = finishTime;
         if (duration == 0) {
             long duration = ChronoUnit.MILLIS.between(startTime, finishTime);
             setDuration(duration);
@@ -2544,25 +2563,38 @@ public class TestOutcome {
     }
 
     public Long getDuration() {
-        if (duration > 0) {
-            return duration;
+        // For data-driven tests, each top-level step is a separate test
+        if (isDataDriven()) {
+            return getDataDrivenDuration();
+        } else {
+            if (startTime != null && endTime != null) {
+                return ChronoUnit.MILLIS.between(startTime, endTime);
+            } else {
+                return duration;
+            }
         }
-        long calculatedDuration = 0;
-        for (TestStep step : testSteps) {
-            calculatedDuration += step.getDuration();
+    }
+
+    private long getDataDrivenDuration() {
+        // The duration of a data-driven test is the difference between the earliest start time and the latest end time
+        Optional<ZonedDateTime> earliestStartTime = getTestSteps().stream().map(TestStep::getStartTime).min(Comparator.naturalOrder());
+        Optional<ZonedDateTime> latestEndTime = getDataDrivenEndTime();
+        if (earliestStartTime.isPresent() && latestEndTime.isPresent()) {
+            return ChronoUnit.MILLIS.between(earliestStartTime.get(), latestEndTime.get());
         }
-        return calculatedDuration;
-//        return testSteps
-//                .stream()
-//                .mapToLong(TestStep::getDuration)
-//                .sum();
+        return 0;
+    }
+
+    private Optional<ZonedDateTime> getDataDrivenEndTime() {
+        return getTestSteps().stream().map(TestStep::getEndTime).max(Comparator.naturalOrder());
     }
 
     public ZonedDateTime getEndTime() {
-        if (startTime == null) {
-            return null;
+        if (isDataDriven()) {
+            return getDataDrivenEndTime().orElse(null);
+        } else {
+            return endTime;
         }
-        return startTime.plusNanos(duration * 1000);
     }
 
     /**
@@ -2977,7 +3009,8 @@ public class TestOutcome {
                 environmentVariables,
                 externalLink,
                 context,
-                testSource);
+                testSource,
+                this.testOutlineName);
     }
 
     public ExternalLink getExternalLink() {

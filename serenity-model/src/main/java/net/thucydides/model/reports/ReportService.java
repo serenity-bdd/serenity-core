@@ -128,6 +128,9 @@ public class ReportService {
      */
 
     public void generateReportsFor(final List<TestOutcome> testOutcomeResults) {
+        if (testOutcomeResults.isEmpty()) {
+            return;
+        }
         final TestOutcomes allTestOutcomes = TestOutcomes.of(testOutcomeResults);
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);

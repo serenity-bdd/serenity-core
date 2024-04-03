@@ -359,12 +359,12 @@ public class TestOutcomeRequirementsTagProvider implements RequirementsTagProvid
     }
 
     private Requirement findRequirementByTag(TestTag tag) {
-        for (Requirement requirement : getFlattenedRequirements()) {
-            if (requirement.matchesTag(tag)) {
-                return requirement;
-            }
-        }
-        return null;
+        return getFlattenedRequirements()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(requirement -> requirement.matchesTag(tag))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

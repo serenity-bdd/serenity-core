@@ -694,6 +694,10 @@ public class TestStep implements Cloneable {
         return startTime;
     }
 
+    public ZonedDateTime getEndTime() {
+        return startTime.plus(duration, ChronoUnit.MILLIS);
+    }
+
     public int getActualScreenshotCount() {
         int screenshotCount = 0;
         if (hasChildren()) {

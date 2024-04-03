@@ -27,7 +27,7 @@ public class SimpleSuccessfulParameterizedTestSample {
 
 
     @ParameterizedTest
-    @ValueSource(strings = { "A", "B" ,"C"})
+    @ValueSource(strings = { "D", "E" ,"F","H"})
     public void test2() {
     }
 

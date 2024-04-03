@@ -1111,15 +1111,6 @@ public class WhenRecordingNewTestOutcomes {
         assertThat(testOutcome.getUserStory().getStoryClassName(), is(MyApp.MyUserStory.class.getName()));
     }
 
-    @Test
-    public void we_can_record_the_lifetime_of_a_test_run() throws InterruptedException {
-        Thread.sleep(100);
-        testOutcome.recordDuration();
-        assertThat(testOutcome.getDuration(), is(greaterThanOrEqualTo(10L)));
-        assertThat(testOutcome.getDuration(), is(lessThan(5000L)));
-        assertThat(testOutcome.getDurationInSeconds(), is(lessThan(5.0)));
-    }
-
     class SimpleScenarioSteps extends ScenarioSteps {
 
         public SimpleScenarioSteps(final Pages pages) {

@@ -683,7 +683,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn("Could not read feature file - is this file empty or badly formatted? " + storyFile, e);
         }
         return null;
     }

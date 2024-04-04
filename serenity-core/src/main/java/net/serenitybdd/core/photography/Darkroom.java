@@ -25,9 +25,11 @@ public class Darkroom {
     private final EnvironmentVariables environmentVariables;
 
     public void isOpenForBusiness() {
-        if (theDarkroomIsClosed()) {
-            LOGGER.debug("Opening darkroom");
-            start();
+        synchronized (this) {
+            if (theDarkroomIsClosed()) {
+                LOGGER.debug("Opening darkroom");
+                start();
+            }
         }
     }
 
@@ -61,7 +63,9 @@ public class Darkroom {
     }
 
     public void start() {
-
+        if (theDarkroomIsOpen()) {
+            return; // Already open, no need to start again.
+        }
         this.processingLine = new DarkroomProcessingLine(getProcessors());
         screenshotThread = new Thread(processingLine,"Darkroom Processing Line");
         screenshotThread.setDaemon(true);
@@ -71,6 +75,7 @@ public class Darkroom {
     public void terminate() {
         if (processingLine != null) {
             shutdownProcessingLine();
+            processingLine = null; // Clear the processing line to ensure the darkroom is marked as closed.
         }
         DarkroomFileSystem.close();
     }

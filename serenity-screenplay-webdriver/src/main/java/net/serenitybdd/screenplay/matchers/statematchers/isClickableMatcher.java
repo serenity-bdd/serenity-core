@@ -18,6 +18,6 @@ public class isClickableMatcher<T extends WebElementState> extends TypeSafeMatch
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was not clicked");
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was not clickable");
     }
 }

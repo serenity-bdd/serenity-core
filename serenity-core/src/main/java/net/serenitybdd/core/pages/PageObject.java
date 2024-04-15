@@ -145,9 +145,9 @@ public abstract class PageObject {
         callback.apply(this);
     }
 
-    public PageObject(final WebDriver driver, final int ajaxTimeout) {
+    public PageObject(final WebDriver webdriver, final int ajaxTimeout) {
         this();
-        setDriver(driver, ajaxTimeout);
+        setDriver(webdriver, ajaxTimeout);
     }
 
     public PageObject(final WebDriver driver) {
@@ -162,13 +162,16 @@ public abstract class PageObject {
         setDriver(driver);
     }
 
-    protected void setDriver(WebDriver driver, long timeout) {
-        this.driver = driver;
-        new DefaultPageObjectInitialiser(driver, timeout).apply(this);
+    protected void setDriver(WebDriver webdriver, long timeout) {
+        this.driver = webdriver;
+        if (SerenityInfrastructure.getConfiguration().getBaseUrl() != null) {
+            setDefaultBaseUrl(SerenityInfrastructure.getConfiguration().getBaseUrl());
+        }
+        new DefaultPageObjectInitialiser(getDriver(), timeout).apply(this);
     }
 
-    public <T extends PageObject> T setDriver(WebDriver driver) {
-        setDriver(driver, getImplicitWaitTimeout().toMillis());
+    public <T extends PageObject> T setDriver(WebDriver webdriver) {
+        setDriver(webdriver, getImplicitWaitTimeout().toMillis());
         return (T) this;
     }
 
@@ -223,19 +226,19 @@ public abstract class PageObject {
      * By default, this will look for a file on the file system, at the location provided.
      */
     public FileToUpload upload(final String filename) {
-        return new FileToUpload(driver, filename).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(getDriver(), filename).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(String data) throws IOException {
         Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data.getBytes(StandardCharsets.UTF_8));
-        return new FileToUpload(driver, datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(getDriver(), datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(byte[] data) throws IOException {
         Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data);
-        return new FileToUpload(driver, datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(getDriver(), datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     private boolean isDefinedRemoteUrl() {
@@ -269,7 +272,7 @@ public abstract class PageObject {
 
     protected RenderedPageObjectView getRenderedView() {
         if (renderedView == null) {
-            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout(), true);
+            renderedView = new RenderedPageObjectView(getDriver(), this, getWaitForTimeout(), true);
         }
         return renderedView;
     }
@@ -360,7 +363,7 @@ public abstract class PageObject {
     }
 
     public RenderedPageObjectView withTimeoutOf(Duration timeout) {
-        return new RenderedPageObjectView(driver, this, timeout, false);
+        return new RenderedPageObjectView(getDriver(), this, timeout, false);
     }
 
     /**
@@ -455,7 +458,7 @@ public abstract class PageObject {
     }
 
     public WebDriverWait waitOnPage() {
-        return new WebDriverWait(driver, getWaitForTimeout());
+        return new WebDriverWait(getDriver(), getWaitForTimeout());
     }
 
     public PageObject waitForTitleToDisappear(final String expectedTitle) {
@@ -1042,7 +1045,7 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement,
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(getDriver(), webElement,
                 getImplicitWaitTimeout().toMillis(),
                 getWaitForTimeout().toMillis(),
                 nameOf(webElement));
@@ -1134,7 +1137,7 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(getDriver(),
                 bySelector,
                 getImplicitWaitTimeout().toMillis(),
                 getWaitForTimeout().toMillis(),
@@ -1398,14 +1401,14 @@ public abstract class PageObject {
     }
 
     public ThucydidesFluentWait<WebDriver> waitForWithRefresh() {
-        return new FluentWaitWithRefresh<>(driver, webdriverClock, sleeper)
+        return new FluentWaitWithRefresh<>(getDriver(), webdriverClock, sleeper)
                 .withTimeout(getWaitForTimeout().toMillis(), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
     public SerenityFluentWait waitForCondition() {
-        return (SerenityFluentWait) new SerenityFluentWait(driver, webdriverClock, sleeper)
+        return (SerenityFluentWait) new SerenityFluentWait(getDriver(), webdriverClock, sleeper)
                 .withTimeout(getWaitForTimeout())
                 .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
@@ -1424,7 +1427,7 @@ public abstract class PageObject {
     }
 
     public Alert getAlert() {
-        return driver.switchTo().alert();
+        return getDriver().switchTo().alert();
     }
 
     public Actions withAction() {

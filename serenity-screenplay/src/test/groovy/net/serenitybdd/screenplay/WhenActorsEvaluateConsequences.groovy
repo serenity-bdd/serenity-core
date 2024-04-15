@@ -94,6 +94,25 @@ class WhenActorsEvaluateConsequences extends Specification{
         outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, FAILURE, SKIPPED]
     }
 
+    def "should report failures that happen inside a question"() {
+        when:
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeAbleToPurchaseAnItemWithABrokenQuestion"]
+        outcome.result == ERROR
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, ERROR]
+    }
+
+    def "should report assertion failures that happen inside a question"() {
+        when:
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeAbleToPurchaseAnItemWithAQuestionWithAFailingAssertion"]
+        outcome.result == FAILURE
+        outcome.testSteps.collect { it.result } == [FAILURE]
+    }
+
+
     def "should use all the consequences in a group of consequences to evaluate the total result"() {
         when:
         def results = resultsFrom(runner.testOutcomes)

@@ -69,7 +69,10 @@ public class Pages implements Serializable {
     }
 
     public WebDriver getDriver() {
-        return (driver != null) ? driver : Serenity.getWebdriverManager().getWebdriver();
+        if (driver == null) {
+            driver = Serenity.getWebdriverManager().getWebdriver();
+        }
+        return driver;
     }
 
     protected WebdriverProxyFactory getProxyFactory() {

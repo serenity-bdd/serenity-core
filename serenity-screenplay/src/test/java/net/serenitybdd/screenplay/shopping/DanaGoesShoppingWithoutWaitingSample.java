@@ -5,6 +5,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.ThisTakesTooLong;
+import net.serenitybdd.screenplay.shopping.questions.BrokenQuestion;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
@@ -252,6 +253,19 @@ public class DanaGoesShoppingWithoutWaitingSample {
                 seeThat(theTotalCost(), equalTo(20)));
     }
 
+
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithABrokenQuestion() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
+                purchase().aPear().thatCosts(5).dollars());
+
+        then(dana).should(seeThat(BrokenQuestion.thatThrowsAnException(), equalTo(10)));
+    }
+
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithAQuestionWithAFailingAssertion() {
+        when(dana).should(seeThat(BrokenQuestion.thatThrowsAnAssertionError(), equalTo(10)));
+    }
 
     // Expected to fail with two failures and a skipped
     @Test

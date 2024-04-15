@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.serenitybdd.core.di.SerenityInfrastructure.getWebDriverFactory;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.NEVER;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.configuredIn;
 
@@ -200,6 +201,23 @@ public class Serenity {
     }
 
     public static WebDriver getDriver() {
+        return getWebdriverManager().getWebdriver();
+    }
+
+    /**
+     * Return the actual WebDriver instance used by Serenity
+     */
+    public static WebDriver getProxiedDriver() {
+        return ((WebDriverFacade)getWebdriverManager().getWebdriver()).getProxiedDriver();
+    }
+
+    /**
+     * A convenience method that allows you to set your own driver for Serenity to use.
+     * The driver will be used whenever the default driver for the current thread is requested.
+     */
+    public static WebDriver useDriver(WebDriver driver) {
+        WebDriverFacade driverFacade = new WebDriverFacade(driver, getWebDriverFactory());
+        getWebdriverManager().setCurrentDriver(driverFacade);
         return getWebdriverManager().getWebdriver();
     }
 

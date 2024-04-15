@@ -2,6 +2,9 @@ package net.serenitybdd.screenplay;
 
 import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.annotations.Step;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
 
 import java.util.function.Consumer;
 
@@ -18,7 +21,12 @@ public class AnonymousPerformableFunction implements Performable, CanBeSilent {
     @Override
     @Step("!#title")
     public <T extends Actor> void performAs(T actor) {
-        actions.accept(actor);
+        try {
+            actions.accept(actor);
+        } catch (Throwable e) {
+            StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(e.getMessage()), e));
+            throw e;
+        }
     }
 
     @Override

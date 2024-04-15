@@ -13,6 +13,6 @@ public class TestFailedEvent extends StepEventBusEventBase {
 
 	@Override
 	public void play() {
-		getStepEventBus().testFailed(cause);
+		getStepEventBus().testFailed(cause, timestamp);
 	}
 }

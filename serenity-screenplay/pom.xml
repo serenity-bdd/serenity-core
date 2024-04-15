@@ -5,7 +5,7 @@
     <parent>
         <artifactId>serenity-bdd</artifactId>
         <groupId>net.serenity-bdd</groupId>
-        <version>4.1.8-SNAPSHOT</version>
+        <version>4.1.8</version>
     </parent>
     <artifactId>serenity-screenplay</artifactId>
     <packaging>jar</packaging>

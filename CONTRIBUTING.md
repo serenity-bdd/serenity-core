@@ -108,7 +108,7 @@ For builds we use [maven](http://maven.apache.org), and uses Maven Wrapper to ac
 
 So, now you are ready to build the project. After you checkout it go to folder and execute:
 ```
-.mvnw clean verify
+./mvnw clean verify
 ```
 It will take some time... A lot of tests should execute before build can be marked successful. Using gradle documentation you can configure executing only your tests.
 

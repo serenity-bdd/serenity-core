@@ -57,7 +57,7 @@ public class WebDriverFactory {
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            SerenityInfrastructure.getFixtureProviderService(),
+                SerenityInfrastructure.getFixtureProviderService(),
                 SerenityInfrastructure.getCloseBrowser());
     }
 
@@ -143,15 +143,7 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            if (shouldRetry(cause)) {
-                LOGGER.debug("Waiting to retry: " + cause.getMessage() + ")");
-                return waitThenRetry(driverClass, options, environmentVariables);
-            } else {
-                throw new DriverConfigurationError(
-                        "WebDriver was unable to create a new instance of type " + driverClass + System.lineSeparator()
-                        + "WebDriver reported the following message: " + cause.getMessage() + System.lineSeparator()
-                        + "See below for more details.", cause);
-            }
+            return waitThenRetry(driverClass, options, environmentVariables);
         }
     }
 
@@ -190,7 +182,7 @@ public class WebDriverFactory {
         if (remainingTries == 0) {
             throw new DriverConfigurationError(
                     "After several attempts, could not instantiate new WebDriver instance of type " + driverClass +
-                    " (" + cause.getMessage() + "). See below for more details.", cause);
+                            " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
         PauseTestExecution.forADelayOf(30).seconds();
@@ -212,7 +204,7 @@ public class WebDriverFactory {
                         .from(environmentVariables, "All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
                 partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
-                                       && (cause.getMessage().contains(partialErrorMessage))
+                        && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 
@@ -229,7 +221,7 @@ public class WebDriverFactory {
     }
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables) {
-       return EnvironmentSpecificConfiguration
+        return EnvironmentSpecificConfiguration
                 .from(environmentVariables)
                 .getOptionalProperty(ThucydidesSystemProperty.WEBDRIVER_DRIVER, DRIVER, WEBDRIVER_CAPABILITIES_BROWSERNAME)
                 .orElse(null);

@@ -1624,7 +1624,18 @@ public enum ThucydidesSystemProperty {
      */
     WEBDRIVER_CREATION_RETRY_CAUSES,
 
-    WEBDRIVER_CREATION_RETRY_MAX_TIME,
+    /**
+     * If we can't create the webdriver for some reason (for example, all parallel tests are in use),
+     * we wait for a short delay and try again a number of times.
+     * This is the time we wait between retries. The default is 5 seconds.
+      */
+    WEBDRIVER_CREATION_RETRY_DELAY,
+    /**
+     *  If we can't create the webdriver for some reason (for example, all parallel tests are in use),
+     *  we wait for a short delay and try again a number of times. This is the maximum number of times we try to create the webdriver.
+     *  The default is 6.
+     */
+    WEBDRIVER_CREATION_RETRY_COUNT,
 
     /**
      * If set to true, the name of the actor will appear in "should" statements for Screenplay tests.

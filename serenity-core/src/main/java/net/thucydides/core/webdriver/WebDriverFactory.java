@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SystemTimeouts;
 import net.serenitybdd.core.di.SerenityInfrastructure;
 import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
@@ -168,7 +169,7 @@ public class WebDriverFactory {
     private WebDriver waitThenRetry(Class<? extends WebDriver> driverClass,
                                     String options,
                                     EnvironmentVariables environmentVariables) {
-        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables, 30);
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_COUNT.integerFrom(environmentVariables, 6);
         return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, null);
     }
 
@@ -178,6 +179,7 @@ public class WebDriverFactory {
                                     EnvironmentVariables environmentVariables,
                                     Exception cause) {
         LOGGER.debug("Remaining tries: " + remainingTries);
+        int retryDelay = WEBDRIVER_CREATION_RETRY_DELAY.integerFrom(environmentVariables, 5);
 
         if (remainingTries == 0) {
             throw new DriverConfigurationError(
@@ -185,7 +187,7 @@ public class WebDriverFactory {
                             " (" + cause.getMessage() + "). See below for more details.", cause);
         }
 
-        PauseTestExecution.forADelayOf(30).seconds();
+        PauseTestExecution.forADelayOf(retryDelay).seconds();
 
         try {
             return createWebDriver(driverClass, options, environmentVariables);

@@ -101,43 +101,19 @@ If this PR change something, that can change view of report or console output, e
 screenshots “what was before this PR” and how it will be changed”. 
 
 ```
-examples:
-* [Upgrading gradle and bintray plugin version](serenity-bdd/serenity-jbehave/pull/25) 
-* [#243 Upgrading typesafe.config from 1.2 to 1.3](serenity-bdd/serenity-core/pull/248)
 
 ## <a name="how_to_build"></a> How to build
-First of all make sure that your environment is ready to build this module. We actively use [Selenium](http://www.seleniumhq.org/) so Chrome, Firefox, Phantomsjs, chromedriver should be available in your PATH. Also java should be installed on your dev machine. 
 
-#### Chrome 
-To get instructions about installing Chrome use [official site](https://www.google.com/chrome/). 
-#### FireFox
-To get instructions about installing FireFox use [official site](https://www.mozilla.org/en-US/firefox/new/). 
-It is possible to check if all fine with your installation, run in console
-```
-firefox
-```
-If executed without error - this part is ready. 
+For builds we use [maven](http://maven.apache.org), and uses Maven Wrapper to achieve that all developers will use same version.
 
-#### PhantomJs 
-PhantomJs it is headless browser, it is suitable for writing tests as with real browsers and using less resources for such tests. 
-To install phantomJs follow [instructions](http://phantomjs.org/download.html). 
-It is possible to check if all fine with phantomJs just run in console
+So, now you are ready to build the project. After you checkout it go to folder and execute:
 ```
-phantomjs -v
-```
-If executed without error - this part is ready. 
-
-#### ChromeDriver
-
-ChromeDriver can be downloaded from [site](https://sites.google.com/a/chromium.org/chromedriver/downloads), after it will be included in PATH you should check if all fine with versions of ChromeDriver/Chrome execute in console:
-```
-chromedriver
-```
-this command will run chromedriver as server and if output does not contains errors - chromedriver and Chrome are ready. 
-
-For builds we use [gradle](http://gradle.org), and to achieve that all developers will use same version - [wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) is configured.
-So, now you are ready to build module. After you checkout it go to folder and execute:
-```
-./gradlew clean test integrationTests install
+./mvnw clean verify
 ```
 It will take some time... A lot of tests should execute before build can be marked successful. Using gradle documentation you can configure executing only your tests.
+
+If you wish to check a change locally before running the full test suite, you can build the snapshot version like this:
+
+```
+./mvnw clean install -DskipTests
+```

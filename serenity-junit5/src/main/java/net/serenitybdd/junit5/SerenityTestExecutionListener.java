@@ -358,7 +358,7 @@ public class SerenityTestExecutionListener implements TestExecutionListener {
         TestResult result = eventBusFor(testIdentifier).getBaseStepListener().getCurrentTestOutcome().getResult();
         if (testExecutionResult.getStatus() == TestExecutionResult.Status.ABORTED && result == TestResult.SUCCESS) {
             updateResultsUsingTestExecutionResult(testIdentifier, testExecutionResult);
-        } else if (testExecutionResult.getStatus() == TestExecutionResult.Status.FAILED && result.isLessSevereThan(TestResult.FAILURE)) {
+        } else if (testExecutionResult.getStatus() == TestExecutionResult.Status.FAILED && TestResult.FAILURE.isLessSevereThan(result)) {
             updateResultsUsingTestExecutionResult(testIdentifier, testExecutionResult);
         }
 

@@ -273,6 +273,14 @@ public class TestStep implements Cloneable {
         return new ArrayList(children);
     }
 
+    public String getAllStepsText() {
+        StringBuilder allStepsText = new StringBuilder();
+        for (TestStep testStep : getFlattenedSteps()) {
+            allStepsText.append(testStep.getDescription() + "\n");
+        }
+        return allStepsText.toString();
+    }
+
     public List<ScreenshotAndHtmlSource> getScreenshots() {
         return new ArrayList(screenshots);
     }

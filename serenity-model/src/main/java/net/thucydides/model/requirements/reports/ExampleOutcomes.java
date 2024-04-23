@@ -17,7 +17,8 @@ public class ExampleOutcomes {
                                     testStep.getResult(),
                                     testStep.getStartTime(),
                                     testStep.getDuration(),
-                                    testStep.getChildren().size()
+                                    testStep.getChildren().size(),
+                                    testStep.getAllStepsText()
                             )).collect(Collectors.toList());
         } else {
             return new ArrayList<>();

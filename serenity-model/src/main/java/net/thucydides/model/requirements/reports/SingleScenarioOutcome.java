@@ -35,7 +35,6 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private Rule rule;
     private ExternalLink externalLink;
     private final Collection<TestTag> scenarioTags;
-
     private final String context;
 
     public SingleScenarioOutcome(String name,
@@ -157,6 +156,13 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return steps.size();
     }
 
+    public String getAllStepsText() {
+        StringBuilder allStepsText = new StringBuilder();
+        for (String step : steps) {
+            allStepsText.append(step + "\n");
+        }
+        return allStepsText.toString();
+    }
 
     public ZonedDateTime getStartTime() {
         return startTime;

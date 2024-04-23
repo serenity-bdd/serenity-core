@@ -159,6 +159,14 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return steps.size();
     }
 
+    public String getAllStepsText() {
+        StringBuilder allStepsText = new StringBuilder();
+        for (String step : steps) {
+            allStepsText.append(step + "\n");
+        }
+        return allStepsText.toString();
+    }
+
     public List<TestCaseResultCount> getResultCounts() {
         List<TestCaseResultCount> resultCounts = new ArrayList<>();
         // Create an initial list of results in a logical order

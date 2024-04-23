@@ -1172,6 +1172,16 @@ public class TestOutcomes {
                 .count();
     }
 
+    public String getAllStepsText() {
+        StringBuilder allStepsText = new StringBuilder();
+        for (TestOutcome outcome : outcomes) {
+            for (TestStep testStep : outcome.getFlattenedTestSteps()) {
+                allStepsText.append(testStep.getDescription() + "\n");
+            }
+        }
+        return allStepsText.toString();
+    }
+
     private int totalImplementedTests() {
         return outcomes.stream()
                 .mapToInt(TestOutcome::getImplementedTestCount)

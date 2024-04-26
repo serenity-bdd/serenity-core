@@ -164,6 +164,7 @@ class CoverageByTagType(
             testOutcomesForTag.testCaseCount,
             successRate,
             testOutcomesForTag.result,
+            testOutcomesForTag.allStepsText,
             reportNameProvider.forRequirementOrTag(testTag),    //            ReportNameProvider().forRequirementOrTag(testTag),
             countByResultLabelFrom(testOutcomesForTag),
             percentageByResultFrom(testOutcomesForTag)
@@ -191,6 +192,7 @@ class CoverageByTag(
     val testCount: Long,
     val successRate: String,
     val result: TestResult,
+    var allStepsText: String,
     val report: String,
     val countByResult: Map<String, Long>,
     val percentageByResult: Map<String, Double>

@@ -51,7 +51,11 @@
                     search: ""
                 },
                 columnDefs: [
-                    {type: 'time-elapsed-dhms', targets: 5}
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                    {type: 'time-elapsed-dhms', targets: 6}
                 ]
             })
             $("#manual-scenario-results").DataTable({
@@ -60,6 +64,12 @@
                     searchPlaceholder: "Filter",
                     search: ""
                 },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                ]
             })
 
             // Results table
@@ -80,7 +90,17 @@
             $(".feature-coverage-table").DataTable({
                 searching: true,
                 paging: false,
-                info: false
+                info: false,
+                language: {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    {
+                        targets: 2,
+                        visible: false
+                    },
+                ]
             });
 
             $(".feature-coverage-table-with-pagination").DataTable({
@@ -90,7 +110,13 @@
                 language: {
                     searchPlaceholder: "Filter",
                     search: ""
-                }
+                },
+                columnDefs: [
+                    {
+                        targets: 2,
+                        visible: false
+                    },
+                ]
             });
         });
     </script>
@@ -331,12 +357,12 @@
                                                                     <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
                                                                     <h4>${inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle()}</h4>
 
-                                                                    <table class="table ${coverageTableClass}"
-                                                                           id="${tagCoverageByType.tagType}">
+                                                                    <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}" style="width:100%">
                                                                         <thead>
                                                                         <tr>
                                                                             <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
                                                                             <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">StepsText</th>
                                                                             <th style="width:1em;">Test&nbsp;Cases</th>
                                                                             <th style="width:1em;">%&nbsp;Pass</th>
                                                                             <th style="width:1em;">Result</th>
@@ -361,6 +387,7 @@
                                                                                         </#if>
                                                                                     </td>
                                                                                     <td>${tagCoverage.scenarioCount}</td>
+                                                                                    <td>${tagCoverage.allStepsText}</td>
                                                                                     <td>${tagCoverage.testCount}</td>
                                                                                     <td>${tagCoverage.successRate}</td>
                                                                                     <td>
@@ -452,14 +479,14 @@
                                                         <h3><i class="bi bi-gear"></i> Automated Scenarios</h3>
 
                                                         <#if (automatedTestCases?has_content)>
-                                                            <table class="scenario-result-table table"
-                                                                   id="scenario-results">
+                                                            <table class="scenario-result-table table" id="scenario-results" style="width:100%">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
                                                                     <th class="test-name-column">Scenario</th>
                                                                     <th>Context</th>
                                                                     <th>Steps</th>
+                                                                    <th>StepsText</th>
                                                                     <th>Started</th>
                                                                     <th>Total Duration</th>
                                                                     <th>Result</th>
@@ -501,6 +528,7 @@
                                                                         <td>${context_icon}<span style="display:none">${context_label}</span>
                                                                         </td>
                                                                         <td>${scenario.stepCount}</td>
+                                                                        <td>${scenario.allStepsText}</td>
                                                                         <td data-order="${scenario.timestamp}">${scenario.formattedStartTime}</td>
                                                                         <td>${scenario.formattedDuration}</td>
                                                                         <td>${outcome_icon} <span
@@ -522,14 +550,14 @@
                                                         <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
 
                                                         <#if (manualTestCases?has_content)>
-                                                            <table class="scenario-result-table table"
-                                                                   id="manual-scenario-results">
+                                                            <table class="scenario-result-table table" id="manual-scenario-results" style="width:100%">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${leafRequirementType}</th>
                                                                     <th class="test-name-column">Scenario</th>
                                                                     <th>Context</th>
                                                                     <th>Steps</th>
+                                                                    <th>StepsText</th>
                                                                     <th>Result</th>
                                                                 </tr>
                                                                 </thead>
@@ -557,6 +585,7 @@
                                                                                 </td>
                                                                                 <td><i class="bi bi-person"></i></td>
                                                                                 <td>${exampleOutcome.stepCount}</td>
+                                                                                <td>${exampleOutcome.allStepsText}</td>
                                                                                 <td>${example_outcome_icon} <span
                                                                                             style="display:none">${exampleOutcome.result}</span>
                                                                                     <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>
@@ -582,6 +611,7 @@
                                                                             </td>
                                                                             <td><i class="bi bi-person"></i></td>
                                                                             <td>${scenario.stepCount}</td>
+                                                                            <td>${scenario.allStepsText}</td>
                                                                             <td>${outcome_icon} <span
                                                                                         style="display:none">${scenario.result}</span>
                                                                                 <#if (scenario.externalLink)?? && (scenario.externalLink.url)??>

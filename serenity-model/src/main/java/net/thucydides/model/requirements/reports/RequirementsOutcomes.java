@@ -104,6 +104,10 @@ public class RequirementsOutcomes {
         return this.testOutcomes.getScenarioCount();
     }
 
+    public String getAllStepsText() {
+        return this.testOutcomes.getAllStepsText();
+    }
+
     public List<Requirement> getRequirements() {
         return requirementOutcomes.stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
     }

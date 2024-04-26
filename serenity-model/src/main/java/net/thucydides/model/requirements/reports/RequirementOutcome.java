@@ -267,6 +267,10 @@ public class RequirementOutcome {
         return testOutcomes.getScenarioCount();
     }
 
+    public String getAllStepsText() {
+        return testOutcomes.getAllStepsText();
+    }
+
     public long getTestCount() {
         return testOutcomes.getTotal();
     }

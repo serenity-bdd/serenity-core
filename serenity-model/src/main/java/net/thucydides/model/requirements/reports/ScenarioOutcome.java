@@ -43,6 +43,8 @@ public interface ScenarioOutcome {
 
     Integer getStepCount();
 
+    String getAllStepsText();
+
     ZonedDateTime getStartTime();
 
     Long getTimestamp();

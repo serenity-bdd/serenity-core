@@ -12,14 +12,16 @@ public class ExampleOutcome {
     private ZonedDateTime startTime;
     private final long duration;
     private final long stepCount;
+    private final String allStepsText;
 
-    public ExampleOutcome(String title, String subtitle, TestResult result, ZonedDateTime startTime, long duration, long stepCount) {
+    public ExampleOutcome(String title, String subtitle, TestResult result, ZonedDateTime startTime, long duration, long stepCount, String allStepsText) {
         this.title = title;
         this.subtitle = subtitle;
         this.result = result;
         this.startTime = startTime;
         this.duration = duration;
         this.stepCount = stepCount;
+        this.allStepsText = allStepsText;
     }
 
     public String getTitle() {
@@ -48,6 +50,10 @@ public class ExampleOutcome {
 
     public long getStepCount() {
         return stepCount;
+    }
+
+    public String getAllStepsText() {
+        return allStepsText;
     }
 
     public String getFormattedStartTime() {

@@ -22,10 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.model.ThucydidesSystemProperty.*;
@@ -188,6 +185,7 @@ public class WebDriverFactory {
         }
 
         PauseTestExecution.forADelayOf(retryDelay).seconds();
+        Map<String, Integer> ageOfFriends = Map.of("Peter", 23, "Paul", 25, "Mary", 27);
 
         try {
             return createWebDriver(driverClass, options, environmentVariables);

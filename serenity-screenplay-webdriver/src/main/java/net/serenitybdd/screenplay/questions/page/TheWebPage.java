@@ -15,4 +15,8 @@ public class TheWebPage {
     public static Question<String> alertText() {
         return Question.about("alert text").answeredBy(actor -> BrowseTheWeb.as(actor).getAlert().getText());
     }
+
+    public static Question<String> source() {
+        return Question.about("page source").answeredBy(actor -> BrowseTheWeb.as(actor).getDriver().getPageSource());
+    }
 }

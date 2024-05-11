@@ -3,8 +3,9 @@ package net.serenitybdd.junit.runners;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepPublisher;
-import org.junit.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * A JUnit statement that runs a Serenity-enabled test and then publishes the results via JUnit.
@@ -31,11 +32,13 @@ class SerenityStatement extends Statement {
         try {
             updateCurrentEventBusFrom(publisher);
             statement.evaluate();
-        } catch (AssumptionViolatedException assumptionViolated) {
-            stepEventBus().assumptionViolated(assumptionViolated.getMessage());
         } catch (AssertionError assertionError) {
             if (!stepEventBus().aStepInTheCurrentTestHasFailed()) {
                 throw assertionError;
+            }
+        } catch (Throwable throwable) {
+            if (throwable.getClass().getSimpleName().endsWith("AssumptionViolatedException")) {
+                stepEventBus().assumptionViolated(throwable.getMessage());
             }
         }
         checkForStepFailures();
@@ -62,7 +65,12 @@ class SerenityStatement extends Statement {
 
     private void checkForAssumptionViolations() {
         if (stepEventBus().assumptionViolated()) {
-            throw new AssumptionViolatedException(stepEventBus().getAssumptionViolatedMessage());
+            try {
+                Class<?> assumptionViolatedException = Class.forName("org.junit.AssumptionViolatedException");
+                throw ((RuntimeException) assumptionViolatedException.getConstructor(String.class).newInstance(stepEventBus().getAssumptionViolatedMessage()));
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -38,11 +38,9 @@ import net.thucydides.model.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -947,7 +945,12 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
     }
 
     private boolean isAssumptionFailure(Throwable rootCause) {
-        return (AssumptionViolatedException.class.isAssignableFrom(rootCause.getClass()));
+        try {
+            Class<?> assumptionViolationException = Class.forName("org.junit.AssumptionViolatedException");
+            return assumptionViolationException.isAssignableFrom(rootCause.getClass());
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     private String stepTitleFrom(io.cucumber.messages.types.Step currentStep, TestStep testStep) {
@@ -962,9 +965,9 @@ public class SerenityReporter implements Plugin, ConcurrentEventListener {
         if (currentStep.getStep().getArgument() != null) {
             StepArgument stepArgument = currentStep.getStep().getArgument();
             if (stepArgument instanceof DataTableArgument) {
-                List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> rowList = new ArrayList<>();
                 for (List<String> row : ((DataTableArgument) stepArgument).cells()) {
-                    Map<String, Object> rowMap = new HashMap<String, Object>();
+                    Map<String, Object> rowMap = new HashMap<>();
                     rowMap.put("cells", row);
                     rowList.add(rowMap);
                 }

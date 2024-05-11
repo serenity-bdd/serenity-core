@@ -8,7 +8,6 @@ import net.thucydides.model.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.model.steps.ExecutedStepDescription;
 import net.thucydides.model.steps.StepFailure;
 import net.thucydides.core.steps.events.StepEventBusEventBase;
-import org.junit.internal.AssumptionViolatedException;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -119,7 +118,12 @@ public class StepFinishedWithResultEvent extends StepEventBusEventBase {
     }
 
 	private boolean isAssumptionFailure(Throwable rootCause) {
-        return (AssumptionViolatedException.class.isAssignableFrom(rootCause.getClass()));
+        try {
+            Class<?> assumptionViolationException = Class.forName("org.junit.AssumptionViolatedException");
+            return assumptionViolationException.isAssignableFrom(rootCause.getClass());
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
 

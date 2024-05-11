@@ -25,6 +25,7 @@ import net.serenitybdd.cucumber.events.StepFinishedWithResultEvent;
 import net.serenitybdd.cucumber.formatting.ScenarioOutlineDescription;
 import net.serenitybdd.cucumber.util.PathUtils;
 import net.serenitybdd.cucumber.util.StepDefinitionAnnotationReader;
+import net.serenitybdd.model.exceptions.SerenityManagedException;
 import net.thucydides.core.model.screenshots.StepDefinitionAnnotations;
 import net.thucydides.model.domain.DataTable;
 import net.thucydides.model.domain.Rule;
@@ -36,6 +37,7 @@ import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.events.*;
 import net.thucydides.core.steps.session.TestSession;
 import net.thucydides.model.steps.ExecutedStepDescription;
+import net.thucydides.model.steps.StepFailure;
 import net.thucydides.model.steps.TestSourceType;
 import net.thucydides.model.util.Inflector;
 import net.thucydides.model.webdriver.Configuration;
@@ -515,12 +517,9 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
 
     private void handleTestRunFinished(TestRunFinished event) {
         LOGGER.debug("SRP:handleTestRunFinished " + Thread.currentThread() + " " + contextURISet);
-        try {
-            contextURISet.forEach(featurePath -> {
-                getContext(featurePath).playAllTestEvents();
-            });
-        } catch (Throwable th) {
-            th.printStackTrace();
+
+        for (URI featurePath : contextURISet) {
+            getContext(featurePath).playAllTestEvents();
         }
         enrichOutcomes();
         generateReports();

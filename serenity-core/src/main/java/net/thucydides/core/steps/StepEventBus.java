@@ -957,7 +957,8 @@ public class StepEventBus {
      */
     public void takeScreenshot() {
         if (!isDryRun()) {
-            getBaseStepListener().notifyUIError();
+//            getBaseStepListener().notifyUIError();
+            getBaseStepListener().takeScreenshot();
         }
     }
 

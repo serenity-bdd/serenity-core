@@ -3,6 +3,7 @@ package net.serenitybdd.junit.spring;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.internal.AssumptionViolatedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -48,12 +49,10 @@ public class PassFailureCountingRule implements MethodRule {
                     base.evaluate();
                     result = "passed";
                     state.passes++;
+                } catch (AssumptionViolatedException e) {
+                    result = "skipped";
                 } catch (Throwable t) {
-                    if (t.getClass().getSimpleName().endsWith("AssumptionViolatedException")) {
-                        result = "skipped";
-                    } else {
-                        result = "failed";
-                    }
+                    result = "failed";
                     state.failures++;
                     cause = t;
                 }

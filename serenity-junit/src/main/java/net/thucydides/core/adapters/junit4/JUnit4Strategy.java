@@ -52,7 +52,7 @@ class JUnit4Strategy implements JUnitStrategy {
 
     @Override
     public boolean isAssumptionViolatedException(final Throwable throwable) {
-        return (throwable instanceof org.junit.internal.AssumptionViolatedException);
+        return (throwable instanceof org.junit.AssumptionViolatedException);
     }
 
     @Override

@@ -12,14 +12,8 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 
-//import org.openqa.selenium.firefox.FirefoxDriver
-//import org.openqa.selenium.htmlunit.HtmlUnitDriver
-
 class WhenHandlingFailingTests extends Specification {
 
-//    def firefoxDriver = Mock(FirefoxDriver)
-//    def htmlUnitDriver = Mock(HtmlUnitDriver)
-    def environmentVariables = new MockEnvironmentVariables()
     File temporaryDirectory
 
     def setup() {

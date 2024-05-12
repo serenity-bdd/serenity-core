@@ -319,13 +319,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-
-        <!-- QUESTIONABLE -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.thoughtworks.xstream</groupId>-->
-        <!--            <artifactId>xstream</artifactId>-->
-        <!--        </dependency>-->
-
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>

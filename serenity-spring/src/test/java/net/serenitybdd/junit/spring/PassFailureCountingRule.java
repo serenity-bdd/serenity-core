@@ -3,7 +3,7 @@ package net.serenitybdd.junit.spring;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.internal.AssumptionViolatedException;
+
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -21,12 +21,12 @@ public class PassFailureCountingRule implements MethodRule {
         this.expectedFailures = expectedFailures;
     }
 
-    private class State {
+    private static class State {
         private int passes = 0;
         private int failures = 0;
     }
 
-    private static final Map<Class<?>,State> states = new HashMap();
+    private static final Map<Class<?>,State> states = new HashMap<>();
 
     @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
@@ -49,13 +49,14 @@ public class PassFailureCountingRule implements MethodRule {
                     base.evaluate();
                     result = "passed";
                     state.passes++;
-                } catch (AssumptionViolatedException e) {
-                    result = "skipped";
                 } catch (Throwable t) {
-                    result = "failed";
-                    state.failures++;
-                    cause = t;
-                }
+                    if (isAssumptionViolatedException(t)) {
+                        result = "skipped";
+                    } else {
+                        result = "failed";
+                        state.failures++;
+                        cause = t;
+                    }                }
                 if (state.passes > PassFailureCountingRule.this.expectedPasses) {
                     throw new AssertionError(this.createExceptionMessage(PassFailureCountingRule.this.expectedPasses,state.passes,"pass",testMethodName));
                 }
@@ -69,6 +70,15 @@ public class PassFailureCountingRule implements MethodRule {
 
             private String createExceptionMessage(int expected, int actual, String type, String testName) {
                 return "No more than " + expected + " test" + (expected==1?"":"s") + " in class " + testName + " should " + type + ", and this test " + type + "ing makes that " + actual + ".";
+            }
+
+            private boolean isAssumptionViolatedException(Throwable throwable) {
+                try {
+                    Class<?> clazz = Class.forName("org.junit.AssumptionViolatedException");
+                    return clazz.isInstance(throwable);
+                } catch (ClassNotFoundException e) {
+                    return false;
+                }
             }
         };
     }

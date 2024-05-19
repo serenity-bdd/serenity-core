@@ -784,7 +784,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         LOGGER.debug("SRP:startScenario" + " " + featurePath + " "
                 + Thread.currentThread() + " " + testCase.getId() + " at line " + testCase.getLocation().getLine());
 
-        reinitializeRemoteWebDriver();
+        RestartBrowserForEach restartBrowserForEach = RestartBrowserForEach.configuredIn(SerenityInfrastructure.getEnvironmentVariables());
+        if (restartBrowserForEach.restartBrowserForANew(RestartBrowserForEach.SCENARIO)) {
+            reinitializeRemoteWebDriver();
+        }
 
         context.addHighPriorityStepEventBusEvent(scenarioId,
                 new TestStartedEvent(scenarioId,
@@ -923,7 +926,10 @@ public class SerenityReporterParallel implements Plugin, ConcurrentEventListener
         getContext(featurePath).addStepEventBusEvent(
                 new ClearStepFailuresEvent());
 
-        reinitializeRemoteWebDriver();
+        RestartBrowserForEach restartBrowserForEach = RestartBrowserForEach.configuredIn(SerenityInfrastructure.getEnvironmentVariables());
+        if (restartBrowserForEach.restartBrowserForANew(RestartBrowserForEach.EXAMPLE)) {
+            reinitializeRemoteWebDriver();
+        }
 
         getContext(featurePath).addStepEventBusEvent(
                 new ExampleStartedEvent(data, scenarioName));

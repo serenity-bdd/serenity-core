@@ -104,7 +104,7 @@ public class ScenarioOutcomes {
     private static List<TestTag> getTestTags(RequirementsService requirements, TestOutcome testOutcome) {
         Optional<Requirement> requirement = requirements.getParentRequirementFor(testOutcome);
         List<TestTag> scenarioTags = new ArrayList<>();
-        if (requirement.isPresent() && requirement.get().getScenarioTags() != null) {
+        if (requirement != null && requirement.isPresent() && requirement.get().getScenarioTags() != null) {
             if (requirement.get().getScenarioTags().get(testOutcome.getName()) != null) {
                 scenarioTags.addAll(requirement.get().getScenarioTags().get(testOutcome.getName()));
             }

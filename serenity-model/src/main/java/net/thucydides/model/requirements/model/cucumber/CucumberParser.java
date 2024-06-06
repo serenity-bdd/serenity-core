@@ -392,7 +392,7 @@ public class CucumberParser {
             } else if (tag.getName().toLowerCase().startsWith("@issues:")) {
                 String issueNumberList = tag.getName().replaceAll("@issues:", "");
                 List<String> issueNumberTags = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(issueNumberList);
-                return issueNumberTags.get(0);
+                return issueNumberTags.stream().findFirst().orElse("");
             }
         }
         return null;

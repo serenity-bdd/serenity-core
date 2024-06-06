@@ -4,7 +4,6 @@ package cucumber.runtime;
 
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
-import io.cucumber.core.plugin.ConfigureDriverFromTags;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.annotations.events.BeforeScenario;
 import net.serenitybdd.core.lifecycle.LifecycleRegister;

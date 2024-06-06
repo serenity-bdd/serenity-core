@@ -1,5 +1,10 @@
 package net.thucydides.model.requirements.model.cucumber;
 
+import io.cucumber.messages.types.Feature;
+import io.cucumber.messages.types.Rule;
+import io.cucumber.messages.types.Scenario;
+import io.cucumber.messages.types.Tag;
+
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,10 +34,9 @@ public class FeatureFileChecker {
                         Optional<AnnotatedFeature> loadedFeature = cucumberParser.loadFeature(featureFile);
                         loadedFeature.ifPresent(
                                 annotatedFeature -> {
-                                    recordFeaturePath(pathNamesToFeatureFiles,
-                                            featureFile,
-                                            annotatedFeature);
+                                    recordFeaturePath(pathNamesToFeatureFiles, featureFile, annotatedFeature);
                                     featureFileNames.add(annotatedFeature.getFeature().getName());
+                                    checkTagsIn(annotatedFeature.getFeature());
                                 }
                         );
                         return Optional.empty();
@@ -61,6 +65,54 @@ public class FeatureFileChecker {
         }
     }
 
+
+    private void checkTagsIn(Feature feature) {
+        checkTags(feature.getTags());
+        feature.getChildren().forEach(
+                child -> {
+                    if (child.getScenario().isPresent()) {
+                        checkTagsInScenario(child.getScenario().get());
+                    } else if (child.getRule().isPresent()) {
+                        checkTagsInRule(child.getRule().get());
+                    }
+                }
+        );
+    }
+
+    private void checkTagsInScenario(Scenario scenario) {
+        checkTags(scenario.getTags());
+        if (!scenario.getExamples().isEmpty()) {
+            List<Tag> exampleTags = scenario.getExamples()
+                    .stream()
+                    .flatMap(examples -> examples.getTags().stream())
+                    .collect(Collectors.toList());
+            checkTags(exampleTags);
+        }
+    }
+
+    private void checkTagsInRule(Rule rule) {
+        checkTags(rule.getTags());
+        rule.getChildren().forEach(
+                child -> {
+                    if (child.getScenario().isPresent()) {
+                        checkTagsInScenario(child.getScenario().get());
+                    }
+                }
+        );
+    }
+
+    private void checkTags(List<Tag> tags) {
+        for(Tag tag : tags) {
+            if (tag.getName().trim().endsWith(":")) {
+                throw new InvalidFeatureFileException("Invalid tag format at " + tag.getLocation() + " - tags in the format <name>:<value> (e.g. '@color:red') must have a value after the colon");
+            }
+            if (tag.getName().trim().endsWith("=")) {
+                throw new InvalidFeatureFileException("Invalid tag format at " + tag.getLocation() + " - tags in the format <name>=<value> (e.g. '@color=red') must have a value after the equals sign");
+            }
+        }
+    }
+
+
     private Collection<String> checkForDuplicateFeatureNames(List<String> featureFileNames) {
         // Return the list of duplicate feature names in featureFileNames
         return featureFileNames.stream()
@@ -77,7 +129,7 @@ public class FeatureFileChecker {
                 .map(file -> "      - " + file.getPath())
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        return String.format("* " + DUPLICATE_FEATURE_NAME,key, featureFilesWithDuplicates);
+        return String.format("* " + DUPLICATE_FEATURE_NAME, key, featureFilesWithDuplicates);
     }
 
     private static void recordFeaturePath(ConcurrentHashMap<String, List<File>> pathNamesToFeatureFiles,

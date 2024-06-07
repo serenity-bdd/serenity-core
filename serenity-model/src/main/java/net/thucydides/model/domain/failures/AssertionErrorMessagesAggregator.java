@@ -23,7 +23,7 @@ public class AssertionErrorMessagesAggregator {
     }
 
     private static String stripLeadingLineBreakFrom(String errorMessage) {
-        return errorMessage.replaceFirst("^(\\r\\n|\\n|\\r)", "");
+        return (errorMessage != null) ? errorMessage.replaceFirst("^(\\r\\n|\\n|\\r)", "") : "";
     }
 
     private static void countAssertions(List<String> errors, StringBuilder msg) {

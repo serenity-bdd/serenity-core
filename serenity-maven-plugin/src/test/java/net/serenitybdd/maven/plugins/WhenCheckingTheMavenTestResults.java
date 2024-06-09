@@ -65,6 +65,7 @@ public class WhenCheckingTheMavenTestResults {
         plugin.execute();
     }
 
+    @Test
     public void should_report_successful_results_without_an_exception() throws Exception {
 
         when(resultChecker.checkTestResults()).thenReturn(TestResult.SUCCESS);

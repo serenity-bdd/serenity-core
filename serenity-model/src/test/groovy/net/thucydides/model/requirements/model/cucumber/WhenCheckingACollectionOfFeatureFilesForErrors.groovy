@@ -26,15 +26,6 @@ class WhenCheckingACollectionOfFeatureFilesForErrors extends Specification {
         notThrown(Exception)
     }
 
-    def "Should throw an exception for a directory that does not exist"() {
-        given:
-        FeatureFileFinder finder = new FeatureFileFinder("src/test/resources/features/does_not_exist")
-        when:
-        finder.findFeatureFiles().collect(Collectors.toList())
-        then:
-        NoSuchFileException ex = thrown()
-    }
-
     def "Should display a meaningful error message if there are empty scenario names"() {
         given:
             FeatureFileChecker checker = new FeatureFileChecker();

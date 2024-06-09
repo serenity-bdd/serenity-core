@@ -4,6 +4,8 @@ import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.Rule;
 import io.cucumber.messages.types.Scenario;
 import io.cucumber.messages.types.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
@@ -21,11 +23,14 @@ public class FeatureFileChecker {
 
     CucumberParser cucumberParser = new CucumberParser();
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FeatureFileChecker.class);
+
     public void check(Stream<File> files, boolean allowDuplicateFeatureNames) {
 
         List<String> featureFileNames = new ArrayList<>();
         // Features can have duplicate names but a feature file name and parent directory name should be unique
         ConcurrentHashMap<String, List<File>> pathNamesToFeatureFiles = new ConcurrentHashMap<>();
+        Map<String, String> featureFileToResult = new TreeMap<>();
 
         List<String> errorMessages = files
                 .filter(File::isFile)
@@ -41,15 +46,15 @@ public class FeatureFileChecker {
                         );
                         return Optional.empty();
                     } catch (Throwable invalidFeatureFile) {
-                        invalidFeatureFile.printStackTrace();
-                        return Optional.of("* Error found in feature file: " + featureFile.getAbsolutePath()
+                        return Optional.of("* Error found in feature file: " + shortenedFeatureFilePath(featureFile.getAbsolutePath())
                                 + System.lineSeparator()
-                                + "    " + invalidFeatureFile + ":" + invalidFeatureFile.getMessage());
+                                + " -> " + invalidFeatureFile.getMessage());
                     }
                 })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(Object::toString)
+                .distinct()
                 .collect(Collectors.toList());
 
         // Check for duplicate feature names
@@ -61,10 +66,15 @@ public class FeatureFileChecker {
         }
 
         if (!errorMessages.isEmpty()) {
-            throw new InvalidFeatureFileException(errorMessages.stream().collect(Collectors.joining(System.lineSeparator())));
+            throw new InvalidFeatureFileException(
+                    "INVALID FEATURE FILES FOUND:" + System.lineSeparator() +
+                    errorMessages.stream().collect(Collectors.joining(System.lineSeparator())));
         }
     }
 
+    private String shortenedFeatureFilePath(String absolutePath) {
+        return (absolutePath.contains("/features/")) ? absolutePath.substring(absolutePath.indexOf("/features/") + 10) : absolutePath;
+    }
 
     private void checkTagsIn(Feature feature) {
         checkTags(feature.getTags());

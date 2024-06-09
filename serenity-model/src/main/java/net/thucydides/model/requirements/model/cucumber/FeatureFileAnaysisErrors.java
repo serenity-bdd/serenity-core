@@ -10,7 +10,7 @@ public class FeatureFileAnaysisErrors {
             + "    Each scenario should have a unique name, e.g. Scenario: Adding a single item to the cart";
 
     public static final String EMPTY_RULE_NAME
-            = "Empty rule names were found in file '%s'" + System.lineSeparator()
+            = "-> Empty rule names were found in file '%s'" + System.lineSeparator()
             + "    Each rule should have a unique name, e.g. Rule: Discount codes should appear in the shopping cart";
 
     public static final String DUPLICATE_SCENARIO_NAME
